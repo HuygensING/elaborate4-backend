@@ -8,46 +8,6 @@
   <artifactId>elab4-backend</artifactId>
   <packaging>war</packaging>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <c3p0.version>0.9.1.2</c3p0.version>
-    <persistence.version>1.0.0</persistence.version>
-    <commons-configuration.version>1.9</commons-configuration.version>
-    <commons-lang.version>2.6</commons-lang.version>
-    <freemarker.version>2.3.20</freemarker.version>
-    <flexjson.version>3.1</flexjson.version>
-<!--     <gson.version>2.2.2</gson.version> -->
-    <guava.version>15.0</guava.version>
-    <guice.version>3.0</guice.version>
-<!--     <hibernate.version>4.2.0.Final</hibernate.version> -->
-    <hibernate.version>4.2.6.Final</hibernate.version>
-    <hsqldb.version>2.3.0</hsqldb.version>
-    <jackson.version>2.2.3</jackson.version>
-    <javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
-    <jaxrstools.version>0.0.5</jaxrstools.version>
-    <jersey.version>1.17.1</jersey.version>
-    <jsoup.version>1.7.2</jsoup.version>
-    <jsr250-api.version>1.0</jsr250-api.version>
-    <jtidy.version>r938</jtidy.version>
-    <junit.version>4.11</junit.version>
-    <mockito.version>1.9.5</mockito.version>
-    <postgresql.version>9.0-801.jdbc4</postgresql.version>
-    <!-- <postgresql.version>9.2-1002.jdbc4</postgresql.version>-->
-    <slf4j.version>1.7.5</slf4j.version>
-    <solr.version>4.4.0</solr.version>
-    <visitei.version>0.4.5-SNAPSHOT</visitei.version>
-    <tomcat-maven.version>1.1</tomcat-maven.version>
-    <tomcatservlet-api.version>6.0.36</tomcatservlet-api.version>
-    <yoga.version>1.0.0</yoga.version>
-    <classloader-leak-prevention.version>1.8.1</classloader-leak-prevention.version>
-
-    <appassembler-maven.version>1.3.1</appassembler-maven.version>
-    <maven-assembly.version>2.4</maven-assembly.version>
-    <maven-compiler.version>3.1</maven-compiler.version>
-    <tomcat-maven.version>1.1</tomcat-maven.version>
-  </properties>
-
   <dependencies>
 		<!-- compile dependecies -->
     <dependency>
@@ -322,21 +282,6 @@
 
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler.version}</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>2.3</version>
-      </plugin>
-
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>tomcat-maven-plugin</artifactId>
         <version>${tomcat-maven.version}</version>
@@ -355,24 +300,6 @@
 
     </plugins>
   </build>
-
-  <scm>
-    <tag>HEAD</tag>
-    <connection>scm:svn:svn+ssh://svn@hi7dev.huygens.knaw.nl/data/svn/svn/repos/elaborate/trunk/elaborate_backend</connection>
-    <developerConnection>scm:svn:svn+ssh://bramb@hi7dev.huygens.knaw.nl/data/svn/svn/repos/elaborate/trunk/elaborate_backend</developerConnection>
-  </scm>
-  <organization>
-    <name>Huygens ING</name>
-    <url>http://www.huygens.knaw.nl/</url>
-  </organization>
-  <issueManagement>
-    <system>Redmine</system>
-    <url>http://suzanna.huygens.knaw.nl/projects/elaborate-consolidatie</url>
-  </issueManagement>
-  <ciManagement>
-    <system>cruisecontrolrb</system>
-    <url>http://cruisecontrol.huygens.knaw.nl/builds/elaborate_backend</url>
-  </ciManagement>
 
   <profiles>
 
@@ -526,33 +453,5 @@
     </profile>
 
   </profiles>
-
-  <prerequisites>
-    <maven>2.2.1</maven>
-  </prerequisites>
-
-  <repositories>
-    <repository>
-      <id>Huygens</id>
-      <name>Huygens repository</name>
-      <url>http://maven.huygens.knaw.nl/repository/</url>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>warn</checksumPolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>fail</checksumPolicy>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>central</id>
-      <name>central repository</name>
-      <url>http://repo1.maven.org/maven2</url>
-    </repository>
-  </repositories>
-
 
 </project>
