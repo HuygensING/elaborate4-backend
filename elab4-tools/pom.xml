@@ -6,4 +6,5 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>elab4-tools</artifactId>
+  <description>tools for elab4</description>
 </project>
