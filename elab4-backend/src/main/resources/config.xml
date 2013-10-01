@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="0.1">
+  <settings>
+    <version>0.1</version>
+    <solr>
+      <url>http://localhost:8080/solr-elab3/entries/</url>
+    </solr>
+
+    <server>
+      <scheme>http</scheme>
+      <name>10.152.32.82</name>
+      <port>2013</port>
+    </server>
+
+  </settings>
+</config>

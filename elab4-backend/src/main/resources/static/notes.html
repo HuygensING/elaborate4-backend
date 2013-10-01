@@ -1,0 +1,446 @@
+<h1>Documentatie</h1>
+
+<h2>entiteiten</h2>
+
+<p>Voor de entiteit calls moet altijd een <code>Authorization</code> header meegestuurd worden. <br />
+Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij anders vermeld.  </p>
+
+<h3>users</h3>
+
+<ul>
+<li><p>Create/toevoegen: <br />
+<code>POST</code> naar <code>/users</code></p>
+
+<pre><code>    {
+      "username" : "new_user",
+      "email" : "new.user@huygens.knaw.nl",
+      "firstName" : "New",
+      "lastName" : "User",
+      "role" : "USER",
+      "password" : "laswysdfas23"
+    }
+</code></pre></li>
+<li><p>Read/opvragen: <br />
+<code>GET</code> <code>/users</code></p></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/users/{user_id}</code></p>
+
+<pre><code>    {
+      "email" : "new.user@example.org",
+      "firstName" : "New",
+      "lastName" : "User",
+      "role" : "USER",
+      "password" : "laswysdfas23"
+    }
+</code></pre></li>
+<li><p>Delete/wissen: <br />
+<code>DELETE</code>  <code>/users/{user_id}</code></p></li>
+</ul>
+
+<h3>projectmetadata</h3>
+
+<ul>
+<li><p>Create/toevoegen: <br />
+<code>POST</code> naar <code>/projectmetadatafields</code></p>
+
+<pre><code>  {
+    "fieldName" : "whatever"
+  }
+</code></pre></li>
+<li><p>Read/opvragen: <br />
+alle:
+<code>GET</code> <code>/projectmetadatafields</code>
+specifieke:
+<code>GET</code> <code>/projectmetadatafields/{field_id}</code></p></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/projectmetadatafields/{field_id}</code></p>
+
+<pre><code>  {
+    "fieldName" : "new.field.name"
+  }
+</code></pre></li>
+<li><p>Delete/wissen: <br />
+<code>DELETE</code>  <code>/projectmetadatafields/{field_id}</code></p></li>
+</ul>
+
+<h3>projecten</h3>
+
+<ul>
+<li><p>Create/toevoegen: <br />
+<code>POST</code> naar <code>/projects</code></p>
+
+<pre><code>  {
+    "title" : "project title",
+    "textLayers" : [ "Diplomatic", "Critical", "Translation"]
+  }
+</code></pre></li>
+<li><p>Read/opvragen:
+alle: <br />
+<code>GET</code> <code>/projects</code>
+specifieke:
+<code>GET</code> <code>/projects/{project_id}</code></p></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/projects/{project_id}</code></p></li>
+<li><p>Delete/wissen: <br />
+<code>DELETE</code>  <code>/projects/{project_id}</code></p></li>
+</ul>
+
+<h4>project annotationtypes</h4>
+
+<ul>
+<li>Read/opvragen:
+<code>GET</code> naar <code>/projects/{project_id}/annotationtypes</code></li>
+</ul>
+
+<h4>project logentries</h4>
+
+<ul>
+<li>Read/opvragen:
+<code>GET</code> naar <code>/projects/{project_id}/logentries</code></li>
+</ul>
+
+<h4>project users</h4>
+
+<ul>
+<li>Read/opvragen:
+<code>GET</code> naar <code>/projects/{project_id}/projectusers</code>
+geeft een array van user id's</li>
+</ul>
+
+<h4>project settings</h4>
+
+<ul>
+<li><p>Read/opvragen:
+<code>GET</code> naar <code>/projects/{project_id}/settings</code></p></li>
+<li><p>project settings updaten: <br />
+<code>PUT</code> naar <code>/projects/{project_id}/settings</code></p>
+
+<pre><code>  {
+    "Type" : "Brievenproject",
+    "Version" : "0.1"
+  }
+</code></pre></li>
+</ul>
+
+<h4>project entry metadatafields</h4>
+
+<ul>
+<li><p>Read/opvragen:
+<code>GET</code> naar <code>/projects/{project_id}/entrymetadatafields</code></p></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/projects/{project_id}/entrymetadatafields</code></p>
+
+<pre><code>    [ "field1", "field2" ]
+</code></pre></li>
+</ul>
+
+<h4>project entries</h4>
+
+<ul>
+<li>alle entries van dit project: <br />
+<code>GET</code> <code>/projects/{project_id}/entries</code></li>
+</ul>
+
+<h3>entries</h3>
+
+<ul>
+<li><p>Create/toevoegen: <br />
+<code>POST</code> naar <code>/projects/{project_id}/entries</code></p>
+
+<pre><code>  {
+    "name" : "project-unique name",
+    "publishable" : false
+  }
+</code></pre>
+
+<p><code>publishable</code> is optional, default false;</p></li>
+<li><p>Read/opvragen: <br />
+<code>GET</code> <code>/projects/{project_id}/entries/{entry_id}</code></p></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/projects/{project_id}/entries/{entry_id}</code></p>
+
+<pre><code>  {
+    "name" : "project-unique name",
+    "publishable" : true
+  }
+</code></pre>
+
+<p><code>publishable</code> is optional</p></li>
+<li><p>Delete/wissen: <br />
+<code>DELETE</code>  <code>/projects/{project_id}/entries/{entry_id}</code></p></li>
+<li><p>alle transcripties van deze entry: <br />
+<code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/transcriptions</code></p></li>
+</ul>
+
+<h3>facsimiles</h3>
+
+<ul>
+<li><p>Create/toevoegen: <br />
+<code>POST</code> naar <code>/projects/{project_id}/entries/{entry_id}/facsimiles</code></p>
+
+<pre><code>  {
+    "name" : "pagina 1",
+    "filename" : "00000001.jpg"
+    "zoomableUrl" : "http://localhost:8080/jp2/13507286068671.jp2"
+  }
+</code></pre></li>
+<li><p>Read/opvragen: <br />
+<code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/facsimiles/{facsimile_id}</code></p></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/projects/{project_id}/entries/{entry_id}/facsimiles/{facsimile_id}</code></p>
+
+<pre><code>  {
+    "name" : "pagina 1",
+    "filename" : "00000001.jpg"
+    "zoomableUrl" : "http://localhost:8080/jp2/13507286068671.jp2"
+  }
+</code></pre></li>
+<li><p>Delete/wissen: <br />
+<code>DELETE</code>  <code>/projects/{project_id}/entries/{entry_id}/facsimiles/{facsimile_id}</code></p></li>
+</ul>
+
+<h3>transcripties</h3>
+
+<ul>
+<li><p>Create/toevoegen: <br />
+<code>POST</code> naar <code>/projects/{project_id}/entries/{entry_id}/transcriptions</code></p>
+
+<pre><code>  {
+    "body": "transcription body",
+    "textLayer": "Diplomatic",
+  }
+</code></pre></li>
+<li><p>Read/opvragen: <br />
+<code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}</code></p>
+
+<pre><code>  {
+    "body": "transcription body",
+    "textLayer": "Diplomatic",
+    "id": 13413
+  }
+</code></pre></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}</code></p>
+
+<pre><code>  {
+    "body": "new body",
+  }
+</code></pre></li>
+<li><p>Delete/wissen: <br />
+<code>DELETE</code>  <code>/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}</code></p></li>
+<li><p>alle annotaties van deze transcriptie: <br />
+<code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations</code></p></li>
+</ul>
+
+<h3>annotaties</h3>
+
+<ul>
+<li><p>Create/toevoegen: <br />
+<code>POST</code> naar <code>/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations</code></p>
+
+<pre><code>  {
+    "body" : "de annotatie body",
+    "typeId" : 1
+    "metadata" : {
+       "field1" : "value1", 
+       "field2" : "value" 
+    }
+  }
+</code></pre>
+
+<p>waarbij <code>typeId</code> het id is van het gebruikte AnnotationType, default is 1
+<code>metadata</code> is een hashmap met waardes voor de relevante velden bij het gebruikte AnnotationType</p></li>
+<li><p>Read/opvragen: <br />
+<code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}</code></p></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}</code></p>
+
+<pre><code>  {
+    "body" : "de annotatie body",
+    "typeId" : 1
+    "metadata" : {
+       "field1" : "value1", 
+       "field2" : "value" 
+    }
+  }
+</code></pre></li>
+<li><p>Delete/wissen: <br />
+<code>DELETE</code>  <code>/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}</code></p></li>
+</ul>
+
+<hr />
+
+<h2>publication</h2>
+
+<p>De <em>projectleader</em> of <em>admin user</em> mag publiceren via een <code>POST</code> naar <code>/projects/{project_id}/publication</code></p>
+
+<p>Je kunt een json setting meeposten:</p>
+
+<pre><code>  {
+    "projectEntryMetadataFields" : ["Pagina","Deel"],
+    "annotationTypeIds" : [1,2,3]
+  }
+</code></pre>
+
+<p>waarbij <code>projectEntryMetadataFields</code> een array is van de metadatavelden die mee moeten komen met de publicatie, in de aangegeven volgorde te tonen.
+Default worden alle metadatavelden getoond, in de volgorde zoals ze in het project staan.</p>
+
+<p><code>annotationTypeIds</code> bevat een lijst van ids van die annotationtypes die getoond moeten worden in de publicatie, default worden ze allemaal getoond.</p>
+
+<p>Na de post wordt de publicatie op de achtergrond gemaakt: metadata van het project, en de inhoud van de entries wordt naar json bestanden geschreven, de entry teksten worden geindexeerd, en van het geheel wordt een warfile gemaakt.
+De post komt meteen terug met een <code>Location</code> waarop de voortgang uitgelezen kan worden: een json map met de volgende keys:</p>
+
+<ul>
+<li><code>id</code> - het id van de publicatieactie</li>
+<li><code>done</code>  - boolean die aangeeft of het aanmaken van de publicatie klaar is</li>
+<li><code>url</code> - zodra de het publicatieproces done is staat hierin het url waarop de publicatie te zien is.</li>
+<li><code>loglines</code> - een array van logregels die aangeven waar het publicatieproces mee bezig is, met timestamps.</li>
+</ul>
+
+<p>Alleen de entries met <code>publishable=true</code> worden in de publicatie opgenomen.</p>
+
+<p>De publicatie heeft een <code>search</code> api vergelijkbaar met die van de elaborate backend, met als verschil dat <code>projectId</code> niet meegegeven hoeft te worden, en dat er niet ingelogd hoeft te worden.</p>
+
+<hr />
+
+<p><!--</p>
+
+<h2>TODO</h2>
+
+<ul>
+<li>annotationTypes groeperen</li>
+<li>projectType: CKCC</li>
+<li>milestones plaatsen: chapter/page/etc.</li>
+<li>behalve publishable ook published als metadata op de entry
+-->
+<!--
+eb=http://10.152.32.82:2013
+eb=http://rest.elaborate.huygens.knaw.nl</li>
+</ul>
+
+<p>rootcode=<code>curl --silent --show-error --data "username=root&amp;password=toor" $eb/sessions/login/|jq -r ".token"</code>; echo $rootcode
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -d '{"term":"deus","textLayers":["Diplomatic"],"searchInAnnotations":"true"}' $eb/projects/17/search/
+curl -v -H "Authorization: SimpleAuth $rootcode"  $eb/projects/1/search/201|jq "."</p>
+
+<p>curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects|jq "."
+curl -i -H "Authorization: SimpleAuth $rootcode" -X OPTIONS $eb/projects</p>
+
+<p>project<em>id=1
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project</em>id|jq "."
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project<em>id/settings|jq "."
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project</em>id/entrymetadatafields|jq "."
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project<em>id/annotationtypes|jq "."
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project</em>id/users|jq "."
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/statistics|jq "."</p>
+
+<h1>create project</h1>
+
+<p>curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d "{\"title\":\"Project X ($(date))\", \"textLayers\":[\"Diplomatic\"]}" $eb/projects</p>
+
+<h1>update project settings</h1>
+
+<p>curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"Type":"Brievenproject","Version":"0.1","Start date":"nu","Release date":"onbekend"}' $eb/projects/$project_id/settings</p>
+
+<h1>ProjectMetadataField</h1>
+
+<p>curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projectmetadatafields|jq "."</p>
+
+<h1>project users</h1>
+
+<p>curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project<em>id/users/$user</em>id|jq "."</p>
+
+<h1>project tei export</h1>
+
+<p>curl -i -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/tei</p>
+
+<h1>read users</h1>
+
+<p>curl -s -H "Authorization: SimpleAuth $rootcode" $eb/users|jq "."</p>
+
+<h1>create user</h1>
+
+<p>curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d '{"username":"new_user","email":"new.user@huygens.knaw.nl","firstName":"New","lastName":"User","role":"USER","password":"laswysdfas23"}' $eb/users</p>
+
+<h1>read user</h1>
+
+<p>curl -s -H "Authorization: SimpleAuth $rootcode" $eb/users/$user_id|jq "."</p>
+
+<h1>update user</h1>
+
+<p>curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"email":"new.user@example.com","firstName":"John","lastName":"Doe"}' $eb/users/$user_id</p>
+
+<h1>delete user</h1>
+
+<p>curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/users/$user_id</p>
+
+<p>curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project<em>id/projectusers|jq "."
+curl -i -H "Authorization: SimpleAuth $rootcode" -X PUT $eb/projects/$project</em>id/projectusers/$user<em>id
+curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/projects/$project</em>id/projectusers/$user_id</p>
+
+<h1>loglines</h1>
+
+<p>curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/log|jq "."</p>
+
+<h1>project entries</h1>
+
+<p>curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries|jq "."</p>
+
+<h1>project entry transcriptions</h1>
+
+<p>curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project<em>id/entries/$entry</em>id/transcriptions|jq "."</p>
+
+<h1>project entry setting</h1>
+
+<p>scurl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project<em>id/entries/$entry</em>id/settings|jq "."</p>
+
+<h1>delete entry settings</h1>
+
+<p>curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/projects/$project<em>id/entries/$entry</em>id</p>
+
+<h1>update entry settings</h1>
+
+<p>curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"field1":"value1","field2":"value2"}'$eb/projects/$project<em>id/entries/$entry</em>id/settings|jq "."</p>
+
+<h1>update entry settings for multiple entries</h1>
+
+<p>curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"projectEntityIds":[1,2,3],"settings":{"Publishable":false,field1":"value1","field2":"value2"}}' $eb/projects/$project_id/multipleentrysettings|jq "."</p>
+
+<h1>publish project</h1>
+
+<p>curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d "{}" $eb/projects/$project<em>id/publication
+curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project</em>id/publicationstatus/$status_id | jq "."</p>
+
+<p>= annotatietab
+facet: type</p>
+
+<p>indexeren:
+per annotatie:
+- annotation.id
+- annotated text
+- project.id
+- type
+- metadata
+- annotatievolgorde in tekst (positie <ae>)</p>
+
+<p>=project metadata</p>
+
+<p>extra projectmetadata velden</p>
+
+<p>publication.font to use (ivm special utf8 characters)
+publication.title = de titel van de publicatie
+entry.name<em>singular = hoe een entry genoemd word.
+entry.name</em>plural = het woord voor meerdere entries 
+annotationtype.b.name = De (korte) annotatietypenaam voor <b> in transcriptiebody
+annotationtype.b.description = De annotatietypebeschrijving voor <b> in transcriptiebody
+annotationtype.i.name = De (korte) annotatietypenaam voor <i> in transcriptiebody
+annotationtype.i.description = De annotatietypebeschrijving voor <i> in transcriptiebody
+annotationtype.u.name = De (korte) annotatietypenaam voor <u> in transcriptiebody
+annotationtype.u.description = De annotatietypebeschrijving voor <u> in transcriptiebody
+annotationtype.strike.name = De (korte) annotatietypenaam voor <strike> in transcriptiebody
+annotationtype.strike.description = De annotatietypebeschrijving voor <strike> in transcriptiebody</p>
+
+<p>publicatie fase 2:
+project entries aanmelden bij oaipmh</p>
+
+<p>-->
+Last updated: 2013-09-26</p>
