@@ -1,0 +1,558 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>nl.knaw.huygens.elab4</groupId>
+    <artifactId>elab4</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>elab4-backend</artifactId>
+  <packaging>war</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <c3p0.version>0.9.1.2</c3p0.version>
+    <persistence.version>1.0.0</persistence.version>
+    <commons-configuration.version>1.9</commons-configuration.version>
+    <commons-lang.version>2.6</commons-lang.version>
+    <freemarker.version>2.3.20</freemarker.version>
+    <flexjson.version>3.1</flexjson.version>
+<!--     <gson.version>2.2.2</gson.version> -->
+    <guava.version>15.0</guava.version>
+    <guice.version>3.0</guice.version>
+<!--     <hibernate.version>4.2.0.Final</hibernate.version> -->
+    <hibernate.version>4.2.6.Final</hibernate.version>
+    <hsqldb.version>2.3.0</hsqldb.version>
+    <jackson.version>2.2.3</jackson.version>
+    <javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
+    <jaxrstools.version>0.0.5</jaxrstools.version>
+    <jersey.version>1.17.1</jersey.version>
+    <jsoup.version>1.7.2</jsoup.version>
+    <jsr250-api.version>1.0</jsr250-api.version>
+    <jtidy.version>r938</jtidy.version>
+    <junit.version>4.11</junit.version>
+    <mockito.version>1.9.5</mockito.version>
+    <postgresql.version>9.0-801.jdbc4</postgresql.version>
+    <!-- <postgresql.version>9.2-1002.jdbc4</postgresql.version>-->
+    <slf4j.version>1.7.5</slf4j.version>
+    <solr.version>4.4.0</solr.version>
+    <visitei.version>0.4.5-SNAPSHOT</visitei.version>
+    <tomcat-maven.version>1.1</tomcat-maven.version>
+    <tomcatservlet-api.version>6.0.36</tomcatservlet-api.version>
+    <yoga.version>1.0.0</yoga.version>
+    <classloader-leak-prevention.version>1.8.1</classloader-leak-prevention.version>
+
+    <appassembler-maven.version>1.3.1</appassembler-maven.version>
+    <maven-assembly.version>2.4</maven-assembly.version>
+    <maven-compiler.version>3.1</maven-compiler.version>
+    <tomcat-maven.version>1.1</tomcat-maven.version>
+  </properties>
+
+  <dependencies>
+		<!-- compile dependecies -->
+    <dependency>
+      <groupId>nl.knaw.huygens</groupId>
+      <artifactId>jax-rs-tools</artifactId>
+      <version>${jaxrstools.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>nl.knaw.huygens</groupId>
+      <artifactId>visitei</artifactId>
+      <version>${visitei.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>nl.knaw.huygens</groupId>
+      <artifactId>huygens-persistence</artifactId>
+      <version>${persistence.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>${commons-configuration.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>${guice.version}</version>
+    </dependency>
+<!--
+     <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>1.0.0.GA</version>
+    </dependency> 
+-->
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>jsr250-api</artifactId>
+      <version>${jsr250-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.jaxrs</groupId>
+      <artifactId>jackson-jaxrs-json-provider</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+		<!-- jersey -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>${jersey.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-grizzly2</artifactId>
+      <version>${jersey.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey.contribs</groupId>
+      <artifactId>jersey-guice</artifactId>
+      <version>${jersey.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-json</artifactId>
+      <version>${jersey.version}</version>
+    </dependency>
+<!--
+     <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>yoga-core</artifactId>
+      <version>${yoga.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>yoga-jaxrs</artifactId>
+      <version>${yoga.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>yoga-hibernate</artifactId>
+      <version>${yoga.version}</version>
+    </dependency>
+ -->
+    <dependency>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>${c3p0.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${javaxservlet-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+		<!-- <dependency> <groupId>javax.persistence</groupId> <artifactId>persistence-api</artifactId> 
+			<version>1.0.2</version> </dependency> -->
+		<!-- <dependency> <groupId>elaborate_3000</groupId> <artifactId>common</artifactId> 
+			<version>[0.0.1,)</version> </dependency> -->
+
+    <dependency>
+      <artifactId>solr-solrj</artifactId>
+      <groupId>org.apache.solr</groupId>
+      <version>${solr.version}</version>
+      <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <artifactId>solr-core</artifactId>
+      <groupId>org.apache.solr</groupId>
+      <version>${solr.version}</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>${commons-lang.version}</version>
+    </dependency>
+
+		<!--
+     <dependency> <groupId>com.google.code.gson</groupId> <artifactId>gson</artifactId> 
+			<version>${gson.version}</version> </dependency>
+       -->
+
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <version>${freemarker.version}</version>
+    </dependency>
+
+		<!-- hibernate -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-c3p0</artifactId>
+      <version>${hibernate.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgresql.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <version>${jtidy.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>${jsoup.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.flexjson</groupId>
+      <artifactId>flexjson</artifactId>
+      <version>${flexjson.version}</version>
+    </dependency>
+
+    <!--  pdf -->
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>1.8.2</version>
+    </dependency>
+
+    <!-- runtime dependencies -->
+    <dependency>
+      <groupId>se.jiderhamn</groupId>
+      <artifactId>classloader-leak-prevention</artifactId>
+      <scope>runtime</scope>
+      <version>${classloader-leak-prevention.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+		<!-- test dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey.jersey-test-framework</groupId>
+      <artifactId>jersey-test-framework-grizzly</artifactId>
+      <version>${jersey.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>${hsqldb.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-testing</artifactId>
+      <version>${hibernate.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.ftl</include>
+          <include>**/*.js</include>
+          <include>**/*.css</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <testSourceDirectory>src/test/java</testSourceDirectory>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/java</directory>
+        <includes>
+          <include>**/*.html</include>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+          <include>**/*.ftl</include>
+        </includes>
+      </testResource>
+    </testResources>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler.version}</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.3</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>tomcat-maven-plugin</artifactId>
+        <version>${tomcat-maven.version}</version>
+        <configuration>
+          <server>${tomcat.server}</server>
+          <url>${tomcat.manager.url}</url>
+          <path>${tomcat.path}</path>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.1.0.M0</version>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <scm>
+    <tag>HEAD</tag>
+    <connection>scm:svn:svn+ssh://svn@hi7dev.huygens.knaw.nl/data/svn/svn/repos/elaborate/trunk/elaborate_backend</connection>
+    <developerConnection>scm:svn:svn+ssh://bramb@hi7dev.huygens.knaw.nl/data/svn/svn/repos/elaborate/trunk/elaborate_backend</developerConnection>
+  </scm>
+  <organization>
+    <name>Huygens ING</name>
+    <url>http://www.huygens.knaw.nl/</url>
+  </organization>
+  <issueManagement>
+    <system>Redmine</system>
+    <url>http://suzanna.huygens.knaw.nl/projects/elaborate-consolidatie</url>
+  </issueManagement>
+  <ciManagement>
+    <system>cruisecontrolrb</system>
+    <url>http://cruisecontrol.huygens.knaw.nl/builds/elaborate_backend</url>
+  </ciManagement>
+
+  <profiles>
+
+    <profile>
+      <id>local</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <tomcat.manager.url>http://localhost:8080/manager/html</tomcat.manager.url>
+        <tomcat.server>tomcat.local</tomcat.server>
+        <tomcat.path>/elaborate-backend</tomcat.path>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>testserver</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <tomcat.manager.url>http://demo7.huygens.knaw.nl/manager/html</tomcat.manager.url>
+        <tomcat.server>tomcat.demo7</tomcat.server>
+        <tomcat.path>/elab4testBE</tomcat.path>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>prepare-package</phase>
+                <configuration>
+                  <tasks>
+                    <echo>copying instances/elab4test/persistence.xml${project.basedir}</echo>
+                    <delete file="${project.build.outputDirectory}/META-INF/persistence.xml"/>
+                    <copy file="${project.basedir}/instances/elab4test/persistence.xml" tofile="${project.build.outputDirectory}/META-INF/persistence.xml"/>
+                    <echo>copying instances/elab4test/config.xml</echo>
+                    <delete file="${project.build.outputDirectory}/config.xml"/>
+                    <copy file="${project.basedir}/instances/elab4test/config.xml" tofile="${project.build.outputDirectory}/config.xml"/>
+                    <echo>copying instances/elab4test/logging.properties</echo>
+                    <delete file="${project.build.outputDirectory}/logging.properties"/>
+                    <copy file="${project.basedir}/instances/elab4test/logging.properties" tofile="${project.build.outputDirectory}/logging.properties"/>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>production</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <tomcat.manager.url>http://mb.huygens.knaw.nl/manager/html</tomcat.manager.url>
+        <tomcat.server>tomcat.mb</tomcat.server>
+        <tomcat.path>/elab4testBE</tomcat.path>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>prepare-package</phase>
+                <configuration>
+                  <tasks>
+                    <echo>copying instances/production/persistence.xml${project.basedir}</echo>
+                    <delete file="${project.build.outputDirectory}/META-INF/persistence.xml"/>
+                    <copy file="${project.basedir}/instances/production/persistence.xml" tofile="${project.build.outputDirectory}/META-INF/persistence.xml"/>
+                    <echo>copying instances/production/config.xml</echo>
+                    <delete file="${project.build.outputDirectory}/config.xml"/>
+                    <copy file="${project.basedir}/instances/production/config.xml" tofile="${project.build.outputDirectory}/config.xml"/>
+                    <echo>copying instances/production/logging.properties</echo>
+                    <delete file="${project.build.outputDirectory}/logging.properties"/>
+                    <copy file="${project.basedir}/instances/production/logging.properties" tofile="${project.build.outputDirectory}/logging.properties"/>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>standalone</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>appassembler-maven-plugin</artifactId>
+            <version>${appassembler-maven.version}</version>
+            <configuration>
+              <repositoryLayout>flat</repositoryLayout>
+              <repositoryName>lib</repositoryName>
+              <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+              <useWildcardClassPath>true</useWildcardClassPath>
+              <extraJvmArguments>-Xmx512m</extraJvmArguments>
+              <daemons>
+                <daemon>
+                  <id>elab4-backend</id>
+                  <mainClass>elaborate.editor.backend.ElaborateBackendServer</mainClass>
+                  <commandLineArguments>
+                    <commandLineArgument>start</commandLineArgument>
+                    <commandLineArgument>stop</commandLineArgument>
+                    <commandLineArgument>restart</commandLineArgument>
+                    <commandLineArgument>status</commandLineArgument>
+                  </commandLineArguments>
+                  <platforms>
+                    <platform>jsw</platform>
+                  </platforms>
+                </daemon>
+              </daemons>
+            </configuration>
+            <executions>
+              <execution>
+                <id>app-assemble</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>generate-daemons</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>${maven-assembly.version}</version>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/app.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
+
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
+  <repositories>
+    <repository>
+      <id>Huygens</id>
+      <name>Huygens repository</name>
+      <url>http://maven.huygens.knaw.nl/repository/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>central</id>
+      <name>central repository</name>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+  </repositories>
+
+
+</project>

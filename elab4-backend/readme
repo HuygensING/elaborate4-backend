@@ -1,0 +1,8 @@
+# build the backend
+  mvn clean package assembly:assembly
+
+#unpack target/elab4_backend*-server.zip to a directory of choice.
+#go to that directory, then to the afp directory
+#you can start the backend by calling 
+  bin/elab4_backend start
+#the backend accepts the commands: start stop restart status

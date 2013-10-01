@@ -1,0 +1,39 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+  version="2.0">
+  <persistence-unit name="nl.knaw.huygens.elaborate.old.jpa">
+    <description>Persistence unit for testing</description>
+
+    <class>elaborate.editor.model.orm.Annotation</class>
+    <class>elaborate.editor.model.orm.AnnotationMetadataItem</class>
+    <class>elaborate.editor.model.orm.AnnotationType</class>
+    <class>elaborate.editor.model.orm.AnnotationTypeMetadataItem</class>
+    <class>elaborate.editor.model.orm.Facsimile</class>
+    <class>elaborate.editor.model.orm.LogEntry</class>
+    <class>elaborate.editor.model.orm.Project</class>
+    <class>elaborate.editor.model.orm.ProjectAnnotationType</class>
+    <class>elaborate.editor.model.orm.ProjectEntry</class>
+    <class>elaborate.editor.model.orm.ProjectEntryMetadataField</class>
+    <class>elaborate.editor.model.orm.ProjectEntryMetadataItem</class>
+    <class>elaborate.editor.model.orm.ProjectMetadataField</class>
+    <class>elaborate.editor.model.orm.ProjectMetadataItem</class>
+    <class>elaborate.editor.model.orm.ProjectUser</class>
+    <class>elaborate.editor.model.orm.SearchData</class>
+    <class>elaborate.editor.model.orm.Transcription</class>
+    <class>elaborate.editor.model.orm.TranscriptionType</class>
+    <class>elaborate.editor.model.orm.User</class>
+    <class>elaborate.editor.model.orm.UserSetting</class>
+
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:testdb;shutdown=false;sql.syntax_pgs=true"/>
+      <property name="javax.persistence.jdbc.user" value="SA"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+      <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
+			<!-- <property name="hibernate.archive.autodetection" value="class" /> -->
+    </properties>
+  </persistence-unit>
+
+</persistence>

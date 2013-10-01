@@ -1,0 +1,212 @@
+package elaborate.util;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.output.NullWriter;
+import org.apache.commons.lang.StringUtils;
+import org.w3c.tidy.Tidy;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+
+import elaborate.editor.model.LoggableObject;
+
+public class StringUtil extends LoggableObject {
+  private static final String UTF8 = "UTF8";
+  static Tidy TIDY = new Tidy();
+  static {
+    TIDY.setAltText("");
+    TIDY.setAsciiChars(true);
+    TIDY.setBreakBeforeBR(false);
+    TIDY.setBurstSlides(false);
+    TIDY.setDropEmptyParas(true);
+    TIDY.setDropFontTags(true);
+    TIDY.setDropProprietaryAttributes(false);
+    TIDY.setEncloseBlockText(false);
+    TIDY.setEncloseText(false);
+    TIDY.setErrout(new PrintWriter(new NullWriter()));
+    TIDY.setEscapeCdata(true);
+    TIDY.setFixBackslash(true);
+    TIDY.setFixComments(true);
+    TIDY.setFixUri(true);
+    TIDY.setForceOutput(true);
+    TIDY.setHideComments(true);
+    TIDY.setHideEndTags(false);
+    TIDY.setIndentAttributes(false);
+    TIDY.setIndentCdata(false);
+    TIDY.setIndentContent(false);
+    TIDY.setInputEncoding(UTF8);
+    TIDY.setJoinClasses(true);
+    TIDY.setJoinStyles(true);
+    TIDY.setKeepFileTimes(false);
+    TIDY.setLiteralAttribs(false);
+    TIDY.setLogicalEmphasis(true);
+    TIDY.setLowerLiterals(true);
+    TIDY.setMakeBare(true);
+    TIDY.setMakeClean(true);
+    TIDY.setNumEntities(true);
+    TIDY.setOutputEncoding(UTF8);
+    TIDY.setPrintBodyOnly(true);
+    TIDY.setQuiet(false);
+    TIDY.setQuoteAmpersand(false);
+    TIDY.setQuoteMarks(false);
+    TIDY.setQuoteNbsp(false);
+    TIDY.setReplaceColor(false);
+    TIDY.setSmartIndent(false);
+    TIDY.setSpaces(1);
+    TIDY.setTidyMark(false);
+    TIDY.setTrimEmptyElements(false);
+    TIDY.setUpperCaseAttrs(false);
+    TIDY.setUpperCaseTags(false);
+    TIDY.setWord2000(true);
+    TIDY.setWrapAttVals(false);
+    TIDY.setWraplen(2000);
+    TIDY.setXmlOut(true);
+    TIDY.setXmlPi(false);
+    TIDY.setXmlSpace(false);
+    TIDY.setXmlTags(false);
+  }
+  private static final String PAGETITLESEPARATOR = " :: ";
+  private static final String APPNAME = "eLaborate3";
+  static final String DELIM = "+-*/(),.;'`\"<> ";
+
+  public static String normalize(String field) {
+    return field.toLowerCase().replaceAll("\\W+", " ").trim().replaceAll(" ", "_");
+  }
+
+  @SuppressWarnings("boxing")
+  public static String replace(String originalTerm, String replacementTerm, String body, List<Integer> occurrencesToReplace, boolean preserveCase) {
+    StringTokenizer tokenizer = new StringTokenizer(body, DELIM, true);
+
+    //    LOG.info("body:[{}]", body);
+    StringBuilder replaced = new StringBuilder(body.length());
+    int occurrence = 1;
+    while (tokenizer.hasMoreTokens()) {
+      String token = tokenizer.nextToken();
+      DelimiterDetector delimiterDetector = new DelimiterDetector(token);
+      String strippedToken = delimiterDetector.getStripped();
+      if (strippedToken.equalsIgnoreCase(originalTerm)) {
+        String replacement = preserveCase ? TextCase.detectCase(strippedToken).applyTo(replacementTerm) : replacementTerm;
+        replaced.append(occurrencesToReplace.contains(occurrence) ? delimiterDetector.getPreDelimiters() + replacement + delimiterDetector.getPostDelimiters() : token);
+        occurrence++;
+      } else {
+        replaced.append(token);
+      }
+    }
+    //    LOG.info("replaced:[{}]", replaced);
+    return replaced.toString();
+  }
+
+  static List<String> hostProtocols = Lists.newArrayList(new String[] { "http", "https" });
+
+  /**
+   * change ULRs in <code>textWithURLs</code> to links
+   * @param textWithURLs text with URLs
+   * @return text with links
+   */
+  public static String activateURLs(String textWithURLs) {
+    StringTokenizer tokenizer = new StringTokenizer(textWithURLs, "<> ", true);
+    StringBuilder replaced = new StringBuilder(textWithURLs.length());
+    while (tokenizer.hasMoreTokens()) {
+      String token = tokenizer.nextToken();
+      //      LOG.info("token={}", token);
+      try {
+        URL url = new URL(token);
+        // If possible then replace with anchor...
+        String linktext = token;
+        String file = url.getFile();
+        if (StringUtils.isNotBlank(file)) {
+          linktext = file;
+        }
+        String protocol = url.getProtocol();
+        if (hostProtocols.contains(protocol)) {
+          linktext = url.getHost() + linktext;
+        }
+        replaced.append("<a target=\"_blank\" href=\"" + url + "\">" + linktext + "</a>");
+      } catch (MalformedURLException e) {
+        replaced.append(token);
+      }
+    }
+
+    return replaced.toString();
+  }
+
+  //  public static String activateURLs(String textWithURLs) {
+  //    StringTokenizer tokenizer = new StringTokenizer(textWithURLs, DELIM, true);
+  //
+  //    List<String> htmlParts = Lists.newArrayList();
+  //    for (String part : textWithURLs.split("\\s")) {
+  //      try {
+  //        URL url = new URL(part);
+  //        // If possible then replace with anchor...
+  //        String linktext = part;
+  //        String file = url.getFile();
+  //        if (StringUtils.isNotBlank(file)) {
+  //          linktext = file;
+  //        }
+  //        String protocol = url.getProtocol();
+  //        if (hostProtocols.contains(protocol)) {
+  //          linktext = url.getHost() + linktext;
+  //        }
+  //        htmlParts.add("<a target=\"_blank\" href=\"" + url + "\">" + linktext + "</a>");
+  //      } catch (MalformedURLException e) {
+  //        htmlParts.add(part);
+  //      }
+  //    }
+  //    return Joiner.on(" ").join(htmlParts);
+  //  }
+
+  public static String pageTitle(String... subtitles) {
+    List<String> parts = Lists.newArrayList(APPNAME);
+    parts.addAll(Lists.newArrayList(subtitles));
+    return Joiner.on(PAGETITLESEPARATOR).join(parts);
+  }
+
+  public static String escapeQuotes(String string) {
+    return string.replaceAll("\"", "\\\\\"").replaceAll("'", "\\\\'");
+  }
+
+  static List<String> XML_ENTITIES = Lists.newArrayList("quot", "amp", "apos", "lt", "gt");
+
+  public static String fixXML(String brokenxml) {
+    String fixedXml = brokenxml.replaceAll("&", "&amp;");
+    for (String entity : XML_ENTITIES) {
+      fixedXml = fixedXml.replaceAll("&amp;" + entity + ";", "&" + entity + ";");
+    }
+    Pattern p = Pattern.compile("<([^<]*?)>");
+    Matcher matcher = p.matcher(fixedXml);
+    while (matcher.find()) {
+      String group = matcher.group();
+      String replacement = "&0&" + matcher.group(1) + "&1&";
+      fixedXml = fixedXml.replace(group, replacement);
+    }
+    fixedXml = fixedXml.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&0&", "<").replaceAll("&1&", ">");
+    return fixedXml;
+  }
+
+  public static String html2xml(String editBody) {
+    StringReader in = new StringReader(editBody);
+    StringWriter out = new StringWriter();
+    TIDY.parse(in, out);
+    try {
+      in.close();
+      out.close();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return out.toString().replaceAll("\r\n", "").replaceAll("\n", "");
+  }
+
+  private StringUtil() {
+    throw new AssertionError("Non-instantiable class");
+  }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="0.1">
+  <settings>
+    <version>0.1</version>
+
+    <solr>
+      <url>http://mb.huygens.knaw.nl/solr-elab4/entries/</url>
+    </solr>
+
+    <server>
+      <scheme>http</scheme>
+      <name>rest.elaborate.huygens.knaw.nl</name>
+    </server>
+  </settings>
+</config>
