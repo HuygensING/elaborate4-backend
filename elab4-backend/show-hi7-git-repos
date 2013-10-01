@@ -1,4 +1,0 @@
-#show git repo's op hi7dev
-ssh bramb@hi7dev.huygens.knaw.nl "ls -lF /data/git/git"
-echo "clone met:"
-echo "  git clone ssh://bramb@hi7dev.huygens.knaw.nl/data/git/git/<gitname>"

@@ -18,6 +18,6 @@ Project.configure do |project|
   # Ping Subversion for new revisions every 5 minutes (default: 30 seconds)
   project.scheduler.polling_interval = 5.minutes
 
-  project.source_control = Subversion.new(:url => 'svn+ssh://svn@hi7dev.huygens.knaw.nl/data/svn/svn/repos/elaborate/trunk/elaborate_backend')
+#  project.source_control = Subversion.new(:url => 'svn+ssh://svn@hi7dev.huygens.knaw.nl/data/svn/svn/repos/elaborate/trunk/elaborate_backend')
   project.do_clean_checkout :always
 end
