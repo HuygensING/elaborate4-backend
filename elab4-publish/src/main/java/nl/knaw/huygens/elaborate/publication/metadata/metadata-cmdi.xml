@@ -1,0 +1,49 @@
+<cmdi:CMD
+  CMDVersion="1.1"
+  xmlns:cmdi="http://www.clarin.eu/cmd/"
+  xmlns:database="http://www.oclc.org/pears/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703673/xsd"
+
+  <cmdi:Header>
+    <cmdi:MdCreator>Database import</cmdi:MdCreator>
+    <cmdi:MdCreationDate>2012-07-13</cmdi:MdCreationDate>
+    <cmdi:MdSelfLink>https://service.arthurianfiction.org/manuscript/MAN0000000001</cmdi:MdSelfLink>
+    <cmdi:MdProfile>clarin.eu:cr1:p_1345561703673</cmdi:MdProfile>
+    <cmdi:MdCollectionDisplayName>Arthurian Fiction project</cmdi:MdCollectionDisplayName>
+  </cmdi:Header>
+
+  <cmdi:Resources>
+    <cmdi:ResourceProxyList>
+      <cmdi:ResourceProxy id="MAN0000000001_NAR0000000212">
+        <cmdi:ResourceType>Metadata</cmdi:ResourceType>
+        <cmdi:ResourceRef>https://service.arthurianfiction.org/narrative/NAR0000000212</cmdi:ResourceRef>
+      </cmdi:ResourceProxy>
+    </cmdi:ResourceProxyList>
+    <cmdi:JournalFileProxyList/>
+    <cmdi:ResourceRelationList/>
+  </cmdi:Resources>
+
+  <cmdi:Components>
+    <cmdi:Elaborate>
+      <cmdi:edition>
+        <cmdi:CLARIN_PROFILE>clarin.eu:cr1:p_1345561703673</cmdi:CLARIN_PROFILE>
+        <cmdi:id>MAN0000000001</cmdi:id>
+        <cmdi:city></cmdi:city>
+        <cmdi:library>Private Collection</cmdi:library>
+        <cmdi:shelfmark></cmdi:shelfmark>
+        <cmdi:dates/>
+        <cmdi:origins/>
+        <cmdi:narratives>
+          <cmdi:narrative>
+            <cmdi:id>NAR0000000212</cmdi:id>
+            <cmdi:title>Gogulor</cmdi:title>
+          </cmdi:narrative>
+        </cmdi:narratives>
+        <cmdi:patrons/>
+        <cmdi:artists/>
+        <cmdi:scribes/>
+      </cmdi:manuscript>
+    </cmdi:Elaborate>
+  </cmdi:Components>
+</cmdi:CMD>

@@ -13,5 +13,20 @@
       <artifactId>huygens-persistence</artifactId>
       <version>${persistence.version}</version>
     </dependency>
+    <dependency>
+      <groupId>nl.knaw.huygens.oaipmh</groupId>
+      <artifactId>client-java</artifactId>
+      <version>${oaipmh.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <version>${freemarker.version}</version>
+    </dependency>
   </dependencies>
 </project>
