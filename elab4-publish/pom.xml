@@ -28,5 +28,11 @@
       <artifactId>freemarker</artifactId>
       <version>${freemarker.version}</version>
     </dependency>
+    <!-- text dependencies -->
+    <dependency>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>${xmlunit.version}</version>
+    </dependency>
   </dependencies>
 </project>
