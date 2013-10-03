@@ -80,14 +80,14 @@ public class PublishTask extends LoggableObject implements Runnable {
     List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
     int entryNum = 1;
     List<String> entryFilenames = Lists.newArrayList();
-    List<ThumbnailInfo> thumbnails = Lists.newArrayList();
+    Map<Long, List<String>> thumbnails = Maps.newHashMap();
     for (ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
         status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
         List<String> thumbnailUrls = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields);
         long id = projectEntry.getId();
         entryFilenames.add(id + ".json");
-        thumbnails.add(new ThumbnailInfo(id, thumbnailUrls));
+        thumbnails.put(id, thumbnailUrls);
         indexEntry(projectEntry);
       }
     }
@@ -145,7 +145,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     return MessageFormat.format("entry{0,number,#}.json", num);
   }
 
-  Map<String, Object> getProjectData(Project project, List<String> entryFilenames, List<ThumbnailInfo> thumbnails) {
+  Map<String, Object> getProjectData(Project project, List<String> entryFilenames, Map<Long, List<String>> thumbnails) {
     Map<String, String> metadataMap = project.getMetadataMap();
     Map<String, Object> map = Maps.newHashMap();
     map.put("id", project.getId());
@@ -323,7 +323,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     }
   }
 
-  private void exportPojectData(List<String> entryFilenames, List<ThumbnailInfo> thumbnails) {
+  private void exportPojectData(List<String> entryFilenames, Map<Long, List<String>> thumbnails) {
     File json = new File(jsonDir, "config.json");
     EntityManager entityManager = HibernateUtil.getEntityManager();
     Project project = entityManager.find(Project.class, projectId);
@@ -399,13 +399,4 @@ public class PublishTask extends LoggableObject implements Runnable {
     }
   }
 
-  public class ThumbnailInfo {
-    public long entryId;
-    public List<String> urls = Lists.newArrayList();
-
-    public ThumbnailInfo(long _entryId, List<String> _urls) {
-      this.entryId = _entryId;
-      this.urls = _urls;
-    }
-  }
 }
