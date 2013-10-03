@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.core.SecurityContext;
 
+import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +16,6 @@ import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
-import elaborate.editor.model.LoggableObject;
 import elaborate.editor.model.SessionService;
 
 public class AuthenticationResourceFilter extends LoggableObject implements ResourceFilter, ContainerRequestFilter {

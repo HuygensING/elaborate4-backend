@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import nl.knaw.huygens.LoggableObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -26,7 +28,6 @@ import com.google.common.collect.Maps;
 
 import elaborate.editor.model.FacetInfo;
 import elaborate.editor.model.FacetType;
-import elaborate.editor.model.LoggableObject;
 import elaborate.editor.solr.FacetCount.Option;
 
 public abstract class AbstractSolrServer extends LoggableObject implements SolrServerWrapper {
@@ -98,13 +99,13 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
     SolrQuery query = new SolrQuery();
     String[] fieldsToReturn = getIndexFieldToReturn(sp.getOrderLevels());
     query.setQuery(queryString)//
-        .setFields(fieldsToReturn)//
-        .setRows(ROWS)//
-        .addFacetField(facetFields)//
-        .setFacetMinCount(1)//
-        .setFacetLimit(FACET_LIMIT)//
-        .setHighlight(true)//
-        .setHighlightFragsize(HIGHLIGHT_FRAGSIZE);
+    .setFields(fieldsToReturn)//
+    .setRows(ROWS)//
+    .addFacetField(facetFields)//
+    .setFacetMinCount(1)//
+    .setFacetLimit(FACET_LIMIT)//
+    .setHighlight(true)//
+    .setHighlightFragsize(HIGHLIGHT_FRAGSIZE);
     query.set(HighlightParams.MAX_CHARS, -1);
     query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[textFieldMap.size()]));
     query.set(HighlightParams.Q, queryString);
@@ -271,15 +272,15 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
   private FacetCount convertFacet(FacetField field, String title, FacetType type) {
     if (field != null) {
       FacetCount facetCount = new FacetCount()//
-          .setName(field.getName())//
-          .setTitle(title)//
-          .setType(type);
+      .setName(field.getName())//
+      .setTitle(title)//
+      .setType(type);
       List<Count> counts = field.getValues();
       if (counts != null) {
         for (Count count : counts) {
           Option option = new FacetCount.Option()//
-              .setName(count.getName())//
-              .setCount(count.getCount());
+          .setName(count.getName())//
+          .setCount(count.getCount());
           facetCount.addOption(option);
         }
       }

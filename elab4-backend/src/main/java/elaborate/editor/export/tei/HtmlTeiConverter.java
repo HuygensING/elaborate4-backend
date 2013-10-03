@@ -16,6 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.XmlContext;
 
@@ -26,7 +27,6 @@ import org.xml.sax.SAXException;
 
 import com.google.common.base.Charsets;
 
-import elaborate.editor.model.LoggableObject;
 import elaborate.util.XmlUtil;
 
 public class HtmlTeiConverter extends LoggableObject {

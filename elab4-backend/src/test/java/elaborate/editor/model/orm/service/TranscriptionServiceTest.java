@@ -2,12 +2,12 @@ package elaborate.editor.model.orm.service;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import nl.knaw.huygens.LoggableObject;
 
 import org.junit.After;
 import org.junit.Before;
 
 import elaborate.editor.model.AnnotationInputWrapper;
-import elaborate.editor.model.LoggableObject;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.User;
 

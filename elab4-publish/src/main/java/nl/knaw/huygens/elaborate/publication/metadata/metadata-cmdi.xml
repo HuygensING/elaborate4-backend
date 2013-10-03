@@ -33,7 +33,7 @@
         <cmdi:library>Private Collection</cmdi:library>
         <cmdi:dates/>
         <cmdi:origins/>
-      </cmdi:manuscript>
+      </cmdi:edition>
     </cmdi:Elaborate>
   </cmdi:Components>
 </cmdi:CMD>

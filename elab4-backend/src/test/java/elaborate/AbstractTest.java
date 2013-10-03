@@ -1,5 +1,5 @@
 package elaborate;
 
-import elaborate.editor.model.LoggableObject;
+import nl.knaw.huygens.LoggableObject;
 
 public class AbstractTest extends LoggableObject {}

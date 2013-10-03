@@ -27,11 +27,11 @@ public class SolrIndexerTest extends AbstractTest {
     User creator = new User();
     entry = project.addEntry("brief 1", creator).setProjectEntryMetadataItems(projectEntryMetadataItems);
     entry.addTranscription(creator)//
-        .setBody("<body><ab id=\"9085822\"/>sdgdgdgsdgsdfg<ae id=\"9085822\"/></body>")//
-        .setTextLayer("layer1");
+    .setBody("<body><ab id=\"9085822\"/>sdgdgdgsdgsdfg<ae id=\"9085822\"/></body>")//
+    .setTextLayer("layer1");
     entry.addTranscription(creator)//
-        .setBody("<body>aap <i>noot</i> mies</body>")//
-        .setTextLayer("layer2");
+    .setBody("<body>aap <i>noot</i> mies</body>")//
+    .setTextLayer("layer2");
   }
 
   @After

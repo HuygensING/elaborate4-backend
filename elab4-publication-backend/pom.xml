@@ -16,10 +16,17 @@
   <dependencies>
     <!-- compile dependecies -->
     <dependency>
+      <groupId>nl.knaw.huygens.elab4</groupId>
+      <artifactId>elab4-solr</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>nl.knaw.huygens</groupId>
       <artifactId>jax-rs-tools</artifactId>
       <version>${jaxrstools.version}</version>
     </dependency>
+
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
@@ -36,30 +43,6 @@
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-json</artifactId>
       <version>${jersey.version}</version>
-    </dependency>
-
-    <!-- solr -->
-    <dependency>
-      <artifactId>solr-solrj</artifactId>
-      <groupId>org.apache.solr</groupId>
-      <version>${solr.version}</version>
-      <type>jar</type>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <artifactId>solr-core</artifactId>
-      <groupId>org.apache.solr</groupId>
-      <version>${solr.version}</version>
-      <type>jar</type>
     </dependency>
 
     <!-- provided dependencies -->

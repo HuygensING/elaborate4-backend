@@ -1,9 +1,9 @@
 package elaborate.editor.resources.orm;
 
+import nl.knaw.huygens.LoggableObject;
+
 import org.junit.After;
 import org.junit.Before;
-
-import elaborate.editor.model.LoggableObject;
 
 public class SearchResourceTest extends LoggableObject {
 

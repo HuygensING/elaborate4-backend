@@ -11,14 +11,14 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import nl.knaw.huygens.LoggableObject;
+
 import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.tidy.Tidy;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-
-import elaborate.editor.model.LoggableObject;
 
 public class StringUtil extends LoggableObject {
   private static final String UTF8 = "UTF8";

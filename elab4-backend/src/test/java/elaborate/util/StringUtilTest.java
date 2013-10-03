@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriBuilderException;
 
+import nl.knaw.huygens.LoggableObject;
+
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.junit.Test;
@@ -16,7 +18,6 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import elaborate.editor.model.LoggableObject;
 import elaborate.editor.resources.SessionResource;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;

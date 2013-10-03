@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import com.google.common.collect.Lists;
+import nl.knaw.huygens.LoggableObject;
 
-import elaborate.editor.model.LoggableObject;
+import com.google.common.collect.Lists;
 
 public class WarMaker extends LoggableObject {
   private final String basename;
