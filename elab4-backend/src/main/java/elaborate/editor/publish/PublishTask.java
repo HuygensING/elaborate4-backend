@@ -50,8 +50,8 @@ import elaborate.editor.solr.SolrServerWrapper;
 import elaborate.util.HibernateUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
-  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
-  //  private static final String TOMCAT_WEBAPPS_DIR = "/usr/share/tomcat6/webapps/";
+  //  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
+  private static final String TOMCAT_WEBAPPS_DIR = "/usr/share/tomcat6/webapps/";
   private static final String PUBLICATION_TOMCAT_URL = "http://demo7.huygens.knaw.nl/";
 
   private final Publication.Status status;
@@ -73,22 +73,27 @@ public class PublishTask extends LoggableObject implements Runnable {
     prepareDirectories();
     status.addLogline("setting up new solr index");
     prepareSolr();
+    EntityManager entityManager = HibernateUtil.getEntityManager();
     ProjectService ps = new ProjectService();
     List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
+    ps.setEntityManager(entityManager);
     List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
     int entryNum = 1;
     List<String> entryFilenames = Lists.newArrayList();
+    List<ThumbnailInfo> thumbnails = Lists.newArrayList();
     for (ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
         status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
-        entryFilenames.add(exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields));
+        List<String> thumbnailUrls = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields);
+        long id = projectEntry.getId();
+        entryFilenames.add(id + ".json");
+        thumbnails.add(new ThumbnailInfo(id, thumbnailUrls));
         indexEntry(projectEntry);
       }
     }
     commitAndCloseSolr();
-    exportPojectData(entryFilenames);
+    exportPojectData(entryFilenames, thumbnails);
 
-    EntityManager entityManager = HibernateUtil.getEntityManager();
     Project project = entityManager.find(Project.class, projectId);
     exportSearchConfig(project, projectEntryMetadataFields);
     String basename = getBasename(project);
@@ -140,13 +145,14 @@ public class PublishTask extends LoggableObject implements Runnable {
     return MessageFormat.format("entry{0,number,#}.json", num);
   }
 
-  Map<String, Object> getProjectData(Project project, List<String> entryFilenames) {
+  Map<String, Object> getProjectData(Project project, List<String> entryFilenames, List<ThumbnailInfo> thumbnails) {
     Map<String, String> metadataMap = project.getMetadataMap();
     Map<String, Object> map = Maps.newHashMap();
     map.put("id", project.getId());
     map.put("title", StringUtils.defaultIfBlank(metadataMap.get(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
     map.put("publicationDate", new DateTime().toString("yyyy-MM-dd HH:mm"));
     map.put("entryIds", entryFilenames);
+    map.put("thumbnails", thumbnails);
     map.put("entryTerm_singular", metadataMap.get(ProjectMetadataFields.ENTRYTERM_SINGULAR));
     map.put("entryTerm_plural", metadataMap.get(ProjectMetadataFields.ENTRYTERM_PLURAL));
     map.put("baseURL", getBaseURL(getBasename(project)));
@@ -278,7 +284,7 @@ public class PublishTask extends LoggableObject implements Runnable {
   private Map<String, String> getFacsimileData(String zoomableUrl) {
     Map<String, String> map = Maps.newHashMap();
     map.put("zoom", "https://tomcat.tiler01.huygens.knaw.nl/adore-huygens-viewer-2.0/viewer.html?rft_id=" + zoomableUrl);
-    map.put("thumbnail", "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=0&rft_id=" + zoomableUrl);
+    map.put("thumbnail", "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=" + zoomableUrl);
     return map;
   }
 
@@ -317,16 +323,16 @@ public class PublishTask extends LoggableObject implements Runnable {
     }
   }
 
-  private void exportPojectData(List<String> entryFilenames) {
+  private void exportPojectData(List<String> entryFilenames, List<ThumbnailInfo> thumbnails) {
     File json = new File(jsonDir, "config.json");
     EntityManager entityManager = HibernateUtil.getEntityManager();
     Project project = entityManager.find(Project.class, projectId);
-    Map<String, Object> projectData = getProjectData(project, entryFilenames);
+    Map<String, Object> projectData = getProjectData(project, entryFilenames, thumbnails);
     entityManager.close();
     exportJson(json, projectData);
   }
 
-  private String exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields) {
+  private List<String> exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields) {
     //    String entryFilename = entryFilename(entryNum);
     String entryFilename = projectEntry.getId() + ".json";
     File json = new File(jsonDir, entryFilename);
@@ -335,7 +341,12 @@ public class PublishTask extends LoggableObject implements Runnable {
     Map<String, Object> entryData = getProjectEntryData(projectEntry, projectEntryMetadataFields);
     entityManager.close();
     exportJson(json, entryData);
-    return entryFilename;
+
+    List<String> thumbnailUrls = Lists.newArrayList();
+    for (Map<String, String> map : (List<Map<String, String>>) entryData.get("facsimiles")) {
+      thumbnailUrls.add(map.get("thumbnail"));
+    }
+    return thumbnailUrls;
   }
 
   private void deploy(File war) {
@@ -385,6 +396,16 @@ public class PublishTask extends LoggableObject implements Runnable {
       solrServer.shutdown();
     } catch (IndexException e) {
       e.printStackTrace();
+    }
+  }
+
+  public class ThumbnailInfo {
+    public long entryId;
+    public List<String> urls = Lists.newArrayList();
+
+    public ThumbnailInfo(long _entryId, List<String> _urls) {
+      this.entryId = _entryId;
+      this.urls = _urls;
     }
   }
 }
