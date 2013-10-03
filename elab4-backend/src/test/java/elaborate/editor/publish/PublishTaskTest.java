@@ -13,13 +13,13 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import elaborate.AbstractTest;
 import elaborate.editor.model.FacetInfo;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.publish.Publication.Settings;
-import elaborate.editor.publish.PublishTask.ThumbnailInfo;
 
 public class PublishTaskTest extends AbstractTest {
 
@@ -39,7 +39,7 @@ public class PublishTaskTest extends AbstractTest {
     PublishTask publishTask = new PublishTask(settings);
     List<String> entries = ImmutableList.of("entry1.json", "entry2.json");
 
-    List<ThumbnailInfo> thumbnails = Lists.newArrayList();
+    Map<Long, List<String>> thumbnails = Maps.newHashMap();
     Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
     assertEquals(projectTitle, projectData.get("title"));
 
