@@ -1,0 +1,76 @@
+function e4-set-eb {
+  export eb=$1	
+}
+
+function e4-set-login {
+	e4-set-username $1
+	e4-set-password $2
+}
+
+function e4-set-username {
+  export e4_username=$1	
+}
+
+function e4-set-password {
+  export e4_password=$1
+}
+
+function e4-login {
+  authtoken=`curl --silent --show-error --data "username=$e4_username&password=$e4_password" $eb/sessions/login/|jq -r ".token"`
+  if [ -z "$authtoken" ];then
+    echo "login failed for username=$e4_username & password=$e4_password on $eb"
+    curl -i --data "username=$e4_username&password=$e4_password" $eb/sessions/login/
+  else
+    echo "login successful, token=$authtoken"
+  fi
+  export authtoken
+  e4post='curl -i -H "Authorization: SimpleAuth $authtoken" -H "Content-Type: application/json" -X POST'
+  export e4post
+  e4put='curl -i -H "Authorization: SimpleAuth $authtoken" -H "Content-Type: application/json" -X PUT'
+  export e4put
+}
+ 
+function e4-show-projects {
+  curl -s -H "Authorization: SimpleAuth $authtoken" $eb/projects|jq ".[]|{id,title}"
+}
+
+function e4-show-project-entrymetadatafields {
+  e4-get-json $eb/projects/$project_id/entrymetadatafields|jq "."
+}
+
+function e4-show-version {
+  e4-get-json $eb/version
+}
+
+function e4-publish {
+  project_id=$1
+  curl -i -H "Authorization: SimpleAuth $authtoken" -H "Content-Type: application/json" -X POST -d "{}" $eb/projects/$project_id/publication
+}
+
+function e4-get {
+  curl -i -H "Authorization: SimpleAuth $authtoken" $@
+}
+
+function e4-get-json {
+  curl -s -H "Authorization: SimpleAuth $authtoken" $@|jq "."
+}
+
+function e4-show-log {
+  project_id=$1
+  curl -s -H "Authorization: SimpleAuth $authtoken" $eb/projects/$project_id/log |jq "."
+}
+
+function e4-delete {
+  curl -i -H "Authorization: SimpleAuth $authtoken" -X DELETE $@
+}
+
+function e4-put {
+  curl -i -H "Authorization: SimpleAuth $authtoken" -H "Content-Type: application/json" -X PUT $@
+}
+
+function e4-post {
+  curl -i -H "Authorization: SimpleAuth $authtoken" -H "Content-Type: application/json" -X POST $@
+}
+
+e4-set-eb http://10.152.32.82:2013
+e4-set-login root d3gelijk
