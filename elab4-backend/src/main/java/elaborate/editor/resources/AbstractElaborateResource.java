@@ -6,11 +6,12 @@ import java.net.URISyntaxException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 
+import nl.knaw.huygens.LoggableObject;
+
 import com.sun.jersey.spi.container.ContainerRequest;
 
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.ElaborateSecurityContext;
-import elaborate.editor.model.LoggableObject;
 import elaborate.editor.model.orm.User;
 
 public abstract class AbstractElaborateResource extends LoggableObject {

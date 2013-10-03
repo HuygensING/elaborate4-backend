@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 
 import javax.inject.Singleton;
 
+import nl.knaw.huygens.LoggableObject;
+
 import org.apache.commons.lang.RandomStringUtils;
 
 import com.google.common.collect.Lists;

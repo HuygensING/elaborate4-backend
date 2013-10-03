@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
+import nl.knaw.huygens.LoggableObject;
+
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
 
@@ -14,7 +16,6 @@ import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.AbstractTrackedEntity;
 import elaborate.editor.model.ElaborateRoles;
-import elaborate.editor.model.LoggableObject;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;

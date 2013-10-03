@@ -2,6 +2,7 @@ package elaborate.editor.resources.orm.wrappers;
 
 import java.util.List;
 
+import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.tei.Document;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -10,7 +11,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
-import elaborate.editor.model.LoggableObject;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.XmlUtil;
 

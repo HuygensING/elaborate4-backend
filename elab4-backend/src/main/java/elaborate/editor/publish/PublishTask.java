@@ -13,6 +13,8 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import nl.knaw.huygens.LoggableObject;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +29,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
-import elaborate.editor.model.LoggableObject;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationMetadataItem;

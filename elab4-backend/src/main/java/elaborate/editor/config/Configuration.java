@@ -9,6 +9,8 @@ import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
 
+import nl.knaw.huygens.LoggableObject;
+
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
@@ -17,8 +19,6 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-
-import elaborate.editor.model.LoggableObject;
 
 public final class Configuration extends LoggableObject {
   private static final String SOLR_SORT_FIELDS = "solr.sort_fields";
