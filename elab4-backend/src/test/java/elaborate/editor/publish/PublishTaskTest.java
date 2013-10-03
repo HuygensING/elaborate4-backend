@@ -19,6 +19,7 @@ import elaborate.editor.model.FacetInfo;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.publish.Publication.Settings;
+import elaborate.editor.publish.PublishTask.ThumbnailInfo;
 
 public class PublishTaskTest extends AbstractTest {
 
@@ -38,7 +39,8 @@ public class PublishTaskTest extends AbstractTest {
     PublishTask publishTask = new PublishTask(settings);
     List<String> entries = ImmutableList.of("entry1.json", "entry2.json");
 
-    Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries);
+    List<ThumbnailInfo> thumbnails = Lists.newArrayList();
+    Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
     assertEquals(projectTitle, projectData.get("title"));
 
     LOG.info("projectData={}", projectData);
@@ -81,9 +83,9 @@ public class PublishTaskTest extends AbstractTest {
   public void testGetSearchConfigMap() throws Exception {
     List<String> selectedProjectEntryMetadataFields = ImmutableList.of("Field1", "Field2", "Field3");
     Project project = new Project()//
-        .setProjectEntryMetadataFieldnames(ImmutableList.of("Field1", "Field2", "Field3", "field4"))//
-        .setLevel1("Field1")//
-        .setLevel2("Field3");
+    .setProjectEntryMetadataFieldnames(ImmutableList.of("Field1", "Field2", "Field3", "field4"))//
+    .setLevel1("Field1")//
+    .setLevel2("Field3");
     SearchConfig searchConfig = new SearchConfig(project, selectedProjectEntryMetadataFields);
     LOG.info("searchConfig={}", searchConfig);
     assertNotNull(searchConfig);
