@@ -3,7 +3,7 @@ package nl.knaw.huygens.elaborate.publication.metadata;
 import java.util.Date;
 
 public class CmdiRecord extends AbstractMetadataRecord {
-  private static final String TEMPLATE = "metadata-cmdi.xml";
+  private static final String TEMPLATE = "metadata-cmdi.xml.ftl";
 
   private String mdSelfLink = "";
   private String mdCreator = "";

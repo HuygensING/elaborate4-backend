@@ -1,7 +1,7 @@
 package nl.knaw.huygens.elaborate.publication.metadata;
 
 public class DublinCoreRecord extends AbstractMetadataRecord {
-  private static final String TEMPLATE = "metadata-oai_dc.xml";
+  private static final String TEMPLATE = "metadata-oai_dc.xml.ftl";
 
   /*
    * see http://dublincore.org/documents/dces/
