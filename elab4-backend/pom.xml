@@ -13,12 +13,12 @@
     <dependency>
       <groupId>nl.knaw.huygens.elab4</groupId>
       <artifactId>elab4-common</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>nl.knaw.huygens.elab4</groupId>
       <artifactId>elab4-solr</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>nl.knaw.huygens</groupId>

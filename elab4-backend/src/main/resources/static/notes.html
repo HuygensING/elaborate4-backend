@@ -168,6 +168,17 @@ geeft een array van user id's</li>
 <p><code>publishable</code> is optional</p></li>
 <li><p>Delete/wissen: <br />
 <code>DELETE</code>  <code>/projects/{project_id}/entries/{entry_id}</code></p></li>
+<li><p>entrysettings opvragen: <br />
+<code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/settings</code></p></li>
+<li><p>entrysettings bijwerken: <br />
+<code>PUT</code> <code>/projects/{project_id}/entries/{entry_id}/settings</code></p>
+
+<pre><code>  {
+    "key" : "value",
+  }
+</code></pre>
+
+<p>waarbij de values strings zijn.</p></li>
 <li><p>alle transcripties van deze entry: <br />
 <code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/transcriptions</code></p></li>
 </ul>

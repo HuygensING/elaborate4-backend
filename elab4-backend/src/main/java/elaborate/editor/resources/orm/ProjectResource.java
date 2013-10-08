@@ -287,7 +287,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Path("{project_id}/entries/{entry_id}/settings")
   @Produces(UTF8MediaType.APPLICATION_JSON)
   @APIDesc("Returns the settings of the project entry with the given entry_id")
-  public Map<String, Object> getProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id) {
+  public Map<String, String> getProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id) {
     return projectEntryService.getProjectEntrySettings(entry_id, getUser());
   }
 
@@ -295,7 +295,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Path("{project_id}/entries/{entry_id}/settings")
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @APIDesc("Updates the settings of the project entry with the given entry_id")
-  public void updateProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id, Map<String, Object> projectEntrySettings) {
+  public void updateProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id, Map<String, String> projectEntrySettings) {
     projectEntryService.updateProjectEntrySettings(project_id, entry_id, projectEntrySettings, getUser());
   }
 

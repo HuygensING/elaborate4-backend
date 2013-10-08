@@ -158,6 +158,19 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 * Delete/wissen:  
   `DELETE`  `/projects/{project_id}/entries/{entry_id}`
 
+
+* entrysettings opvragen:  
+  `GET` `/projects/{project_id}/entries/{entry_id}/settings`
+
+* entrysettings bijwerken:  
+  `PUT` `/projects/{project_id}/entries/{entry_id}/settings`
+
+          {
+            "key" : "value",
+          }
+
+  waarbij de values strings zijn.
+
 * alle transcripties van deze entry:  
   `GET` `/projects/{project_id}/entries/{entry_id}/transcriptions`
 
