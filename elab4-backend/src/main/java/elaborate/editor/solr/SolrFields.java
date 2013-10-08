@@ -14,10 +14,10 @@ public class SolrFields {
 
   public static final String PROJECT_ID = "project_id";
   public static final String NAME = "name";
-  static final String ID = "id";
-  static final String PUBLISHABLE = "publishable";
-
+  public static final String PUBLISHABLE = "publishable";
   public static final String METADATAFIELD_PREFIX = "metadata_";
+
+  static final String ID = "id";
   static final String TEXTLAYER_PREFIX = "textlayer_";
   static final String TEXTLAYERCS_PREFIX = "textlayercs_";
   static final String ANNOTATION_PREFIX = "annotations_";

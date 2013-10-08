@@ -76,8 +76,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     beginTransaction();
     ProjectEntry projectEntry = find(getEntityClass(), id);
     Transcription transcription = projectEntry.addTranscription(user)//
-        .setBody(transcriptionInput.getBodyForDb())//
-        .setTextLayer(transcriptionInput.textLayer);
+    .setBody(transcriptionInput.getBodyForDb())//
+    .setTextLayer(transcriptionInput.textLayer);
     persist(transcription);
     commitTransaction();
     return transcription;
@@ -98,8 +98,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     Project project = projectEntry.getProject();
 
     Facsimile facsimile = projectEntry.addFacsimile(facsimileData.getName(), facsimileData.getTitle(), user)//
-        .setFilename(facsimileData.getFilename())//
-        .setZoomableUrl(facsimileData.getZoomableUrl());
+    .setFilename(facsimileData.getFilename())//
+    .setZoomableUrl(facsimileData.getZoomableUrl());
     persist(facsimile);
     persist(project.addLogEntry(MessageFormat.format("added facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
     commitTransaction();
@@ -126,8 +126,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
       throw new NotFoundException("no facsimile with id " + facsimile_id + " found");
     }
     facsimile.setName(facsimileData.getName())//
-        .setFilename(facsimileData.getFilename())//
-        .setZoomableUrl(facsimileData.getZoomableUrl());
+    .setFilename(facsimileData.getFilename())//
+    .setZoomableUrl(facsimileData.getZoomableUrl());
     persist(facsimile);
     ProjectEntry projectEntry = facsimile.getProjectEntry();
     persist(project.addLogEntry(MessageFormat.format("updated facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
@@ -149,17 +149,49 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
   }
 
   /* projectentrysettings */
-  public Map<String, String> getProjectEntrySettings(long entry_id, User user) {
+  public Map<String, Object> getProjectEntrySettings(long entry_id, User user) {
     openEntityManager();
 
-    Map<String, String> map = Maps.newHashMap();
     ProjectEntry pe = read(entry_id);
+    Map<String, Object> map = Maps.newHashMap();
+    map.put(ProjectEntry.PUBLISHABLE, pe.isPublishable());
+    String[] projectEntryMetadataFieldnames = pe.getProject().getProjectEntryMetadataFieldnames();
+    for (String fieldname : projectEntryMetadataFieldnames) {
+      map.put(fieldname, "");
+    }
     for (ProjectEntryMetadataItem pemi : pe.getProjectEntryMetadataItems()) {
       map.put(pemi.getField(), pemi.getData());
     }
 
     closeEntityManager();
     return map;
+  }
+
+  public void updateProjectEntrySettings(long project_id, long entry_id, Map<String, Object> projectEntrySettings, User creator) {
+    beginTransaction();
+    projectService.setEntityManager(getEntityManager());
+    Project project = projectService.getProjectIfUserIsAllowed(project_id, creator);
+
+    ProjectEntry pe = read(entry_id);
+    for (ProjectEntryMetadataItem projectEntryMetadataItem : pe.getProjectEntryMetadataItems()) {
+      getEntityManager().remove(projectEntryMetadataItem);
+    }
+
+    if (projectEntrySettings.containsKey(ProjectEntry.PUBLISHABLE)) {
+      boolean publishable = (Boolean) projectEntrySettings.remove(ProjectEntry.PUBLISHABLE);
+      pe.setPublishable(publishable);
+      persist(pe);
+    }
+    for (Entry<String, Object> settingsEntry : projectEntrySettings.entrySet()) {
+      String key = settingsEntry.getKey();
+      String value = (String) settingsEntry.getValue();
+      ProjectEntryMetadataItem pemi = pe.addMetadataItem(key, value, creator);
+      persist(pemi);
+    }
+    String logLine = MessageFormat.format("updated metadata for entry ''{0}''", pe.getName());
+    updateParents(pe, creator, logLine);
+
+    commitTransaction();
   }
 
   public void updateMultipleProjectEntrySettings(long project_id, MultipleProjectEntrySettings mpes, User user) {
