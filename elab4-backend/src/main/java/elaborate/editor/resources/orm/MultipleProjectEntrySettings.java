@@ -5,9 +5,10 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import elaborate.editor.model.orm.ProjectEntry;
+
 @XmlRootElement
 public class MultipleProjectEntrySettings {
-  private static final String PUBLISHABLE = "Publishable";
   private List<Long> projectEntryIds;
   private Map<String, Object> settings;
   private boolean publishable;
@@ -28,8 +29,8 @@ public class MultipleProjectEntrySettings {
   }
 
   public void setSettings(Map<String, Object> _settings) {
-    if (_settings.containsKey(PUBLISHABLE)) {
-      publishable = (Boolean) _settings.remove(PUBLISHABLE);
+    if (_settings.containsKey(ProjectEntry.PUBLISHABLE)) {
+      publishable = (Boolean) _settings.remove(ProjectEntry.PUBLISHABLE);
       changePublishable = true;
     }
     this.settings = _settings;

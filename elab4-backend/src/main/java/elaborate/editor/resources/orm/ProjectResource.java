@@ -287,8 +287,16 @@ public class ProjectResource extends AbstractElaborateResource {
   @Path("{project_id}/entries/{entry_id}/settings")
   @Produces(UTF8MediaType.APPLICATION_JSON)
   @APIDesc("Returns the settings of the project entry with the given entry_id")
-  public Map<String, String> getProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id) {
+  public Map<String, Object> getProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id) {
     return projectEntryService.getProjectEntrySettings(entry_id, getUser());
+  }
+
+  @PUT
+  @Path("{project_id}/entries/{entry_id}/settings")
+  @Consumes(UTF8MediaType.APPLICATION_JSON)
+  @APIDesc("Updates the settings of the project entry with the given entry_id")
+  public void updateProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id, Map<String, Object> projectEntrySettings) {
+    projectEntryService.updateProjectEntrySettings(project_id, entry_id, projectEntrySettings, getUser());
   }
 
   /* update multiple entry settings */
@@ -510,11 +518,11 @@ public class ProjectResource extends AbstractElaborateResource {
 
   private void addURI(Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
     UriBuilder builder = UriBuilder//
-        .fromPath(prevLink)//
-        .scheme(config.getStringSetting("server.scheme", "html"))//
-        .host(config.getStringSetting("server.name", "127.0.0.1"))//
-        .queryParam("start", start)//
-        .queryParam("rows", rows);
+    .fromPath(prevLink)//
+    .scheme(config.getStringSetting("server.scheme", "html"))//
+    .host(config.getStringSetting("server.name", "127.0.0.1"))//
+    .queryParam("start", start)//
+    .queryParam("rows", rows);
     int port = config.getIntSetting("server.port", DEFAULT_PORT);
     if (port != DEFAULT_PORT) {
       builder.port(port);

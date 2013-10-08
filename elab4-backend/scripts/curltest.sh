@@ -2,6 +2,7 @@ eb=http://10.152.32.82:2013
 eb=http://rest.elaborate.huygens.knaw.nl
 
 rootcode=`curl --silent --show-error --data "username=root&password=toor" $eb/sessions/login/|jq -r ".token"`; echo $rootcode
+rootcode=`curl --silent --show-error --data "username=root&password=d3gelijk" $eb/sessions/login/|jq -r ".token"`; echo $rootcode
 
 curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -d '{"term":"deus","textLayers":["Diplomatic"],"searchInAnnotations":"true"}' $eb/projects/17/search/
 curl -v -H "Authorization: SimpleAuth $rootcode"  $eb/projects/1/search/201|jq "."
@@ -86,7 +87,7 @@ curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/j
 # project entry setting
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/$entry_id/settings|jq "."
 
-# delete entry settings
+# delete entry
 curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/projects/$project_id/entries/$entry_id
 
 # update entry settings
