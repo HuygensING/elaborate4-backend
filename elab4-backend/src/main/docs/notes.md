@@ -425,4 +425,4 @@ publicatie fase 2:
 project entries aanmelden bij oaipmh
 
 -->
-Last updated: 2013-09-26
+Last updated: 2013-10-08
