@@ -149,12 +149,11 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
   }
 
   /* projectentrysettings */
-  public Map<String, Object> getProjectEntrySettings(long entry_id, User user) {
+  public Map<String, String> getProjectEntrySettings(long entry_id, User user) {
     openEntityManager();
 
     ProjectEntry pe = read(entry_id);
-    Map<String, Object> map = Maps.newHashMap();
-    map.put(ProjectEntry.PUBLISHABLE, pe.isPublishable());
+    Map<String, String> map = Maps.newHashMap();
     String[] projectEntryMetadataFieldnames = pe.getProject().getProjectEntryMetadataFieldnames();
     for (String fieldname : projectEntryMetadataFieldnames) {
       map.put(fieldname, "");
@@ -167,7 +166,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     return map;
   }
 
-  public void updateProjectEntrySettings(long project_id, long entry_id, Map<String, Object> projectEntrySettings, User creator) {
+  public void updateProjectEntrySettings(long project_id, long entry_id, Map<String, String> projectEntrySettings, User creator) {
     beginTransaction();
     projectService.setEntityManager(getEntityManager());
     Project project = projectService.getProjectIfUserIsAllowed(project_id, creator);
@@ -177,14 +176,9 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
       getEntityManager().remove(projectEntryMetadataItem);
     }
 
-    if (projectEntrySettings.containsKey(ProjectEntry.PUBLISHABLE)) {
-      boolean publishable = (Boolean) projectEntrySettings.remove(ProjectEntry.PUBLISHABLE);
-      pe.setPublishable(publishable);
-      persist(pe);
-    }
-    for (Entry<String, Object> settingsEntry : projectEntrySettings.entrySet()) {
+    for (Entry<String, String> settingsEntry : projectEntrySettings.entrySet()) {
       String key = settingsEntry.getKey();
-      String value = (String) settingsEntry.getValue();
+      String value = settingsEntry.getValue();
       ProjectEntryMetadataItem pemi = pe.addMetadataItem(key, value, creator);
       persist(pemi);
     }

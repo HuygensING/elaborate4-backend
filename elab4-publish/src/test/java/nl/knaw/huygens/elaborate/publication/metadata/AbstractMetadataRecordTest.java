@@ -18,24 +18,24 @@ public class AbstractMetadataRecordTest extends XMLTestCase {
   @After
   public void tearDown() throws Exception {}
 
-  @Test
-  public void testDCAsXML() throws Exception {
-    DublinCoreRecord dc = new DublinCoreRecord()//
-    .setType(DCMITypes.COLLECTION)//
-    .setDate("now")//
-    .setContributor("contributor");
-    String xml = dc.asXML();
-    LOG.info("xml={}", xml);
-    //    assertXpathExists("/dc/date", xml);
-    //    assertXpathExists("/oai:dc/dc:date", xml);
-    //    assertXpathEvaluatesTo("now", "/oai:dc/dc:date", xml);
-    //    assertXpathEvaluatesTo("Collection", "/oai:dc/dc:type", xml);
-    //    assertXpathEvaluatesTo("contributor", "/oai:dc/dc:contributor", xml);
-    //    assertXMLValid(xml);
-    assertTrue(xml.contains(">now<"));
-    assertTrue(xml.contains(">Collection<"));
-    assertTrue(xml.contains(">contributor<"));
-  }
+  //  @Test
+  //  public void testDCAsXML() throws Exception {
+  //    DublinCoreRecord dc = new DublinCoreRecord()//
+  //    .setType(DCMITypes.COLLECTION)//
+  //    .setDate("now")//
+  //    .setContributor("contributor");
+  //    String xml = dc.asXML();
+  //    LOG.info("xml={}", xml);
+  //    //    assertXpathExists("/dc/date", xml);
+  //    //    assertXpathExists("/oai:dc/dc:date", xml);
+  //    //    assertXpathEvaluatesTo("now", "/oai:dc/dc:date", xml);
+  //    //    assertXpathEvaluatesTo("Collection", "/oai:dc/dc:type", xml);
+  //    //    assertXpathEvaluatesTo("contributor", "/oai:dc/dc:contributor", xml);
+  //    //    assertXMLValid(xml);
+  //    assertTrue(xml.contains(">now<"));
+  //    assertTrue(xml.contains(">Collection<"));
+  //    assertTrue(xml.contains(">contributor<"));
+  //  }
 
   @Test
   public void testCMDIAsXML() throws Exception {
