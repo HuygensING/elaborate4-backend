@@ -78,6 +78,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
   /* private */
   protected void checkEntityFound(T entity, long id) {
     if (entity == null) {
+      closeEntityManager();
       throw new NotFoundException(MessageFormat.format("No {0} found with id {1,number,#}", getEntityName(), id));
     }
   }

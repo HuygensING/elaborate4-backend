@@ -38,7 +38,6 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.model.orm.service.TranscriptionService;
-import elaborate.editor.publish.Publication;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 import elaborate.jaxrs.APIDesc;
@@ -437,21 +436,10 @@ public class ProjectResource extends AbstractElaborateResource {
   }
 
   /* publish */
-  @POST
-  @Path("{project_id}/publication")
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("begin the publication of the project")
-  public Response startPublication(@PathParam("project_id") long project_id, Publication.Settings settings) {
-    Publication.Status status = projectService.createPublicationStatus(project_id, settings, getUser());
-    return Response.created(status.getURI()).build();
-  }
 
-  @GET
-  @Path("{project_id}/publication/{status_id}")
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Returns the status of the publication with the given status_id")
-  public Publication.Status getPublicationStatus(@PathParam("status_id") String status_id) {
-    return projectService.getPublicationStatus(status_id);
+  @Path("{project_id}/publication")
+  public PublicationResource getPublicationResource() {
+    return new PublicationResource(getUser(), projectService);
   }
 
   /* search */

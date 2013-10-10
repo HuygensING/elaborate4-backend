@@ -60,6 +60,8 @@ public class PublishTask extends LoggableObject implements Runnable {
   private File distDir;
   private File jsonDir;
   private final Long projectId;
+  private SolrServerWrapper solrServer;
+  private final AnnotationService annotationService = new AnnotationService();
 
   public PublishTask(Publication.Settings settings) {
     this.settings = settings;
@@ -174,8 +176,6 @@ public class PublishTask extends LoggableObject implements Runnable {
       return f1.getFilename().compareTo(f2.getFilename());
     }
   };
-  private SolrServerWrapper solrServer;
-  private final AnnotationService annotationService = new AnnotationService();
 
   Map<String, Object> getProjectEntryData(ProjectEntry projectEntry, List<String> projectMetadataFields) {
     Map<String, Object> map = Maps.newHashMap();
@@ -296,6 +296,9 @@ public class PublishTask extends LoggableObject implements Runnable {
     try {
       File publicationResourceDir = new File(resource.toURI());
       FileUtils.copyDirectory(publicationResourceDir, distDir);
+      String indexfilename = "index-" + settings.getProjectType() + ".html";
+      File index = new File(distDir, indexfilename);
+      index.renameTo(new File(distDir, "index.html"));
     } catch (URISyntaxException e) {
       e.printStackTrace();
     } catch (IOException e) {

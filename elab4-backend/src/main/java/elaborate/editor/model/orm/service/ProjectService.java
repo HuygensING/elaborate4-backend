@@ -32,6 +32,7 @@ import elaborate.editor.export.tei.TeiConversionConfig;
 import elaborate.editor.export.tei.TeiMaker;
 import elaborate.editor.model.Action;
 import elaborate.editor.model.FacetInfo;
+import elaborate.editor.model.ProjectTypes;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationMetadataItem;
 import elaborate.editor.model.orm.AnnotationType;
@@ -502,18 +503,25 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     closeEntityManager();
   }
 
-  public Publication.Status createPublicationStatus(long project_id, Publication.Settings settings, User user) {
+  public Publication.Status createPublicationStatus(long project_id, User user) {
     Publisher publisher = Publisher.instance();
     openEntityManager();
     Project project = getProjectIfUserIsAllowed(project_id, user);
     boolean canPublish = user.getPermission(project).can(Action.PUBLISH);
+    Map<String, String> projectMetadata = project.getMetadataMap();
     closeEntityManager();
 
     if (!canPublish) {
       throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
     };
 
-    settings.setProjectId(project_id);
+    List<Long> annotationTypeIds = Lists.newArrayList();
+    List<String> projectEntryMetadataFields = Lists.newArrayList();
+    Publication.Settings settings = new Publication.Settings()//
+    .setProjectId(project_id)//
+    //    .setAnnotationTypeIds(annotationTypeIds)//
+    //    .setProjectEntryMetadataFields(projectEntryMetadataFields)//
+    .setProjectType(StringUtils.defaultIfBlank(projectMetadata.get("projectType"), ProjectTypes.COLLECTION));
     Publication.Status publicationStatus = publisher.publish(settings);
 
     return publicationStatus;
