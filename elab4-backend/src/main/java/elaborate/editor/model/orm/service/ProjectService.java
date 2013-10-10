@@ -40,6 +40,7 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.ProjectMetadataItem;
 import elaborate.editor.model.orm.ProjectUser;
+import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
@@ -141,12 +142,12 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     //        .setParameter("projectId", id)//
     //        .getResultList();
     List<ProjectEntry> resultList = getEntityManager()//.
-        .createQuery("from ProjectEntry pe" + //
-            " where project_id=:projectId" + //
-            " order by pe.name",//
-            ProjectEntry.class)//
-        .setParameter("projectId", id)//
-        .getResultList();
+    .createQuery("from ProjectEntry pe" + //
+        " where project_id=:projectId" + //
+        " order by pe.name",//
+        ProjectEntry.class)//
+    .setParameter("projectId", id)//
+    .getResultList();
     ImmutableList<ProjectEntry> projectEntries = ImmutableList.copyOf(resultList);
 
     return projectEntries;
@@ -158,6 +159,11 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     Project project = find(getEntityClass(), id);
     ProjectEntry entry = project.addEntry(projectEntry.getName(), user);
     persist(entry);
+    String[] textLayers = project.getTextLayers();
+    for (String textLayer : textLayers) {
+      Transcription transcription = entry.addTranscription(user).setTextLayer(textLayer);
+      persist(transcription);
+    }
     persist(project.addLogEntry("added entry " + projectEntry.getName(), user));
 
     commitTransaction();
@@ -310,36 +316,36 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   private Long getTranscriptionCount(long project_id, EntityManager entityManager) {
     Long transcriptionCount = (Long) entityManager//
-        .createQuery("select count(*) from Transcription"//
-            + " where project_entry_id in"//
-            + " (select id from ProjectEntry where project_id=:project_id)"//
-        )//
-        .setParameter("project_id", project_id)//
-        .getSingleResult();
+    .createQuery("select count(*) from Transcription"//
+        + " where project_entry_id in"//
+        + " (select id from ProjectEntry where project_id=:project_id)"//
+    )//
+    .setParameter("project_id", project_id)//
+    .getSingleResult();
     return transcriptionCount;
   }
 
   private Long getAnnotationCount(long project_id, EntityManager entityManager) {
     Long annotationCount = (Long) entityManager//
-        .createQuery("select count(*) from Annotation"//
-            + " where transcription_id in"//
-            + "   (select id from Transcription"//
-            + "     where project_entry_id in"//
-            + "      (select id from ProjectEntry where project_id=:project_id))"//
-        )//
-        .setParameter("project_id", project_id)//
-        .getSingleResult();
+    .createQuery("select count(*) from Annotation"//
+        + " where transcription_id in"//
+        + "   (select id from Transcription"//
+        + "     where project_entry_id in"//
+        + "      (select id from ProjectEntry where project_id=:project_id))"//
+    )//
+    .setParameter("project_id", project_id)//
+    .getSingleResult();
     return annotationCount;
   }
 
   private Long getFacsimileCount(long project_id, EntityManager entityManager) {
     Long facsimileCount = (Long) entityManager//
-        .createQuery("select count(*) from"//
-            + " Facsimile where project_entry_id in"//
-            + " (select id from ProjectEntry where project_id=:project_id)"//
-        )//
-        .setParameter("project_id", project_id)//
-        .getSingleResult();
+    .createQuery("select count(*) from"//
+        + " Facsimile where project_entry_id in"//
+        + " (select id from ProjectEntry where project_id=:project_id)"//
+    )//
+    .setParameter("project_id", project_id)//
+    .getSingleResult();
     return facsimileCount;
   }
 
@@ -347,14 +353,14 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     Map<String, Object> textLayerCountMap = Maps.newHashMap();
     for (String textLayer : project.getTextLayers()) {
       Long textLayerCount = (Long) entityManager//
-          .createQuery("select count(*) from Transcription"//
-              + " where text_layer = :text_layer"//
-              + " and project_entry_id in"//
-              + " (select id from ProjectEntry where project_id=:project_id)"//
-          )//
-          .setParameter("text_layer", textLayer)//
-          .setParameter("project_id", project_id)//
-          .getSingleResult();
+      .createQuery("select count(*) from Transcription"//
+          + " where text_layer = :text_layer"//
+          + " and project_entry_id in"//
+          + " (select id from ProjectEntry where project_id=:project_id)"//
+      )//
+      .setParameter("text_layer", textLayer)//
+      .setParameter("project_id", project_id)//
+      .getSingleResult();
       textLayerCountMap.put(textLayer, textLayerCount);
     }
     return textLayerCountMap;
@@ -364,16 +370,16 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     Map<String, Object> annotationTypeCountMap = Maps.newHashMap();
     for (AnnotationType annotationType : project.getAnnotationTypes()) {
       Long annotationTypeCount = (Long) entityManager//
-          .createQuery("select count(*) from Annotation"//
-              + " where annotation_type_id = :annotation_type_id"//
-              + "   and transcription_id in"//
-              + "     (select id from Transcription"//
-              + "       where project_entry_id in"//
-              + "         (select id from ProjectEntry where project_id=:project_id))"//
-          )//
-          .setParameter("annotation_type_id", annotationType.getId())//
-          .setParameter("project_id", project_id)//
-          .getSingleResult();
+      .createQuery("select count(*) from Annotation"//
+          + " where annotation_type_id = :annotation_type_id"//
+          + "   and transcription_id in"//
+          + "     (select id from Transcription"//
+          + "       where project_entry_id in"//
+          + "         (select id from ProjectEntry where project_id=:project_id))"//
+      )//
+      .setParameter("annotation_type_id", annotationType.getId())//
+      .setParameter("project_id", project_id)//
+      .getSingleResult();
       annotationTypeCountMap.put(annotationType.getName(), annotationTypeCount);
     }
     return annotationTypeCountMap;
@@ -381,11 +387,11 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   private Long getEntriesCount(long project_id, EntityManager entityManager) {
     Long entriesCount = (Long) entityManager//
-        .createQuery("select count(*) from ProjectEntry"//
-            + " where project_id=:project_id"//
-        )//
-        .setParameter("project_id", project_id)//
-        .getSingleResult();
+    .createQuery("select count(*) from ProjectEntry"//
+        + " where project_id=:project_id"//
+    )//
+    .setParameter("project_id", project_id)//
+    .getSingleResult();
     return entriesCount;
   }
 
@@ -537,8 +543,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       }
     };
     TeiConversionConfig config = new TeiConversionConfig()//
-        .setGroupTextsByMetadata(groupTextsByMetadata)//
-        .addAnnotationTypeMapping(versregels, mapToL);
+    .setGroupTextsByMetadata(groupTextsByMetadata)//
+    .addAnnotationTypeMapping(versregels, mapToL);
 
     openEntityManager();
     String xml = new TeiMaker(project, config, getEntityManager()).toXML();

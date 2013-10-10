@@ -9,6 +9,8 @@ import java.util.Set;
 
 import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
 
+import org.mockito.internal.util.collections.Sets;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
@@ -65,11 +67,29 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 
   /* transcriptions */
   public Collection<Transcription> getTranscriptions(long id, User user) {
+    addMissingTextLayers(id, user);
     openEntityManager();
     ProjectEntry projectEntry = find(getEntityClass(), id);
     ImmutableList<Transcription> transcriptions = ImmutableList.copyOf(projectEntry.getTranscriptions());
     closeEntityManager();
     return transcriptions;
+  }
+
+  private void addMissingTextLayers(long id, User user) {
+    beginTransaction();
+    ProjectEntry projectEntry = find(getEntityClass(), id);
+    Project project = projectEntry.getProject();
+    Set<String> textLayers = Sets.newSet(project.getTextLayers());
+    for (Transcription transcription : projectEntry.getTranscriptions()) {
+      textLayers.remove(transcription.getTextLayer());
+    }
+    if (!textLayers.isEmpty()) {
+      for (String textLayer : textLayers) {
+        Transcription transcription = projectEntry.addTranscription(user).setTextLayer(textLayer);
+        persist(transcription);
+      }
+    }
+    commitTransaction();
   }
 
   public Transcription addTranscription(long id, TranscriptionWrapper transcriptionInput, User user) {

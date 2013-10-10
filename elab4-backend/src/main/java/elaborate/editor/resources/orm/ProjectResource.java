@@ -1,6 +1,5 @@
 package elaborate.editor.resources.orm;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -9,19 +8,15 @@ import java.util.Set;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.UriBuilder;
 
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
@@ -38,35 +33,24 @@ import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.LogEntry;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.SearchData;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 import elaborate.editor.model.orm.service.ProjectService;
-import elaborate.editor.model.orm.service.SearchService;
 import elaborate.editor.model.orm.service.TranscriptionService;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
-import elaborate.editor.solr.AbstractSolrServer;
-import elaborate.editor.solr.ElaborateSearchParameters;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
 @Path("projects")
 @AuthorizationRequired
 public class ProjectResource extends AbstractElaborateResource {
-  private static final int DEFAULT_PORT = 80;
-  static final String KEY_NEXT = "_next";
-  static final String KEY_PREV = "_prev";
-
   Configuration config = Configuration.instance();
 
   @Context
   private ProjectService projectService;
-
-  @Context
-  private SearchService searchService;
 
   @Context
   private ProjectEntryService projectEntryService;
@@ -471,63 +455,10 @@ public class ProjectResource extends AbstractElaborateResource {
   }
 
   /* search */
-  @POST
+
   @Path("{project_id}/search")
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  public Response createSearch(//
-      @PathParam("project_id") long projectId,//
-      ElaborateSearchParameters elaborateSearchParameters//
-  ) {
-    elaborateSearchParameters.setProjectId(projectId);
-    SearchData search = searchService.createSearch(elaborateSearchParameters, getUser());
-    return Response.created(createURI(search)).build();
-  }
-
-  @GET
-  @Path("{project_id}/search/{search_id}")
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  public Response getSearchResults(//
-      @PathParam("project_id") long projectId,//
-      @PathParam("search_id") long searchId,//
-      @QueryParam("start") @DefaultValue("0") int start,//
-      @QueryParam("rows") @DefaultValue("25") int rows//
-  //      @QueryParam("verbose") @DefaultValue("false") boolean verbose//
-  ) {
-    Map<String, Object> searchResult = searchService.getSearchResult(projectId, searchId, start, rows, getUser());
-    addPrevNextURIs(searchResult, projectId, searchId, start, rows);
-    ResponseBuilder builder = Response.ok(searchResult);
-    return builder.build();
-  }
-
-  void addPrevNextURIs(Map<String, Object> searchResult, long projectId, long searchId, int start, int rows) {
-    int prevStart = Math.max(0, start - rows);
-    LOG.info("prevStart={}", prevStart);
-    String path = MessageFormat.format("/projects/{0,number,#}/search/{1,number,#}", projectId, searchId);
-    if (start > 0) {
-      addURI(searchResult, KEY_PREV, path, prevStart, rows);
-    }
-
-    int nextStart = start + rows;
-    int size = (Integer) searchResult.get(AbstractSolrServer.KEY_NUMFOUND);
-    LOG.info("nextStart={}, size={}", nextStart, size);
-    if (nextStart < size) {
-      addURI(searchResult, KEY_NEXT, path, start + rows, rows);
-    }
-  }
-
-  private void addURI(Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
-    UriBuilder builder = UriBuilder//
-    .fromPath(prevLink)//
-    .scheme(config.getStringSetting("server.scheme", "html"))//
-    .host(config.getStringSetting("server.name", "127.0.0.1"))//
-    .queryParam("start", start)//
-    .queryParam("rows", rows);
-    int port = config.getIntSetting("server.port", DEFAULT_PORT);
-    if (port != DEFAULT_PORT) {
-      builder.port(port);
-    }
-    searchResult.put(key, builder.build().toString());
+  public SearchResource getSearchResource() {
+    return new SearchResource(getUser());
   }
 
 }
