@@ -1,5 +1,7 @@
+tag=testdeploy_`date +"%Y%m%d%H%M%S"`
+git tag $tag
 propfile=src/main/resources/version.properties
-echo "build=`svnversion |awk -F":" '{print $2}'`" > $propfile
+echo "build=$tag" > $propfile
 echo "builddate=`date`" >> $propfile
 mvn tomcat:redeploy -P testserver
 # restore compiled code to default
