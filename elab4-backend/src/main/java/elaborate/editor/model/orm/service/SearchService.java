@@ -60,37 +60,37 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 
   public Map<String, Object> getSearchResult(long projectId, long searchId, int start, int rows, User user) {
     Map<String, Object> resultsMap = Maps.newHashMap();
-    try {
-      openEntityManager();
-      SearchData searchData = find(SearchData.class, searchId);
-      checkEntityFound(searchData, searchId);
-      Project project = getEntityManager().find(Project.class, projectId);
-      closeEntityManager();
+    //    try {
+    openEntityManager();
+    SearchData searchData = find(SearchData.class, searchId);
+    checkEntityFound(searchData, searchId);
+    Project project = getEntityManager().find(Project.class, projectId);
+    closeEntityManager();
 
-      if (searchData != null) {
-        List<String> sortableFields = Lists.newArrayList("id", "name");
-        sortableFields.addAll(ImmutableList.copyOf(project.getFacetFields()));
+    if (searchData != null) {
+      List<String> sortableFields = Lists.newArrayList("id", "name");
+      sortableFields.addAll(ImmutableList.copyOf(project.getFacetFields()));
 
-        resultsMap = searchData.getResults();
+      resultsMap = searchData.getResults();
 
-        List<String> ids = (List<String>) resultsMap.remove("ids");
-        List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
+      List<String> ids = (List<String>) resultsMap.remove("ids");
+      List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
 
-        int lo = ResourceUtil.toRange(start, 0, ids.size());
-        int hi = ResourceUtil.toRange(lo + rows, 0, ids.size());
-        ids = ids.subList(lo, hi);
-        results = results.subList(lo, hi);
+      int lo = ResourceUtil.toRange(start, 0, ids.size());
+      int hi = ResourceUtil.toRange(lo + rows, 0, ids.size());
+      ids = ids.subList(lo, hi);
+      results = results.subList(lo, hi);
 
-        resultsMap.put("ids", ids);
-        resultsMap.put("results", results);
-        resultsMap.put("start", lo);
-        resultsMap.put("rows", hi - lo);
+      resultsMap.put("ids", ids);
+      resultsMap.put("results", results);
+      resultsMap.put("start", lo);
+      resultsMap.put("rows", hi - lo);
 
-        resultsMap.put("sortableFields", sortableFields);
-      }
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+      resultsMap.put("sortableFields", sortableFields);
     }
+    //    } catch (Exception e) {
+    //      throw new RuntimeException(e);
+    //    }
     return resultsMap;
   }
 

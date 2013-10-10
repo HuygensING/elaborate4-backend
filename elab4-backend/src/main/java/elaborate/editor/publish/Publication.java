@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
+import elaborate.editor.model.ProjectTypes;
 import elaborate.editor.model.orm.AnnotationType;
 
 public class Publication {
@@ -18,13 +19,15 @@ public class Publication {
     private Long projectId;
     private List<String> projectEntryMetadataFields = Lists.newArrayList();
     private List<Long> annotationTypeIds = Lists.newArrayList();
+    private String projectType = ProjectTypes.COLLECTION; // || "work"
 
     public Long getProjectId() {
       return projectId;
     }
 
-    public void setProjectId(Long projectId) {
+    public Settings setProjectId(Long projectId) {
       this.projectId = projectId;
+      return this;
     }
 
     public boolean includeAnnotationType(AnnotationType annotationType) {
@@ -35,16 +38,27 @@ public class Publication {
       return projectEntryMetadataFields;
     }
 
-    public void setProjectEntryMetadataFields(List<String> projectEntryMetadataFields) {
+    public Settings setProjectEntryMetadataFields(List<String> projectEntryMetadataFields) {
       this.projectEntryMetadataFields = projectEntryMetadataFields;
+      return this;
     }
 
     public List<Long> getAnnotationTypeIds() {
       return annotationTypeIds;
     }
 
-    public void setAnnotationTypeIds(List<Long> annotationTypeIds) {
+    public Settings setAnnotationTypeIds(List<Long> annotationTypeIds) {
       this.annotationTypeIds = annotationTypeIds;
+      return this;
+    }
+
+    public String getProjectType() {
+      return projectType;
+    }
+
+    public Settings setProjectType(String projectType) {
+      this.projectType = projectType;
+      return this;
     }
   }
 

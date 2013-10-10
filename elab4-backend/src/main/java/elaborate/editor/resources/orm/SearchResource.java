@@ -11,12 +11,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+import com.sun.jersey.spi.resource.Singleton;
+
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.orm.SearchData;
 import elaborate.editor.model.orm.User;
@@ -24,16 +26,18 @@ import elaborate.editor.model.orm.service.SearchService;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.editor.solr.AbstractSolrServer;
 import elaborate.editor.solr.ElaborateSearchParameters;
+import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
+@AuthorizationRequired
+@Singleton
 public class SearchResource extends AbstractElaborateResource {
   private static final int DEFAULT_PORT = 80;
   static final String KEY_NEXT = "_next";
   static final String KEY_PREV = "_prev";
 
-  @Context
   private final SearchService searchService = new SearchService();
+  private final Configuration config = Configuration.instance();
 
-  Configuration config = Configuration.instance();
   private final User user;
 
   public SearchResource(User user) {
