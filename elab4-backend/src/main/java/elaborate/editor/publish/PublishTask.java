@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
@@ -47,6 +48,7 @@ import elaborate.editor.solr.IndexException;
 import elaborate.editor.solr.LocalSolrServer;
 import elaborate.editor.solr.SolrIndexer;
 import elaborate.editor.solr.SolrServerWrapper;
+import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
@@ -296,9 +298,6 @@ public class PublishTask extends LoggableObject implements Runnable {
     try {
       File publicationResourceDir = new File(resource.toURI());
       FileUtils.copyDirectory(publicationResourceDir, distDir);
-      String indexfilename = "index-" + settings.getProjectType() + ".html";
-      File index = new File(distDir, indexfilename);
-      index.renameTo(new File(distDir, "index.html"));
     } catch (URISyntaxException e) {
       e.printStackTrace();
     } catch (IOException e) {
@@ -333,6 +332,11 @@ public class PublishTask extends LoggableObject implements Runnable {
     Map<String, Object> projectData = getProjectData(project, entryFilenames, thumbnails);
     entityManager.close();
     exportJson(json, projectData);
+
+    String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
+    File destIndex = new File(distDir, "index.html");
+    Map<String, String> fmRootMap = ImmutableMap.of("DATA_LOCATION", projectData.get("baseURL") + "/data");
+    FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
   }
 
   private List<String> exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields) {
