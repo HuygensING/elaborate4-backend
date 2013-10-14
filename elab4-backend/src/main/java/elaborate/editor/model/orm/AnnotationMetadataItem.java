@@ -33,24 +33,27 @@ public class AnnotationMetadataItem extends AbstractStoredEntity<AnnotationMetad
     return annotation;
   }
 
-  public void setAnnotation(Annotation annotation) {
+  public AnnotationMetadataItem setAnnotation(Annotation annotation) {
     this.annotation = annotation;
+    return this;
   }
 
   public AnnotationTypeMetadataItem getAnnotationTypeMetadataItem() {
     return annotationTypeMetadataItem;
   }
 
-  public void setAnnotationTypeMetadataItem(AnnotationTypeMetadataItem annotationTypeMetadataItem) {
+  public AnnotationMetadataItem setAnnotationTypeMetadataItem(AnnotationTypeMetadataItem annotationTypeMetadataItem) {
     this.annotationTypeMetadataItem = annotationTypeMetadataItem;
+    return this;
   }
 
   public String getData() {
     return data;
   }
 
-  public void setData(String data) {
+  public AnnotationMetadataItem setData(String data) {
     this.data = data;
+    return this;
   }
 
 }
