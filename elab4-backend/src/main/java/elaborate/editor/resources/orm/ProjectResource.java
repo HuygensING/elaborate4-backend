@@ -165,6 +165,7 @@ public class ProjectResource extends AbstractElaborateResource {
     return projectService.getProjectAnnotationTypes(project_id, getUser());
   }
 
+  // TODO
   @PUT
   @Path("{project_id}/annotationtypes")
   @Consumes(UTF8MediaType.APPLICATION_JSON)

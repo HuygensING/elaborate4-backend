@@ -173,12 +173,28 @@ geeft een array van user id's</li>
 <li><p>entrysettings bijwerken: <br />
 <code>PUT</code> <code>/projects/{project_id}/entries/{entry_id}/settings</code></p>
 
-<pre><code>  {
-    "key" : "value",
-  }
+<pre><code>{
+  "key" : "value",
+  ....
+}
 </code></pre>
 
 <p>waarbij de values strings zijn.</p></li>
+<li><p>meerdere entrysettings tegelijkertijd bijwerken: <br />
+<code>PUT</code> <code>/projects/{project_id}/multipleentrysettings</code></p>
+
+<pre><code>{
+  "projectEntityIds" : [1,2,3],
+  "settings" : {
+    "Publishable" : false,
+    "field1" : "value1",
+    "field2" : "value2",
+    ....
+  }
+}
+</code></pre>
+
+<p>waarbij de (geselecteerde) projectEntityIds longs, settings een hashmap, Publishable een boolean, de rest van de values zijn strings.</p></li>
 <li><p>alle transcripties van deze entry: <br />
 <code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/transcriptions</code></p></li>
 </ul>
@@ -454,4 +470,4 @@ annotationtype.strike.description = De annotatietypebeschrijving voor <strike> i
 project entries aanmelden bij oaipmh</p>
 
 <p>-->
-Last updated: 2013-09-26</p>
+Last updated: 2013-10-11</p>

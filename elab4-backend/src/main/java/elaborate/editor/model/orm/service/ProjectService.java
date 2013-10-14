@@ -272,8 +272,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   public void setProjectAnnotationTypes(long project_id, Set<AnnotationType> annotationTypes, User user) {
     beginTransaction();
     Project project = getProjectIfUserIsAllowed(project_id, user);
+
     project.setAnnotationTypes(annotationTypes);
     persist(project.addLogEntry("projectannotationtypes changed", user));
+
     setModifiedBy(project, user);
 
     commitTransaction();

@@ -165,11 +165,28 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 * entrysettings bijwerken:  
   `PUT` `/projects/{project_id}/entries/{entry_id}/settings`
 
-          {
-            "key" : "value",
-          }
+        {
+          "key" : "value",
+          ....
+        }
 
-  waarbij de values strings zijn.
+   waarbij de values strings zijn.
+
+* meerdere entrysettings tegelijkertijd bijwerken:  
+  `PUT` `/projects/{project_id}/multipleentrysettings`
+
+        {
+          "projectEntityIds" : [1,2,3],
+          "settings" : {
+            "Publishable" : false,
+            "field1" : "value1",
+            "field2" : "value2",
+            ....
+          }
+        }
+
+   waarbij de (geselecteerde) projectEntityIds longs, settings een hashmap, Publishable een boolean, de rest van de values zijn strings.
+
 
 * alle transcripties van deze entry:  
   `GET` `/projects/{project_id}/entries/{entry_id}/transcriptions`
@@ -425,4 +442,4 @@ publicatie fase 2:
 project entries aanmelden bij oaipmh
 
 -->
-Last updated: 2013-10-08
+Last updated: 2013-10-11

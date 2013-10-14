@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -14,6 +15,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.AnnotationInputWrapper;
@@ -185,10 +187,32 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
   public void updateAnnotation(long project_id, long annotation_id, AnnotationInputWrapper update, User user) {
     beginTransaction();
     checkProjectPermissions(project_id, user);
+
     Annotation annotation = find(Annotation.class, annotation_id);
     AnnotationType annotationType = getAnnotationType(update);
     annotation.setBody(update.body).setAnnotationType(annotationType);
     persist(annotation);
+
+    // annotationmetadata: remove existing
+    for (AnnotationMetadataItem annotationMetadataItem : annotation.getAnnotationMetadataItems()) {
+      remove(annotationMetadataItem);
+    }
+
+    Set<AnnotationMetadataItem> annotationMetadataItems = Sets.newHashSet();
+    for (String key : update.metadata.keySet()) {
+      AnnotationTypeMetadataItem annotationTypeMetadataItem = (AnnotationTypeMetadataItem) getEntityManager().createQuery("from AnnotationTypeMetadataItem as m where m.name=?1").setParameter(1, key).getSingleResult();
+      if (annotationTypeMetadataItem != null) {
+        AnnotationMetadataItem item = new AnnotationMetadataItem().setAnnotation(annotation).setAnnotationTypeMetadataItem(annotationTypeMetadataItem).setData(update.metadata.get(key));
+        persist(item);
+        annotationMetadataItems.add(item);
+      }
+    }
+
+    //    String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
+    //      annotationMetadataItem.setData(update.metadata.get(name));
+    //      persist(annotationMetadataItem);
+    //    }
+
     commitTransaction();
   }
 

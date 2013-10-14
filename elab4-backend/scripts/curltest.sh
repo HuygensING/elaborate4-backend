@@ -94,7 +94,7 @@ curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/projects/$project
 curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"field1":"value1","field2":"value2"}'$eb/projects/$project_id/entries/$entry_id/settings|jq "."
 
 # update entry settings for multiple entries
-curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"projectEntityIds":[1,2,3],"settings":{"Publishable":false,field1":"value1","field2":"value2"}}' $eb/projects/$project_id/multipleentrysettings|jq "."
+curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"projectEntityIds":[1,2,3],"settings":{"Publishable":false,"field1":"value1","field2":"value2"}}' $eb/projects/$project_id/multipleentrysettings|jq "."
 
 # publish project
 curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d "{}" $eb/projects/$project_id/publication

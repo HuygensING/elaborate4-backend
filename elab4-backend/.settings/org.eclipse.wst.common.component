@@ -5,6 +5,12 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="elab4-common-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/elab4-common/elab4-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="elab4-solr-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/elab4-solr/elab4-solr">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="jax-rs-tools-0.0.5.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jax-rs-tools/jax-rs-tools">
             <dependency-type>uses</dependency-type>
         </dependent-module>
