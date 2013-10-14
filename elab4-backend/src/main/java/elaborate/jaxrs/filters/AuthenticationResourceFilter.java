@@ -26,6 +26,11 @@ public class AuthenticationResourceFilter extends LoggableObject implements Reso
 
   @Override
   public ContainerRequest filter(ContainerRequest request) {
+    // OPTIONS calls don't need authorization, apparently
+    if ("OPTIONS".equals(request.getMethod())) {
+      return request;
+    }
+
     String authentication = request.getHeaderValue(HEADER);
     //    LOG.info("authentication={}", authentication);
     if (StringUtils.isNotBlank(authentication)) {
