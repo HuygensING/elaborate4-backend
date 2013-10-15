@@ -289,6 +289,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   @APIDesc("Updates the settings of the project entries with the given entry_ids")
   public void updateMultipleProjectEntrySettings(@PathParam("project_id") long project_id, MultipleProjectEntrySettings mpes) {
+    LOG.info("in:{}", mpes);
     projectEntryService.updateMultipleProjectEntrySettings(project_id, mpes, getUser());
   }
 

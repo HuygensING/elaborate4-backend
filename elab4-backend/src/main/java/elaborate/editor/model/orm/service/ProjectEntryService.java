@@ -2,7 +2,6 @@ package elaborate.editor.model.orm.service;
 
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -213,23 +212,27 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     projectService.setEntityManager(getEntityManager());
     Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
 
-    List<Long> ids = mpes.getProjectEntryIds();
-    for (Long entry_id : ids) {
+    Map<String, Object> settings = mpes.getSettings();
+    Set<Entry<String, Object>> settingsEntrySet = settings.entrySet();
+    for (Long entry_id : mpes.getProjectEntryIds()) {
+      LOG.info("entryId={}", entry_id);
       ProjectEntry pe = read(entry_id);
-      Map<String, Object> settings = mpes.getSettings();
 
       if (mpes.changePublishable()) {
+        LOG.info("changepublishable to {}", mpes.getPublishableSetting());
         pe.setPublishable(mpes.getPublishableSetting());
       }
 
-      Set<Entry<String, Object>> settingEntries = settings.entrySet();
-      for (Entry<String, Object> entry : settingEntries) {
+      for (Entry<String, Object> entry : settingsEntrySet) {
         String key = entry.getKey();
         String value = (String) entry.getValue();
+
         ProjectEntryMetadataItem pemItem = pe.getMetadataItem(key);
         if (pemItem == null) {
+          LOG.info("add new setting: {}={}", key, value);
           persist(pe.addMetadataItem(key, value, user));
         } else {
+          LOG.info("modify existing setting: {}={}", key, value);
           pemItem.setData(value);
           persist(pemItem);
           setModifiedBy(pemItem, user);
