@@ -26,6 +26,7 @@
       <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
       <param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter;nl.knaw.huygens.jaxrstools.filters.CORSFilter</param-value>
     </init-param>
+
     <load-on-startup>1</load-on-startup>
   </servlet>
 
@@ -51,6 +52,8 @@
 
   <filter-mapping>
     <filter-name>UrlRewriteFilter</filter-name>
+    <url-pattern>/entry/*</url-pattern>
+    <url-pattern>/search/*</url-pattern>
     <url-pattern>/page/*</url-pattern>
     <url-pattern>/tekst/*</url-pattern>
     <url-pattern>/zoeken/*</url-pattern>

@@ -19,7 +19,17 @@
   </rule>
 
   <rule>
+    <from>/entry/.*</from>
+    <to>/index.html</to>
+  </rule>
+
+  <rule>
     <from>/zoeken/.*</from>
+    <to>/index.html</to>
+  </rule>
+
+  <rule>
+    <from>/search/.*</from>
     <to>/index.html</to>
   </rule>
 

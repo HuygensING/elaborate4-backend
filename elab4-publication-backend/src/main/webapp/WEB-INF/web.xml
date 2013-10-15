@@ -52,6 +52,8 @@
 
   <filter-mapping>
     <filter-name>UrlRewriteFilter</filter-name>
+    <url-pattern>/entry/*</url-pattern>
+    <url-pattern>/search/*</url-pattern>
     <url-pattern>/page/*</url-pattern>
     <url-pattern>/tekst/*</url-pattern>
     <url-pattern>/zoeken/*</url-pattern>

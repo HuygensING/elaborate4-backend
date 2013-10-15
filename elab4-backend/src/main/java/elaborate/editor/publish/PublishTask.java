@@ -25,7 +25,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
@@ -335,8 +334,8 @@ public class PublishTask extends LoggableObject implements Runnable {
 
     String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
     File destIndex = new File(distDir, "index.html");
-    Map<String, String> fmRootMap = ImmutableMap.of("baseURL", projectData.get("baseURL") + "/data");
-    FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
+    //    Map<String, String> fmRootMap = ImmutableMap.of("baseURL", projectData.get("baseURL") + "");
+    FreeMarker.templateToFile(indexfilename, destIndex, projectData, getClass());
   }
 
   private List<String> exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields) {
