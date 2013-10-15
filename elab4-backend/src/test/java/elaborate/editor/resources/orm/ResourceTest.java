@@ -17,9 +17,9 @@ public class ResourceTest extends JerseyTest {
 
   public ResourceTest() {
     super(new WebAppDescriptor.Builder()//
-        .initParam("com.sun.jersey.config.property.packages", "elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers")//
-        .initParam("com.sun.jersey.spi.container.ResourceFilters", "elaborate.jaxrs.filters.ElaborateResourceFilterFactory")//
-        .build());
+    .initParam("com.sun.jersey.config.property.packages", "elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers")//
+    .initParam("com.sun.jersey.spi.container.ResourceFilters", "elaborate.jaxrs.filters.ElaborateResourceFilterFactory")//
+    .build());
     //    super("elaborate.editor.resources", "elaborate.editor.providers");
   }
 
