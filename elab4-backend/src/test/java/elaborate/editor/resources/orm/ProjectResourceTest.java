@@ -8,21 +8,21 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 import elaborate.editor.model.orm.Project;
 import elaborate.jaxrs.filters.AuthenticationResourceFilter;
 
-@Ignore
 public class ProjectResourceTest extends ResourceTest {
   private String authHeader;
 
@@ -32,10 +32,10 @@ public class ProjectResourceTest extends ResourceTest {
 
   @Before
   public void doLogin() {
-    authHeader = login("root", "d3gelijk");
+    //    authHeader = login("root", "d3gelijk");
   }
 
-  @Test
+  //  @Test
   public void test() {
     String string = resource()//
     .path("/projects")//
@@ -51,6 +51,19 @@ public class ProjectResourceTest extends ResourceTest {
   }
 
   @Test
+  public void testOptionsDoesntNeedAuthorization() {
+    // options: no authorization required
+    resource().path("/projects").method("OPTIONS");
+    // get: authorization required
+    try {
+      resource().path("/projects").method("GET");
+      fail("I was expecting an UnauthorizedException here.");
+    } catch (UniformInterfaceException uie) {
+      assertEquals(Status.UNAUTHORIZED.getStatusCode(), uie.getResponse().getStatus());
+    }
+  }
+
+  //  @Test
   public void testGetAll() {
     ProjectResource projectResource = new ProjectResource();
     List<Project> all = projectResource.getAll();
