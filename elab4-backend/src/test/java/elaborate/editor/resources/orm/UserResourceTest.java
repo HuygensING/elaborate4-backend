@@ -3,12 +3,16 @@ package elaborate.editor.resources.orm;
 import static org.junit.Assert.*;
 
 import javax.persistence.EntityManager;
+import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.User;
 
+@Ignore
 public class UserResourceTest extends ResourceTest {
   private static EntityManager entityManager;
 
@@ -28,11 +32,16 @@ public class UserResourceTest extends ResourceTest {
     entityManager.close();
   }
 
-  //  @Test
+  @Test
   public void testGetUsers() {
     String responseMsg = resource().path("users").get(String.class);
     assertTrue(responseMsg.contains("\"John\""));
     assertTrue(responseMsg.contains("\"Butcher\""));
+  }
+
+  @Test
+  public void testAddUser() {
+    resource().path("users").accept(MediaType.APPLICATION_JSON).post("{\"username\":\"bla\"}");
   }
 
 }
