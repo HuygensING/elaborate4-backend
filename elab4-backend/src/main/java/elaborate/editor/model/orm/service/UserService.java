@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import javax.inject.Singleton;
 import javax.persistence.NoResultException;
 
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import com.google.common.collect.ImmutableList;
@@ -35,7 +36,14 @@ public class UserService extends AbstractStoredEntityService<User> {
   /* CRUD methods */
   public User create(User user, User creator) {
     beginTransaction();
+
     if (creator.getPermission(user).canWrite()) {
+      User existingUser = (User) getEntityManager().createQuery("from User as u where u.username=?1").setParameter(1, user.getUsername()).getSingleResult();
+      if (existingUser != null) {
+        rollbackTransaction();
+        throw new BadRequestException("a user with username " + user.getUsername() + " already exists. Usernames must be unique");
+      }
+
       User create = super.create(user);
       commitTransaction();
       return create;
