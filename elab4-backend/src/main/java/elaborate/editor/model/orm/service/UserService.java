@@ -132,7 +132,7 @@ public class UserService extends AbstractStoredEntityService<User> {
     beginTransaction();
     User user = read(userId);
     if (!modifier.getUsername().equals(user.getUsername())) {
-      commitTransaction();
+      rollbackTransaction();
       throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
     }
     UserSetting userSetting = user.setUserSetting(key, value);
@@ -144,7 +144,7 @@ public class UserService extends AbstractStoredEntityService<User> {
     beginTransaction();
     User user = read(userId);
     if (!modifier.getUsername().equals(user.getUsername())) {
-      commitTransaction();
+      rollbackTransaction();
       throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
     }
 
