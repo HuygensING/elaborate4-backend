@@ -335,7 +335,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 
     String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
     File destIndex = new File(distDir, "index.html");
-    Map<String, String> fmRootMap = ImmutableMap.of("DATA_LOCATION", projectData.get("baseURL") + "/data");
+    Map<String, String> fmRootMap = ImmutableMap.of("baseURL", projectData.get("baseURL") + "/data");
     FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
   }
 

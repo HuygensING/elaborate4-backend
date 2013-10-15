@@ -21,11 +21,13 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.solr.RemoteSolrServer;
+import elaborate.editor.solr.SolrIndexer;
 import elaborate.editor.solr.SolrServerWrapper;
 
 @Singleton
 public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> extends LoggableObject {
   private SolrServerWrapper solrserver = null;
+  private SolrIndexer solrindexer = null;
   private ProjectService projectService = null;
 
   //  private ProjectEntryService projectEntryService = null;
@@ -90,6 +92,17 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
   void setModifiedBy(AbstractTrackedEntity<?> trackedEntity, User modifier) {
     trackedEntity.setModifiedBy(modifier);
     merge(trackedEntity);
+    if (trackedEntity instanceof ProjectEntry) {
+      ProjectEntry projectEntry = (ProjectEntry) trackedEntity;
+      getSolrIndexer().index(projectEntry, true);
+    }
+  }
+
+  private SolrIndexer getSolrIndexer() {
+    if (solrindexer == null) {
+      solrindexer = new SolrIndexer();
+    }
+    return solrindexer;
   }
 
   /* entitymanager methods */

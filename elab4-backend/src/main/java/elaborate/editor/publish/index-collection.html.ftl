@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/lib/faceted-search/stage/css/main.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
     <!-- script(data-main="http://maven.huygens.knaw.nl/cdn/elaborate/v0.0.1/js/main", src="http://maven.huygens.knaw.nl/cdn/elaborate/v0.0.1/js/require.js")-->
-    <script>var DATA_LOCATION = '${DATA_LOCATION}';</script>
+    <script>var DATA_LOCATION = '${baseURL}';</script>
     <script data-main="/js/main" src="/lib/requirejs/require.js" type="text/javascript"></script>
   </head>
   <body>

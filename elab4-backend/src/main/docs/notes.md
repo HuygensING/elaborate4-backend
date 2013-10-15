@@ -176,7 +176,7 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
   `PUT` `/projects/{project_id}/multipleentrysettings`
 
         {
-          "projectEntityIds" : [1,2,3],
+          "projectEntryIds" : [1,2,3],
           "settings" : {
             "Publishable" : false,
             "field1" : "value1",
@@ -318,7 +318,8 @@ Alleen de entries met `publishable=true` worden in de publicatie opgenomen.
 
 De publicatie heeft een `search` api vergelijkbaar met die van de elaborate backend, met als verschil dat `projectId` niet meegegeven hoeft te worden, en dat er niet ingelogd hoeft te worden.
   
-****************************************
+************************************************************************************************************************
+
 <!--
 ## TODO
 
@@ -327,11 +328,14 @@ De publicatie heeft een `search` api vergelijkbaar met die van de elaborate back
 - milestones plaatsen: chapter/page/etc.
 - behalve publishable ook published als metadata op de entry
 -->
-<!--
+
+  <!--
 eb=http://10.152.32.82:2013
 eb=http://rest.elaborate.huygens.knaw.nl
 
 rootcode=`curl --silent --show-error --data "username=root&password=toor" $eb/sessions/login/|jq -r ".token"`; echo $rootcode
+rootcode=`curl --silent --show-error --data "username=root&password=d3gelijk" $eb/sessions/login/|jq -r ".token"`; echo $rootcode
+
 curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -d '{"term":"deus","textLayers":["Diplomatic"],"searchInAnnotations":"true"}' $eb/projects/17/search/
 curl -v -H "Authorization: SimpleAuth $rootcode"  $eb/projects/1/search/201|jq "."
 
@@ -354,6 +358,7 @@ curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/j
 
 # ProjectMetadataField
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projectmetadatafields|jq "."
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d '{"fieldName":"EntryDescription"}' $eb/projectmetadatafields
 
 # project users
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/users/$user_id|jq "."
@@ -383,30 +388,61 @@ curl -i -H "Authorization: SimpleAuth $rootcode" -X PUT $eb/projects/$project_id
 curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/projects/$project_id/projectusers/$user_id
 
 # loglines
-curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/log|jq "."
+curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/logentries|jq "."
 
 # project entries
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries|jq "."
 
+# add project entry
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -d '{"name":"project-unique entryname"}' $eb/projects/$project_id/entries
+
+# update project entry
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"name":"new project-unique entryname"}' $eb/projects/$project_id/entries/$entry_id
+
+# delete project entry
+curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/projects/$project_id/entries/$entry_id
+
+# project entry facsimiles
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/$entry_id/facsimiles|jq "."
+
 # project entry transcriptions
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/$entry_id/transcriptions|jq "."
 
-# project entry setting
-scurl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/$entry_id/settings|jq "."
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/$entry_id/transcriptions/$transcription_id|jq "."
 
-# delete entry settings
+#add transcription
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d '{"body":"dit is mijn lichaam","textLayer":"layer"}' $eb/projects/$project_id/entries/$entry_id/transcriptions
+
+#update transcription
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"body":"brand new body<br/>one time only"}' $eb/projects/$project_id/entries/$entry_id/transcriptions/$transcription_id
+
+# project entry setting
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/$entry_id/settings|jq "."
+
+# delete entry
 curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/projects/$project_id/entries/$entry_id
 
 # update entry settings
 curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"field1":"value1","field2":"value2"}'$eb/projects/$project_id/entries/$entry_id/settings|jq "."
 
 # update entry settings for multiple entries
-curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"projectEntityIds":[1,2,3],"settings":{"Publishable":false,field1":"value1","field2":"value2"}}' $eb/projects/$project_id/multipleentrysettings|jq "."
+curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"projectEntryIds":[1,2,3],"settings":{"Publishable":false,"field1":"value1","field2":"value2"}}' $eb/projects/$project_id/multipleentrysettings|jq "."
 
 # publish project
 curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d "{}" $eb/projects/$project_id/publication
-curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/publicationstatus/$status_id | jq "."
+curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/publication/$status_id | jq "."
   
+
+curl -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/17152/transcriptions/21224|jq "."
+curl -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/17152/transcriptions/21224/annotations|jq "."
+curl -v -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" -X POST -d '{"body":"whatever"}'  $eb/projects/$project_id/entries/17152/transcriptions/21224/annotations
+curl -v -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" -X POST -d '{"body":"whatever", "typeId":1}'  $eb/projects/$project_id/entries/17152/transcriptions/21224/annotations
+curl -v -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" -X POST -d '{"body":"whatever", "typeId":31, "metadata":{"person id":"PERSONID"}}'  $eb/projects/$project_id/entries/17152/transcriptions/21224/annotations
+
+curl -v -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" -X PUT -d '{"body":"whatever", "typeId":1}'  $eb/projects/$project_id/entries/17152/transcriptions/21224/annotations/aa
+-->
+
+<!--  
 = annotatietab
 facet: type
 
@@ -442,4 +478,4 @@ publicatie fase 2:
 project entries aanmelden bij oaipmh
 
 -->
-Last updated: 2013-10-11
+Last updated: 2013-10-15
