@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.SecurityContext;
 
 import nl.knaw.huygens.LoggableObject;
 
@@ -22,9 +23,12 @@ public abstract class AbstractElaborateResource extends LoggableObject {
   public User getUser() {
     User user = null;
     ContainerRequest cr = (ContainerRequest) request;
-    ElaborateSecurityContext esc = (ElaborateSecurityContext) cr.getSecurityContext();
-    if (esc != null) {
-      user = esc.getUser();
+    SecurityContext securityContext = cr.getSecurityContext();
+    if (securityContext instanceof ElaborateSecurityContext) {
+      ElaborateSecurityContext esc = (ElaborateSecurityContext) securityContext;
+      if (esc != null) {
+        user = esc.getUser();
+      }
     }
     return user;
   }
