@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config version="0.1">
   <settings>
-    <version>0.1</version>
+    <version>0.1a (test)</version>
 
     <solr>
       <url>http://demo7.huygens.knaw.nl/solr-elab4test/entries/</url>
@@ -11,6 +11,14 @@
       <scheme>http</scheme>
       <name>rest.elaborate.huygens.knaw.nl</name>
     </server>
+
+    <publication>
+      <cdn>hi7dev.huygens.knaw.nl/cdn/elaborate</cdn>
+      <version>
+        <work>development</work>
+        <collection>development</collection>
+      </version>
+    </publication>
 
   </settings>
 </config>

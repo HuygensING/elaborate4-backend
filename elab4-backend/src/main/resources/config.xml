@@ -12,5 +12,13 @@
       <port>2013</port>
     </server>
 
+    <publication>
+      <cdn>hi7dev.huygens.knaw.nl/cdn/elaborate</cdn>
+      <version>
+        <work>development</work>
+        <collection>development</collection>
+      </version>
+    </publication>
+
   </settings>
 </config>
