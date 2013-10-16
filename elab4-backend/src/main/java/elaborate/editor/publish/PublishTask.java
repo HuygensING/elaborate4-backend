@@ -25,10 +25,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
+import elaborate.editor.config.Configuration;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationMetadataItem;
@@ -332,10 +334,19 @@ public class PublishTask extends LoggableObject implements Runnable {
     entityManager.close();
     exportJson(json, projectData);
 
-    String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
+    //    String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
+    String indexfilename = "index.html.ftl";
     File destIndex = new File(distDir, "index.html");
-    //    Map<String, String> fmRootMap = ImmutableMap.of("baseURL", projectData.get("baseURL") + "");
-    FreeMarker.templateToFile(indexfilename, destIndex, projectData, getClass());
+    String projectType = settings.getProjectType();
+    String version = Configuration.instance().getSetting("publication.version." + projectType);
+    String cdnBaseURL = Configuration.instance().getSetting("publication.cdn");
+    Map<String, Object> fmRootMap = ImmutableMap.of(//
+        "BASE_URL", projectData.get("baseURL"),//
+        "TYPE", projectType,//
+        "ELABORATE_CDN", cdnBaseURL,//
+        "VERSION", version//
+    );
+    FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
   }
 
   private List<String> exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields) {
