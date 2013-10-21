@@ -41,7 +41,7 @@ public class CMDIRecordTest extends LoggableObject {
     .setMdSelfLink("uri")//
     .setMdCollectionDisplayName("displayname")//
     .build();
-    LOG.info("CMDI=", cr);
+    LOG.info("CMDI={}", cr);
   }
 
 }

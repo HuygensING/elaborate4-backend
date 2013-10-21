@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -77,6 +79,11 @@ public class CMDIRecord extends AbstractMetadataRecord {
   @Override
   Object getDataModel() {
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
   }
 
   public static class Builder {
@@ -153,6 +160,11 @@ public class CMDIRecord extends AbstractMetadataRecord {
     public ResourceProxy setRef(String ref) {
       this.ref = ref;
       return this;
+    }
+
+    @Override
+    public String toString() {
+      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
   }
 }
