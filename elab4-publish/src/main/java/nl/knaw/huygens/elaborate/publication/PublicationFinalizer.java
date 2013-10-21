@@ -3,7 +3,7 @@ package nl.knaw.huygens.elaborate.publication;
 import java.util.Date;
 import java.util.List;
 
-import nl.knaw.huygens.elaborate.publication.metadata.CmdiRecord;
+import nl.knaw.huygens.elaborate.publication.metadata.CMDIRecord;
 import nl.knaw.huygens.elaborate.publication.metadata.DublinCoreRecord;
 import nl.knaw.huygens.oaipmh.OAIRecord;
 import nl.knaw.huygens.oaipmh.OAISet;
@@ -34,8 +34,8 @@ public class PublicationFinalizer {
 
     List<String> setSpecs = ImmutableList.of(elab4editionSetSpec);
     DublinCoreRecord dcRecord = new DublinCoreRecord();
-    CmdiRecord cmdiRecord = new CmdiRecord();
-    String metadata = dcRecord.asXML() + cmdiRecord.asXML();
+    CMDIRecord cMDIRecord = new CMDIRecord.Builder().build();
+    String metadata = dcRecord.asXML() + cMDIRecord.asXML();
     String id = "";
     Date datestamp = new Date();
     OAIRecord oaiRecord = new OAIRecord().setIdentifier(PREFIX + id).setSetSpecs(setSpecs).setMetadata(metadata).setDatestamp(datestamp);

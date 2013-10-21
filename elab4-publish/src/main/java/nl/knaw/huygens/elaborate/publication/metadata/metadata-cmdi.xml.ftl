@@ -6,8 +6,8 @@
   xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1345561703673/xsd">
 
   <cmdi:Header>
-    <cmdi:MdCollectionDisplayName>Elaborate</cmdi:MdCollectionDisplayName>
-    <cmdi:MdProfile>clarin.eu:cr1:p_1345561703673</cmdi:MdProfile>
+    <cmdi:MdCollectionDisplayName>${mdCollectionDisplayName}</cmdi:MdCollectionDisplayName>
+    <cmdi:MdProfile>${mdProfile}</cmdi:MdProfile>
     <cmdi:MdCreator>${mdCreator}</cmdi:MdCreator>
     <cmdi:MdCreationDate>${mdCreationDate?string("yyyy-MM-dd")}</cmdi:MdCreationDate>
     <cmdi:MdSelfLink>${mdSelfLink}</cmdi:MdSelfLink>
