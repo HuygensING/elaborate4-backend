@@ -19,7 +19,7 @@ public class CMDIRecordTest extends LoggableObject {
   public void testBuild1() throws Exception {
     try {
       CMDIRecord cr = new CMDIRecord.Builder().build();
-    } catch (Exception e) {
+    } catch (InvalidCMDIRecordException e) {
       assertEquals("invalid CMDIRecord: set MdCreator; set MdProfile; set MdSelfLink", e.getMessage());
     }
   }
@@ -28,7 +28,7 @@ public class CMDIRecordTest extends LoggableObject {
   public void testBuild2() throws Exception {
     try {
       CMDIRecord cr = new CMDIRecord.Builder().setMdCreator("mdCreator").build();
-    } catch (Exception e) {
+    } catch (InvalidCMDIRecordException e) {
       assertEquals("invalid CMDIRecord: set MdProfile; set MdSelfLink", e.getMessage());
     }
   }
