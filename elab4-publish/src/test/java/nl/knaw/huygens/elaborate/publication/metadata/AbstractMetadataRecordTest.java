@@ -39,7 +39,7 @@ public class AbstractMetadataRecordTest extends XMLTestCase {
 
   @Test
   public void testCMDIAsXML() throws Exception {
-    CmdiRecord dc = new CmdiRecord();
+    CMDIRecord dc = new ElaborateCMDIRecordBuilder().setMdCreator("creator").setMdSelfLink("mdSelfLink").build();
     String xml = dc.asXML();
     LOG.info("xml={}", xml);
     //    assertXMLValid(xml);
