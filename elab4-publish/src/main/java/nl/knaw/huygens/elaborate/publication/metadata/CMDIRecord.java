@@ -119,7 +119,7 @@ public class CMDIRecord extends AbstractMetadataRecord {
       validationResults.add(checkRequiredSetting(cMDIRecord.getMdSelfLink(), "MdSelfLink"));
       String join = Joiner.on("; ").skipNulls().join(validationResults);
       if (StringUtils.isNotEmpty(join)) {
-        throw new RuntimeException("invalid CMDIRecord: " + join);
+        throw new InvalidCMDIRecordException("invalid CMDIRecord: " + join);
       }
       return cMDIRecord;
     }
