@@ -14,6 +14,9 @@
         <dependent-module archiveName="jax-rs-tools-0.0.5.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jax-rs-tools/jax-rs-tools">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="huygens-persistence-1.0.6.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/persistence/persistence">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="elab4-backend"/>
         <property name="java-output-path" value="/elab4-backend/target/classes"/>
     </wb-module>
