@@ -11,6 +11,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 public class CMDIRecord extends AbstractMetadataRecord {
+
+  // http://www.clarin.eu/node/3460
   private static final String TEMPLATE = "metadata-cmdi.xml.ftl";
 
   private String mdSelfLink = "";
@@ -109,6 +111,7 @@ public class CMDIRecord extends AbstractMetadataRecord {
       return this;
     }
 
+    // the author of the file
     public Builder setMdCreator(String mdCreator) {
       cMDIRecord.setMdCreator(mdCreator);
       return this;

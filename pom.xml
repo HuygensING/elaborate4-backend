@@ -40,7 +40,7 @@
     <maven-compiler.version>3.1</maven-compiler.version>
     <maven-war.version>2.3</maven-war.version>
     <mockito.version>1.9.5</mockito.version>
-    <persistence.version>1.0.0</persistence.version>
+    <persistence.version>1.0.6</persistence.version>
     <oaipmh.version>0.0.1</oaipmh.version>
     <postgresql.version>9.0-801.jdbc4</postgresql.version>
     <slf4j.version>1.7.5</slf4j.version>
