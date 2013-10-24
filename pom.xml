@@ -42,8 +42,7 @@
     <mockito.version>1.9.5</mockito.version>
     <persistence.version>1.0.6</persistence.version>
     <oaipmh.version>0.0.1</oaipmh.version>
-    <!--  <postgresql.version>9.0-801.jdbc4</postgresql.version> -->
-    <postgresql.version>9.2-1002.jdbc4</postgresql.version>
+    <postgresql.version>9.0-801.jdbc4</postgresql.version>
     <slf4j.version>1.7.5</slf4j.version>
     <solr.version>4.4.0</solr.version><!-- 4.5.1 geeft problemen -->
     <tomcat-maven.version>1.1</tomcat-maven.version>
