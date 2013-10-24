@@ -26,8 +26,8 @@
     <freemarker.version>2.3.20</freemarker.version>
     <guava.version>15.0</guava.version>
     <guice.version>3.0</guice.version>
-    <hibernate.version>4.2.6.Final</hibernate.version>
-    <hsqldb.version>2.3.0</hsqldb.version>
+    <hibernate.version>4.3.0.Beta5</hibernate.version>
+    <hsqldb.version>2.3.1</hsqldb.version>
     <jackson.version>2.2.3</jackson.version>
     <javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
     <jaxrstools.version>0.0.5</jaxrstools.version>
@@ -42,9 +42,10 @@
     <mockito.version>1.9.5</mockito.version>
     <persistence.version>1.0.6</persistence.version>
     <oaipmh.version>0.0.1</oaipmh.version>
-    <postgresql.version>9.0-801.jdbc4</postgresql.version>
+    <!--  <postgresql.version>9.0-801.jdbc4</postgresql.version> -->
+    <postgresql.version>9.2-1002.jdbc4</postgresql.version>
     <slf4j.version>1.7.5</slf4j.version>
-    <solr.version>4.4.0</solr.version>
+    <solr.version>4.4.0</solr.version><!-- 4.5.1 geeft problemen -->
     <tomcat-maven.version>1.1</tomcat-maven.version>
     <tomcatservlet-api.version>6.0.36</tomcatservlet-api.version>
     <urlrewritefilter.version>4.0.4</urlrewritefilter.version>
