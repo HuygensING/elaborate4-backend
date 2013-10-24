@@ -13,7 +13,7 @@
     </server>
 
     <publication>
-      <cdn>hi7dev.huygens.knaw.nl/cdn/elaborate</cdn>
+      <cdn>cdn.huygens.knaw.nl/elaborate</cdn>
       <version>
         <work>development</work>
         <collection>development</collection>
