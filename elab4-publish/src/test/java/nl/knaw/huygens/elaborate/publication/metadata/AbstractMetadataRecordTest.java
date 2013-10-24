@@ -18,7 +18,7 @@ public class AbstractMetadataRecordTest extends LoggableObject {
   @After
   public void tearDown() throws Exception {}
 
-  @Test
+  //  @Test
   public void testDCAsXML() throws Exception {
     DublinCoreRecord dc = new DublinCoreRecord()//
     .setType(DCMITypes.COLLECTION)//
