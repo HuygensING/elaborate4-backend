@@ -97,8 +97,8 @@
 
   <scm>
     <tag>HEAD</tag>
-    <connection>ssh://bramb@hi7dev.huygens.knaw.nl/data/git/git/elab4.git</connection>
-    <developerConnection>ssh://bramb@hi7dev.huygens.knaw.nl/data/git/git/elab4.git</developerConnection>
+    <connection>ssh://bramb@hi7.huygens.knaw.nl/data/git/elab4.git</connection>
+    <developerConnection>ssh://bramb@hi7.huygens.knaw.nl/data/git/elab4.git</developerConnection>
   </scm>
 
   <organization>

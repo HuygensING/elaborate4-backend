@@ -1,4 +1,4 @@
-# Project-specific configuration for elaborate_backend
+# Project-specific configuration for elab4
 # see http://cruisecontrol.huygens.knaw.nl/documentation/manual
 
 Project.configure do |project|
@@ -18,6 +18,6 @@ Project.configure do |project|
   # Ping Subversion for new revisions every 5 minutes (default: 30 seconds)
   project.scheduler.polling_interval = 5.minutes
 
-  project.source_control = SourceControl::Git.new :repository=>"/data/git/elab4.git"
+#  project.source_control = SourceControl::Git.new :repository=>"/data/git/elab4.git"
   project.do_clean_checkout :always
 end

@@ -30,11 +30,6 @@
       <artifactId>visitei</artifactId>
       <version>${visitei.version}</version>
     </dependency>
-    <dependency>
-      <groupId>nl.knaw.huygens</groupId>
-      <artifactId>huygens-persistence</artifactId>
-      <version>${persistence.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>com.google.guava</groupId>
