@@ -42,6 +42,7 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.ProjectMetadataItem;
 import elaborate.editor.model.orm.ProjectUser;
 import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
@@ -63,7 +64,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   /* CRUD methods */
   public Project create(Project project, User user) {
-    if (rootOrAdmin(user)) {
+    if (!rootOrAdmin(user)) {
+      throw new UnauthorizedException();
+
+    } else {
       beginTransaction();
 
       addDefaultFields(project, user);
@@ -72,9 +76,6 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       persist(created.addLogEntry("project created", user));
       commitTransaction();
       return created;
-
-    } else {
-      throw new UnauthorizedException();
     }
   }
 
@@ -83,6 +84,9 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     project.setCreatedOn(new Date());
     project.setModifier(user);
     project.setModifiedOn(new Date());
+    if (project.getTextLayers().length == 0) {
+      project.setTextLayers(Lists.newArrayList(TranscriptionType.DIPLOMATIC));
+    }
     if (project.getName() == null) {
       project.setName(StringUtils.normalizeSpace(project.getTitle()));
     }
