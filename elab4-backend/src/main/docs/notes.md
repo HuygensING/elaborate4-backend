@@ -296,7 +296,7 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 
 ## publication
 
-De _projectleader_ of _admin user_ mag publiceren via een `POST` naar `/projects/{project_id}/publication`
+De _projectleader_ of _admin user_ mag publiceren via een `POST` naar `/projects/{project_id}/draft`
 
 Je kunt een json setting meeposten:
 
