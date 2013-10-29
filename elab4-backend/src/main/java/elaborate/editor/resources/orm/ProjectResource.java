@@ -447,10 +447,15 @@ public class ProjectResource extends AbstractElaborateResource {
 
   /* publish */
 
-  @Path("{project_id}/publication")
-  public PublicationResource getPublicationResource() {
-    return new PublicationResource(getUser(), projectService);
+  @Path("{project_id}/draft")
+  public DraftPublicationResource getDraftResource() {
+    return new DraftPublicationResource(getUser(), projectService);
   }
+
+  //  @Path("{project_id}/publicationrequest")
+  //  public void requestPublication() {
+  //    ;
+  //  }
 
   /* search */
 
