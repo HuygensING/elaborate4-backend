@@ -89,15 +89,6 @@ public class ProjectResource extends AbstractElaborateResource {
     projectService.delete(project_id, getUser());
   }
 
-  /* TEI export */
-  @GET
-  @Path("{project_id}/tei")
-  @Produces(MediaType.APPLICATION_XML)
-  @APIDesc("Returns the project with the given project_id as tei")
-  public String exportTei(@PathParam("project_id") long project_id) {
-    return projectService.exportTei(project_id, getUser());
-  }
-
   /* project settings */
   @GET
   @Path("{project_id}/settings")
@@ -118,6 +109,15 @@ public class ProjectResource extends AbstractElaborateResource {
     } else {
       throw new BadRequestException("no settingsMap sent");
     }
+  }
+
+  @PUT
+  @Path("{project_id}/textlayers")
+  @Consumes(UTF8MediaType.APPLICATION_JSON)
+  @RolesAllowed("ADMIN")
+  @APIDesc("Updates the textlayers settings of the project with the given project_id")
+  public void updateTextlayersSettings(@PathParam("project_id") long project_id, List<String> textLayers) {
+    projectService.setTextlayers(project_id, textLayers, getUser());
   }
 
   //  /* project facets */
@@ -244,6 +244,15 @@ public class ProjectResource extends AbstractElaborateResource {
   @APIDesc("Returns the logentries of the project with the given project_id")
   public List<LogEntry> getLogEntries(@PathParam("project_id") long project_id) {
     return projectService.getLogEntries(project_id, getUser());
+  }
+
+  /* TEI export */
+  @GET
+  @Path("{project_id}/tei")
+  @Produces(MediaType.APPLICATION_XML)
+  @APIDesc("Returns the project with the given project_id as tei")
+  public String exportTei(@PathParam("project_id") long project_id) {
+    return projectService.exportTei(project_id, getUser());
   }
 
   /* publish */

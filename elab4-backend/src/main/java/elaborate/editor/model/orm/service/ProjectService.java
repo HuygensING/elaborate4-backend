@@ -411,6 +411,18 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     return list;
   }
 
+  public void setTextlayers(long project_id, List<String> textLayers, User user) {
+    beginTransaction();
+
+    Project project = getProjectIfUserIsAllowed(project_id, user);
+    project.setTextLayers(textLayers);
+
+    persist(project);
+    persist(project.addLogEntry("project textlayers changed", user));
+    setModifiedBy(project, user);
+    commitTransaction();
+  }
+
   public void setProjectSettings(long project_id, Map<String, String> settingsMap, User user) {
     beginTransaction();
 
