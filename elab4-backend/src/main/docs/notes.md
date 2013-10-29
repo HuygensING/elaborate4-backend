@@ -323,6 +323,7 @@ De post komt meteen terug met een `Location` waarop de voortgang uitgelezen kan 
 
 - `id` - het id van de publicatieactie
 - `done`  - boolean die aangeeft of het aanmaken van de publicatie klaar is
+- `fail`  - boolean die aangeeft of het aanmaken van de publicatie onderbroken is door een error, de oorzaak is gelogd in de loglines
 - `url` - zodra de het publicatieproces done is staat hierin het url waarop de publicatie te zien is.
 - `loglines` - een array van logregels die aangeven waar het publicatieproces mee bezig is, met timestamps.
 

@@ -66,7 +66,8 @@ public class Publication {
     private final String id;
     private String url;
     private final List<String> loglines = Lists.newArrayList();
-    boolean done = false;
+    private boolean done = false;
+    private boolean fail = false;
     private final long projectId;
 
     public Status(long projectId) {
@@ -105,6 +106,10 @@ public class Publication {
       return done;
     }
 
+    public boolean isFail() {
+      return fail;
+    }
+
     public String getId() {
       return id;
     }
@@ -115,6 +120,10 @@ public class Publication {
 
     public void setUrl(String url) {
       this.url = url;
+    }
+
+    public void setFail() {
+      this.fail = true;
     }
   }
 

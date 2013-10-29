@@ -24,6 +24,7 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -74,46 +75,53 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   @Override
   public void run() {
-    status.addLogline("started");
-    prepareDirectories();
-    status.addLogline("setting up new solr index");
-    prepareSolr();
-    EntityManager entityManager = HibernateUtil.getEntityManager();
-    ProjectService ps = new ProjectService();
-    List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
-    ps.setEntityManager(entityManager);
-    List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
-    int entryNum = 1;
-    List<String> entryFilenames = Lists.newArrayList();
-    Map<Long, List<String>> thumbnails = Maps.newHashMap();
-    for (ProjectEntry projectEntry : projectEntriesInOrder) {
-      if (projectEntry.isPublishable()) {
-        status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
-        List<String> thumbnailUrls = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields);
-        long id = projectEntry.getId();
-        entryFilenames.add(id + ".json");
-        thumbnails.put(id, thumbnailUrls);
-        indexEntry(projectEntry);
+    try {
+      status.addLogline("started");
+      prepareDirectories();
+      status.addLogline("setting up new solr index");
+      prepareSolr();
+      EntityManager entityManager = HibernateUtil.getEntityManager();
+      ProjectService ps = new ProjectService();
+      List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
+      ps.setEntityManager(entityManager);
+      List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
+      int entryNum = 1;
+      List<String> entryFilenames = Lists.newArrayList();
+      Map<Long, List<String>> thumbnails = Maps.newHashMap();
+      for (ProjectEntry projectEntry : projectEntriesInOrder) {
+        if (projectEntry.isPublishable()) {
+          status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
+          List<String> thumbnailUrls = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields);
+          long id = projectEntry.getId();
+          entryFilenames.add(id + ".json");
+          thumbnails.put(id, thumbnailUrls);
+          indexEntry(projectEntry);
+        }
       }
+      commitAndCloseSolr();
+      exportPojectData(entryFilenames, thumbnails);
+
+      Project project = entityManager.find(Project.class, projectId);
+      exportSearchConfig(project, projectEntryMetadataFields);
+      String basename = getBasename(project);
+      entityManager.close();
+
+      status.addLogline("generating war file " + basename + ".war");
+      File war = new WarMaker(basename, distDir, rootDir).make();
+      String url = getBaseURL(basename);
+      status.addLogline("deploying war to " + url);
+      deploy(war);
+      status.setUrl(url);
+      status.addLogline("cleaning up temporary directories");
+      clearDirectories();
+      status.addLogline("finished");
+      status.setDone();
+
+    } catch (Exception e) {
+      status.addLogline("FAIL: " + e.getMessage());
+      status.addLogline(Joiner.on("\n").join(e.getStackTrace()));
+      status.setFail();
     }
-    commitAndCloseSolr();
-    exportPojectData(entryFilenames, thumbnails);
-
-    Project project = entityManager.find(Project.class, projectId);
-    exportSearchConfig(project, projectEntryMetadataFields);
-    String basename = getBasename(project);
-    entityManager.close();
-
-    status.addLogline("generating war file " + basename + ".war");
-    File war = new WarMaker(basename, distDir, rootDir).make();
-    String url = getBaseURL(basename);
-    status.addLogline("deploying war to " + url);
-    deploy(war);
-    status.setUrl(url);
-    status.addLogline("cleaning up temporary directories");
-    clearDirectories();
-    status.addLogline("finished");
-    status.setDone();
   }
 
   private String getBaseURL(String basename) {
@@ -345,7 +353,7 @@ public class PublishTask extends LoggableObject implements Runnable {
         "TYPE", projectType,//
         "ELABORATE_CDN", cdnBaseURL,//
         "VERSION", version//
-    );
+        );
     FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
   }
 
