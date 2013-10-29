@@ -86,6 +86,13 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 * Delete/wissen:  
   `DELETE`  `/projects/{project_id}`
   
+#### project textlayers
+
+* project settings updaten:  
+  `PUT` naar `/projects/{project_id}/textlayers`
+
+          [ "first","second","third" ]
+
 #### project annotationtypes
 
 * Read/opvragen:
