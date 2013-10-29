@@ -8,10 +8,9 @@ import java.util.Set;
 
 import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
 
-import org.mockito.internal.util.collections.Sets;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
@@ -78,7 +77,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     beginTransaction();
     ProjectEntry projectEntry = find(getEntityClass(), id);
     Project project = projectEntry.getProject();
-    Set<String> textLayers = Sets.newSet(project.getTextLayers());
+    Set<String> textLayers = Sets.newHashSet(project.getTextLayers());
     for (Transcription transcription : projectEntry.getTranscriptions()) {
       textLayers.remove(transcription.getTextLayer());
     }
@@ -95,8 +94,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     beginTransaction();
     ProjectEntry projectEntry = find(getEntityClass(), id);
     Transcription transcription = projectEntry.addTranscription(user)//
-    .setBody(transcriptionInput.getBodyForDb())//
-    .setTextLayer(transcriptionInput.textLayer);
+        .setBody(transcriptionInput.getBodyForDb())//
+        .setTextLayer(transcriptionInput.textLayer);
     persist(transcription);
     commitTransaction();
     return transcription;
@@ -117,8 +116,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     Project project = projectEntry.getProject();
 
     Facsimile facsimile = projectEntry.addFacsimile(facsimileData.getName(), facsimileData.getTitle(), user)//
-    .setFilename(facsimileData.getFilename())//
-    .setZoomableUrl(facsimileData.getZoomableUrl());
+        .setFilename(facsimileData.getFilename())//
+        .setZoomableUrl(facsimileData.getZoomableUrl());
     persist(facsimile);
     persist(project.addLogEntry(MessageFormat.format("added facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
     commitTransaction();
@@ -145,8 +144,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
       throw new NotFoundException("no facsimile with id " + facsimile_id + " found");
     }
     facsimile.setName(facsimileData.getName())//
-    .setFilename(facsimileData.getFilename())//
-    .setZoomableUrl(facsimileData.getZoomableUrl());
+        .setFilename(facsimileData.getFilename())//
+        .setZoomableUrl(facsimileData.getZoomableUrl());
     persist(facsimile);
     ProjectEntry projectEntry = facsimile.getProjectEntry();
     persist(project.addLogEntry(MessageFormat.format("updated facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
