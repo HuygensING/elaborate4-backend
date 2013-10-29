@@ -582,7 +582,6 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     setModifiedBy(project, user);
 
     commitTransaction();
-
   }
 
 }

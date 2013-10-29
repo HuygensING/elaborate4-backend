@@ -52,7 +52,7 @@ curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/users/$user_id
 
 
 # projectusers
-curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/projectusers|jq "."
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/projectusers|jq "."
 curl -i -H "Authorization: SimpleAuth $rootcode"  -H "Content-Type: application/json" -X PUT -d '[1,2,3]' $eb/projects/$project_id/projectusers
 
 # loglines
@@ -97,8 +97,8 @@ curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json
 curl -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '{"projectEntryIds":[1,2,3],"settings":{"Publishable":false,"field1":"value1","field2":"value2"}}' $eb/projects/$project_id/multipleentrysettings|jq "."
 
 # publish project
-curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d "{}" $eb/projects/$project_id/publication
-curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/publication/$status_id | jq "."
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d "{}" $eb/projects/$project_id/draft
+curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/draft/$status_id | jq "."
  	
 
 curl -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries/17152/transcriptions/21224|jq "."
