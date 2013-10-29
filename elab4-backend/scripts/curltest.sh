@@ -51,9 +51,9 @@ curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/j
 curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/users/$user_id
 
 
+# projectusers
 curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/projectusers|jq "."
-curl -i -H "Authorization: SimpleAuth $rootcode" -X PUT $eb/projects/$project_id/projectusers/$user_id
-curl -i -H "Authorization: SimpleAuth $rootcode" -X DELETE $eb/projects/$project_id/projectusers/$user_id
+curl -i -H "Authorization: SimpleAuth $rootcode"  -H "Content-Type: application/json" -X PUT -d '[1,2,3]' $eb/projects/$project_id/projectusers
 
 # loglines
 curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/logentries|jq "."

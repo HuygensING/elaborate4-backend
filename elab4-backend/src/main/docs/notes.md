@@ -101,6 +101,11 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 * Read/opvragen:
   `GET` naar `/projects/{project_id}/projectusers`
   geeft een array van user id's
+  
+* Update/bijwerken:  
+  `PUT` naar `/projects/{project_id}/projectusers`
+
+          [1,2,3]
 
 #### project settings
 
@@ -478,4 +483,4 @@ publicatie fase 2:
 project entries aanmelden bij oaipmh
 
 -->
-Last updated: 2013-10-15
+Last updated: 2013-10-29
