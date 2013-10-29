@@ -124,13 +124,13 @@
     <repository>
       <id>maven.huygens</id>
       <name>Huygens Maven Repository</name>
-      <url>scp://hi7dev.huygens.knaw.nl/data/hibuild/public_html/repository</url>
+      <url>scp://hi7.huygens.knaw.nl/data/htdocs/repository</url>
     </repository>
     <!-- use the following if you ARE using a snapshot version. -->
     <snapshotRepository>
       <id>maven.huygens</id>
       <name>Huygens Maven Repository</name>
-      <url>scp://hi7dev.huygens.knaw.nl/data/hibuild/public_html/repository</url>
+      <url>scp://hi7.huygens.knaw.nl/data/htdocs/repository</url>
       <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
   </distributionManagement>
