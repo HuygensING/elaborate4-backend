@@ -34,7 +34,6 @@ import elaborate.editor.model.orm.LogEntry;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.model.orm.service.TranscriptionService;
@@ -189,27 +188,36 @@ public class ProjectResource extends AbstractElaborateResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   @APIDesc("Returns the user ids assigned to the project with the given project_id")
   public List<Long> getProjectUsers(@PathParam("project_id") long project_id) {
-    return projectService.getProjectUsersIds(project_id, getUser());
+    return projectService.getProjectUserIds(project_id, getUser());
   }
 
   @PUT
-  @Path("{project_id}/projectusers/{user_id}")
+  @Path("{project_id}/projectusers")
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @RolesAllowed("ADMIN")
-  @APIDesc("Adds an existing user to the project with the given project_id")
-  public Response addProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
-    User created = projectService.addProjectUser(project_id, user_id, getUser());
-    return Response.created(createURI(created)).build();
+  @APIDesc("Updates the user ids assigned to the project with the given project_id")
+  public void updateProjectUsers(@PathParam("project_id") long project_id, List<Long> userIds) {
+    projectService.updateProjectUserIds(project_id, userIds, getUser());
   }
 
-  @DELETE
-  @Path("{project_id}/projectusers/{user_id}")
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @RolesAllowed("ADMIN")
-  @APIDesc("Removes the user with the given user_id from the project with the given project_id")
-  public void deleteProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
-    projectService.deleteProjectUser(project_id, user_id, getUser());
-  }
+  //  @PUT
+  //  @Path("{project_id}/projectusers/{user_id}")
+  //  @Consumes(UTF8MediaType.APPLICATION_JSON)
+  //  @RolesAllowed("ADMIN")
+  //  @APIDesc("Adds an existing user to the project with the given project_id")
+  //  public Response addProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
+  //    User created = projectService.addProjectUser(project_id, user_id, getUser());
+  //    return Response.created(createURI(created)).build();
+  //  }
+
+  //  @DELETE
+  //  @Path("{project_id}/projectusers/{user_id}")
+  //  @Consumes(UTF8MediaType.APPLICATION_JSON)
+  //  @RolesAllowed("ADMIN")
+  //  @APIDesc("Removes the user with the given user_id from the project with the given project_id")
+  //  public void deleteProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
+  //    projectService.deleteProjectUser(project_id, user_id, getUser());
+  //  }
 
   /* project statistics */
   @GET
