@@ -92,6 +92,7 @@ public class PublishTask extends LoggableObject implements Runnable {
         if (projectEntry.isPublishable()) {
           status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
           List<String> thumbnailUrls = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields);
+          // hier staat iets
           long id = projectEntry.getId();
           entryFilenames.add(id + ".json");
           thumbnails.put(id, thumbnailUrls);
