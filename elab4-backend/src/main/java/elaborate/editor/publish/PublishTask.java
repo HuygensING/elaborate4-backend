@@ -90,7 +90,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     int entryNum = 1;
     List<String> entryFilenames = Lists.newArrayList();
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
-    Multimap<String, AnnotationData> annotationIndex = ArrayListMultimap.create();
+    Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
     for (ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
         status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
@@ -195,14 +195,14 @@ public class PublishTask extends LoggableObject implements Runnable {
     Map<String, TextlayerData> texts = getTexts(projectEntry);
     map.put("paralleltexts", texts);
     map.put("metadata", getMetadata(projectEntry, projectMetadataFields));
-    Multimap<String, AnnotationData> annotationDataMap = ArrayListMultimap.create();
+    Multimap<String, AnnotationIndexData> annotationDataMap = ArrayListMultimap.create();
     String[] textLayers = projectEntry.getProject().getTextLayers();
     for (String textLayer : textLayers) {
       int order = 1;
       TextlayerData textlayerData = texts.get(textLayer);
       if (textlayerData != null) {
-        for (AnnotationData2 ad : textlayerData.getAnnotations()) {
-          AnnotationData annotationData = new AnnotationData()//
+        for (AnnotationData ad : textlayerData.getAnnotations()) {
+          AnnotationIndexData annotationIndexData = new AnnotationIndexData()//
               .setEntryId(projectEntry.getId())//
               .setN(ad.getN())//
               .setAnnotatedText(ad.getAnnotatedText())//
@@ -210,7 +210,7 @@ public class PublishTask extends LoggableObject implements Runnable {
               .setTextLayer(textLayer)//
               .setAnnotationOrder(order++);
           String atype = ad.getType().getName();
-          annotationDataMap.put(atype, annotationData);
+          annotationDataMap.put(atype, annotationIndexData);
         }
       }
     }
@@ -232,14 +232,14 @@ public class PublishTask extends LoggableObject implements Runnable {
     return textlayerData;
   }
 
-  private List<AnnotationData2> getAnnotationData(List<Integer> annotationNumbers) {
-    List<AnnotationData2> list = Lists.newArrayList();
+  private List<AnnotationData> getAnnotationData(List<Integer> annotationNumbers) {
+    List<AnnotationData> list = Lists.newArrayList();
     for (Integer integer : annotationNumbers) {
       Annotation annotation = annotationService.getAnnotationByAnnotationNo(integer, entityManager);
       if (annotation != null) {
         AnnotationType annotationType = annotation.getAnnotationType();
         if (settings.includeAnnotationType(annotationType)) {
-          AnnotationData2 ad2 = new AnnotationData2()//
+          AnnotationData ad2 = new AnnotationData()//
               .setN(annotation.getAnnotationNo())//
               .setText(annotation.getBody())//
               .setAnnotatedText(annotation.getAnnotatedText())//
@@ -351,7 +351,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     }
   }
 
-  private void exportPojectData(List<String> entryFilenames, Map<Long, List<String>> thumbnails, Multimap<String, AnnotationData> annotationIndex) {
+  private void exportPojectData(List<String> entryFilenames, Map<Long, List<String>> thumbnails, Multimap<String, AnnotationIndexData> annotationIndex) {
     File json = new File(jsonDir, "config.json");
     EntityManager entityManager = HibernateUtil.getEntityManager();
     Project project = entityManager.find(Project.class, projectId);
@@ -384,7 +384,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     EntityManager entityManager = HibernateUtil.getEntityManager();
     entityManager.merge(projectEntry);
     Map<String, Object> entryData = getProjectEntryData(projectEntry, projectEntryMetadataFields);
-    Multimap<String, AnnotationData> annotationDataMap = (Multimap<String, AnnotationData>) entryData.remove("annotationDataMap");
+    Multimap<String, AnnotationIndexData> annotationDataMap = (Multimap<String, AnnotationIndexData>) entryData.remove("annotationDataMap");
     entityManager.close();
     exportJson(json, entryData);
 
@@ -441,10 +441,10 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   static class ExportedEntryData {
     public List<String> thumbnailUrls;
-    public Multimap<String, AnnotationData> annotationDataMap;
+    public Multimap<String, AnnotationIndexData> annotationDataMap;
   }
 
-  static class AnnotationData {
+  static class AnnotationIndexData {
     private long entryId = 0l;
     private String textLayer = "";
     private String annotatedText = "";
@@ -456,7 +456,7 @@ public class PublishTask extends LoggableObject implements Runnable {
       return annotationText;
     }
 
-    public AnnotationData setN(int n) {
+    public AnnotationIndexData setN(int n) {
       this.n = n;
       return this;
     }
@@ -465,7 +465,7 @@ public class PublishTask extends LoggableObject implements Runnable {
       return n;
     }
 
-    public AnnotationData setAnnotationText(String annotationText) {
+    public AnnotationIndexData setAnnotationText(String annotationText) {
       this.annotationText = annotationText;
       return this;
     }
@@ -474,7 +474,7 @@ public class PublishTask extends LoggableObject implements Runnable {
       return entryId;
     }
 
-    public AnnotationData setEntryId(long entryId) {
+    public AnnotationIndexData setEntryId(long entryId) {
       this.entryId = entryId;
       return this;
     }
@@ -483,7 +483,7 @@ public class PublishTask extends LoggableObject implements Runnable {
       return textLayer;
     }
 
-    public AnnotationData setTextLayer(String textLayer) {
+    public AnnotationIndexData setTextLayer(String textLayer) {
       this.textLayer = textLayer;
       return this;
     }
@@ -492,7 +492,7 @@ public class PublishTask extends LoggableObject implements Runnable {
       return annotatedText;
     }
 
-    public AnnotationData setAnnotatedText(String annotatedText) {
+    public AnnotationIndexData setAnnotatedText(String annotatedText) {
       this.annotatedText = annotatedText;
       return this;
     }
@@ -501,20 +501,20 @@ public class PublishTask extends LoggableObject implements Runnable {
       return annotationOrder;
     }
 
-    public AnnotationData setAnnotationOrder(int annotationOrder) {
+    public AnnotationIndexData setAnnotationOrder(int annotationOrder) {
       this.annotationOrder = annotationOrder;
       return this;
     }
 
   }
 
-  public class AnnotationData2 {
+  public class AnnotationData {
     private int annotationNo = 0;
     private String body = "";
     private AnnotationTypeData annotationTypeData = null;
     private String annotatedText = "";
 
-    public AnnotationData2 setN(int annotationNo) {
+    public AnnotationData setN(int annotationNo) {
       this.annotationNo = annotationNo;
       return this;
     }
@@ -527,12 +527,12 @@ public class PublishTask extends LoggableObject implements Runnable {
       return annotatedText;
     }
 
-    public AnnotationData2 setAnnotatedText(String annotatedText) {
+    public AnnotationData setAnnotatedText(String annotatedText) {
       this.annotatedText = XmlUtil.removeXMLtags(annotatedText).trim();
       return this;
     }
 
-    public AnnotationData2 setText(String body) {
+    public AnnotationData setText(String body) {
       this.body = XmlUtil.removeXMLtags(body).trim();
       return this;
     }
@@ -541,7 +541,7 @@ public class PublishTask extends LoggableObject implements Runnable {
       return body;
     }
 
-    public AnnotationData2 setType(AnnotationTypeData annotationTypeData) {
+    public AnnotationData setType(AnnotationTypeData annotationTypeData) {
       this.annotationTypeData = annotationTypeData;
       return this;
     }
@@ -598,7 +598,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   public static class TextlayerData {
     String text = "";
-    List<AnnotationData2> annotations = Lists.newArrayList();
+    List<AnnotationData> annotations = Lists.newArrayList();
 
     public String getText() {
       return text;
@@ -609,11 +609,11 @@ public class PublishTask extends LoggableObject implements Runnable {
       return this;
     }
 
-    public List<AnnotationData2> getAnnotations() {
+    public List<AnnotationData> getAnnotations() {
       return annotations;
     }
 
-    public TextlayerData setAnnotations(List<AnnotationData2> annotations) {
+    public TextlayerData setAnnotations(List<AnnotationData> annotations) {
       this.annotations = annotations;
       return this;
     }
