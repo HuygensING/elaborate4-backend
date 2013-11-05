@@ -44,7 +44,7 @@ function e4-show-version {
 
 function e4-publish {
   project_id=$1
-  curl -i -H "Authorization: SimpleAuth $authtoken" -H "Content-Type: application/json" -X POST -d "{}" $eb/projects/$project_id/publication
+  curl -i -H "Authorization: SimpleAuth $authtoken" -H "Content-Type: application/json" -X POST -d "{}" $eb/projects/$project_id/draft
 }
 
 function e4-get {

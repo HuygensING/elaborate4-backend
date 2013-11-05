@@ -24,11 +24,12 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
 
 import elaborate.editor.config.Configuration;
@@ -52,6 +53,7 @@ import elaborate.editor.solr.SolrIndexer;
 import elaborate.editor.solr.SolrServerWrapper;
 import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
+import elaborate.util.XmlUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
   //  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
@@ -75,53 +77,49 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   @Override
   public void run() {
-    try {
-      status.addLogline("started");
-      prepareDirectories();
-      status.addLogline("setting up new solr index");
-      prepareSolr();
-      EntityManager entityManager = HibernateUtil.getEntityManager();
-      ProjectService ps = new ProjectService();
-      List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
-      ps.setEntityManager(entityManager);
-      List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
-      int entryNum = 1;
-      List<String> entryFilenames = Lists.newArrayList();
-      Map<Long, List<String>> thumbnails = Maps.newHashMap();
-      for (ProjectEntry projectEntry : projectEntriesInOrder) {
-        if (projectEntry.isPublishable()) {
-          status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
-          List<String> thumbnailUrls = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields);
-          long id = projectEntry.getId();
-          entryFilenames.add(id + ".json");
-          thumbnails.put(id, thumbnailUrls);
-          indexEntry(projectEntry);
-        }
+    status.addLogline("started");
+    prepareDirectories();
+    status.addLogline("setting up new solr index");
+    prepareSolr();
+    entityManager = HibernateUtil.getEntityManager();
+    ProjectService ps = new ProjectService();
+    List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
+    ps.setEntityManager(entityManager);
+    //    annotationService.setEntityManager(entityManager);
+    List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
+    int entryNum = 1;
+    List<String> entryFilenames = Lists.newArrayList();
+    Map<Long, List<String>> thumbnails = Maps.newHashMap();
+    Multimap<String, AnnotationData> annotationIndex = ArrayListMultimap.create();
+    for (ProjectEntry projectEntry : projectEntriesInOrder) {
+      if (projectEntry.isPublishable()) {
+        status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
+        ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields);
+        long id = projectEntry.getId();
+        entryFilenames.add(id + ".json");
+        thumbnails.put(id, eed.thumbnailUrls);
+        annotationIndex.putAll(eed.annotationDataMap);
+        indexEntry(projectEntry);
       }
-      commitAndCloseSolr();
-      exportPojectData(entryFilenames, thumbnails);
-
-      Project project = entityManager.find(Project.class, projectId);
-      exportSearchConfig(project, projectEntryMetadataFields);
-      String basename = getBasename(project);
-      entityManager.close();
-
-      status.addLogline("generating war file " + basename + ".war");
-      File war = new WarMaker(basename, distDir, rootDir).make();
-      String url = getBaseURL(basename);
-      status.addLogline("deploying war to " + url);
-      deploy(war);
-      status.setUrl(url);
-      status.addLogline("cleaning up temporary directories");
-      clearDirectories();
-      status.addLogline("finished");
-      status.setDone();
-
-    } catch (Exception e) {
-      status.addLogline("FAIL: " + e.getMessage());
-      status.addLogline(Joiner.on("\n").join(e.getStackTrace()));
-      status.setFail();
     }
+    commitAndCloseSolr();
+    exportPojectData(entryFilenames, thumbnails, annotationIndex);
+
+    Project project = entityManager.find(Project.class, projectId);
+    exportSearchConfig(project, projectEntryMetadataFields);
+    String basename = getBasename(project);
+    entityManager.close();
+
+    status.addLogline("generating war file " + basename + ".war");
+    File war = new WarMaker(basename, distDir, rootDir).make();
+    String url = getBaseURL(basename);
+    status.addLogline("deploying war to " + url);
+    deploy(war);
+    status.setUrl(url);
+    status.addLogline("cleaning up temporary directories");
+    clearDirectories();
+    status.addLogline("finished");
+    status.setDone();
   }
 
   private String getBaseURL(String basename) {
@@ -187,45 +185,66 @@ public class PublishTask extends LoggableObject implements Runnable {
       return f1.getFilename().compareTo(f2.getFilename());
     }
   };
+  private EntityManager entityManager;
 
   Map<String, Object> getProjectEntryData(ProjectEntry projectEntry, List<String> projectMetadataFields) {
     Map<String, Object> map = Maps.newHashMap();
     map.put("name", projectEntry.getName());
     map.put("id", projectEntry.getId());
     map.put("facsimiles", getFacsimileURLs(projectEntry));
-    map.put("paralleltexts", getTexts(projectEntry));
+    Map<String, TextlayerData> texts = getTexts(projectEntry);
+    map.put("paralleltexts", texts);
     map.put("metadata", getMetadata(projectEntry, projectMetadataFields));
+    Multimap<String, AnnotationData> annotationDataMap = ArrayListMultimap.create();
+    String[] textLayers = projectEntry.getProject().getTextLayers();
+    for (String textLayer : textLayers) {
+      int order = 1;
+      TextlayerData textlayerData = texts.get(textLayer);
+      if (textlayerData != null) {
+        for (AnnotationData2 ad : textlayerData.getAnnotations()) {
+          AnnotationData annotationData = new AnnotationData()//
+              .setEntryId(projectEntry.getId())//
+              .setN(ad.getN())//
+              .setAnnotatedText(ad.getAnnotatedText())//
+              .setAnnotationText(ad.getText())//
+              .setTextLayer(textLayer)//
+              .setAnnotationOrder(order++);
+          String atype = ad.getType().getName();
+          annotationDataMap.put(atype, annotationData);
+        }
+      }
+    }
+    map.put("annotationDataMap", annotationDataMap);
     return map;
   }
 
-  private Map<String, Object> getTexts(ProjectEntry projectEntry) {
-    Map<String, Object> map = Maps.newHashMap();
+  private Map<String, TextlayerData> getTexts(ProjectEntry projectEntry) {
+    Map<String, TextlayerData> map = Maps.newHashMap();
     for (Transcription transcription : projectEntry.getTranscriptions()) {
-      map.put(transcription.getTranscriptionType().getName(), getTranscriptionMap(transcription));
+      map.put(transcription.getTranscriptionType().getName(), getTextlayerData(transcription));
     }
     return map;
   }
 
-  private Map<String, Object> getTranscriptionMap(Transcription transcription) {
-    Map<String, Object> transcriptionMap = Maps.newHashMap();
+  private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
-    transcriptionMap.put("text", tw.body);
-    transcriptionMap.put("annotations", getAnnotationData(tw.annotationNumbers));
-    return transcriptionMap;
+    TextlayerData textlayerData = new TextlayerData().setText(tw.body).setAnnotations(getAnnotationData(tw.annotationNumbers));
+    return textlayerData;
   }
 
-  private List<Map<String, Object>> getAnnotationData(List<Integer> annotationNumbers) {
-    List<Map<String, Object>> list = Lists.newArrayList();
+  private List<AnnotationData2> getAnnotationData(List<Integer> annotationNumbers) {
+    List<AnnotationData2> list = Lists.newArrayList();
     for (Integer integer : annotationNumbers) {
-      Annotation annotation = annotationService.getAnnotationByAnnotationNo(integer);
+      Annotation annotation = annotationService.getAnnotationByAnnotationNo(integer, entityManager);
       if (annotation != null) {
         AnnotationType annotationType = annotation.getAnnotationType();
         if (settings.includeAnnotationType(annotationType)) {
-          Map<String, Object> map = Maps.newHashMap();
-          map.put("n", annotation.getAnnotationNo());
-          map.put("text", annotation.getBody());
-          map.put("type", getAnnotationTypeData(annotationType, annotation.getAnnotationMetadataItems()));
-          list.add(map);
+          AnnotationData2 ad2 = new AnnotationData2()//
+              .setN(annotation.getAnnotationNo())//
+              .setText(annotation.getBody())//
+              .setAnnotatedText(annotation.getAnnotatedText())//
+              .setType(getAnnotationTypeData(annotationType, annotation.getAnnotationMetadataItems()));
+          list.add(ad2);
         }
       }
     }
@@ -248,15 +267,13 @@ public class PublishTask extends LoggableObject implements Runnable {
   //    return list;
   //  }
 
-  private Map<String, Object> getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
-    Map<String, Object> map = Maps.newHashMap();
-    map.put("name", annotationType.getName());
-    map.put("description", annotationType.getDescription());
+  private AnnotationTypeData getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
     Map<String, Object> metadata = getMetadata(meta);
-    if (!metadata.isEmpty()) {
-      map.put("metadata", metadata);
-    }
-    return map;
+    AnnotationTypeData annotationTypeData = new AnnotationTypeData()//
+        .setName(annotationType.getName())//
+        .setDescription(annotationType.getDescription())//
+        .setMetadata(metadata);
+    return annotationTypeData;
   }
 
   private Map<String, Object> getMetadata(Set<AnnotationMetadataItem> meta) {
@@ -334,13 +351,16 @@ public class PublishTask extends LoggableObject implements Runnable {
     }
   }
 
-  private void exportPojectData(List<String> entryFilenames, Map<Long, List<String>> thumbnails) {
+  private void exportPojectData(List<String> entryFilenames, Map<Long, List<String>> thumbnails, Multimap<String, AnnotationData> annotationIndex) {
     File json = new File(jsonDir, "config.json");
     EntityManager entityManager = HibernateUtil.getEntityManager();
     Project project = entityManager.find(Project.class, projectId);
     Map<String, Object> projectData = getProjectData(project, entryFilenames, thumbnails);
     entityManager.close();
     exportJson(json, projectData);
+
+    json = new File(jsonDir, "annotation_index.json");
+    exportJson(json, annotationIndex.asMap());
 
     //    String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
     String indexfilename = "index.html.ftl";
@@ -357,13 +377,14 @@ public class PublishTask extends LoggableObject implements Runnable {
     FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
   }
 
-  private List<String> exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields) {
+  private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields) {
     //    String entryFilename = entryFilename(entryNum);
     String entryFilename = projectEntry.getId() + ".json";
     File json = new File(jsonDir, entryFilename);
     EntityManager entityManager = HibernateUtil.getEntityManager();
     entityManager.merge(projectEntry);
     Map<String, Object> entryData = getProjectEntryData(projectEntry, projectEntryMetadataFields);
+    Multimap<String, AnnotationData> annotationDataMap = (Multimap<String, AnnotationData>) entryData.remove("annotationDataMap");
     entityManager.close();
     exportJson(json, entryData);
 
@@ -371,7 +392,11 @@ public class PublishTask extends LoggableObject implements Runnable {
     for (Map<String, String> map : (List<Map<String, String>>) entryData.get("facsimiles")) {
       thumbnailUrls.add(map.get("thumbnail"));
     }
-    return thumbnailUrls;
+
+    ExportedEntryData exportedEntryData = new ExportedEntryData();
+    exportedEntryData.thumbnailUrls = thumbnailUrls;
+    exportedEntryData.annotationDataMap = annotationDataMap;
+    return exportedEntryData;
   }
 
   private void deploy(File war) {
@@ -385,16 +410,6 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   private void clearDirectories() {
     FileUtils.deleteQuietly(rootDir);
-  }
-
-  public static class Metadata {
-    public String field;
-    public String value;
-
-    public Metadata(String _field, String _value) {
-      field = _field;
-      value = StringUtils.defaultIfBlank(_value, "");
-    }
   }
 
   private void prepareSolr() {
@@ -424,4 +439,189 @@ public class PublishTask extends LoggableObject implements Runnable {
     }
   }
 
+  static class ExportedEntryData {
+    public List<String> thumbnailUrls;
+    public Multimap<String, AnnotationData> annotationDataMap;
+  }
+
+  static class AnnotationData {
+    private long entryId = 0l;
+    private String textLayer = "";
+    private String annotatedText = "";
+    private String annotationText = "";
+    private int annotationOrder = 0;
+    private int n;
+
+    public String getAnnotationText() {
+      return annotationText;
+    }
+
+    public AnnotationData setN(int n) {
+      this.n = n;
+      return this;
+    }
+
+    public int getN() {
+      return n;
+    }
+
+    public AnnotationData setAnnotationText(String annotationText) {
+      this.annotationText = annotationText;
+      return this;
+    }
+
+    public long getEntryId() {
+      return entryId;
+    }
+
+    public AnnotationData setEntryId(long entryId) {
+      this.entryId = entryId;
+      return this;
+    }
+
+    public String getTextLayer() {
+      return textLayer;
+    }
+
+    public AnnotationData setTextLayer(String textLayer) {
+      this.textLayer = textLayer;
+      return this;
+    }
+
+    public String getAnnotatedText() {
+      return annotatedText;
+    }
+
+    public AnnotationData setAnnotatedText(String annotatedText) {
+      this.annotatedText = annotatedText;
+      return this;
+    }
+
+    public int getAnnotationOrder() {
+      return annotationOrder;
+    }
+
+    public AnnotationData setAnnotationOrder(int annotationOrder) {
+      this.annotationOrder = annotationOrder;
+      return this;
+    }
+
+  }
+
+  public class AnnotationData2 {
+    private int annotationNo = 0;
+    private String body = "";
+    private AnnotationTypeData annotationTypeData = null;
+    private String annotatedText = "";
+
+    public AnnotationData2 setN(int annotationNo) {
+      this.annotationNo = annotationNo;
+      return this;
+    }
+
+    public int getN() {
+      return annotationNo;
+    }
+
+    public String getAnnotatedText() {
+      return annotatedText;
+    }
+
+    public AnnotationData2 setAnnotatedText(String annotatedText) {
+      this.annotatedText = XmlUtil.removeXMLtags(annotatedText).trim();
+      return this;
+    }
+
+    public AnnotationData2 setText(String body) {
+      this.body = XmlUtil.removeXMLtags(body).trim();
+      return this;
+    }
+
+    public String getText() {
+      return body;
+    }
+
+    public AnnotationData2 setType(AnnotationTypeData annotationTypeData) {
+      this.annotationTypeData = annotationTypeData;
+      return this;
+    }
+
+    public AnnotationTypeData getType() {
+      return annotationTypeData;
+    }
+
+  }
+
+  public class AnnotationTypeData {
+    private String name = "";
+    private String description = "";
+    private Map<String, Object> metadata = Maps.newHashMap();
+
+    public AnnotationTypeData setName(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public AnnotationTypeData setDescription(String description) {
+      this.description = description;
+      return this;
+    }
+
+    public String getDescription() {
+      return description;
+    }
+
+    public AnnotationTypeData setMetadata(Map<String, Object> metadata) {
+      this.metadata = metadata;
+      return this;
+    }
+
+    public Map<String, Object> getMetadata() {
+      return metadata;
+    }
+
+  }
+
+  public static class Metadata {
+    public String field = "";
+    public String value = "";
+
+    public Metadata(String _field, String _value) {
+      field = _field;
+      value = StringUtils.defaultIfBlank(_value, "");
+    }
+  }
+
+  public static class TextlayerData {
+    String text = "";
+    List<AnnotationData2> annotations = Lists.newArrayList();
+
+    public String getText() {
+      return text;
+    }
+
+    public TextlayerData setText(String text) {
+      this.text = text;
+      return this;
+    }
+
+    public List<AnnotationData2> getAnnotations() {
+      return annotations;
+    }
+
+    public TextlayerData setAnnotations(List<AnnotationData2> annotations) {
+      this.annotations = annotations;
+      return this;
+    }
+
+    public AnnotationData2 setType(Map<String, Object> annotationTypeData) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+  }
 }
