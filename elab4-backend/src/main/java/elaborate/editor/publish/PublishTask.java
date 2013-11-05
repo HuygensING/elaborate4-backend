@@ -618,10 +618,5 @@ public class PublishTask extends LoggableObject implements Runnable {
       return this;
     }
 
-    public AnnotationData2 setType(Map<String, Object> annotationTypeData) {
-      // TODO Auto-generated method stub
-      return null;
-    }
-
   }
 }
