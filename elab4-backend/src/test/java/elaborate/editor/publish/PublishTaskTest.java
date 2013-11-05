@@ -1,7 +1,11 @@
 package elaborate.editor.publish;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Map;
@@ -65,8 +69,12 @@ public class PublishTaskTest extends AbstractTest {
     PublishTask publishTask = new PublishTask(settings);
 
     ProjectEntry entry = mock(ProjectEntry.class);
+    Project project = mock(Project.class);
     String entryName = "entryname";
     when(entry.getName()).thenReturn(entryName);
+    when(entry.getProject()).thenReturn(project);
+    String[] textLayers = new String[] { "Diplomatic", "Comments" };
+    when(project.getTextLayers()).thenReturn(textLayers);
 
     List<String> projectEntryMetadataFields = Lists.newArrayList("Meta1", "Meta2");
     Map<String, Object> projectEntryData = publishTask.getProjectEntryData(entry, projectEntryMetadataFields);
@@ -83,9 +91,9 @@ public class PublishTaskTest extends AbstractTest {
   public void testGetSearchConfigMap() throws Exception {
     List<String> selectedProjectEntryMetadataFields = ImmutableList.of("Field1", "Field2", "Field3");
     Project project = new Project()//
-    .setProjectEntryMetadataFieldnames(ImmutableList.of("Field1", "Field2", "Field3", "field4"))//
-    .setLevel1("Field1")//
-    .setLevel2("Field3");
+        .setProjectEntryMetadataFieldnames(ImmutableList.of("Field1", "Field2", "Field3", "field4"))//
+        .setLevel1("Field1")//
+        .setLevel2("Field3");
     SearchConfig searchConfig = new SearchConfig(project, selectedProjectEntryMetadataFields);
     LOG.info("searchConfig={}", searchConfig);
     assertNotNull(searchConfig);
