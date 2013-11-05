@@ -56,8 +56,8 @@ import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
-  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
-  //  private static final String TOMCAT_WEBAPPS_DIR = "/usr/share/tomcat6/webapps/";
+  //  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
+  private static final String TOMCAT_WEBAPPS_DIR = "/usr/share/tomcat6/webapps/";
   private static final String PUBLICATION_TOMCAT_URL = "http://demo7.huygens.knaw.nl/";
 
   private final Publication.Status status;
