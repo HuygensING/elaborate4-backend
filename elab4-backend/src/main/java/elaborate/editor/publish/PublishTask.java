@@ -56,6 +56,7 @@ import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
+  private static final String ANNOTATION_INDEX_JSON = "annotation_index.json";
   //  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
   private static final String TOMCAT_WEBAPPS_DIR = "/usr/share/tomcat6/webapps/";
   private static final String PUBLICATION_TOMCAT_URL = "http://demo7.huygens.knaw.nl/";
@@ -167,6 +168,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     map.put("entryTerm_singular", metadataMap.get(ProjectMetadataFields.ENTRYTERM_SINGULAR));
     map.put("entryTerm_plural", metadataMap.get(ProjectMetadataFields.ENTRYTERM_PLURAL));
     map.put("baseURL", getBaseURL(getBasename(project)));
+    map.put("annotation_index", ANNOTATION_INDEX_JSON);
     map.put("metadata", getMetadata(project));
     return map;
   }
@@ -359,7 +361,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     entityManager.close();
     exportJson(json, projectData);
 
-    json = new File(jsonDir, "annotation_index.json");
+    json = new File(jsonDir, ANNOTATION_INDEX_JSON);
     exportJson(json, annotationIndex.asMap());
 
     //    String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
