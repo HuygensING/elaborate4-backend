@@ -1,6 +1,8 @@
 package elaborate.editor.model.orm;
 
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -168,22 +170,22 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
   //  }
   //
   //  @SuppressWarnings("boxing")
-  //  public String getAnnotatedText() {
-  //    String body = annotation.getTranscription().getBody();
-  //    if (body == null) {
-  //      return "";
-  //    }
-  //    String regex = String.format("(?m)(?s)<%s id=\"%s\"/>(.*)<%s id=\"%s\"/>", //
-  //        TranscriptionBodyTags.ANNOTATION_BEGIN, //
-  //        annotation.getAnnotationNo(),//
-  //        TranscriptionBodyTags.ANNOTATION_END, //
-  //        annotation.getAnnotationNo());
-  //    //    LOG.info("regex={}", regex);
-  //    //    LOG.info("body={}", body);
-  //    Pattern pattern = Pattern.compile(regex);
-  //    Matcher matcher = pattern.matcher(body);
-  //    return matcher.find() ? matcher.group(1) : "";
-  //  }
+  public String getAnnotatedText() {
+    String body = getTranscription().getBody();
+    if (body == null) {
+      return "";
+    }
+    String regex = String.format("(?m)(?s)<%s id=\"%s\"/>(.*)<%s id=\"%s\"/>", //
+        Transcription.BodyTags.ANNOTATION_BEGIN, //
+        getAnnotationNo(),//
+        Transcription.BodyTags.ANNOTATION_END, //
+        getAnnotationNo());
+    //    LOG.info("regex={}", regex);
+    //    LOG.info("body={}", body);
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(body);
+    return matcher.find() ? matcher.group(1) : "";
+  }
   //
   //  public String getSolrId() {
   //    return Annotation.TYPE + annotation.getId();
