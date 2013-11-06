@@ -57,8 +57,8 @@ import elaborate.util.XmlUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
   private static final String ANNOTATION_INDEX_JSON = "annotation_index.json";
-  //  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
-  private static final String TOMCAT_WEBAPPS_DIR = "/usr/share/tomcat6/webapps/";
+  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
+  //  private static final String TOMCAT_WEBAPPS_DIR = "/usr/share/tomcat6/webapps/";
   private static final String PUBLICATION_TOMCAT_URL = "http://demo7.huygens.knaw.nl/";
 
   private final Publication.Status status;
@@ -510,7 +510,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   }
 
-  public class AnnotationData {
+  public static class AnnotationData {
     private int annotationNo = 0;
     private String body = "";
     private AnnotationTypeData annotationTypeData = null;
@@ -535,7 +535,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     }
 
     public AnnotationData setText(String body) {
-      this.body = XmlUtil.removeXMLtags(body).trim();
+      this.body = XmlUtil.removeXMLtags(body.replaceAll("<span class=\"annotationStub\">.*?</span>", "")).trim();
       return this;
     }
 
@@ -554,7 +554,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   }
 
-  public class AnnotationTypeData {
+  public static class AnnotationTypeData {
     private String name = "";
     private String description = "";
     private Map<String, Object> metadata = Maps.newHashMap();
