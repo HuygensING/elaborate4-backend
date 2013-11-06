@@ -24,6 +24,7 @@ import elaborate.editor.model.FacetInfo;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.publish.Publication.Settings;
+import elaborate.editor.publish.PublishTask.AnnotationData;
 
 public class PublishTaskTest extends AbstractTest {
 
@@ -105,5 +106,11 @@ public class PublishTaskTest extends AbstractTest {
     String json = PublishTask.toJson(searchConfig);
     LOG.info(json);
     assertNotNull(json);
+  }
+
+  @Test
+  public void testSetText() throws Exception {
+    AnnotationData ad = new AnnotationData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
+    assertEquals("dit is de annotatietekst", ad.getText());
   }
 }
