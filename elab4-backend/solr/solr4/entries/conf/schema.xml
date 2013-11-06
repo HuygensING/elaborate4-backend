@@ -499,21 +499,23 @@
     </fieldType>
 
     <!-- Just like text_general except it reverses the characters of
-         each token, to enable more efficient leading wildcard queries. -->
-    <fieldType name="text_general_rev" class="solr.TextField" positionIncrementGap="100">
-      <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ReversedWildcardFilterFactory" withOriginal="true" maxPosAsterisk="3" maxPosQuestion="2" maxFractionAsterisk="0.33"/>
-      </analyzer>
-      <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-    </fieldType>
+	         each token, to enable more efficient leading wildcard queries. -->
+		<fieldType name="text_general_rev" class="solr.TextField" positionIncrementGap="100">
+			<analyzer type="index">
+				<tokenizer class="solr.StandardTokenizerFactory" />
+				<filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.ReversedWildcardFilterFactory" withOriginal="true" maxPosAsterisk="3" maxPosQuestion="2"	maxFractionAsterisk="0.33" />
+				<filter class="solr.ASCIIFoldingFilterFactory" />
+			</analyzer>
+			<analyzer type="query">
+				<tokenizer class="solr.StandardTokenizerFactory" />
+				<filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
+				<filter class="solr.LowerCaseFilterFactory" />
+				<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true" />
+				<filter class="solr.ASCIIFoldingFilterFactory" />
+			</analyzer>
+		</fieldType>
 
     <!-- Just like text_general_rev except case sensitive. -->
     <fieldType name="text_general_rev_cs" class="solr.TextField" positionIncrementGap="100">
@@ -521,11 +523,13 @@
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
         <filter class="solr.ReversedWildcardFilterFactory" withOriginal="true" maxPosAsterisk="3" maxPosQuestion="2" maxFractionAsterisk="0.33"/>
+				<filter class="solr.ASCIIFoldingFilterFactory" />
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
         <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+				<filter class="solr.ASCIIFoldingFilterFactory" />
       </analyzer>
     </fieldType>
 
