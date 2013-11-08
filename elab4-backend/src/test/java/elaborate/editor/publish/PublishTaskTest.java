@@ -21,6 +21,7 @@ import com.google.common.collect.Maps;
 
 import elaborate.AbstractTest;
 import elaborate.editor.model.FacetInfo;
+import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.publish.Publication.Settings;
@@ -35,7 +36,7 @@ public class PublishTaskTest extends AbstractTest {
   public void tearDown() throws Exception {}
 
   @Test
-  public void testGetProjectData() throws Exception {
+  public void testGetProjectData_WithProjectTitle() throws Exception {
     Settings settings = mock(Publication.Settings.class);
     Project mockProject = mock(Project.class);
     String projectTitle = "titel";
@@ -47,6 +48,38 @@ public class PublishTaskTest extends AbstractTest {
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
     Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
     assertEquals(projectTitle, projectData.get("title"));
+
+    LOG.info("projectData={}", projectData);
+
+    String json = PublishTask.toJson(projectData);
+    LOG.info("json={}", json);
+    assertTrue(StringUtils.isNotBlank(json));
+  }
+
+  @Test
+  public void testGetProjectData_WithPublicationTitle() throws Exception {
+    Settings settings = mock(Publication.Settings.class);
+    Project mockProject = mock(Project.class);
+    String projectTitle = "Project title";
+    when(mockProject.getTitle()).thenReturn(projectTitle);
+
+    String publicationTitle = "Publication title";
+    Map<String, String> metadataMap = Maps.newHashMap();
+    metadataMap.put(ProjectMetadataFields.PUBLICATION_TITLE, publicationTitle);
+    metadataMap.put(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold");
+    metadataMap.put(ProjectMetadataFields.TEXT_FONT, "comicsans");
+    metadataMap.put("extra", "extra");
+    when(mockProject.getMetadataMap()).thenReturn(metadataMap);
+
+    PublishTask publishTask = new PublishTask(settings);
+    List<String> entries = ImmutableList.of("entry1.json", "entry2.json");
+
+    Map<Long, List<String>> thumbnails = Maps.newHashMap();
+    Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
+    assertEquals(publicationTitle, projectData.get("title"));
+    assertFalse(((Map<Long, List<String>>) projectData.get("metadata")).containsKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME));
+    assertFalse(projectData.containsKey("entryTermSingular"));
+    assertEquals("comicsans", projectData.get("textFont"));
 
     LOG.info("projectData={}", projectData);
 

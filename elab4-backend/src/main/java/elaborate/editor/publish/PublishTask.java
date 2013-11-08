@@ -159,27 +159,37 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   Map<String, Object> getProjectData(Project project, List<String> entryFilenames, Map<Long, List<String>> thumbnails) {
     Map<String, String> metadataMap = project.getMetadataMap();
+    for (String key : ProjectMetadataFields.ANNOTATIONTYPE_FIELDS) {
+      metadataMap.remove(key);
+    }
     Map<String, Object> map = Maps.newHashMap();
     map.put("id", project.getId());
     map.put("title", StringUtils.defaultIfBlank(metadataMap.remove(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
     map.put("publicationDate", new DateTime().toString("yyyy-MM-dd HH:mm"));
     map.put("entryIds", entryFilenames);
     map.put("thumbnails", thumbnails);
-    map.put("entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
-    map.put("entryTermPlural", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_PLURAL));
     map.put("baseURL", getBaseURL(getBasename(project)));
     map.put("annotationIndex", ANNOTATION_INDEX_JSON);
-    map.put("metadata", getMetadata(project));
+    addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
+    addIfNotNull(map, "entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
+    addIfNotNull(map, "entryTermPlural", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_PLURAL));
+    map.put("metadata", metadataMap);
     return map;
   }
 
-  private Map<String, Object> getMetadata(Project project) {
-    Map<String, Object> metamap = Maps.newHashMap();
-    for (ProjectMetadataItem projectMetadataItem : project.getProjectMetadataItems()) {
-      metamap.put(projectMetadataItem.getField(), projectMetadataItem.getData());
-    }
-    return metamap;
+  private void addIfNotNull(Map<String, Object> map, String key, String value) {
+    if (value != null) {
+      map.put(key, value);
+    };
   }
+
+//  private Map<String, Object> getMetadata(Project project) {
+//    Map<String, Object> metamap = Maps.newHashMap();
+//    for (ProjectMetadataItem projectMetadataItem : project.getProjectMetadataItems()) {
+//      metamap.put(projectMetadataItem.getField(), projectMetadataItem.getData());
+//    }
+//    return metamap;
+//  }
 
   private static final Comparator<Facsimile> SORT_ON_FILENAME = new Comparator<Facsimile>() {
     @Override
