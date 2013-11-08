@@ -1,7 +1,7 @@
 package elaborate.editor.model;
 
 public class ProjectMetadataFields {
-  public static String PUBLICATION_FONT = "text.font";
+  public static String TEXT_FONT = "text.font";
   public static String PUBLICATION_TITLE = "publication.title";
 
   public static String ENTRYTERM_SINGULAR = "entry.term_singular";
@@ -15,4 +15,11 @@ public class ProjectMetadataFields {
   public static String ANNOTATIONTYPE_STRIKE_NAME = "annotationtype.strike.name";
   public static String ANNOTATIONTYPE_UNDERLINE_DESCRIPTION = "annotationtype.u.description";
   public static String ANNOTATIONTYPE_UNDERLINE_NAME = "annotationtype.u.name";
+  public static String[] ANNOTATIONTYPE_FIELDS = {//
+  ANNOTATIONTYPE_BOLD_DESCRIPTION, ANNOTATIONTYPE_BOLD_NAME,//
+      ANNOTATIONTYPE_ITALIC_DESCRIPTION, ANNOTATIONTYPE_ITALIC_NAME,//
+      ANNOTATIONTYPE_UNDERLINE_DESCRIPTION, ANNOTATIONTYPE_UNDERLINE_NAME,//
+      ANNOTATIONTYPE_STRIKE_DESCRIPTION, ANNOTATIONTYPE_STRIKE_NAME // 
+  };
+
 }
