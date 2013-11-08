@@ -88,7 +88,7 @@ specifieke:
 <h4>project textlayers</h4>
 
 <ul>
-<li><p>project settings updaten: <br />
+<li><p>project textlayer settings updaten: <br />
 <code>PUT</code> naar <code>/projects/{project_id}/textlayers</code></p>
 
 <pre><code>  [ "first","second","third" ]
@@ -134,7 +134,23 @@ geeft een array van user id's</p></li>
     "Type" : "Brievenproject",
     "Version" : "0.1"
   }
-</code></pre></li>
+</code></pre>
+
+<p>extra systeemgedefinieerde projectsettingsvariabelen (niet verplicht):<br>
+<code>text.font</code> - invullen indien een speciaal (unicode) font nodig is om de textlayer tekst weer te geven<br>
+<code>publication.title</code> - invullen indien de publicatie een andere titel moet krijgen dan in de werkomgeving<br></p>
+
+<p><code>entry.term_singular</code> - de naam die binnen dit project gebruikt moet worden om 1 entry aan te geven (bv. 'letter')<br>
+<code>entry.term_plural</code> - de naam die binnen dit project gebruikt moet worden om meerdere entries aan te geven (bv. 'letters')<br></p>
+
+<p><code>annotationtype.b.name</code> - korte naam voor het annotatietype dat binnen dit project weergegeven wordt als <b>bold</b><br>
+<code>annotationtype.b.description</code> - omschrijving voor het annotatietype dat binnen dit project weergegeven wordt als <b>bold</b><br>
+<code>annotationtype.i.name</code> - korte naam voor het annotatietype dat binnen dit project weergegeven wordt als <i>italic</i><br>
+<code>annotationtype.i.description</code> - omschrijving voor het annotatietype dat binnen dit project weergegeven wordt als <i>italic</i><br>
+<code>annotationtype.u.name</code> - korte naam voor het annotatietype dat binnen dit project weergegeven wordt als <u>underline</u><br>
+<code>annotationtype.u.description</code> - omschrijving voor het annotatietype dat binnen dit project weergegeven wordt als <u>underline</u><br>
+<code>annotationtype.strike.name</code> - korte naam voor het annotatietype dat binnen dit project weergegeven wordt als <strike>strikethrough</strike><br>
+<code>annotationtype.strike.description</code> - omschrijving voor het annotatietype dat binnen dit project weergegeven wordt als <strike>strikethrough</strike><br></p></li>
 </ul>
 
 <h4>project entry metadatafields</h4>

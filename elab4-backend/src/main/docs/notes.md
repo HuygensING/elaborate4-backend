@@ -88,7 +88,7 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
   
 #### project textlayers
 
-* project settings updaten:  
+* project textlayer settings updaten:  
   `PUT` naar `/projects/{project_id}/textlayers`
 
           [ "first","second","third" ]
@@ -126,6 +126,23 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
             "Type" : "Brievenproject",
             "Version" : "0.1"
           }
+          
+  extra systeemgedefinieerde projectsettingsvariabelen (niet verplicht):<br>
+  `text.font` - invullen indien een speciaal (unicode) font nodig is om de textlayer tekst weer te geven<br>
+  `publication.title` - invullen indien de publicatie een andere titel moet krijgen dan in de werkomgeving<br>
+
+  `entry.term_singular` - de naam die binnen dit project gebruikt moet worden om 1 entry aan te geven (bv. 'letter')<br>
+  `entry.term_plural` - de naam die binnen dit project gebruikt moet worden om meerdere entries aan te geven (bv. 'letters')<br>
+
+  `annotationtype.b.name` - korte naam voor het annotatietype dat binnen dit project weergegeven wordt als <b>bold</b><br>
+  `annotationtype.b.description` - omschrijving voor het annotatietype dat binnen dit project weergegeven wordt als <b>bold</b><br>
+  `annotationtype.i.name` - korte naam voor het annotatietype dat binnen dit project weergegeven wordt als <i>italic</i><br>
+  `annotationtype.i.description` - omschrijving voor het annotatietype dat binnen dit project weergegeven wordt als <i>italic</i><br>
+  `annotationtype.u.name` - korte naam voor het annotatietype dat binnen dit project weergegeven wordt als <u>underline</u><br>
+  `annotationtype.u.description` - omschrijving voor het annotatietype dat binnen dit project weergegeven wordt als <u>underline</u><br>
+  `annotationtype.strike.name` - korte naam voor het annotatietype dat binnen dit project weergegeven wordt als <strike>strikethrough</strike><br>
+  `annotationtype.strike.description` - omschrijving voor het annotatietype dat binnen dit project weergegeven wordt als <strike>strikethrough</strike><br>
+
 
 #### project entry metadatafields
 

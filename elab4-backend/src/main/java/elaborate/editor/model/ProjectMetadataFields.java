@@ -1,7 +1,7 @@
 package elaborate.editor.model;
 
 public class ProjectMetadataFields {
-  public static String PUBLICATION_FONT = "publication.font";
+  public static String PUBLICATION_FONT = "text.font";
   public static String PUBLICATION_TITLE = "publication.title";
 
   public static String ENTRYTERM_SINGULAR = "entry.term_singular";
