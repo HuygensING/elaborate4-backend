@@ -161,12 +161,12 @@ public class PublishTask extends LoggableObject implements Runnable {
     Map<String, String> metadataMap = project.getMetadataMap();
     Map<String, Object> map = Maps.newHashMap();
     map.put("id", project.getId());
-    map.put("title", StringUtils.defaultIfBlank(metadataMap.get(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
+    map.put("title", StringUtils.defaultIfBlank(metadataMap.remove(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
     map.put("publicationDate", new DateTime().toString("yyyy-MM-dd HH:mm"));
     map.put("entryIds", entryFilenames);
     map.put("thumbnails", thumbnails);
-    map.put("entryTermSingular", metadataMap.get(ProjectMetadataFields.ENTRYTERM_SINGULAR));
-    map.put("entryTermPlural", metadataMap.get(ProjectMetadataFields.ENTRYTERM_PLURAL));
+    map.put("entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
+    map.put("entryTermPlural", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_PLURAL));
     map.put("baseURL", getBaseURL(getBasename(project)));
     map.put("annotationIndex", ANNOTATION_INDEX_JSON);
     map.put("metadata", getMetadata(project));
