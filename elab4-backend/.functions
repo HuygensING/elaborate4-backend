@@ -34,6 +34,14 @@ function e4-show-projects {
   curl -s -H "Authorization: SimpleAuth $authtoken" $eb/projects|jq ".[]|{id,title}"
 }
 
+function e4-show-users {
+  curl -s -H "Authorization: SimpleAuth $authtoken" $eb/users|jq "."
+}
+
+function e4-show-annotationtypes {
+  curl -s -H "Authorization: SimpleAuth $authtoken" $eb/annotationtypes|jq "."
+}
+
 function e4-show-project-entrymetadatafields {
   e4-get-json $eb/projects/$project_id/entrymetadatafields|jq "."
 }

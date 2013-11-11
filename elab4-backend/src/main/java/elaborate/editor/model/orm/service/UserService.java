@@ -40,9 +40,10 @@ public class UserService extends AbstractStoredEntityService<User> {
     if (creator.getPermission(user).canWrite()) {
       try {
         getEntityManager().createQuery("from User as u where u.username=?1").setParameter(1, user.getUsername()).getSingleResult();
-      } catch (NoResultException e) {
         rollbackTransaction();
         throw new ConflictException("a user with username " + user.getUsername() + " already exists. Usernames must be unique");
+      } catch (NoResultException e) {
+        // user doesn't already exist, that's good
       }
 
       User create = super.create(user);
