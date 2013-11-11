@@ -1,5 +1,6 @@
 package elaborate.editor.model;
 
+import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.User;
 
@@ -41,10 +42,28 @@ public class Permissions {
     if (object instanceof Project) {
       Project project = (Project) object;
       permission = permissionForProject(user, project);
+
     } else if (object instanceof User) {
       User otheruser = (User) object;
       permission = permissionForUser(user, otheruser);
+
+    } else if (object instanceof AnnotationType) {
+      AnnotationType annotationType = (AnnotationType) object;
+      permission = permissionForAnnotationType(user, annotationType);
     }
+    return permission;
+  }
+
+  private static Permission permissionForAnnotationType(User user, AnnotationType annotationType) {
+    Permission permission = new Permission().setCanRead(true);
+
+    boolean userIsAdmin = user.getRoleString().contains(ElaborateRoles.ADMIN);
+    boolean userIsProjectLeader = user.getRoleString().contains(ElaborateRoles.PROJECTLEADER);
+
+    if (userIsProjectLeader || userIsAdmin) {
+      permission.setCanWrite(true);
+    }
+
     return permission;
   }
 
