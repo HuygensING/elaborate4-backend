@@ -3,6 +3,7 @@ package elaborate.editor.resources.orm.wrappers;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import elaborate.editor.model.orm.AnnotationType;
@@ -21,7 +22,7 @@ public class AnnotationTypeMetadataItemInput {
   //  "name": "index"
   //},
   long id;
-  List<MetadataInput> annotationTypeMetadataItems;
+  List<MetadataInput> annotationTypeMetadataItems = Lists.newArrayList();
   String description;
   String name;
 
@@ -74,7 +75,7 @@ public class AnnotationTypeMetadataItemInput {
         .setId(id)//
         .setName(name)//
         .setDescription(description)//
-        .setAnnotationTypeMetadataItems(items);
+        .setMetadataItems(items);
   }
 
   public static class MetadataInput {

@@ -1,10 +1,7 @@
 package elaborate.editor.resources.orm;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
-import org.junit.After;
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,18 +17,6 @@ public class ResourceTest extends JerseyTest {
         .initParam("com.sun.jersey.config.property.packages", "elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers")//
         .initParam("com.sun.jersey.spi.container.ResourceFilters", "elaborate.jaxrs.filters.ElaborateResourceFilterFactory")//
         .build());
-    //    super("elaborate.editor.resources", "elaborate.editor.providers");
-  }
-
-  @Before
-  public void setUpRT() throws Exception {
-    entityManagerFactory = Persistence.createEntityManagerFactory("nl.knaw.huygens.elaborate.test.jpa");
-    //    entityManagerFactory = Persistence.createEntityManagerFactory("nl.knaw.huygens.elaborate.jpa");
-  }
-
-  @After
-  public void tearDownRT() throws Exception {
-    entityManagerFactory.close();
   }
 
 }

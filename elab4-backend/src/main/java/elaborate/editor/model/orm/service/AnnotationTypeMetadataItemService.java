@@ -78,7 +78,7 @@ public class AnnotationTypeMetadataItemService extends AbstractStoredEntityServi
     AnnotationTypeService annotationTypeService = new AnnotationTypeService();
     annotationTypeService.setEntityManager(getEntityManager());
     AnnotationType annotationType = annotationTypeService.read(annotationTypeId);
-    ImmutableList<AnnotationTypeMetadataItem> list = ImmutableList.copyOf(annotationType.getAnnotationTypeMetadataItems());
+    ImmutableList<AnnotationTypeMetadataItem> list = ImmutableList.copyOf(annotationType.getMetadataItems());
     closeEntityManager();
     return list;
   }

@@ -11,7 +11,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -47,12 +49,11 @@ public class AnnotationType extends AbstractTrackedEntity<AnnotationType> {
     return this;
   }
 
-  @JsonIgnore
-  public Set<AnnotationTypeMetadataItem> getAnnotationTypeMetadataItems() {
+  public Set<AnnotationTypeMetadataItem> getMetadataItems() {
     return annotationTypeMetadataItems;
   }
 
-  public AnnotationType setAnnotationTypeMetadataItems(Set<AnnotationTypeMetadataItem> annotationTypeMetadataItems) {
+  public AnnotationType setMetadataItems(Set<AnnotationTypeMetadataItem> annotationTypeMetadataItems) {
     this.annotationTypeMetadataItems = annotationTypeMetadataItems;
     return this;
   };
@@ -68,10 +69,15 @@ public class AnnotationType extends AbstractTrackedEntity<AnnotationType> {
     annotationTypeMap.put("description", getDescription());
     final List<Map<String, Object>> annotationTypeMetadataItemsList = Lists.newArrayList();
     annotationTypeMap.put("metadata_items", annotationTypeMetadataItemsList);
-    for (final AnnotationTypeMetadataItem annotationTypeMetadataItem : getAnnotationTypeMetadataItems()) {
+    for (final AnnotationTypeMetadataItem annotationTypeMetadataItem : getMetadataItems()) {
       annotationTypeMetadataItemsList.add(annotationTypeMetadataItem.getDataMap());
     }
     return annotationTypeMap;
-  };
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+  }
 
 }
