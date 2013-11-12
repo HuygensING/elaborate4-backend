@@ -62,6 +62,57 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 
 * Delete/wissen:  
   `DELETE`  `/projectmetadatafields/{field_id}`
+  
+### annotation types
+
+* Create/toevoegen:  
+  `POST` naar `/annotationtypes`
+
+          {
+            "name" : "korte naam"
+            "description" : "langere beschrijving"
+          }
+
+* Read/opvragen:  
+  alle:
+  `GET` `/annotationtypes`
+  
+  specifieke:  
+  `GET` `/annotationtypes/{type_id}`
+
+* Update/bijwerken:    
+  `PUT` naar `/annotationtypes/{type_id}`
+
+          {
+            "name" : "andere korte naam"
+            "description" : "betere beschrijving"
+          }
+
+
+* Delete/wissen:    
+  `DELETE`  `/annotationtypes/{type_id}`
+  
+* metadata opvragen:  
+  `GET` `/annotationtypes/{type_id}/metadataitems`
+
+* metadata toevoegen:  
+  `POST` `/annotationtypes/{type_id}/metadataitems/{meta_id}`
+
+          {
+            "name" : "metadataveld"
+            "description" : "beschrijving"
+          }
+
+* metadata bijwerken:  
+  `PUT` `/annotationtypes/{type_id}/metadataitems/{meta_id}`
+
+          {
+            "name" : "andere veldnaam"
+            "description" : "betere beschrijving"
+          }
+
+* metadata wissen:  
+  `DELETE` `/annotationtypes/{type_id}/metadataitems/{meta_id}`
 
 
 ### projecten
@@ -97,6 +148,11 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 
 * Read/opvragen:
   `GET` naar `/projects/{project_id}/annotationtypes`
+
+* Update/bijwerken:
+  `PUT` naar `/projects/{project_id}/annotationtypes`
+
+          [1,2,3]
 
 #### project logentries
 

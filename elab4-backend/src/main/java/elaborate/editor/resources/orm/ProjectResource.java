@@ -2,7 +2,6 @@ package elaborate.editor.resources.orm;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
@@ -24,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.Views;
-import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.LogEntry;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.service.ProjectEntryService;
@@ -152,8 +150,8 @@ public class ProjectResource extends AbstractElaborateResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   @JsonView(Views.Minimal.class)
   @APIDesc("Returns the annotation types for the project with the given project_id")
-  public Object getProjectAnnotationTypes(@PathParam("project_id") long project_id) {
-    return projectService.getProjectAnnotationTypes(project_id, getUser());
+  public List<Long> getProjectAnnotationTypes(@PathParam("project_id") long project_id) {
+    return projectService.getProjectAnnotationTypeIds(project_id, getUser());
   }
 
   // TODO
@@ -162,8 +160,8 @@ public class ProjectResource extends AbstractElaborateResource {
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @JsonView(Views.Minimal.class)
   @APIDesc("Updates the annotation types for the project with the given project_id")
-  public void setProjectAnnotationTypes(@PathParam("project_id") long project_id, Set<AnnotationType> annotationTypes) {
-    projectService.setProjectAnnotationTypes(project_id, annotationTypes, getUser());
+  public void setProjectAnnotationTypes(@PathParam("project_id") long project_id, List<Long> annotationTypeIds) {
+    projectService.setProjectAnnotationTypes(project_id, annotationTypeIds, getUser());
   }
 
   /* project users */

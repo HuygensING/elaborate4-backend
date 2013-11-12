@@ -14,9 +14,11 @@ project_id=1
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id|jq "."
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/settings|jq "."
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entrymetadatafields|jq "."
-curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/annotationtypes|jq "."
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/users|jq "."
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/statistics|jq "."
+
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/annotationtypes|jq "."
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '[1,2,3]' $eb/projects/$project_id/annotationtypes
 
 # create project
 curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d "{\"title\":\"Project X ($(date))\", \"textLayers\":[\"Diplomatic\"]}" $eb/projects

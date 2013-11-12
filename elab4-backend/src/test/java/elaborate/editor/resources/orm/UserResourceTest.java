@@ -1,6 +1,6 @@
 package elaborate.editor.resources.orm;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import javax.persistence.EntityManager;
 import javax.ws.rs.core.MediaType;

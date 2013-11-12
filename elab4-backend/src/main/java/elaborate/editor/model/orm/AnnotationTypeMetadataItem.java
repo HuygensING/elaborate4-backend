@@ -31,16 +31,18 @@ public class AnnotationTypeMetadataItem extends AbstractStoredEntity<AnnotationT
     return name;
   }
 
-  public void setName(String name) {
+  public AnnotationTypeMetadataItem setName(String name) {
     this.name = name;
+    return this;
   }
 
   public String getDescription() {
     return description;
   }
 
-  public void setDescription(String description) {
+  public AnnotationTypeMetadataItem setDescription(String description) {
     this.description = description;
+    return this;
   }
 
   @JsonIgnore
@@ -48,8 +50,9 @@ public class AnnotationTypeMetadataItem extends AbstractStoredEntity<AnnotationT
     return annotationType;
   }
 
-  public void setAnnotationType(AnnotationType annotationType) {
+  public AnnotationTypeMetadataItem setAnnotationType(AnnotationType annotationType) {
     this.annotationType = annotationType;
+    return this;
   }
 
   @Transient

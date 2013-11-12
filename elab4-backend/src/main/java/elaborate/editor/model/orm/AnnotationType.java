@@ -1,5 +1,6 @@
 package elaborate.editor.model.orm;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,6 +10,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import elaborate.editor.model.AbstractTrackedEntity;
 
@@ -42,6 +47,7 @@ public class AnnotationType extends AbstractTrackedEntity<AnnotationType> {
     return this;
   }
 
+  @JsonIgnore
   public Set<AnnotationTypeMetadataItem> getAnnotationTypeMetadataItems() {
     return annotationTypeMetadataItems;
   }
@@ -51,52 +57,21 @@ public class AnnotationType extends AbstractTrackedEntity<AnnotationType> {
     return this;
   };
 
-  AnnotationTypeMetadataItem addMetadataItem(String name, String description) {
-    return null;
-  };
+  //  AnnotationTypeMetadataItem addMetadataItem(String name, String description) {
+  //    return null;
+  //  };
 
   @Transient
   Map<String, Object> getDataMap() {
-    return null;
+    final Map<String, Object> annotationTypeMap = Maps.newHashMap();
+    annotationTypeMap.put("name", getName());
+    annotationTypeMap.put("description", getDescription());
+    final List<Map<String, Object>> annotationTypeMetadataItemsList = Lists.newArrayList();
+    annotationTypeMap.put("metadata_items", annotationTypeMetadataItemsList);
+    for (final AnnotationTypeMetadataItem annotationTypeMetadataItem : getAnnotationTypeMetadataItems()) {
+      annotationTypeMetadataItemsList.add(annotationTypeMetadataItem.getDataMap());
+    }
+    return annotationTypeMap;
   };
-
-  //  String getName();
-  //
-  //  void setName(String name);
-  //
-  //  String getDescription();
-  //
-  //  void setDescription(String description);
-  //
-  //  @OneToMany
-  //  AnnotationTypeMetadataItem[] getAnnotationTypeMetadataItems();
-  //
-  //  @Implemented
-  //  AnnotationTypeMetadataItem addMetadataItem(String name, String description);
-  //
-  //  @Implemented
-  //  Map<String, Object> getDataMap();
-  //  @SuppressWarnings("unused")
-  //  private final AnnotationType annotationType;
-  //
-  //  public AnnotationTypeImpl(final AnnotationType _annotationType) {
-  //    this.annotationType = _annotationType;
-  //  }
-  //
-  //  public AnnotationTypeMetadataItem addMetadataItem(final String name, final String description) {
-  //    return ModelFactory.createAnnotationTypeMetadatItem(annotationType, name, description);
-  //  }
-  //
-  //  public Map<String, Object> getDataMap() {
-  //    final Map<String, Object> annotationTypeMap = Maps.newHashMap();
-  //    annotationTypeMap.put("name", annotationType.getName());
-  //    annotationTypeMap.put("description", annotationType.getDescription());
-  //    final List<Map<String, Object>> annotationTypeMetadataItemsList = Lists.newArrayList();
-  //    annotationTypeMap.put("metadata_items", annotationTypeMetadataItemsList);
-  //    for (final AnnotationTypeMetadataItem annotationTypeMetadataItem : annotationType.getAnnotationTypeMetadataItems()) {
-  //      annotationTypeMetadataItemsList.add(annotationTypeMetadataItem.getDataMap());
-  //    }
-  //    return annotationTypeMap;
-  //  }
 
 }

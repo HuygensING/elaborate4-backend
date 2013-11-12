@@ -63,6 +63,55 @@ specifieke:
 <code>DELETE</code>  <code>/projectmetadatafields/{field_id}</code></p></li>
 </ul>
 
+<h3>annotation types</h3>
+
+<ul>
+<li><p>Create/toevoegen: <br />
+<code>POST</code> naar <code>/annotationtypes</code></p>
+
+<pre><code>  {
+    "name" : "korte naam"
+    "description" : "langere beschrijving"
+  }
+</code></pre></li>
+<li><p>Read/opvragen: <br />
+alle:
+<code>GET</code> <code>/annotationtypes</code></p>
+
+<p>specifieke: <br />
+<code>GET</code> <code>/annotationtypes/{type_id}</code></p></li>
+<li><p>Update/bijwerken: <br />
+<code>PUT</code> naar <code>/annotationtypes/{type_id}</code></p>
+
+<pre><code>  {
+    "name" : "andere korte naam"
+    "description" : "betere beschrijving"
+  }
+</code></pre></li>
+<li><p>Delete/wissen: <br />
+<code>DELETE</code>  <code>/annotationtypes/{type_id}</code></p></li>
+<li><p>metadata opvragen: <br />
+<code>GET</code> <code>/annotationtypes/{type_id}/metadataitems</code></p></li>
+<li><p>metadata toevoegen: <br />
+<code>POST</code> <code>/annotationtypes/{type_id}/metadataitems/{meta_id}</code></p>
+
+<pre><code>  {
+    "name" : "metadataveld"
+    "description" : "beschrijving"
+  }
+</code></pre></li>
+<li><p>metadata bijwerken: <br />
+<code>PUT</code> <code>/annotationtypes/{type_id}/metadataitems/{meta_id}</code></p>
+
+<pre><code>  {
+    "name" : "andere veldnaam"
+    "description" : "betere beschrijving"
+  }
+</code></pre></li>
+<li><p>metadata wissen: <br />
+<code>DELETE</code> <code>/annotationtypes/{type_id}/metadataitems/{meta_id}</code></p></li>
+</ul>
+
 <h3>projecten</h3>
 
 <ul>
@@ -98,8 +147,13 @@ specifieke:
 <h4>project annotationtypes</h4>
 
 <ul>
-<li>Read/opvragen:
-<code>GET</code> naar <code>/projects/{project_id}/annotationtypes</code></li>
+<li><p>Read/opvragen:
+<code>GET</code> naar <code>/projects/{project_id}/annotationtypes</code></p></li>
+<li><p>Update/bijwerken:
+<code>PUT</code> naar <code>/projects/{project_id}/annotationtypes</code></p>
+
+<pre><code>  [1,2,3]
+</code></pre></li>
 </ul>
 
 <h4>project logentries</h4>

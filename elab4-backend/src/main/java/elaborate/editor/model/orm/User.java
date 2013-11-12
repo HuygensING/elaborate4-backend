@@ -22,11 +22,11 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.Permission;
 import elaborate.editor.model.Permissions;
-import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.UserSettings;
 
 @Entity

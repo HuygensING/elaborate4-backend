@@ -3,21 +3,23 @@ package elaborate.editor.model.orm;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
-public class StoredEntityTest {
+import elaborate.AbstractTest;
 
-  protected EntityManagerFactory entityManagerFactory;
+public class StoredEntityTest extends AbstractTest {
 
-  @Before
-  public void setUp() throws Exception {
-    //    entityManagerFactory = Persistence.createEntityManagerFactory("nl.knaw.huygens.elaborate.test.jpa");
-    entityManagerFactory = Persistence.createEntityManagerFactory("nl.knaw.huygens.elaborate.test.psql.jpa");
+  protected static EntityManagerFactory entityManagerFactory;
+
+  @BeforeClass
+  public static void setUpClass() throws Exception {
+    entityManagerFactory = Persistence.createEntityManagerFactory("nl.knaw.huygens.elaborate.test.jpa");
+    //    entityManagerFactory = Persistence.createEntityManagerFactory("nl.knaw.huygens.elaborate.test.psql.jpa");
   }
 
-  @After
-  public void tearDown() throws Exception {
+  @AfterClass
+  public static void tearDownClass() throws Exception {
     if (entityManagerFactory != null) {
       entityManagerFactory.close();
     }

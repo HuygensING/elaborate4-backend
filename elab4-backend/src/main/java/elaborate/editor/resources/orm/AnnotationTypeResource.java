@@ -20,7 +20,7 @@ import elaborate.editor.model.Views;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.service.AnnotationTypeService;
 import elaborate.editor.resources.AbstractElaborateResource;
-import elaborate.editor.resources.orm.wrappers.AnnotationTypeInput;
+import elaborate.editor.resources.orm.wrappers.AnnotationTypeMetadataItemInput;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
@@ -44,13 +44,13 @@ public class AnnotationTypeResource extends AbstractElaborateResource {
   @JsonView(Views.Minimal.class)
   @APIDesc("Returns the annotationtype with the given id")
   public AnnotationType getAnnotationType(@PathParam("id") long id) {
-    return annotationTypeService.read(id);
+    return annotationTypeService.read(id, getUser());
   }
 
   @POST
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @APIDesc("Adds a new AnnotationType")
-  public Response create(AnnotationTypeInput input) {
+  public Response create(AnnotationTypeMetadataItemInput input) {
     AnnotationType annotationType = input.getAnnotationType();
     annotationTypeService.create(annotationType, getUser());
     return Response.created(createURI(annotationType)).build();
@@ -60,8 +60,8 @@ public class AnnotationTypeResource extends AbstractElaborateResource {
   @Path("{id}")
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @APIDesc("Updates the annotationtype with the given id")
-  public void update(@PathParam("id") long id, AnnotationTypeInput input) {
-    input.id = id;
+  public void update(@PathParam("id") long id, AnnotationTypeMetadataItemInput input) {
+    input.setId(id);
     annotationTypeService.update(input.getAnnotationType(), getUser());
   }
 
@@ -72,4 +72,8 @@ public class AnnotationTypeResource extends AbstractElaborateResource {
     annotationTypeService.delete(id, getUser());
   }
 
+  @Path("{id}/metadataitems")
+  public AnnotationTypeMetadataItemResource getMetadataItemResource() {
+    return new AnnotationTypeMetadataItemResource(getUser());
+  }
 }

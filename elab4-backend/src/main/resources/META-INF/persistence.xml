@@ -33,7 +33,7 @@
       <property name="javax.persistence.jdbc.password" value="test" />
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
       <property name="hibernate.hbm2ddl.auto" value="validate" />
-      <property name="hibernate.show_sql" value="false" />
+      <property name="hibernate.show_sql" value="true" />
       <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy" />
       <property name="hibernate.c3p0.min_size" value="5" />
       <property name="hibernate.c3p0.max_size" value="20" />

@@ -1,17 +1,19 @@
 package elaborate.editor.model.orm.service;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import nl.knaw.huygens.LoggableObject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
 
+import elaborate.AbstractTest;
 import elaborate.editor.model.AnnotationInputWrapper;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.User;
 
-public class TranscriptionServiceTest extends LoggableObject {
+public class TranscriptionServiceTest extends AbstractTest {
 
   @Before
   public void setUp() throws Exception {}
