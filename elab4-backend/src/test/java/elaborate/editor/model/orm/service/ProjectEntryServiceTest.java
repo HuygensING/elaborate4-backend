@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 import elaborate.AbstractTest;
 import elaborate.editor.model.orm.ProjectEntry;
@@ -24,7 +23,7 @@ public class ProjectEntryServiceTest extends AbstractTest {
   @After
   public void tearDown() throws Exception {}
 
-  @Test
+  //  @Test
   public void testRead() throws Exception {
     User user = mock(User.class);
     when(user.getId()).thenReturn((long) 1);
