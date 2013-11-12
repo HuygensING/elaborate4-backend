@@ -1,8 +1,12 @@
 package elaborate.editor.model.orm.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
@@ -11,23 +15,29 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import elaborate.AbstractTest;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.StoredEntityTest;
 import elaborate.editor.model.orm.User;
 
 @Ignore
-public class ProjectServiceTest extends AbstractTest {
-  private UserService userService;
-  private ProjectService projectService;
-  private User root;
-  private User notRoot;
+public class ProjectServiceTest extends StoredEntityTest {
+  private static UserService userService;
+  private static ProjectService projectService;
+  private static User root;
+  private static User notRoot;
 
   @Before
   public void setUp() throws Exception {
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
     userService = new UserService();
+    userService.setEntityManager(entityManager);
+
     projectService = new ProjectService();
+    projectService.setEntityManager(entityManager);
+
     root = new User().setRoot(true).setUsername("root");
+    userService.beginTransaction();
     userService.create(root);
     notRoot = new User().setUsername("notroot");
   }
@@ -35,6 +45,7 @@ public class ProjectServiceTest extends AbstractTest {
   @After
   public void tearDown() throws Exception {
     userService.delete(root.getId());
+    userService.rollbackTransaction();
   }
 
   @Test(expected = UnauthorizedException.class)

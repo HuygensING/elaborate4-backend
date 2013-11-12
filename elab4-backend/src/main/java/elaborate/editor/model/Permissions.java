@@ -1,6 +1,7 @@
 package elaborate.editor.model;
 
 import elaborate.editor.model.orm.AnnotationType;
+import elaborate.editor.model.orm.AnnotationTypeMetadataItem;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.User;
 
@@ -47,14 +48,14 @@ public class Permissions {
       User otheruser = (User) object;
       permission = permissionForUser(user, otheruser);
 
-    } else if (object instanceof AnnotationType) {
-      AnnotationType annotationType = (AnnotationType) object;
-      permission = permissionForAnnotationType(user, annotationType);
+    } else if (object instanceof AnnotationType || object instanceof AnnotationTypeMetadataItem) {
+      permission = permissionForAnnotationType(user);
+
     }
     return permission;
   }
 
-  private static Permission permissionForAnnotationType(User user, AnnotationType annotationType) {
+  private static Permission permissionForAnnotationType(User user) {
     Permission permission = new Permission().setCanRead(true);
 
     boolean userIsAdmin = user.getRoleString().contains(ElaborateRoles.ADMIN);

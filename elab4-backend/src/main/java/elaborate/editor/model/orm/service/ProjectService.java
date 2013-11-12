@@ -274,6 +274,34 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     return annotationTypes;
   }
 
+  public List<Long> getProjectAnnotationTypeIds(long project_id, User user) {
+    List<Long> list = Lists.newArrayList();
+    openEntityManager();
+    Project project = getProjectIfUserIsAllowed(project_id, user);
+    for (AnnotationType annotationType : project.getAnnotationTypes()) {
+      list.add(annotationType.getId());
+    }
+    closeEntityManager();
+    return list;
+  }
+
+  public void setProjectAnnotationTypes(long project_id, List<Long> annotationTypeIds, User user) {
+    beginTransaction();
+    Project project = getProjectIfUserIsAllowed(project_id, user);
+
+    Set<AnnotationType> annotationTypes = Sets.newHashSet();
+    for (Long id : annotationTypeIds) {
+      AnnotationType at = getEntityManager().find(AnnotationType.class, id);
+      annotationTypes.add(at);
+    }
+    project.setAnnotationTypes(annotationTypes);
+    persist(project.addLogEntry("projectannotationtypes changed", user));
+
+    setModifiedBy(project, user);
+
+    commitTransaction();
+  }
+
   public void setProjectAnnotationTypes(long project_id, Set<AnnotationType> annotationTypes, User user) {
     beginTransaction();
     Project project = getProjectIfUserIsAllowed(project_id, user);

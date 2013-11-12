@@ -39,7 +39,7 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
     return "user " + creator.getUsername() + " is not authorized to " + string;
   }
 
-  public AnnotationType read(long id, User modifier) {
+  public AnnotationType read(long id, User reader) {
     openEntityManager();
     AnnotationType annotationType = super.read(id);
     closeEntityManager();
