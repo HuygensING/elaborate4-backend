@@ -150,7 +150,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
   private List<AnnotationMetadataItem> createAnnotationMetadataItems(Annotation annotation, AnnotationInputWrapper annotationInput, AnnotationType annotationType) {
     Map<String, Long> atmiMap = Maps.newHashMap();
-    Iterator<AnnotationTypeMetadataItem> iterator = annotationType.getAnnotationTypeMetadataItems().iterator();
+    Iterator<AnnotationTypeMetadataItem> iterator = annotationType.getMetadataItems().iterator();
     while (iterator.hasNext()) {
       AnnotationTypeMetadataItem annotationTypeMetadataItem = iterator.next();
       atmiMap.put(annotationTypeMetadataItem.getName(), annotationTypeMetadataItem.getId());

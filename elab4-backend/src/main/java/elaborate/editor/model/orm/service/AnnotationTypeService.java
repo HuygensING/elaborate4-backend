@@ -27,9 +27,10 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
   public AnnotationType create(AnnotationType annotationType, User creator) {
     beginTransaction();
     if (creator.getPermission(annotationType).canWrite()) {
-      AnnotationType create = super.create(annotationType);
+      annotationType.setCreatedBy(creator);
+      AnnotationType created = super.create(annotationType);
       commitTransaction();
-      return create;
+      return created;
     }
     rollbackTransaction();
     throw new UnauthorizedException(exception(creator, "create new annotation types"));

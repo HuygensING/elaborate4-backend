@@ -1,6 +1,7 @@
 package elaborate.editor.model.orm.service;
 
 import java.text.MessageFormat;
+import java.util.Date;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
@@ -91,11 +92,19 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 
   void setModifiedBy(AbstractTrackedEntity<?> trackedEntity, User modifier) {
     trackedEntity.setModifiedBy(modifier);
+    trackedEntity.setModifiedOn(new Date());
     merge(trackedEntity);
     if (trackedEntity instanceof ProjectEntry) {
       ProjectEntry projectEntry = (ProjectEntry) trackedEntity;
       getSolrIndexer().index(projectEntry, true);
     }
+  }
+
+  void setCreatedBy(AbstractTrackedEntity<?> trackedEntity, User creator) {
+    trackedEntity.setCreator(creator);
+    trackedEntity.setCreatedOn(new Date());
+    merge(trackedEntity);
+    setModifiedBy(trackedEntity, creator);
   }
 
   private SolrIndexer getSolrIndexer() {
@@ -120,7 +129,9 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 
   /** start read **/
   public void openEntityManager() {
-    tlem.set(ENTITY_MANAGER_FACTORY.createEntityManager());
+    if (tlem.get() == null) {
+      tlem.set(ENTITY_MANAGER_FACTORY.createEntityManager());
+    }
   }
 
   /** end read **/

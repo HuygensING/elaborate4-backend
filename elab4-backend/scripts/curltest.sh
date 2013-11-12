@@ -109,3 +109,6 @@ curl -v -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootc
 curl -v -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" -X POST -d '{"body":"whatever", "typeId":31, "metadata":{"person id":"PERSONID"}}'  $eb/projects/$project_id/entries/17152/transcriptions/21224/annotations
 
 curl -v -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootcode" -X PUT -d '{"body":"whatever", "typeId":1}'  $eb/projects/$project_id/entries/17152/transcriptions/21224/annotations/aa
+
+curl -s -H "Authorization: SimpleAuth $rootcode" $eb/annotationtypes|jq "."
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d '{"name":"bla","description":"hahaha"}' $eb/annotationtypes

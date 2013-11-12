@@ -32,7 +32,7 @@
     <javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
     <jaxrstools.version>0.0.5</jaxrstools.version>
     <jersey.version>1.17.1</jersey.version>
-    <jsoup.version>1.7.2</jsoup.version>
+    <jsoup.version> 1.7.3</jsoup.version>
     <jsr250-api.version>1.0</jsr250-api.version>
     <jtidy.version>r938</jtidy.version>
     <junit.version>4.11</junit.version>

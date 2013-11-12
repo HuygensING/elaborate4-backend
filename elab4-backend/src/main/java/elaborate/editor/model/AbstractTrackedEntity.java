@@ -81,4 +81,10 @@ public abstract class AbstractTrackedEntity<T extends AbstractTrackedEntity<T>> 
     setModifiedOn(new Date());
   }
 
+  public void setCreatedBy(User creator) {
+    setCreator(creator);
+    setCreatedOn(new Date());
+    setModifiedBy(creator);
+  };
+
 }
