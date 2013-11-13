@@ -1,6 +1,6 @@
 package elaborate.editor.solr;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,6 +17,6 @@ public class FacetedSearchParametersTest<T> {
   @Test
   public void testSetTerm() throws Exception {
     FacetedSearchParameters<?> facetedSearchParameters = new FacetedSearchParameters().setCaseSensitive(true).setFacetFields(new String[] {});
-    assertTrue(facetedSearchParameters.isCaseSensitive());
+    assertThat(facetedSearchParameters.isCaseSensitive()).isTrue();
   }
 }

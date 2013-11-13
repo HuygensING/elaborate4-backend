@@ -170,6 +170,8 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
   //  }
   //
   //  @SuppressWarnings("boxing")
+
+  @JsonIgnore
   public String getAnnotatedText() {
     String body = getTranscription().getBody();
     if (body == null) {

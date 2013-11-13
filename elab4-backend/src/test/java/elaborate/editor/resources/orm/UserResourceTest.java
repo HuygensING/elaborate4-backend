@@ -1,6 +1,6 @@
 package elaborate.editor.resources.orm;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.persistence.EntityManager;
 import javax.ws.rs.core.MediaType;
@@ -35,8 +35,8 @@ public class UserResourceTest extends ResourceTest {
   @Test
   public void testGetUsers() {
     String responseMsg = resource().path("users").get(String.class);
-    assertTrue(responseMsg.contains("\"John\""));
-    assertTrue(responseMsg.contains("\"Butcher\""));
+    assertThat(responseMsg.contains("\"John\"")).isTrue();
+    assertThat(responseMsg.contains("\"Butcher\"")).isTrue();
   }
 
   @Test
