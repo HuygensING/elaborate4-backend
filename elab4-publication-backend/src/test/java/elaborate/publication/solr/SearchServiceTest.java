@@ -41,13 +41,14 @@ public class SearchServiceTest extends LoggableObject {
     //    assertFalse(facetFields.isEmpty());
 
     Map<String, Map<String, String>> facetInfoMap = (Map<String, Map<String, String>>) configMap.get("facetInfoMap");
-    assertThat(facetInfoMap).isNotNull();
     LOG.info("facetInfoMap={}", facetInfoMap);
+    assertThat(facetInfoMap).isNotNull();
     assertThat(facetInfoMap.keySet()).isNotEmpty();
 
     String[] facetFields = SearchService.toStringArray(configMap.get("facetFields"));
     String[] expected = new String[] { "metadata_field1", "metadata_field2", "metadata_field3" };
     assertThat(expected).isEqualTo(facetFields);
+
     Map<String, String> facetInfo = facetInfoMap.get("metadata_field1");
     assertThat(facetInfo).isNotNull();
     assertThat(facetInfo.get("type")).isEqualTo("LIST");
@@ -58,6 +59,5 @@ public class SearchServiceTest extends LoggableObject {
     assertThat(facetInfo2.getType()).isEqualTo(FacetType.LIST);
     assertThat(facetInfo2.getTitle()).isEqualTo("Field2");
     assertThat(facetInfo2.getName()).isEqualTo("metadata_field2");
-
   }
 }
