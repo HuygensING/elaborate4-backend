@@ -1,6 +1,7 @@
 package elaborate.editor.resources.orm;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class SearchResourceTest extends LoggableObject {
     searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
     SearchResource searchResource = new SearchResource(null);
     searchResource.addPrevNextURIs(searchResult, 1, 2, 0, 50);
-    assertEquals("http://10.152.32.82:2013/projects/1/search/2?start=50&rows=50", searchResult.get(SearchResource.KEY_NEXT));
+    assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://10.152.32.82:2013/projects/1/search/2?start=50&rows=50");
     assertFalse(searchResult.containsKey(SearchResource.KEY_PREV));
   }
 
@@ -39,14 +40,14 @@ public class SearchResourceTest extends LoggableObject {
     Map<String, Object> searchResult = Maps.newHashMap();
     searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
     searchResource.addPrevNextURIs(searchResult, 1, 2, 10, 50);
-    assertEquals("http://10.152.32.82:2013/projects/1/search/2?start=60&rows=50", searchResult.get(SearchResource.KEY_NEXT));
-    assertEquals("http://10.152.32.82:2013/projects/1/search/2?start=0&rows=50", searchResult.get(SearchResource.KEY_PREV));
+    assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://10.152.32.82:2013/projects/1/search/2?start=60&rows=50");
+    assertThat(searchResult.get(SearchResource.KEY_PREV)).isEqualTo("http://10.152.32.82:2013/projects/1/search/2?start=0&rows=50");
   }
 
   @Test
   public void testMessageFormat() {
     String path = MessageFormat.format("/projects/{0,number,#}/search/{1,number,#}", 31415, 1000000);
-    assertEquals("/projects/31415/search/1000000", path);
+    assertThat(path).isEqualTo("/projects/31415/search/1000000");
   }
 
 }

@@ -1,24 +1,24 @@
 package elaborate.util;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
 public class TextCaseTest {
   @Test
   public void testDetectLowerCase() {
-    assertEquals(TextCase.LOWER, TextCase.detectCase("lower"));
-    assertEquals(TextCase.UPPER, TextCase.detectCase("UPPER"));
-    assertEquals(TextCase.CAPITALIZED, TextCase.detectCase("Capitalized"));
-    assertEquals(TextCase.MIXED, TextCase.detectCase("mIxEd"));
+    assertThat(TextCase.detectCase("lower")).isEqualTo(TextCase.LOWER);
+    assertThat(TextCase.detectCase("UPPER")).isEqualTo(TextCase.UPPER);
+    assertThat(TextCase.detectCase("Capitalized")).isEqualTo(TextCase.CAPITALIZED);
+    assertThat(TextCase.detectCase("mIxEd")).isEqualTo(TextCase.MIXED);
   }
 
   @Test
   public void testApplyTo() {
     String string = "tEsT";
-    assertEquals("test", TextCase.LOWER.applyTo(string));
-    assertEquals("TEST", TextCase.UPPER.applyTo(string));
-    assertEquals("Test", TextCase.CAPITALIZED.applyTo(string));
-    assertEquals(string, TextCase.MIXED.applyTo(string));
+    assertThat(TextCase.LOWER.applyTo(string)).isEqualTo("test");
+    assertThat(TextCase.UPPER.applyTo(string)).isEqualTo("TEST");
+    assertThat(TextCase.CAPITALIZED.applyTo(string)).isEqualTo("Test");
+    assertThat(TextCase.MIXED.applyTo(string)).isEqualTo(string);
   }
 }

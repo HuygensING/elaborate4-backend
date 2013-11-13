@@ -1,6 +1,7 @@
 package elaborate.util;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.util.List;
@@ -26,7 +27,7 @@ public class StringUtilTest extends LoggableObject {
 
   @Test
   public void testNormalize() {
-    assertEquals("abc_def", StringUtil.normalize("Abc Def"));
+    assertThat(StringUtil.normalize("Abc Def")).isEqualTo("abc_def");
   }
 
   @Test
@@ -68,7 +69,7 @@ public class StringUtilTest extends LoggableObject {
 
   private void testReplacement(String body, String expected, String originalTerm, String replacementTerm, List<Integer> occurencesToReplace) {
     String replaced = StringUtil.replace(originalTerm, replacementTerm, body, occurencesToReplace, true);
-    assertEquals(expected, replaced);
+    assertThat(replaced).isEqualTo(expected);
   }
 
   @Test
@@ -79,44 +80,44 @@ public class StringUtilTest extends LoggableObject {
     JSONSerializer serializer = new JSONSerializer();
     String mapJson = serializer.serialize(map);
     Map<String, String> map2 = new JSONDeserializer<Map<String, String>>().deserialize(mapJson);
-    assertEquals(map.toString(), map2.toString());
+    assertThat(map2.toString()).isEqualTo(map.toString());
   }
 
   //  @Test
   public void testStringSize() {
     String string = "bláàt sçhapën";
-    assertEquals(13, string.length()); // 9 normal + 4 utf-8 chars
-    assertEquals(17, string.getBytes().length); //(9 + 2x4 bytes)
-    assertEquals(13, string.codePointCount(0, 13));
+    assertThat(string.length()).isEqualTo(13); // 9 normal + 4 utf-8 chars
+    assertThat(string.getBytes().length).isEqualTo(17); //(9 + 2x4 bytes)
+    assertThat(string.codePointCount(0, 13)).isEqualTo(13);
   }
 
   @Test
   public void testActivateURLs() {
     String string = "kijk ook eens op http://hier.daar.nl/ok en mail mailto:bram.buitendijk@huygens.nl .";
     String expected = "kijk ook eens op <a target=\"_blank\" href=\"http://hier.daar.nl/ok\">hier.daar.nl/ok</a> en mail <a target=\"_blank\" href=\"mailto:bram.buitendijk@huygens.nl\">bram.buitendijk@huygens.nl</a> .";
-    assertEquals(expected, StringUtil.activateURLs(string));
-    assertEquals(expected, StringUtil.activateURLs(expected));
+    assertThat(StringUtil.activateURLs(string)).isEqualTo(expected);
+    assertThat(StringUtil.activateURLs(expected)).isEqualTo(expected);
   }
 
   @Test
   public void testActivateURLs2() {
     String string = "<span>http://daysmagazine.com/index.php/days-at-home/de-eenhoorn.html</span>";
     String expected = "<span><a target=\"_blank\" href=\"http://daysmagazine.com/index.php/days-at-home/de-eenhoorn.html\">daysmagazine.com/index.php/days-at-home/de-eenhoorn.html</a></span>";
-    assertEquals(expected, StringUtil.activateURLs(string));
-    assertEquals(expected, StringUtil.activateURLs(expected));
+    assertThat(StringUtil.activateURLs(string)).isEqualTo(expected);
+    assertThat(StringUtil.activateURLs(expected)).isEqualTo(expected);
   }
 
   @Test
   public void testPageTitle() {
-    assertEquals("eLaborate3", StringUtil.pageTitle());
-    assertEquals("eLaborate3 :: edit", StringUtil.pageTitle("edit"));
-    assertEquals("eLaborate3 :: Torec :: Publish", StringUtil.pageTitle("Torec", "Publish"));
+    assertThat(StringUtil.pageTitle()).isEqualTo("eLaborate3");
+    assertThat(StringUtil.pageTitle("edit")).isEqualTo("eLaborate3 :: edit");
+    assertThat(StringUtil.pageTitle("Torec", "Publish")).isEqualTo("eLaborate3 :: Torec :: Publish");
   }
 
   @Test
   public void testEscapeQuotes() {
-    assertEquals("bla \\\"bla\\\" bla", StringUtil.escapeQuotes("bla \"bla\" bla"));
-    assertEquals("single \\'quotes\\'", StringUtil.escapeQuotes("single 'quotes'"));
+    assertThat(StringUtil.escapeQuotes("bla \"bla\" bla")).isEqualTo("bla \\\"bla\\\" bla");
+    assertThat(StringUtil.escapeQuotes("single 'quotes'")).isEqualTo("single \\'quotes\\'");
   }
 
   @Test
@@ -126,7 +127,7 @@ public class StringUtilTest extends LoggableObject {
     //    LOG.info(xml);
     XmlTestUtil.assertXmlIsWellFormed(xml);
     String expected = "<xml>a&amp;b, bla &amp; co; 4 &gt; 2 &lt; 3; &gt;</xml>";
-    assertEquals(expected, xml);
+    assertThat(xml).isEqualTo(expected);
   }
 
   @Test
@@ -160,7 +161,7 @@ public class StringUtilTest extends LoggableObject {
     String xmlBody = StringUtil.html2xml(html);
     LOG.info(xmlBody);
     XmlTestUtil.assertXmlIsWellFormed(wrap(xmlBody));
-    assertEquals(expected, xmlBody);
+    assertThat(xmlBody).isEqualTo(expected);
   }
 
   private String wrap(String xml) {

@@ -1,6 +1,6 @@
 package elaborate.editor.solr;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,7 +26,7 @@ public class AbstractSolrServerTest {
     String expected = "(textlayer_diplomatic:*) AND project_id:0";
 
     String query = testSolrServer.composeQuery(sp);
-    assertEquals(expected, query);
+    assertThat(query).isEqualTo(expected);
   }
 
   @Test
@@ -39,7 +39,7 @@ public class AbstractSolrServerTest {
     String expected = "(textlayercs_diplomatic:iets) AND project_id:1";
 
     String query = testSolrServer.composeQuery(sp);
-    assertEquals(expected, query);
+    assertThat(query).isEqualTo(expected);
   }
 
   @Test
@@ -52,7 +52,7 @@ public class AbstractSolrServerTest {
     String expected = "(textlayercs_diplomatic:(iets anders)) AND project_id:1";
 
     String query = testSolrServer.composeQuery(sp);
-    assertEquals(expected, query);
+    assertThat(query).isEqualTo(expected);
   }
 
   @Test
@@ -67,7 +67,7 @@ public class AbstractSolrServerTest {
     String expected = "(textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)) AND project_id:1";
 
     String query = testSolrServer.composeQuery(sp);
-    assertEquals(expected, query);
+    assertThat(query).isEqualTo(expected);
   }
 
   @Test
@@ -81,7 +81,7 @@ public class AbstractSolrServerTest {
     String expected = "(*:*) AND project_id:1";
 
     String query = testSolrServer.composeQuery(sp);
-    assertEquals(expected, query);
+    assertThat(query).isEqualTo(expected);
   }
 
   @Test
@@ -99,7 +99,7 @@ public class AbstractSolrServerTest {
     String expected = "(+(*:*) +metadata_folio_number:(199)) AND project_id:1";
 
     String query = testSolrServer.composeQuery(sp);
-    assertEquals(expected, query);
+    assertThat(query).isEqualTo(expected);
   }
 
   static class TestSolrServer extends AbstractSolrServer {

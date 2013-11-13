@@ -1,7 +1,6 @@
 package elaborate.editor.model.orm.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,8 +29,8 @@ public class TranscriptionServiceTest extends AbstractTest {
     when(root.isRoot()).thenReturn(true);
     Annotation annotation = ts.addAnnotation(1, 1, annotationInput, root);
     LOG.info("annotation={}", annotation);
-    assertTrue(annotation != null);
-    assertEquals("body", annotation.getBody());
+    assertThat(annotation).isNotNull();
+    assertThat(annotation.getBody()).isEqualTo("body");
   }
 
 }

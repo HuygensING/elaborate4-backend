@@ -1,6 +1,6 @@
 package elaborate.util;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
@@ -17,9 +17,9 @@ public class DelimiterDetectorTest {
 
   private void testDelimiterDetector(String string, String expectedPre, String expectedStripped, String expectedPost) {
     DelimiterDetector d = new DelimiterDetector(string);
-    assertEquals(expectedPre, d.getPreDelimiters());
-    assertEquals(expectedStripped, d.getStripped());
-    assertEquals(expectedPost, d.getPostDelimiters());
+    assertThat(d.getPreDelimiters()).isEqualTo(expectedPre);
+    assertThat(d.getStripped()).isEqualTo(expectedStripped);
+    assertThat(d.getPostDelimiters()).isEqualTo(expectedPost);
   }
 
 }

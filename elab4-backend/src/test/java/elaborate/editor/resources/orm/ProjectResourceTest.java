@@ -1,6 +1,8 @@
 package elaborate.editor.resources.orm;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,16 +40,16 @@ public class ProjectResourceTest extends ResourceTest {
   //  @Test
   public void test() {
     String string = resource()//
-    .path("/projects")//
-    .header(AuthenticationResourceFilter.HEADER, authHeader)//
-    .get(String.class);
-    assertEquals("[]", string);
+        .path("/projects")//
+        .header(AuthenticationResourceFilter.HEADER, authHeader)//
+        .get(String.class);
+    assertThat(string).isEqualTo("[]");
 
     ClientResponse response = resource()//
-    .path("/projects/1")//
-    .header(AuthenticationResourceFilter.HEADER, authHeader)//
-    .get(ClientResponse.class);
-    assertEquals(404, response.getStatus());
+        .path("/projects/1")//
+        .header(AuthenticationResourceFilter.HEADER, authHeader)//
+        .get(ClientResponse.class);
+    assertThat(response.getStatus()).isEqualTo(404);
   }
 
   @Test
@@ -59,7 +61,7 @@ public class ProjectResourceTest extends ResourceTest {
       resource().path("/projects").method("GET");
       fail("I was expecting an UnauthorizedException here.");
     } catch (UniformInterfaceException uie) {
-      assertEquals(Status.UNAUTHORIZED.getStatusCode(), uie.getResponse().getStatus());
+      assertThat(uie.getResponse().getStatus()).isEqualTo(Status.UNAUTHORIZED.getStatusCode());
     }
   }
 
@@ -77,10 +79,10 @@ public class ProjectResourceTest extends ResourceTest {
     formData.add("username", username);
     formData.add("password", password);
     ClientResponse loginResponse = resource()//
-    .path("sessions/login")//
-    .type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)//
-    .post(ClientResponse.class, formData);
-    assertEquals(200, loginResponse.getStatus());
+        .path("sessions/login")//
+        .type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)//
+        .post(ClientResponse.class, formData);
+    assertThat(loginResponse.getStatus()).isEqualTo(200);
     String json = loginResponse.getEntity(String.class);
     ObjectMapper mapper = new ObjectMapper();
     String token = null;

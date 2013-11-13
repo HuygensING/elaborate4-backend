@@ -1,6 +1,7 @@
 package elaborate.editor.solr;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -27,11 +28,11 @@ public class SolrIndexerTest extends AbstractTest {
     User creator = new User();
     entry = project.addEntry("brief 1", creator).setProjectEntryMetadataItems(projectEntryMetadataItems);
     entry.addTranscription(creator)//
-    .setBody("<body><ab id=\"9085822\"/>sdgdgdgsdgsdfg<ae id=\"9085822\"/></body>")//
-    .setTextLayer("layer1");
+        .setBody("<body><ab id=\"9085822\"/>sdgdgdgsdgsdfg<ae id=\"9085822\"/></body>")//
+        .setTextLayer("layer1");
     entry.addTranscription(creator)//
-    .setBody("<body>aap <i>noot</i> mies</body>")//
-    .setTextLayer("layer2");
+        .setBody("<body>aap <i>noot</i> mies</body>")//
+        .setTextLayer("layer2");
   }
 
   @After
@@ -42,18 +43,18 @@ public class SolrIndexerTest extends AbstractTest {
     SolrInputDocument docForEditor = SolrIndexer.getSolrInputDocument(entry, false);
     assertNotNull(docForEditor);
     LOG.info("docForEditor={}", docForEditor);
-    assertEquals(entry.getId(), docForEditor.getField(SolrFields.ID).getValue());
-    assertEquals(entry.getName(), docForEditor.getField(SolrFields.NAME).getValue());
-    assertEquals(entry.getProject().getId(), docForEditor.getField(SolrFields.PROJECT_ID).getValue());
-    assertEquals(entry.isPublishable(), docForEditor.getField(SolrFields.PUBLISHABLE).getValue());
+    assertThat(docForEditor.getField(SolrFields.ID).getValue()).isEqualTo(entry.getId());
+    assertThat(docForEditor.getField(SolrFields.NAME).getValue()).isEqualTo(entry.getName());
+    assertThat(docForEditor.getField(SolrFields.PROJECT_ID).getValue()).isEqualTo(entry.getProject().getId());
+    assertThat(docForEditor.getField(SolrFields.PUBLISHABLE).getValue()).isEqualTo(entry.isPublishable());
 
     SolrInputDocument docForPublication = SolrIndexer.getSolrInputDocument(entry, true);
     assertNotNull(docForPublication);
     LOG.info("docForPublication={}", docForPublication);
-    assertEquals(entry.getId(), docForPublication.getField(SolrFields.ID).getValue());
-    assertEquals(entry.getName(), docForPublication.getField(SolrFields.NAME).getValue());
-    assertEquals(null, docForPublication.getField(SolrFields.PROJECT_ID));
-    assertEquals(null, docForPublication.getField(SolrFields.PUBLISHABLE));
+    assertThat(docForPublication.getField(SolrFields.ID).getValue()).isEqualTo(entry.getId());
+    assertThat(docForPublication.getField(SolrFields.NAME).getValue()).isEqualTo(entry.getName());
+    assertThat(docForPublication.getField(SolrFields.PROJECT_ID)).isEqualTo(null);
+    assertThat(docForPublication.getField(SolrFields.PUBLISHABLE)).isEqualTo(null);
   }
 
   //  @Test
@@ -61,6 +62,6 @@ public class SolrIndexerTest extends AbstractTest {
     String xml = "";
     String expected = "";
     String out = SolrIndexer.convert(xml);
-    assertEquals(expected, out);
+    assertThat(out).isEqualTo(expected);
   }
 }

@@ -1,6 +1,6 @@
 package elaborate.editor.model.orm.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -61,7 +61,7 @@ public class ProjectServiceTest extends StoredEntityTest {
     Project created = projectService.create(project, root);
     long project_id = created.getId();
     Project read = projectService.read(project_id, root);
-    assertEquals("name", read.getName());
+    assertThat(read.getName()).isEqualTo("name");
   }
 
   @Test
