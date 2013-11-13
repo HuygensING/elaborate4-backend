@@ -1,6 +1,6 @@
 package elaborate.editor.model;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,30 +15,35 @@ public class PermissionTest {
 
   @Test
   public void testAllow() throws Exception {
-    assertFalse(permission.can(Action.ADD));
+    assertThat(permission.can(Action.ADD)).isFalse();
+
     permission.allow(Action.ADD);
-    assertTrue(permission.can(Action.ADD));
+    assertThat(permission.can(Action.ADD)).isTrue();
+
     permission.disallow(Action.ADD);
-    assertFalse(permission.can(Action.ADD));
+    assertThat(permission.can(Action.ADD)).isFalse();
   }
 
   @Test
   public void testSetCanRead() throws Exception {
-    assertFalse(permission.canRead());
+    assertThat(permission.canRead()).isFalse();
+
     permission.setCanRead(true);
-    assertTrue(permission.canRead());
+    assertThat(permission.canRead()).isTrue();
   }
 
   @Test
   public void testSetCanWrite() throws Exception {
-    assertFalse(permission.canRead());
-    assertFalse(permission.canWrite());
+    assertThat(permission.canRead()).isFalse();
+    assertThat(permission.canWrite()).isFalse();
+
     permission.setCanWrite(true);
-    assertTrue(permission.canRead());
-    assertTrue(permission.canWrite());
+    assertThat(permission.canRead()).isTrue();
+    assertThat(permission.canWrite()).isTrue();
+
     permission.setCanWrite(false);
-    assertTrue(permission.canRead());
-    assertFalse(permission.canWrite());
+    assertThat(permission.canRead()).isTrue();
+    assertThat(permission.canWrite()).isFalse();
   }
 
 }

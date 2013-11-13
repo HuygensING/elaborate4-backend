@@ -1,6 +1,7 @@
 package elaborate.editor.model;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -50,12 +51,12 @@ public class PermissionsTest {
   @Test
   public void testGetPermission3() throws Exception {
     Permission permission = Permissions.getPermission(plainUser, admin);
-    assertFalse(permission.canWrite());
+    assertThat(permission.canWrite()).isFalse();
   }
 
   @Test
   public void testGetPermission4() throws Exception {
     Permission permission = Permissions.getPermission(null, plainUser);
-    assertFalse(permission.canWrite());
+    assertThat(permission.canWrite()).isFalse();
   }
 }

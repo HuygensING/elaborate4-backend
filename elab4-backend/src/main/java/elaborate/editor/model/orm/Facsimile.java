@@ -22,8 +22,6 @@ public class Facsimile extends AbstractProjectEntryElement<Facsimile> {
   public static final String THUMBNAIL_PREFIX = "t100_";
   public static final String BROWSE_IMAGE_PREFIX = "t500_";
 
-  private static final String JPG = ".jpg";
-
   String name;
   String filename;
   String zoomableUrl;

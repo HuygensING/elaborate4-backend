@@ -1,6 +1,13 @@
 package elaborate.editor.solr;
 
-import static elaborate.editor.solr.SolrFields.*;
+import static elaborate.editor.solr.SolrFields.ANNOTATIONCS_PREFIX;
+import static elaborate.editor.solr.SolrFields.ANNOTATION_PREFIX;
+import static elaborate.editor.solr.SolrFields.ID;
+import static elaborate.editor.solr.SolrFields.NAME;
+import static elaborate.editor.solr.SolrFields.PROJECT_ID;
+import static elaborate.editor.solr.SolrFields.PUBLISHABLE;
+import static elaborate.editor.solr.SolrFields.TEXTLAYERCS_PREFIX;
+import static elaborate.editor.solr.SolrFields.TEXTLAYER_PREFIX;
 
 import java.io.IOException;
 import java.util.Set;

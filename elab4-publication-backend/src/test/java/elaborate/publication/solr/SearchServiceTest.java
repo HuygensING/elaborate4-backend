@@ -1,8 +1,6 @@
 package elaborate.publication.solr;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -35,7 +33,7 @@ public class SearchServiceTest extends LoggableObject {
     LOG.info("{}", a);
     InputStream reader = new ByteArrayInputStream(a.getBytes());
     Map<String, Object> configMap = SearchService.readConfigMap(reader);
-    assertFalse(configMap.isEmpty());
+    assertThat(configMap).isNotEmpty();
 
     //    assertTrue(configMap.containsKey("facetFields"));
     //    List<String> facetFields = (List<String>) configMap.get("facetFields");
@@ -45,11 +43,11 @@ public class SearchServiceTest extends LoggableObject {
     Map<String, Map<String, String>> facetInfoMap = (Map<String, Map<String, String>>) configMap.get("facetInfoMap");
     assertThat(facetInfoMap).isNotNull();
     LOG.info("facetInfoMap={}", facetInfoMap);
-    assertFalse(facetInfoMap.keySet().isEmpty());
+    assertThat(facetInfoMap.keySet()).isNotEmpty();
 
     String[] facetFields = SearchService.toStringArray(configMap.get("facetFields"));
     String[] expected = new String[] { "metadata_field1", "metadata_field2", "metadata_field3" };
-    assertArrayEquals(expected, facetFields);
+    assertThat(expected).isEqualTo(facetFields);
     Map<String, String> facetInfo = facetInfoMap.get("metadata_field1");
     assertThat(facetInfo).isNotNull();
     assertThat(facetInfo.get("type")).isEqualTo("LIST");

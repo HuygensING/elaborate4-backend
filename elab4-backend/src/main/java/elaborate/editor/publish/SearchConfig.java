@@ -18,9 +18,6 @@ public class SearchConfig {
   Map<String, FacetInfo> facetInfoMap = Maps.newLinkedHashMap();
   List<String> defaultSortOrder = Lists.newArrayList();
 
-  @SuppressWarnings("unused")
-  private SearchConfig() {}
-
   public SearchConfig(Project project, List<String> selectedMetadataFields) {
     for (Entry<String, FacetInfo> entry : project.getFacetInfoMap().entrySet()) {
       String key = entry.getKey();

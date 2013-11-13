@@ -1,7 +1,6 @@
 package elaborate.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -23,8 +22,8 @@ public class XmlUtilTest {
 
   @Test
   public void test() {
-    assertThat(0).isEqualTo((40 % 5));
-    assertTrue((41 % 5) != 0);
+    assertThat(40 % 5).isEqualTo(0);
+    assertThat(41 % 5).isNotEqualTo(0);
   }
 
   @Test

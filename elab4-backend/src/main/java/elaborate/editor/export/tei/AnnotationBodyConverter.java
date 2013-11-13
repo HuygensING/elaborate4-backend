@@ -1,6 +1,6 @@
 package elaborate.editor.export.tei;
 
-import static nl.knaw.huygens.tei.Traversal.*;
+import static nl.knaw.huygens.tei.Traversal.NEXT;
 
 import java.util.TreeSet;
 

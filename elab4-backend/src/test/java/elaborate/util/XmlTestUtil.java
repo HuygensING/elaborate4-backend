@@ -1,7 +1,6 @@
 package elaborate.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -27,7 +26,7 @@ public class XmlTestUtil {
       builder = dBF.newDocumentBuilder();
       InputSource is = new InputSource(new StringReader(xml));
       Document doc = builder.parse(is);
-      assertNotNull(doc);
+      assertThat(doc).isNotNull();
     } catch (ParserConfigurationException e) {
       throw new RuntimeException(e);
     } catch (SAXException e) {

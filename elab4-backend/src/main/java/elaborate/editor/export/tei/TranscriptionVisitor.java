@@ -1,6 +1,7 @@
 package elaborate.editor.export.tei;
 
-import static nl.knaw.huygens.tei.Traversal.*;
+import static nl.knaw.huygens.tei.Traversal.NEXT;
+import static nl.knaw.huygens.tei.Traversal.STOP;
 
 import java.util.Map;
 import java.util.Set;
@@ -252,14 +253,6 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
       }
       context.addLiteral(AnnotationBodyConverter.convert(annotationBody));
       context.addCloseTag(note);
-    }
-
-    private void addPtr(XmlContext context, String id, String value) {
-      String target = "#note" + id;
-      Map<String, String> ptrAttributes = Maps.newHashMap();
-      ptrAttributes.put("target", target);
-      ptrAttributes.put("type", value);
-      context.addEmptyElementTag(new Element("ptr", ptrAttributes));
     }
 
     private Element interp(String key, String value) {

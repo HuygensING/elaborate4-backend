@@ -41,8 +41,8 @@ public class Project extends AbstractDocument<Project> {
   public static final String NEW_PROJECT_NAME = "new_project";
   private static final Set<String> DEFAULT_FACETFIELDS = Sets.newLinkedHashSet(Lists.newArrayList("publishable"));
   private static final Set<FacetInfo> DEFAULT_FACETINFO = Sets.newHashSet(//
-  new FacetInfo().setName(SolrFields.PUBLISHABLE).setTitle(ProjectEntry.PUBLISHABLE).setType(FacetType.BOOLEAN)//
-  );
+      new FacetInfo().setName(SolrFields.PUBLISHABLE).setTitle(ProjectEntry.PUBLISHABLE).setType(FacetType.BOOLEAN)//
+      );
 
   /* properties to persist */
   private String level_1;
@@ -135,9 +135,9 @@ public class Project extends AbstractDocument<Project> {
     List<FacetInfo> list = Lists.newArrayList(DEFAULT_FACETINFO);
     for (String pemfn : getProjectEntryMetadataFieldnames()) {
       list.add(new FacetInfo()//
-      .setName(SolrUtils.facetName(pemfn))//
-      .setTitle(pemfn)//
-      .setType(FacetType.LIST)//
+          .setName(SolrUtils.facetName(pemfn))//
+          .setTitle(pemfn)//
+          .setType(FacetType.LIST)//
       );
     }
     return list;
@@ -455,10 +455,10 @@ public class Project extends AbstractDocument<Project> {
   //
   public ProjectEntry addEntry(String name, User creator) {
     return ModelFactory.createTrackedEntity(ProjectEntry.class, creator)//
-    .setProject(this)//
-    .setName(name)//
-    .setFacsimiles(Lists.<Facsimile> newArrayList())//
-    .setTranscriptions(Lists.<Transcription> newArrayList());
+        .setProject(this)//
+        .setName(name)//
+        .setFacsimiles(Lists.<Facsimile> newArrayList())//
+        .setTranscriptions(Lists.<Transcription> newArrayList());
   }
 
   //
@@ -644,9 +644,9 @@ public class Project extends AbstractDocument<Project> {
   //  }
   public ProjectMetadataItem addMetadata(String key, String value, User creator) {
     return ModelFactory.createTrackedEntity(ProjectMetadataItem.class, creator)//
-    .setProject(this)//
-    .setField(key)//
-    .setData(value);
+        .setProject(this)//
+        .setField(key)//
+        .setData(value);
   }
 
   @JsonIgnore
@@ -666,10 +666,10 @@ public class Project extends AbstractDocument<Project> {
 
   public LogEntry addLogEntry(String string, User user) {
     return ModelFactory.create(LogEntry.class)//
-    .setProject(this)//
-    .setComment(string)//
-    .setCreatedOn(new Date())//
-    .setUserName(user.getUsername());
+        .setProject(this)//
+        .setComment(string)//
+        .setCreatedOn(new Date())//
+        .setUserName(user.getUsername());
   }
 
 }

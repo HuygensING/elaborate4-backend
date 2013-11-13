@@ -133,7 +133,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   public List<ProjectEntry> getProjectEntriesInOrder(long id) {
 
-    Project project = find(getEntityClass(), id);
+    find(getEntityClass(), id);
     //    List<ProjectEntry> resultList = getEntityManager//.
     //        .createQuery("from ProjectEntry pe" + //
     //            " left join pe.projectEntryMetadataItems l1 with l1.field=:level1" + //
@@ -562,8 +562,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
     };
 
-    List<Long> annotationTypeIds = Lists.newArrayList();
-    List<String> projectEntryMetadataFields = Lists.newArrayList();
+    Lists.newArrayList();
+    Lists.newArrayList();
     Publication.Settings settings = new Publication.Settings()//
         .setProjectId(project_id)//
         //    .setAnnotationTypeIds(annotationTypeIds)//

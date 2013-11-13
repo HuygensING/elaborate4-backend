@@ -1,7 +1,6 @@
 package elaborate.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.util.List;
@@ -153,8 +152,8 @@ public class StringUtilTest extends LoggableObject {
 
   @Test
   public void test() {
-    assertTrue(true == Boolean.valueOf("true"));
-    assertTrue(false == Boolean.valueOf("false"));
+    assertThat(Boolean.valueOf("true")).isTrue();
+    assertThat(Boolean.valueOf("false")).isFalse();
   }
 
   private void testHTML2XML(String html, String expected) {

@@ -1,6 +1,6 @@
 package nl.knaw.huygens.elaborate.publication.metadata;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import nl.knaw.huygens.LoggableObject;
 
 import org.junit.After;
@@ -21,9 +21,9 @@ public class AbstractMetadataRecordTest extends LoggableObject {
   //  @Test
   public void testDCAsXML() throws Exception {
     DublinCoreRecord dc = new DublinCoreRecord()//
-    .setType(DCMITypes.COLLECTION)//
-    .setDate("now")//
-    .setContributor("contributor");
+        .setType(DCMITypes.COLLECTION)//
+        .setDate("now")//
+        .setContributor("contributor");
     String xml = dc.asXML();
     LOG.info("xml={}", xml);
     //    assertXpathExists("/dc/date", xml);
@@ -32,9 +32,9 @@ public class AbstractMetadataRecordTest extends LoggableObject {
     //    assertXpathEvaluatesTo("Collection", "/oai:dc/dc:type", xml);
     //    assertXpathEvaluatesTo("contributor", "/oai:dc/dc:contributor", xml);
     //    assertXMLValid(xml);
-    assertTrue(xml.contains(">now<"));
-    assertTrue(xml.contains(">Collection<"));
-    assertTrue(xml.contains(">contributor<"));
+    assertThat(xml).contains(">now<");
+    assertThat(xml).contains(">Collection<");
+    assertThat(xml).contains(">contributor<");
   }
 
   @Test
@@ -43,6 +43,6 @@ public class AbstractMetadataRecordTest extends LoggableObject {
     String xml = dc.asXML();
     LOG.info("xml={}", xml);
     //    assertXMLValid(xml);
-    assertTrue(xml.contains("cmdi"));
+    assertThat(xml).contains("cmdi");
   }
 }

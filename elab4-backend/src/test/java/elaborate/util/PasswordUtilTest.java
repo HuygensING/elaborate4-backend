@@ -1,6 +1,6 @@
 package elaborate.util;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.UnsupportedEncodingException;
 
@@ -18,8 +18,8 @@ public class PasswordUtilTest {
     final String password = "aap-noot-mies";
     final byte[] passwordDigest2 = PasswordUtil.encode(password);
     String encodedPassword = new String(Base64.encodeBase64(passwordDigest2), Charsets.UTF_8);
-    assertTrue(PasswordUtil.matches(password, encodedPassword));
-    assertFalse(PasswordUtil.matches("somethingelse", encodedPassword));
+    assertThat(PasswordUtil.matches(password, encodedPassword)).isTrue();
+    assertThat(PasswordUtil.matches("somethingelse", encodedPassword)).isFalse();
   }
 
 }

@@ -41,7 +41,6 @@ import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.ProjectEntryMetadataItem;
-import elaborate.editor.model.orm.ProjectMetadataItem;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.AnnotationService;
@@ -183,13 +182,13 @@ public class PublishTask extends LoggableObject implements Runnable {
     };
   }
 
-//  private Map<String, Object> getMetadata(Project project) {
-//    Map<String, Object> metamap = Maps.newHashMap();
-//    for (ProjectMetadataItem projectMetadataItem : project.getProjectMetadataItems()) {
-//      metamap.put(projectMetadataItem.getField(), projectMetadataItem.getData());
-//    }
-//    return metamap;
-//  }
+  //  private Map<String, Object> getMetadata(Project project) {
+  //    Map<String, Object> metamap = Maps.newHashMap();
+  //    for (ProjectMetadataItem projectMetadataItem : project.getProjectMetadataItems()) {
+  //      metamap.put(projectMetadataItem.getField(), projectMetadataItem.getData());
+  //    }
+  //    return metamap;
+  //  }
 
   private static final Comparator<Facsimile> SORT_ON_FILENAME = new Comparator<Facsimile>() {
     @Override

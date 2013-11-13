@@ -1,6 +1,7 @@
 package elaborate.editor.backend;
 
-import static elaborate.util.HibernateUtil.*;
+import static elaborate.util.HibernateUtil.beginTransaction;
+import static elaborate.util.HibernateUtil.commitTransaction;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;

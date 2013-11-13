@@ -1,16 +1,7 @@
 package elaborate.editor.model.orm.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import org.junit.AfterClass;
@@ -63,36 +54,36 @@ public class AnnotationTypeServiceTest extends AbstractTest {
     LOG.info("setupClass - end");
   }
 
-  private static void testdb() {
-    try {
-      Class.forName("org.hsqldb.jdbcDriver");
-      Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:testdb", "sa", "");
-      Statement s = conn.createStatement();
-      s.execute("SELECT * FROM *");
-      ResultSet rs = s.getResultSet();
-      ResultSetMetaData metaData = rs.getMetaData();
-      int columnCount = metaData.getColumnCount();
-      for (int i = 1; i < columnCount; i++) {
-        System.out.print(metaData.getColumnName(i) + " | ");
-      }
-      LOG.info("");
-
-      while (rs.next()) {
-        for (int i = 1; i < columnCount; i++) {
-          System.out.print(rs.getString(i) + " | ");
-        }
-        LOG.info("");
-      }
-      conn.close();
-    } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-
-  }
+  //  private static void testdb() {
+  //    try {
+  //      Class.forName("org.hsqldb.jdbcDriver");
+  //      Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:testdb", "sa", "");
+  //      Statement s = conn.createStatement();
+  //      s.execute("SELECT * FROM *");
+  //      ResultSet rs = s.getResultSet();
+  //      ResultSetMetaData metaData = rs.getMetaData();
+  //      int columnCount = metaData.getColumnCount();
+  //      for (int i = 1; i < columnCount; i++) {
+  //        System.out.print(metaData.getColumnName(i) + " | ");
+  //      }
+  //      LOG.info("");
+  //
+  //      while (rs.next()) {
+  //        for (int i = 1; i < columnCount; i++) {
+  //          System.out.print(rs.getString(i) + " | ");
+  //        }
+  //        LOG.info("");
+  //      }
+  //      conn.close();
+  //    } catch (ClassNotFoundException e) {
+  //      // TODO Auto-generated catch block
+  //      e.printStackTrace();
+  //    } catch (SQLException e) {
+  //      // TODO Auto-generated catch block
+  //      e.printStackTrace();
+  //    }
+  //
+  //  }
 
   @AfterClass
   public static void teardownClass() {
@@ -123,7 +114,7 @@ public class AnnotationTypeServiceTest extends AbstractTest {
     // Create
     AnnotationType created = service.create(placeholder, user);
     long id = created.getId();
-    assertNotNull(id);
+    assertThat(id).isNotNull();
 
     ImmutableList<AnnotationType> all = service.getAll();
     assertThat(all.size()).isEqualTo(1);

@@ -22,8 +22,6 @@ public class TranscriptionWrapper extends LoggableObject {
   @JsonIgnore
   public List<Integer> annotationNumbers = Lists.newArrayList();
 
-  private TranscriptionWrapper() {}
-
   public TranscriptionWrapper(Transcription transcription) {
     id = transcription.getId();
     textLayer = transcription.getTextLayer();
