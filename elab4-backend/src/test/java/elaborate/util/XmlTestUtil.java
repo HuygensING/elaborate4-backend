@@ -1,6 +1,7 @@
 package elaborate.util;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -41,14 +42,14 @@ public class XmlTestUtil {
   public void testFixXml() {
     String in = "<xml><i>blâ <b>&</i> co</b><ok/> &cie <.> ok</xml>";
     String expected = "<xml><i>blâ <b>&amp;</b></i><b> co</b><ok/> &amp;cie &lt;.&gt; ok</xml>";
-    assertEquals(expected, XmlUtil.fixXhtml(in));
+    assertThat(XmlUtil.fixXhtml(in)).isEqualTo(expected);
   }
 
   //  @Test
   //  public void test() {
   //    String in = "<body>01 En<i>de</i> hine w@d sond<i>er</i> sage\n 02 Noit moede in dien dage\n 03 M@ sijn wesen gedurde tier vre\n 04 <ab id=\"81467\"/>Tot<i>er</i><ae id=\"81467\"/> vesp<i>er</i>tijt alde<i>n</i> dach dure\n 05 En<i>de</i> soude hebben geduert alsoe</body>";
   //    String expected = in;
-  //    assertEquals(expected, in.replaceAll("\\n\\s+[0-9][0-9]\\s+", "\n"));
+  //    assertThat( "\n")).isEqualTo(expected, in.replaceAll("\\n\\s+[0-9][0-9]\\s+");
   //  }
 
 }

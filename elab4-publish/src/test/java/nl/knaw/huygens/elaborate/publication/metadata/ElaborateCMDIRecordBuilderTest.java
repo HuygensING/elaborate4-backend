@@ -1,6 +1,6 @@
 package nl.knaw.huygens.elaborate.publication.metadata;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +17,7 @@ public class ElaborateCMDIRecordBuilderTest {
   @Test
   public void test() {
     CMDIRecord cr = new ElaborateCMDIRecordBuilder().setMdCreator("me").setMdSelfLink("mdSelfLink").build();
-    assertEquals("Elaborate", cr.getMdCollectionDisplayName());
+    assertThat(cr.getMdCollectionDisplayName()).isEqualTo("Elaborate");
   }
 
 }

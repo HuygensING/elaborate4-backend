@@ -1,6 +1,8 @@
 package nl.knaw.huygens.elaborate.publication;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import net.handle.hdllib.HandleException;
 import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.persistence.PersistenceException;
@@ -33,12 +35,12 @@ public class PublicationFinalizerTest extends LoggableObject {
     assertNotNull(pid);
 
     String persistentURL = persistenceManager.getPersistentURL(pid);
-    assertEquals(url, persistentURL);
+    assertThat(persistentURL).isEqualTo(url);
 
     String newURL = "http://example.org/bla";
     persistenceManager.modifyURLForPersistentId(pid, newURL);
     persistentURL = persistenceManager.getPersistentURL(pid);
-    assertEquals(newURL, persistentURL);
+    assertThat(persistentURL).isEqualTo(newURL);
 
     persistenceManager.deletePersistentId(pid);
     assertDeleted(persistenceManager, pid);
@@ -51,7 +53,7 @@ public class PublicationFinalizerTest extends LoggableObject {
       Throwable cause = pe.getCause();
       assertTrue(cause instanceof HandleException);
       HandleException he = (HandleException) cause;
-      assertEquals(HandleException.HANDLE_DOES_NOT_EXIST, he.getCode());
+      assertThat(he.getCode()).isEqualTo(HandleException.HANDLE_DOES_NOT_EXIST);
     }
   }
 

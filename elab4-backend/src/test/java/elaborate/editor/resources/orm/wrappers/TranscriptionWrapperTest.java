@@ -1,7 +1,8 @@
 package elaborate.editor.resources.orm.wrappers;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -28,10 +29,10 @@ public class TranscriptionWrapperTest {
     Transcription transcription = mockTranscription(textLayer, title, body);
 
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
-    //    assertEquals(title, tw.title);
-    assertEquals(textLayer, tw.textLayer);
+    //    assertThat( tw.title).isEqualTo(title);
+    assertThat(tw.textLayer).isEqualTo(textLayer);
     String expected = "<span data-id=\"9085822\" data-marker=\"begin\"></span>sdgdgdgsdgsdfg<sup data-id=\"9085822\" data-marker=\"end\">1</sup>";
-    assertEquals(expected, tw.body);
+    assertThat(tw.body).isEqualTo(expected);
   }
 
   private Transcription mockTranscription(String textLayer, String title, String body) {
@@ -48,18 +49,18 @@ public class TranscriptionWrapperTest {
     String expected = "<span data-id=\"9085822\" data-marker=\"begin\"></span>bla <span data-id=\"9085821\" data-marker=\"begin\"></span>die<sup data-id=\"9085822\" data-marker=\"end\">1</sup> bla<sup data-id=\"9085821\" data-marker=\"end\">2</sup><br>hello world";
     Transcription transcription = mockTranscription("textLayer", "title", in);
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
-    assertEquals(expected, tw.body);
+    assertThat(tw.body).isEqualTo(expected);
     List<Integer> annotationNumbers = tw.annotationNumbers;
-    assertEquals(2, annotationNumbers.size());
-    assertEquals(Integer.valueOf(9085822), annotationNumbers.get(0));
-    assertEquals(Integer.valueOf(9085821), annotationNumbers.get(1));
+    assertThat(annotationNumbers.size()).isEqualTo(2);
+    assertThat(annotationNumbers.get(0)).isEqualTo(Integer.valueOf(9085822));
+    assertThat(annotationNumbers.get(1)).isEqualTo(Integer.valueOf(9085821));
   }
 
   @Test
   public void testConvertFromInput() throws Exception {
     String in = "<span data-marker=\"begin\" data-id=\"9085822\">bla die bla</span><sup data-marker=\"end\" data-id=\"9085822\">1</sup><br>hello world";
     String expected = "<body><ab id=\"9085822\"/>bla die bla<ae id=\"9085822\"/>\nhello world</body>";
-    assertEquals(expected, TranscriptionWrapper.convertFromInput(in));
+    assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
   }
 
 }

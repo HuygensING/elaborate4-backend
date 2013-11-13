@@ -1,6 +1,6 @@
 package elaborate.editor.model.orm;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
 import java.util.List;
@@ -19,7 +19,7 @@ public class ProjectTest extends StoredEntityTest {
         .setUsername("root")//
         .setFirstName("firstName")//
         .setLastName("last");
-    assertEquals(0, user.getId());
+    assertThat(user.getId()).isEqualTo(0);
 
     entityManager.getTransaction().begin();
     entityManager.persist(user);
@@ -32,7 +32,7 @@ public class ProjectTest extends StoredEntityTest {
     entityManager.persist(ModelFactory.create(Project.class).setName("project2").setCreatedOn(new Date()).setCreator(user));
     entityManager.getTransaction().commit();
     entityManager.close();
-    assertEquals(1, user.getId());
+    assertThat(user.getId()).isEqualTo(1);
 
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
@@ -43,27 +43,27 @@ public class ProjectTest extends StoredEntityTest {
     }
     project1 = result.get(0);
     Project project2 = result.get(1);
-    assertEquals("project1", project1.getName());
-    assertEquals("project2", project2.getName());
-    assertEquals("root", project1.getCreator().getUsername());
+    assertThat(project1.getName()).isEqualTo("project1");
+    assertThat(project2.getName()).isEqualTo("project2");
+    assertThat(project1.getCreator().getUsername()).isEqualTo("root");
 
     List<ProjectEntry> projectEntries = project1.getProjectEntries();
-    assertEquals(1, projectEntries.size());
+    assertThat(projectEntries.size()).isEqualTo(1);
 
     ProjectEntry projectEntry = projectEntries.get(0);
-    assertEquals("entry", projectEntry.getName());
+    assertThat(projectEntry.getName()).isEqualTo("entry");
 
     List<Transcription> transcriptions = projectEntry.getTranscriptions();
-    assertEquals(1, transcriptions.size());
+    assertThat(transcriptions.size()).isEqualTo(1);
 
     Transcription transcription2 = transcriptions.get(0);
-    assertEquals("", transcription2.getBody());
+    assertThat(transcription2.getBody()).isEqualTo("");
 
     List<Facsimile> facsimiles = projectEntry.getFacsimiles();
-    assertEquals(1, facsimiles.size());
+    assertThat(facsimiles.size()).isEqualTo(1);
 
     Facsimile facsimile = facsimiles.get(0);
-    assertEquals("", facsimile.getFilename());
+    assertThat(facsimile.getFilename()).isEqualTo("");
 
     entityManager.getTransaction().commit();
     entityManager.close();

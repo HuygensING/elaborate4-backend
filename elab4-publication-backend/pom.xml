@@ -1,125 +1,133 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>nl.knaw.huygens.elab4</groupId>
-    <artifactId>elab4</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>elab4-publication-backend</artifactId>
-  <packaging>war</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>nl.knaw.huygens.elab4</groupId>
+		<artifactId>elab4</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>elab4-publication-backend</artifactId>
+	<packaging>war</packaging>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-  </properties>
+	</properties>
 
-  <dependencies>
-    <!-- compile dependecies -->
-    <dependency>
-      <groupId>nl.knaw.huygens.elab4</groupId>
-      <artifactId>elab4-solr</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
+	<dependencies>
+		<!-- compile dependecies -->
+		<dependency>
+			<groupId>nl.knaw.huygens.elab4</groupId>
+			<artifactId>elab4-solr</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 
-    <dependency>
-      <groupId>nl.knaw.huygens</groupId>
-      <artifactId>jax-rs-tools</artifactId>
-      <version>${jaxrstools.version}</version>
-    </dependency>
+		<dependency>
+			<groupId>nl.knaw.huygens</groupId>
+			<artifactId>jax-rs-tools</artifactId>
+			<version>${jaxrstools.version}</version>
+		</dependency>
 
-    <dependency>
-      <groupId>com.fasterxml.jackson.jaxrs</groupId>
-      <artifactId>jackson-jaxrs-json-provider</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 
-    <!-- jersey -->
-    <dependency>
-      <groupId>com.sun.jersey.contribs</groupId>
-      <artifactId>jersey-guice</artifactId>
-      <version>${jersey.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-json</artifactId>
-      <version>${jersey.version}</version>
-    </dependency>
+		<!-- jersey -->
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-guice</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
 
-    <!-- provided dependencies -->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>${javaxservlet-api.version}</version>
-      <scope>provided</scope>
-    </dependency>
+		<!-- provided dependencies -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${javaxservlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-    <!-- runtime dependencies -->
-    <dependency>
-      <groupId>se.jiderhamn</groupId>
-      <artifactId>classloader-leak-prevention</artifactId>
-      <scope>runtime</scope>
-      <version>${classloader-leak-prevention.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.tuckey</groupId>
-      <artifactId>urlrewritefilter</artifactId>
-      <version>${urlrewritefilter.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.directory.studio</groupId>
-      <artifactId>org.apache.commons.logging</artifactId>
-      <version>1.1.3</version>
-      <scope>runtime</scope>
-    </dependency>
+		<!-- runtime dependencies -->
+		<dependency>
+			<groupId>se.jiderhamn</groupId>
+			<artifactId>classloader-leak-prevention</artifactId>
+			<scope>runtime</scope>
+			<version>${classloader-leak-prevention.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tuckey</groupId>
+			<artifactId>urlrewritefilter</artifactId>
+			<version>${urlrewritefilter.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.directory.studio</groupId>
+			<artifactId>org.apache.commons.logging</artifactId>
+			<version>1.1.3</version>
+			<scope>runtime</scope>
+		</dependency>
 
 		<!-- test dependencies -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey.jersey-test-framework</groupId>
-      <artifactId>jersey-test-framework-grizzly</artifactId>
-      <version>${jersey.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.jersey-test-framework</groupId>
+			<artifactId>jersey-test-framework-grizzly</artifactId>
+			<version>${jersey.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${assertj-core.version}</version>
+			<scope>test</scope>
+		</dependency>
 
-  <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-      <resource>
-        <directory>src/main/java</directory>
-        <includes>
-          <include>**/*.properties</include>
-        </includes>
-      </resource>
-    </resources>
+	</dependencies>
 
-    <testSourceDirectory>src/test/java</testSourceDirectory>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-      </testResource>
-      <testResource>
-        <directory>src/test/java</directory>
-        <includes>
-          <include>**/*.properties</include>
-        </includes>
-      </testResource>
-    </testResources>
-  </build>
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+			<testResource>
+				<directory>src/test/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</testResource>
+		</testResources>
+	</build>
 
 </project>

@@ -1,7 +1,10 @@
 package elaborate.editor.model;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,12 +26,12 @@ public class ElaborateSecurityContextTest {
 
   @Test
   public void testGetUser() throws Exception {
-    assertEquals(user, elaborateSecurityContext.getUser());
+    assertThat(elaborateSecurityContext.getUser()).isEqualTo(user);
   }
 
   @Test
   public void testGetUserPrincipal() throws Exception {
-    assertEquals(user.getUsername(), elaborateSecurityContext.getUserPrincipal().getName());
+    assertThat(elaborateSecurityContext.getUserPrincipal().getName()).isEqualTo(user.getUsername());
   }
 
   @Test
@@ -38,7 +41,7 @@ public class ElaborateSecurityContextTest {
 
   @Test
   public void testGetAuthenticationScheme() throws Exception {
-    assertEquals("SimpleAuth", elaborateSecurityContext.getAuthenticationScheme());
+    assertThat(elaborateSecurityContext.getAuthenticationScheme()).isEqualTo("SimpleAuth");
   }
 
   @Test

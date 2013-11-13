@@ -1,6 +1,6 @@
 package elaborate.editor.publish;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -47,7 +47,7 @@ public class PublishTaskTest extends AbstractTest {
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
     Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
-    assertEquals(projectTitle, projectData.get("title"));
+    assertThat(projectData.get("title")).isEqualTo(projectTitle);
 
     LOG.info("projectData={}", projectData);
 
@@ -76,10 +76,10 @@ public class PublishTaskTest extends AbstractTest {
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
     Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
-    assertEquals(publicationTitle, projectData.get("title"));
+    assertThat(projectData.get("title")).isEqualTo(publicationTitle);
     assertFalse(((Map<Long, List<String>>) projectData.get("metadata")).containsKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME));
     assertFalse(projectData.containsKey("entryTermSingular"));
-    assertEquals("comicsans", projectData.get("textFont"));
+    assertThat(projectData.get("textFont")).isEqualTo("comicsans");
 
     LOG.info("projectData={}", projectData);
 
@@ -93,7 +93,7 @@ public class PublishTaskTest extends AbstractTest {
     ProjectEntry entry = mock(ProjectEntry.class);
     when(entry.getId()).thenReturn(9999l);
 
-    assertEquals("entry9999.json", PublishTask.entryFilename(9999));
+    assertThat(PublishTask.entryFilename(9999)).isEqualTo("entry9999.json");
   }
 
   @Test
@@ -112,7 +112,7 @@ public class PublishTaskTest extends AbstractTest {
 
     List<String> projectEntryMetadataFields = Lists.newArrayList("Meta1", "Meta2");
     Map<String, Object> projectEntryData = publishTask.getProjectEntryData(entry, projectEntryMetadataFields);
-    assertEquals(entryName, projectEntryData.get("name"));
+    assertThat(projectEntryData.get("name")).isEqualTo(entryName);
 
     LOG.info("projectEntryData={}", projectEntryData);
 
@@ -144,6 +144,6 @@ public class PublishTaskTest extends AbstractTest {
   @Test
   public void testSetText() throws Exception {
     AnnotationData ad = new AnnotationData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
-    assertEquals("dit is de annotatietekst", ad.getText());
+    assertThat(ad.getText()).isEqualTo("dit is de annotatietekst");
   }
 }

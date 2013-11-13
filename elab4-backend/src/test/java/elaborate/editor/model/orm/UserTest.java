@@ -1,6 +1,6 @@
 package elaborate.editor.model.orm;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Set;
@@ -27,12 +27,12 @@ public class UserTest extends StoredEntityTest {
     entityManager = entityManagerFactory.createEntityManager();
     entityManager.getTransaction().begin();
     List<User> result = entityManager.createQuery("from User", User.class).getResultList();
-    assertEquals(1, result.size());
+    assertThat(result.size()).isEqualTo(1);
     for (User u : result) {
       Set<UserSetting> userSettings = u.getUserSettings();
-      assertEquals(2, userSettings.size());
+      assertThat(userSettings).hasSize(2);
       UserSetting setting = userSettings.iterator().next();
-      assertEquals("root", setting.getUser().getUsername());
+      assertThat(setting.getUser().getUsername()).isEqualTo("root");
     }
     entityManager.getTransaction().commit();
     entityManager.close();

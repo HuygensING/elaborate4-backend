@@ -1,6 +1,6 @@
 package nl.knaw.huygens.elaborate.publication.metadata;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import nl.knaw.huygens.LoggableObject;
 
 import org.junit.After;
@@ -20,7 +20,7 @@ public class CMDIRecordTest extends LoggableObject {
     try {
       CMDIRecord cr = new CMDIRecord.Builder().build();
     } catch (InvalidCMDIRecordException e) {
-      assertEquals("invalid CMDIRecord: set MdCreator; set MdProfile; set MdSelfLink", e.getMessage());
+      assertThat(e.getMessage()).isEqualTo("invalid CMDIRecord: set MdCreator; set MdProfile; set MdSelfLink");
     }
   }
 
@@ -29,18 +29,18 @@ public class CMDIRecordTest extends LoggableObject {
     try {
       CMDIRecord cr = new CMDIRecord.Builder().setMdCreator("mdCreator").build();
     } catch (InvalidCMDIRecordException e) {
-      assertEquals("invalid CMDIRecord: set MdProfile; set MdSelfLink", e.getMessage());
+      assertThat(e.getMessage()).isEqualTo("invalid CMDIRecord: set MdProfile; set MdSelfLink");
     }
   }
 
   @Test
   public void testBuild3() throws Exception {
     CMDIRecord cr = new CMDIRecord.Builder()//
-    .setMdCreator("mdCreator")//
-    .setMdProfile("profile")//
-    .setMdSelfLink("uri")//
-    .setMdCollectionDisplayName("displayname")//
-    .build();
+        .setMdCreator("mdCreator")//
+        .setMdProfile("profile")//
+        .setMdSelfLink("uri")//
+        .setMdCollectionDisplayName("displayname")//
+        .build();
     LOG.info("CMDI={}", cr);
   }
 

@@ -1,6 +1,6 @@
 package elaborate.editor.model.orm.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -59,7 +59,7 @@ public class AnnotationTypeServiceTest extends AbstractTest {
     service.commitTransaction();
 
     ImmutableList<AnnotationType> all = service.getAll();
-    assertEquals(true, all.isEmpty());
+    assertThat(all).isEmpty();
     LOG.info("setupClass - end");
   }
 
@@ -118,7 +118,7 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 
   private void testAsAuthorizedUser(String name, User user) {
     AnnotationType placeholder = new AnnotationType().setName(name).setDescription("description");
-    assertEquals(0, placeholder.getId()); // default
+    assertThat(placeholder.getId()).isEqualTo(0); // default
 
     // Create
     AnnotationType created = service.create(placeholder, user);
@@ -126,19 +126,19 @@ public class AnnotationTypeServiceTest extends AbstractTest {
     assertNotNull(id);
 
     ImmutableList<AnnotationType> all = service.getAll();
-    assertEquals(1, all.size());
+    assertThat(all.size()).isEqualTo(1);
 
     // Read
     AnnotationType read = service.read(id, user);
-    assertEquals(name, read.getName());
-    assertEquals("description", read.getDescription());
+    assertThat(read.getName()).isEqualTo(name);
+    assertThat(read.getDescription()).isEqualTo("description");
 
     // Update
     read.setName("newName").setDescription("newDescription");
     service.update(read, user);
     AnnotationType updated = service.read(id, user);
-    assertEquals("newName", updated.getName());
-    assertEquals("newDescription", updated.getDescription());
+    assertThat(updated.getName()).isEqualTo("newName");
+    assertThat(updated.getDescription()).isEqualTo("newDescription");
 
     // Delete
     service.delete(id, user);
@@ -176,7 +176,7 @@ public class AnnotationTypeServiceTest extends AbstractTest {
       exceptionThrown = true;
     }
     service.delete(created.getId(), root);
-    assertEquals(true, exceptionThrown);
+    assertThat(exceptionThrown).isEqualTo(true);
   }
 
   @Test
@@ -200,7 +200,7 @@ public class AnnotationTypeServiceTest extends AbstractTest {
       exceptionThrown = true;
     }
     service.delete(created.getId(), root);
-    assertEquals(true, exceptionThrown);
+    assertThat(exceptionThrown).isEqualTo(true);
   }
 
   @Test

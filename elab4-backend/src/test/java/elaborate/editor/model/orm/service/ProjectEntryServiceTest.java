@@ -1,6 +1,6 @@
 package elaborate.editor.model.orm.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -28,7 +28,7 @@ public class ProjectEntryServiceTest extends AbstractTest {
     User user = mock(User.class);
     when(user.getId()).thenReturn((long) 1);
     ProjectEntry pe = projectEntryService.read(1, user);
-    assertEquals(1, pe.getId());
+    assertThat(pe.getId()).isEqualTo(1);
   }
 
 }
