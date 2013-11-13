@@ -280,7 +280,7 @@
 						<param>elaborate.editor.model</param>
 						<param>elaborate.editor.model.orm</param>
 					</packages>
-					<targetDir>src/test/java</targetDir>
+					<targetDir>src/assert/java</targetDir>
 				</configuration>
 			</plugin>
 		</plugins>
