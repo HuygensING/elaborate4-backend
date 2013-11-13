@@ -98,8 +98,8 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
     String cutoffDate = new DateTime().minusDays(1).toString("YYYY-MM-dd HH:mm:ss");
     beginTransaction();
     getEntityManager()//
-    .createQuery("delete SearchData where created_on < '" + cutoffDate + "'")//
-    .executeUpdate();
+        .createQuery("delete SearchData where created_on < '" + cutoffDate + "'")//
+        .executeUpdate();
     commitTransaction();
   }
 

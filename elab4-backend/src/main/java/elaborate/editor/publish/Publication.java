@@ -68,10 +68,8 @@ public class Publication {
     private final List<String> loglines = Lists.newArrayList();
     private boolean done = false;
     private boolean fail = false;
-    private final long projectId;
 
     public Status(long projectId) {
-      this.projectId = projectId;
       this.id = new DateTime().toString("yyyyMMddHHmmss") + projectId;
     }
 

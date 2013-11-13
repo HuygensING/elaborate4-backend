@@ -1,6 +1,7 @@
 package elaborate.editor.resources.orm.wrappers;
 
-import static nl.knaw.huygens.tei.Traversal.*;
+import static nl.knaw.huygens.tei.Traversal.NEXT;
+import static nl.knaw.huygens.tei.Traversal.STOP;
 
 import java.util.List;
 

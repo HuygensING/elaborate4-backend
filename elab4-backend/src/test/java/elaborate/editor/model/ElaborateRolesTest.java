@@ -1,9 +1,13 @@
 package elaborate.editor.model;
 
-import static com.google.common.collect.Lists.*;
-import static elaborate.editor.model.ElaborateRoles.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static elaborate.editor.model.ElaborateRoles.ADMIN;
+import static elaborate.editor.model.ElaborateRoles.PROJECTLEADER;
+import static elaborate.editor.model.ElaborateRoles.READER;
+import static elaborate.editor.model.ElaborateRoles.USER;
+import static elaborate.editor.model.ElaborateRoles.getRolestringFor;
+import static elaborate.editor.model.ElaborateRoles.highestRole;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 

@@ -1,8 +1,6 @@
 package elaborate.editor.model.orm.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -52,7 +50,7 @@ public class ProjectServiceTest extends StoredEntityTest {
   public void testCreateAsNotRoot() throws Exception {
     Project project = ModelFactory.createTrackedEntity(Project.class, notRoot).setName("name");
     Project created = projectService.create(project, notRoot);
-    assertNotNull(created);
+    assertThat(created).isNotNull();
   }
 
   @Test
@@ -67,7 +65,7 @@ public class ProjectServiceTest extends StoredEntityTest {
   @Test
   public void testGetAll() throws Exception {
     List<Project> all = projectService.getAll(root);
-    assertFalse(all.isEmpty());
+    assertThat(all).isNotEmpty();
     LOG.info("{}", all.size());
   }
 

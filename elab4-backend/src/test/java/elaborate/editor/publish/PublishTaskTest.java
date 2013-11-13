@@ -1,9 +1,6 @@
 package elaborate.editor.publish;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,7 +50,7 @@ public class PublishTaskTest extends AbstractTest {
 
     String json = PublishTask.toJson(projectData);
     LOG.info("json={}", json);
-    assertTrue(StringUtils.isNotBlank(json));
+    assertThat(StringUtils.isNotBlank(json)).isTrue();
   }
 
   @Test
@@ -77,15 +74,18 @@ public class PublishTaskTest extends AbstractTest {
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
     Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
     assertThat(projectData.get("title")).isEqualTo(publicationTitle);
-    assertFalse(((Map<Long, List<String>>) projectData.get("metadata")).containsKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME));
-    assertFalse(projectData.containsKey("entryTermSingular"));
+    Map<String, List<String>> map = (Map<String, List<String>>) projectData.get("metadata");
+    assertThat(map).doesNotContainKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
+    boolean containsKey = map.containsKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
+    assertThat(containsKey).isFalse();
+    assertThat(projectData.containsKey("entryTermSingular")).isFalse();
     assertThat(projectData.get("textFont")).isEqualTo("comicsans");
 
     LOG.info("projectData={}", projectData);
 
     String json = PublishTask.toJson(projectData);
     LOG.info("json={}", json);
-    assertTrue(StringUtils.isNotBlank(json));
+    assertThat(StringUtils.isNotBlank(json)).isTrue();
   }
 
   @Test
@@ -118,7 +118,7 @@ public class PublishTaskTest extends AbstractTest {
 
     String json = PublishTask.toJson(projectEntryData);
     LOG.info("json={}", json);
-    assertTrue(StringUtils.isNotBlank(json));
+    assertThat(StringUtils.isNotBlank(json)).isTrue();
   }
 
   @Test
@@ -130,15 +130,15 @@ public class PublishTaskTest extends AbstractTest {
         .setLevel2("Field3");
     SearchConfig searchConfig = new SearchConfig(project, selectedProjectEntryMetadataFields);
     LOG.info("searchConfig={}", searchConfig);
-    assertNotNull(searchConfig);
+    assertThat(searchConfig).isNotNull();
 
     Map<String, FacetInfo> map = searchConfig.getFacetInfoMap();
-    assertNotNull(map);
-    assertTrue(map.containsKey("metadata_field1"));
-    assertFalse(map.containsKey("publishable"));
+    assertThat(map).isNotNull();
+    assertThat(map).containsKey("metadata_field1");
+    assertThat(map).doesNotContainKey("publishable");
     String json = PublishTask.toJson(searchConfig);
     LOG.info(json);
-    assertNotNull(json);
+    assertThat(json).isNotNull();
   }
 
   @Test

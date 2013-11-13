@@ -127,7 +127,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
   public Facsimile readFacsimile(long project_id, long facsimile_id, User user) {
     openEntityManager();
     projectService.setEntityManager(getEntityManager());
-    Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
+    projectService.getProjectIfUserIsAllowed(project_id, user);
 
     Facsimile facsimile = find(Facsimile.class, facsimile_id);
     closeEntityManager();
@@ -156,7 +156,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
   public Facsimile deleteFacsimile(long project_id, long facsimile_id, User user) {
     beginTransaction();
     projectService.setEntityManager(getEntityManager());
-    Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
+    projectService.getProjectIfUserIsAllowed(project_id, user);
 
     Facsimile facsimile = find(Facsimile.class, facsimile_id);
     ProjectEntry projectEntry = facsimile.getProjectEntry();
@@ -187,7 +187,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
   public void updateProjectEntrySettings(long project_id, long entry_id, Map<String, String> projectEntrySettings, User creator) {
     beginTransaction();
     projectService.setEntityManager(getEntityManager());
-    Project project = projectService.getProjectIfUserIsAllowed(project_id, creator);
+    projectService.getProjectIfUserIsAllowed(project_id, creator);
 
     ProjectEntry pe = read(entry_id);
     for (ProjectEntryMetadataItem projectEntryMetadataItem : pe.getProjectEntryMetadataItems()) {

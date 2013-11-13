@@ -1,7 +1,6 @@
 package elaborate.editor.resources.orm;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class SearchResourceTest extends LoggableObject {
     SearchResource searchResource = new SearchResource(null);
     searchResource.addPrevNextURIs(searchResult, 1, 2, 0, 50);
     assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://10.152.32.82:2013/projects/1/search/2?start=50&rows=50");
-    assertFalse(searchResult.containsKey(SearchResource.KEY_PREV));
+    assertThat(searchResult).doesNotContainKey(SearchResource.KEY_PREV);
   }
 
   @Test

@@ -110,16 +110,16 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
    */
   public Transcription addTranscription(User creator) {
     return ModelFactory.createTrackedEntity(Transcription.class, creator)//
-    .setProjectEntry(this)//
-    .setBody(Transcription.DEFAULT_BODY)//
-    .setTranscriptionType(ModelFactory.getDefaultTranscriptionType());
+        .setProjectEntry(this)//
+        .setBody(Transcription.DEFAULT_BODY)//
+        .setTranscriptionType(ModelFactory.getDefaultTranscriptionType());
   }
 
   public Facsimile addFacsimile(String name, String title, User creator) {
     return ModelFactory.createTrackedEntity(Facsimile.class, creator)//
-    .setProjectEntry(this)//
-    .setName(name)//
-    .setTitle(title);
+        .setProjectEntry(this)//
+        .setName(name)//
+        .setTitle(title);
   }
 
   public String getMetadataValue(String key) {
@@ -141,7 +141,7 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 
   public ProjectEntryMetadataItem addMetadataItem(String key, String value, User creator) {
     return ModelFactory.createMetadataItem(ProjectEntryMetadataItem.class, key, value, creator)//
-    .setProjectEntry(this);
+        .setProjectEntry(this);
   }
 
   //

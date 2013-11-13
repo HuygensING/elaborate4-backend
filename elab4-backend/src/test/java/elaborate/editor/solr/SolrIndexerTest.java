@@ -1,7 +1,6 @@
 package elaborate.editor.solr;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class SolrIndexerTest extends AbstractTest {
   //  @Test
   public void testGetSolrInputDocument() throws Exception {
     SolrInputDocument docForEditor = SolrIndexer.getSolrInputDocument(entry, false);
-    assertNotNull(docForEditor);
+    assertThat(docForEditor != null).isTrue();
     LOG.info("docForEditor={}", docForEditor);
     assertThat(docForEditor.getField(SolrFields.ID).getValue()).isEqualTo(entry.getId());
     assertThat(docForEditor.getField(SolrFields.NAME).getValue()).isEqualTo(entry.getName());
@@ -49,7 +48,7 @@ public class SolrIndexerTest extends AbstractTest {
     assertThat(docForEditor.getField(SolrFields.PUBLISHABLE).getValue()).isEqualTo(entry.isPublishable());
 
     SolrInputDocument docForPublication = SolrIndexer.getSolrInputDocument(entry, true);
-    assertNotNull(docForPublication);
+    assertThat(docForPublication != null).isTrue();
     LOG.info("docForPublication={}", docForPublication);
     assertThat(docForPublication.getField(SolrFields.ID).getValue()).isEqualTo(entry.getId());
     assertThat(docForPublication.getField(SolrFields.NAME).getValue()).isEqualTo(entry.getName());

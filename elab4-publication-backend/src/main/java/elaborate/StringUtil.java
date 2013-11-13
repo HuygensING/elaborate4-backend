@@ -13,7 +13,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 public class StringUtil extends LoggableObject {
-  private static final String UTF8 = "UTF8";
   //  static Tidy TIDY = new Tidy();
   //  static {
   //    TIDY.setAltText("");

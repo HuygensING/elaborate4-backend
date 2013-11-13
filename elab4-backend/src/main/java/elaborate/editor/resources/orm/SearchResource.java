@@ -90,11 +90,11 @@ public class SearchResource extends AbstractElaborateResource {
 
   private void addURI(Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
     UriBuilder builder = UriBuilder//
-    .fromPath(prevLink)//
-    .scheme(config.getStringSetting("server.scheme", "html"))//
-    .host(config.getStringSetting("server.name", "127.0.0.1"))//
-    .queryParam("start", start)//
-    .queryParam("rows", rows);
+        .fromPath(prevLink)//
+        .scheme(config.getStringSetting("server.scheme", "html"))//
+        .host(config.getStringSetting("server.name", "127.0.0.1"))//
+        .queryParam("start", start)//
+        .queryParam("rows", rows);
     int port = config.getIntSetting("server.port", DEFAULT_PORT);
     if (port != DEFAULT_PORT) {
       builder.port(port);
