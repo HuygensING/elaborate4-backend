@@ -3,6 +3,7 @@ package elaborate.publication.resources;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -77,6 +78,15 @@ public class SearchResource extends LoggableObject {
     addPrevNextURIs(searchResult, searchId, start, rows);
 
     ResponseBuilder builder = Response.ok(searchResult);
+    return builder.build();
+  }
+
+  @GET
+  @Path("{search_id}/allids")
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  public Response getAllSearchResultIds(@PathParam("search_id") long searchId) {
+    List<String> searchResultIds = searchService.getAllSearchResultIds(searchId);
+    ResponseBuilder builder = Response.ok(searchResultIds);
     return builder.build();
   }
 
