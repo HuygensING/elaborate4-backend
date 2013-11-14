@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config version="0.1">
-  <settings>
-    <version>0.1</version>
-    <solr>
-      <url>http://localhost:8080/solr-elab3/entries/</url>
-    </solr>
+	<settings>
+		<version>0.1</version>
+		<solr>
+			<url>http://localhost:8080/solr-elab3/entries/</url>
+		</solr>
 
-    <server>
-      <scheme>http</scheme>
-      <name>10.152.32.82</name>
-      <port>2013</port>
-    </server>
+		<server>
+			<scheme>http</scheme>
+			<name>10.152.32.82</name>
+			<port>2013</port>
+		</server>
 
-    <publication>
-      <cdn>hi7dev.huygens.knaw.nl/cdn/elaborate</cdn>
-      <version>
-        <work>development</work>
-        <collection>development</collection>
-      </version>
-    </publication>
-
-  </settings>
+		<publication>
+			<cdn>cdn.huygens.knaw.nl/elaborate</cdn>
+			<version>
+				<work>development</work>
+				<collection>development</collection>
+			</version>
+			<tomcat>
+				<url>http://localhost:8080/</url>
+				<webappdir>C:/devel/tomcat6/webapps/</webappdir>
+			</tomcat>
+		</publication>
+  
+	</settings>
 </config>

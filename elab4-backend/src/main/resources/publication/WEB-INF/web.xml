@@ -1,55 +1,43 @@
-<web-app id="elaborate_publication" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-  version="3.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="elaborate_publication" version="3.0">
   <display-name>eLaborate publication</display-name>
   <description>eLaborate publication</description>
-
   <servlet>
     <servlet-name>JerseyRESTService</servlet-name>
     <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-
     <init-param>
       <param-name>com.sun.jersey.config.property.packages</param-name>
       <param-value>elaborate.publication.resources;elaborate.publication.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers</param-value>
     </init-param>
-
     <init-param>
       <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
       <param-value>true</param-value>
     </init-param>
-
     <init-param>
       <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
       <param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
     </init-param>
-
     <init-param>
       <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
       <param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter;nl.knaw.huygens.jaxrstools.filters.CORSFilter</param-value>
     </init-param>
-
     <load-on-startup>1</load-on-startup>
   </servlet>
-
   <listener>
     <listener-class>se.jiderhamn.classloader.leak.prevention.ClassLoaderLeakPreventor</listener-class>
   </listener>
-
   <filter>
     <filter-name>UrlRewriteFilter</filter-name>
     <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-
-    <!-- set the amount of seconds the conf file will be checked for reload can be a valid integer (0 denotes check every time, -1 denotes no reload check, default -1) -->
     <init-param>
       <param-name>confReloadCheckInterval</param-name>
-      <param-value>0</param-value>
+      <param-value>-1</param-value>
     </init-param>
   </filter>
-
   <servlet-mapping>
     <servlet-name>JerseyRESTService</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
-
   <filter-mapping>
     <filter-name>UrlRewriteFilter</filter-name>
     <url-pattern>/entry/*</url-pattern>
@@ -60,5 +48,4 @@
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
-
 </web-app>

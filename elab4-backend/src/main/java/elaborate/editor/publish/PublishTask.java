@@ -55,10 +55,10 @@ import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
+  private static final String PUBLICATION_TOMCAT_WEBAPPDIR = "publication.tomcat.webappdir";
+  private static final String PUBLICATION_TOMCAT_URL = "publication.tomcat.url";
+
   private static final String ANNOTATION_INDEX_JSON = "annotation_index.json";
-  private static final String TOMCAT_WEBAPPS_DIR = "C:/devel/tomcat6/webapps/";
-  //  private static final String TOMCAT_WEBAPPS_DIR = "/usr/share/tomcat6/webapps/";
-  private static final String PUBLICATION_TOMCAT_URL = "http://demo7.huygens.knaw.nl/";
 
   private final Publication.Status status;
   private final Publication.Settings settings;
@@ -68,6 +68,8 @@ public class PublishTask extends LoggableObject implements Runnable {
   private final Long projectId;
   private SolrServerWrapper solrServer;
   private final AnnotationService annotationService = new AnnotationService();
+
+  Configuration config = Configuration.instance();
 
   public PublishTask(Publication.Settings settings) {
     this.settings = settings;
@@ -106,7 +108,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     exportPojectData(entryFilenames, thumbnails, annotationIndex);
 
     Project project = entityManager.find(Project.class, projectId);
-    exportSearchConfig(project, projectEntryMetadataFields);
+    exportSearchConfig(project, projectEntryMetadataFields, entryNum - 1);
     String basename = getBasename(project);
     entityManager.close();
 
@@ -123,14 +125,14 @@ public class PublishTask extends LoggableObject implements Runnable {
   }
 
   private String getBaseURL(String basename) {
-    return PUBLICATION_TOMCAT_URL + basename;
+    return config.getSetting(PUBLICATION_TOMCAT_URL) + basename;
   }
 
   private String getBasename(Project project) {
     return "elab4-" + project.getName();
   }
 
-  private void exportSearchConfig(Project project, List<String> projectEntryMetadataFields) {
+  private void exportSearchConfig(Project project, List<String> projectEntryMetadataFields, int numberOfEntries) {
     File json = new File(distDir, "WEB-INF/classes/config.json");
     exportJson(json, new SearchConfig(project, projectEntryMetadataFields));
   }
@@ -411,7 +413,7 @@ public class PublishTask extends LoggableObject implements Runnable {
   }
 
   private void deploy(File war) {
-    File destDir = new File(TOMCAT_WEBAPPS_DIR);
+    File destDir = new File(config.getSetting(PUBLICATION_TOMCAT_WEBAPPDIR));
     try {
       FileUtils.copyFileToDirectory(war, destDir);
     } catch (IOException e) {

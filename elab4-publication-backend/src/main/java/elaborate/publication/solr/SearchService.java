@@ -162,4 +162,18 @@ public class SearchService extends LoggableObject {
     return configMap;
   }
 
+  public List<String> getAllSearchResultIds(long searchId) {
+    try {
+      SearchData searchData = searchDataIndex.get(searchId);
+      if (searchData != null) {
+        Map<String, Object> resultsMap = searchData.getResults();
+        List<String> list = (List<String>) resultsMap.remove("ids");
+        return list;
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return ImmutableList.of();
+  }
+
 }
