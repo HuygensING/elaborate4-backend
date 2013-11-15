@@ -371,6 +371,36 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 
 * Delete/wissen:  
   `DELETE`  `/projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}`
+  
+### search
+
+* Create:  
+  `POST` naar `/projects/{project_id}/search`
+
+			{
+			  "term" : "*",
+			  "caseSensitive" : false,
+			  "fuzzy" : false,
+			  "searchInTranscriptions" : true,
+			  "textLayers" : [ ],
+			  "searchInAnnotations" : false,
+			  "sort" : null,
+			  "sortDir" : "asc",
+			  "ascending" : true,
+			  "facetFields" : [ ],
+			  "facetInfoMap" : null,
+			  "orderLevels" : [ ],
+			  "level1Field" : "name",
+			  "level2Field" : "name",
+			  "level3Field" : "name",
+			  "textFieldsToSearch" : { },
+			  "facetValues" : [ ]
+			}
+
+  
+* Read/opvragen:  
+  `GET` `/projects/{project_id}/search/{search_id}`
+
 
 ****************************************
 
