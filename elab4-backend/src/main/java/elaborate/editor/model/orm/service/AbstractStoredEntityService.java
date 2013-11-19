@@ -21,14 +21,14 @@ import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
+import elaborate.editor.solr.ElaborateSolrIndexer;
 import elaborate.editor.solr.RemoteSolrServer;
-import elaborate.editor.solr.SolrIndexer;
 import elaborate.editor.solr.SolrServerWrapper;
 
 @Singleton
 public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> extends LoggableObject {
   private SolrServerWrapper solrserver = null;
-  private SolrIndexer solrindexer = null;
+  private ElaborateSolrIndexer solrindexer = null;
   private ProjectService projectService = null;
 
   //  private ProjectEntryService projectEntryService = null;
@@ -107,9 +107,9 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
     setModifiedBy(trackedEntity, creator);
   }
 
-  private SolrIndexer getSolrIndexer() {
+  private ElaborateSolrIndexer getSolrIndexer() {
     if (solrindexer == null) {
-      solrindexer = new SolrIndexer();
+      solrindexer = new ElaborateSolrIndexer();
     }
     return solrindexer;
   }

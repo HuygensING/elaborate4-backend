@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.service.ProjectEntryService;
-import elaborate.editor.solr.SolrIndexer;
+import elaborate.editor.solr.ElaborateSolrIndexer;
 
 public class Indexer {
   private static final int COMMIT_EVERY_N_RECORDS = 100;
@@ -27,7 +27,7 @@ public class Indexer {
   public static void main(String[] args) {
     StopWatch sw = new StopWatch();
     sw.start();
-    SolrIndexer solr = new SolrIndexer();
+    ElaborateSolrIndexer solr = new ElaborateSolrIndexer();
     solr.clear();
     EntityManager entityManager = beginTransaction();
 
