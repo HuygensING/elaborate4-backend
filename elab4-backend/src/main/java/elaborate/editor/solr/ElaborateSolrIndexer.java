@@ -11,6 +11,7 @@ import static elaborate.editor.solr.SolrFields.TEXTLAYER_PREFIX;
 
 import java.util.Set;
 
+import nl.knaw.huygens.solr.SolrUtils;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
 

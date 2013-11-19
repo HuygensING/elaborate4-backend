@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import nl.knaw.huygens.solr.FacetInfo;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import elaborate.editor.model.FacetInfo;
 import elaborate.editor.model.orm.Project;
 
 public class SearchConfig {

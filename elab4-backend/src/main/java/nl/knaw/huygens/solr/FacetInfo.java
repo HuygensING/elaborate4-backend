@@ -1,4 +1,4 @@
-package elaborate.editor.model;
+package nl.knaw.huygens.solr;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;

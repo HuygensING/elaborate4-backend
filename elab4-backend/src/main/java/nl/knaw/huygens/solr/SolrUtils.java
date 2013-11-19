@@ -1,4 +1,4 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.solr;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -9,6 +9,7 @@ import org.apache.solr.parser.SolrQueryParserBase;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
+import elaborate.editor.solr.SolrFields;
 import elaborate.util.StringUtil;
 
 public class SolrUtils {

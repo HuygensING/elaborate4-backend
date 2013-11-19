@@ -7,8 +7,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.google.common.collect.Lists;
 
-import elaborate.editor.model.FacetType;
-
 public class FacetCount {
   private String name = "";
   private String title = "";

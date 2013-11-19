@@ -6,13 +6,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+import nl.knaw.huygens.solr.RemoteSolrServer;
+import nl.knaw.huygens.solr.SolrServerWrapper;
 
 import com.google.common.collect.ImmutableMap;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.orm.service.SearchService;
-import elaborate.editor.solr.RemoteSolrServer;
-import elaborate.editor.solr.SolrServerWrapper;
 import elaborate.util.HibernateUtil;
 
 @Path("status")

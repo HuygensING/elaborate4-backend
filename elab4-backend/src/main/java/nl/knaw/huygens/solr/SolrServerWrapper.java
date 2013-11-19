@@ -1,9 +1,7 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.solr;
 
 import java.util.Collection;
 import java.util.Map;
-
-import nl.knaw.huygens.solr.FacetedSearchParameters;
 
 import org.apache.solr.common.SolrInputDocument;
 

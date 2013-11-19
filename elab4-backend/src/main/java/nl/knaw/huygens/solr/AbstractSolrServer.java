@@ -11,10 +11,6 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.common.SolrInputDocument;
 
-import elaborate.editor.model.FacetType;
-import elaborate.editor.solr.IndexException;
-import elaborate.editor.solr.SolrServerWrapper;
-
 public abstract class AbstractSolrServer extends LoggableObject implements SolrServerWrapper {
   public static final String KEY_NUMFOUND = "numFound";
 

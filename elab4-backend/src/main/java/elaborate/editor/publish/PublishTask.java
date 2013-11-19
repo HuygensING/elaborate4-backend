@@ -14,6 +14,9 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.solr.IndexException;
+import nl.knaw.huygens.solr.LocalSolrServer;
+import nl.knaw.huygens.solr.SolrServerWrapper;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -47,9 +50,6 @@ import elaborate.editor.model.orm.service.AnnotationService;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 import elaborate.editor.solr.ElaborateSolrIndexer;
-import elaborate.editor.solr.IndexException;
-import elaborate.editor.solr.LocalSolrServer;
-import elaborate.editor.solr.SolrServerWrapper;
 import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;

@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Map;
 
+import nl.knaw.huygens.solr.FacetInfo;
+
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +19,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import elaborate.AbstractTest;
-import elaborate.editor.model.FacetInfo;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;

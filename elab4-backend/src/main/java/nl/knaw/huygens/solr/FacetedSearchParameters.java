@@ -7,9 +7,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
 
-import elaborate.editor.model.FacetInfo;
-import elaborate.editor.solr.FacetParameter;
-
 @SuppressWarnings("unchecked")
 public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> extends AbstractSearchParameters<FacetedSearchParameters<T>> {
   private String term = "*";

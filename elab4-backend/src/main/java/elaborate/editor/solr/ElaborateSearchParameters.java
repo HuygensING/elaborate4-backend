@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import nl.knaw.huygens.solr.FacetedSearchParameters;
+import nl.knaw.huygens.solr.SolrUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;

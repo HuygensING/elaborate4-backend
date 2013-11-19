@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+import nl.knaw.huygens.solr.FacetInfo;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
@@ -32,7 +33,6 @@ import elaborate.editor.export.tei.TagInfo;
 import elaborate.editor.export.tei.TeiConversionConfig;
 import elaborate.editor.export.tei.TeiMaker;
 import elaborate.editor.model.Action;
-import elaborate.editor.model.FacetInfo;
 import elaborate.editor.model.ProjectTypes;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationMetadataItem;

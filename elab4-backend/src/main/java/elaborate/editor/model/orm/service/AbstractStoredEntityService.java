@@ -9,6 +9,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
 import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.solr.RemoteSolrServer;
+import nl.knaw.huygens.solr.SolrServerWrapper;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
@@ -22,8 +24,6 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.solr.ElaborateSolrIndexer;
-import elaborate.editor.solr.RemoteSolrServer;
-import elaborate.editor.solr.SolrServerWrapper;
 
 @Singleton
 public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> extends LoggableObject {
