@@ -6,14 +6,13 @@ import java.text.MessageFormat;
 import java.util.Map;
 
 import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.solr.AbstractSolrServer;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Maps;
-
-import elaborate.editor.solr.AbstractSolrServer;
 
 public class SearchResourceTest extends LoggableObject {
 

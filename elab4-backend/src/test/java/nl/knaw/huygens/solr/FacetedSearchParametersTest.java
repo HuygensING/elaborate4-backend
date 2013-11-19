@@ -1,4 +1,4 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.solr;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +16,9 @@ public class FacetedSearchParametersTest<T> {
 
   @Test
   public void testSetTerm() throws Exception {
-    FacetedSearchParameters<?> facetedSearchParameters = new FacetedSearchParameters().setCaseSensitive(true).setFacetFields(new String[] {});
+    FacetedSearchParameters<?> facetedSearchParameters = new FacetedSearchParameters()//
+        .setCaseSensitive(true)//
+        .setFacetFields(new String[] {});
     assertThat(facetedSearchParameters.isCaseSensitive()).isTrue();
   }
 }
