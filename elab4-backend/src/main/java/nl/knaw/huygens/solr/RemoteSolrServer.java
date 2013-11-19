@@ -1,6 +1,8 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.solr;
 
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+
+import elaborate.editor.solr.AbstractElaborateSolrServer;
 
 public class RemoteSolrServer extends AbstractElaborateSolrServer {
   private final String solrUrl;

@@ -1,4 +1,4 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.solr;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

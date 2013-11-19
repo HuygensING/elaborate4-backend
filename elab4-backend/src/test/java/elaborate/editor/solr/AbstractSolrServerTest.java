@@ -1,6 +1,8 @@
 package elaborate.editor.solr;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import nl.knaw.huygens.solr.FacetParameter;
+import nl.knaw.huygens.solr.LocalSolrServer;
 
 import org.junit.After;
 import org.junit.Before;
@@ -9,8 +11,6 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 import elaborate.editor.solr.ElaborateSearchParameters;
-import elaborate.editor.solr.FacetParameter;
-import elaborate.editor.solr.LocalSolrServer;
 
 public class AbstractSolrServerTest {
 

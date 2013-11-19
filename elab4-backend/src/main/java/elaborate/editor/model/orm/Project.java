@@ -17,6 +17,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
+import nl.knaw.huygens.solr.SolrUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
@@ -25,11 +29,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import elaborate.editor.model.AbstractDocument;
-import elaborate.editor.model.FacetInfo;
-import elaborate.editor.model.FacetType;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.solr.SolrFields;
-import elaborate.editor.solr.SolrUtils;
 
 @Entity
 @Table(name = "projects")

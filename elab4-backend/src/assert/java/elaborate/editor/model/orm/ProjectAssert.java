@@ -1,9 +1,11 @@
 package elaborate.editor.model.orm;
 
+import nl.knaw.huygens.solr.FacetInfo;
+
 import org.assertj.core.api.AbstractAssert;
 // Assertions is needed if an assertion for Iterable is generated
 import org.assertj.core.api.Assertions;
-import elaborate.editor.model.FacetInfo;
+
 import java.util.Date;
 import java.util.Map;
 

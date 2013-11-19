@@ -6,6 +6,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 
@@ -17,7 +18,7 @@ import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.User;
 
-//@Ignore
+@Ignore
 public class AnnotationTypeServiceTest extends AbstractTest {
   static AnnotationTypeService service;
   private static User projectleader;

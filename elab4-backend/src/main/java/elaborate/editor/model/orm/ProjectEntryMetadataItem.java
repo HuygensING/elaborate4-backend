@@ -7,8 +7,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import nl.knaw.huygens.solr.SolrUtils;
 import elaborate.editor.model.AbstractMetadataItem;
-import elaborate.editor.solr.SolrUtils;
 
 @Entity
 @Table(name = "project_entry_metadata_items")

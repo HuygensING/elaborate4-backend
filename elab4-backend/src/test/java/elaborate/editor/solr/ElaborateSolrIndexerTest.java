@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -17,6 +18,7 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.ProjectEntryMetadataItem;
 import elaborate.editor.model.orm.User;
 
+@Ignore
 public class ElaborateSolrIndexerTest extends AbstractTest {
 
   private ProjectEntry entry;

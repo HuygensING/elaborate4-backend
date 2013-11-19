@@ -1,8 +1,10 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.solr;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
+
+import elaborate.editor.solr.AbstractElaborateSolrServer;
 
 public class LocalSolrServer extends AbstractElaborateSolrServer {
 

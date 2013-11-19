@@ -8,7 +8,11 @@ import java.util.Set;
 
 import nl.knaw.huygens.solr.AbstractSolrServer;
 import nl.knaw.huygens.solr.FacetCount;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetParameter;
 import nl.knaw.huygens.solr.FacetedSearchParameters;
+import nl.knaw.huygens.solr.IndexException;
+import nl.knaw.huygens.solr.SolrUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -22,8 +26,6 @@ import org.apache.solr.common.params.HighlightParams;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import elaborate.editor.model.FacetInfo;
 
 public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
   public static final String KEY_NUMFOUND = "numFound";

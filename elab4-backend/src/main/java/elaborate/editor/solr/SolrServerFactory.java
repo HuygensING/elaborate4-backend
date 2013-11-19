@@ -1,5 +1,9 @@
 package elaborate.editor.solr;
 
+import nl.knaw.huygens.solr.LocalSolrServer;
+import nl.knaw.huygens.solr.RemoteSolrServer;
+import nl.knaw.huygens.solr.SolrServerWrapper;
+
 import org.apache.commons.lang.StringUtils;
 
 import elaborate.editor.config.Configuration;
