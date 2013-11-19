@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
 
-public class LocalSolrServer extends AbstractSolrServer {
+public class LocalSolrServer extends AbstractElaborateSolrServer {
 
   public static final String SOLR_DIRECTORY = "solr";
   public static final String SOLR_CONFIG_FILE = "solrconfig.xml";
@@ -34,7 +34,7 @@ public class LocalSolrServer extends AbstractSolrServer {
   }
 
   @Override
-  void setServer() {
+  protected void setServer() {
     try {
       container = new CoreContainer(solrDir);
       container.load();

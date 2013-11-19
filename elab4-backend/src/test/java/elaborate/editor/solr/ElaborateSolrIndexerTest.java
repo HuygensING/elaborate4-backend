@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
@@ -16,7 +17,7 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.ProjectEntryMetadataItem;
 import elaborate.editor.model.orm.User;
 
-public class SolrIndexerTest extends AbstractTest {
+public class ElaborateSolrIndexerTest extends AbstractTest {
 
   private ProjectEntry entry;
 
@@ -37,9 +38,9 @@ public class SolrIndexerTest extends AbstractTest {
   @After
   public void tearDown() throws Exception {}
 
-  //  @Test
+  @Test
   public void testGetSolrInputDocument() throws Exception {
-    SolrInputDocument docForEditor = SolrIndexer.getSolrInputDocument(entry, false);
+    SolrInputDocument docForEditor = ElaborateSolrIndexer.getSolrInputDocument(entry, false);
     assertThat(docForEditor != null).isTrue();
     LOG.info("docForEditor={}", docForEditor);
     assertThat(docForEditor.getField(SolrFields.ID).getValue()).isEqualTo(entry.getId());
@@ -47,7 +48,7 @@ public class SolrIndexerTest extends AbstractTest {
     assertThat(docForEditor.getField(SolrFields.PROJECT_ID).getValue()).isEqualTo(entry.getProject().getId());
     assertThat(docForEditor.getField(SolrFields.PUBLISHABLE).getValue()).isEqualTo(entry.isPublishable());
 
-    SolrInputDocument docForPublication = SolrIndexer.getSolrInputDocument(entry, true);
+    SolrInputDocument docForPublication = ElaborateSolrIndexer.getSolrInputDocument(entry, true);
     assertThat(docForPublication != null).isTrue();
     LOG.info("docForPublication={}", docForPublication);
     assertThat(docForPublication.getField(SolrFields.ID).getValue()).isEqualTo(entry.getId());
@@ -56,11 +57,11 @@ public class SolrIndexerTest extends AbstractTest {
     assertThat(docForPublication.getField(SolrFields.PUBLISHABLE)).isEqualTo(null);
   }
 
-  //  @Test
+  @Test
   public void testConvert() throws Exception {
     String xml = "";
     String expected = "";
-    String out = SolrIndexer.convert(xml);
+    String out = ElaborateSolrIndexer.convert(xml);
     assertThat(out).isEqualTo(expected);
   }
 }

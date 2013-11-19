@@ -8,13 +8,17 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import elaborate.editor.solr.ElaborateSearchParameters;
+import elaborate.editor.solr.FacetParameter;
+import elaborate.editor.solr.LocalSolrServer;
+
 public class AbstractSolrServerTest {
 
-  private TestSolrServer testSolrServer;
+  private LocalSolrServer testSolrServer;
 
   @Before
   public void setUp() throws Exception {
-    testSolrServer = new TestSolrServer();
+    testSolrServer = new LocalSolrServer("", "");
   }
 
   @After
@@ -100,11 +104,6 @@ public class AbstractSolrServerTest {
 
     String query = testSolrServer.composeQuery(sp);
     assertThat(query).isEqualTo(expected);
-  }
-
-  static class TestSolrServer extends AbstractSolrServer {
-    @Override
-    void setServer() {}
   }
 
 }

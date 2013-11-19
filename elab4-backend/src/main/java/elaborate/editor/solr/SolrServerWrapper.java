@@ -3,6 +3,8 @@ package elaborate.editor.solr;
 import java.util.Collection;
 import java.util.Map;
 
+import nl.knaw.huygens.solr.FacetedSearchParameters;
+
 import org.apache.solr.common.SolrInputDocument;
 
 public interface SolrServerWrapper {
@@ -47,7 +49,7 @@ public interface SolrServerWrapper {
    * @return
    * @throws IndexException
    */
-  Map<String, Object> search(ElaborateSearchParameters elaborateSearchParameters) throws IndexException;
+  Map<String, Object> search(FacetedSearchParameters<?> facetedSearchParameters) throws IndexException;
 
   //  /**
   //   * @param pid

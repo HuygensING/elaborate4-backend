@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+import nl.knaw.huygens.solr.AbstractSolrServer;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -24,7 +25,6 @@ import elaborate.editor.model.orm.SearchData;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.SearchService;
 import elaborate.editor.resources.AbstractElaborateResource;
-import elaborate.editor.solr.AbstractSolrServer;
 import elaborate.editor.solr.ElaborateSearchParameters;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
