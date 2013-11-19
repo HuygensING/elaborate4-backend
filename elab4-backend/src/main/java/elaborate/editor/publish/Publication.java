@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 
 import elaborate.editor.model.ProjectTypes;
 import elaborate.editor.model.orm.AnnotationType;
+import elaborate.editor.model.orm.User;
 
 public class Publication {
 
@@ -20,6 +21,7 @@ public class Publication {
     private List<String> projectEntryMetadataFields = Lists.newArrayList();
     private List<Long> annotationTypeIds = Lists.newArrayList();
     private String projectType = ProjectTypes.COLLECTION; // || "work"
+    private User user;
 
     public Long getProjectId() {
       return projectId;
@@ -58,6 +60,15 @@ public class Publication {
 
     public Settings setProjectType(String projectType) {
       this.projectType = projectType;
+      return this;
+    }
+
+    public User getUser() {
+      return user;
+    }
+
+    public Settings setUser(User user) {
+      this.user = user;
       return this;
     }
   }
