@@ -35,7 +35,7 @@ public class SearchResource extends AbstractElaborateResource {
   static final String KEY_NEXT = "_next";
   static final String KEY_PREV = "_prev";
 
-  private final SearchService searchService = new SearchService();
+  private final SearchService searchService = SearchService.instance();
   private final Configuration config = Configuration.instance();
 
   private final User user;

@@ -17,7 +17,7 @@ public class ProjectEntryServiceTest extends AbstractTest {
 
   @Before
   public void setUp() throws Exception {
-    projectEntryService = new ProjectEntryService();
+    projectEntryService = ProjectEntryService.instance();
   }
 
   @After

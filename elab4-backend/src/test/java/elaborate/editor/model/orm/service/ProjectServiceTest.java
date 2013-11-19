@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import org.junit.After;
@@ -13,13 +11,13 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import elaborate.AbstractTest;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.StoredEntityTest;
 import elaborate.editor.model.orm.User;
 
 @Ignore
-public class ProjectServiceTest extends StoredEntityTest {
+public class ProjectServiceTest extends AbstractTest {
   private static UserService userService;
   private static ProjectService projectService;
   private static User root;
@@ -27,21 +25,18 @@ public class ProjectServiceTest extends StoredEntityTest {
 
   @Before
   public void setUp() throws Exception {
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    userService = new UserService();
-    userService.setEntityManager(entityManager);
-
-    projectService = new ProjectService();
-    projectService.setEntityManager(entityManager);
-
+    userService = UserService.instance();
+    projectService = ProjectService.instance();
     root = new User().setRoot(true).setUsername("root");
     userService.beginTransaction();
     userService.create(root);
     notRoot = new User().setUsername("notroot");
+    projectService.beginTransaction();
   }
 
   @After
   public void tearDown() throws Exception {
+    projectService.rollbackTransaction();
     userService.delete(root.getId());
     userService.rollbackTransaction();
   }

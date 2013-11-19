@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.WebAppDescriptor;
 
+import elaborate.editor.model.ModelFactory;
+
 public class ResourceTest extends JerseyTest {
   public Logger LOG = LoggerFactory.getLogger(getClass());
-  protected static EntityManagerFactory entityManagerFactory;
+  protected static EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
 
   public ResourceTest() {
     super(new WebAppDescriptor.Builder()//

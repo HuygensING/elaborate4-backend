@@ -40,8 +40,8 @@ import elaborate.jaxrs.Annotations.AuthorizationRequired;
 @Singleton
 public class ProjectEntriesResource extends AbstractElaborateResource {
   private final ProjectService projectService;
-  private final ProjectEntryService projectEntryService = new ProjectEntryService();
-  private final TranscriptionService transcriptionService = new TranscriptionService();
+  private final ProjectEntryService projectEntryService = ProjectEntryService.instance();
+  private final TranscriptionService transcriptionService = TranscriptionService.instance();
   private final User user;
 
   public ProjectEntriesResource(User user, ProjectService projectService) {

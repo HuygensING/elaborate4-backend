@@ -67,7 +67,7 @@ public class PublishTask extends LoggableObject implements Runnable {
   private File jsonDir;
   private final Long projectId;
   private SolrServerWrapper solrServer;
-  private final AnnotationService annotationService = new AnnotationService();
+  private final AnnotationService annotationService = AnnotationService.instance();
 
   Configuration config = Configuration.instance();
 
@@ -84,7 +84,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     status.addLogline("setting up new solr index");
     prepareSolr();
     entityManager = HibernateUtil.getEntityManager();
-    ProjectService ps = new ProjectService();
+    ProjectService ps = ProjectService.instance();
     List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
     ps.setEntityManager(entityManager);
     //    annotationService.setEntityManager(entityManager);

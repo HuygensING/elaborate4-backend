@@ -22,7 +22,7 @@ public class TranscriptionServiceTest extends AbstractTest {
 
   //  @Test
   public void testAddAnnotation() throws Exception {
-    TranscriptionService ts = new TranscriptionService();
+    TranscriptionService ts = TranscriptionService.instance();
     AnnotationInputWrapper annotationInput = new AnnotationInputWrapper();
     annotationInput.body = "body";
     User root = mock(User.class);

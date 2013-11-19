@@ -20,13 +20,20 @@ import elaborate.editor.model.orm.service.UserService;
 @Singleton
 public class SessionService extends LoggableObject {
   private static SessionService instance;
-
-  UserService userService = new UserService();
-
   private static final int MINUTES = 1000 * 60;
   private static final int SESSION_TIMEOUT = 60 * MINUTES;
   private static final int SESSIONID_SIZE = 20;
   Map<String, Session> sessionMap = Maps.newHashMap();
+  UserService userService = UserService.instance();
+
+  private SessionService() {}
+
+  public static SessionService instance() {
+    if (instance == null) {
+      instance = new SessionService();
+    }
+    return instance;
+  }
 
   public String startSession(User user) {
     String sessionId = RandomStringUtils.randomAlphanumeric(SESSIONID_SIZE);
@@ -96,13 +103,6 @@ public class SessionService extends LoggableObject {
       long diff = new Date().getTime() - lastAccessed.getTime();
       return (diff < SESSION_TIMEOUT);
     }
-  }
-
-  public static SessionService instance() {
-    if (instance == null) {
-      instance = new SessionService();
-    }
-    return instance;
   }
 
 }

@@ -22,7 +22,17 @@ import elaborate.editor.resources.orm.MultipleProjectEntrySettings;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 
 public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntry> {
-  ProjectService projectService = new ProjectService();
+  private static ProjectEntryService instance;
+  ProjectService projectService = ProjectService.instance();
+
+  private ProjectEntryService() {}
+
+  public static ProjectEntryService instance() {
+    if (instance == null) {
+      instance = new ProjectEntryService();
+    }
+    return instance;
+  }
 
   @Override
   Class<ProjectEntry> getEntityClass() {

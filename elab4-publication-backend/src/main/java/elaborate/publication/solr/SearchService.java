@@ -25,6 +25,7 @@ import elaborate.LoggableObject;
 
 @Singleton
 public class SearchService extends LoggableObject {
+  private static SearchService instance;
 
   private final Map<Long, SearchData> searchDataIndex = Maps.newHashMap();
   private SolrServerWrapper solrServer;
@@ -33,9 +34,16 @@ public class SearchService extends LoggableObject {
   private String[] facetFields;
   private String[] defaultSortOrder;
 
-  public SearchService() {
+  private SearchService() {
     super();
     setFacetData();
+  }
+
+  public static SearchService instance() {
+    if (instance == null) {
+      instance = new SearchService();
+    }
+    return instance;
   }
 
   public SearchData createSearch(ElaborateSearchParameters elaborateSearchParameters) {

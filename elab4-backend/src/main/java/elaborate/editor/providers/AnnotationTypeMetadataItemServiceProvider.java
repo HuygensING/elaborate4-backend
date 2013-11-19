@@ -11,6 +11,6 @@ import elaborate.editor.model.orm.service.AnnotationTypeService;
 public class AnnotationTypeMetadataItemServiceProvider extends SingletonTypeInjectableProvider<Context, AnnotationTypeService> {
 
   public AnnotationTypeMetadataItemServiceProvider() {
-    super(AnnotationTypeService.class, new AnnotationTypeService());
+    super(AnnotationTypeService.class, AnnotationTypeService.instance());
   }
 }
