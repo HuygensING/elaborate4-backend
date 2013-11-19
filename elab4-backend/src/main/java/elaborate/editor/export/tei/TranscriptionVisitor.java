@@ -264,7 +264,7 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
     }
 
     private Annotation getAnnotation(String annotationId) {
-      return new AnnotationService().getAnnotationByAnnotationNo(Integer.valueOf(annotationId), entityManager);
+      return AnnotationService.instance().getAnnotationByAnnotationNo(Integer.valueOf(annotationId), entityManager);
     }
 
   }

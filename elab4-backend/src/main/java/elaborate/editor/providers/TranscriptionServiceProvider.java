@@ -11,6 +11,6 @@ import elaborate.editor.model.orm.service.TranscriptionService;
 public class TranscriptionServiceProvider extends SingletonTypeInjectableProvider<Context, TranscriptionService> {
 
   public TranscriptionServiceProvider() {
-    super(TranscriptionService.class, new TranscriptionService());
+    super(TranscriptionService.class, TranscriptionService.instance());
   }
 }

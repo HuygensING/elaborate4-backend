@@ -31,6 +31,16 @@ import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 
 @Singleton
 public class TranscriptionService extends AbstractStoredEntityService<Transcription> {
+  private static TranscriptionService instance;
+
+  private TranscriptionService() {}
+
+  public static TranscriptionService instance() {
+    if (instance == null) {
+      instance = new TranscriptionService();
+    }
+    return instance;
+  }
 
   @Override
   Class<? extends AbstractStoredEntity<?>> getEntityClass() {
@@ -42,7 +52,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     return "Transcription";
   }
 
-  //  AnnotationService annotationService = new AnnotationService();
+  //  AnnotationService annotationService = AnnotationService.instance();
 
   public Transcription read(long project_id, long transcription_id, User user) {
     openEntityManager();

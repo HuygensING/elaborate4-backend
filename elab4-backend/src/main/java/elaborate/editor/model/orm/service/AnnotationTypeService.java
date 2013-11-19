@@ -11,6 +11,16 @@ import elaborate.editor.model.orm.User;
 
 @Singleton
 public class AnnotationTypeService extends AbstractStoredEntityService<AnnotationType> {
+  private static AnnotationTypeService instance;
+
+  private AnnotationTypeService() {}
+
+  public static AnnotationTypeService instance() {
+    if (instance == null) {
+      instance = new AnnotationTypeService();
+    }
+    return instance;
+  }
 
   @Override
   Class<AnnotationType> getEntityClass() {

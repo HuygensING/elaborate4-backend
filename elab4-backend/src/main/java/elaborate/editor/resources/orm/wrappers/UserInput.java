@@ -33,7 +33,7 @@ public class UserInput {
   public String password;
 
   public User getUser() {
-    User user = (id == NULL_ID) ? new User() : new UserService().getUser(id);
+    User user = (id == NULL_ID) ? new User() : UserService.instance().getUser(id);
     if (StringUtils.isNotBlank(username)) {
       user.setUsername(username);
     }

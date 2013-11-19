@@ -11,6 +11,6 @@ import elaborate.editor.model.orm.service.SearchService;
 public class SearchServiceProvider extends SingletonTypeInjectableProvider<Context, SearchService> {
 
   public SearchServiceProvider() {
-    super(SearchService.class, new SearchService());
+    super(SearchService.class, SearchService.instance());
   }
 }

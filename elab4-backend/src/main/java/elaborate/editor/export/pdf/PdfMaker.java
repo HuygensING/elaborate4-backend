@@ -33,7 +33,7 @@ public class PdfMaker {
       try {
         doc = new PDDocument();
 
-        ProjectService projectService = new ProjectService();
+        ProjectService projectService = ProjectService.instance();
         projectService.setEntityManager(entityManager);
         List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(project.getId());
 

@@ -181,8 +181,8 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 
   void initServices() {
     if (projectService == null) {
-      projectService = new ProjectService();
-      //      projectEntryService = new ProjectEntryService();
+      projectService = ProjectService.instance();
+      //      projectEntryService = ProjectEntryService.instance();
     }
   }
 

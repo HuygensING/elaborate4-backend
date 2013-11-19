@@ -11,6 +11,6 @@ import elaborate.editor.model.orm.service.UserService;
 public class UserServiceProvider extends SingletonTypeInjectableProvider<Context, UserService> {
 
   public UserServiceProvider() {
-    super(UserService.class, new UserService());
+    super(UserService.class, UserService.instance());
   }
 }

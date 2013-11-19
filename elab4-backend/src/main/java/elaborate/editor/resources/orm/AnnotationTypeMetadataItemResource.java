@@ -31,7 +31,7 @@ import elaborate.jaxrs.Annotations.AuthorizationRequired;
 public class AnnotationTypeMetadataItemResource extends AbstractElaborateResource {
   @Context
   private final User user;
-  private final AnnotationTypeMetadataItemService annotationTypeMetadataItemService = new AnnotationTypeMetadataItemService();
+  private final AnnotationTypeMetadataItemService annotationTypeMetadataItemService = AnnotationTypeMetadataItemService.instance();
 
   public AnnotationTypeMetadataItemResource(User user) {
     this.user = user;

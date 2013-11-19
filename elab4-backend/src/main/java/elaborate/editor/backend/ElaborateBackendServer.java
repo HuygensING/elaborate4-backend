@@ -45,7 +45,7 @@ public class ElaborateBackendServer {
     }));
 
     SessionService sessionService = SessionService.instance();
-    SearchService searchService = new SearchService();
+    SearchService searchService = SearchService.instance();
     while (true) {
       try {
         LOG.info("removing expired Sessions");

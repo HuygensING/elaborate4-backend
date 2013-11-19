@@ -11,6 +11,16 @@ import elaborate.editor.model.orm.ProjectMetadataField;
 import elaborate.editor.model.orm.User;
 
 public class ProjectMetadataFieldService extends AbstractStoredEntityService<ProjectMetadataField> {
+  private static ProjectMetadataFieldService instance;
+
+  private ProjectMetadataFieldService() {}
+
+  public static ProjectMetadataFieldService instance() {
+    if (instance == null) {
+      instance = new ProjectMetadataFieldService();
+    }
+    return instance;
+  }
 
   @Override
   Class<ProjectMetadataField> getEntityClass() {

@@ -38,7 +38,7 @@ public class StatusResource extends AbstractElaborateResource {
   }
 
   private ServerStatus getSolrStatus() {
-    SolrServerWrapper solrServer = new SearchService().getSolrServer();
+    SolrServerWrapper solrServer = SearchService.instance().getSolrServer();
     return new ServerStatus(((RemoteSolrServer) solrServer).getUrl(), solrServer.ping());
   }
 

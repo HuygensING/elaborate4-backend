@@ -31,7 +31,7 @@ public class Indexer {
     solr.clear();
     EntityManager entityManager = beginTransaction();
 
-    ProjectEntryService projectEntryService = new ProjectEntryService();
+    ProjectEntryService projectEntryService = ProjectEntryService.instance();
     projectEntryService.setEntityManager(entityManager);
     List<ProjectEntry> projectentries = projectEntryService.getAll();
     int size = projectentries.size();

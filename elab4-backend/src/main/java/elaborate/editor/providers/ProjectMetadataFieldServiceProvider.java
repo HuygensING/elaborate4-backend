@@ -11,6 +11,6 @@ import elaborate.editor.model.orm.service.ProjectMetadataFieldService;
 public class ProjectMetadataFieldServiceProvider extends SingletonTypeInjectableProvider<Context, ProjectMetadataFieldService> {
 
   public ProjectMetadataFieldServiceProvider() {
-    super(ProjectMetadataFieldService.class, new ProjectMetadataFieldService());
+    super(ProjectMetadataFieldService.class, ProjectMetadataFieldService.instance());
   }
 }

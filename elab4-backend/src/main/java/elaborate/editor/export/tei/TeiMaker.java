@@ -74,7 +74,7 @@ public class TeiMaker {
 
       Element header = createHeader();
       root.appendChild(header);
-      ProjectService projectService = new ProjectService();
+      ProjectService projectService = ProjectService.instance();
       projectService.setEntityManager(entityManager);
       List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(project.getId());
       Element facsimile = createFacsimile(projectEntriesInOrder);

@@ -22,6 +22,16 @@ import elaborate.util.PasswordUtil;
 
 @Singleton
 public class UserService extends AbstractStoredEntityService<User> {
+  private static UserService instance;
+
+  private UserService() {}
+
+  public static UserService instance() {
+    if (instance == null) {
+      instance = new UserService();
+    }
+    return instance;
+  }
 
   @Override
   Class<? extends AbstractStoredEntity<?>> getEntityClass() {

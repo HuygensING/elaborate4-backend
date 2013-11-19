@@ -11,6 +11,6 @@ import elaborate.editor.model.orm.service.ProjectService;
 public class ProjectServiceProvider extends SingletonTypeInjectableProvider<Context, ProjectService> {
 
   public ProjectServiceProvider() {
-    super(ProjectService.class, new ProjectService());
+    super(ProjectService.class, ProjectService.instance());
   }
 }

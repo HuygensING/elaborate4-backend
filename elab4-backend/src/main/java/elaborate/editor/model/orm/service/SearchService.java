@@ -23,10 +23,16 @@ import elaborate.util.ResourceUtil;
 
 @Singleton
 public class SearchService extends AbstractStoredEntityService<SearchData> {
-  ProjectService projectService = new ProjectService();
+  private static SearchService instance;
+  ProjectService projectService = ProjectService.instance();
 
-  public SearchService() {
-    super();
+  private SearchService() {}
+
+  public static SearchService instance() {
+    if (instance == null) {
+      instance = new SearchService();
+    }
+    return instance;
   }
 
   public SearchData createSearch(ElaborateSearchParameters elaborateSearchParameters, User user) {

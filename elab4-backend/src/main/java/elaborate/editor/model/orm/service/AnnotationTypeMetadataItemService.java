@@ -13,6 +13,16 @@ import elaborate.editor.resources.orm.wrappers.AnnotationTypeMetadataItemInput;
 
 @Singleton
 public class AnnotationTypeMetadataItemService extends AbstractStoredEntityService<AnnotationTypeMetadataItem> {
+  private static AnnotationTypeMetadataItemService instance;
+
+  private AnnotationTypeMetadataItemService() {}
+
+  public static AnnotationTypeMetadataItemService instance() {
+    if (instance == null) {
+      instance = new AnnotationTypeMetadataItemService();
+    }
+    return instance;
+  }
 
   @Override
   Class<AnnotationTypeMetadataItem> getEntityClass() {
@@ -75,7 +85,7 @@ public class AnnotationTypeMetadataItemService extends AbstractStoredEntityServi
   /**/
   public ImmutableList<AnnotationTypeMetadataItem> getAll(long annotationTypeId) {
     openEntityManager();
-    AnnotationTypeService annotationTypeService = new AnnotationTypeService();
+    AnnotationTypeService annotationTypeService = AnnotationTypeService.instance();
     annotationTypeService.setEntityManager(getEntityManager());
     AnnotationType annotationType = annotationTypeService.read(annotationTypeId);
     ImmutableList<AnnotationTypeMetadataItem> list = ImmutableList.copyOf(annotationType.getMetadataItems());
