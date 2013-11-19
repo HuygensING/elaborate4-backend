@@ -46,9 +46,9 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.AnnotationService;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
+import elaborate.editor.solr.ElaborateSolrIndexer;
 import elaborate.editor.solr.IndexException;
 import elaborate.editor.solr.LocalSolrServer;
-import elaborate.editor.solr.SolrIndexer;
 import elaborate.editor.solr.SolrServerWrapper;
 import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
@@ -437,7 +437,7 @@ public class PublishTask extends LoggableObject implements Runnable {
   }
 
   private void indexEntry(ProjectEntry projectEntry) {
-    SolrInputDocument doc = SolrIndexer.getSolrInputDocument(projectEntry, true);
+    SolrInputDocument doc = ElaborateSolrIndexer.getSolrInputDocument(projectEntry, true);
     try {
       solrServer.add(doc);
     } catch (IndexException e) {
