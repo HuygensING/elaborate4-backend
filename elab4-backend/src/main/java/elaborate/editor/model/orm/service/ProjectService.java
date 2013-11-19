@@ -575,6 +575,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     Lists.newArrayList();
     Publication.Settings settings = new Publication.Settings()//
         .setProjectId(project_id)//
+        .setUser(user)//
         //    .setAnnotationTypeIds(annotationTypeIds)//
         //    .setProjectEntryMetadataFields(projectEntryMetadataFields)//
         .setProjectType(StringUtils.defaultIfBlank(projectMetadata.get("projectType"), ProjectTypes.COLLECTION));
@@ -633,4 +634,27 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     commitTransaction();
   }
 
+  public void setMetadata(long project_id, String key, String value, User user) {
+    beginTransaction();
+    Project project = getProjectIfUserIsAllowed(project_id, user);
+
+    ProjectMetadataItem item = null;
+    List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
+    for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
+      if (projectMetadataItem.getField().equals(key)) {
+        item = projectMetadataItem;
+        break;
+      }
+    }
+    if (item == null) {
+      ProjectMetadataItem pmi = project.addMetadata(key, value, user);
+      persist(pmi);
+
+    } else {
+      item.setData(value);
+      persist(item);
+    }
+
+    commitTransaction();
+  }
 }

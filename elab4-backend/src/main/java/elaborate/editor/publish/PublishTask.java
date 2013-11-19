@@ -55,6 +55,7 @@ import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
+  private static final String PUBLICATION_URL = "publicationURL";
   private static final String PUBLICATION_TOMCAT_WEBAPPDIR = "publication.tomcat.webappdir";
   private static final String PUBLICATION_TOMCAT_URL = "publication.tomcat.url";
 
@@ -70,6 +71,7 @@ public class PublishTask extends LoggableObject implements Runnable {
   private final AnnotationService annotationService = AnnotationService.instance();
 
   Configuration config = Configuration.instance();
+  private EntityManager entityManager;
 
   public PublishTask(Publication.Settings settings) {
     this.settings = settings;
@@ -122,6 +124,10 @@ public class PublishTask extends LoggableObject implements Runnable {
     clearDirectories();
     status.addLogline("finished");
     status.setDone();
+
+    entityManager = HibernateUtil.getEntityManager();
+    ps.setEntityManager(entityManager);
+    ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
   }
 
   private String getBaseURL(String basename) {
@@ -199,7 +205,6 @@ public class PublishTask extends LoggableObject implements Runnable {
       return f1.getFilename().compareTo(f2.getFilename());
     }
   };
-  private EntityManager entityManager;
 
   Map<String, Object> getProjectEntryData(ProjectEntry projectEntry, List<String> projectMetadataFields) {
     Map<String, Object> map = Maps.newHashMap();
