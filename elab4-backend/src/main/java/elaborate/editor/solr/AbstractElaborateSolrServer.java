@@ -141,7 +141,7 @@ public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
   public String composeQuery(ElaborateSearchParameters sp) {
     List<String> textLayers = sp.getTextLayers();
     String joinedTermQuery = "";
-    if (textLayers.isEmpty()) {
+    if (textLayers.isEmpty() || sp.getTerm().equals("*")) {
       joinedTermQuery = "*:*";
 
     } else {

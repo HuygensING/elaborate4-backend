@@ -24,6 +24,7 @@ import com.google.common.collect.Sets;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.StringUtil;
@@ -52,7 +53,8 @@ public class ElaborateSolrIndexer extends SolrIndexer {
     SolrInputDocument doc = new SolrInputDocument();
     doc.addField(ID, projectEntry.getId());
     doc.addField(NAME, projectEntry.getName());
-    for (String field : projectEntry.getProject().getProjectEntryMetadataFieldnames()) {
+    Project project = projectEntry.getProject();
+    for (String field : project.getProjectEntryMetadataFieldnames()) {
       String facetName = SolrUtils.facetName(field);
       String value = projectEntry.getMetadataValue(field);
       doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL), 1.0f);
