@@ -71,6 +71,7 @@ public class Publication {
       this.user = user;
       return this;
     }
+
   }
 
   public static class Status {

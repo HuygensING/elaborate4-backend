@@ -95,10 +95,13 @@ public class PublishTask extends LoggableObject implements Runnable {
     List<String> entryFilenames = Lists.newArrayList();
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
     Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
+    Project project = entityManager.find(Project.class, projectId);
+    Map<String, String> typographicalAnnotationMap = getTypographicalAnnotationMap(project);
+
     for (ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
         status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
-        ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields);
+        ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields, typographicalAnnotationMap);
         long id = projectEntry.getId();
         entryFilenames.add(id + ".json");
         thumbnails.put(id, eed.thumbnailUrls);
@@ -109,7 +112,6 @@ public class PublishTask extends LoggableObject implements Runnable {
     commitAndCloseSolr();
     exportPojectData(entryFilenames, thumbnails, annotationIndex);
 
-    Project project = entityManager.find(Project.class, projectId);
     exportSearchConfig(project, projectEntryMetadataFields, entryNum - 1);
     String basename = getBasename(project);
     entityManager.close();
@@ -128,6 +130,30 @@ public class PublishTask extends LoggableObject implements Runnable {
     entityManager = HibernateUtil.getEntityManager();
     ps.setEntityManager(entityManager);
     ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
+  }
+
+  Map<String, String> getTypographicalAnnotationMap(Project project) {
+    Map<String, String> typographicalAnnotationMap = Maps.newHashMap();
+    Map<String, String> metadataMap = project.getMetadataMap();
+    addMapping(typographicalAnnotationMap, metadataMap, "b", ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION);
+    addMapping(typographicalAnnotationMap, metadataMap, "i", ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION);
+    addMapping(typographicalAnnotationMap, metadataMap, "u", ProjectMetadataFields.ANNOTATIONTYPE_UNDERLINE_NAME, ProjectMetadataFields.ANNOTATIONTYPE_UNDERLINE_DESCRIPTION);
+    addMapping(typographicalAnnotationMap, metadataMap, "strike", ProjectMetadataFields.ANNOTATIONTYPE_STRIKE_NAME, ProjectMetadataFields.ANNOTATIONTYPE_STRIKE_DESCRIPTION);
+    return typographicalAnnotationMap;
+  }
+
+  private void addMapping(Map<String, String> typographicalAnnotationMap, Map<String, String> metadataMap, String key, String nameKey, String descriptionKey) {
+    if (metadataMap.containsKey(nameKey)) {
+      String name = metadataMap.get(nameKey);
+      String description = metadataMap.get(descriptionKey);
+      String annotationTypeLabel;
+      if (StringUtils.isNotBlank(description)) {
+        annotationTypeLabel = description + " [" + name + "]";
+      } else {
+        annotationTypeLabel = name;
+      }
+      typographicalAnnotationMap.put(key, annotationTypeLabel);
+    }
   }
 
   private String getBaseURL(String basename) {
@@ -228,13 +254,20 @@ public class PublishTask extends LoggableObject implements Runnable {
               .setAnnotationText(ad.getText())//
               .setTextLayer(textLayer)//
               .setAnnotationOrder(order++);
-          String atype = ad.getType().getName();
+          String atype = annotationTypeKey(ad.getType());
           annotationDataMap.put(atype, annotationIndexData);
         }
       }
     }
     map.put("annotationDataMap", annotationDataMap);
     return map;
+  }
+
+  private String annotationTypeKey(AnnotationTypeData atd) {
+    if (StringUtils.isNotBlank(atd.description)) {
+      return atd.getDescription() + " [" + atd.getName() + "]";
+    }
+    return atd.getName();
   }
 
   private Map<String, TextlayerData> getTexts(ProjectEntry projectEntry) {
@@ -247,7 +280,9 @@ public class PublishTask extends LoggableObject implements Runnable {
 
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
-    TextlayerData textlayerData = new TextlayerData().setText(tw.body).setAnnotations(getAnnotationData(tw.annotationNumbers));
+    TextlayerData textlayerData = new TextlayerData()//
+        .setText(tw.body)//
+        .setAnnotations(getAnnotationData(tw.annotationNumbers));
     return textlayerData;
   }
 
@@ -396,7 +431,7 @@ public class PublishTask extends LoggableObject implements Runnable {
     FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
   }
 
-  private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields) {
+  private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields, Map<String, String> typograhicalAnnotationMap) {
     //    String entryFilename = entryFilename(entryNum);
     String entryFilename = projectEntry.getId() + ".json";
     File json = new File(jsonDir, entryFilename);
