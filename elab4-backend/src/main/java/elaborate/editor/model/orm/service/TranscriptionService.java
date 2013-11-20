@@ -68,7 +68,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
     checkProjectPermissions(project_id, user);
     Transcription transcription = read(transcription_id);
-    if (wrapper.body != null) {
+    if (wrapper.getBody() != null) {
       transcription.setBody(wrapper.getBodyForDb());
     }
     merge(transcription);
