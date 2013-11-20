@@ -1,6 +1,7 @@
 package elaborate.editor.publish;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -15,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -146,5 +148,21 @@ public class PublishTaskTest extends AbstractTest {
   public void testSetText() throws Exception {
     AnnotationData ad = new AnnotationData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
     assertThat(ad.getText()).isEqualTo("dit is de annotatietekst");
+  }
+
+  @Test
+  public void testGetTypographicalAnnotationMap() throws Exception {
+    Settings settings = mock(Publication.Settings.class);
+    PublishTask publishTask = new PublishTask(settings);
+    Project project = mock(Project.class);
+    Map<String, String> metadataMap = ImmutableMap.of(//
+        ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold",//
+        ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION, "Vetgedrukt",//
+        ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, "italic",//
+        ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION, ""//
+    );
+    when(project.getMetadataMap()).thenReturn(metadataMap);
+    Map<String, String> map = publishTask.getTypographicalAnnotationMap(project);
+    assertThat(map).containsOnly(entry("b", "Vetgedrukt [bold]"), entry("i", "italic"));
   }
 }

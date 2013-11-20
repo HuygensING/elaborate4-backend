@@ -573,12 +573,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
     Lists.newArrayList();
     Lists.newArrayList();
+    String projectType = StringUtils.defaultIfBlank(projectMetadata.get("projectType"), ProjectTypes.COLLECTION);
     Publication.Settings settings = new Publication.Settings()//
         .setProjectId(project_id)//
         .setUser(user)//
         //    .setAnnotationTypeIds(annotationTypeIds)//
         //    .setProjectEntryMetadataFields(projectEntryMetadataFields)//
-        .setProjectType(StringUtils.defaultIfBlank(projectMetadata.get("projectType"), ProjectTypes.COLLECTION));
+        .setProjectType(projectType);
     Publication.Status publicationStatus = publisher.publish(settings);
 
     return publicationStatus;
