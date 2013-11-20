@@ -10,8 +10,6 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import elaborate.editor.solr.ElaborateSearchParameters;
-
 public class AbstractSolrServerTest {
 
   private LocalSolrServer testSolrServer;
@@ -27,7 +25,7 @@ public class AbstractSolrServerTest {
   @Test
   public void testComposeQuery1() throws Exception {
     ElaborateSearchParameters sp = new ElaborateSearchParameters().setTextLayers(ImmutableList.of("diplomatic"));
-    String expected = "(textlayer_diplomatic:*) AND project_id:0";
+    String expected = "(*:*) AND project_id:0";
 
     String query = testSolrServer.composeQuery(sp);
     assertThat(query).isEqualTo(expected);
