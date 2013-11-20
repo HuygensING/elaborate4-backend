@@ -15,18 +15,47 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.util.XmlUtil;
 
 public class TranscriptionWrapper extends LoggableObject {
-  public long id;
-  public String textLayer;
-  public String body;
+  private long id = 0l;
+  private String textLayer = "";
+  private String body = "";
+
+  public TranscriptionWrapper() {}
+
+  public TranscriptionWrapper(Transcription transcription) {
+    setId(transcription.getId());
+    setTextLayer(transcription.getTextLayer());
+    convertBodyForOutput(transcription.getBody());
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public TranscriptionWrapper setId(long id) {
+    this.id = id;
+    return this;
+  }
+
+  public String getTextLayer() {
+    return textLayer;
+  }
+
+  public TranscriptionWrapper setTextLayer(String textLayer) {
+    this.textLayer = textLayer;
+    return this;
+  }
+
+  public String getBody() {
+    return body;
+  }
+
+  public TranscriptionWrapper setBody(String body) {
+    this.body = body;
+    return this;
+  }
 
   @JsonIgnore
   public List<Integer> annotationNumbers = Lists.newArrayList();
-
-  public TranscriptionWrapper(Transcription transcription) {
-    id = transcription.getId();
-    textLayer = transcription.getTextLayer();
-    convertBodyForOutput(transcription.getBody());
-  }
 
   void convertBodyForOutput(String bodyIn) {
     LOG.info("body from db={}", bodyIn);
@@ -34,17 +63,17 @@ public class TranscriptionWrapper extends LoggableObject {
     TranscriptionBodyVisitor visitor = new TranscriptionBodyVisitor();
     document.accept(visitor);
 
-    body = visitor.getContext().getResult()//
+    setBody(visitor.getContext().getResult()//
         .replaceAll("\n", "<br>")//
-        .trim();
+        .trim());
     annotationNumbers = visitor.getAnnotationIds();
   }
 
   @JsonIgnore
   public Transcription getTranscription() {
     Transcription transcription = new Transcription();
-    transcription.setTextLayer(textLayer);
-    transcription.setBody(convertFromInput(body));
+    transcription.setTextLayer(getTextLayer());
+    transcription.setBody(convertFromInput(getBody()));
     return transcription;
   }
 
@@ -61,11 +90,12 @@ public class TranscriptionWrapper extends LoggableObject {
 
   @JsonIgnore
   public String getBodyForDb() {
-    return convertFromInput(body);
+    return convertFromInput(getBody());
   }
 
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
   }
+
 }

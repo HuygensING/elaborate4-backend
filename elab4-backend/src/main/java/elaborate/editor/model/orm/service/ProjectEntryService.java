@@ -105,7 +105,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     ProjectEntry projectEntry = find(getEntityClass(), id);
     Transcription transcription = projectEntry.addTranscription(user)//
         .setBody(transcriptionInput.getBodyForDb())//
-        .setTextLayer(transcriptionInput.textLayer);
+        .setTextLayer(transcriptionInput.getTextLayer());
     persist(transcription);
     commitTransaction();
     return transcription;

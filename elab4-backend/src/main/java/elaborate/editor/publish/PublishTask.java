@@ -281,7 +281,7 @@ public class PublishTask extends LoggableObject implements Runnable {
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
     TextlayerData textlayerData = new TextlayerData()//
-        .setText(tw.body)//
+        .setText(tw.getBody())//
         .setAnnotations(getAnnotationData(tw.annotationNumbers));
     return textlayerData;
   }

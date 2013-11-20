@@ -30,9 +30,9 @@ public class TranscriptionWrapperTest {
 
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
     //    assertThat( tw.title).isEqualTo(title);
-    assertThat(tw.textLayer).isEqualTo(textLayer);
+    assertThat(tw.getTextLayer()).isEqualTo(textLayer);
     String expected = "<span data-id=\"9085822\" data-marker=\"begin\"></span>sdgdgdgsdgsdfg<sup data-id=\"9085822\" data-marker=\"end\">1</sup>";
-    assertThat(tw.body).isEqualTo(expected);
+    assertThat(tw.getBody()).isEqualTo(expected);
   }
 
   private Transcription mockTranscription(String textLayer, String title, String body) {
@@ -49,7 +49,7 @@ public class TranscriptionWrapperTest {
     String expected = "<span data-id=\"9085822\" data-marker=\"begin\"></span>bla <span data-id=\"9085821\" data-marker=\"begin\"></span>die<sup data-id=\"9085822\" data-marker=\"end\">1</sup> bla<sup data-id=\"9085821\" data-marker=\"end\">2</sup><br>hello world";
     Transcription transcription = mockTranscription("textLayer", "title", in);
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
-    assertThat(tw.body).isEqualTo(expected);
+    assertThat(tw.getBody()).isEqualTo(expected);
     List<Integer> annotationNumbers = tw.annotationNumbers;
     assertThat(annotationNumbers.size()).isEqualTo(2);
     assertThat(annotationNumbers.get(0)).isEqualTo(Integer.valueOf(9085822));
