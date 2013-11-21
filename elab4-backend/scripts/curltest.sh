@@ -59,6 +59,9 @@ curl -i -H "Authorization: SimpleAuth $rootcode"  -H "Content-Type: application/
 # loglines
 curl -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/logentries|jq "."
 
+# change project textlayers
+curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X PUT -d '["Diplomatic","Comments"]' $eb/projects/$project_id/textlayers
+
 # project entries
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/projects/$project_id/entries|jq "."
 

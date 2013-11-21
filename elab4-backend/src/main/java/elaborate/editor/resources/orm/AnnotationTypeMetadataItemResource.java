@@ -29,53 +29,53 @@ import elaborate.jaxrs.Annotations.AuthorizationRequired;
 @AuthorizationRequired
 @Singleton
 public class AnnotationTypeMetadataItemResource extends AbstractElaborateResource {
-  @Context
-  private final User user;
-  private final AnnotationTypeMetadataItemService annotationTypeMetadataItemService = AnnotationTypeMetadataItemService.instance();
+	@Context
+	private final User user;
+	private final AnnotationTypeMetadataItemService annotationTypeMetadataItemService = AnnotationTypeMetadataItemService.instance();
 
-  public AnnotationTypeMetadataItemResource(User user) {
-    this.user = user;
-  }
+	public AnnotationTypeMetadataItemResource(User user) {
+		this.user = user;
+	}
 
-  @GET
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @JsonView(Views.Minimal.class)
-  @APIDesc("Returns the metatada for the annotationtypeMetadataItem with the given id")
-  public ImmutableList<AnnotationTypeMetadataItem> getAnnotationTypeMetadataItems(@PathParam("id") long id) {
-    return annotationTypeMetadataItemService.getAll(id);
-  }
+	@GET
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@JsonView(Views.Minimal.class)
+	@APIDesc("Returns the metatada for the annotationtypeMetadataItem with the given id")
+	public ImmutableList<AnnotationTypeMetadataItem> getAnnotationTypeMetadataItems(@PathParam("id") long id) {
+		return annotationTypeMetadataItemService.getAll(id);
+	}
 
-  @GET
-  @Path("{id}")
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @JsonView(Views.Minimal.class)
-  @APIDesc("Returns the annotationtypeMetadataItem with the given id")
-  public AnnotationTypeMetadataItem getAnnotationType(@PathParam("id") long id) {
-    return annotationTypeMetadataItemService.read(id, getUser());
-  }
+	@GET
+	@Path("{id}")
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@JsonView(Views.Minimal.class)
+	@APIDesc("Returns the annotationtypeMetadataItem with the given id")
+	public AnnotationTypeMetadataItem getAnnotationType(@PathParam("id") long id) {
+		return annotationTypeMetadataItemService.read(id, getUser());
+	}
 
-  @POST
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Adds a new AnnotationTypeMetadataItem")
-  public Response create(AnnotationTypeMetadataItemInput input) {
-    AnnotationTypeMetadataItem created = annotationTypeMetadataItemService.create(input, getUser());
-    return Response.created(createURI(created)).build();
-  }
+	@POST
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Adds a new AnnotationTypeMetadataItem")
+	public Response create(AnnotationTypeMetadataItemInput input) {
+		AnnotationTypeMetadataItem created = annotationTypeMetadataItemService.create(input, getUser());
+		return Response.created(createURI(created)).build();
+	}
 
-  @PUT
-  @Path("{id}")
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Updates the annotationtypeMetadataItem with the given id")
-  public void update(@PathParam("id") long id, AnnotationTypeMetadataItemInput input) {
-    input.setId(id);
-    annotationTypeMetadataItemService.update(input, getUser());
-  }
+	@PUT
+	@Path("{id}")
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Updates the annotationtypeMetadataItem with the given id")
+	public void update(@PathParam("id") long id, AnnotationTypeMetadataItemInput input) {
+		input.setId(id);
+		annotationTypeMetadataItemService.update(input, getUser());
+	}
 
-  @DELETE
-  @Path("{id}")
-  @APIDesc("Deletes the annotationtypeMetadataItem with the given id")
-  public void delete(@PathParam("id") long id) {
-    annotationTypeMetadataItemService.delete(id, getUser());
-  }
+	@DELETE
+	@Path("{id}")
+	@APIDesc("Deletes the annotationtypeMetadataItem with the given id")
+	public void delete(@PathParam("id") long id) {
+		annotationTypeMetadataItemService.delete(id, getUser());
+	}
 
 }

@@ -10,6 +10,7 @@ import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.AnnotationTypeMetadataItem;
 
 public class AnnotationTypeMetadataItemInput {
+
   //  "id": 177,
   //  "annotationTypeMetadataItems": [
   //    {
