@@ -14,20 +14,19 @@ import elaborate.editor.model.orm.ProjectEntry;
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class AbstractProjectEntryElement<T extends AbstractProjectEntryElement<T>> extends AbstractTrackedEntity<T> {
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "project_entry_id", columnDefinition = "int4")
-  //  @Column(name = "project_entry_id")
-  private ProjectEntry projectEntry;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "project_entry_id", columnDefinition = "int4")
+	private ProjectEntry projectEntry;
 
-  @JsonIgnore
-  public ProjectEntry getProjectEntry() {
-    return projectEntry;
-  }
+	@JsonIgnore
+	public ProjectEntry getProjectEntry() {
+		return projectEntry;
+	}
 
-  public T setProjectEntry(ProjectEntry projectEntry) {
-    this.projectEntry = projectEntry;
-    return (T) this;
-  }
+	public T setProjectEntry(ProjectEntry projectEntry) {
+		this.projectEntry = projectEntry;
+		return (T) this;
+	}
 }
