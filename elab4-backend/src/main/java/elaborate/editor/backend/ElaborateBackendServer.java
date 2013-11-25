@@ -27,66 +27,66 @@ import elaborate.jaxrs.filters.ElaborateResourceFilterFactory;
 
 @DeclareRoles({ ElaborateRoles.READER, ElaborateRoles.USER, ElaborateRoles.PROJECTLEADER, ElaborateRoles.ADMIN })
 public class ElaborateBackendServer {
-  private static final int ONE_HOUR = Hours.ONE.toStandardSeconds().getSeconds() * 1000;
-  private static final Logger LOG = LoggerFactory.getLogger(ElaborateBackendServer.class);
+	private static final int ONE_HOUR = Hours.ONE.toStandardSeconds().getSeconds() * 1000;
+	private static final Logger LOG = LoggerFactory.getLogger(ElaborateBackendServer.class);
 
-  public static void main(String[] args) throws IOException {
-    //    fill();
-    //    System.out.println(ElaborateBackendServer.class.getClassLoader().getResource("logging.properties"));
-    final HttpServer httpServer = startServer();
-    LOG.info(String.format("Jersey app started with WADL available at %s/application.wadl\n", getBaseURI()));
+	public static void main(String[] args) throws IOException {
+		//    fill();
+		//    System.out.println(ElaborateBackendServer.class.getClassLoader().getResource("logging.properties"));
+		final HttpServer httpServer = startServer();
+		LOG.info(String.format("Jersey app started with WADL available at %s/application.wadl\n", getBaseURI()));
 
-    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-      @Override
-      public void run() {
-        LOG.info("Stopping HTTP server");
-        httpServer.stop();
-      }
-    }));
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				LOG.info("Stopping HTTP server");
+				httpServer.stop();
+			}
+		}));
 
-    SessionService sessionService = SessionService.instance();
-    SearchService searchService = SearchService.instance();
-    while (true) {
-      try {
-        LOG.info("removing expired Sessions");
-        sessionService.removeExpiredSessions();
-        LOG.info("removing expired Searches");
-        searchService.removeExpiredSearches();
-        Thread.sleep(ONE_HOUR);
-      } catch (InterruptedException e) {
-        LOG.info("Stopping HTTP server");
-        httpServer.stop();
-      }
-    }
-  }
+		SessionService sessionService = SessionService.instance();
+		SearchService searchService = SearchService.instance();
+		while (true) {
+			try {
+				LOG.info("removing expired Sessions");
+				sessionService.removeExpiredSessions();
+				LOG.info("removing expired Searches");
+				searchService.removeExpiredSearches();
+				Thread.sleep(ONE_HOUR);
+			} catch (InterruptedException e) {
+				LOG.info("Stopping HTTP server");
+				httpServer.stop();
+			}
+		}
+	}
 
-  private static URI getBaseURI() {
-    Configuration config = Configuration.instance();
-    return UriBuilder//
-        .fromUri("")//
-        .scheme(config.getStringSetting("server.scheme", "http"))//
-        .host(config.getStringSetting("server.name", "127.0.0.1"))//
-        .port(config.getIntegerSetting("server.port", 9998))//
-        .build();
-  }
+	private static URI getBaseURI() {
+		Configuration config = Configuration.instance();
+		return UriBuilder//
+				.fromUri("")//
+				.scheme(config.getStringSetting("server.scheme", "http"))//
+				.host(config.getStringSetting("server.name", "127.0.0.1"))//
+				.port(config.getIntegerSetting("server.port", 9998))//
+				.build();
+	}
 
-  @SuppressWarnings("unchecked")
-  protected static HttpServer startServer() throws IOException {
-    LOG.info("Starting grizzly...");
-    ResourceConfig rc = new PackagesResourceConfig("nl.knaw.huygens.jaxrstools.resources", "nl.knaw.huygens.jaxrstools.providers", "elaborate.editor.resources", "elaborate.editor.testresources", "elaborate.editor.providers");
+	@SuppressWarnings("unchecked")
+	protected static HttpServer startServer() throws IOException {
+		LOG.info("Starting grizzly...");
+		ResourceConfig rc = new PackagesResourceConfig("nl.knaw.huygens.jaxrstools.resources", "nl.knaw.huygens.jaxrstools.providers", "elaborate.editor.resources", "elaborate.editor.testresources", "elaborate.editor.providers");
 
-    rc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+		rc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 
-    //    rc.getProperties().put(ResourceConfig.PROPERTY_WADL_GENERATOR_CONFIG, "elaborate.jaxrs.CustomWadlGeneratorConfig");
+		//    rc.getProperties().put(ResourceConfig.PROPERTY_WADL_GENERATOR_CONFIG, "elaborate.jaxrs.CustomWadlGeneratorConfig");
 
-    rc.getContainerRequestFilters().add(new GZIPContentEncodingFilter());
+		rc.getContainerRequestFilters().add(new GZIPContentEncodingFilter());
 
-    rc.getContainerResponseFilters().add(new GZIPContentEncodingFilter());
-    rc.getContainerResponseFilters().add(new CORSFilter());
+		rc.getContainerResponseFilters().add(new GZIPContentEncodingFilter());
+		rc.getContainerResponseFilters().add(new CORSFilter());
 
-    //    rc.getResourceFilterFactories().add(new RolesAllowedResourceFilterFactory());
-    rc.getResourceFilterFactories().add(new ElaborateResourceFilterFactory());
+		//    rc.getResourceFilterFactories().add(new RolesAllowedResourceFilterFactory());
+		rc.getResourceFilterFactories().add(new ElaborateResourceFilterFactory());
 
-    return GrizzlyServerFactory.createHttpServer(getBaseURI(), rc);
-  }
+		return GrizzlyServerFactory.createHttpServer(getBaseURI(), rc);
+	}
 }
