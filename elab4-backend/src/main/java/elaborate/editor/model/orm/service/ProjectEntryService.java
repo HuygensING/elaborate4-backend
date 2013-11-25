@@ -53,6 +53,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	}
 
 	public void update(long entry_id, ProjectEntry updateEntry, User user) {
+		//		throw new RuntimeException("hahaha");
 		beginTransaction();
 		ProjectEntry projectEntry = super.read(entry_id);
 		projectEntry.setName(updateEntry.getName());
@@ -62,6 +63,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		commitTransaction();
 
 		beginTransaction();
+		projectEntry = super.read(entry_id);
 		setModifiedBy(projectEntry, user);
 		commitTransaction();
 	}
