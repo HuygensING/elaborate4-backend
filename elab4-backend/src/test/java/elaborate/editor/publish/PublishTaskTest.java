@@ -27,6 +27,7 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.publish.Publication.Settings;
 import elaborate.editor.publish.PublishTask.AnnotationData;
 import elaborate.editor.publish.PublishTask.AnnotationTypeData;
+import elaborate.editor.publish.PublishTask.EntryData;
 
 public class PublishTaskTest extends AbstractTest {
 
@@ -44,7 +45,9 @@ public class PublishTaskTest extends AbstractTest {
 		when(mockProject.getTitle()).thenReturn(projectTitle);
 
 		PublishTask publishTask = new PublishTask(settings);
-		List<String> entries = ImmutableList.of("entry1.json", "entry2.json");
+		EntryData entry1 = new EntryData("uno", "entry1.json");
+		EntryData entry2 = new EntryData("due", "entry2.json");
+		List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
 		Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
@@ -73,7 +76,9 @@ public class PublishTaskTest extends AbstractTest {
 		when(mockProject.getMetadataMap()).thenReturn(metadataMap);
 
 		PublishTask publishTask = new PublishTask(settings);
-		List<String> entries = ImmutableList.of("entry1.json", "entry2.json");
+		EntryData entry1 = new EntryData("uno", "entry1.json");
+		EntryData entry2 = new EntryData("due", "entry2.json");
+		List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
 		Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
