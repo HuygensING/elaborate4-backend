@@ -92,7 +92,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		//    annotationService.setEntityManager(entityManager);
 		List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
 		int entryNum = 1;
-		List<String> entryFilenames = Lists.newArrayList();
+		List<EntryData> entryData = Lists.newArrayList();
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
 		Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
 		Project project = entityManager.find(Project.class, projectId);
@@ -103,14 +103,14 @@ public class PublishTask extends LoggableObject implements Runnable {
 				status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
 				ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields, typographicalAnnotationMap);
 				long id = projectEntry.getId();
-				entryFilenames.add(id + ".json");
+				entryData.add(new EntryData(projectEntry.getName(), id + ".json"));
 				thumbnails.put(id, eed.thumbnailUrls);
 				annotationIndex.putAll(eed.annotationDataMap);
 				indexEntry(projectEntry);
 			}
 		}
 		commitAndCloseSolr();
-		exportPojectData(entryFilenames, thumbnails, annotationIndex);
+		exportPojectData(entryData, thumbnails, annotationIndex);
 
 		exportSearchConfig(project, projectEntryMetadataFields, entryNum - 1);
 		String basename = getBasename(project);
@@ -190,7 +190,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		return MessageFormat.format("entry{0,number,#}.json", num);
 	}
 
-	Map<String, Object> getProjectData(Project project, List<String> entryFilenames, Map<Long, List<String>> thumbnails) {
+	Map<String, Object> getProjectData(Project project, List<EntryData> entries, Map<Long, List<String>> thumbnails) {
 		Map<String, String> metadataMap = project.getMetadataMap();
 		for (String key : ProjectMetadataFields.ANNOTATIONTYPE_FIELDS) {
 			metadataMap.remove(key);
@@ -199,7 +199,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		map.put("id", project.getId());
 		map.put("title", StringUtils.defaultIfBlank(metadataMap.remove(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
 		map.put("publicationDate", new DateTime().toString("yyyy-MM-dd HH:mm"));
-		map.put("entryIds", entryFilenames);
+		map.put("entries", entries);
 		map.put("textLayers", project.getTextLayers());
 		map.put("thumbnails", thumbnails);
 		map.put("baseURL", getBaseURL(getBasename(project)));
@@ -406,11 +406,11 @@ public class PublishTask extends LoggableObject implements Runnable {
 		}
 	}
 
-	private void exportPojectData(List<String> entryFilenames, Map<Long, List<String>> thumbnails, Multimap<String, AnnotationIndexData> annotationIndex) {
+	private void exportPojectData(List<EntryData> entryData, Map<Long, List<String>> thumbnails, Multimap<String, AnnotationIndexData> annotationIndex) {
 		File json = new File(jsonDir, "config.json");
 		EntityManager entityManager = HibernateUtil.getEntityManager();
 		Project project = entityManager.find(Project.class, projectId);
-		Map<String, Object> projectData = getProjectData(project, entryFilenames, thumbnails);
+		Map<String, Object> projectData = getProjectData(project, entryData, thumbnails);
 		entityManager.close();
 		exportJson(json, projectData);
 
@@ -659,6 +659,16 @@ public class PublishTask extends LoggableObject implements Runnable {
 		public Metadata(String _field, String _value) {
 			field = _field;
 			value = StringUtils.defaultIfBlank(_value, "");
+		}
+	}
+
+	public static class EntryData {
+		public final String datafile;
+		public final String name;
+
+		public EntryData(String _name, String _datafile) {
+			this.name = _name;
+			this.datafile = _datafile;
 		}
 	}
 

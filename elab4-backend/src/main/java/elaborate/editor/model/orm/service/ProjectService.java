@@ -688,4 +688,5 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 		commitTransaction();
 	}
+
 }
