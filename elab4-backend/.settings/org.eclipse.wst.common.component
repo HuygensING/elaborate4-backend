@@ -12,7 +12,7 @@
         <dependent-module archiveName="elab4-solr-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/elab4-solr/elab4-solr">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="jax-rs-tools-0.0.5.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jax-rs-tools/jax-rs-tools">
+        <dependent-module archiveName="jax-rs-tools-0.0.6.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jax-rs-tools/jax-rs-tools">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="elab4-backend"/>
