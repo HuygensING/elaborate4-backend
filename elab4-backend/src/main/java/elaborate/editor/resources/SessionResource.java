@@ -12,10 +12,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import com.google.common.collect.ImmutableMap;
-import com.sun.jersey.api.NotFoundException;
 
 import elaborate.editor.model.SessionService;
 import elaborate.editor.model.orm.User;
@@ -24,35 +24,35 @@ import elaborate.jaxrs.APIDesc;
 
 @Path("sessions")
 public class SessionResource extends AbstractElaborateResource {
-  @Context
-  UserService userService;
+	@Context
+	UserService userService;
 
-  @Inject
-  SessionService sessionService;
+	@Inject
+	SessionService sessionService;
 
-  @POST
-  @Path("login")
-  @Consumes(UTF8MediaType.APPLICATION_FORM_URLENCODED)
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Get an authentication if the username/password combo is valid")
-  public Response login(@FormParam("username") String username, @FormParam("password") String password) {
-    User user = userService.getByUsernamePassword(username, password);
-    if (user != null) {
-      String sessionId = sessionService.startSession(user);
-      Map<String, Object> content = ImmutableMap.<String, Object> of("token", sessionId, "user", user);
-      return Response.ok(content).build();
-    } else {
-      throw new NotFoundException();
-    }
-  }
+	@POST
+	@Path("login")
+	@Consumes(UTF8MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Get an authentication if the username/password combo is valid")
+	public Response login(@FormParam("username") String username, @FormParam("password") String password) {
+		User user = userService.getByUsernamePassword(username, password);
+		if (user != null) {
+			String sessionId = sessionService.startSession(user);
+			Map<String, Object> content = ImmutableMap.<String, Object> of("token", sessionId, "user", user);
+			return Response.ok(content).build();
+		} else {
+			throw new BadRequestException("no user found with this username/password combination");
+		}
+	}
 
-  @POST
-  @Path("{token}/logout")
-  @Consumes(UTF8MediaType.APPLICATION_FORM_URLENCODED)
-  @Produces(UTF8MediaType.TEXT_PLAIN)
-  @APIDesc("Logout the session with the given token")
-  public Response logout(@PathParam("token") String sessionId) {
-    sessionService.stopSession(sessionId);
-    return Response.ok().build();
-  }
+	@POST
+	@Path("{token}/logout")
+	@Consumes(UTF8MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(UTF8MediaType.TEXT_PLAIN)
+	@APIDesc("Logout the session with the given token")
+	public Response logout(@PathParam("token") String sessionId) {
+		sessionService.stopSession(sessionId);
+		return Response.ok().build();
+	}
 }
