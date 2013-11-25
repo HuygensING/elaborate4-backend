@@ -36,6 +36,7 @@ public class SessionResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Get an authentication if the username/password combo is valid")
 	public Response login(@FormParam("username") String username, @FormParam("password") String password) {
+		sessionService.removeExpiredSessions();
 		User user = userService.getByUsernamePassword(username, password);
 		if (user != null) {
 			String sessionId = sessionService.startSession(user);
