@@ -19,42 +19,42 @@ import com.sun.jersey.spi.container.ResourceFilter;
 import elaborate.editor.model.SessionService;
 
 public class AuthenticationResourceFilter extends LoggableObject implements ResourceFilter, ContainerRequestFilter {
-  public static final String SCHEME = "SimpleAuth";
-  public static final String HEADER = "Authorization";
+	public static final String HEADER = "Authorization";
+	public static final String SCHEME = "SimpleAuth";
 
-  SessionService sessionService = SessionService.instance();
+	SessionService sessionService = SessionService.instance();
 
-  @Override
-  public ContainerRequest filter(ContainerRequest request) {
-    // OPTIONS calls don't need authorization, apparently
-    if ("OPTIONS".equals(request.getMethod())) {
-      return request;
-    }
+	@Override
+	public ContainerRequest filter(ContainerRequest request) {
+		// OPTIONS calls don't need authorization, apparently
+		if ("OPTIONS".equals(request.getMethod())) {
+			return request;
+		}
 
-    String authentication = request.getHeaderValue(HEADER);
-    //    LOG.info("authentication={}", authentication);
-    if (StringUtils.isNotBlank(authentication)) {
-      List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
-      if (parts.size() == 2 && SCHEME.equals(parts.get(0))) {
-        String key = parts.get(1);
-        SecurityContext securityContext = sessionService.getSecurityContext(key);
-        if (securityContext != null) {
-          request.setSecurityContext(securityContext);
-          return request;
-        }
-      }
-    }
-    throw new UnauthorizedException("No valid " + HEADER + " header in request");
-  }
+		String authentication = request.getHeaderValue(HEADER);
+		//    LOG.info("authentication={}", authentication);
+		if (StringUtils.isNotBlank(authentication)) {
+			List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
+			if (parts.size() == 2 && SCHEME.equals(parts.get(0))) {
+				String key = parts.get(1);
+				SecurityContext securityContext = sessionService.getSecurityContext(key);
+				if (securityContext != null) {
+					request.setSecurityContext(securityContext);
+					return request;
+				}
+			}
+		}
+		throw new UnauthorizedException("No valid " + HEADER + " header in request");
+	}
 
-  @Override
-  public ContainerRequestFilter getRequestFilter() {
-    return this;
-  }
+	@Override
+	public ContainerRequestFilter getRequestFilter() {
+		return this;
+	}
 
-  @Override
-  public ContainerResponseFilter getResponseFilter() {
-    return null;
-  }
+	@Override
+	public ContainerResponseFilter getResponseFilter() {
+		return null;
+	}
 
 }

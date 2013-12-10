@@ -115,3 +115,6 @@ curl -v -H "Content-Type: application/json" -H "Authorization: SimpleAuth $rootc
 
 curl -s -H "Authorization: SimpleAuth $rootcode" $eb/annotationtypes|jq "."
 curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -X POST -d '{"name":"bla","description":"hahaha"}' $eb/annotationtypes
+
+
+curl "http://rest.elaborate.huygens.knaw.nl/sessions/login" -H "Pragma: no-cache" -H "Origin: http://test.elaborate.huygens.knaw.nl" -H "Accept-Encoding: gzip,deflate,sdch" -H "Host: rest.elaborate.huygens.knaw.nl" -H "Accept-Language: nl-NL,nl;q=0.8,en-US;q=0.6,en;q=0.4,af;q=0.2,de;q=0.2,fr;q=0.2" -H "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "Accept: */*" -H "Cache-Control: no-cache" -H "Referer: http://test.elaborate.huygens.knaw.nl/login" -H "Connection: keep-alive" -H "DNT: 1" --data "username=root&password=toor" --compressed

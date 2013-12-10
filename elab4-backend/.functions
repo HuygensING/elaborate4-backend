@@ -56,7 +56,7 @@ function e4-show-project-entrymetadatafields {
 
 function e4-show-project-settings {
   project_id=$1
-  e4-get-json $eb/projects/$project_id/settings|jq "."
+  e4-get-json $eb/projects/$project_id/setting|sjq "."
 }
 
 function e4-show-version {

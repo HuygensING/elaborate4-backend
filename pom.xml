@@ -7,12 +7,13 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>elab4-common</module>
 		<module>elab4-backend</module>
 		<module>elab4-publish</module>
 		<module>elab4-publication-backend</module>
 		<module>elab4-tools</module>
 		<module>elab4-solr</module>
-		<module>elab4-common</module>
+		<module>elab4-backend-client</module>
 	</modules>
 
 	<properties>
