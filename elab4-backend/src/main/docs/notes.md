@@ -258,9 +258,9 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
             "next" : 1235
           }
   
-  als prev=-1, dan is entry {entry_id} de eerste.
-  als next=-1, dan is entry {entry_id} de laatste.
-  De entryids zijn gesorteerd op de alfabetische volgorde van de inhoud van de metadatavelden zoals gedefinieerd in project.level1, project.level2 en project.level3, en daarna op entryname 
+  als `prev=-1`, dan is entry `{entry_id}` de eerste.<br>
+  als `next=-1`, dan is entry `{entry_id}` de laatste.<br>
+  De entryids zijn gesorteerd op de alfabetische volgorde van de inhoud van de metadatavelden zoals gedefinieerd in project.level1, project.level2 en project.level3, en daarna op entryname. 
 
 * entrysettings opvragen:  
   `GET` `/projects/{project_id}/entries/{entry_id}/settings`
