@@ -70,14 +70,14 @@ public class ProjectResource extends AbstractElaborateResource {
 		return Response.created(createURI(project)).build();
 	}
 
-	@PUT
-	@Path("{project_id}")
-	@RolesAllowed("ADMIN")
-	@Consumes(UTF8MediaType.APPLICATION_JSON)
-	@APIDesc("Updates the project with the given project_id")
-	public void updateProject(Project project) {
-		projectService.update(project, getUser());
-	}
+	//	@PUT
+	//	@Path("{project_id}")
+	//	@RolesAllowed("ADMIN")
+	//	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	//	@APIDesc("Updates the project with the given project_id")
+	//	public void updateProject(Project project) {
+	//		projectService.update(project, getUser());
+	//	}
 
 	@DELETE
 	@Path("{project_id}")
@@ -88,6 +88,20 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	/* project settings */
+
+	@PUT
+	@Path("{project_id}/sortlevels")
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
+	@APIDesc("Updates level1,2,3 of the project with the given project_id")
+	public void updateProjectSortLevels(@PathParam("project_id") long project_id, List<String> levels) {
+		if (levels != null) {
+			projectService.setProjectSortLevels(project_id, levels, getUser());
+		} else {
+			throw new BadRequestException("no sortlevels sent");
+		}
+	}
+
 	@GET
 	@Path("{project_id}/settings")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
