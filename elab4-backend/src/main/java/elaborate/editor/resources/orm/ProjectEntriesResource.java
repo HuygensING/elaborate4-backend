@@ -28,6 +28,7 @@ import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.service.PrevNext;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.model.orm.service.TranscriptionService;
@@ -73,6 +74,15 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@JsonView(Views.Extended.class)
 	public ProjectEntry getProjectEntry(@PathParam("entry_id") long entry_id) {
 		return projectEntryService.read(entry_id, user);
+	}
+
+	@GET
+	@Path("{entry_id}/prevnext")
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Returns the id of the previous projectentry")
+	@JsonView(Views.Extended.class)
+	public PrevNext getPreviousProjectEntryId(@PathParam("entry_id") long entry_id) {
+		return projectEntryService.getPrevNextProjectEntryIds(entry_id);
 	}
 
 	@PUT

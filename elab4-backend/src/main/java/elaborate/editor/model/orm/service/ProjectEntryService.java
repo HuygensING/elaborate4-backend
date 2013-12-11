@@ -2,6 +2,7 @@ package elaborate.editor.model.orm.service;
 
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -270,6 +271,30 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	public void delete(long project_id, long transcription_id, User user) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public PrevNext getPrevNextProjectEntryIds(long entry_id) {
+		openEntityManager();
+		projectService.setEntityManager(getEntityManager());
+
+		ProjectEntry pe = read(entry_id);
+		long project_id = pe.getProject().getId();
+		List<Long> projectEntryIdsInOrder = projectService.getProjectEntryIdsInOrder(project_id);
+		int index = projectEntryIdsInOrder.indexOf(entry_id);
+
+		PrevNext pn = new PrevNext();
+		int prevIndex = index - 1;
+		if (prevIndex > -1) {
+			pn.prev = projectEntryIdsInOrder.get(prevIndex);
+		}
+
+		int nextIndex = index + 1;
+		if (nextIndex < projectEntryIdsInOrder.size()) {
+			pn.next = projectEntryIdsInOrder.get(nextIndex);
+		}
+
+		closeEntityManager();
+		return pn;
 	}
 
 	/* private methods */

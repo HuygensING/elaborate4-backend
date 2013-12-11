@@ -133,30 +133,14 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public Collection<ProjectEntry> getProjectEntries(long id, User user) {
 		openEntityManager();
-
-		Project project = find(getEntityClass(), id);
-		ImmutableList<ProjectEntry> projectEntries = ImmutableList.copyOf(project.getProjectEntries());
-
+		Project project = getProjectIfUserIsAllowed(id, user);
+		List<ProjectEntry> projectEntriesInOrder = getProjectEntriesInOrder(id);
 		closeEntityManager();
-		return projectEntries;
+		return projectEntriesInOrder;
 	}
 
-	public List<ProjectEntry> getProjectEntriesInOrder(long id) {
-
+	public List<ProjectEntry> getProjectEntriesInOrder0(long id) {
 		find(getEntityClass(), id);
-		//    List<ProjectEntry> resultList = getEntityManager//.
-		//        .createQuery("from ProjectEntry pe" + //
-		//            " left join pe.projectEntryMetadataItems l1 with l1.field=:level1" + //
-		//            " left join pe.projectEntryMetadataItems l2 with l2.field=:level2" + //
-		//            " left join pe.projectEntryMetadataItems l3 with l3.field=:level3" + //
-		//            " where project_id=:projectId" + //
-		//            " order by l1.data,l2.data,l3.data,pe.name",//
-		//            ProjectEntry.class)//
-		//        .setParameter("level1", project.getLevel1())//
-		//        .setParameter("level2", project.getLevel2())//
-		//        .setParameter("level3", project.getLevel3())//
-		//        .setParameter("projectId", id)//
-		//        .getResultList();
 		List<ProjectEntry> resultList = getEntityManager()//.
 				.createQuery("from ProjectEntry pe" + //
 						" where project_id=:projectId" + //
@@ -167,6 +151,40 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		ImmutableList<ProjectEntry> projectEntries = ImmutableList.copyOf(resultList);
 
 		return projectEntries;
+	}
+
+	public List<ProjectEntry> getProjectEntriesInOrder(long id) {
+		final List<Long> projectEntryIdsInOrder = getProjectEntryIdsInOrder(id);
+		Project project = find(getEntityClass(), id);
+		List<ProjectEntry> projectEntries = project.getProjectEntries();
+		Collections.sort(projectEntries, new Comparator<ProjectEntry>() {
+			@Override
+			public int compare(ProjectEntry e1, ProjectEntry e2) {
+				return projectEntryIdsInOrder.indexOf(e1.getId())//
+						- projectEntryIdsInOrder.indexOf(e2.getId());
+			}
+		});
+		return projectEntries;
+	}
+
+	public List<Long> getProjectEntryIdsInOrder(long id) {
+		Project project = find(getEntityClass(), id);
+		List<Long> resultList = getEntityManager()//.
+				.createQuery("select pe.id from ProjectEntry pe" + //
+						" left join pe.projectEntryMetadataItems l1 with l1.field=:level1" + //
+						" left join pe.projectEntryMetadataItems l2 with l2.field=:level2" + //
+						" left join pe.projectEntryMetadataItems l3 with l3.field=:level3" + //
+						" where project_id=:projectId" + //
+						" order by l1.data,l2.data,l3.data,pe.name",//
+						Long.class)//
+				.setParameter("level1", project.getLevel1())//
+				.setParameter("level2", project.getLevel2())//
+				.setParameter("level3", project.getLevel3())//
+				.setParameter("projectId", id)//
+				.getResultList();
+		ImmutableList<Long> projectEntryIds = ImmutableList.copyOf(resultList);
+
+		return projectEntryIds;
 	}
 
 	public ProjectEntry createProjectEntry(long id, ProjectEntry projectEntry, User user) {

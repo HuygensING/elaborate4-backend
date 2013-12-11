@@ -134,6 +134,13 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 * Update/bijwerken:  
   `PUT` naar `/projects/{project_id}`
 
+          {
+            "title" : "new project title",
+            "level1" : "metadataveld 1",
+            "level2" : "metadataveld 2",
+            "level3" : "metadataveld 3",
+          }
+
 * Delete/wissen:  
   `DELETE`  `/projects/{project_id}`
   
@@ -243,6 +250,17 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
 * Delete/wissen:  
   `DELETE`  `/projects/{project_id}/entries/{entry_id}`
 
+* ids ophalen van voorgaande/volgende entries:  
+  `GET` `/projects/{project_id}/entries/{entry_id}/prevnext`
+  
+          {
+            "prev" : 1234,
+            "next" : 1235
+          }
+  
+  als prev=-1, dan is entry {entry_id} de eerste.
+  als next=-1, dan is entry {entry_id} de laatste.
+  De entryids zijn gesorteerd op de alfabetische volgorde van de inhoud van de metadatavelden zoals gedefinieerd in project.level1, project.level2 en project.level3, en daarna op entryname 
 
 * entrysettings opvragen:  
   `GET` `/projects/{project_id}/entries/{entry_id}/settings`

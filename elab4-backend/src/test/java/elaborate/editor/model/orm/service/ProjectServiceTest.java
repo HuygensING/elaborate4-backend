@@ -64,6 +64,13 @@ public class ProjectServiceTest extends AbstractTest {
 		LOG.info("{}", all.size());
 	}
 
+	@Test
+	public void testGetProjectEntryIdsInOrder() throws Exception {
+		List<Long> idList = projectService.getProjectEntryIdsInOrder(1);
+		LOG.info("ids:{}", idList);
+		assertThat(idList).isNotEmpty();
+	}
+
 	//  @Test
 	//  public void testExportPdf() throws Exception {
 	//    projectService.exportPdf(1, root, "editie.pdf");

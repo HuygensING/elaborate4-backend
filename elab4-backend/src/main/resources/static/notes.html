@@ -129,7 +129,15 @@ alle: <br />
 specifieke:
 <code>GET</code> <code>/projects/{project_id}</code></p></li>
 <li><p>Update/bijwerken: <br />
-<code>PUT</code> naar <code>/projects/{project_id}</code></p></li>
+<code>PUT</code> naar <code>/projects/{project_id}</code></p>
+
+<pre><code>  {
+    "title" : "new project title",
+    "level1" : "metadataveld 1",
+    "level2" : "metadataveld 2",
+    "level3" : "metadataveld 3",
+  }
+</code></pre></li>
 <li><p>Delete/wissen: <br />
 <code>DELETE</code>  <code>/projects/{project_id}</code></p></li>
 </ul>
@@ -253,6 +261,18 @@ geeft een array van user id's</p></li>
 <p><code>publishable</code> is optional</p></li>
 <li><p>Delete/wissen: <br />
 <code>DELETE</code>  <code>/projects/{project_id}/entries/{entry_id}</code></p></li>
+<li><p>ids ophalen van voorgaande/volgende entries: <br />
+<code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/prevnext</code></p>
+
+<pre><code>  {
+    "prev" : 1234,
+    "next" : 1235
+  }
+</code></pre>
+
+<p>als prev=-1, dan is entry {entry<em>id} de eerste.
+als next=-1, dan is entry {entry</em>id} de laatste.
+De entryids zijn gesorteerd op de alfabetische volgorde van de inhoud van de metadatavelden zoals gedefinieerd in project.level1, project.level2 en project.level3, en daarna op entryname </p></li>
 <li><p>entrysettings opvragen: <br />
 <code>GET</code> <code>/projects/{project_id}/entries/{entry_id}/settings</code></p></li>
 <li><p>entrysettings bijwerken: <br />
