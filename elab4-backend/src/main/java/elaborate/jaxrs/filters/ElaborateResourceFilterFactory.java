@@ -10,22 +10,22 @@ import com.sun.jersey.spi.container.ResourceFilterFactory;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
 public class ElaborateResourceFilterFactory implements ResourceFilterFactory {
-  private static final Class<AuthorizationRequired> ANNOTATION_CLASS = AuthorizationRequired.class;
+	private static final Class<AuthorizationRequired> ANNOTATION_CLASS = AuthorizationRequired.class;
 
-  @Override
-  public List<ResourceFilter> create(AbstractMethod am) {
-    List<ResourceFilter> singletonList = Lists.newArrayList();
-    singletonList.add(new LoggingResourceFilter());
+	@Override
+	public List<ResourceFilter> create(AbstractMethod am) {
+		List<ResourceFilter> singletonList = Lists.newArrayList();
+		//    singletonList.add(new LoggingResourceFilter());
 
-    if (needsAuthorization(am)) {
-      singletonList.add(new AuthenticationResourceFilter());
-    }
-    return singletonList;
-  }
+		if (needsAuthorization(am)) {
+			singletonList.add(new AuthenticationResourceFilter());
+		}
+		return singletonList;
+	}
 
-  private boolean needsAuthorization(AbstractMethod am) {
-    return (am.getAnnotation(ANNOTATION_CLASS) != null) //
-        || (am.getResource().getAnnotation(ANNOTATION_CLASS) != null);
-  }
+	private boolean needsAuthorization(AbstractMethod am) {
+		return (am.getAnnotation(ANNOTATION_CLASS) != null) //
+				|| (am.getResource().getAnnotation(ANNOTATION_CLASS) != null);
+	}
 
 }
