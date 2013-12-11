@@ -128,16 +128,6 @@ alle: <br />
 <code>GET</code> <code>/projects</code>
 specifieke:
 <code>GET</code> <code>/projects/{project_id}</code></p></li>
-<li><p>Update/bijwerken: <br />
-<code>PUT</code> naar <code>/projects/{project_id}</code></p>
-
-<pre><code>  {
-    "title" : "new project title",
-    "level1" : "metadataveld 1",
-    "level2" : "metadataveld 2",
-    "level3" : "metadataveld 3",
-  }
-</code></pre></li>
 <li><p>Delete/wissen: <br />
 <code>DELETE</code>  <code>/projects/{project_id}</code></p></li>
 </ul>
@@ -149,6 +139,16 @@ specifieke:
 <code>PUT</code> naar <code>/projects/{project_id}/textlayers</code></p>
 
 <pre><code>  [ "first","second","third" ]
+</code></pre></li>
+</ul>
+
+<h4>project sorting/grouping levels</h4>
+
+<ul>
+<li><p>project sorting/grouping levels updaten: <br />
+<code>PUT</code> naar <code>/projects/{project_id}/sortlevels</code></p>
+
+<pre><code>  [ "level1","level2","level3" ]
 </code></pre></li>
 </ul>
 

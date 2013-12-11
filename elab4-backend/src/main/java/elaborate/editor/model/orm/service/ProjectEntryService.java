@@ -199,7 +199,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		return map;
 	}
 
-	public void updateProjectEntrySettings(long project_id, long entry_id, Map<String, String> projectEntrySettings, User creator) {
+	public void updateProjectEntrySettings(long project_id, long entry_id, Map<String, Object> projectEntrySettings, User creator) {
 		beginTransaction();
 		projectService.setEntityManager(getEntityManager());
 		projectService.getProjectIfUserIsAllowed(project_id, creator);
@@ -209,9 +209,14 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 			getEntityManager().remove(projectEntryMetadataItem);
 		}
 
-		for (Entry<String, String> settingsEntry : projectEntrySettings.entrySet()) {
+		Object publishableSetting = projectEntrySettings.remove(ProjectEntry.PUBLISHABLE);
+		if (publishableSetting != null) {
+			pe.setPublishable((Boolean) publishableSetting);
+		}
+
+		for (Entry<String, Object> settingsEntry : projectEntrySettings.entrySet()) {
 			String key = settingsEntry.getKey();
-			String value = settingsEntry.getValue();
+			String value = (String) settingsEntry.getValue();
 			ProjectEntryMetadataItem pemi = pe.addMetadataItem(key, value, creator);
 			persist(pemi);
 		}
@@ -265,11 +270,6 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 			setModifiedBy(pe, user);
 		}
 		commitTransaction();
-
-	}
-
-	public void delete(long project_id, long transcription_id, User user) {
-		// TODO Auto-generated method stub
 
 	}
 

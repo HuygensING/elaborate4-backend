@@ -131,16 +131,6 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
   specifieke:
   `GET` `/projects/{project_id}`
 
-* Update/bijwerken:  
-  `PUT` naar `/projects/{project_id}`
-
-          {
-            "title" : "new project title",
-            "level1" : "metadataveld 1",
-            "level2" : "metadataveld 2",
-            "level3" : "metadataveld 3",
-          }
-
 * Delete/wissen:  
   `DELETE`  `/projects/{project_id}`
   
@@ -150,6 +140,13 @@ Alle POST/PUT calls sturen JSON en alle GET calls geven JSON terug, tenzij ander
   `PUT` naar `/projects/{project_id}/textlayers`
 
           [ "first","second","third" ]
+
+#### project sorting/grouping levels
+
+* project sorting/grouping levels updaten:  
+  `PUT` naar `/projects/{project_id}/sortlevels`
+
+          [ "level1","level2","level3" ]
 
 #### project annotationtypes
 

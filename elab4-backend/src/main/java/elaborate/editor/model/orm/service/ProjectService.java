@@ -512,6 +512,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		beginTransaction();
 
 		Project project = getProjectIfUserIsAllowed(project_id, user);
+		if (!user.getPermission(project).can(Action.EDIT_PROJECT_SETTINGS)) {
+			throw new UnauthorizedException();
+		}
+
 		List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
 		for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
 			getEntityManager().remove(projectMetadataItem);
@@ -705,6 +709,36 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		}
 
 		commitTransaction();
+	}
+
+	public void setProjectSortLevels(long project_id, List<String> levels, User user) {
+		beginTransaction();
+		Project project = getProjectIfUserIsAllowed(project_id, user);
+		if (!user.getPermission(project).can(Action.EDIT_PROJECT_SETTINGS)) {
+			throw new UnauthorizedException();
+		}
+		List<String> newLevels = Lists.newArrayList("", "", "");
+
+		List<String> allowed = ImmutableList.copyOf(project.getProjectEntryMetadataFieldnames());
+		List<String> disallowed = Lists.newArrayListWithCapacity(3);
+		for (int i = 0; i < 3; i++) {
+			if (levels.size() > i) {
+				String level = levels.get(i);
+				newLevels.add(i, level);
+				if (StringUtils.isNotBlank(level) && !allowed.contains(level)) {
+					disallowed.add(level);
+				}
+			}
+		}
+		if (disallowed.isEmpty()) {
+			project.setLevel1(newLevels.get(0)).setLevel2(newLevels.get(1)).setLevel3(newLevels.get(2));
+			persist(project);
+			commitTransaction();
+
+		} else {
+			rollbackTransaction();
+			throw new BadRequestException("invalid sortlevel value(s): " + Joiner.on(", ").join(disallowed));
+		}
 	}
 
 }

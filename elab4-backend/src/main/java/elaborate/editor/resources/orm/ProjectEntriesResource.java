@@ -115,7 +115,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@Path("{entry_id}/settings")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the settings of the project entry with the given entry_id")
-	public void updateProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id, Map<String, String> projectEntrySettings) {
+	public void updateProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id, Map<String, Object> projectEntrySettings) {
 		projectEntryService.updateProjectEntrySettings(project_id, entry_id, projectEntrySettings, user);
 	}
 
