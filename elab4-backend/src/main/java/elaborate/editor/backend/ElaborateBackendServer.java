@@ -73,7 +73,7 @@ public class ElaborateBackendServer {
 	@SuppressWarnings("unchecked")
 	protected static HttpServer startServer() throws IOException {
 		LOG.info("Starting grizzly...");
-		ResourceConfig rc = new PackagesResourceConfig("nl.knaw.huygens.jaxrstools.resources", "nl.knaw.huygens.jaxrstools.providers", "elaborate.editor.resources", "elaborate.editor.testresources", "elaborate.editor.providers");
+		ResourceConfig rc = new PackagesResourceConfig("nl.knaw.huygens.jaxrstools.resources", "nl.knaw.huygens.jaxrstools.providers", "elaborate.editor.resources", "elaborate.editor.testresources", "elaborate.editor.providers"/*, "nl.knaw.huygens.security.client.filters"*/);
 
 		rc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 

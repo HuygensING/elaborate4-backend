@@ -3,7 +3,10 @@ package elaborate.editor.model;
 import org.assertj.core.api.AbstractAssert;
 // Assertions is needed if an assertion for Iterable is generated
 import org.assertj.core.api.Assertions;
+
 import elaborate.editor.model.orm.User;
+import elaborate.editor.security.ElaborateSecurityContext;
+
 import java.security.Principal;
 
 

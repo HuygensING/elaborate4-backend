@@ -22,150 +22,164 @@ import elaborate.util.PasswordUtil;
 
 @Singleton
 public class UserService extends AbstractStoredEntityService<User> {
-  private static UserService instance;
+	private static UserService instance;
 
-  private UserService() {}
+	private UserService() {}
 
-  public static UserService instance() {
-    if (instance == null) {
-      instance = new UserService();
-    }
-    return instance;
-  }
+	public static UserService instance() {
+		if (instance == null) {
+			instance = new UserService();
+		}
+		return instance;
+	}
 
-  @Override
-  Class<? extends AbstractStoredEntity<?>> getEntityClass() {
-    return User.class;
-  }
+	@Override
+	Class<? extends AbstractStoredEntity<?>> getEntityClass() {
+		return User.class;
+	}
 
-  @Override
-  String getEntityName() {
-    return "User";
-  }
+	@Override
+	String getEntityName() {
+		return "User";
+	}
 
-  /* CRUD methods */
-  public User create(User user, User creator) {
-    beginTransaction();
+	/* CRUD methods */
+	public User create(User user, User creator) {
+		beginTransaction();
 
-    if (creator.getPermission(user).canWrite()) {
-      try {
-        getEntityManager().createQuery("from User as u where u.username=?1").setParameter(1, user.getUsername()).getSingleResult();
-        rollbackTransaction();
-        throw new ConflictException("a user with username " + user.getUsername() + " already exists. Usernames must be unique");
-      } catch (NoResultException e) {
-        // user doesn't already exist, that's good
-      }
+		if (creator.getPermission(user).canWrite()) {
+			try {
+				getEntityManager().createQuery("from User as u where u.username=?1").setParameter(1, user.getUsername()).getSingleResult();
+				rollbackTransaction();
+				throw new ConflictException("a user with username " + user.getUsername() + " already exists. Usernames must be unique");
+			} catch (NoResultException e) {
+				// user doesn't already exist, that's good
+			}
 
-      User create = super.create(user);
-      commitTransaction();
-      return create;
+			User create = super.create(user);
+			commitTransaction();
+			return create;
 
-    } else {
-      rollbackTransaction();
-      throw new UnauthorizedException("user " + creator.getUsername() + " is not authorized to create new users");
-    }
-  }
+		} else {
+			rollbackTransaction();
+			throw new UnauthorizedException("user " + creator.getUsername() + " is not authorized to create new users");
+		}
+	}
 
-  @Override
-  public User read(long userId) {
-    openEntityManager();
-    User user = super.read(userId);
-    closeEntityManager();
-    return user;
-  }
+	@Override
+	public User read(long userId) {
+		openEntityManager();
+		User user = super.read(userId);
+		closeEntityManager();
+		return user;
+	}
 
-  public User update(User user, User modifier) {
-    beginTransaction();
-    User updated = super.update(user);
-    commitTransaction();
-    return updated;
-  }
+	public User update(User user, User modifier) {
+		beginTransaction();
+		User updated = super.update(user);
+		commitTransaction();
+		return updated;
+	}
 
-  public void delete(long id, User modifier) {
-    beginTransaction();
-    super.delete(id);
-    commitTransaction();
-  }
+	public void delete(long id, User modifier) {
+		beginTransaction();
+		super.delete(id);
+		commitTransaction();
+	}
 
-  /* */
-  public ImmutableMap<String, String> getSettings(long id) {
-    Builder<String, String> settings = ImmutableMap.<String, String> builder();
+	/* */
+	public ImmutableMap<String, String> getSettings(long id) {
+		Builder<String, String> settings = ImmutableMap.<String, String> builder();
 
-    openEntityManager();
+		openEntityManager();
 
-    User user = find(User.class, id);
-    if (user != null) {
-      for (UserSetting setting : user.getUserSettings()) {
-        settings.put(setting.getKey(), setting.getValue());
-      }
-    }
+		User user = find(User.class, id);
+		if (user != null) {
+			for (UserSetting setting : user.getUserSettings()) {
+				settings.put(setting.getKey(), setting.getValue());
+			}
+		}
 
-    closeEntityManager();
+		closeEntityManager();
 
-    if (user == null) {
-      throw new NotFoundException("No user found with id " + id);
-    }
-    return settings.build();
-  }
+		if (user == null) {
+			throw new NotFoundException("No user found with id " + id);
+		}
+		return settings.build();
+	}
 
-  public User getByUsernamePassword(String username, String password) {
-    openEntityManager();
+	public User getByUsernamePassword(String username, String password) {
+		openEntityManager();
 
-    byte[] encodedPassword = PasswordUtil.encode(password);
-    User user;
-    try {
-      user = (User) getEntityManager().createQuery("from User as u where u.username=?1 and u.encodedpassword=?2").setParameter(1, username).setParameter(2, encodedPassword).getSingleResult();
-    } catch (NoResultException e) {
-      user = null;
-    }
+		byte[] encodedPassword = PasswordUtil.encode(password);
+		User user;
+		try {
+			user = (User) getEntityManager().createQuery("from User as u where u.username=?1 and u.encodedpassword=?2").setParameter(1, username).setParameter(2, encodedPassword).getSingleResult();
+		} catch (NoResultException e) {
+			user = null;
+		}
 
-    closeEntityManager();
+		closeEntityManager();
 
-    return user;
-  }
+		return user;
+	}
 
-  public User getUser(long id) {
-    openEntityManager();
-    User user = find(User.class, id);
-    closeEntityManager();
-    return user;
-  }
+	public User getByEmail(String emailAddress) {
+		openEntityManager();
+		User user;
+		try {
+			user = (User) getEntityManager().createQuery("from User as u where u.email=?1").setParameter(1, emailAddress).getSingleResult();
+		} catch (NoResultException e) {
+			user = null;
+		}
 
-  @Override
-  public ImmutableList<User> getAll() {
-    openEntityManager();
-    ImmutableList<User> all = super.getAll();
-    closeEntityManager();
-    return all;
-  }
+		closeEntityManager();
 
-  public void setSetting(long userId, String key, String value, User modifier) {
-    beginTransaction();
-    User user = read(userId);
-    if (!modifier.getUsername().equals(user.getUsername())) {
-      rollbackTransaction();
-      throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
-    }
-    UserSetting userSetting = user.setUserSetting(key, value);
-    persist(userSetting);
-    commitTransaction();
-  }
+		return user;
+	}
 
-  public void updateSettings(long userId, Map<String, String> newSettingsMap, User modifier) {
-    beginTransaction();
-    User user = read(userId);
-    if (!modifier.getUsername().equals(user.getUsername())) {
-      rollbackTransaction();
-      throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
-    }
+	public User getUser(long id) {
+		openEntityManager();
+		User user = find(User.class, id);
+		closeEntityManager();
+		return user;
+	}
 
-    for (Entry<String, String> entry : newSettingsMap.entrySet()) {
-      UserSetting userSetting = user.setUserSetting(entry.getKey(), entry.getValue());
-      persist(userSetting);
-    }
+	@Override
+	public ImmutableList<User> getAll() {
+		openEntityManager();
+		ImmutableList<User> all = super.getAll();
+		closeEntityManager();
+		return all;
+	}
 
-    persist(user);
-    commitTransaction();
-  }
+	public void setSetting(long userId, String key, String value, User modifier) {
+		beginTransaction();
+		User user = read(userId);
+		if (!modifier.getUsername().equals(user.getUsername())) {
+			rollbackTransaction();
+			throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
+		}
+		UserSetting userSetting = user.setUserSetting(key, value);
+		persist(userSetting);
+		commitTransaction();
+	}
+
+	public void updateSettings(long userId, Map<String, String> newSettingsMap, User modifier) {
+		beginTransaction();
+		User user = read(userId);
+		if (!modifier.getUsername().equals(user.getUsername())) {
+			rollbackTransaction();
+			throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
+		}
+
+		for (Entry<String, String> entry : newSettingsMap.entrySet()) {
+			UserSetting userSetting = user.setUserSetting(entry.getKey(), entry.getValue());
+			persist(userSetting);
+		}
+
+		persist(user);
+		commitTransaction();
+	}
 
 }
