@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config version="0.1">
 	<settings>
-		<version>0.1a (test)</version>
+		<version>0.2 (test)</version>
 
 		<solr>
 			<url>http://demo7.huygens.knaw.nl/solr-elab4test/entries/</url>
@@ -23,6 +23,14 @@
 				<webappdir>/usr/share/tomcat6/webapps/</webappdir>
 			</tomcat>
 		</publication>
+
+		<security>
+			<enabled>true</enabled>
+			<hss>
+				<url>https://secure.huygens.knaw.nl/</url>
+				<credentials>Huygens 2J5Zv$gb2l7l_V4GMoR)</credentials>
+			</hss>
+		</security>
 
 	</settings>
 </config>

@@ -1,6 +1,5 @@
 package nl.knaw.huygens.elaborate.publication;
 
-import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -17,58 +16,58 @@ import nl.knaw.huygens.persistence.PersistenceManagerFactory;
 import com.google.common.collect.ImmutableList;
 
 public class PublicationFinalizer {
-  private static final String HANDLE_URL = "http://hdl.handle.net/";
-  private static final String PREFIX = "oai:oaipmh.huygens.knaw.nl:elaborate:";
-  private static final String PM_PREFIX = "11240.1";
+	//	private static final String HANDLE_URL = "http://hdl.handle.net/";
+	private static final String PREFIX = "oai:oaipmh.huygens.knaw.nl:elaborate:";
+	private static final String PM_PREFIX = "11240.1";
 
-  private final PersistenceManager pm = getPersistenceManager();
+	private final PersistenceManager pm = getPersistenceManager();
 
-  public void finalizePublication() {
-    // steps:
-    // - move war to production
-    // register persistent identifiers
-    // generate metadata in oai & cmdi
-    // send metadata to oaipmh server
-    doOAI();
-  }
+	public void finalizePublication() {
+		// steps:
+		// - move war to production
+		// register persistent identifiers
+		// generate metadata in oai & cmdi
+		// send metadata to oaipmh server
+		doOAI();
+	}
 
-  PersistenceManager getPersistenceManager() {
-    String cipher = "Gewacu6u";
-    String namingAuthority = "0.NA";
-    String pathToPrivateKey = getClass().getClassLoader().getResource("admpriv.bin").getPath();
-    PersistenceManager pm = PersistenceManagerFactory.newPersistenceManager(true, cipher, namingAuthority, PM_PREFIX, pathToPrivateKey);
-    return pm;
-  }
+	PersistenceManager getPersistenceManager() {
+		String cipher = "Gewacu6u";
+		String namingAuthority = "0.NA";
+		String pathToPrivateKey = getClass().getClassLoader().getResource("admpriv.bin").getPath();
+		PersistenceManager pm = PersistenceManagerFactory.newPersistenceManager(true, cipher, namingAuthority, PM_PREFIX, pathToPrivateKey);
+		return pm;
+	}
 
-  private void doOAI() {
-    OaiPmhRestClient oai = new OaiPmhRestClient("http://127.0.0.1:9998/");
-    String elab4editionSetSpec = "elaborate:edition";
-    OAISet oaiSet = oai.getSet(elab4editionSetSpec);
-    if (oaiSet == null) {
-      oaiSet = new OAISet().setSetSpec(elab4editionSetSpec).setDescription("published elaborate editions").setSetName("elaborate edition");
-      oai.postSet(oaiSet);
-    }
+	private void doOAI() {
+		OaiPmhRestClient oai = new OaiPmhRestClient("http://127.0.0.1:9998/");
+		String elab4editionSetSpec = "elaborate:edition";
+		OAISet oaiSet = oai.getSet(elab4editionSetSpec);
+		if (oaiSet == null) {
+			oaiSet = new OAISet().setSetSpec(elab4editionSetSpec).setDescription("published elaborate editions").setSetName("elaborate edition");
+			oai.postSet(oaiSet);
+		}
 
-    List<String> setSpecs = ImmutableList.of(elab4editionSetSpec);
-    DublinCoreRecord dcRecord = new DublinCoreRecord();
-    String url = "url";
-    String pid = persistURL(url);
-    CMDIRecord cMDIRecord = new ElaborateCMDIRecordBuilder().setMdSelfLink(pid).build();
-    String metadata = dcRecord.asXML() + cMDIRecord.asXML();
-    String id = "";
-    Date datestamp = new Date();
-    OAIRecord oaiRecord = new OAIRecord().setIdentifier(PREFIX + id).setSetSpecs(setSpecs).setMetadata(metadata).setDatestamp(datestamp);
-    oai.postRecord(oaiRecord);
+		List<String> setSpecs = ImmutableList.of(elab4editionSetSpec);
+		DublinCoreRecord dcRecord = new DublinCoreRecord();
+		String url = "url";
+		String pid = persistURL(url);
+		CMDIRecord cMDIRecord = new ElaborateCMDIRecordBuilder().setMdSelfLink(pid).build();
+		String metadata = dcRecord.asXML() + cMDIRecord.asXML();
+		String id = "";
+		Date datestamp = new Date();
+		OAIRecord oaiRecord = new OAIRecord().setIdentifier(PREFIX + id).setSetSpecs(setSpecs).setMetadata(metadata).setDatestamp(datestamp);
+		oai.postRecord(oaiRecord);
 
-  }
+	}
 
-  String persistURL(String url) {
-    try {
-      String pid = pm.persistURL(url);
-      return MessageFormat.format("{0}{1}/{2}", HANDLE_URL, PM_PREFIX, pid);
-    } catch (PersistenceException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+	String persistURL(String url) {
+		try {
+			String pid = pm.persistURL(url);
+			return pm.getPersistentURL(pid);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

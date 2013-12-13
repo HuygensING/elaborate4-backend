@@ -20,7 +20,6 @@ import elaborate.editor.model.SessionService;
 
 public class AuthenticationResourceFilter extends LoggableObject implements ResourceFilter, ContainerRequestFilter {
 	public static final String HEADER = "Authorization";
-	public static final String SCHEME = "SimpleAuth";
 
 	SessionService sessionService = SessionService.instance();
 
@@ -35,12 +34,17 @@ public class AuthenticationResourceFilter extends LoggableObject implements Reso
 		//    LOG.info("authentication={}", authentication);
 		if (StringUtils.isNotBlank(authentication)) {
 			List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
-			if (parts.size() == 2 && SCHEME.equals(parts.get(0))) {
+			if (parts.size() == 2) {
 				String key = parts.get(1);
-				SecurityContext securityContext = sessionService.getSecurityContext(key);
-				if (securityContext != null) {
-					request.setSecurityContext(securityContext);
-					return request;
+				String scheme = parts.get(0);
+				try {
+					SecurityContext securityContext = sessionService.getSecurityContext(scheme, key);
+					if (securityContext != null) {
+						request.setSecurityContext(securityContext);
+						return request;
+					}
+				} catch (nl.knaw.huygens.security.client.UnauthorizedException e) {
+					throw new UnauthorizedException(e.getMessage());
 				}
 			}
 		}
