@@ -26,4 +26,12 @@ public class SecurityWrapper {
 		}
 		return new Session(user.getId());
 	}
+
+	public static void delete(String sessionId) {
+		try {
+			hah.logout(sessionId);
+		} catch (UnauthorizedException e) {
+			e.printStackTrace();
+		}
+	}
 }

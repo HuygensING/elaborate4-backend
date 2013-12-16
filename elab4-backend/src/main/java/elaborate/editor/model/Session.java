@@ -5,6 +5,7 @@ import java.util.Date;
 public class Session {
 	Date lastAccessed;
 	long userId;
+	private boolean federated = false;
 
 	public Session(long userId) {
 		this.userId = userId;
@@ -22,5 +23,14 @@ public class Session {
 	public boolean isActive() {
 		long diff = new Date().getTime() - lastAccessed.getTime();
 		return (diff < SessionService.SESSION_TIMEOUT);
+	}
+
+	public boolean isFederated() {
+		return federated;
+	}
+
+	public Session setFederated(boolean federated) {
+		this.federated = federated;
+		return this;
 	}
 }

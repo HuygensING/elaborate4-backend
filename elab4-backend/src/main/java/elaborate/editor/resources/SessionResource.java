@@ -14,6 +14,9 @@ import javax.ws.rs.core.Response;
 
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+import nl.knaw.huygens.security.client.UnauthorizedException;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -35,16 +38,32 @@ public class SessionResource extends AbstractElaborateResource {
 	@Consumes(UTF8MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Get an authentication if the username/password combo is valid")
-	public Response login(@FormParam("username") String username, @FormParam("password") String password) {
+	public Response login(@FormParam("username") String username, @FormParam("password") String password, @FormParam("hsid") String hsid) {
 		sessionService.removeExpiredSessions();
-		User user = userService.getByUsernamePassword(username, password);
-		if (user != null) {
-			String sessionId = sessionService.startSession(user);
-			Map<String, Object> content = ImmutableMap.<String, Object> of("token", sessionId, "user", user);
-			return Response.ok(content).build();
+		User user = null;
+		String token = hsid;
+		if (StringUtils.isNotBlank(hsid)) {
+			// the Federated way
+			try {
+				user = sessionService.getSessionUser(hsid);
+			} catch (UnauthorizedException e) {
+				throw new nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException(e.getMessage());
+			}
+			if (user == null) {
+				throw new BadRequestException("not a valid hsid");
+			}
+
 		} else {
-			throw new BadRequestException("no user found with this username/password combination");
+			// the old way
+			user = userService.getByUsernamePassword(username, password);
+			if (user == null) {
+				throw new BadRequestException("no user found with this username/password combination");
+			}
+			token = sessionService.startSession(user);
 		}
+
+		Map<String, Object> content = ImmutableMap.<String, Object> of("token", token, "user", user);
+		return Response.ok(content).build();
 	}
 
 	@POST
