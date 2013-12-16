@@ -3,6 +3,7 @@ eb=http://rest.elaborate.huygens.knaw.nl
 
 rootcode=`curl --silent --show-error --data "username=root&password=toor" $eb/sessions/login/|jq -r ".token"`; echo $rootcode
 rootcode=`curl --silent --show-error --data "username=root&password=d3gelijk" $eb/sessions/login/|jq -r ".token"`; echo $rootcode
+curl --silent --show-error --data "hsid=47eb2758-b2df-4ba7-b6b3-5ae2795a48eb" $eb/sessions/login/
 
 curl -i -H "Authorization: SimpleAuth $rootcode" -H "Content-Type: application/json" -d '{"term":"deus","textLayers":["Diplomatic"],"searchInAnnotations":"true"}' $eb/projects/17/search/
 curl -v -H "Authorization: SimpleAuth $rootcode"  $eb/projects/1/search/201|jq "."

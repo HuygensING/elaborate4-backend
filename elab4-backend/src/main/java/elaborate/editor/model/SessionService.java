@@ -45,7 +45,10 @@ public class SessionService extends LoggableObject {
 	}
 
 	public void stopSession(String sessionId) {
-		sessionMap.remove(sessionId);
+		Session session = sessionMap.remove(sessionId);
+		if (session != null && session.isFederated()) {
+			SecurityWrapper.delete(sessionId);
+		}
 		//    LOG.info("sessionMap={}", sessionMap);
 	}
 
@@ -98,5 +101,15 @@ public class SessionService extends LoggableObject {
 		long userId = session.getUserId();
 		User user = userService.read(userId);
 		return user != null ? new ElaborateSecurityContext(user) : null;
+	}
+
+	public User getSessionUser(String hsid) throws UnauthorizedException {
+		Session session = sessionMap.get(hsid);
+		if (session == null) {
+			session = SecurityWrapper.createSession(hsid);
+		}
+		long userId = session.getUserId();
+		User user = userService.read(userId);
+		return user;
 	}
 }

@@ -15,6 +15,11 @@ function e4-set-password {
   export e4_password=$1
 }
 
+function e4-logout {
+  echo "curl -X POST $eb/sessions/$authtoken/logout"
+  curl -X POST $eb/sessions/$authtoken/logout
+}
+
 function e4-login {
   authtoken=`curl --silent --show-error --data "username=$e4_username&password=$e4_password" $eb/sessions/login/|jq -r ".token"`
   if [ -z "$authtoken" ];then
@@ -56,7 +61,7 @@ function e4-show-project-entrymetadatafields {
 
 function e4-show-project-settings {
   project_id=$1
-  e4-get-json $eb/projects/$project_id/setting|sjq "."
+  e4-get-json $eb/projects/$project_id/settings|jq "."
 }
 
 function e4-show-version {

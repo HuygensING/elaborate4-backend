@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>nl.knaw.huygens</groupId>
 			<artifactId>security-client</artifactId>
-			<version>2.1.2</version>
+			<version>${security.version}</version>
 		</dependency>
 
 		<dependency>
