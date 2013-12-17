@@ -11,28 +11,25 @@ import elaborate.editor.model.orm.User;
 
 @Singleton
 public class AnnotationTypeService extends AbstractStoredEntityService<AnnotationType> {
-  private static AnnotationTypeService instance;
+	private static AnnotationTypeService instance = new AnnotationTypeService();
 
-  private AnnotationTypeService() {}
+	private AnnotationTypeService() {}
 
-  public static AnnotationTypeService instance() {
-    if (instance == null) {
-      instance = new AnnotationTypeService();
-    }
-    return instance;
-  }
+	public static AnnotationTypeService instance() {
+		return instance;
+	}
 
-  @Override
-  Class<AnnotationType> getEntityClass() {
-    return AnnotationType.class;
-  }
+	@Override
+	Class<AnnotationType> getEntityClass() {
+		return AnnotationType.class;
+	}
 
-  @Override
-  String getEntityName() {
-    return "AnnotationType";
-  }
+	@Override
+	String getEntityName() {
+		return "AnnotationType";
+	}
 
-  /* CRUD methods */
+	/* CRUD methods */
 
   public AnnotationType create(AnnotationType annotationType, User creator) {
     beginTransaction();
@@ -46,16 +43,16 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
     throw new UnauthorizedException(exception(creator, "create new annotation types"));
   }
 
-  private String exception(User creator, String string) {
-    return "user " + creator.getUsername() + " is not authorized to " + string;
-  }
+	private String exception(User creator, String string) {
+		return "user " + creator.getUsername() + " is not authorized to " + string;
+	}
 
-  public AnnotationType read(long id, User reader) {
-    openEntityManager();
-    AnnotationType annotationType = super.read(id);
-    closeEntityManager();
-    return annotationType;
-  }
+	public AnnotationType read(long id, User reader) {
+		openEntityManager();
+		AnnotationType annotationType = super.read(id);
+		closeEntityManager();
+		return annotationType;
+	}
 
   public void update(AnnotationType annotationType, User modifier) {
     beginTransaction();
@@ -80,13 +77,13 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
     }
   }
 
-  /**/
-  @Override
-  public ImmutableList<AnnotationType> getAll() {
-    openEntityManager();
-    ImmutableList<AnnotationType> all = super.getAll();
-    closeEntityManager();
-    return all;
-  }
+	/**/
+	@Override
+	public ImmutableList<AnnotationType> getAll() {
+		openEntityManager();
+		ImmutableList<AnnotationType> all = super.getAll();
+		closeEntityManager();
+		return all;
+	}
 
 }

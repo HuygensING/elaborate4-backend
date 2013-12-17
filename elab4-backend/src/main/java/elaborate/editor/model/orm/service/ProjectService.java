@@ -57,14 +57,11 @@ import elaborate.editor.publish.Publisher;
 public class ProjectService extends AbstractStoredEntityService<Project> {
 	private static final String COUNT_KEY = "count";
 	private static final List<String> DEFAULT_PROJECTENTRYMETADATAFIELDNAMES = Lists.newArrayList();
-	private static ProjectService instance;
+	private static ProjectService instance = new ProjectService();
 
 	private ProjectService() {}
 
 	public static ProjectService instance() {
-		if (instance == null) {
-			instance = new ProjectService();
-		}
 		return instance;
 	}
 
