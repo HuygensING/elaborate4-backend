@@ -28,77 +28,77 @@ import elaborate.jaxrs.Annotations.AuthorizationRequired;
 @Path("users")
 @AuthorizationRequired
 public class UserResource extends AbstractElaborateResource {
-  @Context
-  private UserService userService;
+	@Context
+	private UserService userService;
 
-  @GET
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Returns a list of all users")
-  public ImmutableList<User> getAll() {
-    return userService.getAll();
-  }
+	@GET
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Returns a list of all users")
+	public ImmutableList<User> getAll() {
+		return userService.getAll();
+	}
 
-  @GET
-  @Path("{id}")
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Returns the user with the given id")
-  public User getUser(@PathParam("id") long id) {
-    return userService.read(id);
-  }
+	@GET
+	@Path("{id: [0-9]+}")
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Returns the user with the given id")
+	public User getUser(@PathParam("id") long id) {
+		return userService.read(id);
+	}
 
-  @POST
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  //  @RolesAllowed("ADMIN")
-  @APIDesc("Adds a new user")
-  public Response create(UserInput userInput) {
-    User user = userInput.getUser();
-    userService.create(user, getUser());
-    return Response.created(createURI(user)).build();
-  }
+	@POST
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	//  @RolesAllowed("ADMIN")
+	@APIDesc("Adds a new user")
+	public Response create(UserInput userInput) {
+		User user = userInput.getUser();
+		userService.create(user, getUser());
+		return Response.created(createURI(user)).build();
+	}
 
-  @PUT
-  @Path("{id}")
-  //  @RolesAllowed("ADMIN")
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Updates the user with the given id")
-  public void update(@PathParam("id") long id, UserInput userInput) {
-    userInput.id = id;
-    userService.update(userInput.getUser(), getUser());
-  }
+	@PUT
+	@Path("{id: [0-9]+}")
+	//  @RolesAllowed("ADMIN")
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Updates the user with the given id")
+	public void update(@PathParam("id") long id, UserInput userInput) {
+		userInput.id = id;
+		userService.update(userInput.getUser(), getUser());
+	}
 
-  @DELETE
-  @Path("{id}")
-  //  @RolesAllowed("ADMIN")
-  @APIDesc("Deletes the user with the given id")
-  public void delete(@PathParam("id") long id) {
-    userService.delete(id, getUser());
-  }
+	@DELETE
+	@Path("{id: [0-9]+}")
+	//  @RolesAllowed("ADMIN")
+	@APIDesc("Deletes the user with the given id")
+	public void delete(@PathParam("id") long id) {
+		userService.delete(id, getUser());
+	}
 
-  @GET
-  @Path("{id}/settings")
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Returns a map of the settings for the user with the given id")
-  public ImmutableMap<String, String> getUserSettings(@PathParam("id") long id) {
-    LOG.info("getUserSettings({})", new Object[] { id });
-    return userService.getSettings(id);
-  }
+	@GET
+	@Path("{id: [0-9]+}/settings")
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Returns a map of the settings for the user with the given id")
+	public ImmutableMap<String, String> getUserSettings(@PathParam("id") long id) {
+		LOG.info("getUserSettings({})", new Object[] { id });
+		return userService.getSettings(id);
+	}
 
-  @PUT
-  @Path("{id}/settings")
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Updates the map of the settings for the user with the given id")
-  public void updateUserSettings(@PathParam("id") long id, Map<String, String> newSettings) {
-    userService.updateSettings(id, newSettings, getUser());
-  }
+	@PUT
+	@Path("{id: [0-9]+}/settings")
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Updates the map of the settings for the user with the given id")
+	public void updateUserSettings(@PathParam("id") long id, Map<String, String> newSettings) {
+		userService.updateSettings(id, newSettings, getUser());
+	}
 
-  @POST
-  @Path("{id}/settings/{field}")
-  @Consumes(UTF8MediaType.TEXT_PLAIN)
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Adds or sets a setting for the given field for the user with the given id, returns the new settings")
-  public Object setUserSetting(@PathParam("id") long id, @PathParam("field") String field, String value) {
-    LOG.info("setUserSetting({},{},{})", new Object[] { id, field, value });
-    userService.setSetting(id, field, value, getUser());
-    return userService.getSettings(id);
-  }
+	@POST
+	@Path("{id: [0-9]+}/settings/{field}")
+	@Consumes(UTF8MediaType.TEXT_PLAIN)
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Adds or sets a setting for the given field for the user with the given id, returns the new settings")
+	public Object setUserSetting(@PathParam("id") long id, @PathParam("field") String field, String value) {
+		LOG.info("setUserSetting({},{},{})", new Object[] { id, field, value });
+		userService.setSetting(id, field, value, getUser());
+		return userService.getSettings(id);
+	}
 }

@@ -68,7 +68,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{entry_id}")
+	@Path("{entry_id: [0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the projectentry with the given entry_id")
 	@JsonView(Views.Extended.class)
@@ -77,7 +77,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{entry_id}/prevnext")
+	@Path("{entry_id: [0-9]+}/prevnext")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the id of the previous projectentry")
 	@JsonView(Views.Extended.class)
@@ -86,7 +86,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{entry_id}")
+	@Path("{entry_id: [0-9]+}")
 	@RolesAllowed("ADMIN")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the projectentry with the given entry_id")
@@ -95,7 +95,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@DELETE
-	@Path("{entry_id}")
+	@Path("{entry_id: [0-9]+}")
 	@RolesAllowed("ADMIN")
 	@APIDesc("Deletes the projectentry with the given entry_id")
 	public void deleteProjectEntry(@PathParam("entry_id") long entry_id) {
@@ -104,7 +104,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 
 	/* entry settings */
 	@GET
-	@Path("{entry_id}/settings")
+	@Path("{entry_id: [0-9]+}/settings")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the settings of the project entry with the given entry_id")
 	public Map<String, String> getProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id) {
@@ -112,7 +112,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{entry_id}/settings")
+	@Path("{entry_id: [0-9]+}/settings")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the settings of the project entry with the given entry_id")
 	public void updateProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id, Map<String, Object> projectEntrySettings) {
@@ -121,7 +121,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 
 	/* facsimiles */
 	@GET
-	@Path("{entry_id}/facsimiles")
+	@Path("{entry_id: [0-9]+}/facsimiles")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the facsimiles of the project entry with the given entry_id")
 	@JsonView(Views.Minimal.class)
@@ -130,7 +130,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@POST
-	@Path("{entry_id}/facsimiles")
+	@Path("{entry_id: [0-9]+}/facsimiles")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@RolesAllowed("USER")
 	@APIDesc("Adds a facsimile to the project entry with the given entry_id")
@@ -140,7 +140,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{entry_id}/facsimiles/{facsimile_id}")
+	@Path("{entry_id: [0-9]+}/facsimiles/{facsimile_id: [0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the facsimile with the given facsimile_id of the project entry with the given entry_id of the project with the given project_id")
 	@JsonView(Views.Minimal.class)
@@ -150,7 +150,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{entry_id}/facsimiles/{facsimile_id}")
+	@Path("{entry_id: [0-9]+}/facsimiles/{facsimile_id: [0-9]+}")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the facsimile with the given facsimile_id of the project entry with the given entry_id of the project with the given project_id")
 	public void updateFacsimile(@PathParam("project_id") long project_id, @PathParam("facsimile_id") long facsimile_id, Facsimile newFacsimileData) {
@@ -158,7 +158,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@DELETE
-	@Path("{entry_id}/facsimiles/{facsimile_id}")
+	@Path("{entry_id: [0-9]+}/facsimiles/{facsimile_id: [0-9]+}")
 	@APIDesc("Deletes the facsimile with the given facsimile_id of the project entry with the given entry_id of the project with the given project_id, and all its dependencies (annotations")
 	public void deleteFacsimile(@PathParam("project_id") long project_id, @PathParam("facsimile_id") long facsimile_id) {
 		projectEntryService.deleteFacsimile(project_id, facsimile_id, user);
@@ -166,7 +166,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 
 	/* transcriptions*/
 	@GET
-	@Path("{entry_id}/transcriptions")
+	@Path("{entry_id: [0-9]+}/transcriptions")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the transcriptions of the project entry with the given entry_id")
 	public Collection<TranscriptionWrapper> getTranscriptions(@PathParam("entry_id") long entry_id) {
@@ -179,7 +179,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@POST
-	@Path("{entry_id}/transcriptions")
+	@Path("{entry_id: [0-9]+}/transcriptions")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@RolesAllowed("USER")
 	@APIDesc("Adds a transcription to the project entry with the given entry_id")
@@ -189,7 +189,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{entry_id}/transcriptions/{transcription_id}")
+	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the transcription with the given transcription_id of the project entry with the given entry_id of the project with the given project_id")
 	public TranscriptionWrapper getTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id) {
@@ -198,7 +198,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{entry_id}/transcriptions/{transcription_id}")
+	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the transcription with the given transcription_id of the project entry with the given entry_id of the project with the given project_id")
 	public void updateTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id, TranscriptionWrapper transcriptionWrapper) {
@@ -207,7 +207,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@DELETE
-	@Path("{entry_id}/transcriptions/{transcription_id}")
+	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}")
 	@APIDesc("Deletes the transcription with the given transcription_id of the project entry with the given entry_id of the project with the given project_id, and all its dependencies (annotations")
 	public void deleteTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id) {
 		transcriptionService.delete(project_id, transcription_id, user);
@@ -215,7 +215,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 
 	/* annotations*/
 	@GET
-	@Path("{entry_id}/transcriptions/{transcription_id}/annotations")
+	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}/annotations")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the annotations of the transcription with the given transcription_id of the project entry with the given entry_id")
 	public Collection<Annotation> getAnnotations(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id) {
@@ -223,7 +223,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@POST
-	@Path("{entry_id}/transcriptions/{transcription_id}/annotations")
+	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}/annotations")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Add an annotation to the transcription with the given transcription_id of the project entry with the given entry_id")
 	public Response addAnnotation(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id, AnnotationInputWrapper annotationInput) {
@@ -232,7 +232,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}")
+	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}/annotations/{annotation_id: [0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the annotation with the given annotation_id of the transcription with the given transcription_id of the project entry with the given entry_id")
 	public Annotation getAnnotation(@PathParam("project_id") long project_id, @PathParam("annotation_id") long annotation_id) {
@@ -240,7 +240,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}")
+	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}/annotations/{annotation_id: [0-9]+}")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("updates the annotation with the given annotation_id of the transcription with the given transcription_id of the project entry with the given entry_id")
 	public void updateAnnotation(@PathParam("project_id") long project_id, @PathParam("annotation_id") long annotation_id, AnnotationInputWrapper annotationInput) {
@@ -248,7 +248,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	@DELETE
-	@Path("{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}")
+	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}/annotations/{annotation_id: [0-9]+}")
 	@APIDesc("updates the annotation with the given annotation_id of the transcription with the given transcription_id of the project entry with the given entry_id")
 	public void deleteAnnotation(@PathParam("project_id") long project_id, @PathParam("annotation_id") long annotation_id) {
 		transcriptionService.deleteAnnotation(project_id, annotation_id, user);
