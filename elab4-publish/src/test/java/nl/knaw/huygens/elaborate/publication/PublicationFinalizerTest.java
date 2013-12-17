@@ -32,7 +32,7 @@ public class PublicationFinalizerTest extends LoggableObject {
 		LOG.info("pid={}", pid);
 		assertThat(pid).isNotNull();
 
-		String persistedURL = persistenceManager.getURLValue(pid);
+		String persistedURL = persistenceManager.getPersistedURL(pid);
 		assertThat(persistedURL).isEqualTo(url);
 
 		String persistentURL = persistenceManager.getPersistentURL(pid);
@@ -40,7 +40,7 @@ public class PublicationFinalizerTest extends LoggableObject {
 
 		String newURL = "http://example.org/bla";
 		persistenceManager.modifyURLForPersistentId(pid, newURL);
-		persistedURL = persistenceManager.getURLValue(pid);
+		persistedURL = persistenceManager.getPersistedURL(pid);
 		assertThat(persistedURL).isEqualTo(newURL);
 
 		persistenceManager.deletePersistentId(pid);
@@ -49,7 +49,7 @@ public class PublicationFinalizerTest extends LoggableObject {
 
 	private void assertDeleted(PersistenceManager persistenceManager, String pid) {
 		try {
-			persistenceManager.getURLValue(pid);
+			persistenceManager.getPersistedURL(pid);
 		} catch (PersistenceException pe) {
 			Throwable cause = pe.getCause();
 			assertThat(cause).isInstanceOf(HandleException.class);
