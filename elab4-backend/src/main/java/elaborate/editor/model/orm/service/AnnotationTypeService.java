@@ -36,7 +36,7 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 
   public AnnotationType create(AnnotationType annotationType, User creator) {
     beginTransaction();
-    if (creator.getPermission(annotationType).canWrite()) {
+    if (creator.getPermissionFor(annotationType).canWrite()) {
       annotationType.setCreatedBy(creator);
       AnnotationType created = super.create(annotationType);
       commitTransaction();
@@ -59,7 +59,7 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 
   public void update(AnnotationType annotationType, User modifier) {
     beginTransaction();
-    if (modifier.getPermission(annotationType).canWrite()) {
+    if (modifier.getPermissionFor(annotationType).canWrite()) {
       super.update(annotationType);
       commitTransaction();
     } else {
@@ -71,7 +71,7 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
   public void delete(long id, User modifier) {
     beginTransaction();
     AnnotationType annotationType = super.read(id);
-    if (modifier.getPermission(annotationType).canWrite()) {
+    if (modifier.getPermissionFor(annotationType).canWrite()) {
       super.delete(id);
       commitTransaction();
     } else {

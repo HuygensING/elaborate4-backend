@@ -47,7 +47,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 	public User create(User user, User creator) {
 		beginTransaction();
 
-		if (creator.getPermission(user).canWrite()) {
+		if (creator.getPermissionFor(user).canWrite()) {
 			try {
 				getEntityManager().createQuery("from User as u where u.username=?1").setParameter(1, user.getUsername()).getSingleResult();
 				rollbackTransaction();
