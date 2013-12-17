@@ -31,217 +31,214 @@ import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 
 @Singleton
 public class TranscriptionService extends AbstractStoredEntityService<Transcription> {
-  private static TranscriptionService instance;
+	private static TranscriptionService instance = new TranscriptionService();
 
-  private TranscriptionService() {}
+	private TranscriptionService() {}
 
-  public static TranscriptionService instance() {
-    if (instance == null) {
-      instance = new TranscriptionService();
-    }
-    return instance;
-  }
+	public static TranscriptionService instance() {
+		return instance;
+	}
 
-  @Override
-  Class<? extends AbstractStoredEntity<?>> getEntityClass() {
-    return Transcription.class;
-  }
+	@Override
+	Class<? extends AbstractStoredEntity<?>> getEntityClass() {
+		return Transcription.class;
+	}
 
-  @Override
-  String getEntityName() {
-    return "Transcription";
-  }
+	@Override
+	String getEntityName() {
+		return "Transcription";
+	}
 
-  //  AnnotationService annotationService = AnnotationService.instance();
+	//  AnnotationService annotationService = AnnotationService.instance();
 
-  public Transcription read(long project_id, long transcription_id, User user) {
-    openEntityManager();
-    checkProjectPermissions(project_id, user);
+	public Transcription read(long project_id, long transcription_id, User user) {
+		openEntityManager();
+		checkProjectPermissions(project_id, user);
 
-    Transcription transcription = read(transcription_id);
-    closeEntityManager();
-    return transcription;
-  }
+		Transcription transcription = read(transcription_id);
+		closeEntityManager();
+		return transcription;
+	}
 
-  public void update(long project_id, long transcription_id, TranscriptionWrapper wrapper, User user) {
-    beginTransaction();
+	public void update(long project_id, long transcription_id, TranscriptionWrapper wrapper, User user) {
+		beginTransaction();
 
-    checkProjectPermissions(project_id, user);
-    Transcription transcription = read(transcription_id);
-    if (wrapper.getBody() != null) {
-      transcription.setBody(wrapper.getBodyForDb());
-    }
-    merge(transcription);
-    ProjectEntry projectEntry = transcription.getProjectEntry();
-    String logLine = MessageFormat.format("updated transcription ''{0}'' for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
-    updateParents(projectEntry, user, logLine);
+		checkProjectPermissions(project_id, user);
+		Transcription transcription = read(transcription_id);
+		if (wrapper.getBody() != null) {
+			transcription.setBody(wrapper.getBodyForDb());
+		}
+		merge(transcription);
+		ProjectEntry projectEntry = transcription.getProjectEntry();
+		String logLine = MessageFormat.format("updated transcription ''{0}'' for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
+		updateParents(projectEntry, user, logLine);
 
-    commitTransaction();
-  }
+		commitTransaction();
+	}
 
-  public void delete(long project_id, long transcription_id, User user) {
-    beginTransaction();
+	public void delete(long project_id, long transcription_id, User user) {
+		beginTransaction();
 
-    checkProjectPermissions(project_id, user);
+		checkProjectPermissions(project_id, user);
 
-    Transcription transcription = find(Transcription.class, transcription_id);
-    checkEntityFound(transcription, transcription_id);
-    for (Annotation annotation : transcription.getAnnotations()) {
-      remove(annotation);
-    }
-    remove(transcription);
+		Transcription transcription = find(Transcription.class, transcription_id);
+		checkEntityFound(transcription, transcription_id);
+		for (Annotation annotation : transcription.getAnnotations()) {
+			remove(annotation);
+		}
+		remove(transcription);
 
-    ProjectEntry projectEntry = transcription.getProjectEntry();
+		ProjectEntry projectEntry = transcription.getProjectEntry();
 
-    String logLine = MessageFormat.format("deleted transcription ''{0}'' and its annotations for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
+		String logLine = MessageFormat.format("deleted transcription ''{0}'' and its annotations for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
 
-    updateParents(projectEntry, user, logLine);
+		updateParents(projectEntry, user, logLine);
 
-    commitTransaction();
-  }
+		commitTransaction();
+	}
 
-  /* annotations */
-  public Collection<Annotation> getAnnotations(long project_id, long transcription_id, User user) {
-    openEntityManager();
+	/* annotations */
+	public Collection<Annotation> getAnnotations(long project_id, long transcription_id, User user) {
+		openEntityManager();
 
-    checkProjectPermissions(project_id, user);
+		checkProjectPermissions(project_id, user);
 
-    Transcription transcription = read(transcription_id);
-    List<Annotation> annotations = ImmutableList.copyOf(transcription.getAnnotations());
+		Transcription transcription = read(transcription_id);
+		List<Annotation> annotations = ImmutableList.copyOf(transcription.getAnnotations());
 
-    closeEntityManager();
-    return annotations;
-  }
+		closeEntityManager();
+		return annotations;
+	}
 
-  private static final int ANNOTATION_NO_START = 9000000;
+	private static final int ANNOTATION_NO_START = 9000000;
 
-  public Annotation addAnnotation(long project_id, long transcription_id, AnnotationInputWrapper annotationInput, User user) {
-    beginTransaction();
+	public Annotation addAnnotation(long project_id, long transcription_id, AnnotationInputWrapper annotationInput, User user) {
+		beginTransaction();
 
-    checkProjectPermissions(project_id, user);
-    Transcription transcription = read(transcription_id);
-    Annotation annotation = ModelFactory.createTrackedEntity(Annotation.class, user);
-    annotation.setTranscription(transcription);
-    annotation.setBody(annotationInput.body);
+		checkProjectPermissions(project_id, user);
+		Transcription transcription = read(transcription_id);
+		Annotation annotation = ModelFactory.createTrackedEntity(Annotation.class, user);
+		annotation.setTranscription(transcription);
+		annotation.setBody(annotationInput.body);
 
-    AnnotationType annotationType = getAnnotationType(annotationInput);
-    annotation.setAnnotationType(annotationType);
+		AnnotationType annotationType = getAnnotationType(annotationInput);
+		annotation.setAnnotationType(annotationType);
 
-    persist(annotation);
-    if (!annotationInput.metadata.isEmpty()) {
-      createAnnotationMetadataItems(annotation, annotationInput, annotationType);
-    }
+		persist(annotation);
+		if (!annotationInput.metadata.isEmpty()) {
+			createAnnotationMetadataItems(annotation, annotationInput, annotationType);
+		}
 
-    ProjectEntry projectEntry = transcription.getProjectEntry();
+		ProjectEntry projectEntry = transcription.getProjectEntry();
 
-    String logLine = MessageFormat.format("added annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''", annotationType.getName(), transcription.getTextLayer(), projectEntry.getName());
-    updateParents(projectEntry, user, logLine);
-    commitTransaction();
+		String logLine = MessageFormat.format("added annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''", annotationType.getName(), transcription.getTextLayer(), projectEntry.getName());
+		updateParents(projectEntry, user, logLine);
+		commitTransaction();
 
-    long id = annotation.getId();
+		long id = annotation.getId();
 
-    beginTransaction();
-    annotation = find(Annotation.class, id);
-    annotation.setAnnotationNo((int) (ANNOTATION_NO_START + id));
-    persist(annotation);
-    commitTransaction();
+		beginTransaction();
+		annotation = find(Annotation.class, id);
+		annotation.setAnnotationNo((int) (ANNOTATION_NO_START + id));
+		persist(annotation);
+		commitTransaction();
 
-    return annotation;
-  }
+		return annotation;
+	}
 
-  private AnnotationType getAnnotationType(AnnotationInputWrapper annotationInput) {
-    AnnotationType annotationType = find(AnnotationType.class, annotationInput.typeId);
-    if (annotationType == null) {
-      rollbackTransaction();
-      throw new BadRequestException("bad typeId: no AnnotationType found with id " + annotationInput.typeId);
-    }
-    return annotationType;
-  }
+	private AnnotationType getAnnotationType(AnnotationInputWrapper annotationInput) {
+		AnnotationType annotationType = find(AnnotationType.class, annotationInput.typeId);
+		if (annotationType == null) {
+			rollbackTransaction();
+			throw new BadRequestException("bad typeId: no AnnotationType found with id " + annotationInput.typeId);
+		}
+		return annotationType;
+	}
 
-  private List<AnnotationMetadataItem> createAnnotationMetadataItems(Annotation annotation, AnnotationInputWrapper annotationInput, AnnotationType annotationType) {
-    Map<String, Long> atmiMap = Maps.newHashMap();
-    Iterator<AnnotationTypeMetadataItem> iterator = annotationType.getMetadataItems().iterator();
-    while (iterator.hasNext()) {
-      AnnotationTypeMetadataItem annotationTypeMetadataItem = iterator.next();
-      atmiMap.put(annotationTypeMetadataItem.getName(), annotationTypeMetadataItem.getId());
-    }
+	private List<AnnotationMetadataItem> createAnnotationMetadataItems(Annotation annotation, AnnotationInputWrapper annotationInput, AnnotationType annotationType) {
+		Map<String, Long> atmiMap = Maps.newHashMap();
+		Iterator<AnnotationTypeMetadataItem> iterator = annotationType.getMetadataItems().iterator();
+		while (iterator.hasNext()) {
+			AnnotationTypeMetadataItem annotationTypeMetadataItem = iterator.next();
+			atmiMap.put(annotationTypeMetadataItem.getName(), annotationTypeMetadataItem.getId());
+		}
 
-    List<AnnotationMetadataItem> annotationMetadataItems = Lists.newArrayListWithCapacity(annotationInput.metadata.size());
-    for (Entry<String, String> entry : annotationInput.metadata.entrySet()) {
-      String key = entry.getKey();
-      String value = entry.getValue();
-      AnnotationMetadataItem ami = ModelFactory.create(AnnotationMetadataItem.class);
-      if (!atmiMap.containsKey(key)) {
-        rollbackTransaction();
-        throw new BadRequestException("bad metadata key: no AnnotationTypeMetadataItem found with name " + key);
-      }
-      long atmiId = atmiMap.get(key);
-      AnnotationTypeMetadataItem annotationTypeMetadataItem = find(AnnotationTypeMetadataItem.class, atmiId);
-      ami.setAnnotationTypeMetadataItem(annotationTypeMetadataItem);
-      ami.setData(value);
-      ami.setAnnotation(annotation);
-      persist(ami);
-      annotationMetadataItems.add(ami);
-    }
-    return annotationMetadataItems;
-  }
+		List<AnnotationMetadataItem> annotationMetadataItems = Lists.newArrayListWithCapacity(annotationInput.metadata.size());
+		for (Entry<String, String> entry : annotationInput.metadata.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			AnnotationMetadataItem ami = ModelFactory.create(AnnotationMetadataItem.class);
+			if (!atmiMap.containsKey(key)) {
+				rollbackTransaction();
+				throw new BadRequestException("bad metadata key: no AnnotationTypeMetadataItem found with name " + key);
+			}
+			long atmiId = atmiMap.get(key);
+			AnnotationTypeMetadataItem annotationTypeMetadataItem = find(AnnotationTypeMetadataItem.class, atmiId);
+			ami.setAnnotationTypeMetadataItem(annotationTypeMetadataItem);
+			ami.setData(value);
+			ami.setAnnotation(annotation);
+			persist(ami);
+			annotationMetadataItems.add(ami);
+		}
+		return annotationMetadataItems;
+	}
 
-  public Annotation readAnnotation(long project_id, long annotation_id, User user) {
-    openEntityManager();
-    checkProjectPermissions(project_id, user);
-    Annotation annotation = find(Annotation.class, annotation_id);
-    closeEntityManager();
-    return annotation;
-  }
+	public Annotation readAnnotation(long project_id, long annotation_id, User user) {
+		openEntityManager();
+		checkProjectPermissions(project_id, user);
+		Annotation annotation = find(Annotation.class, annotation_id);
+		closeEntityManager();
+		return annotation;
+	}
 
-  public void updateAnnotation(long project_id, long annotation_id, AnnotationInputWrapper update, User user) {
-    beginTransaction();
-    checkProjectPermissions(project_id, user);
+	public void updateAnnotation(long project_id, long annotation_id, AnnotationInputWrapper update, User user) {
+		beginTransaction();
+		checkProjectPermissions(project_id, user);
 
-    Annotation annotation = find(Annotation.class, annotation_id);
-    AnnotationType annotationType = getAnnotationType(update);
-    annotation.setBody(update.body).setAnnotationType(annotationType);
-    persist(annotation);
+		Annotation annotation = find(Annotation.class, annotation_id);
+		AnnotationType annotationType = getAnnotationType(update);
+		annotation.setBody(update.body).setAnnotationType(annotationType);
+		persist(annotation);
 
-    // annotationmetadata: remove existing
-    for (AnnotationMetadataItem annotationMetadataItem : annotation.getAnnotationMetadataItems()) {
-      remove(annotationMetadataItem);
-    }
+		// annotationmetadata: remove existing
+		for (AnnotationMetadataItem annotationMetadataItem : annotation.getAnnotationMetadataItems()) {
+			remove(annotationMetadataItem);
+		}
 
-    Set<AnnotationMetadataItem> annotationMetadataItems = Sets.newHashSet();
-    for (String key : update.metadata.keySet()) {
-      AnnotationTypeMetadataItem annotationTypeMetadataItem = (AnnotationTypeMetadataItem) getEntityManager().createQuery("from AnnotationTypeMetadataItem as m where m.name=?1").setParameter(1, key).getSingleResult();
-      if (annotationTypeMetadataItem != null) {
-        AnnotationMetadataItem item = new AnnotationMetadataItem().setAnnotation(annotation).setAnnotationTypeMetadataItem(annotationTypeMetadataItem).setData(update.metadata.get(key));
-        persist(item);
-        annotationMetadataItems.add(item);
-      }
-    }
+		Set<AnnotationMetadataItem> annotationMetadataItems = Sets.newHashSet();
+		for (String key : update.metadata.keySet()) {
+			AnnotationTypeMetadataItem annotationTypeMetadataItem = (AnnotationTypeMetadataItem) getEntityManager().createQuery("from AnnotationTypeMetadataItem as m where m.name=?1").setParameter(1, key).getSingleResult();
+			if (annotationTypeMetadataItem != null) {
+				AnnotationMetadataItem item = new AnnotationMetadataItem().setAnnotation(annotation).setAnnotationTypeMetadataItem(annotationTypeMetadataItem).setData(update.metadata.get(key));
+				persist(item);
+				annotationMetadataItems.add(item);
+			}
+		}
 
-    //    String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
-    //      annotationMetadataItem.setData(update.metadata.get(name));
-    //      persist(annotationMetadataItem);
-    //    }
+		//    String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
+		//      annotationMetadataItem.setData(update.metadata.get(name));
+		//      persist(annotationMetadataItem);
+		//    }
 
-    commitTransaction();
-  }
+		commitTransaction();
+	}
 
-  public void deleteAnnotation(long project_id, long annotation_id, User user) {
-    beginTransaction();
+	public void deleteAnnotation(long project_id, long annotation_id, User user) {
+		beginTransaction();
 
-    checkProjectPermissions(project_id, user);
+		checkProjectPermissions(project_id, user);
 
-    Annotation annotation = find(Annotation.class, annotation_id);
-    remove(annotation);
+		Annotation annotation = find(Annotation.class, annotation_id);
+		remove(annotation);
 
-    Transcription transcription = annotation.getTranscription();
-    ProjectEntry projectEntry = transcription.getProjectEntry();
+		Transcription transcription = annotation.getTranscription();
+		ProjectEntry projectEntry = transcription.getProjectEntry();
 
-    String logLine = MessageFormat.format("deleted annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''", annotation.getAnnotationType().getName(), transcription.getTextLayer(), projectEntry.getName());
+		String logLine = MessageFormat.format("deleted annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''", annotation.getAnnotationType().getName(), transcription.getTextLayer(), projectEntry.getName());
 
-    updateParents(projectEntry, user, logLine);
+		updateParents(projectEntry, user, logLine);
 
-    commitTransaction();
-  }
+		commitTransaction();
+	}
 
 }
