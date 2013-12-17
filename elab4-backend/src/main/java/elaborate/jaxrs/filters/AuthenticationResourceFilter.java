@@ -35,8 +35,8 @@ public class AuthenticationResourceFilter extends LoggableObject implements Reso
 		if (StringUtils.isNotBlank(authentication)) {
 			List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
 			if (parts.size() == 2) {
-				String key = parts.get(1);
 				String scheme = parts.get(0);
+				String key = parts.get(1);
 				try {
 					SecurityContext securityContext = sessionService.getSecurityContext(scheme, key);
 					if (securityContext != null) {

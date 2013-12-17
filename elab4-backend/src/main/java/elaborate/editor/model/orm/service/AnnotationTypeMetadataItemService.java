@@ -13,14 +13,11 @@ import elaborate.editor.resources.orm.wrappers.AnnotationTypeMetadataItemInput;
 
 @Singleton
 public class AnnotationTypeMetadataItemService extends AbstractStoredEntityService<AnnotationTypeMetadataItem> {
-  private static AnnotationTypeMetadataItemService instance;
+	private static AnnotationTypeMetadataItemService instance = new AnnotationTypeMetadataItemService();
 
   private AnnotationTypeMetadataItemService() {}
 
   public static AnnotationTypeMetadataItemService instance() {
-    if (instance == null) {
-      instance = new AnnotationTypeMetadataItemService();
-    }
     return instance;
   }
 

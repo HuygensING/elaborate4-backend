@@ -24,14 +24,14 @@
 		<assertj-core.version>1.5.0</assertj-core.version>
 		<c3p0.version>0.9.1.2</c3p0.version>
 		<classloader-leak-prevention.version>1.9.0</classloader-leak-prevention.version>
-		<commons-configuration.version>1.6</commons-configuration.version><!-- because of hadoop-common dependency in solr-core -->
+		<commons-configuration.version>1.10</commons-configuration.version><!-- because of hadoop-common dependency in solr-core -->
 		<commons-lang.version>2.6</commons-lang.version>
 		<flexjson.version>3.1</flexjson.version>
 		<fest.version>1.0.16</fest.version>
 		<freemarker.version>2.3.20</freemarker.version>
 		<guava.version>15.0</guava.version>
 		<guice.version>3.0</guice.version>
-		<hibernate.version>4.3.0.CR2</hibernate.version>
+		<hibernate.version>4.3.0.Final</hibernate.version>
 		<hsqldb.version>2.3.1</hsqldb.version>
 		<jackson.version>2.3.0</jackson.version>
 		<javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
@@ -45,12 +45,12 @@
 		<maven-compiler.version>3.1</maven-compiler.version>
 		<maven-war.version>2.3</maven-war.version>
 		<mockito.version>1.9.5</mockito.version>
-		<persistence.version>2.0.0</persistence.version>
+		<persistence.version>2.0.1</persistence.version>
 		<oaipmh.version>0.0.1</oaipmh.version>
 		<postgresql.version>9.0-801.jdbc4</postgresql.version>
 		<security.version>2.1.4</security.version>
 		<slf4j.version>1.7.5</slf4j.version>
-		<solr.version>4.4.0</solr.version><!-- 4.5.1 geeft problemen -->
+		<solr.version>4.6.0</solr.version><!-- 4.5.1 geeft problemen -->
 		<tomcat-maven.version>1.1</tomcat-maven.version>
 		<tomcatservlet-api.version>6.0.36</tomcatservlet-api.version>
 		<urlrewritefilter.version>4.0.4</urlrewritefilter.version>
