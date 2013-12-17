@@ -63,8 +63,8 @@ public class SearchResource extends AbstractElaborateResource {
 	public Response getSearchResults(//
 			@PathParam("project_id") long projectId,//
 			@PathParam("search_id") long searchId,//
-			@QueryParam("start") @DefaultValue("0") int start,//
-			@QueryParam("rows") @DefaultValue("25") int rows//
+			@QueryParam("start: [0-9]+") @DefaultValue("0") int start,//
+			@QueryParam("rows: [0-9]+") @DefaultValue("25") int rows//
 	//      @QueryParam("verbose") @DefaultValue("false") boolean verbose//
 	) {
 		Map<String, Object> searchResult = searchService.getSearchResult(projectId, searchId, start, rows, user);
