@@ -8,7 +8,6 @@ import nl.knaw.huygens.persistence.PersistenceManager;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 public class PublicationFinalizerTest extends LoggableObject {
 
@@ -22,7 +21,7 @@ public class PublicationFinalizerTest extends LoggableObject {
 	@After
 	public void tearDown() throws Exception {}
 
-	@Test
+	//	@Test
 	public void testGetPersistenceManager() throws Exception {
 		PersistenceManager persistenceManager = pf.getPersistenceManager();
 		assertThat(persistenceManager).isNotNull();

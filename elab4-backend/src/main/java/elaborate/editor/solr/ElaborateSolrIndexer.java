@@ -31,77 +31,77 @@ import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
 
 public class ElaborateSolrIndexer extends SolrIndexer {
-  public ElaborateSolrIndexer() {
-    super(getServer(), ID);
-  }
+	public ElaborateSolrIndexer() {
+		super(getServer(), ID);
+	}
 
-  private static SolrServer getServer() {
-    String solrURL = Configuration.instance().getSetting(Configuration.SOLR_URL_KEY);
-    LOG.info("connecting with SOLR server on {}", solrURL);
-    return new HttpSolrServer(solrURL);
-  }
+	private static SolrServer getServer() {
+		String solrURL = Configuration.instance().getSetting(Configuration.SOLR_URL_KEY);
+		LOG.info("connecting with SOLR server on {}", solrURL);
+		return new HttpSolrServer(solrURL);
+	}
 
-  public void index(ProjectEntry projectEntry, boolean commitNow) {
-    super.index(getSolrInputDocument(projectEntry, false), commitNow);
-  }
+	public void index(ProjectEntry projectEntry, boolean commitNow) {
+		super.index(getSolrInputDocument(projectEntry, false), commitNow);
+	}
 
-  public void deindex(ProjectEntry e) {
-    super.deleteById(String.valueOf(e.getId()));
-  }
+	public void deindex(ProjectEntry e) {
+		super.deleteById(String.valueOf(e.getId()));
+	}
 
-  public static SolrInputDocument getSolrInputDocument(ProjectEntry projectEntry, boolean forPublication) {
-    SolrInputDocument doc = new SolrInputDocument();
-    doc.addField(ID, projectEntry.getId());
-    doc.addField(NAME, projectEntry.getName());
-    Project project = projectEntry.getProject();
-    for (String field : project.getProjectEntryMetadataFieldnames()) {
-      String facetName = SolrUtils.facetName(field);
-      String value = projectEntry.getMetadataValue(field);
-      doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL), 1.0f);
-    }
-    Set<String> textLayersProcessed = Sets.newHashSet();
-    for (Transcription transcription : projectEntry.getTranscriptions()) {
-      String tBody = convert(transcription.getBody());
-      String textLayer = StringUtil.normalize(transcription.getTextLayer());
-      if (textLayersProcessed.contains(textLayer)) {
-        LOG.error("duplicate textlayer {} for entry {}", textLayer, projectEntry.getId());
-      } else {
-        doc.addField(TEXTLAYER_PREFIX + textLayer, tBody);
-        doc.addField(TEXTLAYERCS_PREFIX + textLayer, tBody);
-        for (Annotation annotation : transcription.getAnnotations()) {
-          String body = annotation.getBody();
-          if (body != null) {
-            String aBody = convert(body);
-            doc.addField(ANNOTATION_PREFIX + textLayer, aBody);
-            doc.addField(ANNOTATIONCS_PREFIX + textLayer, aBody);
-          }
-        }
-        textLayersProcessed.add(textLayer);
-      }
-    }
-    if (!forPublication) {
-      doc.addField(PUBLISHABLE, projectEntry.isPublishable(), 1.0f);
-      doc.addField(PROJECT_ID, projectEntry.getProject().getId());
-    }
-    return doc;
-  }
+	public static SolrInputDocument getSolrInputDocument(ProjectEntry projectEntry, boolean forPublication) {
+		SolrInputDocument doc = new SolrInputDocument();
+		doc.addField(ID, projectEntry.getId());
+		doc.addField(NAME, projectEntry.getName());
+		Project project = projectEntry.getProject();
+		for (String field : project.getProjectEntryMetadataFieldnames()) {
+			String facetName = SolrUtils.facetName(field);
+			String value = projectEntry.getMetadataValue(field);
+			doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL), 1.0f);
+		}
+		Set<String> textLayersProcessed = Sets.newHashSet();
+		for (Transcription transcription : projectEntry.getTranscriptions()) {
+			String tBody = convert(transcription.getBody());
+			String textLayer = StringUtil.normalize(transcription.getTextLayer());
+			if (textLayersProcessed.contains(textLayer)) {
+				LOG.error("duplicate textlayer {} for entry {}", textLayer, projectEntry.getId());
+			} else {
+				doc.addField(TEXTLAYER_PREFIX + textLayer, tBody);
+				doc.addField(TEXTLAYERCS_PREFIX + textLayer, tBody);
+				for (Annotation annotation : transcription.getAnnotations()) {
+					String body = annotation.getBody();
+					if (body != null) {
+						String aBody = convert(body);
+						doc.addField(ANNOTATION_PREFIX + textLayer, aBody);
+						doc.addField(ANNOTATIONCS_PREFIX + textLayer, aBody);
+					}
+				}
+				textLayersProcessed.add(textLayer);
+			}
+		}
+		if (!forPublication) {
+			doc.addField(PUBLISHABLE, projectEntry.isPublishable(), 1.0f);
+			doc.addField(PROJECT_ID, projectEntry.getProject().getId());
+		}
+		return doc;
+	}
 
-  // -- private methods
+	// -- private methods
 
-  static String convert(String xmlContent) {
-    final SolrIndexerVisitor visitor = new SolrIndexerVisitor();
-    String xml = XmlUtil.wrapInXml(XmlUtil.fixXhtml(xmlContent)).replaceAll("\n", " ");
-    try {
-      final Document document = Document.createFromXml(xml, false);
-      document.accept(visitor);
-      final XmlContext c = visitor.getContext();
-      String rawResult = c.getResult();
-      return rawResult;
+	static String convert(String xmlContent) {
+		final SolrIndexerVisitor visitor = new SolrIndexerVisitor();
+		String xml = XmlUtil.wrapInXml(XmlUtil.fixXhtml(xmlContent)).replaceAll("\n", " ");
+		try {
+			final Document document = Document.createFromXml(xml, false);
+			document.accept(visitor);
+			final XmlContext c = visitor.getContext();
+			String rawResult = c.getResult();
+			return rawResult;
 
-    } catch (Exception e) {
-      LOG.error(e.getMessage());
-      return XmlUtil.removeXMLtags(xml);
-    }
-  }
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			return XmlUtil.removeXMLtags(xml);
+		}
+	}
 
 }
