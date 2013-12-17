@@ -6,10 +6,8 @@ import nl.knaw.huygens.persistence.PersistenceManager;
 public class PersistenceWrapper {
 
 	private final PersistenceManager persistenceManager;
-	private final String baseUrl;
 
-	public PersistenceWrapper(String baseUrl, PersistenceManager persistenceManager) {
-		this.baseUrl = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
+	public PersistenceWrapper(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
 	}
 
@@ -18,7 +16,7 @@ public class PersistenceWrapper {
 	}
 
 	public String getPersistedUrl(String persistentId) throws PersistenceException {
-		return persistenceManager.getURLValue(persistentId);
+		return persistenceManager.getPersistedURL(persistentId);
 	}
 
 	public String getPersistentUrl(String persistentId) {
