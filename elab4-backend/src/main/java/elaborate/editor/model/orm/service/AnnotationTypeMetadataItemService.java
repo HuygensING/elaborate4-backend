@@ -39,7 +39,7 @@ public class AnnotationTypeMetadataItemService extends AbstractStoredEntityServi
   public AnnotationTypeMetadataItem create(AnnotationTypeMetadataItemInput input, User creator) {
     beginTransaction();
     AnnotationTypeMetadataItem annotationTypeMetadataItem = new AnnotationTypeMetadataItem();
-    if (creator.getPermission(annotationTypeMetadataItem).canWrite()) {
+    if (creator.getPermissionFor(annotationTypeMetadataItem).canWrite()) {
       AnnotationTypeMetadataItem create = super.create(annotationTypeMetadataItem);
       commitTransaction();
       return create;
@@ -61,7 +61,7 @@ public class AnnotationTypeMetadataItemService extends AbstractStoredEntityServi
 
   public void update(AnnotationTypeMetadataItem annotationType, User modifier) {
     beginTransaction();
-    if (modifier.getPermission(annotationType).canWrite()) {
+    if (modifier.getPermissionFor(annotationType).canWrite()) {
       super.update(annotationType);
       commitTransaction();
     } else {
@@ -73,7 +73,7 @@ public class AnnotationTypeMetadataItemService extends AbstractStoredEntityServi
   public void delete(long id, User modifier) {
     beginTransaction();
     AnnotationTypeMetadataItem annotationType = super.read(id);
-    if (modifier.getPermission(annotationType).canWrite()) {
+    if (modifier.getPermissionFor(annotationType).canWrite()) {
       super.delete(id);
       commitTransaction();
     } else {
