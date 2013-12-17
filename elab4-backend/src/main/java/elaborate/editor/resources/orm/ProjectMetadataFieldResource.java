@@ -28,50 +28,50 @@ import elaborate.jaxrs.Annotations.AuthorizationRequired;
 @Path("projectmetadatafields")
 @AuthorizationRequired
 public class ProjectMetadataFieldResource extends AbstractElaborateResource {
-  @Context
-  private ProjectMetadataFieldService projectMetadataFieldService;
+	@Context
+	private ProjectMetadataFieldService projectMetadataFieldService;
 
-  @GET
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Returns a list of all projectmetadatafields")
-  @JsonView(Views.Minimal.class)
-  public List<ProjectMetadataField> getAll() {
-    return projectMetadataFieldService.getAll(getUser());
-  }
+	@GET
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Returns a list of all projectmetadatafields")
+	@JsonView(Views.Minimal.class)
+	public List<ProjectMetadataField> getAll() {
+		return projectMetadataFieldService.getAll(getUser());
+	}
 
-  @GET
-  @Path("{field_id}")
-  @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Returns the projectmetadatafield with the given field_id")
-  @JsonView(Views.Minimal.class)
-  public ProjectMetadataField getProjectMetadataField(@PathParam("field_id") long field_id) {
-    return projectMetadataFieldService.read(field_id);
-  }
+	@GET
+	@Path("{field_id: [0-9]+}")
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Returns the projectmetadatafield with the given field_id")
+	@JsonView(Views.Minimal.class)
+	public ProjectMetadataField getProjectMetadataField(@PathParam("field_id") long field_id) {
+		return projectMetadataFieldService.read(field_id);
+	}
 
-  @POST
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @RolesAllowed("ADMIN")
-  @APIDesc("Adds a new projecmetadatafield")
-  public Response createProjectMetadataField(ProjectMetadataField pmField) {
-    projectMetadataFieldService.create(pmField, getUser());
-    return Response.created(createURI(pmField)).build();
-  }
+	@POST
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@RolesAllowed("ADMIN")
+	@APIDesc("Adds a new projecmetadatafield")
+	public Response createProjectMetadataField(ProjectMetadataField pmField) {
+		projectMetadataFieldService.create(pmField, getUser());
+		return Response.created(createURI(pmField)).build();
+	}
 
-  @PUT
-  @Path("{field_id}")
-  @RolesAllowed("ADMIN")
-  @Consumes(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc("Updates the projectmetadatafield with the given field_id")
-  public void updateProject(ProjectMetadataField pmField) {
-    projectMetadataFieldService.update(pmField, getUser());
-  }
+	@PUT
+	@Path("{field_id: [0-9]+}")
+	@RolesAllowed("ADMIN")
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Updates the projectmetadatafield with the given field_id")
+	public void updateProject(ProjectMetadataField pmField) {
+		projectMetadataFieldService.update(pmField, getUser());
+	}
 
-  @DELETE
-  @Path("{field_id}")
-  @RolesAllowed("ADMIN")
-  @APIDesc("Deletes the projectmetadatafield with the given field_id")
-  public void deleteProject(@PathParam("field_id") long field_id) {
-    projectMetadataFieldService.delete(field_id, getUser());
-  }
+	@DELETE
+	@Path("{field_id: [0-9]+}")
+	@RolesAllowed("ADMIN")
+	@APIDesc("Deletes the projectmetadatafield with the given field_id")
+	public void deleteProject(@PathParam("field_id") long field_id) {
+		projectMetadataFieldService.delete(field_id, getUser());
+	}
 
 }

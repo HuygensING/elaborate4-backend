@@ -46,7 +46,7 @@ public class AnnotationTypeMetadataItemResource extends AbstractElaborateResourc
 	}
 
 	@GET
-	@Path("{id}")
+	@Path("{id: [0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@JsonView(Views.Minimal.class)
 	@APIDesc("Returns the annotationtypeMetadataItem with the given id")
@@ -63,7 +63,7 @@ public class AnnotationTypeMetadataItemResource extends AbstractElaborateResourc
 	}
 
 	@PUT
-	@Path("{id}")
+	@Path("{id: [0-9]+}")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the annotationtypeMetadataItem with the given id")
 	public void update(@PathParam("id") long id, AnnotationTypeMetadataItemInput input) {
@@ -72,7 +72,7 @@ public class AnnotationTypeMetadataItemResource extends AbstractElaborateResourc
 	}
 
 	@DELETE
-	@Path("{id}")
+	@Path("{id: [0-9]+}")
 	@APIDesc("Deletes the annotationtypeMetadataItem with the given id")
 	public void delete(@PathParam("id") long id) {
 		annotationTypeMetadataItemService.delete(id, getUser());

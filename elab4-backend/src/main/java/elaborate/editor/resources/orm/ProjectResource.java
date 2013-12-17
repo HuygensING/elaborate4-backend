@@ -54,7 +54,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{project_id}")
+	@Path("{project_id: [0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the project with the given project_id")
 	public Project getProject(@PathParam("project_id") long project_id) {
@@ -71,7 +71,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	//	@PUT
-	//	@Path("{project_id}")
+	//	@Path("{project_id: [0-9]+}")
 	//	@RolesAllowed("ADMIN")
 	//	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	//	@APIDesc("Updates the project with the given project_id")
@@ -80,7 +80,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	//	}
 
 	@DELETE
-	@Path("{project_id}")
+	@Path("{project_id: [0-9]+}")
 	@RolesAllowed("ADMIN")
 	@APIDesc("Deletes the project with the given project_id")
 	public void deleteProject(@PathParam("project_id") long project_id) {
@@ -90,7 +90,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	/* project settings */
 
 	@PUT
-	@Path("{project_id}/sortlevels")
+	@Path("{project_id: [0-9]+}/sortlevels")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates level1,2,3 of the project with the given project_id")
@@ -103,7 +103,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{project_id}/settings")
+	@Path("{project_id: [0-9]+}/settings")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the settings of the project with the given project_id")
 	public Map<String, String> getProjectSettings(@PathParam("project_id") long project_id) {
@@ -111,7 +111,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{project_id}/settings")
+	@Path("{project_id: [0-9]+}/settings")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates the settings of the project with the given project_id")
@@ -124,7 +124,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{project_id}/textlayers")
+	@Path("{project_id: [0-9]+}/textlayers")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates the textlayers settings of the project with the given project_id")
@@ -134,7 +134,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	//  /* project facets */
 	//  @GET
-	//  @Path("{project_id}/facets")
+	//  @Path("{project_id: [0-9]+}/facets")
 	//  @Produces(UTF8MediaType.APPLICATION_JSON)
 	//  @APIDesc("Returns facet info of the project with the given project_id")
 	//  public List<FacetInfo> getFacetInfo(@PathParam("project_id") long project_id) {
@@ -143,7 +143,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	/* project entry metadata */
 	@GET
-	@Path("{project_id}/entrymetadatafields")
+	@Path("{project_id: [0-9]+}/entrymetadatafields")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the metadatafields for the project entries of the project with the given project_id")
 	public String[] getProjectEntryMetadataFields(@PathParam("project_id") long project_id) {
@@ -151,7 +151,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{project_id}/entrymetadatafields")
+	@Path("{project_id: [0-9]+}/entrymetadatafields")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the metadatafields for the project entries of the project with the given project_id")
 	public void updateProjectEntryMetadataFields(@PathParam("project_id") long project_id, List<String> fields) {
@@ -160,7 +160,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	/* project annotationtypes */
 	@GET
-	@Path("{project_id}/annotationtypes")
+	@Path("{project_id: [0-9]+}/annotationtypes")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@JsonView(Views.Minimal.class)
 	@APIDesc("Returns the annotation types for the project with the given project_id")
@@ -168,9 +168,8 @@ public class ProjectResource extends AbstractElaborateResource {
 		return projectService.getProjectAnnotationTypeIds(project_id, getUser());
 	}
 
-	// TODO
 	@PUT
-	@Path("{project_id}/annotationtypes")
+	@Path("{project_id: [0-9]+}/annotationtypes")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@JsonView(Views.Minimal.class)
 	@APIDesc("Updates the annotation types for the project with the given project_id")
@@ -180,7 +179,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	/* project users */
 	@GET
-	@Path("{project_id}/users")
+	@Path("{project_id: [0-9]+}/users")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the users assigned to the project with the given project_id, extended view")
 	public Object getProjectUsersExtended(@PathParam("project_id") long project_id) {
@@ -188,7 +187,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{project_id}/projectusers")
+	@Path("{project_id: [0-9]+}/projectusers")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the user ids assigned to the project with the given project_id")
 	public List<Long> getProjectUsers(@PathParam("project_id") long project_id) {
@@ -196,7 +195,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	@PUT
-	@Path("{project_id}/projectusers")
+	@Path("{project_id: [0-9]+}/projectusers")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates the user ids assigned to the project with the given project_id")
@@ -205,7 +204,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	}
 
 	//  @PUT
-	//  @Path("{project_id}/projectusers/{user_id}")
+	//  @Path("{project_id: [0-9]+}/projectusers/{user_id}")
 	//  @Consumes(UTF8MediaType.APPLICATION_JSON)
 	//  @RolesAllowed("ADMIN")
 	//  @APIDesc("Adds an existing user to the project with the given project_id")
@@ -215,7 +214,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	//  }
 
 	//  @DELETE
-	//  @Path("{project_id}/projectusers/{user_id}")
+	//  @Path("{project_id: [0-9]+}/projectusers/{user_id}")
 	//  @Consumes(UTF8MediaType.APPLICATION_JSON)
 	//  @RolesAllowed("ADMIN")
 	//  @APIDesc("Removes the user with the given user_id from the project with the given project_id")
@@ -225,7 +224,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	/* project statistics */
 	@GET
-	@Path("{project_id}/statistics")
+	@Path("{project_id: [0-9]+}/statistics")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the statistics of the project with the given project_id")
 	public Object getProjectStatistics(@PathParam("project_id") long project_id) {
@@ -234,14 +233,14 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	/* project entries */
 
-	@Path("{project_id}/entries")
+	@Path("{project_id: [0-9]+}/entries")
 	public ProjectEntriesResource getProjectEntriesResource() {
 		return new ProjectEntriesResource(getUser(), projectService);
 	}
 
 	/* update multiple entry settings */
 	@PUT
-	@Path("{project_id}/multipleentrysettings")
+	@Path("{project_id: [0-9]+}/multipleentrysettings")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the settings of the project entries with the given entry_ids")
 	public void updateMultipleProjectEntrySettings(@PathParam("project_id") long project_id, MultipleProjectEntrySettings mpes) {
@@ -251,7 +250,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	/* project loglines */
 	@GET
-	@Path("{project_id}/logentries")
+	@Path("{project_id: [0-9]+}/logentries")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the logentries of the project with the given project_id")
 	public List<LogEntry> getLogEntries(@PathParam("project_id") long project_id) {
@@ -260,7 +259,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	/* TEI export */
 	@GET
-	@Path("{project_id}/tei")
+	@Path("{project_id: [0-9]+}/tei")
 	@Produces(MediaType.APPLICATION_XML)
 	@APIDesc("Returns the project with the given project_id as tei")
 	public String exportTei(@PathParam("project_id") long project_id) {
@@ -269,19 +268,19 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	/* publish */
 
-	@Path("{project_id}/draft")
+	@Path("{project_id: [0-9]+}/draft")
 	public DraftPublicationResource getDraftResource() {
 		return new DraftPublicationResource(getUser(), projectService);
 	}
 
-	//  @Path("{project_id}/publicationrequest")
+	//  @Path("{project_id: [0-9]+}/publicationrequest")
 	//  public void requestPublication() {
 	//    ;
 	//  }
 
 	/* search */
 
-	@Path("{project_id}/search")
+	@Path("{project_id: [0-9]+}/search")
 	public SearchResource getSearchResource() {
 		return new SearchResource(getUser());
 	}
