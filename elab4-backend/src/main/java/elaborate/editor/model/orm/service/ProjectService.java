@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
@@ -671,7 +672,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<Long> publishableAnnotationTypeIds = Lists.newArrayList();
 		if (metadataString != null) {
 			try {
-				publishableAnnotationTypeIds = new ObjectMapper().readValue(metadataString, List.class);
+				publishableAnnotationTypeIds = new ObjectMapper().readValue(metadataString, new TypeReference<List<Long>>() {});
 			} catch (JsonParseException e) {
 				e.printStackTrace();
 			} catch (JsonMappingException e) {
