@@ -629,6 +629,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		String projectType = StringUtils.defaultIfBlank(projectMetadata.get("projectType"), ProjectTypes.COLLECTION);
 		List<Long> publishableAnnotationTypeIds = getPublishableAnnotationTypeIds(projectMetadata);
 		List<String> publishableProjectEntryMetadataFields = getPublishableProjectEntryMetadataFields(projectMetadata);
+		List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(projectMetadata);
 		List<String> publishableTextLayers = getPublishableTextLayers(projectMetadata);
 		Publication.Settings settings = new Publication.Settings()//
 				.setProjectId(project_id)//
@@ -636,6 +637,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				.setTextLayers(publishableTextLayers)//
 				.setAnnotationTypeIds(publishableAnnotationTypeIds)//
 				.setProjectEntryMetadataFields(publishableProjectEntryMetadataFields)//
+				.setFacetFields(facetableProjectEntryMetadataFields)//
 				.setProjectType(projectType);
 		Publication.Status publicationStatus = publisher.publish(settings);
 
@@ -648,6 +650,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	private List<String> getPublishableProjectEntryMetadataFields(Map<String, String> projectMetadata) {
 		return deserialize(projectMetadata, ProjectMetadataFields.PUBLISHABLE_PROJECT_ENTRY_METADATA_FIELDS);
+	}
+
+	private List<String> getFacetableProjectEntryMetadataFields(Map<String, String> projectMetadata) {
+		return deserialize(projectMetadata, ProjectMetadataFields.FACETABLE_PROJECT_ENTRY_METADATA_FIELDS);
 	}
 
 	private List<String> deserialize(Map<String, String> projectMetadata, String key) {
