@@ -31,17 +31,17 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 
 	/* CRUD methods */
 
-	public AnnotationType create(AnnotationType annotationType, User creator) {
-		beginTransaction();
-		if (creator.getPermission(annotationType).canWrite()) {
-			annotationType.setCreatedBy(creator);
-			AnnotationType created = super.create(annotationType);
-			commitTransaction();
-			return created;
-		}
-		rollbackTransaction();
-		throw new UnauthorizedException(exception(creator, "create new annotation types"));
-	}
+  public AnnotationType create(AnnotationType annotationType, User creator) {
+    beginTransaction();
+    if (creator.getPermissionFor(annotationType).canWrite()) {
+      annotationType.setCreatedBy(creator);
+      AnnotationType created = super.create(annotationType);
+      commitTransaction();
+      return created;
+    }
+    rollbackTransaction();
+    throw new UnauthorizedException(exception(creator, "create new annotation types"));
+  }
 
 	private String exception(User creator, String string) {
 		return "user " + creator.getUsername() + " is not authorized to " + string;
@@ -54,28 +54,28 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 		return annotationType;
 	}
 
-	public void update(AnnotationType annotationType, User modifier) {
-		beginTransaction();
-		if (modifier.getPermission(annotationType).canWrite()) {
-			super.update(annotationType);
-			commitTransaction();
-		} else {
-			rollbackTransaction();
-			throw new UnauthorizedException(exception(modifier, "update annotation types"));
-		}
-	}
+  public void update(AnnotationType annotationType, User modifier) {
+    beginTransaction();
+    if (modifier.getPermissionFor(annotationType).canWrite()) {
+      super.update(annotationType);
+      commitTransaction();
+    } else {
+      rollbackTransaction();
+      throw new UnauthorizedException(exception(modifier, "update annotation types"));
+    }
+  }
 
-	public void delete(long id, User modifier) {
-		beginTransaction();
-		AnnotationType annotationType = super.read(id);
-		if (modifier.getPermission(annotationType).canWrite()) {
-			super.delete(id);
-			commitTransaction();
-		} else {
-			rollbackTransaction();
-			throw new UnauthorizedException(exception(modifier, "delete annotation types"));
-		}
-	}
+  public void delete(long id, User modifier) {
+    beginTransaction();
+    AnnotationType annotationType = super.read(id);
+    if (modifier.getPermissionFor(annotationType).canWrite()) {
+      super.delete(id);
+      commitTransaction();
+    } else {
+      rollbackTransaction();
+      throw new UnauthorizedException(exception(modifier, "delete annotation types"));
+    }
+  }
 
 	/**/
 	@Override

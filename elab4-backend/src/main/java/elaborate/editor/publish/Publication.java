@@ -16,125 +16,134 @@ import elaborate.editor.model.orm.User;
 
 public class Publication {
 
-  public static class Settings {
-    private Long projectId;
-    private List<String> projectEntryMetadataFields = Lists.newArrayList();
-    private List<Long> annotationTypeIds = Lists.newArrayList();
-    private String projectType = ProjectTypes.COLLECTION; // || "work"
-    private User user;
+	public static class Settings {
+		private Long projectId;
+		private List<String> projectEntryMetadataFields = Lists.newArrayList();
+		private List<Long> annotationTypeIds = Lists.newArrayList();
+		private String projectType = ProjectTypes.COLLECTION; // || "work"
+		private User user;
+		private List<String> textLayers = Lists.newArrayList();
 
-    public Long getProjectId() {
-      return projectId;
-    }
+		public Long getProjectId() {
+			return projectId;
+		}
 
-    public Settings setProjectId(Long projectId) {
-      this.projectId = projectId;
-      return this;
-    }
+		public Settings setProjectId(Long projectId) {
+			this.projectId = projectId;
+			return this;
+		}
 
-    public boolean includeAnnotationType(AnnotationType annotationType) {
-      return getAnnotationTypeIds().isEmpty() ? true : getAnnotationTypeIds().contains(annotationType.getId());
-    }
+		public boolean includeAnnotationType(AnnotationType annotationType) {
+			return getAnnotationTypeIds().isEmpty() ? true : getAnnotationTypeIds().contains(annotationType.getId());
+		}
 
-    public List<String> getProjectEntryMetadataFields() {
-      return projectEntryMetadataFields;
-    }
+		public List<String> getProjectEntryMetadataFields() {
+			return projectEntryMetadataFields;
+		}
 
-    public Settings setProjectEntryMetadataFields(List<String> projectEntryMetadataFields) {
-      this.projectEntryMetadataFields = projectEntryMetadataFields;
-      return this;
-    }
+		public Settings setProjectEntryMetadataFields(List<String> projectEntryMetadataFields) {
+			this.projectEntryMetadataFields = projectEntryMetadataFields;
+			return this;
+		}
 
-    public List<Long> getAnnotationTypeIds() {
-      return annotationTypeIds;
-    }
+		public List<Long> getAnnotationTypeIds() {
+			return annotationTypeIds;
+		}
 
-    public Settings setAnnotationTypeIds(List<Long> annotationTypeIds) {
-      this.annotationTypeIds = annotationTypeIds;
-      return this;
-    }
+		public Settings setAnnotationTypeIds(List<Long> annotationTypeIds) {
+			this.annotationTypeIds = annotationTypeIds;
+			return this;
+		}
 
-    public String getProjectType() {
-      return projectType;
-    }
+		public String getProjectType() {
+			return projectType;
+		}
 
-    public Settings setProjectType(String projectType) {
-      this.projectType = projectType;
-      return this;
-    }
+		public Settings setProjectType(String projectType) {
+			this.projectType = projectType;
+			return this;
+		}
 
-    public User getUser() {
-      return user;
-    }
+		public User getUser() {
+			return user;
+		}
 
-    public Settings setUser(User user) {
-      this.user = user;
-      return this;
-    }
+		public Settings setUser(User user) {
+			this.user = user;
+			return this;
+		}
 
-  }
+		public Settings setTextLayers(List<String> publishableTextLayers) {
+			this.textLayers = publishableTextLayers;
+			return this;
+		}
 
-  public static class Status {
-    private final String id;
-    private String url;
-    private final List<String> loglines = Lists.newArrayList();
-    private boolean done = false;
-    private boolean fail = false;
+		public List<String> getTextLayers() {
+			return textLayers;
+		}
+	}
 
-    public Status(long projectId) {
-      this.id = new DateTime().toString("yyyyMMddHHmmss") + projectId;
-    }
+	public static class Status {
+		private final String id;
+		private String url;
+		private final List<String> loglines = Lists.newArrayList();
+		private boolean done = false;
+		private boolean fail = false;
 
-    @JsonIgnore
-    public URI getURI() {
-      URI uri;
-      try {
-        //        uri = new URIBuilder().setPath(MessageFormat.format("/projects/{0}/publicationstatus/{1}", String.valueOf(projectId), id)).build();
-        //        uri = new URI(MessageFormat.format("status/{0}", id));
-        uri = new URI(id);
-      } catch (URISyntaxException ue) {
-        uri = null;
-        ue.printStackTrace();
-      }
-      return uri;
-    }
+		public Status(long projectId) {
+			this.id = new DateTime().toString("yyyyMMddHHmmss") + projectId;
+		}
 
-    public void addLogline(String line) {
-      String timestamp = new DateTime().toString("yyyy-MM-dd HH:mm:ss");
-      getLoglines().add(MessageFormat.format("{0} | {1}", timestamp, line));
-    }
+		@JsonIgnore
+		public URI getURI() {
+			URI uri;
+			try {
+				//        uri = new URIBuilder().setPath(MessageFormat.format("/projects/{0}/publicationstatus/{1}", String.valueOf(projectId), id)).build();
+				//        uri = new URI(MessageFormat.format("status/{0}", id));
+				uri = new URI(id);
+			} catch (URISyntaxException ue) {
+				uri = null;
+				ue.printStackTrace();
+			}
+			return uri;
+		}
 
-    public List<String> getLoglines() {
-      return loglines;
-    }
+		public void addLogline(String line) {
+			String timestamp = new DateTime().toString("yyyy-MM-dd HH:mm:ss");
+			getLoglines().add(MessageFormat.format("{0} | {1}", timestamp, line));
+		}
 
-    public void setDone() {
-      done = true;
-    }
+		public List<String> getLoglines() {
+			return loglines;
+		}
 
-    public boolean isDone() {
-      return done;
-    }
+		public void setDone() {
+			done = true;
+		}
 
-    public boolean isFail() {
-      return fail;
-    }
+		public boolean isDone() {
+			return done;
+		}
 
-    public String getId() {
-      return id;
-    }
+		public boolean isFail() {
+			return fail;
+		}
 
-    public String getUrl() {
-      return url;
-    }
+		public String getId() {
+			return id;
+		}
 
-    public void setUrl(String url) {
-      this.url = url;
-    }
+		public String getUrl() {
+			return url;
+		}
 
-    public void setFail() {
-      this.fail = true;
-    }
-  }
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public void setFail() {
+			this.fail = true;
+		}
+	}
 
 }
