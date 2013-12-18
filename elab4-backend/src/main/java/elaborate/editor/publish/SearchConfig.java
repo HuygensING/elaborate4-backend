@@ -19,11 +19,11 @@ public class SearchConfig {
   Map<String, FacetInfo> facetInfoMap = Maps.newLinkedHashMap();
   List<String> defaultSortOrder = Lists.newArrayList();
 
-  public SearchConfig(Project project, List<String> selectedMetadataFields) {
+  public SearchConfig(Project project, List<String> metadataFieldsForFacets) {
     for (Entry<String, FacetInfo> entry : project.getFacetInfoMap().entrySet()) {
       String key = entry.getKey();
       FacetInfo value = entry.getValue();
-      if (selectedMetadataFields.contains(value.getTitle())) {
+      if (metadataFieldsForFacets.contains(value.getTitle())) {
         facetInfoMap.put(key, value);
       }
     }

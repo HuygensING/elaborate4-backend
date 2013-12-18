@@ -15,8 +15,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 import nl.knaw.huygens.solr.AbstractSolrServer;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -63,10 +66,15 @@ public class SearchResource extends AbstractElaborateResource {
 	public Response getSearchResults(//
 			@PathParam("project_id") long projectId,//
 			@PathParam("search_id") long searchId,//
-			@QueryParam("start: [0-9]+") @DefaultValue("0") int start,//
-			@QueryParam("rows: [0-9]+") @DefaultValue("25") int rows//
+			@QueryParam("start") @DefaultValue("0") String startString,//
+			@QueryParam("rows") @DefaultValue("25") String rowsString//
 	//      @QueryParam("verbose") @DefaultValue("false") boolean verbose//
 	) {
+		if (!StringUtils.isNumeric(startString) || !StringUtils.isNumeric(rowsString)) {
+			throw new BadRequestException();
+		}
+		int start = Integer.valueOf(startString);
+		int rows = Integer.valueOf(rowsString);
 		Map<String, Object> searchResult = searchService.getSearchResult(projectId, searchId, start, rows, user);
 		addPrevNextURIs(searchResult, projectId, searchId, start, rows);
 		ResponseBuilder builder = Response.ok(searchResult);

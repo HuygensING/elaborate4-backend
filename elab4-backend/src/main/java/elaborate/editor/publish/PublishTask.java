@@ -112,7 +112,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		commitAndCloseSolr();
 		exportPojectData(entryData, thumbnails, annotationIndex);
 
-		exportSearchConfig(project, projectEntryMetadataFields, entryNum - 1);
+		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps));
 		String basename = getBasename(project);
 		entityManager.close();
 
@@ -164,9 +164,9 @@ public class PublishTask extends LoggableObject implements Runnable {
 		return "elab4-" + project.getName();
 	}
 
-	private void exportSearchConfig(Project project, List<String> projectEntryMetadataFields, int numberOfEntries) {
+	private void exportSearchConfig(Project project, List<String> facetFields) {
 		File json = new File(distDir, "WEB-INF/classes/config.json");
-		exportJson(json, new SearchConfig(project, projectEntryMetadataFields));
+		exportJson(json, new SearchConfig(project, facetFields));
 	}
 
 	private List<String> getProjectEntryMetadataFields(ProjectService ps) {
@@ -176,6 +176,15 @@ public class PublishTask extends LoggableObject implements Runnable {
 			projectEntryMetadataFields = ImmutableList.copyOf(ps.getProjectEntryMetadataFields(projectId, rootUser));
 		}
 		return projectEntryMetadataFields;
+	}
+
+	private List<String> getFacetableProjectEntryMetadataFields(ProjectService ps) {
+		List<String> facetFields = settings.getFacetFields();
+		if (facetFields.isEmpty()) {
+			User rootUser = new User().setRoot(true);
+			facetFields = ImmutableList.copyOf(ps.getProjectEntryMetadataFields(projectId, rootUser));
+		}
+		return facetFields;
 	}
 
 	public Publication.Status getStatus() {
@@ -279,7 +288,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 			if (textlayerData.getText().length() < 20) {
 				LOG.warn("empty {} transcription for entry {}", transcription.getTextLayer(), projectEntry.getId());
 			}
-			map.put(transcription.getTranscriptionType().getName(), textlayerData);
+			map.put(transcription.getTextLayer(), textlayerData);
 		}
 		return map;
 	}

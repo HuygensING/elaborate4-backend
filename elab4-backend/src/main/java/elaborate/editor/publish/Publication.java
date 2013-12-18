@@ -23,6 +23,7 @@ public class Publication {
 		private String projectType = ProjectTypes.COLLECTION; // || "work"
 		private User user;
 		private List<String> textLayers = Lists.newArrayList();
+		private List<String> facetFields = Lists.newArrayList();
 
 		public Long getProjectId() {
 			return projectId;
@@ -81,6 +82,16 @@ public class Publication {
 		public List<String> getTextLayers() {
 			return textLayers;
 		}
+
+		public Settings setFacetFields(List<String> facetFields) {
+			this.facetFields = facetFields;
+			return this;
+		}
+
+		public List<String> getFacetFields() {
+			return facetFields;
+		}
+
 	}
 
 	public static class Status {

@@ -70,8 +70,8 @@ public class SearchResource extends LoggableObject {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	public Response getSearchResults(//
 			@PathParam("search_id") long searchId,//
-			@QueryParam("start:[0-9]+") @DefaultValue("0") int start,//
-			@QueryParam("rows:[0-9]+") @DefaultValue("100") int rows//
+			@QueryParam("start") @DefaultValue("0") int start,//
+			@QueryParam("rows") @DefaultValue("100") int rows//
 	) {
 		Map<String, Object> searchResult = searchService.getSearchResult(searchId, start, rows);
 
