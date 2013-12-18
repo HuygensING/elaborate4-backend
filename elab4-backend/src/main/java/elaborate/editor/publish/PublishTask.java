@@ -275,7 +275,11 @@ public class PublishTask extends LoggableObject implements Runnable {
 	private Map<String, TextlayerData> getTexts(ProjectEntry projectEntry) {
 		Map<String, TextlayerData> map = Maps.newHashMap();
 		for (Transcription transcription : projectEntry.getTranscriptions()) {
-			map.put(transcription.getTranscriptionType().getName(), getTextlayerData(transcription));
+			TextlayerData textlayerData = getTextlayerData(transcription);
+			if (textlayerData.getText().length() < 20) {
+				LOG.warn("empty {} transcription for entry {}", transcription.getTextLayer(), projectEntry.getId());
+			}
+			map.put(transcription.getTranscriptionType().getName(), textlayerData);
 		}
 		return map;
 	}
