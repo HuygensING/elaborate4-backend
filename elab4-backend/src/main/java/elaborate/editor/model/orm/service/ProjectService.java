@@ -1,5 +1,6 @@
 package elaborate.editor.model.orm.service;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +21,10 @@ import nl.knaw.huygens.solr.FacetInfo;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
@@ -34,6 +39,7 @@ import elaborate.editor.export.tei.TagInfo;
 import elaborate.editor.export.tei.TeiConversionConfig;
 import elaborate.editor.export.tei.TeiMaker;
 import elaborate.editor.model.Action;
+import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.ProjectTypes;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationMetadataItem;
@@ -509,7 +515,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		beginTransaction();
 
 		Project project = getProjectIfUserIsAllowed(project_id, user);
-		if (!user.getPermission(project).can(Action.EDIT_PROJECT_SETTINGS)) {
+		if (!user.getPermissionFor(project).can(Action.EDIT_PROJECT_SETTINGS)) {
 			throw new UnauthorizedException();
 		}
 
@@ -612,7 +618,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Publisher publisher = Publisher.instance();
 		openEntityManager();
 		Project project = getProjectIfUserIsAllowed(project_id, user);
-		boolean canPublish = user.getPermission(project).can(Action.PUBLISH);
+		boolean canPublish = user.getPermissionFor(project).can(Action.PUBLISH);
 		Map<String, String> projectMetadata = project.getMetadataMap();
 		closeEntityManager();
 
@@ -620,18 +626,62 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 			throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
 		};
 
-		Lists.newArrayList();
-		Lists.newArrayList();
 		String projectType = StringUtils.defaultIfBlank(projectMetadata.get("projectType"), ProjectTypes.COLLECTION);
+		List<Long> publishableAnnotationTypeIds = getPublishableAnnotationTypeIds(projectMetadata);
+		List<String> publishableProjectEntryMetadataFields = getPublishableProjectEntryMetadataFields(projectMetadata);
+		List<String> publishableTextLayers = getPublishableTextLayers(projectMetadata);
 		Publication.Settings settings = new Publication.Settings()//
 				.setProjectId(project_id)//
 				.setUser(user)//
-				//    .setAnnotationTypeIds(annotationTypeIds)//
-				//    .setProjectEntryMetadataFields(projectEntryMetadataFields)//
+				.setTextLayers(publishableTextLayers)//
+				.setAnnotationTypeIds(publishableAnnotationTypeIds)//
+				.setProjectEntryMetadataFields(publishableProjectEntryMetadataFields)//
 				.setProjectType(projectType);
 		Publication.Status publicationStatus = publisher.publish(settings);
 
 		return publicationStatus;
+	}
+
+	private List<String> getPublishableTextLayers(Map<String, String> projectMetadata) {
+		return deserialize(projectMetadata, ProjectMetadataFields.PUBLISHABLE_TEXT_LAYERS);
+	}
+
+	private List<String> getPublishableProjectEntryMetadataFields(Map<String, String> projectMetadata) {
+		return deserialize(projectMetadata, ProjectMetadataFields.PUBLISHABLE_PROJECT_ENTRY_METADATA_FIELDS);
+	}
+
+	private List<String> deserialize(Map<String, String> projectMetadata, String key) {
+		String metadataString = projectMetadata.get(key);
+		List<String> list = Lists.newArrayList();
+		if (metadataString != null) {
+			try {
+				list = new ObjectMapper().readValue(metadataString, List.class);
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+
+	private List<Long> getPublishableAnnotationTypeIds(Map<String, String> projectMetadata) {
+		String metadataString = projectMetadata.get(ProjectMetadataFields.PUBLISHABLE_ANNOTATION_TYPE_IDS);
+		List<Long> publishableAnnotationTypeIds = Lists.newArrayList();
+		if (metadataString != null) {
+			try {
+				publishableAnnotationTypeIds = new ObjectMapper().readValue(metadataString, new TypeReference<List<Long>>() {});
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return publishableAnnotationTypeIds;
 	}
 
 	public Publication.Status getPublicationStatus(String status_id) {
@@ -711,7 +761,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public void setProjectSortLevels(long project_id, List<String> levels, User user) {
 		beginTransaction();
 		Project project = getProjectIfUserIsAllowed(project_id, user);
-		if (!user.getPermission(project).can(Action.EDIT_PROJECT_SETTINGS)) {
+		if (!user.getPermissionFor(project).can(Action.EDIT_PROJECT_SETTINGS)) {
 			throw new UnauthorizedException();
 		}
 		List<String> newLevels = Lists.newArrayList("", "", "");

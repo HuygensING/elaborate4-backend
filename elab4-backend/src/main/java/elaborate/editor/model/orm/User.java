@@ -258,7 +258,7 @@ public class User extends AbstractStoredEntity<User> {
 
   // Permissions
 
-  public Permission getPermission(Object object) {
+  public Permission getPermissionFor(Object object) {
     return Permissions.getPermission(this, object);
   }
 
