@@ -3,6 +3,7 @@ package nl.knaw.huygens.elaborate.publication;
 import java.util.Date;
 import java.util.List;
 
+import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.elaborate.publication.metadata.CMDIRecord;
 import nl.knaw.huygens.elaborate.publication.metadata.DublinCoreRecord;
 import nl.knaw.huygens.elaborate.publication.metadata.ElaborateCMDIRecordBuilder;
@@ -15,12 +16,18 @@ import nl.knaw.huygens.persistence.PersistenceManagerFactory;
 
 import com.google.common.collect.ImmutableList;
 
-public class PublicationFinalizer {
-	//	private static final String HANDLE_URL = "http://hdl.handle.net/";
+public class PublicationFinalizer extends LoggableObject {
+	//	private static final String OAIPMH_URL = "http://localhost:9998/";
+	private static final String OAIPMH_URL = "http://oaipmh.huygens.knaw.nl/";
 	private static final String PREFIX = "oai:oaipmh.huygens.knaw.nl:elaborate:";
 	private static final String PM_PREFIX = "11240.1";
 
 	private final PersistenceManager pm = getPersistenceManager();
+	private static final String elab4editionSetSpec = "elaborate:edition";
+
+	public static void main(String[] args) {
+		new PublicationFinalizer().finalizePublication();
+	}
 
 	public void finalizePublication() {
 		// steps:
@@ -40,8 +47,7 @@ public class PublicationFinalizer {
 	}
 
 	private void doOAI() {
-		OaiPmhRestClient oai = new OaiPmhRestClient("http://127.0.0.1:9998/");
-		String elab4editionSetSpec = "elaborate:edition";
+		OaiPmhRestClient oai = new OaiPmhRestClient(OAIPMH_URL);
 		OAISet oaiSet = oai.getSet(elab4editionSetSpec);
 		if (oaiSet == null) {
 			oaiSet = new OAISet().setSetSpec(elab4editionSetSpec).setDescription("published elaborate editions").setSetName("elaborate edition");
@@ -49,14 +55,47 @@ public class PublicationFinalizer {
 		}
 
 		List<String> setSpecs = ImmutableList.of(elab4editionSetSpec);
-		DublinCoreRecord dcRecord = new DublinCoreRecord();
-		String url = "url";
+		String url = "http://clusius.huygens.knaw.nl/edition";
+		String id = "clusius_correspondence";
+
 		String pid = persistURL(url);
-		CMDIRecord cMDIRecord = new ElaborateCMDIRecordBuilder().setMdSelfLink(pid).build();
-		String metadata = dcRecord.asXML() + cMDIRecord.asXML();
-		String id = "";
+
+		DublinCoreRecord dcRecord = new DublinCoreRecord()//
+				.setTitle("Clusius correspondence")//
+				.setSubject("Letters from/to Carolus Clusius (1526-1609)")//
+				.setCreator("Esther van Gelder")//
+				.setCoverage("1548-1609")//
+				.setDate("2013-12-20")//
+				.setDescription("Website Edition of letters from/to Carolus Clusius (1526-1609)")//
+				.setIdentifier(pid)//
+				.setLanguage("en;nl;fr;it;es;la;de")//
+				.setPublisher("Huygens ING")//
+				.setType("website")//
+		//				.setContributor("contributor")//
+		//				.setFormat("format")//
+		//				.setRelation("relation")//
+		//				.setRights("rights")//
+		//				.setSource("source")//
+		;
+
+		String identifier = PREFIX + id;
+		String selfLink = "http://oaipmh.huygens.knaw.nl/oai?verb=GetRecord&metadataPrefix=cmdi&identifier=" + identifier;
+
+		CMDIRecord cMDIRecord = new ElaborateCMDIRecordBuilder()//
+				.setMdSelfLink(persistURL(selfLink))//
+				.setDublinCoreRecord(dcRecord)//
+				.build();
+
+		String metadata = "<meta>" + dcRecord.asXML() + cMDIRecord.asXML() + "</meta>";
+		LOG.info("metadata={}", metadata);
+
 		Date datestamp = new Date();
-		OAIRecord oaiRecord = new OAIRecord().setIdentifier(PREFIX + id).setSetSpecs(setSpecs).setMetadata(metadata).setDatestamp(datestamp);
+		oai.deleteRecord(identifier);
+		OAIRecord oaiRecord = new OAIRecord()//
+				.setIdentifier(identifier)//
+				.setSetSpecs(setSpecs)//
+				.setMetadata(metadata)//
+				.setDatestamp(datestamp);
 		oai.postRecord(oaiRecord);
 
 	}
@@ -64,7 +103,9 @@ public class PublicationFinalizer {
 	String persistURL(String url) {
 		try {
 			String pid = pm.persistURL(url);
-			return pm.getPersistentURL(pid);
+			String persistentURL = pm.getPersistentURL(pid);
+			//			pm.deletePersistentId(pid);
+			return persistentURL;
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
