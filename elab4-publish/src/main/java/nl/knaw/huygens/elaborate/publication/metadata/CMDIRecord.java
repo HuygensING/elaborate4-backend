@@ -12,162 +12,177 @@ import com.google.common.collect.Lists;
 
 public class CMDIRecord extends AbstractMetadataRecord {
 
-  // http://www.clarin.eu/node/3460
-  private static final String TEMPLATE = "metadata-cmdi.xml.ftl";
+	// http://www.clarin.eu/node/3460
+	private static final String TEMPLATE = "metadata-cmdi.xml.ftl";
 
-  private String mdSelfLink = "";
-  private String mdCreator = "";
-  private Date mdCreationDate = new Date();
-  private String mdProfile = "";
-  private String mdCollectionDisplayName = "";
+	private String mdSelfLink = "";
+	private String mdCreator = "";
+	private Date mdCreationDate = new Date();
+	private String mdProfile = "";
+	private String mdCollectionDisplayName = "";
 
-  private ResourceProxy resourceProxy = new ResourceProxy();
+	private DublinCoreRecord dublinCoreRecord = new DublinCoreRecord();
 
-  protected CMDIRecord() {}
+	private ResourceProxy resourceProxy = null;
 
-  public String getMdSelfLink() {
-    return mdSelfLink;
-  }
+	protected CMDIRecord() {}
 
-  private void setMdSelfLink(String mdSelfLink) {
-    this.mdSelfLink = mdSelfLink;
-  }
+	public String getMdSelfLink() {
+		return mdSelfLink;
+	}
 
-  public String getMdCreator() {
-    return mdCreator;
-  }
+	private void setMdSelfLink(String mdSelfLink) {
+		this.mdSelfLink = mdSelfLink;
+	}
 
-  private void setMdCreator(String mdCreator) {
-    this.mdCreator = mdCreator;
-  }
+	public String getMdCreator() {
+		return mdCreator;
+	}
 
-  public Date getMdCreationDate() {
-    return mdCreationDate;
-  }
+	private void setMdCreator(String mdCreator) {
+		this.mdCreator = mdCreator;
+	}
 
-  private void setMdCreationDate(Date mdCreationDate) {
-    this.mdCreationDate = mdCreationDate;
-  }
+	public Date getMdCreationDate() {
+		return mdCreationDate;
+	}
 
-  public String getMdProfile() {
-    return mdProfile;
-  }
+	private void setMdCreationDate(Date mdCreationDate) {
+		this.mdCreationDate = mdCreationDate;
+	}
 
-  private void setMdProfile(String mdProfile) {
-    this.mdProfile = mdProfile;
-  }
+	public String getMdProfile() {
+		return mdProfile;
+	}
 
-  public String getMdCollectionDisplayName() {
-    return mdCollectionDisplayName;
-  }
+	private void setMdProfile(String mdProfile) {
+		this.mdProfile = mdProfile;
+	}
 
-  private void setMdCollectionDisplayName(String mdCollectionDisplayName) {
-    this.mdCollectionDisplayName = mdCollectionDisplayName;
-  }
+	public String getMdCollectionDisplayName() {
+		return mdCollectionDisplayName;
+	}
 
-  public ResourceProxy getResourceProxy() {
-    return resourceProxy;
-  }
+	private void setMdCollectionDisplayName(String mdCollectionDisplayName) {
+		this.mdCollectionDisplayName = mdCollectionDisplayName;
+	}
 
-  private void setResourceProxy(ResourceProxy resourceProxy) {
-    this.resourceProxy = resourceProxy;
-  }
+	public ResourceProxy getResourceProxy() {
+		return resourceProxy;
+	}
 
-  @Override
-  String getTemplate() {
-    return TEMPLATE;
-  }
+	private void setResourceProxy(ResourceProxy resourceProxy) {
+		this.resourceProxy = resourceProxy;
+	}
 
-  @Override
-  Object getDataModel() {
-    return this;
-  }
+	public void setDublinCoreRecord(DublinCoreRecord dcRecord) {
+		this.dublinCoreRecord = dcRecord;
+	}
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-  }
+	public DublinCoreRecord getDublinCoreRecord() {
+		return dublinCoreRecord;
+	}
 
-  public static class Builder {
-    private final CMDIRecord cMDIRecord = new CMDIRecord();
+	@Override
+	String getTemplate() {
+		return TEMPLATE;
+	}
 
-    public Builder setMdSelfLink(String mdSelfLink) {
-      cMDIRecord.setMdSelfLink(mdSelfLink);
-      return this;
-    }
+	@Override
+	Object getDataModel() {
+		return this;
+	}
 
-    public Builder setMdCreationDate(Date mdCreationDate) {
-      cMDIRecord.setMdCreationDate(mdCreationDate);
-      return this;
-    }
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
 
-    public Builder setMdCollectionDisplayName(String mdCollectionDisplayName) {
-      cMDIRecord.setMdCollectionDisplayName(mdCollectionDisplayName);
-      return this;
-    }
+	public static class Builder {
+		private final CMDIRecord cMDIRecord = new CMDIRecord();
 
-    public Builder setResourceProxy(ResourceProxy resourceProxy) {
-      cMDIRecord.setResourceProxy(resourceProxy);
-      return this;
-    }
+		public Builder setMdSelfLink(String mdSelfLink) {
+			cMDIRecord.setMdSelfLink(mdSelfLink);
+			return this;
+		}
 
-    // the author of the file
-    public Builder setMdCreator(String mdCreator) {
-      cMDIRecord.setMdCreator(mdCreator);
-      return this;
-    }
+		public Builder setMdCreationDate(Date mdCreationDate) {
+			cMDIRecord.setMdCreationDate(mdCreationDate);
+			return this;
+		}
 
-    public Builder setMdProfile(String mdProfile) {
-      cMDIRecord.setMdProfile(mdProfile);
-      return this;
-    }
+		public Builder setMdCollectionDisplayName(String mdCollectionDisplayName) {
+			cMDIRecord.setMdCollectionDisplayName(mdCollectionDisplayName);
+			return this;
+		}
 
-    public CMDIRecord build() {
-      List<String> validationResults = Lists.newArrayListWithCapacity(3);
-      validationResults.add(checkRequiredSetting(cMDIRecord.getMdCreator(), "MdCreator"));
-      validationResults.add(checkRequiredSetting(cMDIRecord.getMdProfile(), "MdProfile"));
-      validationResults.add(checkRequiredSetting(cMDIRecord.getMdSelfLink(), "MdSelfLink"));
-      String join = Joiner.on("; ").skipNulls().join(validationResults);
-      if (StringUtils.isNotEmpty(join)) {
-        throw new InvalidCMDIRecordException("invalid CMDIRecord: " + join);
-      }
-      return cMDIRecord;
-    }
+		public Builder setResourceProxy(ResourceProxy resourceProxy) {
+			cMDIRecord.setResourceProxy(resourceProxy);
+			return this;
+		}
 
-    private String checkRequiredSetting(String value, String string) {
-      if (StringUtils.isBlank(value)) {
-        return "set " + string;
-      }
-      return null;
-    }
+		// the author of the file
+		public Builder setMdCreator(String mdCreator) {
+			cMDIRecord.setMdCreator(mdCreator);
+			return this;
+		}
 
-  }
+		public Builder setMdProfile(String mdProfile) {
+			cMDIRecord.setMdProfile(mdProfile);
+			return this;
+		}
 
-  public static class ResourceProxy {
-    String id = "";
-    String ref = "";
+		public Builder setDublinCoreRecord(DublinCoreRecord dcRecord) {
+			cMDIRecord.setDublinCoreRecord(dcRecord);
+			return this;
+		}
 
-    public String getId() {
-      return id;
-    }
+		public CMDIRecord build() {
+			List<String> validationResults = Lists.newArrayListWithCapacity(3);
+			validationResults.add(checkRequiredSetting(cMDIRecord.getMdCreator(), "MdCreator"));
+			validationResults.add(checkRequiredSetting(cMDIRecord.getMdProfile(), "MdProfile"));
+			validationResults.add(checkRequiredSetting(cMDIRecord.getMdSelfLink(), "MdSelfLink"));
+			String join = Joiner.on("; ").skipNulls().join(validationResults);
+			if (StringUtils.isNotEmpty(join)) {
+				throw new InvalidCMDIRecordException("invalid CMDIRecord: " + join);
+			}
+			return cMDIRecord;
+		}
 
-    public ResourceProxy setId(String id) {
-      this.id = id;
-      return this;
-    }
+		private String checkRequiredSetting(String value, String string) {
+			if (StringUtils.isBlank(value)) {
+				return "set " + string;
+			}
+			return null;
+		}
 
-    public String getRef() {
-      return ref;
-    }
+	}
 
-    public ResourceProxy setRef(String ref) {
-      this.ref = ref;
-      return this;
-    }
+	public static class ResourceProxy {
+		String id = "";
+		String ref = "";
 
-    @Override
-    public String toString() {
-      return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
-  }
+		public String getId() {
+			return id;
+		}
+
+		public ResourceProxy setId(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public String getRef() {
+			return ref;
+		}
+
+		public ResourceProxy setRef(String ref) {
+			this.ref = ref;
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+		}
+	}
 }

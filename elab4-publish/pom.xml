@@ -16,7 +16,7 @@
 		</dependency>
 		<dependency>
 			<groupId>nl.knaw.huygens.oaipmh</groupId>
-			<artifactId>client-java</artifactId>
+			<artifactId>oaipmh-client-java</artifactId>
 			<version>${oaipmh.version}</version>
 		</dependency>
 		<dependency>

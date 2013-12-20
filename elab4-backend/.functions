@@ -1,3 +1,13 @@
+function e4-set-local {
+  e4-set-eb http://10.152.32.82:2013
+  e4-set-login root d3gelijk
+}
+
+function e4-set-hi7 {
+  e4-set-eb http://rest.elaborate.huygens.knaw.nl
+  e4-set-login root toor
+}
+
 function e4-set-eb {
   export eb=$1	
 }
@@ -98,7 +108,6 @@ function e4-post {
   curl -i -H "Authorization: SimpleAuth $authtoken" -H "Content-Type: application/json" -X POST $@
 }
 
-e4-set-eb http://10.152.32.82:2013
-e4-set-login root d3gelijk
+e4-set-local
 
 export PATH=/c/programfiles/Java/jdk1.6.0_33/bin/:$PATH
