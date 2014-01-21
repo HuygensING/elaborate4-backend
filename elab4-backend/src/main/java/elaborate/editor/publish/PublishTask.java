@@ -1,5 +1,28 @@
 package elaborate.editor.publish;
 
+/*
+ * #%L
+ * elab4-backend
+ * =======
+ * Copyright (C) 2011 - 2014 Huygens ING
+ * =======
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -63,12 +86,12 @@ public class PublishTask extends LoggableObject implements Runnable {
 
 	private final Publication.Status status;
 	private final Publication.Settings settings;
+	private final Long projectId;
+	private final AnnotationService annotationService = AnnotationService.instance();
 	private File rootDir;
 	private File distDir;
 	private File jsonDir;
-	private final Long projectId;
 	private SolrServerWrapper solrServer;
-	private final AnnotationService annotationService = AnnotationService.instance();
 
 	Configuration config = Configuration.instance();
 	private EntityManager entityManager;
@@ -112,13 +135,16 @@ public class PublishTask extends LoggableObject implements Runnable {
 		commitAndCloseSolr();
 		exportPojectData(entryData, thumbnails, annotationIndex);
 
-		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps));
 		String basename = getBasename(project);
-		entityManager.close();
+		String url = getBaseURL(basename);
+		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps), url);
+		// FIXME: fix, error bij de ystroom
+		if (entityManager.isOpen()) {
+			entityManager.close();
+		}
 
 		status.addLogline("generating war file " + basename + ".war");
 		File war = new WarMaker(basename, distDir, rootDir).make();
-		String url = getBaseURL(basename);
 		status.addLogline("deploying war to " + url);
 		deploy(war);
 		status.setUrl(url);
@@ -164,9 +190,9 @@ public class PublishTask extends LoggableObject implements Runnable {
 		return "elab4-" + project.getName();
 	}
 
-	private void exportSearchConfig(Project project, List<String> facetFields) {
+	private void exportSearchConfig(Project project, List<String> facetFields, String baseurl) {
 		File json = new File(distDir, "WEB-INF/classes/config.json");
-		exportJson(json, new SearchConfig(project, facetFields));
+		exportJson(json, new SearchConfig(project, facetFields).setBaseURL(baseurl));
 	}
 
 	private List<String> getProjectEntryMetadataFields(ProjectService ps) {
@@ -284,11 +310,15 @@ public class PublishTask extends LoggableObject implements Runnable {
 	private Map<String, TextlayerData> getTexts(ProjectEntry projectEntry) {
 		Map<String, TextlayerData> map = Maps.newHashMap();
 		for (Transcription transcription : projectEntry.getTranscriptions()) {
-			TextlayerData textlayerData = getTextlayerData(transcription);
-			if (textlayerData.getText().length() < 20) {
-				LOG.warn("empty {} transcription for entry {}", transcription.getTextLayer(), projectEntry.getId());
+			try {
+				TextlayerData textlayerData = getTextlayerData(transcription);
+				if (textlayerData.getText().length() < 20) {
+					LOG.warn("empty {} transcription for entry {}", transcription.getTextLayer(), projectEntry.getId());
+				}
+				map.put(transcription.getTextLayer(), textlayerData);
+			} catch (Exception e) {
+				LOG.error("Error '{}' for transcription {}, body: '{}'", new Object[] { e.getMessage(), transcription.getId(), transcription.getBody() });
 			}
-			map.put(transcription.getTextLayer(), textlayerData);
 		}
 		return map;
 	}
@@ -339,6 +369,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 	private AnnotationTypeData getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
 		Map<String, Object> metadata = getMetadata(meta);
 		AnnotationTypeData annotationTypeData = new AnnotationTypeData()//
+				.setId(annotationType.getId())//
 				.setName(annotationType.getName())//
 				.setDescription(annotationType.getDescription())//
 				.setMetadata(metadata);
@@ -380,8 +411,8 @@ public class PublishTask extends LoggableObject implements Runnable {
 
 	private Map<String, String> getFacsimileData(String zoomableUrl) {
 		Map<String, String> map = Maps.newHashMap();
-		map.put("zoom", "https://tomcat.tiler01.huygens.knaw.nl/adore-huygens-viewer-2.0/viewer.html?rft_id=" + zoomableUrl);
-		map.put("thumbnail", "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=" + zoomableUrl);
+		map.put("zoom", "//tomcat.tiler01.huygens.knaw.nl/adore-huygens-viewer-2.0/viewer.html?rft_id=" + zoomableUrl);
+		map.put("thumbnail", "//tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=" + zoomableUrl);
 		return map;
 	}
 
@@ -633,9 +664,19 @@ public class PublishTask extends LoggableObject implements Runnable {
 	}
 
 	public static class AnnotationTypeData {
+		private long id = 0;
 		private String name = "";
 		private String description = "";
 		private Map<String, Object> metadata = Maps.newHashMap();
+
+		public long getId() {
+			return id;
+		}
+
+		public AnnotationTypeData setId(long l) {
+			this.id = l;
+			return this;
+		}
 
 		public AnnotationTypeData setName(String name) {
 			this.name = name;

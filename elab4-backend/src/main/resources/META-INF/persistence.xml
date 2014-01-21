@@ -1,3 +1,24 @@
+<!--
+  #%L
+  elab4-backend
+  =======
+  Copyright (C) 2011 - 2014 Huygens ING
+  =======
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
@@ -43,45 +64,4 @@
 
   </persistence-unit>
   
-  <!-- 	<persistence-unit name="nl.knaw.huygens.elaborate.jpa">
-		<description>Persistence unit for production</description>
-
-		<class>elaborate.editor.model.orm.Annotation</class>
-		<class>elaborate.editor.model.orm.AnnotationMetadataItem</class>
-		<class>elaborate.editor.model.orm.AnnotationType</class>
-		<class>elaborate.editor.model.orm.AnnotationTypeMetadataItem</class>
-		<class>elaborate.editor.model.orm.Facsimile</class>
-		<class>elaborate.editor.model.orm.LogEntry</class>
-		<class>elaborate.editor.model.orm.Project</class>
-		<class>elaborate.editor.model.orm.ProjectAnnotationType</class>
-		<class>elaborate.editor.model.orm.ProjectEntry</class>
-    <class>elaborate.editor.model.orm.ProjectEntryMetadataField</class>
-    <class>elaborate.editor.model.orm.ProjectEntryMetadataItem</class>
-		<class>elaborate.editor.model.orm.ProjectMetadataField</class>
-		<class>elaborate.editor.model.orm.ProjectMetadataItem</class>
-		<class>elaborate.editor.model.orm.ProjectUser</class>
-    <class>elaborate.editor.model.orm.SearchData</class>
-		<class>elaborate.editor.model.orm.Transcription</class>
-		<class>elaborate.editor.model.orm.TranscriptionType</class>
-		<class>elaborate.editor.model.orm.User</class>
-		<class>elaborate.editor.model.orm.UserSetting</class>
-
-		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/elab4db" />
-			<property name="javax.persistence.jdbc.user" value="test" />
-			<property name="javax.persistence.jdbc.password" value="test" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
-			<property name="hibernate.hbm2ddl.auto" value="create" />
-			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy" />
-			<property name="hibernate.c3p0.min_size" value="5" />
-			<property name="hibernate.c3p0.max_size" value="20" />
-			<property name="hibernate.c3p0.timeout" value="1800" />
-			<property name="hibernate.c3p0.max_statements" value="50" />
-		</properties>
-
-	</persistence-unit>
- -->
-
 </persistence>

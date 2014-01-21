@@ -3,17 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.knaw.huygens.elab4</groupId>
 	<artifactId>elab4</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>4.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<inceptionYear>2011</inceptionYear>
+
+	<!-- use this multi-module project for general elab4 stuff -->
 
 	<modules>
 		<module>elab4-common</module>
 		<module>elab4-backend</module>
-		<module>elab4-publish</module>
-		<module>elab4-publication-backend</module>
-		<module>elab4-tools</module>
-		<module>elab4-solr</module>
 		<module>elab4-backend-client</module>
+		<module>elab4-publication-backend</module>
 	</modules>
 
 	<properties>
@@ -43,6 +43,7 @@
 		<maven-assembly.version>2.4</maven-assembly.version>
 		<maven-compiler.version>3.1</maven-compiler.version>
 		<maven-war.version>2.3</maven-war.version>
+		<maven-license.version>1.6</maven-license.version>
 		<mockito.version>1.9.5</mockito.version>
 		<persistence.version>2.0.1</persistence.version>
 		<oaipmh.version>0.0.2</oaipmh.version>
@@ -94,29 +95,33 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${maven-war.version}</version>
 			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>${maven-license.version}</version>
+				<configuration>
+					<licenseName>gpl_v3</licenseName>
+					<sectionDelimiter>=======</sectionDelimiter>
+					<canUpdateCopyright>true</canUpdateCopyright>
+					<canUpdateDescription>true</canUpdateDescription>
+				</configuration>
+				<executions>
+					<execution>
+						<id>download-licenses</id>
+						<goals>
+							<goal>download-licenses</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
-	<scm>
-		<tag>HEAD</tag>
-		<connection>ssh://bramb@hi7.huygens.knaw.nl/data/git/elab4.git</connection>
-		<developerConnection>ssh://bramb@hi7.huygens.knaw.nl/data/git/elab4.git</developerConnection>
-	</scm>
 
 	<organization>
 		<name>Huygens ING</name>
 		<url>http://www.huygens.knaw.nl/</url>
 	</organization>
-
-	<issueManagement>
-		<system>Redmine</system>
-		<url>http://suzanna.huygens.knaw.nl/projects/elaborate-consolidatie</url>
-	</issueManagement>
-
-	<ciManagement>
-		<system>cruisecontrolrb</system>
-		<url>http://cruisecontrol.huygens.knaw.nl/builds/elab4</url>
-	</ciManagement>
 
 	<prerequisites>
 		<maven>2.2.1</maven>
@@ -126,13 +131,13 @@
 		<repository>
 			<id>maven.huygens</id>
 			<name>Huygens Maven Repository</name>
-			<url>scp://hi7.huygens.knaw.nl/data/htdocs/repository</url>
+			<url>${huygens-repo}</url>
 		</repository>
 		<!-- use the following if you ARE using a snapshot version. -->
 		<snapshotRepository>
 			<id>maven.huygens</id>
 			<name>Huygens Maven Repository</name>
-			<url>scp://hi7.huygens.knaw.nl/data/htdocs/repository</url>
+			<url>${huygens-repo}</url>
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 	</distributionManagement>

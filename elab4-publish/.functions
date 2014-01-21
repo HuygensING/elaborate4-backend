@@ -1,9 +1,0 @@
-cr=http://catalog.clarin.eu/ds/ComponentRegistry
-
-function get_components {
-  curl -s -H "Accept:application/json" $cr/rest/registry/components
-}
-
-function get_profiles {
-  curl -s -H "Accept:application/json" $cr/rest/registry/profiles
-}

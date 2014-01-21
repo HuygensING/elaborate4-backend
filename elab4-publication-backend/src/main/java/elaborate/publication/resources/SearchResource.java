@@ -1,5 +1,28 @@
 package elaborate.publication.resources;
 
+/*
+ * #%L
+ * elab4-publication-backend
+ * =======
+ * Copyright (C) 2013 - 2014 Huygens ING
+ * =======
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
@@ -29,6 +52,8 @@ import elaborate.publication.solr.AbstractSolrServer;
 import elaborate.publication.solr.ElaborateSearchParameters;
 import elaborate.publication.solr.SearchData;
 import elaborate.publication.solr.SearchService;
+
+//TODO: next/prev as absolute urls
 
 @Path("search")
 public class SearchResource extends LoggableObject {
@@ -108,15 +133,10 @@ public class SearchResource extends LoggableObject {
 
 	private void addURI(Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
 		UriBuilder builder = UriBuilder//
-				.fromPath(prevLink)//
-				//    .scheme(config.getStringSetting("server.scheme", "html"))//
-				//    .host(config.getStringSetting("server.name", "127.0.0.1"))//
+				.fromUri(searchService.getHost())//
+				.path(prevLink)//
 				.queryParam("start", start)//
 				.queryParam("rows", rows);
-		//    int port = config.getIntSetting("server.port", DEFAULT_PORT);
-		//    if (port != DEFAULT_PORT) {
-		//      builder.port(port);
-		//    }
 		searchResult.put(key, builder.build().toString());
 	}
 

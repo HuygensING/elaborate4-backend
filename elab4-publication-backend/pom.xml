@@ -4,10 +4,11 @@
 	<parent>
 		<groupId>nl.knaw.huygens.elab4</groupId>
 		<artifactId>elab4</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>4.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>elab4-publication-backend</artifactId>
 	<packaging>war</packaging>
+	<inceptionYear>2013</inceptionYear>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,12 +17,6 @@
 
 	<dependencies>
 		<!-- compile dependecies -->
-		<dependency>
-			<groupId>nl.knaw.huygens.elab4</groupId>
-			<artifactId>elab4-solr</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>nl.knaw.huygens</groupId>
 			<artifactId>jax-rs-tools</artifactId>
@@ -32,6 +27,11 @@
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-core</artifactId>
+			<version>${solr.version}</version>
 		</dependency>
 
 		<!-- jersey -->

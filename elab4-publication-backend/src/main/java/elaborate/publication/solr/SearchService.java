@@ -1,5 +1,28 @@
 package elaborate.publication.solr;
 
+/*
+ * #%L
+ * elab4-publication-backend
+ * =======
+ * Copyright (C) 2013 - 2014 Huygens ING
+ * =======
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,9 +57,11 @@ public class SearchService extends LoggableObject {
 	private String[] facetFields;
 	private String[] defaultSortOrder;
 
+	private String hostname;
+
 	private SearchService() {
 		super();
-		setFacetData();
+		loadConfig();
 	}
 
 	public static SearchService instance() {
@@ -68,32 +93,27 @@ public class SearchService extends LoggableObject {
 
 	public Map<String, Object> getSearchResult(long searchId, int start, int rows) {
 		Map<String, Object> resultsMap = Maps.newHashMap();
-		try {
-			SearchData searchData = searchDataIndex.get(searchId);
+		SearchData searchData = searchDataIndex.get(searchId);
 
-			if (searchData != null) {
-				List<String> sortableFields = Lists.newArrayList("id", "name");
-				sortableFields.addAll(ImmutableList.copyOf(getFacetFields()));
+		if (searchData != null) {
+			List<String> sortableFields = Lists.newArrayList("id", "name");
+			sortableFields.addAll(ImmutableList.copyOf(getFacetFields()));
 
-				resultsMap = searchData.getResults();
+			resultsMap = searchData.getResults();
 
-				List<String> ids = (List<String>) resultsMap.remove("ids");
-				List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
+			List<String> ids = (List<String>) resultsMap.remove("ids");
+			List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
 
-				int lo = toRange(start, 0, ids.size());
-				int hi = toRange(lo + rows, 0, ids.size());
-				ids = ids.subList(lo, hi);
-				results = results.subList(lo, hi);
+			int lo = toRange(start, 0, ids.size());
+			int hi = toRange(lo + rows, 0, ids.size());
+			results = results.subList(lo, hi);
 
-				resultsMap.put("ids", ids);
-				resultsMap.put("results", results);
-				resultsMap.put("start", lo);
-				resultsMap.put("rows", hi - lo);
+			resultsMap.put("ids", ids);
+			resultsMap.put("results", results);
+			resultsMap.put("start", lo);
+			resultsMap.put("rows", hi - lo);
 
-				resultsMap.put("sortableFields", sortableFields);
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+			resultsMap.put("sortableFields", sortableFields);
 		}
 		return resultsMap;
 	}
@@ -135,7 +155,7 @@ public class SearchService extends LoggableObject {
 		return facetInfoMap;
 	}
 
-	private void setFacetData() {
+	private void loadConfig() {
 		LOG.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
 		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.json");
 		try {
@@ -143,6 +163,7 @@ public class SearchService extends LoggableObject {
 			facetInfoMap = toMap(configMap.get("facetInfoMap"));
 			facetFields = toStringArray(configMap.get("facetFields"));
 			defaultSortOrder = toStringArray(configMap.get("defaultSortOrder"));
+			hostname = (String) configMap.get("hostname");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -184,6 +205,10 @@ public class SearchService extends LoggableObject {
 			throw new RuntimeException(e);
 		}
 		return ImmutableList.of();
+	}
+
+	public String getHost() {
+		return hostname;
 	}
 
 }
