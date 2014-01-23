@@ -1,4 +1,0 @@
-inloggen via
-een POST naar /sessions/login met parameters username & password
-Je krijgt een json map terug met token <T> en user <U>, het token gebruik je in je volgende requests in de Authorization header:
-Authorization: SimpleAuth <T>  
