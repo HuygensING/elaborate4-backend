@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.knaw.huygens.elab4</groupId>
 	<artifactId>elab4</artifactId>
-	<version>4.0-SNAPSHOT</version>
+	<version>${elab4.version}</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2011</inceptionYear>
 
@@ -14,11 +14,14 @@
 		<module>elab4-backend</module>
 		<module>elab4-backend-client</module>
 		<module>elab4-publication-backend</module>
+		<module>elab4-backend-configuration-example</module>
 	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+		<elab4.version>4.0-SNAPSHOT</elab4.version>
+		<elab4.config.version>4.0</elab4.config.version>
 		<appassembler-maven.version>1.3.1</appassembler-maven.version>
 		<assertj-guava.version>1.0.0</assertj-guava.version>
 		<assertj-core.version>1.5.0</assertj-core.version>
@@ -124,7 +127,7 @@
 	</organization>
 
 	<prerequisites>
-		<maven>2.2.1</maven>
+		<maven>3.0</maven>
 	</prerequisites>
 
 	<distributionManagement>
@@ -141,5 +144,13 @@
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 	</distributionManagement>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License</name>
+			<url>http://www.gnu.org/licenses/gpl.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 </project>

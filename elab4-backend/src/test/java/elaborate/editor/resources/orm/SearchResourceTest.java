@@ -50,7 +50,7 @@ public class SearchResourceTest extends LoggableObject {
 		searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
 		SearchResource searchResource = new SearchResource(null);
 		searchResource.addPrevNextURIs(searchResult, 1, 2, 0, 50);
-		assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://10.152.32.135:2013/projects/1/search/2?start=50&rows=50");
+		assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://server.example.com:2013/projects/1/search/2?start=50&rows=50");
 		assertThat(searchResult).doesNotContainKey(SearchResource.KEY_PREV);
 	}
 
@@ -60,8 +60,8 @@ public class SearchResourceTest extends LoggableObject {
 		Map<String, Object> searchResult = Maps.newHashMap();
 		searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
 		searchResource.addPrevNextURIs(searchResult, 1, 2, 10, 50);
-		assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://10.152.32.135:2013/projects/1/search/2?start=60&rows=50");
-		assertThat(searchResult.get(SearchResource.KEY_PREV)).isEqualTo("http://10.152.32.135:2013/projects/1/search/2?start=0&rows=50");
+		assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://server.example.com:2013/projects/1/search/2?start=60&rows=50");
+		assertThat(searchResult.get(SearchResource.KEY_PREV)).isEqualTo("http://server.example.com:2013/projects/1/search/2?start=0&rows=50");
 	}
 
 	@Test
