@@ -17,7 +17,7 @@ public class ElaborateCMDIRecordBuilderTest {
   @Test
   public void test() {
     CMDIRecord cr = new ElaborateCMDIRecordBuilder().setMdCreator("me").setMdSelfLink("mdSelfLink").build();
-    assertThat(cr.getMdCollectionDisplayName()).isEqualTo("Elaborate");
+    assertThat(cr.getMdCollectionDisplayName()).isEqualTo("Elaborate Editions");
   }
 
 }
