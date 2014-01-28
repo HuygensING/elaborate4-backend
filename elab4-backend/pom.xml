@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>nl.knaw.huygens.elab4</groupId>
 		<artifactId>elab4</artifactId>
-		<version>${elab4.version}</version>
+		<version>4.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>elab4-backend</artifactId>
 	<packaging>war</packaging>
@@ -285,43 +285,14 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-remote-resources-plugin</artifactId>
-				<version>1.5</version>
-				<configuration>
-					<resourceBundles>
-						<resourceBundle>nl.knaw.huygens:elab4-backend-config-${environment}:${config.version}</resourceBundle>
-					</resourceBundles>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>process</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-remote-resources-plugin</artifactId> <version>1.5</version> 
+				<configuration> <resourceBundles> <resourceBundle>nl.knaw.huygens.elab4:elab4-backend-configuration-${environment}:${elab4-config.version}</resourceBundle> 
+				</resourceBundles> </configuration> <executions> <execution> <goals> <goal>process</goal> </goals> </execution> </executions> 
+				</plugin> -->
 		</plugins>
 	</build>
 
-	<profile>
-		<id>dev</id>
-		<activation>
-			<activeByDefault>true</activeByDefault>
-		</activation>
-	</profile>
-
 	<profiles>
-		<profile>
-			<id>example</id>
-			<properties>
-				<environment>example</environment>
-				<config.version>${project.version}</config.version>
-			</properties>
-		</profile>
-
 		<profile>
 			<id>dev</id>
 			<activation>
@@ -329,9 +300,9 @@
 			</activation>
 			<dependencies>
 				<dependency>
-					<groupId>elab4</groupId>
-					<artifactId>elab4-backend-config-local</artifactId>
-					<version>${elab4.config.version}</version>
+					<groupId>nl.knaw.huygens.elab4</groupId>
+					<artifactId>elab4-backend-configuration-local</artifactId>
+					<version>${elab4-config.version}</version>
 					<type>war</type>
 					<scope>runtime</scope>
 				</dependency>
@@ -340,19 +311,43 @@
 
 		<profile>
 			<id>test</id>
-			<properties>
-				<environment>test</environment>
-				<config.version>${elab4.config.version}</config.version>
-			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>nl.knaw.huygens.elab4</groupId>
+					<artifactId>elab4-backend-configuration-test</artifactId>
+					<version>${elab4-config.version}</version>
+					<type>war</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
 		</profile>
 
 		<profile>
 			<id>prod</id>
-			<properties>
-				<environment>production</environment>
-				<config.version>${elab4.config.version}</config.version>
-			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>nl.knaw.huygens.elab4</groupId>
+					<artifactId>elab4-backend-configuration-production</artifactId>
+					<version>${elab4-config.version}</version>
+					<type>war</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
 		</profile>
+
+		<profile>
+			<id>example</id>
+			<dependencies>
+				<dependency>
+					<groupId>nl.knaw.huygens.elab4</groupId>
+					<artifactId>elab4-backend-configuration-example</artifactId>
+					<version>${elab4.version}</version>
+					<type>war</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+
 	</profiles>
 
 	<!-- <profiles> <profile> <id>local</id> <activation> <activeByDefault>true</activeByDefault> </activation> <properties> 

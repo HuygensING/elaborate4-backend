@@ -12,7 +12,7 @@
         <dependent-module archiveName="jax-rs-tools-0.0.6.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jax-rs-tools/jax-rs-tools">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/elab4/elab4-backend-config-local/4.0/elab4-backend-config-local-4.0.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+        <dependent-module deploy-path="/" handle="module:/overlay/prj/elab4-backend-configuration-local?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/slf/?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
