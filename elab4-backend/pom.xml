@@ -272,23 +272,15 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.1.0.M0</version>
 			</plugin>
+
 			<plugin>
-				<groupId>org.assertj</groupId>
-				<artifactId>assertj-assertions-generator-maven-plugin</artifactId>
-				<version>1.1.0</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war.version}</version>
 				<configuration>
-					<packages>
-						<param>elaborate.editor.model</param>
-						<param>elaborate.editor.model.orm</param>
-					</packages>
-					<targetDir>src/assert/java</targetDir>
+					<dependentWarIncludes>**/*.xml</dependentWarIncludes>
 				</configuration>
 			</plugin>
-
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-remote-resources-plugin</artifactId> <version>1.5</version> 
-				<configuration> <resourceBundles> <resourceBundle>nl.knaw.huygens.elab4:elab4-backend-configuration-${environment}:${elab4-config.version}</resourceBundle> 
-				</resourceBundles> </configuration> <executions> <execution> <goals> <goal>process</goal> </goals> </execution> </executions> 
-				</plugin> -->
 		</plugins>
 	</build>
 
@@ -350,37 +342,4 @@
 
 	</profiles>
 
-	<!-- <profiles> <profile> <id>local</id> <activation> <activeByDefault>true</activeByDefault> </activation> <properties> 
-		<tomcat.manager.url>http://localhost:8080/manager/html</tomcat.manager.url> <tomcat.server>tomcat.local</tomcat.server> <tomcat.path>/elaborate-backend</tomcat.path> 
-		</properties> </profile> <profile> <id>testserver</id> <activation> <activeByDefault>false</activeByDefault> </activation> 
-		<properties> <tomcat.manager.url>http://demo7.huygens.knaw.nl/manager/html</tomcat.manager.url> <tomcat.server>tomcat.demo7</tomcat.server> 
-		<tomcat.path>/elab4testBE</tomcat.path> </properties> <build> <plugins> <plugin> <artifactId>maven-antrun-plugin</artifactId> 
-		<executions> <execution> <phase>prepare-package</phase> <configuration> <tasks> <echo>copying instances/elab4test/persistence.xml${project.basedir}</echo> 
-		<delete file="${project.build.outputDirectory}/META-INF/persistence.xml" /> <copy file="${project.basedir}/instances/elab4test/persistence.xml" 
-		tofile="${project.build.outputDirectory}/META-INF/persistence.xml" /> <echo>copying instances/elab4test/config.xml</echo> 
-		<delete file="${project.build.outputDirectory}/config.xml" /> <copy file="${project.basedir}/instances/elab4test/config.xml" 
-		tofile="${project.build.outputDirectory}/config.xml" /> <echo>copying instances/elab4test/logging.properties</echo> <delete 
-		file="${project.build.outputDirectory}/logging.properties" /> <copy file="${project.basedir}/instances/elab4test/logging.properties" 
-		tofile="${project.build.outputDirectory}/logging.properties" /> </tasks> </configuration> <goals> <goal>run</goal> </goals> 
-		</execution> </executions> </plugin> </plugins> </build> </profile> <profile> <id>production</id> <activation> <activeByDefault>false</activeByDefault> 
-		</activation> <properties> <tomcat.manager.url>http://mb.huygens.knaw.nl/manager/html</tomcat.manager.url> <tomcat.server>tomcat.mb</tomcat.server> 
-		<tomcat.path>/elab4testBE</tomcat.path> </properties> <build> <plugins> <plugin> <artifactId>maven-antrun-plugin</artifactId> 
-		<executions> <execution> <phase>prepare-package</phase> <configuration> <tasks> <echo>copying instances/production/persistence.xml${project.basedir}</echo> 
-		<delete file="${project.build.outputDirectory}/META-INF/persistence.xml" /> <copy file="${project.basedir}/instances/production/persistence.xml" 
-		tofile="${project.build.outputDirectory}/META-INF/persistence.xml" /> <echo>copying instances/production/config.xml</echo> 
-		<delete file="${project.build.outputDirectory}/config.xml" /> <copy file="${project.basedir}/instances/production/config.xml" 
-		tofile="${project.build.outputDirectory}/config.xml" /> <echo>copying instances/production/logging.properties</echo> <delete 
-		file="${project.build.outputDirectory}/logging.properties" /> <copy file="${project.basedir}/instances/production/logging.properties" 
-		tofile="${project.build.outputDirectory}/logging.properties" /> </tasks> </configuration> <goals> <goal>run</goal> </goals> 
-		</execution> </executions> </plugin> </plugins> </build> </profile> <profile> <id>standalone</id> <activation> <activeByDefault>false</activeByDefault> 
-		</activation> <build> <plugins> <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>appassembler-maven-plugin</artifactId> 
-		<version>${appassembler-maven.version}</version> <configuration> <repositoryLayout>flat</repositoryLayout> <repositoryName>lib</repositoryName> 
-		<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath> <useWildcardClassPath>true</useWildcardClassPath> 
-		<extraJvmArguments>-Xmx512m</extraJvmArguments> <daemons> <daemon> <id>elab4-backend</id> <mainClass>elaborate.editor.backend.ElaborateBackendServer</mainClass> 
-		<commandLineArguments> <commandLineArgument>start</commandLineArgument> <commandLineArgument>stop</commandLineArgument> <commandLineArgument>restart</commandLineArgument> 
-		<commandLineArgument>status</commandLineArgument> </commandLineArguments> <platforms> <platform>jsw</platform> </platforms> 
-		</daemon> </daemons> </configuration> <executions> <execution> <id>app-assemble</id> <phase>package</phase> <goals> <goal>generate-daemons</goal> 
-		</goals> </execution> </executions> </plugin> <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>${maven-assembly.version}</version> 
-		<configuration> <descriptors> <descriptor>src/main/assembly/app.xml</descriptor> </descriptors> </configuration> </plugin> 
-		</plugins> </build> </profile> </profiles> -->
 </project>
