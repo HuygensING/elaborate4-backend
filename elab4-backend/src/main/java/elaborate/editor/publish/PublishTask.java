@@ -78,6 +78,8 @@ import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
+	private static final String THUMBNAIL_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=";
+	private static final String ZOOM_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/viewer2.1.html?rft_id=";
 	private static final String PUBLICATION_URL = "publicationURL";
 	private static final String PUBLICATION_TOMCAT_WEBAPPDIR = "publication.tomcat.webappdir";
 	private static final String PUBLICATION_TOMCAT_URL = "publication.tomcat.url";
@@ -411,8 +413,8 @@ public class PublishTask extends LoggableObject implements Runnable {
 
 	private Map<String, String> getFacsimileData(String zoomableUrl) {
 		Map<String, String> map = Maps.newHashMap();
-		map.put("zoom", "//tomcat.tiler01.huygens.knaw.nl/adore-huygens-viewer-2.0/viewer.html?rft_id=" + zoomableUrl);
-		map.put("thumbnail", "//tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=" + zoomableUrl);
+		map.put("zoom", ZOOM_URL + zoomableUrl);
+		map.put("thumbnail", THUMBNAIL_URL + zoomableUrl);
 		return map;
 	}
 

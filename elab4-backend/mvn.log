@@ -1,0 +1,581 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building elab4-backend 4.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+Downloading: http://maven.huygens.knaw.nl/repository/nl/knaw/huygens/elab4/elab4-common/4.0-SNAPSHOT/maven-metadata.xml
+Downloading: http://maven.huygens.knaw.nl/repository/nl/knaw/huygens/elab4/elab4/4.0-SNAPSHOT/maven-metadata.xml
+Downloading: http://maven.huygens.knaw.nl/repository/nl/knaw/huygens/visitei/0.4.5-SNAPSHOT/maven-metadata.xml
+[INFO] 
+[INFO] --- maven-clean-plugin:2.4.1:clean (default-clean) @ elab4-backend ---
+[INFO] Deleting C:\Users\BramB\git\elab4\elab4-backend\target
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:resources (default-resources) @ elab4-backend ---
+[debug] execute contextualize
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 201 resources
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ elab4-backend ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 143 source files to C:\Users\BramB\git\elab4\elab4-backend\target\classes
+[WARNING] /C:/Users/BramB/git/elab4/elab4-backend/src/main/java/elaborate/editor/model/AbstractStoredEntity.java: Some input files use unchecked or unsafe operations.
+[WARNING] /C:/Users/BramB/git/elab4/elab4-backend/src/main/java/elaborate/editor/model/AbstractStoredEntity.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:testResources (default-testResources) @ elab4-backend ---
+[debug] execute contextualize
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 3 resources
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ elab4-backend ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 32 source files to C:\Users\BramB\git\elab4\elab4-backend\target\test-classes
+[WARNING] /C:/Users/BramB/git/elab4/elab4-backend/src/test/java/elaborate/editor/publish/PublishTaskTest.java: C:\Users\BramB\git\elab4\elab4-backend\src\test\java\elaborate\editor\publish\PublishTaskTest.java uses unchecked or unsafe operations.
+[WARNING] /C:/Users/BramB/git/elab4/elab4-backend/src/test/java/elaborate/editor/publish/PublishTaskTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.10:test (default-test) @ elab4-backend ---
+[INFO] Surefire report directory: C:\Users\BramB\git\elab4\elab4-backend\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running elaborate.editor.model.ActionTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.104 sec
+Running elaborate.editor.model.ElaborateRolesTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 sec
+Running elaborate.editor.model.orm.service.AnnotationTypeServiceTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.001 sec
+Running elaborate.editor.model.orm.service.ProjectServiceTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0 sec
+Running elaborate.editor.model.PermissionsTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.089 sec
+Running elaborate.editor.model.PermissionTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running elaborate.editor.publish.PublishTaskTest
+Hibernate: alter table annotation_metadata_items drop constraint FK_s04b0w70mn0y8cnyorv13cej3
+Hibernate: alter table annotation_metadata_items drop constraint FK_i0biqjiim6kqi7huv61w49lvd
+Hibernate: alter table annotation_type_metadata_items drop constraint FK_gx4u52bb9ogg2aqqgiua364g9
+Hibernate: alter table annotation_types drop constraint FK_3hawnauu898e36nlem14leski
+Hibernate: alter table annotation_types drop constraint FK_4001gjyr1yqws8j0wiqqxrt6s
+Hibernate: alter table annotations drop constraint FK_qqafqc47htpmw1nwovxh3dnfs
+Hibernate: alter table annotations drop constraint FK_55j0gjl2f86m0p25j2pwapsm6
+Hibernate: alter table annotations drop constraint FK_2gj24vrk3i117233ds6ubkg2r
+Hibernate: alter table annotations drop constraint FK_j2fj7d69aao2pqdcv6onni2kv
+Hibernate: alter table facsimiles drop constraint FK_k7kn2ai91k7lfoknyqg6e33m8
+Hibernate: alter table facsimiles drop constraint FK_c6qwagwm0y0j6dvhk6ibix1w2
+Hibernate: alter table facsimiles drop constraint FK_5emc6ufdl3045bu65jkbkmwhd
+Hibernate: alter table log_entries drop constraint FK_bd239f624q3t3f5uc1q96nn1w
+Hibernate: alter table project_annotation_types drop constraint FK_6q1ue70dtjtv454n1vocxqsql
+Hibernate: alter table project_annotation_types drop constraint FK_pumky5fk9b7tjwjsd83gnvysa
+Hibernate: alter table project_entries drop constraint FK_bdh6678xic29lutl04cd8g17f
+Hibernate: alter table project_entries drop constraint FK_2nkxagc8g2qylll5jcam2aqr7
+Hibernate: alter table project_entries drop constraint FK_9ynjxcmx7t8ajfgo3wjuc92vv
+Hibernate: alter table project_entry_metadata_items drop constraint FK_ny819cpubqiaipsvi8x45gihw
+Hibernate: alter table project_entry_metadata_items drop constraint FK_8woj1ttba6dccx6a3o4lvhe1a
+Hibernate: alter table project_entry_metadata_items drop constraint FK_hxrg1fj2oiepsenc705ylvf37
+Hibernate: alter table project_metadata_fields drop constraint FK_93wdxidf6c7h0y9kldlgk3qsv
+Hibernate: alter table project_metadata_fields drop constraint FK_3cy7r512y7wm2tbbylrlhxi4a
+Hibernate: alter table project_metadata_items drop constraint FK_9216h4pq0rh0rtnmlax42kjkr
+Hibernate: alter table project_metadata_items drop constraint FK_d5uwhwu2rohk720j95e7o79o2
+Hibernate: alter table project_metadata_items drop constraint FK_fc8fc18w4gojekdtv43nk449t
+Hibernate: alter table project_users drop constraint FK_rl5jp955lxoxtbv6pa1wig6vd
+Hibernate: alter table project_users drop constraint FK_4isj8wuooru4brw3629wu4iyg
+Hibernate: alter table projects drop constraint FK_9245up46rjabay3iuisgbg2mc
+Hibernate: alter table projects drop constraint FK_6lygog80e0pexhebnsy9eb2xq
+Hibernate: alter table transcriptions drop constraint FK_5gvp7ln30khawvbiyjyjyr22v
+Hibernate: alter table transcriptions drop constraint FK_au51phk59qi8i5qaka8dh55g3
+Hibernate: alter table transcriptions drop constraint FK_701hil0p3s8x0u05gxre0aeb8
+Hibernate: alter table transcriptions drop constraint FK_f5m9w6udmm0lgewnl1f67nau6
+Hibernate: alter table user_settings drop constraint FK_4bos7satl9xeqd18frfeqg6tt
+Hibernate: drop table annotation_metadata_items if exists
+Hibernate: drop table annotation_type_metadata_items if exists
+Hibernate: drop table annotation_types if exists
+Hibernate: drop table annotations if exists
+Hibernate: drop table facsimiles if exists
+Hibernate: drop table log_entries if exists
+Hibernate: drop table project_annotation_types if exists
+Hibernate: drop table project_entries if exists
+Hibernate: drop table project_entry_metadata_fields if exists
+Hibernate: drop table project_entry_metadata_items if exists
+Hibernate: drop table project_metadata_fields if exists
+Hibernate: drop table project_metadata_items if exists
+Hibernate: drop table project_users if exists
+Hibernate: drop table projects if exists
+Hibernate: drop table searchdata if exists
+Hibernate: drop table transcription_types if exists
+Hibernate: drop table transcriptions if exists
+Hibernate: drop table user_settings if exists
+Hibernate: drop table users if exists
+Hibernate: create table annotation_metadata_items (id serial generated by default as identity (start with 1), rev bigint not null, data varchar(255), annotation_id int4, annotation_type_metadata_item_id int4, primary key (id))
+Hibernate: create table annotation_type_metadata_items (id serial generated by default as identity (start with 1), rev bigint not null, description varchar(255), name varchar(255), annotation_type_id int4, primary key (id))
+Hibernate: create table annotation_types (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, description varchar(255), name varchar(255), creator_id int4, modifier_id int4, primary key (id))
+Hibernate: create table annotations (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, annotation_no integer not null, body varchar(255), creator_id int4, modifier_id int4, annotation_type_id int4, transcription_id int4, primary key (id))
+Hibernate: create table facsimiles (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, filename varchar(255), name varchar(255), thumbnail_url varchar(255), title varchar(255), zoomable_url varchar(255), creator_id int4, modifier_id int4, project_entry_id int4, primary key (id))
+Hibernate: create table log_entries (id serial generated by default as identity (start with 1), rev bigint not null, comment varchar(255), created_on timestamp, project_title varchar(255), user_name varchar(255), project_id int4, primary key (id))
+Hibernate: create table project_annotation_types (id serial not null, rev bigint not null, annotation_type_id int4, project_id int4 generated by default as identity (start with 1), primary key (project_id, annotation_type_id))
+Hibernate: create table project_entries (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, name varchar(255), publishable boolean not null, creator_id int4, modifier_id int4, project_id int4, primary key (id))
+Hibernate: create table project_entry_metadata_fields (id serial generated by default as identity (start with 1), rev bigint not null, field varchar(255), primary key (id))
+Hibernate: create table project_entry_metadata_items (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, data varchar(255), field varchar(255), creator_id int4, modifier_id int4, project_entry_id int4, primary key (id))
+Hibernate: create table project_metadata_fields (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, field_name varchar(255), value_options varchar(255), creator_id int4, modifier_id int4, primary key (id))
+Hibernate: create table project_metadata_items (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, data varchar(255), field varchar(255), creator_id int4, modifier_id int4, project_id int4, primary key (id))
+Hibernate: create table project_users (id serial not null, project_id int4 generated by default as identity (start with 1), user_id int4, primary key (project_id, user_id))
+Hibernate: create table projects (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, name varchar(255), title varchar(255), level_1 varchar(255), level_2 varchar(255), level_3 varchar(255), project_entry_metadata_fieldnames text, project_leader_id int4, text_layers text, creator_id int4, modifier_id int4, primary key (id))
+Hibernate: create table searchdata (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, json varchar(255), primary key (id))
+Hibernate: create table transcription_types (id serial generated by default as identity (start with 1), rev bigint not null, name text, primary key (id))
+Hibernate: create table transcriptions (id serial generated by default as identity (start with 1), rev bigint not null, created_on timestamp, modified_on timestamp, body text, text_layer text, title text, creator_id int4, modifier_id int4, project_entry_id int4, transcription_type_id int4, primary key (id))
+Hibernate: create table user_settings (id serial generated by default as identity (start with 1), rev bigint not null, setting_key varchar(255), setting_value varchar(255), user_id int4, primary key (id))
+Hibernate: create table users (id serial generated by default as identity (start with 1), rev bigint not null, email varchar(255), encodedpassword varbinary(255), firstname varchar(255), is_root boolean not null, lastname varchar(255), rolestring varchar(255), title varchar(255), username varchar(255), primary key (id))
+Hibernate: alter table users add constraint UK_r43af9ap4edm43mmtq01oddj6  unique (username)
+Hibernate: alter table annotation_metadata_items add constraint FK_s04b0w70mn0y8cnyorv13cej3 foreign key (annotation_id) references annotations
+Hibernate: alter table annotation_metadata_items add constraint FK_i0biqjiim6kqi7huv61w49lvd foreign key (annotation_type_metadata_item_id) references annotation_type_metadata_items
+Hibernate: alter table annotation_type_metadata_items add constraint FK_gx4u52bb9ogg2aqqgiua364g9 foreign key (annotation_type_id) references annotation_types
+Hibernate: alter table annotation_types add constraint FK_3hawnauu898e36nlem14leski foreign key (creator_id) references users
+Hibernate: alter table annotation_types add constraint FK_4001gjyr1yqws8j0wiqqxrt6s foreign key (modifier_id) references users
+Hibernate: alter table annotations add constraint FK_qqafqc47htpmw1nwovxh3dnfs foreign key (creator_id) references users
+Hibernate: alter table annotations add constraint FK_55j0gjl2f86m0p25j2pwapsm6 foreign key (modifier_id) references users
+Hibernate: alter table annotations add constraint FK_2gj24vrk3i117233ds6ubkg2r foreign key (annotation_type_id) references annotation_types
+Hibernate: alter table annotations add constraint FK_j2fj7d69aao2pqdcv6onni2kv foreign key (transcription_id) references transcriptions
+Hibernate: alter table facsimiles add constraint FK_k7kn2ai91k7lfoknyqg6e33m8 foreign key (creator_id) references users
+Hibernate: alter table facsimiles add constraint FK_c6qwagwm0y0j6dvhk6ibix1w2 foreign key (modifier_id) references users
+Hibernate: alter table facsimiles add constraint FK_5emc6ufdl3045bu65jkbkmwhd foreign key (project_entry_id) references project_entries
+Hibernate: alter table log_entries add constraint FK_bd239f624q3t3f5uc1q96nn1w foreign key (project_id) references projects
+Hibernate: alter table project_annotation_types add constraint FK_6q1ue70dtjtv454n1vocxqsql foreign key (annotation_type_id) references annotation_types
+Hibernate: alter table project_annotation_types add constraint FK_pumky5fk9b7tjwjsd83gnvysa foreign key (project_id) references projects
+Hibernate: alter table project_entries add constraint FK_bdh6678xic29lutl04cd8g17f foreign key (creator_id) references users
+Hibernate: alter table project_entries add constraint FK_2nkxagc8g2qylll5jcam2aqr7 foreign key (modifier_id) references users
+Hibernate: alter table project_entries add constraint FK_9ynjxcmx7t8ajfgo3wjuc92vv foreign key (project_id) references projects
+Hibernate: alter table project_entry_metadata_items add constraint FK_ny819cpubqiaipsvi8x45gihw foreign key (creator_id) references users
+Hibernate: alter table project_entry_metadata_items add constraint FK_8woj1ttba6dccx6a3o4lvhe1a foreign key (modifier_id) references users
+Hibernate: alter table project_entry_metadata_items add constraint FK_hxrg1fj2oiepsenc705ylvf37 foreign key (project_entry_id) references project_entries
+Hibernate: alter table project_metadata_fields add constraint FK_93wdxidf6c7h0y9kldlgk3qsv foreign key (creator_id) references users
+Hibernate: alter table project_metadata_fields add constraint FK_3cy7r512y7wm2tbbylrlhxi4a foreign key (modifier_id) references users
+Hibernate: alter table project_metadata_items add constraint FK_9216h4pq0rh0rtnmlax42kjkr foreign key (creator_id) references users
+Hibernate: alter table project_metadata_items add constraint FK_d5uwhwu2rohk720j95e7o79o2 foreign key (modifier_id) references users
+Hibernate: alter table project_metadata_items add constraint FK_fc8fc18w4gojekdtv43nk449t foreign key (project_id) references projects
+Hibernate: alter table project_users add constraint FK_rl5jp955lxoxtbv6pa1wig6vd foreign key (project_id) references projects
+Hibernate: alter table project_users add constraint FK_4isj8wuooru4brw3629wu4iyg foreign key (user_id) references users
+Hibernate: alter table projects add constraint FK_9245up46rjabay3iuisgbg2mc foreign key (creator_id) references users
+Hibernate: alter table projects add constraint FK_6lygog80e0pexhebnsy9eb2xq foreign key (modifier_id) references users
+Hibernate: alter table transcriptions add constraint FK_5gvp7ln30khawvbiyjyjyr22v foreign key (creator_id) references users
+Hibernate: alter table transcriptions add constraint FK_au51phk59qi8i5qaka8dh55g3 foreign key (modifier_id) references users
+Hibernate: alter table transcriptions add constraint FK_701hil0p3s8x0u05gxre0aeb8 foreign key (project_entry_id) references project_entries
+Hibernate: alter table transcriptions add constraint FK_f5m9w6udmm0lgewnl1f67nau6 foreign key (transcription_type_id) references transcription_types
+Hibernate: alter table user_settings add constraint FK_4bos7satl9xeqd18frfeqg6tt foreign key (user_id) references users
+elaborate.editor.config.Configuration - Loading configuration from C:\Users\BramB\git\elab4\elab4-backend\config\config.xml
+Configurations with key 'renditions': 0
+Configurations with key 'messages': 0
+2014-01-28 16:07:18,954 INFO  elaborate.editor.publish.PublishTaskTest - projectData={id=0, title=titel, baseURL=http://localhost:8080/elab4-null, textLayers=null, entries=[elaborate.editor.publish.PublishTask$EntryData@5e684a7a, elaborate.editor.publish.PublishTask$EntryData@10f1c002], thumbnails={}, annotationIndex=annotation_index.json, publicationDate=2014-01-28 16:07, metadata={}}
+2014-01-28 16:07:19,026 INFO  elaborate.editor.publish.PublishTaskTest - json={"id":0,"title":"titel","baseURL":"http://localhost:8080/elab4-null","textLayers":null,"entries":[{"datafile":"entry1.json","name":"uno"},{"datafile":"entry2.json","name":"due"}],"thumbnails":{},"annotationIndex":"annotation_index.json","publicationDate":"2014-01-28 16:07","metadata":{}}
+2014-01-28 16:07:19,072 INFO  elaborate.editor.publish.PublishTaskTest - searchConfig=elaborate.editor.publish.SearchConfig@f0fea09
+2014-01-28 16:07:19,083 INFO  elaborate.editor.publish.PublishTaskTest - {"facetFields":["metadata_field1","metadata_field2","metadata_field3"],"facetInfoMap":{"metadata_field1":{"name":"metadata_field1","title":"Field1","type":"LIST"},"metadata_field2":{"name":"metadata_field2","title":"Field2","type":"LIST"},"metadata_field3":{"name":"metadata_field3","title":"Field3","type":"LIST"}},"defaultSortOrder":["Field1","Field3",""],"baseURL":null}
+2014-01-28 16:07:19,098 INFO  elaborate.editor.publish.PublishTaskTest - projectData={id=0, title=Publication title, textFont=comicsans, baseURL=http://localhost:8080/elab4-null, textLayers=null, entries=[elaborate.editor.publish.PublishTask$EntryData@48019cb8, elaborate.editor.publish.PublishTask$EntryData@61d818f6], thumbnails={}, annotationIndex=annotation_index.json, publicationDate=2014-01-28 16:07, metadata={extra=extra}}
+2014-01-28 16:07:19,101 INFO  elaborate.editor.publish.PublishTaskTest - json={"id":0,"title":"Publication title","textFont":"comicsans","baseURL":"http://localhost:8080/elab4-null","textLayers":null,"entries":[{"datafile":"entry1.json","name":"uno"},{"datafile":"entry2.json","name":"due"}],"thumbnails":{},"annotationIndex":"annotation_index.json","publicationDate":"2014-01-28 16:07","metadata":{"extra":"extra"}}
+2014-01-28 16:07:19,112 INFO  elaborate.editor.publish.PublishTaskTest - projectEntryData={id=0, annotationDataMap={}, name=entryname, paralleltexts={}, facsimiles=[], metadata=[elaborate.editor.publish.PublishTask$Metadata@52ffabb0, elaborate.editor.publish.PublishTask$Metadata@f60da62]}
+2014-01-28 16:07:19,117 INFO  elaborate.editor.publish.PublishTaskTest - json={"id":0,"annotationDataMap":{"empty":true},"name":"entryname","paralleltexts":{},"facsimiles":[],"metadata":[{"field":"Meta1","value":""},{"field":"Meta2","value":""}]}
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.684 sec
+Running elaborate.editor.resources.orm.ProjectResourceTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0 sec
+Running elaborate.editor.resources.orm.SearchResourceTest
+2014-01-28 16:07:19,135 INFO  elaborate.editor.resources.orm.SearchResource - prevStart=0
+2014-01-28 16:07:19,135 INFO  elaborate.editor.resources.orm.SearchResource - nextStart=50, size=100
+2014-01-28 16:07:19,161 INFO  elaborate.editor.resources.orm.SearchResource - prevStart=0
+2014-01-28 16:07:19,161 INFO  elaborate.editor.resources.orm.SearchResource - nextStart=60, size=100
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 sec
+Running elaborate.editor.resources.orm.UserResourceTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.005 sec
+Running elaborate.editor.resources.orm.wrappers.TranscriptionWrapperTest
+2014-01-28 16:07:19,206 INFO  elaborate.editor.resources.orm.wrappers.TranscriptionWrapper - body input=<span data-marker="begin" data-id="9085822">bla die bla</span><sup data-marker="end" data-id="9085822">1</sup><br>hello world
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.137 sec
+Running elaborate.editor.security.ElaborateSecurityContextTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 sec
+Running elaborate.editor.solr.AbstractElaborateSolrServerTest
+2014-01-28 16:07:19,335 INFO  elaborate.editor.solr.AbstractElaborateSolrServerTest - terms=[bla, bla1, bla, bla2]
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 sec
+Running elaborate.editor.solr.AbstractSolrServerTest
+2014-01-28 16:07:19,975 ERROR org.apache.solr.core.CoreContainer - Failed to load file C:\Users\BramB\git\elab4\elab4-backend\solr\collection1\solrconfig.xml
+2014-01-28 16:07:19,977 ERROR org.apache.solr.core.CoreContainer - Unable to create core: collection1
+org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+2014-01-28 16:07:19,979 ERROR org.apache.solr.core.CoreContainer - null:org.apache.solr.common.SolrException: Unable to create core: collection1
+	at org.apache.solr.core.CoreContainer.recordAndThrow(CoreContainer.java:1150)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:666)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	... 10 more
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+
+2014-01-28 16:07:20,054 ERROR org.apache.solr.core.CoreContainer - Failed to load file C:\Users\BramB\git\elab4\elab4-backend\solr\collection1\solrconfig.xml
+2014-01-28 16:07:20,055 ERROR org.apache.solr.core.CoreContainer - Unable to create core: collection1
+org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+2014-01-28 16:07:20,055 ERROR org.apache.solr.core.CoreContainer - null:org.apache.solr.common.SolrException: Unable to create core: collection1
+	at org.apache.solr.core.CoreContainer.recordAndThrow(CoreContainer.java:1150)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:666)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	... 10 more
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+
+2014-01-28 16:07:20,157 ERROR org.apache.solr.core.CoreContainer - Failed to load file C:\Users\BramB\git\elab4\elab4-backend\solr\collection1\solrconfig.xml
+2014-01-28 16:07:20,157 ERROR org.apache.solr.core.CoreContainer - Unable to create core: collection1
+org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+2014-01-28 16:07:20,158 ERROR org.apache.solr.core.CoreContainer - null:org.apache.solr.common.SolrException: Unable to create core: collection1
+	at org.apache.solr.core.CoreContainer.recordAndThrow(CoreContainer.java:1150)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:666)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	... 10 more
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+
+2014-01-28 16:07:20,212 ERROR org.apache.solr.core.CoreContainer - Failed to load file C:\Users\BramB\git\elab4\elab4-backend\solr\collection1\solrconfig.xml
+2014-01-28 16:07:20,212 ERROR org.apache.solr.core.CoreContainer - Unable to create core: collection1
+org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+2014-01-28 16:07:20,213 ERROR org.apache.solr.core.CoreContainer - null:org.apache.solr.common.SolrException: Unable to create core: collection1
+	at org.apache.solr.core.CoreContainer.recordAndThrow(CoreContainer.java:1150)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:666)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	... 10 more
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+
+2014-01-28 16:07:20,269 ERROR org.apache.solr.core.CoreContainer - Failed to load file C:\Users\BramB\git\elab4\elab4-backend\solr\collection1\solrconfig.xml
+2014-01-28 16:07:20,269 ERROR org.apache.solr.core.CoreContainer - Unable to create core: collection1
+org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+2014-01-28 16:07:20,270 ERROR org.apache.solr.core.CoreContainer - null:org.apache.solr.common.SolrException: Unable to create core: collection1
+	at org.apache.solr.core.CoreContainer.recordAndThrow(CoreContainer.java:1150)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:666)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	... 10 more
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+
+2014-01-28 16:07:20,324 ERROR org.apache.solr.core.CoreContainer - Failed to load file C:\Users\BramB\git\elab4\elab4-backend\solr\collection1\solrconfig.xml
+2014-01-28 16:07:20,324 ERROR org.apache.solr.core.CoreContainer - Unable to create core: collection1
+org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+2014-01-28 16:07:20,325 ERROR org.apache.solr.core.CoreContainer - null:org.apache.solr.common.SolrException: Unable to create core: collection1
+	at org.apache.solr.core.CoreContainer.recordAndThrow(CoreContainer.java:1150)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:666)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:364)
+	at org.apache.solr.core.CoreContainer$1.call(CoreContainer.java:356)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:471)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+	at java.lang.Thread.run(Thread.java:722)
+Caused by: org.apache.solr.common.SolrException: Could not load config for solrconfig.xml
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:592)
+	at org.apache.solr.core.CoreContainer.create(CoreContainer.java:657)
+	... 10 more
+Caused by: java.io.IOException: Can't find resource 'solrconfig.xml' in classpath or 'solr\collection1\conf/', cwd=C:\Users\BramB\git\elab4\elab4-backend
+	at org.apache.solr.core.SolrResourceLoader.openResource(SolrResourceLoader.java:322)
+	at org.apache.solr.core.SolrResourceLoader.openConfig(SolrResourceLoader.java:287)
+	at org.apache.solr.core.Config.<init>(Config.java:116)
+	at org.apache.solr.core.Config.<init>(Config.java:86)
+	at org.apache.solr.core.SolrConfig.<init>(SolrConfig.java:120)
+	at org.apache.solr.core.CoreContainer.createFromLocal(CoreContainer.java:589)
+	... 11 more
+
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.986 sec
+Running elaborate.editor.solr.ElaborateSearchParametersTest
+2014-01-28 16:07:20,570 INFO  elaborate.editor.solr.ElaborateSearchParametersTest - {
+  "term" : "*",
+  "sort" : null,
+  "sortDir" : "asc",
+  "caseSensitive" : false,
+  "facetFields" : [ ],
+  "facetInfoMap" : null,
+  "orderLevels" : [ ],
+  "fuzzy" : false,
+  "projectId" : 0,
+  "textLayers" : [ ],
+  "searchInTranscriptions" : true,
+  "searchInAnnotations" : false,
+  "level1Field" : "name",
+  "level2Field" : "name",
+  "level3Field" : "name",
+  "textFieldsToSearch" : {
+  },
+  "facetValues" : [ ],
+  "ascending" : true
+}
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.23 sec
+Running elaborate.editor.solr.ElaborateSolrIndexerTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0 sec
+Running elaborate.util.DelimiterDetectorTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running elaborate.util.PasswordUtilTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.001 sec
+Running elaborate.util.StringUtilTest
+2014-01-28 16:07:20,603 INFO  elaborate.util.StringUtilTest - a&amp;b, bla &amp; co; 4 &gt; 2 &lt; 3; &gt;
+2014-01-28 16:07:20,621 INFO  elaborate.util.StringUtilTest -  bla <span id="9000316" class="annotationstart"></span>x<span id="9000316" class="annotationend"></span><br />whatever
+2014-01-28 16:07:20,623 INFO  elaborate.util.StringUtilTest - bla &amp; bli &amp; blo
+2014-01-28 16:07:20,627 INFO  elaborate.util.StringUtilTest - 2014-01-27 16:07:20
+2014-01-28 16:07:20,639 INFO  elaborate.util.StringUtilTest - 3600000 ms
+2014-01-28 16:07:20,655 INFO  elaborate.util.StringUtilTest - http://rest.elaborate.huygens.knaw.nl/sessions/TOKEN/logout
+Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.115 sec
+Running elaborate.util.TextCaseTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running elaborate.util.XmlUtilTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running nl.knaw.huygens.solr.FacetedSearchParametersTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running nl.knaw.huygens.solr.SolrUtilsTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+
+Results :
+
+Tests run: 83, Failures: 0, Errors: 0, Skipped: 6
+
+[INFO] 
+[INFO] --- maven-war-plugin:2.3:war (default-war) @ elab4-backend ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [elab4-backend] in [C:\Users\BramB\git\elab4\elab4-backend\target\elab4-backend-4.0-SNAPSHOT]
+[INFO] Processing war project
+[INFO] Copying webapp resources [C:\Users\BramB\git\elab4\elab4-backend\src\main\webapp]
+[INFO] Processing overlay [ id nl.knaw.huygens.elab4:elab4-backend-configuration-local]
+[INFO] Webapp assembled in [2674 msecs]
+[INFO] Building war: C:\Users\BramB\git\elab4\elab4-backend\target\elab4-backend-4.0-SNAPSHOT.war
+[INFO] 
+[INFO] --- license-maven-plugin:1.6:download-licenses (download-licenses) @ elab4-backend ---
+[WARNING] POM for dependency aopalliance:aopalliance has an invalid license URL: null
+[WARNING] No license information available for: asm:asm
+[WARNING] No license information available for: com.experlog:xapool
+[WARNING] POM for dependency com.sun.xml.bind:jaxb-impl has a license URL that returns file not found: https://glassfish.java.net/public/CDDL+GPL_1_1.html
+[WARNING] No license information available for: commons-beanutils:commons-beanutils
+[WARNING] POM for dependency commons-configuration:commons-configuration has an invalid license URL: /LICENSE.txt
+[WARNING] POM for dependency commons-digester:commons-digester has an invalid license URL: /LICENSE.txt
+[WARNING] No license information available for: dom4j:dom4j
+[WARNING] No license information available for: javax.servlet.jsp:jsp-api
+[WARNING] POM for dependency javax.xml.bind:jaxb-api has a license URL that returns file not found: https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+[WARNING] No license information available for: nl.knaw.huygens:jax-rs-tools
+[WARNING] No license information available for: nl.knaw.huygens:security-client
+[WARNING] No license information available for: nl.knaw.huygens:security-core
+[WARNING] No license information available for: nl.knaw.huygens:visitei
+[WARNING] No license information available for: nl.knaw.huygens.elab4:elab4-backend-configuration-local
+[WARNING] POM for dependency org.apache.httpcomponents:httpclient has an invalid license URL: LICENSE.txt
+[WARNING] POM for dependency org.apache.httpcomponents:httpcore has an invalid license URL: LICENSE.txt
+[WARNING] POM for dependency org.apache.httpcomponents:httpmime has an invalid license URL: LICENSE.txt
+[WARNING] No license information available for: org.apache.zookeeper:zookeeper
+[WARNING] POM for dependency org.assertj:assertj-core has an invalid license URL: LICENSE.txt
+[WARNING] POM for dependency org.assertj:assertj-guava has an invalid license URL: LICENSE.txt
+[WARNING] No license information available for: org.codehaus.jettison:jettison
+[WARNING] POM for dependency org.objenesis:objenesis has a license URL that returns file not found: http://objenesis.googlecode.com/svn/docs/license.html
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 42.088s
+[INFO] Finished at: Tue Jan 28 16:07:45 CET 2014
+[INFO] Final Memory: 47M/597M
+[INFO] ------------------------------------------------------------------------
