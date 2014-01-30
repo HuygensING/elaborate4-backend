@@ -22,7 +22,6 @@ package elaborate.editor.solr;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -47,9 +46,9 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 	private List<String> textLayers = Lists.newArrayList();
 	private boolean searchInTranscriptions = true;
 	private boolean searchInAnnotations = false;
-	private String level1Field = SolrFields.NAME;
-	private String level2Field = SolrFields.NAME;
-	private String level3Field = SolrFields.NAME;
+	private String level1Field = null;
+	private String level2Field = null;
+	private String level3Field = null;
 
 	public ElaborateSearchParameters setProjectId(final long projectId) {
 		this.projectId = projectId;
@@ -137,5 +136,11 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
+	}
+
+	public boolean isLevelFieldsSet() {
+		return StringUtils.isNotEmpty(level1Field) //
+				&& StringUtils.isNotEmpty(level2Field) //
+				&& StringUtils.isNotEmpty(level3Field);
 	}
 }

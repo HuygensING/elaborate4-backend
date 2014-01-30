@@ -22,7 +22,6 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-
 import java.text.MessageFormat;
 import java.util.Map;
 

@@ -22,10 +22,10 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -36,6 +36,7 @@ import org.joda.time.DateTime;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.Project;
@@ -59,13 +60,20 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 		beginTransaction();
 		projectService.setEntityManager(getEntityManager());
 		Project project = projectService.getProjectIfUserIsAllowed(elaborateSearchParameters.getProjectId(), user);
-		elaborateSearchParameters.setLevelFields(project.getLevel1(), project.getLevel2(), project.getLevel3());
+		if (!elaborateSearchParameters.isLevelFieldsSet()) {
+			elaborateSearchParameters.setLevelFields(project.getLevel1(), project.getLevel2(), project.getLevel3());
+		}
 		if (elaborateSearchParameters.getSearchInTranscriptions() && elaborateSearchParameters.getTextLayers().isEmpty()) {
 			elaborateSearchParameters.setTextLayers(ImmutableList.copyOf(project.getTextLayers()));
 		}
-
-		elaborateSearchParameters.setFacetFields(project.getFacetFields());
-		elaborateSearchParameters.setFacetInfoMap(project.getFacetInfoMap());
+		Set<String> resultFields = Sets.newHashSet(elaborateSearchParameters.getResultFields());
+		resultFields.add(project.getLevel1());
+		resultFields.add(project.getLevel2());
+		resultFields.add(project.getLevel3());
+		elaborateSearchParameters//
+				.setFacetFields(project.getFacetFields())//
+				.setResultFields(resultFields)//
+				.setFacetInfoMap(project.getFacetInfoMap());
 		try {
 			Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
 			SearchData searchData = new SearchData().setCreatedOn(new Date()).setResults(result);

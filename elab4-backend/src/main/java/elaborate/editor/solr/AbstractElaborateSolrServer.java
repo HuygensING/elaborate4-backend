@@ -37,6 +37,7 @@ import nl.knaw.huygens.solr.FacetParameter;
 import nl.knaw.huygens.solr.FacetedSearchParameters;
 import nl.knaw.huygens.solr.IndexException;
 import nl.knaw.huygens.solr.SolrUtils;
+import nl.knaw.huygens.solr.SortParameter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -66,11 +67,11 @@ public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
 		LOG.info("searchparameters={}", sp);
 		String queryString = composeQuery(sp);
 		String[] facetFields = sp.getFacetFields();
-		LOG.debug("search({},{})", queryString, sp.getSort());
+		//		LOG.debug("search({},{})", queryString, sp.getSort());
 		Map<String, String> textFieldMap = sp.getTextFieldsToSearch();
 
 		SolrQuery query = new SolrQuery();
-		String[] fieldsToReturn = getIndexFieldToReturn(sp.getOrderLevels());
+		String[] fieldsToReturn = getIndexFieldToReturn(sp.getResultFields());
 		query.setQuery(queryString)//
 				.setFields(fieldsToReturn)//
 				.setRows(ROWS)//
@@ -177,7 +178,7 @@ public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
 		return termCountMap;
 	}
 
-	private String[] getIndexFieldToReturn(List<String> orderLevels) {
+	private String[] getIndexFieldToReturn(Collection<String> orderLevels) {
 		List<String> list = Lists.newArrayList(SolrFields.DOC_ID, SolrFields.NAME);
 		for (String level : orderLevels) {
 			list.add(SolrUtils.facetName(level));
@@ -239,15 +240,22 @@ public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
 	 * @return 
 	 */
 	private SolrQuery setSort(SolrQuery query, ElaborateSearchParameters sp) {
-		boolean ascending = sp.isAscending();
-		String sortField = sp.getSort();
-		ORDER sortOrder = ascending ? SolrQuery.ORDER.asc : SolrQuery.ORDER.desc;
+		//		boolean ascending = sp.isAscending();
+		//		String sortField = sp.getSort();
+		//		ORDER sortOrder = ascending ? SolrQuery.ORDER.asc : SolrQuery.ORDER.desc;
 
-		if (SolrFields.SCORE.equals(sortField)) {
-			query.addSort(SolrFields.SCORE, ascending ? SolrQuery.ORDER.desc : SolrQuery.ORDER.asc);
+		//		if (SolrFields.SCORE.equals(sortField)) {
+		//			query.addSort(SolrFields.SCORE, ascending ? SolrQuery.ORDER.desc : SolrQuery.ORDER.asc);
+		//
+		//		} else if (sortField != null) {
+		//			query.addSort(sortField, sortOrder);
+		//		}
 
-		} else if (sortField != null) {
-			query.addSort(sortField, sortOrder);
+		List<SortParameter> sortParameters = sp.getSortParameters();
+		for (SortParameter sortParameter : sortParameters) {
+			String facetName = SolrUtils.facetName(sortParameter.getFieldname());
+			ORDER solrOrder = solrOrder(sortParameter.getDirection());
+			query.addSort(facetName, solrOrder);
 		}
 
 		query.addSort(sp.getLevel1Field(), SolrQuery.ORDER.asc);
@@ -255,6 +263,10 @@ public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
 		query.addSort(sp.getLevel3Field(), SolrQuery.ORDER.asc);
 		query.addSort(SolrFields.NAME, SolrQuery.ORDER.asc);
 		return query;
+	}
+
+	private ORDER solrOrder(String direction) {
+		return "asc".equals(direction) ? SolrQuery.ORDER.asc : SolrQuery.ORDER.desc;
 	}
 
 	public static final String HL_PRE = "<em>";
