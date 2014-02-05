@@ -65,7 +65,9 @@ example output:
 ### sessions
 
 To login as the root user with the default password:
-rootcode=`curl --silent --show-error --data "username=root&password=toor" $eb/sessions/login/|jq -r ".token"`; echo $rootcode
+  `POST /sessions/login/`
+
+data to post: `"username=root&password=toor"`
 
 All the following REST calls need and `Authorization` header.
 All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
@@ -75,29 +77,28 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Create:
   `POST /users`
 
-```
-  {
-    "username" : "new_user",
-    "email" : "new.user@huygens.knaw.nl",
-    "firstName" : "New",
-    "lastName" : "User",
-    "role" : "USER",
-    "password" : "laswysdfas23"
-  }
-```
+      {
+        "username" : "new_user",
+        "email" : "new.user@huygens.knaw.nl",
+        "firstName" : "New",
+        "lastName" : "User",
+        "role" : "USER",
+        "password" : "laswysdfas23"
+      }
+
 * Read:
   `GET /users`
 
 * Update:
   `PUT /users/{user_id}`
 
-    {
-      "email" : "new.user@example.org",
-      "firstName" : "New",
-      "lastName" : "User",
-      "role" : "USER",
-      "password" : "laswysdfas23"
-    }
+      {
+        "email" : "new.user@example.org",
+        "firstName" : "New",
+        "lastName" : "User",
+        "role" : "USER",
+        "password" : "laswysdfas23"
+      }
 
 * Delete:
   `DELETE /users/{user_id}`
@@ -107,9 +108,9 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Create:
   `POST /projectmetadatafields`
 
-          {
-            "fieldName" : "whatever"
-          }
+      {
+        "fieldName" : "whatever"
+      }
 
 * Read:
   all:
@@ -120,9 +121,9 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Update:
   `PUT /projectmetadatafields/{field_id}`
 
-          {
-            "fieldName" : "new.field.name"
-          }
+      {
+        "fieldName" : "new.field.name"
+      }
 
 
 * Delete:
@@ -133,12 +134,13 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Create:
   `POST /annotationtypes`
 
-          {
-            "name" : "short_name"
-            "description" : "Longer description"
-          }
+      {
+        "name" : "short_name"
+        "description" : "Longer description"
+      }
 
 * Read:
+
   all:
   `GET /annotationtypes`
 
@@ -148,10 +150,10 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Update:
   `PUT /annotationtypes/{type_id}`
 
-          {
-            "name" : "different_short_name"
-            "description" : "Updated description"
-          }
+      {
+        "name" : "different_short_name"
+        "description" : "Updated description"
+      }
 
 * Delete:
   `DELETE /annotationtypes/{type_id}`
@@ -162,18 +164,18 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * add metadata:
   `POST /annotationtypes/{type_id}/metadataitems/{meta_id}`
 
-          {
-            "name" : "fieldname"
-            "description" : "Description of the field"
-          }
+      {
+        "name" : "fieldname"
+        "description" : "Description of the field"
+      }
 
 * update metadata:
   `PUT /annotationtypes/{type_id}/metadataitems/{meta_id}`
 
-          {
-            "name" : "different fieldname"
-            "description" : "Different description"
-          }
+      {
+        "name" : "different fieldname"
+        "description" : "Different description"
+      }
 
 * delete metadata:
   `DELETE /annotationtypes/{type_id}/metadataitems/{meta_id}`
@@ -184,14 +186,16 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Create:
   `POST /projects`
 
-          {
-            "title" : "project title",
-            "textLayers" : [ "Diplomatic", "Critical", "Translation"]
-          }
+      {
+        "title" : "project title",
+        "textLayers" : [ "Diplomatic", "Critical", "Translation"]
+      }
 
 * Read:
+
   all:
   `GET /projects`
+
   specific:
   `GET /projects/{project_id}`
 
@@ -203,14 +207,14 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * update project textlayer settings:
   `PUT /projects/{project_id}/textlayers`
 
-          [ "first","second","third" ]
+      [ "first","second","third" ]
 
 #### project sorting/grouping levels
 
 * update project sorting/grouping levels:
   `PUT /projects/{project_id}/sortlevels`
 
-          [ "level1","level2","level3" ]
+      [ "level1","level2","level3" ]
 
 #### project annotation types
 
@@ -220,7 +224,7 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Update:
   `PUT /projects/{project_id}/annotationtypes`
 
-          [1,2,3]
+      [1,2,3]
 
 #### project logentries
 
@@ -236,7 +240,7 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Update:
   `PUT /projects/{project_id}/projectusers`
 
-          [1,2,3]
+      [1,2,3]
 
 #### project settings
 
@@ -246,26 +250,26 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * update project settings:
   `PUT /projects/{project_id}/settings`
 
-          {
-            "Type" : "Letter project",
-            "Version" : "0.1"
-          }
+      {
+        "Type" : "Letter project",
+        "Version" : "0.1"
+      }
 
-  extra system defined project settings variables (optional):<br>
-  `text.font` - use when a special (unicode) font is necessary to display the textlayer texts.<br>
-  `publication.title` - use when the publication needs a different title from the title in the edit environment.<br>
+  extra system-defined project settings variables (optional):<br>
+  `text.font` - use when a special (unicode) font is necessary to display the textlayer texts.
+  `publication.title` - use when the publication needs a different title from the title in the edit environment.
 
-  `entry.term_singular` - the name used in this project to indicate a single entry (eg. 'letter')<br>
-  `entry.term_plural` - the name used in this project to indicate multiple entries (eg. 'letters')<br>
+  `entry.term_singular` - the name used in this project to indicate a single entry (eg. 'letter')
+  `entry.term_plural` - the name used in this project to indicate multiple entries (eg. 'letters')
 
-  `annotationtype.b.name` - short name for the annotationtype to be displayed as <b>bold</b> for this project<br>
-  `annotationtype.b.description` - longer description for the annotationtype to be displayed as <b>bold</b> for this project<br>
-  `annotationtype.i.name` - short name for the annotationtype to be displayed as <i>italic</i><br>
-  `annotationtype.i.description` - longer description for the annotationtype to be displayed as <i>italic</i><br>
-  `annotationtype.u.name` - short name for the annotationtype to be displayed as <u>underline</u><br>
-  `annotationtype.u.description` - longer description for the annotationtype to be displayed as <u>underline</u><br>
-  `annotationtype.strike.name` - short name for the annotationtype to be displayed as <strike>strikethrough</strike><br>
-  `annotationtype.strike.description` - longer description for the annotationtype to be displayed as <strike>strikethrough</strike><br>
+  `annotationtype.b.name` - short name for the annotationtype to be displayed as <b>bold</b> for this project
+  `annotationtype.b.description` - longer description for the annotationtype to be displayed as <b>bold</b> for this project
+  `annotationtype.i.name` - short name for the annotationtype to be displayed as <i>italic</i>
+  `annotationtype.i.description` - longer description for the annotationtype to be displayed as <i>italic</i>
+  `annotationtype.u.name` - short name for the annotationtype to be displayed as <u>underline</u>
+  `annotationtype.u.description` - longer description for the annotationtype to be displayed as <u>underline</u>
+  `annotationtype.strike.name` - short name for the annotationtype to be displayed as <strike>strikethrough</strike>
+  `annotationtype.strike.description` - longer description for the annotationtype to be displayed as <strike>strikethrough</strike>
 
 
 #### project entry metadatafields
@@ -276,7 +280,7 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Update:
   `PUT /projects/{project_id}/entrymetadatafields`
 
-            [ "field1", "field2" ]
+      [ "field1", "field2" ]
 
 #### project entries
 
@@ -288,10 +292,10 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Create:
   `POST /projects/{project_id}/entries`
 
-          {
-            "name" : "project-unique name",
-            "publishable" : false
-          }
+      {
+        "name" : "project-unique name",
+        "publishable" : false
+      }
 
   `publishable` is optional, default is false;
 
@@ -301,10 +305,10 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Update:
   `PUT /projects/{project_id}/entries/{entry_id}`
 
-          {
-            "name" : "project-unique name",
-            "publishable" : true
-          }
+      {
+        "name" : "project-unique name",
+        "publishable" : true
+      }
 
   `publishable` is optional
 
@@ -314,14 +318,14 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * get previous/next entry ids:
   `GET /projects/{project_id}/entries/{entry_id}/prevnext`
 
-          {
-            "prev" : 1234,
-            "next" : 1235
-          }
+      {
+        "prev" : 1234,
+        "next" : 1235
+      }
 
-  when `prev=-1`, then entry `{entry_id}` is the first.<br>
-  when `next=-1`, then entry `{entry_id}` is the last.<br>
-  The entry ids are sorted in alphabetical order using the contents of the metadata fields as defined in project.level1, project.level2 and project.level3, and the entryname.
+  when `prev=-1`, entry `{entry_id}` is the first.
+  when `next=-1`, entry `{entry_id}` is the last.
+  The entry ids are sorted in alphabetical order using the contents of the metadata fields as defined in `project.level1`, `project.level2` and `project.level3`, and the `entryname`.
 
 * Read entry settings:
   `GET /projects/{project_id}/entries/{entry_id}/settings`
@@ -329,25 +333,25 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * entrysettings bijwerken:
   `PUT /projects/{project_id}/entries/{entry_id}/settings`
 
-        {
-          "key" : "value",
-          ....
-        }
+      {
+        "key" : "value",
+        ....
+      }
 
    where the values are strings.
 
 * update multiple entrysettings:
   `PUT /projects/{project_id}/multipleentrysettings`
 
-        {
-          "projectEntryIds" : [1,2,3],
-          "settings" : {
-            "Publishable" : false,
-            "field1" : "value1",
-            "field2" : "value2",
-            ....
-          }
+      {
+        "projectEntryIds" : [1,2,3],
+        "settings" : {
+          "Publishable" : false,
+          "field1" : "value1",
+          "field2" : "value2",
+          ....
         }
+      }
 
    where the (selected) projectEntityIds are longs, settings is a hashmap, Publishable is a boolean, and all other values are strings.
 
@@ -361,11 +365,11 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Create:
   `POST /projects/{project_id}/entries/{entry_id}/facsimiles`
 
-          {
-            "name" : "page 1",
-            "filename" : "00000001.jpg"
-            "zoomableUrl" : "http://localhost:8080/jp2/13507286068671.jp2"
-          }
+      {
+        "name" : "page 1",
+        "filename" : "00000001.jpg"
+        "zoomableUrl" : "http://localhost:8080/jp2/13507286068671.jp2"
+      }
 
 * Read:
   `GET /projects/{project_id}/entries/{entry_id}/facsimiles/{facsimile_id}`
@@ -373,11 +377,11 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Update:
   `PUT /projects/{project_id}/entries/{entry_id}/facsimiles/{facsimile_id}`
 
-          {
-            "name" : "pagina 1",
-            "filename" : "00000001.jpg"
-            "zoomableUrl" : "http://localhost:8080/jp2/13507286068671.jp2"
-          }
+      {
+        "name" : "pagina 1",
+        "filename" : "00000001.jpg"
+        "zoomableUrl" : "http://localhost:8080/jp2/13507286068671.jp2"
+      }
 
 * Delete:
   `DELETE /projects/{project_id}/entries/{entry_id}/facsimiles/{facsimile_id}`
@@ -388,27 +392,27 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Create:
   `POST /projects/{project_id}/entries/{entry_id}/transcriptions`
 
-          {
-            "body": "transcription body",
-            "textLayer": "Diplomatic",
-          }
+      {
+        "body": "transcription body",
+        "textLayer": "Diplomatic",
+      }
 
 * Read:
   `GET /projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}`
 
-          {
-            "body": "transcription body",
-            "textLayer": "Diplomatic",
-            "id": 13413
-          }
+      {
+        "body": "transcription body",
+        "textLayer": "Diplomatic",
+        "id": 13413
+      }
 
 
 * Update:
   `PUT /projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}`
 
-          {
-            "body": "new body",
-          }
+      {
+        "body": "new body",
+      }
 
 * Delete:
   `DELETE /projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}`
@@ -421,16 +425,15 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Create:
   `POST /projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations`
 
-  ```
-  {
-    "body" : "the annotation body",
-    "typeId" : 1
-    "metadata" : {
-       "field1" : "value1",
-       "field2" : "value"
-    }
-  }
-  ```
+      {
+        "body" : "the annotation body",
+        "typeId" : 1
+        "metadata" : {
+           "field1" : "value1",
+           "field2" : "value"
+        }
+      }
+
   where `typeId` is the id of the AnnotationType used, default is 1
   `metadata` is a hashmap with values for the relevant fields defined by the AnnotationType
 
@@ -440,14 +443,14 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Update:
   `PUT /projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}`
 
-          {
-            "body" : "the annotation body",
-            "typeId" : 1
-            "metadata" : {
-               "field1" : "value1",
-               "field2" : "value"
-            }
-          }
+      {
+        "body" : "the annotation body",
+        "typeId" : 1
+        "metadata" : {
+           "field1" : "value1",
+           "field2" : "value"
+        }
+      }
 
 * Delete:
   `DELETE /projects/{project_id}/entries/{entry_id}/transcriptions/{transcription_id}/annotations/{annotation_id}`
@@ -481,8 +484,7 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 * Read:
   `GET /projects/{project_id}/search/{search_id}`
 
-
-****************************************
+-
 
 ## publish
 
@@ -490,10 +492,10 @@ The _projectleader_ or _admin user_ can publish a draft of the project via `POST
 
 You can POST some json settings:
 
-      {
-        "projectEntryMetadataFields" : ["Page","Part"],
-        "annotationTypeIds" : [1,2,3]
-      }
+    {
+      "projectEntryMetadataFields" : ["Page","Part"],
+      "annotationTypeIds" : [1,2,3]
+    }
 
 
 where `projectEntryMetadataFields` is an array of those metadata fields that should be included in the publication (as facets), in the given order.
@@ -516,6 +518,5 @@ Only those entries that have `publishable=true` will be shown in the publication
 
 The publication has a `search` comparable to the backend, with the exception of the need to login, and to provide the projectId.
 
-************************************************************************************************************************
-
+-
 Last updated: 2014-02-05
