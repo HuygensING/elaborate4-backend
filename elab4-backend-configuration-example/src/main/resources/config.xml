@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  elab4-backend
+  =======
+  Copyright (C) 2011 - 2014 Huygens ING
+  =======
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<config version="0.1">
+  <settings>
+    <!-- version number, will be returned by the /version resource -->
+    <version>4.0</version>
+
+    <solr>
+      <!-- url of the SOLR index -->
+      <url>http://localhost:8080/solr-elab3/entries/</url>
+    </solr>
+
+    <server>
+      <!--  scheme, name and port of the backend server -->
+      <scheme>http</scheme>
+      <name>localhost</name>
+      <port>2014</port>
+    </server>
+
+    <publication>
+      <!-- baseurl for the publication scripts & images -->
+      <cdn>cdn.huygens.knaw.nl/elaborate</cdn>
+      <!-- version of the publication scripts & images to use for the publication, for work type and collection type projects -->
+      <version>
+        <work>development</work>
+        <collection>development</collection>
+      </version>
+      <tomcat>
+        <!-- the baseurl of the tomcat server the published projects will be deployed to -->
+        <url>http://localhost:8080/</url>
+        <!-- the directory to deploy the publication war to -->
+        <webappdir>C:/devel/tomcat6/webapps/</webappdir>
+      </tomcat>
+    </publication>
+
+    <security>
+      <!-- set to true for federated login, currently only our Huygens Security Server is supported -->
+      <enabled>false</enabled>
+    </security>
+
+  </settings>
+</config>
