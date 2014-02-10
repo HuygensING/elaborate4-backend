@@ -22,40 +22,41 @@ package elaborate.publication.solr;
  * #L%
  */
 
-
 import java.util.List;
+
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
 
 public class FacetParameter {
-  String name = "";
-  List<String> values = Lists.newArrayList();
+	String name = "";
+	List<String> values = Lists.newArrayList();
 
-  public String getName() {
-    return name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public FacetParameter setName(String name) {
-    this.name = name;
-    return this;
-  }
+	public FacetParameter setName(String name) {
+		this.name = name;
+		return this;
+	}
 
-  public List<String> getValues() {
-    return values;
-  }
+	public List<String> getValues() {
+		return values;
+	}
 
-  public FacetParameter setValues(List<String> values) {
-    this.values = values;
-    return this;
-  }
+	public FacetParameter setValues(List<String> values) {
+		this.values = values;
+		return this;
+	}
 
-  public List<String> getEscapedValues() {
-    Builder<String> builder = ImmutableList.builder();
-    for (String value : getValues()) {
-      builder.add(SolrUtils.escapeFacetValue(value));
-    }
-    return builder.build();
-  }
+	public List<String> getEscapedValues() {
+		Builder<String> builder = ImmutableList.builder();
+		for (String value : getValues()) {
+			builder.add(SolrUtils.escapeFacetValue(value));
+		}
+		return builder.build();
+	}
 }

@@ -27,8 +27,8 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.solr.FacetedSearchParameters;
-import nl.knaw.huygens.solr.SolrUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -37,8 +37,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import elaborate.util.StringUtil;
 
 @XmlRootElement
 public class ElaborateSearchParameters extends FacetedSearchParameters<ElaborateSearchParameters> {
@@ -107,7 +105,7 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 		String textlayerPrefix = isCaseSensitive() ? SolrFields.TEXTLAYERCS_PREFIX : SolrFields.TEXTLAYER_PREFIX;
 		String annotationPrefix = isCaseSensitive() ? SolrFields.ANNOTATIONCS_PREFIX : SolrFields.ANNOTATION_PREFIX;
 		for (String textLayer : textLayers) {
-			String fieldname = StringUtil.normalize(textLayer);
+			String fieldname = SolrUtils.normalize(textLayer);
 			if (getSearchInTranscriptions()) {
 				map.put(textlayerPrefix + fieldname, textLayer);
 			}

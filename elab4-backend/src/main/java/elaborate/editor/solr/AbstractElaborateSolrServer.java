@@ -30,14 +30,14 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.facetedsearch.SortParameter;
 import nl.knaw.huygens.solr.AbstractSolrServer;
 import nl.knaw.huygens.solr.FacetCount;
 import nl.knaw.huygens.solr.FacetInfo;
 import nl.knaw.huygens.solr.FacetParameter;
 import nl.knaw.huygens.solr.FacetedSearchParameters;
 import nl.knaw.huygens.solr.IndexException;
-import nl.knaw.huygens.solr.SolrUtils;
-import nl.knaw.huygens.solr.SortParameter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -147,7 +147,7 @@ public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
 	private Map<String, Object> entryView(SolrDocument document, String[] fieldsToReturn, Map<String, List<String>> kwicMap, Map<String, String> fieldMap) {
 		Map<String, Object> view = Maps.newHashMap();
 		for (String field : fieldsToReturn) {
-			if (field.startsWith(SolrFields.METADATAFIELD_PREFIX)) {
+			if (field.startsWith(SolrUtils.METADATAFIELD_PREFIX)) {
 				view.put(field, document.getFieldValues(field));
 			} else {
 				view.put(field, document.getFieldValue(field));

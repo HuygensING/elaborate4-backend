@@ -221,7 +221,7 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
   //
   //  public String getLabel() {
   //    String cleanBody = annotation.getBody().replaceAll("<.*?>", "");
-  //    String normalizedType = StringUtil.normalize(annotation.getAnnotationType().getName());
+  //    String normalizedType = SolrUtil.normalize(annotation.getAnnotationType().getName());
   //    String value = StringUtils.defaultIfBlank(cleanBody, annotation.getAnnotatedText());
   //    return String.format("%s:%s", normalizedType, value);
   //  }

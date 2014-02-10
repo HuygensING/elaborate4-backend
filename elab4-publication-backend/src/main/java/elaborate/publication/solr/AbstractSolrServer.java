@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -115,7 +117,7 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 		Map<String, String> textFieldMap = sp.getTextFieldsToSearch();
 
 		SolrQuery query = new SolrQuery();
-		String[] fieldsToReturn = getIndexFieldToReturn(sp.getOrderLevels());
+		String[] fieldsToReturn = getIndexFieldToReturn(sp.getResultFields());
 		query.setQuery(queryString)//
 				.setFields(fieldsToReturn)//
 				.setRows(ROWS)//
@@ -197,9 +199,9 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 		return view;
 	}
 
-	private String[] getIndexFieldToReturn(List<String> orderLevels) {
+	private String[] getIndexFieldToReturn(Collection<String> collection) {
 		List<String> list = Lists.newArrayList(SolrFields.DOC_ID, SolrFields.NAME);
-		for (String level : orderLevels) {
+		for (String level : collection) {
 			list.add(SolrUtils.facetName(level));
 		}
 		return list.toArray(new String[list.size()]);

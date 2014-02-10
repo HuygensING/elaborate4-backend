@@ -25,6 +25,8 @@ package nl.knaw.huygens.solr;
 
 import java.util.List;
 
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;

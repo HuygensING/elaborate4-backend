@@ -29,8 +29,8 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
-import nl.knaw.huygens.solr.SolrUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -148,7 +148,7 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 			Map<String, String> metadata = Maps.newHashMap();
 			List<String> keys = ImmutableList.copyOf(resultmap.keySet());
 			for (String key : keys) {
-				if (key.startsWith(SolrFields.METADATAFIELD_PREFIX)) {
+				if (key.startsWith(SolrUtils.METADATAFIELD_PREFIX)) {
 					Object valueObject = resultmap.remove(key);
 					String name = fieldnameMap.get(key);
 					if (name != null) {

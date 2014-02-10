@@ -101,11 +101,6 @@
 			</dependency> -->
 		<!-- <dependency> <groupId>elaborate_3000</groupId> <artifactId>common</artifactId> <version>[0.0.1,)</version> </dependency> -->
 
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>${commons-lang.version}</version>
-		</dependency>
 
 		<!-- <dependency> <groupId>com.google.code.gson</groupId> <artifactId>gson</artifactId> <version>${gson.version}</version> 
 			</dependency> -->
@@ -149,11 +144,6 @@
 			<groupId>net.sf.flexjson</groupId>
 			<artifactId>flexjson</artifactId>
 			<version>${flexjson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-core</artifactId>
-			<version>${solr.version}</version>
 		</dependency>
 
 		<!-- pdf -->

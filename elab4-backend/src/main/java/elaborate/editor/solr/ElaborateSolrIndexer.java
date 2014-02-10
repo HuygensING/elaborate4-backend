@@ -22,7 +22,6 @@ package elaborate.editor.solr;
  * #L%
  */
 
-
 import static elaborate.editor.solr.SolrFields.ANNOTATIONCS_PREFIX;
 import static elaborate.editor.solr.SolrFields.ANNOTATION_PREFIX;
 import static elaborate.editor.solr.SolrFields.ID;
@@ -34,7 +33,7 @@ import static elaborate.editor.solr.SolrFields.TEXTLAYER_PREFIX;
 
 import java.util.Set;
 
-import nl.knaw.huygens.solr.SolrUtils;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
 
@@ -50,7 +49,6 @@ import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
-import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
 
 public class ElaborateSolrIndexer extends SolrIndexer {
@@ -85,7 +83,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 		Set<String> textLayersProcessed = Sets.newHashSet();
 		for (Transcription transcription : projectEntry.getTranscriptions()) {
 			String tBody = convert(transcription.getBody());
-			String textLayer = StringUtil.normalize(transcription.getTextLayer());
+			String textLayer = SolrUtils.normalize(transcription.getTextLayer());
 			if (textLayersProcessed.contains(textLayer)) {
 				LOG.error("duplicate textlayer {} for entry {}", textLayer, projectEntry.getId());
 			} else {

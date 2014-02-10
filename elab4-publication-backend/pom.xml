@@ -18,6 +18,12 @@
 	<dependencies>
 		<!-- compile dependecies -->
 		<dependency>
+			<groupId>nl.knaw.huygens.elab4</groupId>
+			<artifactId>elab4-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>nl.knaw.huygens</groupId>
 			<artifactId>jax-rs-tools</artifactId>
 			<version>${jaxrstools.version}</version>
