@@ -36,7 +36,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import nl.knaw.huygens.LoggableObject;
-import nl.knaw.huygens.solr.IndexException;
+import nl.knaw.huygens.facetedsearch.IndexException;
 import nl.knaw.huygens.solr.LocalSolrServer;
 import nl.knaw.huygens.solr.SolrServerWrapper;
 

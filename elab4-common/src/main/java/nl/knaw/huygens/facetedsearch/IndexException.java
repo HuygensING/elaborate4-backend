@@ -1,4 +1,4 @@
-package elaborate.publication.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L

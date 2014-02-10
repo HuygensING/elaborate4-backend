@@ -1,4 +1,4 @@
-package elaborate.publication.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
@@ -23,8 +23,6 @@ package elaborate.publication.solr;
  */
 
 import java.util.List;
-
-import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;

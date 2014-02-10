@@ -32,12 +32,12 @@ import java.util.regex.Pattern;
 
 import nl.knaw.huygens.facetedsearch.FacetCount;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.facetedsearch.FacetParameter;
+import nl.knaw.huygens.facetedsearch.IndexException;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.facetedsearch.SortParameter;
 import nl.knaw.huygens.solr.AbstractSolrServer;
-import nl.knaw.huygens.solr.FacetParameter;
 import nl.knaw.huygens.solr.FacetedSearchParameters;
-import nl.knaw.huygens.solr.IndexException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;

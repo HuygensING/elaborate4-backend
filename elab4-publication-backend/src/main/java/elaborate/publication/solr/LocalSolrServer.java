@@ -23,6 +23,8 @@ package elaborate.publication.solr;
  */
 
 
+import nl.knaw.huygens.facetedsearch.IndexException;
+
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
 

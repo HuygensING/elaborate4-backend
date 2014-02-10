@@ -26,6 +26,8 @@ package elaborate.publication.solr;
 import java.util.Collection;
 import java.util.Map;
 
+import nl.knaw.huygens.facetedsearch.IndexException;
+
 import org.apache.solr.common.SolrInputDocument;
 
 public interface SolrServerWrapper {
