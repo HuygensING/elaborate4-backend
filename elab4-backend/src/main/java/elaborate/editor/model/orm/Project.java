@@ -39,9 +39,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.facetedsearch.FacetType;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.solr.FacetInfo;
-import nl.knaw.huygens.solr.FacetType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

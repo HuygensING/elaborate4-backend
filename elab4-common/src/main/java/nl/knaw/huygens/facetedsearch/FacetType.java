@@ -1,10 +1,10 @@
-package elaborate.publication.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
- * elab4-publication-backend
+ * elab4-backend
  * =======
- * Copyright (C) 2013 - 2014 Huygens ING
+ * Copyright (C) 2011 - 2014 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as

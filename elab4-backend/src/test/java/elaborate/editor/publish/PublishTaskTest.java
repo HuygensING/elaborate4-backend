@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.facetedsearch.FacetInfo;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;

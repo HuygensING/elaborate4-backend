@@ -1,10 +1,10 @@
-package nl.knaw.huygens.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
- * elab4-backend
+ * elab4-publication-backend
  * =======
- * Copyright (C) 2011 - 2014 Huygens ING
+ * Copyright (C) 2013 - 2014 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -26,40 +26,40 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 public class FacetInfo {
-  String name = "";
-  String title = "";
-  FacetType type = FacetType.LIST;
+	String name = "";
+	String title = "";
+	FacetType type = FacetType.LIST;
 
-  public String getName() {
-    return name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public FacetInfo setName(String name) {
-    this.name = name;
-    return this;
-  }
+	public FacetInfo setName(String name) {
+		this.name = name;
+		return this;
+	}
 
-  public String getTitle() {
-    return title;
-  }
+	public String getTitle() {
+		return title;
+	}
 
-  public FacetInfo setTitle(String title) {
-    this.title = title;
-    return this;
-  }
+	public FacetInfo setTitle(String title) {
+		this.title = title;
+		return this;
+	}
 
-  public FacetType getType() {
-    return type;
-  }
+	public FacetType getType() {
+		return type;
+	}
 
-  public FacetInfo setType(FacetType type) {
-    this.type = type;
-    return this;
-  }
+	public FacetInfo setType(FacetType type) {
+		this.type = type;
+		return this;
+	}
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-  }
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
+	}
 
 }

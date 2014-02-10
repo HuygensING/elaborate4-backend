@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.facetedsearch.FacetInfo;
 
 import org.apache.commons.lang.StringUtils;
 

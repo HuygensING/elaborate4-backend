@@ -22,7 +22,6 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -37,9 +36,9 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-import nl.knaw.huygens.solr.FacetInfo;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;

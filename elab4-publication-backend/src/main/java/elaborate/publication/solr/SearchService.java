@@ -33,6 +33,8 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
+import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.facetedsearch.FacetType;
 import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
 
 import org.joda.time.DateTime;
