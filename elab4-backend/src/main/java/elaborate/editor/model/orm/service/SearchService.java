@@ -30,7 +30,9 @@ import java.util.Set;
 import javax.inject.Singleton;
 
 import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
+import nl.knaw.huygens.solr.SolrUtils;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import com.google.common.collect.ImmutableList;
@@ -43,6 +45,8 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.SearchData;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.solr.ElaborateSearchParameters;
+import elaborate.editor.solr.SolrFields;
+import elaborate.editor.solr.SolrIndexer;
 import elaborate.util.ResourceUtil;
 
 @Singleton
@@ -60,16 +64,19 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 		beginTransaction();
 		projectService.setEntityManager(getEntityManager());
 		Project project = projectService.getProjectIfUserIsAllowed(elaborateSearchParameters.getProjectId(), user);
+		String level1 = project.getLevel1();
+		String level2 = project.getLevel2();
+		String level3 = project.getLevel3();
 		if (!elaborateSearchParameters.isLevelFieldsSet()) {
-			elaborateSearchParameters.setLevelFields(project.getLevel1(), project.getLevel2(), project.getLevel3());
+			elaborateSearchParameters.setLevelFields(level1, project.getLevel2(), project.getLevel3());
 		}
 		if (elaborateSearchParameters.getSearchInTranscriptions() && elaborateSearchParameters.getTextLayers().isEmpty()) {
 			elaborateSearchParameters.setTextLayers(ImmutableList.copyOf(project.getTextLayers()));
 		}
 		Set<String> resultFields = Sets.newHashSet(elaborateSearchParameters.getResultFields());
-		resultFields.add(project.getLevel1());
-		resultFields.add(project.getLevel2());
-		resultFields.add(project.getLevel3());
+		addIfNotEmpty(resultFields, level1);
+		addIfNotEmpty(resultFields, level2);
+		addIfNotEmpty(resultFields, level3);
 		elaborateSearchParameters//
 				.setFacetFields(project.getFacetFields())//
 				.setResultFields(resultFields)//
@@ -92,6 +99,12 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 		}
 	}
 
+	private void addIfNotEmpty(Set<String> resultFields, String level1) {
+		if (StringUtils.isNotEmpty(level1)) {
+			resultFields.add(level1);
+		}
+	}
+
 	public Map<String, Object> getSearchResult(long projectId, long searchId, int start, int rows, User user) {
 		Map<String, Object> resultsMap = Maps.newHashMap();
 		//    try {
@@ -99,6 +112,11 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 		SearchData searchData = find(SearchData.class, searchId);
 		checkEntityFound(searchData, searchId);
 		Project project = getEntityManager().find(Project.class, projectId);
+		String[] projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+		Map<String, String> fieldnameMap = Maps.newHashMap();
+		for (String fieldName : projectEntryMetadataFieldnames) {
+			fieldnameMap.put(SolrUtils.facetName(fieldName), fieldName);
+		}
 		closeEntityManager();
 
 		if (searchData != null) {
@@ -112,8 +130,8 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 
 			int lo = ResourceUtil.toRange(start, 0, ids.size());
 			int hi = ResourceUtil.toRange(lo + rows, 0, ids.size());
-			//      ids = ids.subList(lo, hi);
 			results = results.subList(lo, hi);
+			groupMetadata(results, fieldnameMap);
 
 			resultsMap.put("ids", ids);
 			resultsMap.put("results", results);
@@ -122,10 +140,37 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 
 			resultsMap.put("sortableFields", sortableFields);
 		}
-		//    } catch (Exception e) {
-		//      throw new RuntimeException(e);
-		//    }
 		return resultsMap;
+	}
+
+	private void groupMetadata(List<Map<String, Object>> results, Map<String, String> fieldnameMap) {
+		for (Map<String, Object> resultmap : results) {
+			Map<String, String> metadata = Maps.newHashMap();
+			List<String> keys = ImmutableList.copyOf(resultmap.keySet());
+			for (String key : keys) {
+				if (key.startsWith(SolrFields.METADATAFIELD_PREFIX)) {
+					Object valueObject = resultmap.remove(key);
+					String name = fieldnameMap.get(key);
+					if (name != null) {
+						if (valueObject == null) {
+							metadata.put(name, SolrIndexer.EMPTYVALUE_SYMBOL);
+						} else if (valueObject instanceof List) {
+							List<String> values = (List<String>) valueObject;
+							if (values.isEmpty()) {
+								metadata.put(name, SolrIndexer.EMPTYVALUE_SYMBOL);
+							} else if (values.size() == 1) {
+								metadata.put(name, values.get(0));
+							} else if (values.size() > 1) {
+								LOG.warn("unexpected: multiple values: {}", values);
+								metadata.put(name, values.get(0));
+							}
+						}
+					}
+				}
+			}
+			LOG.info("metadata:{}", metadata);
+			resultmap.put("metadata", metadata);
+		}
 	}
 
 	public void removeExpiredSearches() {

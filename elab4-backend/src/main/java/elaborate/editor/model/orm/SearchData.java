@@ -22,7 +22,6 @@ package elaborate.editor.model.orm;
  * #L%
  */
 
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Date;
@@ -47,60 +46,62 @@ import elaborate.editor.model.AbstractStoredEntity;
 @Table(name = "searchdata")
 @XmlRootElement(name = "searchdata")
 public class SearchData extends AbstractStoredEntity<SearchData> {
-  private static final long serialVersionUID = 1L;
+	private static final String RESULTS = "results";
 
-  @Transient
-  private final ObjectMapper objectMapper = new ObjectMapper();
+	private static final long serialVersionUID = 1L;
 
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date created_on;
+	@Transient
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
-  String json;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created_on;
 
-  public Date getCreatedOn() {
-    return created_on;
-  }
+	String json;
 
-  public SearchData setCreatedOn(Date created_on) {
-    this.created_on = created_on;
-    return this;
-  }
+	public Date getCreatedOn() {
+		return created_on;
+	}
 
-  public String getJson() {
-    return json;
-  }
+	public SearchData setCreatedOn(Date created_on) {
+		this.created_on = created_on;
+		return this;
+	}
 
-  public SearchData setJson(String json) {
-    this.json = json;
-    return this;
-  }
+	public String getJson() {
+		return json;
+	}
 
-  public SearchData setResults(Map<String, Object> result) {
-    StringWriter stringWriter = new StringWriter();
-    try {
-      objectMapper.writeValue(stringWriter, result);
-    } catch (JsonGenerationException e) {
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    setJson(stringWriter.toString());
-    return this;
-  }
+	public SearchData setJson(String json) {
+		this.json = json;
+		return this;
+	}
 
-  @JsonIgnore
-  public Map<String, Object> getResults() {
-    try {
-      return objectMapper.readValue(json, Map.class);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+	public SearchData setResults(Map<String, Object> results) {
+		StringWriter stringWriter = new StringWriter();
+		try {
+			objectMapper.writeValue(stringWriter, results);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		setJson(stringWriter.toString());
+		return this;
+	}
+
+	@JsonIgnore
+	public Map<String, Object> getResults() {
+		try {
+			return objectMapper.readValue(json, Map.class);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

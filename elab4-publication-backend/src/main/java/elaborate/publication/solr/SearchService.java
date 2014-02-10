@@ -22,10 +22,10 @@ package elaborate.publication.solr;
  * #L%
  */
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,7 +48,9 @@ import elaborate.LoggableObject;
 
 @Singleton
 public class SearchService extends LoggableObject {
-	private static SearchService instance;
+	private static final SearchService instance = new SearchService();
+
+	private static final String EMPTYVALUE_SYMBOL = ":empty";
 
 	private final Map<Long, SearchData> searchDataIndex = Maps.newHashMap();
 	private SolrServerWrapper solrServer;
@@ -65,16 +67,14 @@ public class SearchService extends LoggableObject {
 	}
 
 	public static SearchService instance() {
-		if (instance == null) {
-			instance = new SearchService();
-		}
 		return instance;
 	}
 
 	public SearchData createSearch(ElaborateSearchParameters elaborateSearchParameters) {
-		elaborateSearchParameters.setFacetFields(getFacetFields());
-		elaborateSearchParameters.setFacetInfoMap(getFacetInfoMap());
-		elaborateSearchParameters.setLevelFields(defaultSortOrder[0], defaultSortOrder[1], defaultSortOrder[2]);
+		elaborateSearchParameters//
+				.setFacetFields(getFacetFields())//
+				.setFacetInfoMap(getFacetInfoMap())//
+				.setLevelFields(defaultSortOrder[0], defaultSortOrder[1], defaultSortOrder[2]);
 		try {
 			LOG.info("searchParameters={}", elaborateSearchParameters);
 			Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
@@ -94,6 +94,7 @@ public class SearchService extends LoggableObject {
 	public Map<String, Object> getSearchResult(long searchId, int start, int rows) {
 		Map<String, Object> resultsMap = Maps.newHashMap();
 		SearchData searchData = searchDataIndex.get(searchId);
+		Map<String, String> fieldnameMap = getFieldnameMap();
 
 		if (searchData != null) {
 			List<String> sortableFields = Lists.newArrayList("id", "name");
@@ -107,6 +108,7 @@ public class SearchService extends LoggableObject {
 			int lo = toRange(start, 0, ids.size());
 			int hi = toRange(lo + rows, 0, ids.size());
 			results = results.subList(lo, hi);
+			groupMetadata(results);
 
 			resultsMap.put("ids", ids);
 			resultsMap.put("results", results);
@@ -116,6 +118,43 @@ public class SearchService extends LoggableObject {
 			resultsMap.put("sortableFields", sortableFields);
 		}
 		return resultsMap;
+	}
+
+	private HashMap<String, String> getFieldnameMap() {
+		HashMap<String, String> map = Maps.newHashMap();
+
+		return map;
+	}
+
+	private void groupMetadata(List<Map<String, Object>> results) {
+		for (Map<String, Object> resultmap : results) {
+			Map<String, String> metadata = getFieldnameMap();
+			List<String> keys = ImmutableList.copyOf(resultmap.keySet());
+			for (String key : keys) {
+				if (key.startsWith(SolrFields.METADATAFIELD_PREFIX)) {
+					Object valueObject = resultmap.remove(key);
+					FacetInfo facetInfo = facetInfoMap.get(key);
+					if (facetInfo != null) {
+						String name = facetInfo.getName();
+						if (valueObject == null) {
+							metadata.put(name, EMPTYVALUE_SYMBOL);
+						} else if (valueObject instanceof List) {
+							List<String> values = (List<String>) valueObject;
+							if (values.isEmpty()) {
+								metadata.put(name, EMPTYVALUE_SYMBOL);
+							} else if (values.size() == 1) {
+								metadata.put(name, values.get(0));
+							} else if (values.size() > 1) {
+								LOG.warn("unexpected: multiple values: {}", values);
+								metadata.put(name, values.get(0));
+							}
+						}
+					}
+				}
+			}
+			LOG.info("metadata:{}", metadata);
+			resultmap.put("metadata", metadata);
+		}
 	}
 
 	public void removeExpiredSearches() {

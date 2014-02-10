@@ -22,7 +22,6 @@ package elaborate.publication.resources;
  * #L%
  */
 
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
@@ -43,7 +42,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.ImmutableList;
 
@@ -53,10 +55,9 @@ import elaborate.publication.solr.ElaborateSearchParameters;
 import elaborate.publication.solr.SearchData;
 import elaborate.publication.solr.SearchService;
 
-//TODO: next/prev as absolute urls
-
 @Path("search")
 public class SearchResource extends LoggableObject {
+	private static final String SEARCH_PATH_TEMPLATE = "/search/{0,number,#}";
 	static final String KEY_NEXT = "_next";
 	static final String KEY_PREV = "_prev";
 
@@ -95,13 +96,16 @@ public class SearchResource extends LoggableObject {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	public Response getSearchResults(//
 			@PathParam("search_id") long searchId,//
-			@QueryParam("start") @DefaultValue("0") int start,//
-			@QueryParam("rows") @DefaultValue("100") int rows//
+			@QueryParam("start") @DefaultValue("0") String startString,//
+			@QueryParam("rows") @DefaultValue("100") String rowsString//
 	) {
+		if (!StringUtils.isNumeric(startString) || !StringUtils.isNumeric(rowsString)) {
+			throw new BadRequestException();
+		}
+		int start = Integer.valueOf(startString);
+		int rows = Integer.valueOf(rowsString);
 		Map<String, Object> searchResult = searchService.getSearchResult(searchId, start, rows);
-
 		addPrevNextURIs(searchResult, searchId, start, rows);
-
 		ResponseBuilder builder = Response.ok(searchResult);
 		return builder.build();
 	}
@@ -118,7 +122,7 @@ public class SearchResource extends LoggableObject {
 	void addPrevNextURIs(Map<String, Object> searchResult, long searchId, int start, int rows) {
 		int prevStart = Math.max(0, start - rows);
 		LOG.info("prevStart={}", prevStart);
-		String path = MessageFormat.format("/search/{0,number,#}", searchId);
+		String path = MessageFormat.format(SEARCH_PATH_TEMPLATE, searchId);
 		if (start > 0) {
 			addURI(searchResult, KEY_PREV, path, prevStart, rows);
 		}

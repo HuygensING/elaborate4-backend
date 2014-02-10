@@ -83,7 +83,7 @@ public class SearchResource extends AbstractElaborateResource {
 	}
 
 	@GET
-	@Path("{search_id: [0-9]+}")
+	@Path("{search_id:[0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	public Response getSearchResults(//
 			@PathParam("project_id") long projectId,//

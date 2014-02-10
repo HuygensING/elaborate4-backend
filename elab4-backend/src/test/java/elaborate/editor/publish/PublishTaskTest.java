@@ -65,6 +65,9 @@ public class PublishTaskTest extends AbstractTest {
 		Project mockProject = mock(Project.class);
 		String projectTitle = "titel";
 		when(mockProject.getTitle()).thenReturn(projectTitle);
+		when(mockProject.getLevel1()).thenReturn("level1");
+		when(mockProject.getLevel2()).thenReturn("level2");
+		when(mockProject.getLevel3()).thenReturn("level3");
 
 		PublishTask publishTask = new PublishTask(settings);
 		EntryData entry1 = new EntryData("uno", "entry1.json");
@@ -86,6 +89,9 @@ public class PublishTaskTest extends AbstractTest {
 	public void testGetProjectData_WithPublicationTitle() throws Exception {
 		Settings settings = mock(Publication.Settings.class);
 		Project mockProject = mock(Project.class);
+		when(mockProject.getLevel1()).thenReturn("level1");
+		when(mockProject.getLevel2()).thenReturn("level2");
+		when(mockProject.getLevel3()).thenReturn("level3");
 		String projectTitle = "Project title";
 		when(mockProject.getTitle()).thenReturn(projectTitle);
 

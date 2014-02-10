@@ -22,7 +22,6 @@ package elaborate.editor.publish;
  * #L%
  */
 
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -237,6 +236,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		map.put("title", StringUtils.defaultIfBlank(metadataMap.remove(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
 		map.put("publicationDate", new DateTime().toString("yyyy-MM-dd HH:mm"));
 		map.put("entries", entries);
+		map.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
 		List<String> publishableTextLayers = settings.getTextLayers();
 		map.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
 		map.put("thumbnails", thumbnails);
