@@ -22,6 +22,7 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -162,6 +163,15 @@ public class ProjectResource extends AbstractElaborateResource {
 	//  public List<FacetInfo> getFacetInfo(@PathParam("project_id") long project_id) {
 	//    return projectService.getFacetInfo(project_id, getUser());
 	//  }
+
+	@GET
+	@Path("{project_id: [0-9]+}/entrymetadata")
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("Returns the metadata of the entries of the project with the given project_id")
+	@JsonView(Views.Extended.class)
+	public Collection<Map<String, String>> getProjectEntryMetadata(@PathParam("project_id") long project_id) {
+		return projectService.getProjectEntryMetadata(project_id, getUser());
+	}
 
 	/* project entry metadata */
 	@GET

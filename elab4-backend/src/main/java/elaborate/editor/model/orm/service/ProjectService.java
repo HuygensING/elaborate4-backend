@@ -69,6 +69,7 @@ import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.LogEntry;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.ProjectEntryMetadataItem;
 import elaborate.editor.model.orm.ProjectMetadataItem;
 import elaborate.editor.model.orm.ProjectUser;
 import elaborate.editor.model.orm.Transcription;
@@ -162,6 +163,50 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<ProjectEntry> projectEntriesInOrder = getProjectEntriesInOrder(id);
 		closeEntityManager();
 		return projectEntriesInOrder;
+	}
+
+	public Collection<Map<String, String>> getProjectEntryMetadata(long id, User user) {
+		Collection<Map<String, String>> projectEntryMetadata = Lists.newArrayList();
+		openEntityManager();
+		Project project = getProjectIfUserIsAllowed(id, user);
+		String[] projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+
+		//		select l1.data as bewaarplaats,
+		//    l2.data as collectie,
+		//    l3.data as signatuur,
+		//    l4.data as afzenders,
+		//    l5.data as ontvangers,
+		//    l6.data as datum
+		//from project_entries e
+		//left outer join project_entry_metadata_items l0
+		// on (l0.project_entry_id = e.id and l0.field='Scan(s)')
+		//left outer join project_entry_metadata_items l1
+		// on (l1.project_entry_id = e.id and l1.field='Bewaarplaats')
+		//left outer join project_entry_metadata_items l2
+		// on (l2.project_entry_id = e.id and l2.field='Collectie')
+		//left outer join project_entry_metadata_items l3
+		// on (l3.project_entry_id = e.id and l3.field='Signatuur')
+		//left outer join project_entry_metadata_items l4
+		// on (l4.project_entry_id = e.id and l4.field='Afzender(s)')
+		//left outer join project_entry_metadata_items l5
+		// on (l5.project_entry_id = e.id and l5.field='Ontvanger(s)')
+		//left outer join project_entry_metadata_items l6
+		// on (l6.project_entry_id = e.id and l6.field='Datum')
+		//where e.project_id = 44 and l0.data=''
+		//order by l0.data,l1.data, l2.data, l3.data ,l4.data, l5.data, l6.data;
+
+		List<ProjectEntry> projectEntriesInOrder = getProjectEntriesInOrder(id);
+		for (ProjectEntry projectEntry : projectEntriesInOrder) {
+			Map<String, String> metadata = Maps.newHashMap();
+			metadata.put("entryname", projectEntry.getName());
+			List<ProjectEntryMetadataItem> projectEntryMetadataItems = projectEntry.getProjectEntryMetadataItems();
+			for (ProjectEntryMetadataItem projectEntryMetadataItem : projectEntryMetadataItems) {
+				metadata.put(projectEntryMetadataItem.getField(), projectEntryMetadataItem.getData());
+			}
+			projectEntryMetadata.add(metadata);
+		}
+		closeEntityManager();
+		return projectEntryMetadata;
 	}
 
 	public List<ProjectEntry> getProjectEntriesInOrder0(long id) {
