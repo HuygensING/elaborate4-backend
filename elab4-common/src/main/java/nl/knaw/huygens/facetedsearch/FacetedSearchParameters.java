@@ -115,28 +115,47 @@ public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
 		return this;
 	}
 
-	// TODO: deprecate sort/sortDir, use sortParameters instead
 	private String sort = null;
 	private String sortDir = "asc";
 
+	/**
+	 * @deprecated use {@link setSortParameters()} instead.  
+	 */
+	@Deprecated
 	public T setSort(final String sort) {
 		this.sort = sort;
 		return (T) this;
 	}
 
+	/**
+	 * @deprecated use {@link getSortParameters()} instead.  
+	 */
+	@Deprecated
 	public String getSort() {
 		return sort;
 	}
 
+	/**
+	 * @deprecated use {@link setSortParameters()} instead.  
+	 */
+	@Deprecated
 	public T setSortDir(final String sortDir) {
 		this.sortDir = sortDir;
 		return (T) this;
 	}
 
+	/**
+	 * @deprecated use {@link getSortParameters()} instead.  
+	 */
+	@Deprecated
 	public String getSortDir() {
 		return sortDir;
 	}
 
+	/**
+	 * @deprecated use {@link getSortParameters()} instead.  
+	 */
+	@Deprecated
 	public boolean isAscending() {
 		return "asc".equals(sortDir);
 	}
