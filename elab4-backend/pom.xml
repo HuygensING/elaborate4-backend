@@ -65,7 +65,6 @@
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
-
 		<!-- jersey -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>

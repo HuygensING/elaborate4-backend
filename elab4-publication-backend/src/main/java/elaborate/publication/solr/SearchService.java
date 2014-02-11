@@ -97,7 +97,7 @@ public class SearchService extends LoggableObject {
 	public Map<String, Object> getSearchResult(long searchId, int start, int rows) {
 		Map<String, Object> resultsMap = Maps.newHashMap();
 		SearchData searchData = searchDataIndex.get(searchId);
-		Map<String, String> fieldnameMap = getFieldnameMap();
+		//		Map<String, String> fieldnameMap = getFieldnameMap();
 
 		if (searchData != null) {
 			List<String> sortableFields = Lists.newArrayList("id", "name");
@@ -108,10 +108,14 @@ public class SearchService extends LoggableObject {
 			List<String> ids = (List<String>) resultsMap.remove("ids");
 			List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
 
+			LOG.info("start={}, rows={}", start, rows);
 			int lo = toRange(start, 0, ids.size());
 			int hi = toRange(lo + rows, 0, ids.size());
+			LOG.info("lo={}, hi={}", lo, hi);
 			results = results.subList(lo, hi);
+			LOG.info("results={}", results);
 			groupMetadata(results);
+			LOG.info("after groupMetadata: results={}", results);
 
 			resultsMap.put("ids", ids);
 			resultsMap.put("results", results);
@@ -205,7 +209,7 @@ public class SearchService extends LoggableObject {
 			facetInfoMap = toMap(configMap.get("facetInfoMap"));
 			facetFields = toStringArray(configMap.get("facetFields"));
 			defaultSortOrder = toStringArray(configMap.get("defaultSortOrder"));
-			hostname = (String) configMap.get("hostname");
+			hostname = (String) configMap.get("baseURL");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -249,7 +253,7 @@ public class SearchService extends LoggableObject {
 		return ImmutableList.of();
 	}
 
-	public String getHost() {
+	public String getBaseURL() {
 		return hostname;
 	}
 

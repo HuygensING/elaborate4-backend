@@ -86,6 +86,7 @@ public class SearchResource extends LoggableObject {
 	public Response createSearch(//
 			ElaborateSearchParameters elaborateSearchParameters//
 	) {
+		LOG.info("elaborateSearchParameters:{}", elaborateSearchParameters);
 		searchService.setSolrDir(getSolrDir());
 		SearchData search = searchService.createSearch(elaborateSearchParameters);
 		return Response.created(createURI(search)).build();
@@ -137,7 +138,7 @@ public class SearchResource extends LoggableObject {
 
 	private void addURI(Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
 		UriBuilder builder = UriBuilder//
-				.fromUri(searchService.getHost())//
+				.fromUri(searchService.getBaseURL() + "/api/")//
 				.path(prevLink)//
 				.queryParam("start", start)//
 				.queryParam("rows", rows);
