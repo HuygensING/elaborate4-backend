@@ -46,7 +46,7 @@ import org.apache.commons.lang.StringUtils;
 import com.sun.jersey.spi.resource.Singleton;
 
 import elaborate.editor.config.Configuration;
-import elaborate.editor.model.orm.SearchData;
+import elaborate.editor.model.orm.StorableSearchData;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.SearchService;
 import elaborate.editor.resources.AbstractElaborateResource;
@@ -78,7 +78,7 @@ public class SearchResource extends AbstractElaborateResource {
 	) {
 		searchService.removeExpiredSearches();
 		elaborateSearchParameters.setProjectId(projectId);
-		SearchData search = searchService.createSearch(elaborateSearchParameters, user);
+		StorableSearchData search = searchService.createSearch(elaborateSearchParameters, user);
 		return Response.created(createURI(search)).build();
 	}
 

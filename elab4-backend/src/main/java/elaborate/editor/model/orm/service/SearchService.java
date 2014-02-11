@@ -22,7 +22,6 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,15 +41,14 @@ import com.google.common.collect.Sets;
 
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.SearchData;
+import elaborate.editor.model.orm.StorableSearchData;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.solr.ElaborateSearchParameters;
-import elaborate.editor.solr.SolrFields;
 import elaborate.editor.solr.SolrIndexer;
 import elaborate.util.ResourceUtil;
 
 @Singleton
-public class SearchService extends AbstractStoredEntityService<SearchData> {
+public class SearchService extends AbstractStoredEntityService<StorableSearchData> {
 	private static final SearchService instance = new SearchService();
 	ProjectService projectService = ProjectService.instance();
 
@@ -60,7 +58,7 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 		return instance;
 	}
 
-	public SearchData createSearch(ElaborateSearchParameters elaborateSearchParameters, User user) {
+	public StorableSearchData createSearch(ElaborateSearchParameters elaborateSearchParameters, User user) {
 		beginTransaction();
 		projectService.setEntityManager(getEntityManager());
 		Project project = projectService.getProjectIfUserIsAllowed(elaborateSearchParameters.getProjectId(), user);
@@ -83,10 +81,10 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 				.setFacetInfoMap(project.getFacetInfoMap());
 		try {
 			Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
-			SearchData searchData = new SearchData().setCreatedOn(new Date()).setResults(result);
-			persist(searchData);
+			StorableSearchData storableSearchData = new StorableSearchData().setResults(result);
+			persist(storableSearchData);
 			commitTransaction();
-			return searchData;
+			return storableSearchData;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -109,8 +107,8 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 		Map<String, Object> resultsMap = Maps.newHashMap();
 		//    try {
 		openEntityManager();
-		SearchData searchData = find(SearchData.class, searchId);
-		checkEntityFound(searchData, searchId);
+		StorableSearchData storableSearchData = find(StorableSearchData.class, searchId);
+		checkEntityFound(storableSearchData, searchId);
 		Project project = getEntityManager().find(Project.class, projectId);
 		String[] projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
 		Map<String, String> fieldnameMap = Maps.newHashMap();
@@ -119,11 +117,11 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 		}
 		closeEntityManager();
 
-		if (searchData != null) {
+		if (storableSearchData != null) {
 			List<String> sortableFields = Lists.newArrayList("id", "name");
 			sortableFields.addAll(ImmutableList.copyOf(project.getFacetFields()));
 
-			resultsMap = searchData.getResults();
+			resultsMap = storableSearchData.getResults();
 
 			List<String> ids = (List<String>) resultsMap.remove("ids");
 			List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
@@ -177,14 +175,14 @@ public class SearchService extends AbstractStoredEntityService<SearchData> {
 		String cutoffDate = new DateTime().minusDays(1).toString("YYYY-MM-dd HH:mm:ss");
 		beginTransaction();
 		getEntityManager()//
-				.createQuery("delete SearchData where created_on < '" + cutoffDate + "'")//
+				.createQuery("delete StorableSearchData where created_on < '" + cutoffDate + "'")//
 				.executeUpdate();
 		commitTransaction();
 	}
 
 	@Override
 	Class<? extends AbstractStoredEntity<?>> getEntityClass() {
-		return SearchData.class;
+		return StorableSearchData.class;
 	}
 
 	@Override

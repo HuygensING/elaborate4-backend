@@ -2,7 +2,7 @@ package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
- * elab4-publication-backend
+ * elab4-common
  * =======
  * Copyright (C) 2013 - 2014 Huygens ING
  * =======

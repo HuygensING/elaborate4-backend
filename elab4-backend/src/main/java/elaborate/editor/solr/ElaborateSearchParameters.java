@@ -27,8 +27,8 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import nl.knaw.huygens.facetedsearch.FacetedSearchParameters;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.solr.FacetedSearchParameters;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;

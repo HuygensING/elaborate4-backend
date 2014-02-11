@@ -25,6 +25,7 @@ package nl.knaw.huygens.solr;
 import java.util.Collection;
 import java.util.Map;
 
+import nl.knaw.huygens.facetedsearch.FacetedSearchParameters;
 import nl.knaw.huygens.facetedsearch.IndexException;
 
 import org.apache.solr.common.SolrInputDocument;

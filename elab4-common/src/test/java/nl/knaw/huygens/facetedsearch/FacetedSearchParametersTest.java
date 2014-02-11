@@ -1,10 +1,10 @@
-package nl.knaw.huygens.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
- * elab4-backend
+ * elab4-common
  * =======
- * Copyright (C) 2011 - 2014 Huygens ING
+ * Copyright (C) 2013 - 2014 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as

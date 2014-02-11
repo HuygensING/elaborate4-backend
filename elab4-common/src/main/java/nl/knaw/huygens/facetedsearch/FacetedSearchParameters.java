@@ -1,8 +1,8 @@
-package elaborate.publication.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
- * elab4-publication-backend
+ * elab4-common
  * =======
  * Copyright (C) 2013 - 2014 Huygens ING
  * =======
@@ -26,16 +26,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-import nl.knaw.huygens.facetedsearch.FacetParameter;
-import nl.knaw.huygens.facetedsearch.SortParameter;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
 
 @SuppressWarnings("unchecked")
-public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> extends AbstractSearchParameters<FacetedSearchParameters<T>> {
+public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
 	private String term = "*";
 	private boolean caseSensitive = false;
 	private String[] facetFields = new String[] {};

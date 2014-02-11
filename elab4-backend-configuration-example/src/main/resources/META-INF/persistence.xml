@@ -1,6 +1,6 @@
 <!--
   #%L
-  elab4-backend
+  elab4-backend-configuration-default
   =======
   Copyright (C) 2011 - 2014 Huygens ING
   =======
@@ -41,7 +41,7 @@
     <class>elaborate.editor.model.orm.ProjectMetadataField</class>
     <class>elaborate.editor.model.orm.ProjectMetadataItem</class>
     <class>elaborate.editor.model.orm.ProjectUser</class>
-    <class>elaborate.editor.model.orm.SearchData</class>
+    <class>elaborate.editor.model.orm.StorableSearchData</class>
     <class>elaborate.editor.model.orm.Transcription</class>
     <class>elaborate.editor.model.orm.TranscriptionType</class>
     <class>elaborate.editor.model.orm.User</class>
