@@ -1,4 +1,4 @@
-package elaborate;
+package elaborate.editor.solr;
 
 /*
  * #%L
@@ -22,7 +22,28 @@ package elaborate;
  * #L%
  */
 
+import javax.xml.bind.annotation.XmlRootElement;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 
-public class AbstractTest extends LoggableObject {}
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
+@XmlRootElement
+public class ElaborateEditorSearchParameters extends ElaborateSearchParameters {
+	private long projectId = 0;
+
+	public ElaborateEditorSearchParameters setProjectId(final long projectId) {
+		this.projectId = projectId;
+		return this;
+	}
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
+	}
+}

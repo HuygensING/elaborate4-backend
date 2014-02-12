@@ -1,4 +1,4 @@
-package elaborate.editor.config;
+package nl.knaw.huygens;
 
 /*
  * #%L
@@ -22,8 +22,7 @@ package elaborate.editor.config;
  * #L%
  */
 
-import elaborate.editor.AbstractTest;
 
-public final class ConfigurationTest extends AbstractTest {
+import nl.knaw.huygens.LoggableObject;
 
-}
+public class AbstractTest extends LoggableObject {}

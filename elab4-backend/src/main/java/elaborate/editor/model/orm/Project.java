@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetType;
+import nl.knaw.huygens.facetedsearch.SolrFields;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -52,7 +53,6 @@ import com.google.common.collect.Sets;
 
 import elaborate.editor.model.AbstractDocument;
 import elaborate.editor.model.ModelFactory;
-import elaborate.editor.solr.SolrFields;
 
 @Entity
 @Table(name = "projects")

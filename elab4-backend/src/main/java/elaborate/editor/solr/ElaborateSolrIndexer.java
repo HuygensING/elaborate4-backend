@@ -22,14 +22,14 @@ package elaborate.editor.solr;
  * #L%
  */
 
-import static elaborate.editor.solr.SolrFields.ANNOTATIONCS_PREFIX;
-import static elaborate.editor.solr.SolrFields.ANNOTATION_PREFIX;
-import static elaborate.editor.solr.SolrFields.ID;
-import static elaborate.editor.solr.SolrFields.NAME;
-import static elaborate.editor.solr.SolrFields.PROJECT_ID;
-import static elaborate.editor.solr.SolrFields.PUBLISHABLE;
-import static elaborate.editor.solr.SolrFields.TEXTLAYERCS_PREFIX;
-import static elaborate.editor.solr.SolrFields.TEXTLAYER_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrFields.ANNOTATIONCS_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrFields.ANNOTATION_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrFields.ID;
+import static nl.knaw.huygens.facetedsearch.SolrFields.NAME;
+import static nl.knaw.huygens.facetedsearch.SolrFields.PROJECT_ID;
+import static nl.knaw.huygens.facetedsearch.SolrFields.PUBLISHABLE;
+import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYERCS_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYER_PREFIX;
 
 import java.util.Set;
 

@@ -42,7 +42,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import elaborate.AbstractTest;
+import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;

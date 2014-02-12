@@ -50,7 +50,7 @@ import elaborate.editor.model.orm.StorableSearchData;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.SearchService;
 import elaborate.editor.resources.AbstractElaborateResource;
-import elaborate.editor.solr.ElaborateSearchParameters;
+import elaborate.editor.solr.ElaborateEditorSearchParameters;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
 @AuthorizationRequired
@@ -74,7 +74,7 @@ public class SearchResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	public Response createSearch(//
 			@PathParam("project_id") long projectId,//
-			ElaborateSearchParameters elaborateSearchParameters//
+			ElaborateEditorSearchParameters elaborateSearchParameters//
 	) {
 		searchService.removeExpiredSearches();
 		elaborateSearchParameters.setProjectId(projectId);

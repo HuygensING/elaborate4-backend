@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import elaborate.AbstractTest;
+import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.User;

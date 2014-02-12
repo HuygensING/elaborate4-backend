@@ -29,11 +29,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.FacetCount;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetParameter;
 import nl.knaw.huygens.facetedsearch.FacetType;
 import nl.knaw.huygens.facetedsearch.IndexException;
+import nl.knaw.huygens.facetedsearch.SolrFields;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -185,7 +187,7 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 	private Map<String, Object> entryView(SolrDocument document, String[] fieldsToReturn, Map<String, List<String>> kwicMap, Map<String, String> fieldMap) {
 		Map<String, Object> view = Maps.newHashMap();
 		for (String field : fieldsToReturn) {
-			if (field.startsWith(SolrFields.METADATAFIELD_PREFIX)) {
+			if (field.startsWith(SolrUtils.METADATAFIELD_PREFIX)) {
 				view.put(field, document.getFieldValues(field));
 			} else {
 				view.put(field, document.getFieldValue(field));

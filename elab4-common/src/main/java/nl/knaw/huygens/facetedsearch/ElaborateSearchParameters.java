@@ -1,4 +1,4 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
@@ -27,9 +27,6 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import nl.knaw.huygens.facetedsearch.FacetedSearchParameters;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -40,17 +37,20 @@ import com.google.common.collect.Maps;
 
 @XmlRootElement
 public class ElaborateSearchParameters extends FacetedSearchParameters<ElaborateSearchParameters> {
-	private long projectId = 0;
 	private List<String> textLayers = Lists.newArrayList();
 	private boolean searchInTranscriptions = true;
 	private boolean searchInAnnotations = false;
-	private String level1Field = null;
-	private String level2Field = null;
-	private String level3Field = null;
+	private String level1Field = SolrFields.NAME;
+	private String level2Field = SolrFields.NAME;
+	private String level3Field = SolrFields.NAME;
 
-	public ElaborateSearchParameters setProjectId(final long projectId) {
-		this.projectId = projectId;
+	public ElaborateSearchParameters setTextLayers(final List<String> textLayers) {
+		this.textLayers = textLayers;
 		return this;
+	}
+
+	public List<String> getTextLayers() {
+		return textLayers;
 	}
 
 	public ElaborateSearchParameters setLevelFields(String level1, String level2, String level3) {
@@ -64,19 +64,6 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 			this.level3Field = SolrUtils.facetName(level3);
 		}
 		return this;
-	}
-
-	public long getProjectId() {
-		return projectId;
-	}
-
-	public ElaborateSearchParameters setTextLayers(final List<String> _textLayers) {
-		this.textLayers = _textLayers;
-		return this;
-	}
-
-	public List<String> getTextLayers() {
-		return textLayers;
 	}
 
 	public ElaborateSearchParameters setSearchInTranscriptions(boolean searchInTranscriptions) {

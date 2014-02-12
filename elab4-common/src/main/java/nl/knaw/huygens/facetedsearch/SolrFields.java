@@ -1,4 +1,4 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
@@ -27,6 +27,7 @@ public class SolrFields {
 
 	public static final String UNKNOWN_VALUE = "unknown";
 	public static final String DOC_ID = "id";
+	public static final String ID = "id";
 
 	/** Field used by Solr for refering to relevance of search results. */
 	public static final String SCORE = "score";
@@ -38,11 +39,10 @@ public class SolrFields {
 	public static final String NAME = "name";
 	public static final String PUBLISHABLE = "publishable";
 
-	static final String ID = "id";
-	static final String TEXTLAYER_PREFIX = "textlayer_";
-	static final String TEXTLAYERCS_PREFIX = "textlayercs_";
-	static final String ANNOTATION_PREFIX = "annotations_";
-	static final String ANNOTATIONCS_PREFIX = "annotationscs_";
+	public static final String TEXTLAYER_PREFIX = "textlayer_";
+	public static final String TEXTLAYERCS_PREFIX = "textlayercs_";
+	public static final String ANNOTATION_PREFIX = "annotations_";
+	public static final String ANNOTATIONCS_PREFIX = "annotationscs_";
 
 	private SolrFields() {
 		throw new AssertionError("Non-instantiable class");

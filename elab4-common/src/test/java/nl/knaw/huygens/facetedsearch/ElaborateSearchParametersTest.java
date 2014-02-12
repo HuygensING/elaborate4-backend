@@ -1,4 +1,4 @@
-package elaborate.editor.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
@@ -22,20 +22,20 @@ package elaborate.editor.solr;
  * #L%
  */
 
-
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import nl.knaw.huygens.AbstractTest;
+
 import org.junit.Test;
 
-import elaborate.AbstractTest;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ElaborateSearchParametersTest extends AbstractTest {
-  @Test
-  public void testJson() throws JsonGenerationException, JsonMappingException, IOException {
-    ElaborateSearchParameters e = new ElaborateSearchParameters();
-    LOG.info(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(e));
-  }
+	@Test
+	public void testJson() throws JsonGenerationException, JsonMappingException, IOException {
+		ElaborateSearchParameters e = new ElaborateSearchParameters();
+		LOG.info(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(e));
+	}
 }

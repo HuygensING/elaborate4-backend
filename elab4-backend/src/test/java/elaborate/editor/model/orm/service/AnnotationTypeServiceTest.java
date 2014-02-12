@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
 
-import elaborate.AbstractTest;
+import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.User;

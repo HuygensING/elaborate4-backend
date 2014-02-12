@@ -43,7 +43,7 @@ import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.StorableSearchData;
 import elaborate.editor.model.orm.User;
-import elaborate.editor.solr.ElaborateSearchParameters;
+import elaborate.editor.solr.ElaborateEditorSearchParameters;
 import elaborate.editor.solr.SolrIndexer;
 import elaborate.util.ResourceUtil;
 
@@ -58,7 +58,7 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 		return instance;
 	}
 
-	public StorableSearchData createSearch(ElaborateSearchParameters elaborateSearchParameters, User user) {
+	public StorableSearchData createSearch(ElaborateEditorSearchParameters elaborateSearchParameters, User user) {
 		beginTransaction();
 		projectService.setEntityManager(getEntityManager());
 		Project project = projectService.getProjectIfUserIsAllowed(elaborateSearchParameters.getProjectId(), user);

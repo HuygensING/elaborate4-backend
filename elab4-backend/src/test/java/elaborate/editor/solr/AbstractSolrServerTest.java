@@ -46,7 +46,8 @@ public class AbstractSolrServerTest {
 
 	@Test
 	public void testComposeQuery1() throws Exception {
-		ElaborateSearchParameters sp = new ElaborateSearchParameters().setTextLayers(ImmutableList.of("diplomatic"));
+		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters();
+		sp.setTextLayers(ImmutableList.of("diplomatic"));
 		String expected = "(*:*) AND project_id:0";
 
 		String query = testSolrServer.composeQuery(sp);
@@ -55,9 +56,9 @@ public class AbstractSolrServerTest {
 
 	@Test
 	public void testComposeQuery2() throws Exception {
-		ElaborateSearchParameters sp = new ElaborateSearchParameters()//
-				.setProjectId(1)//
-				.setTerm("iets")//
+		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+				.setProjectId(1);
+		sp.setTerm("iets")//
 				.setTextLayers(ImmutableList.of("Diplomatic"))//
 				.setCaseSensitive(true);
 		String expected = "(textlayercs_diplomatic:iets) AND project_id:1";
@@ -68,9 +69,9 @@ public class AbstractSolrServerTest {
 
 	@Test
 	public void testComposeQuery3() throws Exception {
-		ElaborateSearchParameters sp = new ElaborateSearchParameters()//
-				.setProjectId(1)//
-				.setTerm("iets anders")//
+		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+				.setProjectId(1);
+		sp.setTerm("iets anders")//
 				.setTextLayers(ImmutableList.of("Diplomatic"))//
 				.setCaseSensitive(true);
 		String expected = "(textlayercs_diplomatic:(iets anders)) AND project_id:1";
@@ -81,9 +82,9 @@ public class AbstractSolrServerTest {
 
 	@Test
 	public void testComposeQuery4() throws Exception {
-		ElaborateSearchParameters sp = new ElaborateSearchParameters()//
-				.setProjectId(1)//
-				.setTerm("iets vaags")//
+		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+				.setProjectId(1);
+		sp.setTerm("iets vaags")//
 				.setFuzzy(true)//
 				.setTextLayers(ImmutableList.of("Diplomatic", "Comments"))//
 				.setCaseSensitive(false)//
@@ -96,9 +97,9 @@ public class AbstractSolrServerTest {
 
 	@Test
 	public void testComposeQuery5() throws Exception {
-		ElaborateSearchParameters sp = new ElaborateSearchParameters()//
-				.setProjectId(1)//
-				.setTerm("iets vaags")//
+		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+				.setProjectId(1);
+		sp.setTerm("iets vaags")//
 				.setFuzzy(true)//
 				.setCaseSensitive(false)//
 				.setSearchInAnnotations(true);
@@ -111,9 +112,9 @@ public class AbstractSolrServerTest {
 	@Test
 	public void testComposeQuery6() throws Exception {
 		//  {"searchInAnnotations":false,"searchInTranscriptions":false,"facetValues":[{"name":"metadata_folio_number","values":["199"]}],"term":"a*"}
-		ElaborateSearchParameters sp = new ElaborateSearchParameters()//
-				.setProjectId(1)//
-				.setTerm("a*")//
+		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+				.setProjectId(1);//
+		sp.setTerm("a*")//
 				.setFuzzy(true)//
 				.setCaseSensitive(false)//
 				.setTextLayers(ImmutableList.of("Diplomatic"))//

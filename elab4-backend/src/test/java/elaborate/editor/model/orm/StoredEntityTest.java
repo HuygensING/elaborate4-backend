@@ -28,7 +28,7 @@ import javax.persistence.Persistence;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import elaborate.AbstractTest;
+import elaborate.editor.AbstractTest;
 
 public class StoredEntityTest extends AbstractTest {
 

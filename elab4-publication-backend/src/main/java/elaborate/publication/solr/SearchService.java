@@ -33,9 +33,11 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
+import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetType;
 import nl.knaw.huygens.facetedsearch.SearchData;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
 
 import org.joda.time.DateTime;
@@ -138,7 +140,7 @@ public class SearchService extends LoggableObject {
 			Map<String, String> metadata = getFieldnameMap();
 			List<String> keys = ImmutableList.copyOf(resultmap.keySet());
 			for (String key : keys) {
-				if (key.startsWith(SolrFields.METADATAFIELD_PREFIX)) {
+				if (key.startsWith(SolrUtils.METADATAFIELD_PREFIX)) {
 					Object valueObject = resultmap.remove(key);
 					FacetInfo facetInfo = facetInfoMap.get(key);
 					if (facetInfo != null) {

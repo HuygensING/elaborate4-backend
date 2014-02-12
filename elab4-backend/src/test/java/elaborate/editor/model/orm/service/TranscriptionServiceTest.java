@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 import org.junit.After;
 import org.junit.Before;
 
-import elaborate.AbstractTest;
+import elaborate.editor.AbstractTest;
 import elaborate.editor.model.AnnotationInputWrapper;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.User;

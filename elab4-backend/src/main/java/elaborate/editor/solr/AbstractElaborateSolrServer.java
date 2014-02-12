@@ -30,11 +30,13 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.FacetCount;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetParameter;
 import nl.knaw.huygens.facetedsearch.FacetedSearchParameters;
 import nl.knaw.huygens.facetedsearch.IndexException;
+import nl.knaw.huygens.facetedsearch.SolrFields;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.facetedsearch.SortParameter;
 import nl.knaw.huygens.solr.AbstractSolrServer;
@@ -63,7 +65,7 @@ public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
 
 	@Override
 	public Map<String, Object> search(FacetedSearchParameters<?> fsp) throws IndexException {
-		ElaborateSearchParameters sp = (ElaborateSearchParameters) fsp;
+		ElaborateEditorSearchParameters sp = (ElaborateEditorSearchParameters) fsp;
 		LOG.info("searchparameters={}", sp);
 		String queryString = composeQuery(sp);
 		String[] facetFields = sp.getFacetFields();
@@ -186,7 +188,7 @@ public abstract class AbstractElaborateSolrServer extends AbstractSolrServer {
 		return list.toArray(new String[list.size()]);
 	}
 
-	public String composeQuery(ElaborateSearchParameters sp) {
+	public String composeQuery(ElaborateEditorSearchParameters sp) {
 		List<String> textLayers = sp.getTextLayers();
 		String joinedTermQuery = "";
 		if (textLayers.isEmpty() || sp.getTerm().equals("*")) {
