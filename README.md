@@ -16,7 +16,7 @@ download the codebase
 ---------------------
 
 ```
-git clone https://github.com/HuygensING/elaborate4-backend
+git clone https://github.com/HuygensING/elaborate4-backend.git
 ```
 
 Set up the database
