@@ -34,8 +34,10 @@ import nl.knaw.huygens.facetedsearch.FacetCount;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetParameter;
 import nl.knaw.huygens.facetedsearch.FacetType;
+import nl.knaw.huygens.facetedsearch.FacetedSearchParameters;
 import nl.knaw.huygens.facetedsearch.IndexException;
 import nl.knaw.huygens.facetedsearch.SolrFields;
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -116,7 +118,8 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 	}
 
 	@Override
-	public Map<String, Object> search(ElaborateSearchParameters sp) throws IndexException {
+	public Map<String, Object> search(FacetedSearchParameters<?> fsp) throws IndexException {
+		ElaborateSearchParameters sp = (ElaborateSearchParameters) fsp;
 		LOG.info("searchparameters={}", sp);
 		String queryString = composeQuery(sp);
 		String[] facetFields = sp.getFacetFields();

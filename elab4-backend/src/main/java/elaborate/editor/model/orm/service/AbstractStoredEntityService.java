@@ -31,8 +31,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
 import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.solr.RemoteSolrServer;
-import nl.knaw.huygens.solr.SolrServerWrapper;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
@@ -49,180 +49,180 @@ import elaborate.editor.solr.ElaborateSolrIndexer;
 
 @Singleton
 public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> extends LoggableObject {
-  private SolrServerWrapper solrserver = null;
-  private ElaborateSolrIndexer solrindexer = null;
-  private ProjectService projectService = null;
+	private SolrServerWrapper solrserver = null;
+	private ElaborateSolrIndexer solrindexer = null;
+	private ProjectService projectService = null;
 
-  //  private ProjectEntryService projectEntryService = null;
+	//  private ProjectEntryService projectEntryService = null;
 
-  abstract Class<? extends AbstractStoredEntity<?>> getEntityClass();
+	abstract Class<? extends AbstractStoredEntity<?>> getEntityClass();
 
-  abstract String getEntityName();
+	abstract String getEntityName();
 
-  /* CRUD methods */
-  public T create(T entity) {
-    persist(entity);
-    return entity;
-  }
+	/* CRUD methods */
+	public T create(T entity) {
+		persist(entity);
+		return entity;
+	}
 
-  public T read(long id) {
-    T entity = (T) getEntityManager().find(getEntityClass(), id);
-    checkEntityFound(entity, id);
-    return entity;
-  }
+	public T read(long id) {
+		T entity = (T) getEntityManager().find(getEntityClass(), id);
+		checkEntityFound(entity, id);
+		return entity;
+	}
 
-  public T update(T entity) {
-    return getEntityManager().merge(entity);
-  }
+	public T update(T entity) {
+		return getEntityManager().merge(entity);
+	}
 
-  public T delete(long id) {
-    T entity = (T) getEntityManager().find(getEntityClass(), id);
-    checkEntityFound(entity, id);
-    getEntityManager().remove(entity);
-    return entity;
-  }
+	public T delete(long id) {
+		T entity = (T) getEntityManager().find(getEntityClass(), id);
+		checkEntityFound(entity, id);
+		getEntityManager().remove(entity);
+		return entity;
+	}
 
-  /* public */
-  public ImmutableList<T> getAll() {
-    TypedQuery<T> createQuery = (TypedQuery<T>) getEntityManager().createQuery("from " + getEntityName(), getEntityClass());
-    ImmutableList<T> list = ImmutableList.copyOf(createQuery.getResultList());
-    return list;
-  }
+	/* public */
+	public ImmutableList<T> getAll() {
+		TypedQuery<T> createQuery = (TypedQuery<T>) getEntityManager().createQuery("from " + getEntityName(), getEntityClass());
+		ImmutableList<T> list = ImmutableList.copyOf(createQuery.getResultList());
+		return list;
+	}
 
-  public SolrServerWrapper getSolrServer() {
-    if (solrserver == null) {
-      solrserver = new RemoteSolrServer(Configuration.instance().getSetting(Configuration.SOLR_URL_KEY));
-    }
-    return solrserver;
-  }
+	public SolrServerWrapper getSolrServer() {
+		if (solrserver == null) {
+			solrserver = new RemoteSolrServer(Configuration.instance().getSetting(Configuration.SOLR_URL_KEY));
+		}
+		return solrserver;
+	}
 
-  public void setEntityManager(EntityManager entityManager) {
-    tlem.set(entityManager);
-  }
+	public void setEntityManager(EntityManager entityManager) {
+		tlem.set(entityManager);
+	}
 
-  /* private */
-  protected void checkEntityFound(T entity, long id) {
-    if (entity == null) {
-      closeEntityManager();
-      throw new NotFoundException(MessageFormat.format("No {0} found with id {1,number,#}", getEntityName(), id));
-    }
-  }
+	/* private */
+	protected void checkEntityFound(T entity, long id) {
+		if (entity == null) {
+			closeEntityManager();
+			throw new NotFoundException(MessageFormat.format("No {0} found with id {1,number,#}", getEntityName(), id));
+		}
+	}
 
-  protected boolean rootOrAdmin(User user) {
-    return user.isRoot() || user.hasRole(ElaborateRoles.ADMIN);
-  }
+	protected boolean rootOrAdmin(User user) {
+		return user.isRoot() || user.hasRole(ElaborateRoles.ADMIN);
+	}
 
-  void setModifiedBy(AbstractTrackedEntity<?> trackedEntity, User modifier) {
-    trackedEntity.setModifiedBy(modifier);
-    trackedEntity.setModifiedOn(new Date());
-    merge(trackedEntity);
-    if (trackedEntity instanceof ProjectEntry) {
-      ProjectEntry projectEntry = (ProjectEntry) trackedEntity;
-      getSolrIndexer().index(projectEntry, true);
-    }
-  }
+	void setModifiedBy(AbstractTrackedEntity<?> trackedEntity, User modifier) {
+		trackedEntity.setModifiedBy(modifier);
+		trackedEntity.setModifiedOn(new Date());
+		merge(trackedEntity);
+		if (trackedEntity instanceof ProjectEntry) {
+			ProjectEntry projectEntry = (ProjectEntry) trackedEntity;
+			getSolrIndexer().index(projectEntry, true);
+		}
+	}
 
-  void setCreatedBy(AbstractTrackedEntity<?> trackedEntity, User creator) {
-    trackedEntity.setCreator(creator);
-    trackedEntity.setCreatedOn(new Date());
-    merge(trackedEntity);
-    setModifiedBy(trackedEntity, creator);
-  }
+	void setCreatedBy(AbstractTrackedEntity<?> trackedEntity, User creator) {
+		trackedEntity.setCreator(creator);
+		trackedEntity.setCreatedOn(new Date());
+		merge(trackedEntity);
+		setModifiedBy(trackedEntity, creator);
+	}
 
-  private ElaborateSolrIndexer getSolrIndexer() {
-    if (solrindexer == null) {
-      solrindexer = new ElaborateSolrIndexer();
-    }
-    return solrindexer;
-  }
+	private ElaborateSolrIndexer getSolrIndexer() {
+		if (solrindexer == null) {
+			solrindexer = new ElaborateSolrIndexer();
+		}
+		return solrindexer;
+	}
 
-  /* entitymanager methods */
-  final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
-  //  EntityManager entityManager;
-  protected static final ThreadLocal<EntityManager> tlem = new ThreadLocal<EntityManager>() {};
+	/* entitymanager methods */
+	final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
+	//  EntityManager entityManager;
+	protected static final ThreadLocal<EntityManager> tlem = new ThreadLocal<EntityManager>() {};
 
-  public EntityManager getEntityManager() {
-    EntityManager em = tlem.get();
-    if (em == null) {
-      throw new RuntimeException("no entityManager set, did you call openEntityManager() or beginTransaction()?");
-    }
-    return em;
-  }
+	public EntityManager getEntityManager() {
+		EntityManager em = tlem.get();
+		if (em == null) {
+			throw new RuntimeException("no entityManager set, did you call openEntityManager() or beginTransaction()?");
+		}
+		return em;
+	}
 
-  /** start read **/
-  public void openEntityManager() {
-    if (tlem.get() == null) {
-      tlem.set(ENTITY_MANAGER_FACTORY.createEntityManager());
-    }
-  }
+	/** start read **/
+	public void openEntityManager() {
+		if (tlem.get() == null) {
+			tlem.set(ENTITY_MANAGER_FACTORY.createEntityManager());
+		}
+	}
 
-  /** end read **/
-  public void closeEntityManager() {
-    EntityManager em = tlem.get();
-    if (em != null) {
-      em.close();
-      tlem.set(null);
-    }
-  }
+	/** end read **/
+	public void closeEntityManager() {
+		EntityManager em = tlem.get();
+		if (em != null) {
+			em.close();
+			tlem.set(null);
+		}
+	}
 
-  /** start write **/
-  public void beginTransaction() {
-    openEntityManager();
-    getEntityManager().getTransaction().begin();
-  }
+	/** start write **/
+	public void beginTransaction() {
+		openEntityManager();
+		getEntityManager().getTransaction().begin();
+	}
 
-  /** commit and end write **/
-  public void commitTransaction() {
-    getEntityManager().getTransaction().commit();
-    closeEntityManager();
-  }
+	/** commit and end write **/
+	public void commitTransaction() {
+		getEntityManager().getTransaction().commit();
+		closeEntityManager();
+	}
 
-  /** discard changes and end write **/
-  public void rollbackTransaction() {
-    getEntityManager().getTransaction().rollback();
-    closeEntityManager();
-  }
+	/** discard changes and end write **/
+	public void rollbackTransaction() {
+		getEntityManager().getTransaction().rollback();
+		closeEntityManager();
+	}
 
-  public void persist(Object entity) {
-    getEntityManager().persist(entity);
-  }
+	public void persist(Object entity) {
+		getEntityManager().persist(entity);
+	}
 
-  public void merge(Object entity) {
-    getEntityManager().merge(entity);
-  }
+	public void merge(Object entity) {
+		getEntityManager().merge(entity);
+	}
 
-  public void remove(Object entity) {
-    getEntityManager().remove(entity);
-  }
+	public void remove(Object entity) {
+		getEntityManager().remove(entity);
+	}
 
-  public <X extends AbstractStoredEntity<X>> X find(Class<X> entityClass, Object primaryKey) {
-    return getEntityManager().find(entityClass, primaryKey);
-  }
+	public <X extends AbstractStoredEntity<X>> X find(Class<X> entityClass, Object primaryKey) {
+		return getEntityManager().find(entityClass, primaryKey);
+	}
 
-  /* private methods */
+	/* private methods */
 
-  void initServices() {
-    if (projectService == null) {
-      projectService = ProjectService.instance();
-      //      projectEntryService = ProjectEntryService.instance();
-    }
-  }
+	void initServices() {
+		if (projectService == null) {
+			projectService = ProjectService.instance();
+			//      projectEntryService = ProjectEntryService.instance();
+		}
+	}
 
-  Project checkProjectPermissions(long project_id, User user) {
-    initServices();
-    projectService.setEntityManager(getEntityManager());
-    return projectService.getProjectIfUserIsAllowed(project_id, user);
-  }
+	Project checkProjectPermissions(long project_id, User user) {
+		initServices();
+		projectService.setEntityManager(getEntityManager());
+		return projectService.getProjectIfUserIsAllowed(project_id, user);
+	}
 
-  void updateParents(ProjectEntry projectEntry, User user, String logLine) {
-    setModifiedBy(projectEntry, user);
-    merge(projectEntry);
+	void updateParents(ProjectEntry projectEntry, User user, String logLine) {
+		setModifiedBy(projectEntry, user);
+		merge(projectEntry);
 
-    Project project = projectEntry.getProject();
-    setModifiedBy(project, user);
-    merge(project);
+		Project project = projectEntry.getProject();
+		setModifiedBy(project, user);
+		merge(project);
 
-    persist(project.addLogEntry(logLine, user));
-  }
+		persist(project.addLogEntry(logLine, user));
+	}
 
 }

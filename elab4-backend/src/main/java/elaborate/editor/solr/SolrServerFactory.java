@@ -22,9 +22,9 @@ package elaborate.editor.solr;
  * #L%
  */
 
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.solr.LocalSolrServer;
 import nl.knaw.huygens.solr.RemoteSolrServer;
-import nl.knaw.huygens.solr.SolrServerWrapper;
 
 import org.apache.commons.lang.StringUtils;
 

@@ -30,6 +30,7 @@ import nl.knaw.huygens.facetedsearch.FacetCount;
 import nl.knaw.huygens.facetedsearch.FacetCount.Option;
 import nl.knaw.huygens.facetedsearch.FacetType;
 import nl.knaw.huygens.facetedsearch.IndexException;
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.FacetField;

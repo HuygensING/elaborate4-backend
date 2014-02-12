@@ -27,9 +27,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 import nl.knaw.huygens.solr.RemoteSolrServer;
-import nl.knaw.huygens.solr.SolrServerWrapper;
 
 import com.google.common.collect.ImmutableMap;
 
