@@ -36,6 +36,7 @@ public class SolrUtils {
 	private static final Pattern SPECIAL = Pattern.compile("[+\\-&|!(){}\\[\\]\\^\"~*?:\\\\]");
 
 	public static final String METADATAFIELD_PREFIX = "metadata_";
+	public static final String EMPTYVALUE_SYMBOL = ":empty";
 
 	private SolrUtils() {}
 

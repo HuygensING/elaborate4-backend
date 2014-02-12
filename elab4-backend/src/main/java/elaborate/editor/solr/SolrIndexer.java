@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 public class SolrIndexer {
 	protected static final Logger LOG = LoggerFactory.getLogger(SolrIndexer.class);
-	public static final String EMPTYVALUE_SYMBOL = ":empty";
 	private static final int STATUS_OK = 0;
 	private final SolrServer server;
 	private final String idField;

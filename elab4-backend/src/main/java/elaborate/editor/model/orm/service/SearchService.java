@@ -44,7 +44,6 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.StorableSearchData;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.solr.ElaborateEditorSearchParameters;
-import elaborate.editor.solr.SolrIndexer;
 import elaborate.util.ResourceUtil;
 
 @Singleton
@@ -151,11 +150,11 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 					String name = fieldnameMap.get(key);
 					if (name != null) {
 						if (valueObject == null) {
-							metadata.put(name, SolrIndexer.EMPTYVALUE_SYMBOL);
+							metadata.put(name, SolrUtils.EMPTYVALUE_SYMBOL);
 						} else if (valueObject instanceof List) {
 							List<String> values = (List<String>) valueObject;
 							if (values.isEmpty()) {
-								metadata.put(name, SolrIndexer.EMPTYVALUE_SYMBOL);
+								metadata.put(name, SolrUtils.EMPTYVALUE_SYMBOL);
 							} else if (values.size() == 1) {
 								metadata.put(name, values.get(0));
 							} else if (values.size() > 1) {
@@ -166,7 +165,7 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 					}
 				}
 			}
-			LOG.info("metadata:{}", metadata);
+			//			LOG.info("metadata:{}", metadata);
 			resultmap.put("metadata", metadata);
 		}
 	}

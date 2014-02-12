@@ -22,6 +22,8 @@ package elaborate.publication.solr;
  * #L%
  */
 
+import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -55,8 +57,6 @@ import elaborate.LoggableObject;
 @Singleton
 public class SearchService extends LoggableObject {
 	private static final SearchService instance = new SearchService();
-
-	private static final String EMPTYVALUE_SYMBOL = ":empty";
 
 	private final Map<Long, SearchData> searchDataIndex = Maps.newHashMap();
 	private SolrServerWrapper solrServer;

@@ -30,6 +30,7 @@ import static nl.knaw.huygens.facetedsearch.SolrFields.PROJECT_ID;
 import static nl.knaw.huygens.facetedsearch.SolrFields.PUBLISHABLE;
 import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYERCS_PREFIX;
 import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYER_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 
 import java.util.Set;
 
