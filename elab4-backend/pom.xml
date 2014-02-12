@@ -275,10 +275,23 @@
 
 	<profiles>
 		<profile>
-			<id>dev</id>
+			<id>example</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>nl.knaw.huygens.elab4</groupId>
+					<artifactId>elab4-backend-configuration-example</artifactId>
+					<version>${elab4.version}</version>
+					<type>war</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>dev</id>
 			<dependencies>
 				<dependency>
 					<groupId>nl.knaw.huygens.elab4</groupId>
@@ -310,19 +323,6 @@
 					<groupId>nl.knaw.huygens.elab4</groupId>
 					<artifactId>elab4-backend-configuration-production</artifactId>
 					<version>${elab4-config.version}</version>
-					<type>war</type>
-					<scope>runtime</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-
-		<profile>
-			<id>example</id>
-			<dependencies>
-				<dependency>
-					<groupId>nl.knaw.huygens.elab4</groupId>
-					<artifactId>elab4-backend-configuration-example</artifactId>
-					<version>${elab4.version}</version>
 					<type>war</type>
 					<scope>runtime</scope>
 				</dependency>

@@ -6,26 +6,25 @@
 		<artifactId>elab4</artifactId>
 		<version>4.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>elab4-backend-configuration-default</artifactId>
+	<artifactId>elab4-backend-configuration-example</artifactId>
+	<packaging>war</packaging>
+	<description>Configuration project for the example environment</description>
+	<inceptionYear>2014</inceptionYear>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet-api.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-				<artifactId>maven-remote-resources-plugin</artifactId>
-				<version>1.5</version>
-				<configuration>
-					<includes>
-						<include>**/*.xml</include>
-						<include>**/*.properties</include>
-					</includes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>bundle</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war.version}</version>
 			</plugin>
 		</plugins>
 	</build>
