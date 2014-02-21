@@ -35,9 +35,12 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
+import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
 import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetType;
+import nl.knaw.huygens.facetedsearch.LocalSolrServer;
 import nl.knaw.huygens.facetedsearch.SearchData;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
@@ -51,8 +54,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import elaborate.LoggableObject;
 
 @Singleton
 public class SearchService extends LoggableObject {
@@ -191,7 +192,7 @@ public class SearchService extends LoggableObject {
 
 	private SolrServerWrapper getSolrServer() {
 		if (solrServer == null) {
-			solrServer = new LocalSolrServer(getSolrDir());
+			solrServer = new LocalSolrServer(getSolrDir(), "entries", new ElaborateQueryComposer());
 		}
 		return solrServer;
 	}

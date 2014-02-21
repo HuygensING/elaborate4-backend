@@ -28,22 +28,13 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Map;
 
+import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetType;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
-import elaborate.LoggableObject;
-
 public class SearchServiceTest extends LoggableObject {
-
-	@Before
-	public void setUp() throws Exception {}
-
-	@After
-	public void tearDown() throws Exception {}
 
 	@Test
 	public void testReadConfigMap() throws Exception {
