@@ -1,10 +1,10 @@
-package elaborate.publication.solr;
+package nl.knaw.huygens.facetedsearch;
 
 /*
  * #%L
- * elab4-publication-backend
+ * elab4-backend
  * =======
- * Copyright (C) 2013 - 2014 Huygens ING
+ * Copyright (C) 2011 - 2014 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,23 @@ package elaborate.publication.solr;
  * #L%
  */
 
-import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
-import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
-import nl.knaw.huygens.facetedsearch.IndexException;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
 
 public class LocalSolrServer extends AbstractSolrServer {
 
-	public static final String CORENAME = "entries";
+	public static final String SOLR_DIRECTORY = "solr";
+	//	public static final String SOLR_CONFIG_FILE = "solrconfig.xml";
 
 	private final String solrDir;
+	private final String coreName;
 	private CoreContainer container;
 
-	public LocalSolrServer(String solrDir) {
-		super(new ElaborateQueryComposer());
-		this.solrDir = solrDir;
+	public LocalSolrServer(String solrDir, String coreName, QueryComposer queryComposer) {
+		super(queryComposer);
+		this.solrDir = StringUtils.defaultIfBlank(solrDir, SOLR_DIRECTORY);
+		this.coreName = StringUtils.defaultIfBlank(coreName, "core1");
 		setServer();
 	}
 
@@ -60,7 +60,7 @@ public class LocalSolrServer extends AbstractSolrServer {
 		try {
 			container = new CoreContainer(solrDir);
 			container.load();
-			server = new EmbeddedSolrServer(container, CORENAME);
+			server = new EmbeddedSolrServer(container, coreName);
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}

@@ -36,9 +36,10 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
 import nl.knaw.huygens.facetedsearch.IndexException;
+import nl.knaw.huygens.facetedsearch.LocalSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.solr.LocalSolrServer;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -320,6 +321,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 				map.put(transcription.getTextLayer(), textlayerData);
 			} catch (Exception e) {
 				LOG.error("Error '{}' for transcription {}, body: '{}'", new Object[] { e.getMessage(), transcription.getId(), transcription.getBody() });
+				e.printStackTrace();
 			}
 		}
 		return map;
@@ -517,7 +519,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 
 	private void prepareSolr() {
 		String solrDir = distDir + "/WEB-INF/solr";
-		solrServer = new LocalSolrServer(solrDir, "entries");
+		solrServer = new LocalSolrServer(solrDir, "entries", new ElaborateQueryComposer());
 		try {
 			solrServer.initialize();
 		} catch (IndexException e) {

@@ -28,7 +28,7 @@ import java.text.MessageFormat;
 import java.util.Map;
 
 import nl.knaw.huygens.LoggableObject;
-import nl.knaw.huygens.solr.AbstractSolrServer;
+import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
 
 import org.junit.After;
 import org.junit.Before;

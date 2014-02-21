@@ -28,11 +28,12 @@ import java.util.Date;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.LockModeType;
 import javax.persistence.TypedQuery;
 
 import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.solr.RemoteSolrServer;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
@@ -45,6 +46,7 @@ import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
+import elaborate.editor.solr.ElaborateEditorQueryComposer;
 import elaborate.editor.solr.ElaborateSolrIndexer;
 
 @Singleton
@@ -91,7 +93,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 
 	public SolrServerWrapper getSolrServer() {
 		if (solrserver == null) {
-			solrserver = new RemoteSolrServer(Configuration.instance().getSetting(Configuration.SOLR_URL_KEY));
+			solrserver = new RemoteSolrServer(Configuration.instance().getSetting(Configuration.SOLR_URL_KEY), new ElaborateEditorQueryComposer());
 		}
 		return solrserver;
 	}
@@ -219,6 +221,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		merge(projectEntry);
 
 		Project project = projectEntry.getProject();
+		getEntityManager().lock(project, LockModeType.PESSIMISTIC_WRITE);
 		setModifiedBy(project, user);
 		merge(project);
 

@@ -473,7 +473,6 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 			    {"fieldname":"Signature"},
 			    {"fieldname":"Notes"}
 			  ],
-        "ascending" : true,
         "facetFields" : [ ],
         "facetInfoMap" : null,
         "orderLevels" : [ ],
@@ -523,4 +522,4 @@ Only those entries that have `publishable=true` will be shown in the publication
 The publication has a `search` comparable to the backend, with the exception of the need to login, and to provide the projectId.
 
 -
-Last updated: 2014-02-05
+Last updated: 2014-02-21

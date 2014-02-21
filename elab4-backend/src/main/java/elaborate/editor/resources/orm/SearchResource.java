@@ -37,9 +37,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 
+import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-import nl.knaw.huygens.solr.AbstractSolrServer;
 
 import org.apache.commons.lang.StringUtils;
 

@@ -42,6 +42,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 
+import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
 import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.SearchData;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
@@ -52,7 +53,6 @@ import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.ImmutableList;
 
 import elaborate.LoggableObject;
-import elaborate.publication.solr.AbstractSolrServer;
 import elaborate.publication.solr.SearchService;
 
 @Path("search")

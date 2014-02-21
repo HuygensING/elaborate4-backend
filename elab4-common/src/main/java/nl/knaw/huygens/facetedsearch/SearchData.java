@@ -40,8 +40,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @XmlRootElement(name = "searchdata")
 public class SearchData extends LoggableObject {
 	private final long id;
-	private Date created_on;
-	String json;
+	private Date created_on = new Date();
+	String json = "{}";
 
 	public SearchData() {
 		setCreatedOn(new Date());
