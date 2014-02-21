@@ -10,7 +10,7 @@ This project is the REST-based backend, which connects with database and SOLR in
 It compiles to a webapp.
 
 Installation
-============
+===========
 
 download the codebase
 ---------------------
@@ -467,8 +467,12 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
         "searchInTranscriptions" : true,
         "textLayers" : [ ],
         "searchInAnnotations" : false,
-        "sort" : null,
-        "sortDir" : "asc",
+        "resultFields" : ["Document title","Author(s)"],
+        "sortParameters":[
+			    {"fieldname":"Language","direction":"desc"},
+			    {"fieldname":"Signature"},
+			    {"fieldname":"Notes"}
+			  ],
         "ascending" : true,
         "facetFields" : [ ],
         "facetInfoMap" : null,
