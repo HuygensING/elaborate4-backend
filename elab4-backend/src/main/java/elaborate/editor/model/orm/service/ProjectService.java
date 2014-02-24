@@ -263,6 +263,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Project project = find(getEntityClass(), id);
 		ProjectEntry entry = project.addEntry(projectEntry.getName(), user);
 		persist(entry);
+		setModifiedBy(entry, user);
 		String[] textLayers = project.getTextLayers();
 		for (String textLayer : textLayers) {
 			Transcription transcription = entry.addTranscription(user).setTextLayer(textLayer);

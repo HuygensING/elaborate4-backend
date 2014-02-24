@@ -114,6 +114,9 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		return user.isRoot() || user.hasRole(ElaborateRoles.ADMIN);
 	}
 
+	/*
+	 * Will index projectEntries
+	 */
 	void setModifiedBy(AbstractTrackedEntity<?> trackedEntity, User modifier) {
 		trackedEntity.setModifiedBy(modifier);
 		trackedEntity.setModifiedOn(new Date());
@@ -131,7 +134,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		setModifiedBy(trackedEntity, creator);
 	}
 
-	private ElaborateSolrIndexer getSolrIndexer() {
+	protected ElaborateSolrIndexer getSolrIndexer() {
 		if (solrindexer == null) {
 			solrindexer = new ElaborateSolrIndexer();
 		}

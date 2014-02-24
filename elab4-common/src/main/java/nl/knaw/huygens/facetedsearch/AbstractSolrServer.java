@@ -22,6 +22,7 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +91,10 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 			LOG.error("ping failed with '{}'", e.getMessage());
 			return false;
 		}
+	}
+
+	public void delete(String id) throws SolrServerException, IOException {
+		server.deleteById(id);
 	}
 
 	@Override

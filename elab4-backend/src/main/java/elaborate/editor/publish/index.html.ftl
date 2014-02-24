@@ -28,10 +28,13 @@
     <title>Huygens ING</title>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/css/main.css" rel="stylesheet" type="text/css">
-    <script>var BASE_URL='${BASE_URL}';</script>
+    <script src="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/js/rangy-browser/lib/rangy-core.js"></script>
+    <script src="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/js/rangy-browser/lib/rangy-cssclassapplier.js"></script>
+    <script>
+    var BASE_URL='${BASE_URL}';
+    window.onload = function() { rangy.init() }
+    </script>
     <script src="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/js/main.js"></script>
   </head>
-  <body>
-    Loading, please wait.
-  </body>
+  <body></body>
 </html>

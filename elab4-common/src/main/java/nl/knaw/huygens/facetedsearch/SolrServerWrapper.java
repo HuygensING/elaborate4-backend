@@ -22,9 +22,11 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 
 public interface SolrServerWrapper {
@@ -70,6 +72,13 @@ public interface SolrServerWrapper {
 	 * @throws IndexException
 	 */
 	Map<String, Object> search(FacetedSearchParameters<?> facetedSearchParameters) throws IndexException;
+
+	/**
+	 * @param solrDocumentId
+	 * @return
+	 * @throws IndexException
+	 */
+	void delete(String solrDocumentId) throws SolrServerException, IOException;
 
 	//  /**
 	//   * @param pid

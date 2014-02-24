@@ -71,6 +71,10 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 		super.deleteById(String.valueOf(e.getId()));
 	}
 
+	public void deindex(long entry_id) {
+		super.deleteById(String.valueOf(entry_id));
+	}
+
 	public static SolrInputDocument getSolrInputDocument(ProjectEntry projectEntry, boolean forPublication) {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField(ID, projectEntry.getId());

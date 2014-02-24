@@ -22,7 +22,6 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
@@ -91,6 +90,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	public void delete(long entry_id, User user) {
 		beginTransaction();
 		ProjectEntry deletedProjectEntry = super.delete(entry_id);
+		getSolrIndexer().deindex(entry_id);
 		setModifiedBy(deletedProjectEntry.getProject(), user);
 		persist(deletedProjectEntry.getProject().addLogEntry(MessageFormat.format("deleted entry {0}", entry_id), user));
 		commitTransaction();
