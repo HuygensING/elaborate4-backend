@@ -241,6 +241,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		List<String> publishableTextLayers = settings.getTextLayers();
 		map.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
 		map.put("thumbnails", thumbnails);
+		map.put("entryMetadataFields", project.getProjectEntryMetadataFieldnames());
 		map.put("baseURL", getBaseURL(getBasename(project)));
 		map.put("annotationIndex", ANNOTATION_INDEX_JSON);
 		addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
