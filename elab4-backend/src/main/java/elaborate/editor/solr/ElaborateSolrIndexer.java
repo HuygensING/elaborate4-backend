@@ -32,6 +32,7 @@ import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYERCS_PREFIX;
 import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYER_PREFIX;
 import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 
+import java.io.IOException;
 import java.util.Set;
 
 import nl.knaw.huygens.facetedsearch.SolrUtils;
@@ -40,6 +41,7 @@ import nl.knaw.huygens.tei.XmlContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -129,6 +131,20 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
 			return XmlUtil.removeXMLtags(xml);
+		}
+	}
+
+	public void deindexProject(long project_id) {
+		try {
+			SolrServer server = getServer();
+			server.deleteByQuery("project_id:" + project_id);
+			server.commit();
+		} catch (SolrServerException e) {
+			LOG.error("deindexProject failed:");
+			e.printStackTrace();
+		} catch (IOException e) {
+			LOG.error("deindexProject failed:");
+			e.printStackTrace();
 		}
 	}
 

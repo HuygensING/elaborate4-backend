@@ -153,6 +153,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public void delete(long project_id, User user) {
 		beginTransaction();
 		super.delete(project_id);
+		getSolrIndexer().deindexProject(project_id);
 		LOG.info("user {} deleting project {}", user.getUsername(), project_id);
 		commitTransaction();
 	}
