@@ -39,31 +39,36 @@ import elaborate.editor.security.ElaborateSecurityContext;
 
 public abstract class AbstractElaborateResource extends LoggableObject {
 
-  @Context
-  Request request;
+	@Context
+	Request request;
 
-  public User getUser() {
-    User user = null;
-    ContainerRequest cr = (ContainerRequest) request;
-    SecurityContext securityContext = cr.getSecurityContext();
-    if (securityContext instanceof ElaborateSecurityContext) {
-      ElaborateSecurityContext esc = (ElaborateSecurityContext) securityContext;
-      if (esc != null) {
-        user = esc.getUser();
-      }
-    }
-    return user;
-  }
+	//	@OPTIONS
+	//	public Response options() {
+	//		return Response.ok().header("Allow", "OPTIONS,GET,PUT,POST,DELETE,HEAD").build();
+	//	}
 
-  protected URI createURI(AbstractStoredEntity<?> e) {
-    URI uri;
-    try {
-      uri = new URI(String.valueOf(e.getId()));
-    } catch (URISyntaxException ue) {
-      uri = null;
-      ue.printStackTrace();
-    }
-    return uri;
-  }
+	public User getUser() {
+		User user = null;
+		ContainerRequest cr = (ContainerRequest) request;
+		SecurityContext securityContext = cr.getSecurityContext();
+		if (securityContext instanceof ElaborateSecurityContext) {
+			ElaborateSecurityContext esc = (ElaborateSecurityContext) securityContext;
+			if (esc != null) {
+				user = esc.getUser();
+			}
+		}
+		return user;
+	}
+
+	protected URI createURI(AbstractStoredEntity<?> e) {
+		URI uri;
+		try {
+			uri = new URI(String.valueOf(e.getId()));
+		} catch (URISyntaxException ue) {
+			uri = null;
+			ue.printStackTrace();
+		}
+		return uri;
+	}
 
 }

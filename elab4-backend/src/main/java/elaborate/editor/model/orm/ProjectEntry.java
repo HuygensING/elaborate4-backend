@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
 
 import elaborate.editor.model.AbstractProjectEntity;
 import elaborate.editor.model.ModelFactory;
@@ -64,13 +65,13 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 	private boolean publishable = false;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "projectEntry")
-	private List<Facsimile> facsimiles;
+	private List<Facsimile> facsimiles = Lists.newArrayList();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "projectEntry")
-	private List<Transcription> transcriptions;
+	private List<Transcription> transcriptions = Lists.newArrayList();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "projectEntry")
-	private List<ProjectEntryMetadataItem> projectEntryMetadataItems;
+	private List<ProjectEntryMetadataItem> projectEntryMetadataItems = Lists.newArrayList();
 
 	/*
 	 * persistent properties getters and setters
