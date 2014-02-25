@@ -22,6 +22,7 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
+import java.util.List;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
@@ -74,9 +75,10 @@ public class AnnotationService extends AbstractStoredEntityService<Annotation> {
 	public Annotation getAnnotationByAnnotationNo(int annotationNo, EntityManager entityManager) {
 		//		LOG.info("annotationNo={}", annotationNo);
 		try {
-			return entityManager.createQuery("from Annotation where annotationNo=:no", Annotation.class)//
+			List<Annotation> resultList = entityManager.createQuery("from Annotation where annotationNo=:no", Annotation.class)//
 					.setParameter("no", annotationNo)//
-					.getResultList().get(0);
+					.getResultList();
+			return resultList.isEmpty() ? null : resultList.get(0);
 
 		} catch (NoResultException e) {
 			return null;
