@@ -51,7 +51,7 @@ import com.google.common.collect.Multiset;
 
 public abstract class AbstractSolrServer extends LoggableObject implements SolrServerWrapper {
 	public static final String KEY_NUMFOUND = "numFound";
-	private static final int HIGHLIGHT_FRAGSIZE = 10000;
+	private static final int HIGHLIGHT_FRAGSIZE = 100;
 	private static final int ROWS = 50000;
 	private static final int FACET_LIMIT = 10000;
 
@@ -93,6 +93,7 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 		}
 	}
 
+	@Override
 	public void delete(String id) throws SolrServerException, IOException {
 		server.deleteById(id);
 	}
@@ -221,7 +222,11 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 		Map<String, Object> newKwicMap = Maps.newLinkedHashMap();
 		for (Entry<String, List<String>> entry : kwicMap.entrySet()) {
 			String fieldName = entry.getKey();
-			List<String> snippets = entry.getValue();
+			List<String> raw = entry.getValue();
+			List<String> snippets = Lists.newArrayListWithCapacity(raw.size());
+			for (String snippet : raw) {
+				snippets.add(snippet.trim());
+			}
 			terms.addAll(extractTerms(snippets));
 			String fieldTitle = fieldMap.get(fieldName);
 			newKwicMap.put(fieldTitle, snippets);
