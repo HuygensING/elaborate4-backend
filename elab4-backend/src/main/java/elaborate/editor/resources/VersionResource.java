@@ -40,6 +40,7 @@ import elaborate.jaxrs.APIDesc;
 @Path("version")
 public class VersionResource extends AbstractElaborateResource {
 	private static PropertyResourceBundle propertyResourceBundle;
+	private static PropertyResourceBundle publicationPropertyResourceBundle;
 
 	@GET
 	@APIDesc("Get version info")
@@ -49,6 +50,8 @@ public class VersionResource extends AbstractElaborateResource {
 		data.put("build", getProperty("build"));
 		data.put("builddate", getProperty("builddate"));
 		data.put("version", Configuration.instance().getStringSetting("version", "[undefined]"));
+		data.put("publication_backend_build", getPublicationProperty("build"));
+		data.put("publication_backend_builddate", getPublicationProperty("builddate"));
 		return data;
 	}
 
@@ -61,6 +64,17 @@ public class VersionResource extends AbstractElaborateResource {
 			}
 		}
 		return propertyResourceBundle.getString(key);
+	}
+
+	private static synchronized String getPublicationProperty(String key) {
+		if (publicationPropertyResourceBundle == null) {
+			try {
+				publicationPropertyResourceBundle = new PropertyResourceBundle(Thread.currentThread().getContextClassLoader().getResourceAsStream("publication/WEB-INF/classes/version.properties"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return publicationPropertyResourceBundle.getString(key);
 	}
 
 }
