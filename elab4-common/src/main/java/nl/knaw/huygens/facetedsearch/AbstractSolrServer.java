@@ -134,11 +134,10 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 				.setFacetMinCount(1)//
 				.setFacetLimit(FACET_LIMIT)//
 				.setHighlight(true)//
-				.setParam("hl.mergeContiguous", false)//
-				.setParam("hl.maxAnalyzedChars", String.valueOf(100000))//
 				.setHighlightSnippets(500)//
 				.setHighlightFragsize(HIGHLIGHT_FRAGSIZE);
 
+		query.set(HighlightParams.MERGE_CONTIGUOUS_FRAGMENTS, false);
 		query.set(HighlightParams.MAX_CHARS, -1);
 		query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[textFieldMap.size()]));
 		query.set(HighlightParams.Q, queryString);
