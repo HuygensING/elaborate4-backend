@@ -22,7 +22,6 @@ package elaborate.editor.model;
  * #L%
  */
 
-
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
@@ -30,27 +29,27 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class AbstractDocument<T extends AbstractDocument<T>> extends AbstractTrackedEntity<T> {
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  private String name;
-  private String title;
+	private String name = "";
+	private String title = "Default Title (please change)";
 
-  public String getName() {
-    return name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public T setName(String name) {
-    this.name = name;
-    return ((T) this);
-  };
+	public T setName(String name) {
+		this.name = name;
+		return ((T) this);
+	};
 
-  public String getTitle() {
-    return title;
-  };
+	public String getTitle() {
+		return title;
+	};
 
-  public T setTitle(String title) {
-    this.title = title;
-    return ((T) this);
-  };
+	public T setTitle(String title) {
+		this.title = title;
+		return ((T) this);
+	};
 
 }

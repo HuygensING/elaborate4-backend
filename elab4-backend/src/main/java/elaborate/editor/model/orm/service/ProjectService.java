@@ -37,6 +37,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
@@ -124,8 +125,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		if (project.getTextLayers().length == 0) {
 			project.setTextLayers(Lists.newArrayList(TranscriptionType.DIPLOMATIC));
 		}
-		if (project.getName() == null) {
-			project.setName(StringUtils.normalizeSpace(project.getTitle()));
+		if (StringUtils.isBlank(project.getName())) {
+			project.setName(SolrUtils.normalize(project.getTitle()));
 		}
 		if (project.getProjectLeaderId() == 0) {
 			project.setProjectLeaderId(user.getId());
@@ -152,6 +153,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public void delete(long project_id, User user) {
 		beginTransaction();
 		super.delete(project_id);
+		LOG.info("user {} deleting project {}", user.getUsername(), project_id);
 		commitTransaction();
 	}
 
