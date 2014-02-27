@@ -21,7 +21,7 @@ package elaborate.editor.model.orm.service;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
+import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -76,7 +76,7 @@ public class ProjectServiceTest extends AbstractTest {
 		Project created = projectService.create(project, root);
 		long project_id = created.getId();
 		Project read = projectService.read(project_id, root);
-		assertThat(read.getName()).isEqualTo("name");
+		assertThat(read).hasName("name");
 	}
 
 	@Test

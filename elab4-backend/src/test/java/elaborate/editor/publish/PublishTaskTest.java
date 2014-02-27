@@ -82,7 +82,7 @@ public class PublishTaskTest extends AbstractTest {
 
 		String json = PublishTask.toJson(projectData);
 		LOG.info("json={}", json);
-		assertThat(StringUtils.isNotBlank(json)).isTrue();
+		assertThat(json).isNotEmpty();
 	}
 
 	@Test
@@ -111,11 +111,13 @@ public class PublishTaskTest extends AbstractTest {
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
 		Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
 		assertThat(projectData.get("title")).isEqualTo(publicationTitle);
+
 		Map<String, List<String>> map = (Map<String, List<String>>) projectData.get("metadata");
 		assertThat(map).doesNotContainKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
+
 		boolean containsKey = map.containsKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
 		assertThat(containsKey).isFalse();
-		assertThat(projectData.containsKey("entryTermSingular")).isFalse();
+		assertThat(projectData).doesNotContainKey("entryTermSingular");
 		assertThat(projectData.get("textFont")).isEqualTo("comicsans");
 
 		LOG.info("projectData={}", projectData);
@@ -156,7 +158,7 @@ public class PublishTaskTest extends AbstractTest {
 
 		String json = PublishTask.toJson(projectEntryData);
 		LOG.info("json={}", json);
-		assertThat(StringUtils.isNotBlank(json)).isTrue();
+		assertThat(json).isNotEmpty();
 	}
 
 	@Test

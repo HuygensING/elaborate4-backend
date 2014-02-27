@@ -270,6 +270,27 @@
 					<dependentWarIncludes>**/*.xml</dependentWarIncludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-assertions-generator-maven-plugin</artifactId>
+				<version>1.2.0</version>
+				<configuration>
+<!-- 					<packages>
+						<param>your.first.package</param>
+						<param>your.second.package</param>
+					</packages> -->
+					<classes>
+						<param>elaborate.editor.model.orm.User</param>
+						<param>elaborate.editor.model.orm.Project</param>
+						<param>elaborate.editor.model.orm.ProjectEntry</param>
+						<param>elaborate.editor.model.orm.Facsimile</param>
+						<param>elaborate.editor.model.orm.Transcription</param>
+						<param>elaborate.editor.model.orm.Annotation</param>
+						<param>elaborate.editor.model.orm.AnnotationType</param>
+					</classes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

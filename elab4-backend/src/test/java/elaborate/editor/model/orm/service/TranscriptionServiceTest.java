@@ -21,8 +21,7 @@ package elaborate.editor.model.orm.service;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,23 +35,23 @@ import elaborate.editor.model.orm.User;
 
 public class TranscriptionServiceTest extends AbstractTest {
 
-  @Before
-  public void setUp() throws Exception {}
+	@Before
+	public void setUp() throws Exception {}
 
-  @After
-  public void tearDown() throws Exception {}
+	@After
+	public void tearDown() throws Exception {}
 
-  //  @Test
-  public void testAddAnnotation() throws Exception {
-    TranscriptionService ts = TranscriptionService.instance();
-    AnnotationInputWrapper annotationInput = new AnnotationInputWrapper();
-    annotationInput.body = "body";
-    User root = mock(User.class);
-    when(root.isRoot()).thenReturn(true);
-    Annotation annotation = ts.addAnnotation(1, 1, annotationInput, root);
-    LOG.info("annotation={}", annotation);
-    assertThat(annotation).isNotNull();
-    assertThat(annotation.getBody()).isEqualTo("body");
-  }
+	//  @Test
+	public void testAddAnnotation() throws Exception {
+		TranscriptionService ts = TranscriptionService.instance();
+		AnnotationInputWrapper annotationInput = new AnnotationInputWrapper();
+		annotationInput.body = "body";
+		User root = mock(User.class);
+		when(root.isRoot()).thenReturn(true);
+		Annotation annotation = ts.addAnnotation(1, 1, annotationInput, root);
+		LOG.info("annotation={}", annotation);
+		assertThat(annotation).isNotNull();
+		assertThat(annotation).hasBody("body");
+	}
 
 }
