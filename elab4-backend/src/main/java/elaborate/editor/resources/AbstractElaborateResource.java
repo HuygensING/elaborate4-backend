@@ -24,6 +24,7 @@ package elaborate.editor.resources;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -38,6 +39,9 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.security.ElaborateSecurityContext;
 
 public abstract class AbstractElaborateResource extends LoggableObject {
+	public AbstractElaborateResource() {
+		java.util.logging.Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
+	}
 
 	@Context
 	Request request;
