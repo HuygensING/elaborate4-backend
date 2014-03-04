@@ -37,6 +37,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -58,6 +59,7 @@ import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
+import elaborate.util.XmlUtil;
 
 @AuthorizationRequired
 @Singleton
@@ -206,10 +208,12 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("Adds a transcription to the project entry with the given entry_id")
 	public Response addTranscription(@PathParam("entry_id") long entry_id, TranscriptionWrapper transcriptionWrapper) {
+		checkForWellFormedBody(transcriptionWrapper);
 		Transcription transcription = projectEntryService.addTranscription(entry_id, transcriptionWrapper, user);
 		return Response.created(createURI(transcription)).build();
 	}
 
+	//GET /elab4testBE/projects/28/entries/13553/transcriptions
 	@GET
 	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
@@ -225,7 +229,14 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@APIDesc("Updates the transcription with the given transcription_id of the project entry with the given entry_id of the project with the given project_id")
 	public void updateTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id, TranscriptionWrapper transcriptionWrapper) {
 		LOG.info("transcription in={}", transcriptionWrapper);
+		checkForWellFormedBody(transcriptionWrapper);
 		transcriptionService.update(project_id, transcription_id, transcriptionWrapper, user);
+	}
+
+	private void checkForWellFormedBody(TranscriptionWrapper transcriptionWrapper) {
+		if (!XmlUtil.isWellFormed(XmlUtil.wrapInXml(transcriptionWrapper.getBodyForDb()))) {
+			throw new BadRequestException("xml in body not well-formed");
+		}
 	}
 
 	@DELETE
