@@ -276,10 +276,7 @@
 				<artifactId>assertj-assertions-generator-maven-plugin</artifactId>
 				<version>1.2.0</version>
 				<configuration>
-<!-- 					<packages>
-						<param>your.first.package</param>
-						<param>your.second.package</param>
-					</packages> -->
+					<!-- <packages> <param>your.first.package</param> <param>your.second.package</param> </packages> -->
 					<classes>
 						<param>elaborate.editor.model.orm.User</param>
 						<param>elaborate.editor.model.orm.Project</param>
@@ -290,6 +287,28 @@
 						<param>elaborate.editor.model.orm.AnnotationType</param>
 					</classes>
 				</configuration>
+			</plugin>
+
+			<!-- plugin to add more test source directories -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>add-test-source</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/test/java</source>
+								<source>src/assertj-assertions/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
