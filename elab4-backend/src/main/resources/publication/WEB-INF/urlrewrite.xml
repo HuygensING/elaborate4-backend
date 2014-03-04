@@ -13,51 +13,11 @@
 
 	<rule>
 		<note>
-			The rule means that requests to /page/* will be redirected to / in a transparent fashion,
-			that is, the users will
-			see these URLs but in reality be served index.html.
+			The rule means that requests to /entry, /entry/*, /index, /index/* etc. 
+			will be redirected to / in a transparent fashion, that is,
+			the users will see these URLs but in reality be served index.html.
 		</note>
-		<from>/page/.*</from>
-		<to>/index.html</to>
-	</rule>
-
-	<rule>
-		<from>/tekst/.*</from>
-		<to>/index.html</to>
-	</rule>
-
-	<rule>
-		<from>/entry/.*</from>
-		<to>/index.html</to>
-	</rule>
-
-	<rule>
-		<from>/search/.*</from>
-		<to>/index.html</to>
-	</rule>
-
-	<rule>
-		<from>/zoeken</from>
-		<to>/index.html</to>
-	</rule>
-
-	<rule>
-		<from>/zoeken/.*</from>
-		<to>/index.html</to>
-	</rule>
-
-	<rule>
-		<from>/search</from>
-		<to>/index.html</to>
-	</rule>
-
-	<rule>
-		<from>/index</from>
-		<to>/index.html</to>
-	</rule>
-
-	<rule>
-		<from>/index/.*</from>
+		<from>/(entry|index|search|annotations)(/.*)?$</from>
 		<to>/index.html</to>
 	</rule>
 
