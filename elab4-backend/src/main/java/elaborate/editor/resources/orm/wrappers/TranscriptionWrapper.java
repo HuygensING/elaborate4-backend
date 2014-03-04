@@ -22,7 +22,6 @@ package elaborate.editor.resources.orm.wrappers;
  * #L%
  */
 
-
 import java.util.List;
 
 import nl.knaw.huygens.LoggableObject;
@@ -81,8 +80,15 @@ public class TranscriptionWrapper extends LoggableObject {
 	public List<Integer> annotationNumbers = Lists.newArrayList();
 
 	void convertBodyForOutput(String bodyIn) {
-		//    LOG.info("body from db={}", bodyIn);
-		Document document = Document.createFromXml(bodyIn, true);
+		//		LOG.info("body from db={}", bodyIn);
+		String xml = bodyIn;
+		if (!XmlUtil.isWellFormed(bodyIn)) {
+			LOG.error("body not well-formed:\n({})", bodyIn);
+			xml = "<body>" + XmlUtil.fixXhtml(bodyIn) + "</body>";
+			LOG.info("fixed body:\n({})", xml);
+		}
+		Document document = Document.createFromXml(xml, true);
+
 		TranscriptionBodyVisitor visitor = new TranscriptionBodyVisitor();
 		document.accept(visitor);
 
