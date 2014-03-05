@@ -22,7 +22,6 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-
 import javax.inject.Singleton;
 
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
@@ -34,6 +33,7 @@ import elaborate.editor.model.orm.User;
 
 @Singleton
 public class AnnotationTypeService extends AbstractStoredEntityService<AnnotationType> {
+	private static final String DEFAULT_ANNOTATIONTYPE_NAME = "Uncategorized";
 	private static AnnotationTypeService instance = new AnnotationTypeService();
 
 	private AnnotationTypeService() {}
@@ -54,17 +54,17 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 
 	/* CRUD methods */
 
-  public AnnotationType create(AnnotationType annotationType, User creator) {
-    beginTransaction();
-    if (creator.getPermissionFor(annotationType).canWrite()) {
-      annotationType.setCreatedBy(creator);
-      AnnotationType created = super.create(annotationType);
-      commitTransaction();
-      return created;
-    }
-    rollbackTransaction();
-    throw new UnauthorizedException(exception(creator, "create new annotation types"));
-  }
+	public AnnotationType create(AnnotationType annotationType, User creator) {
+		beginTransaction();
+		if (creator.getPermissionFor(annotationType).canWrite()) {
+			annotationType.setCreatedBy(creator);
+			AnnotationType created = super.create(annotationType);
+			commitTransaction();
+			return created;
+		}
+		rollbackTransaction();
+		throw new UnauthorizedException(exception(creator, "create new annotation types"));
+	}
 
 	private String exception(User creator, String string) {
 		return "user " + creator.getUsername() + " is not authorized to " + string;
@@ -77,28 +77,28 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 		return annotationType;
 	}
 
-  public void update(AnnotationType annotationType, User modifier) {
-    beginTransaction();
-    if (modifier.getPermissionFor(annotationType).canWrite()) {
-      super.update(annotationType);
-      commitTransaction();
-    } else {
-      rollbackTransaction();
-      throw new UnauthorizedException(exception(modifier, "update annotation types"));
-    }
-  }
+	public void update(AnnotationType annotationType, User modifier) {
+		beginTransaction();
+		if (modifier.getPermissionFor(annotationType).canWrite()) {
+			super.update(annotationType);
+			commitTransaction();
+		} else {
+			rollbackTransaction();
+			throw new UnauthorizedException(exception(modifier, "update annotation types"));
+		}
+	}
 
-  public void delete(long id, User modifier) {
-    beginTransaction();
-    AnnotationType annotationType = super.read(id);
-    if (modifier.getPermissionFor(annotationType).canWrite()) {
-      super.delete(id);
-      commitTransaction();
-    } else {
-      rollbackTransaction();
-      throw new UnauthorizedException(exception(modifier, "delete annotation types"));
-    }
-  }
+	public void delete(long id, User modifier) {
+		beginTransaction();
+		AnnotationType annotationType = super.read(id);
+		if (modifier.getPermissionFor(annotationType).canWrite()) {
+			super.delete(id);
+			commitTransaction();
+		} else {
+			rollbackTransaction();
+			throw new UnauthorizedException(exception(modifier, "delete annotation types"));
+		}
+	}
 
 	/**/
 	@Override
@@ -109,4 +109,19 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 		return all;
 	}
 
+	public AnnotationType getDefaultAnnotationType() {
+		//    ModelFactory.createAnnotationType("Uncategorized", "Any annotation", creator);
+		beginTransaction();
+		AnnotationType defaultAnnotationType = (AnnotationType) getEntityManager()//
+				.createQuery("from AnnotationType as at where at.name=?1")//
+				.setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME)//
+				.getSingleResult();
+		if (defaultAnnotationType == null) {
+			defaultAnnotationType = new AnnotationType().setName(DEFAULT_ANNOTATIONTYPE_NAME).setDescription("Any annotation");
+			User root = UserService.instance().getUser(1);
+			create(defaultAnnotationType, root);
+		}
+		commitTransaction();
+		return defaultAnnotationType;
+	}
 }

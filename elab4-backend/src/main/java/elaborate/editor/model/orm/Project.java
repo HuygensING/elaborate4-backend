@@ -90,7 +90,7 @@ public class Project extends AbstractDocument<Project> {
 	joinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) },//
 	inverseJoinColumns = { @JoinColumn(name = "annotation_type_id", columnDefinition = "int4", nullable = false, updatable = false) //
 	})
-	Set<AnnotationType> annotationTypes;
+	Set<AnnotationType> annotationTypes = Sets.newHashSet();
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(//

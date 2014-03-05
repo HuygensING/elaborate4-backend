@@ -106,10 +106,9 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 			throw new UnauthorizedException();
 
 		} else {
-			beginTransaction();
-
 			addDefaultFields(project, user);
 
+			beginTransaction();
 			Project created = super.create(project);
 			persist(created.addLogEntry("project created", user));
 			commitTransaction();
@@ -134,6 +133,11 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		if (project.getProjectEntryMetadataFieldnames().length == 0) {
 			project.setProjectEntryMetadataFieldnames(DEFAULT_PROJECTENTRYMETADATAFIELDNAMES);
 		}
+		if (project.getAnnotationTypes().isEmpty()) {
+			AnnotationType default_annotationType = AnnotationTypeService.instance().getDefaultAnnotationType();
+			project.setAnnotationTypes(Sets.newHashSet(default_annotationType));
+		}
+
 	}
 
 	public Project read(long project_id, User user) {
