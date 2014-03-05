@@ -46,10 +46,10 @@ public class VersionResource extends AbstractElaborateResource {
 	@APIDesc("Get version info")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	public Map<String, String> getVersion() {
-		Map<String, String> data = Maps.newHashMap();
+		Map<String, String> data = Maps.newLinkedHashMap();
+		data.put("version", Configuration.instance().getStringSetting("version", "[undefined]"));
 		data.put("build", getProperty("build"));
 		data.put("builddate", getProperty("builddate"));
-		data.put("version", Configuration.instance().getStringSetting("version", "[undefined]"));
 		data.put("publication_backend_build", getPublicationProperty("build"));
 		data.put("publication_backend_builddate", getPublicationProperty("builddate"));
 		data.put("start_time", System.getProperty("application.starttime"));
