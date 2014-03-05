@@ -22,7 +22,6 @@ package elaborate.jaxrs.filters;
  * #L%
  */
 
-
 import java.util.List;
 
 import javax.ws.rs.core.SecurityContext;

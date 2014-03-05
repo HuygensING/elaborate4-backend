@@ -22,7 +22,6 @@ package elaborate.jaxrs.filters;
  * #L%
  */
 
-
 import java.text.MessageFormat;
 
 import nl.knaw.huygens.LoggableObject;
@@ -68,18 +67,18 @@ public class LoggingResourceFilter extends LoggableObject implements ResourceFil
 		// 127.0.0.1 user-identifier frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326
 		return MessageFormat.format(//
 				"{0} {1} {2} [{3}] \"{4} /{5} {6}\" {7} {8}",//
-				"-",//
+				"?",//
 				//        req.getRemoteAddr(),//
 				"-",//
-				"-",//
+				"?",//
 				//        req.getRemoteUser(),//
 				new DateTime().toString("dd/MMM/yyyy:HH:mm:ss ZZ"),//
 				request.getMethod(),//
 				request.getPath(),//
-				"-",//
+				"?",//
 				//        req.getProtocol(),//
 				response.getStatus(),//
-				"-"//
+				"?"//
 		);
 	}
 

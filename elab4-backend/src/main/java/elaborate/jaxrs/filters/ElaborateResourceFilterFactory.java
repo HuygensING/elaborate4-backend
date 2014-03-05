@@ -22,7 +22,6 @@ package elaborate.jaxrs.filters;
  * #L%
  */
 
-
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -38,7 +37,7 @@ public class ElaborateResourceFilterFactory implements ResourceFilterFactory {
 	@Override
 	public List<ResourceFilter> create(AbstractMethod am) {
 		List<ResourceFilter> singletonList = Lists.newArrayList();
-		//    singletonList.add(new LoggingResourceFilter());
+		singletonList.add(new LoggingResourceFilter());
 
 		if (needsAuthorization(am)) {
 			singletonList.add(new AuthenticationResourceFilter());
