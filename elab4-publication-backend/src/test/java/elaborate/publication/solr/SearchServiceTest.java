@@ -26,13 +26,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetType;
 
+import org.assertj.core.data.MapEntry;
 import org.junit.Test;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class SearchServiceTest extends LoggableObject {
 
@@ -75,5 +82,28 @@ public class SearchServiceTest extends LoggableObject {
 		assertThat(facetInfo2.getType()).isEqualTo(FacetType.LIST);
 		assertThat(facetInfo2.getTitle()).isEqualTo("Field2");
 		assertThat(facetInfo2.getName()).isEqualTo("metadata_field2");
+	}
+
+	@Test
+	public void testMetadataFieldTitlesAreReturned() throws Exception {
+		List<Map<String, Object>> results = Lists.newArrayList();
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("metadata_field1", ImmutableList.of("value"));
+		map.put("metadata_field2", null);
+		results.add(map);
+		int size = results.size();
+
+		SearchService searchService = SearchService.instance();
+		FacetInfo facetInfo1 = new FacetInfo().setName("metadata_field1").setTitle("Field 1").setType(FacetType.LIST);
+		FacetInfo facetInfo2 = new FacetInfo().setName("metadata_field2").setTitle("Field 2").setType(FacetType.LIST);
+		Map<String, FacetInfo> facetInfoMap = ImmutableMap.of("metadata_field1", facetInfo1, "metadata_field2", facetInfo2);
+		searchService.setFacetInfoMap(facetInfoMap);
+
+		searchService.groupMetadata(results);
+		assertThat(results).hasSize(size);
+
+		Map<String, Object> first = results.get(0);
+		Map<String, Object> firstMetadata = (Map<String, Object>) first.get("metadata");
+		assertThat(firstMetadata).containsOnly(MapEntry.entry("Field 1", "value"), MapEntry.entry("Field 2", ":empty"));
 	}
 }

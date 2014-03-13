@@ -27,7 +27,6 @@ import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -131,22 +130,16 @@ public class SearchService extends LoggableObject {
 		return resultsMap;
 	}
 
-	private HashMap<String, String> getFieldnameMap() {
-		HashMap<String, String> map = Maps.newHashMap();
-
-		return map;
-	}
-
-	private void groupMetadata(List<Map<String, Object>> results) {
+	void groupMetadata(List<Map<String, Object>> results) {
 		for (Map<String, Object> resultmap : results) {
-			Map<String, String> metadata = getFieldnameMap();
+			Map<String, String> metadata = Maps.newHashMap();
 			List<String> keys = ImmutableList.copyOf(resultmap.keySet());
 			for (String key : keys) {
 				if (key.startsWith(SolrUtils.METADATAFIELD_PREFIX)) {
 					Object valueObject = resultmap.remove(key);
 					FacetInfo facetInfo = facetInfoMap.get(key);
 					if (facetInfo != null) {
-						String name = facetInfo.getName();
+						String name = facetInfo.getTitle();
 						if (valueObject == null) {
 							metadata.put(name, EMPTYVALUE_SYMBOL);
 						} else if (valueObject instanceof List) {
@@ -205,12 +198,16 @@ public class SearchService extends LoggableObject {
 		return facetInfoMap;
 	}
 
-	private void loadConfig() {
+	void setFacetInfoMap(Map<String, FacetInfo> _facetInfoMap) {
+		facetInfoMap = _facetInfoMap;
+	}
+
+	void loadConfig() {
 		LOG.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
 		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.json");
 		try {
 			Map<String, Object> configMap = readConfigMap(inputStream);
-			facetInfoMap = toMap(configMap.get("facetInfoMap"));
+			setFacetInfoMap(toMap(configMap.get("facetInfoMap")));
 			facetFields = toStringArray(configMap.get("facetFields"));
 			defaultSortOrder = toStringArray(configMap.get("defaultSortOrder"));
 			hostname = (String) configMap.get("baseURL");
