@@ -74,6 +74,12 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	}
 
 	public T update(T entity) {
+		T original = read(entity.getId());
+		if (entity instanceof AbstractTrackedEntity) {
+			AbstractTrackedEntity trackedOriginal = (AbstractTrackedEntity) original;
+			((AbstractTrackedEntity) entity).setCreator(trackedOriginal.getCreator());
+			((AbstractTrackedEntity) entity).setCreatedOn(trackedOriginal.getCreatedOn());
+		}
 		return getEntityManager().merge(entity);
 	}
 

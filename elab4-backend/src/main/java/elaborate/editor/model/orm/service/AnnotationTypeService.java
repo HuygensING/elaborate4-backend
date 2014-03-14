@@ -80,6 +80,7 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 	public void update(AnnotationType annotationType, User modifier) {
 		beginTransaction();
 		if (modifier.getPermissionFor(annotationType).canWrite()) {
+			annotationType.setModifiedBy(modifier);
 			super.update(annotationType);
 			commitTransaction();
 		} else {

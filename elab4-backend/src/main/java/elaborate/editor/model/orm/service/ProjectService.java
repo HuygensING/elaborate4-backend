@@ -149,8 +149,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public void update(Project project, User user) {
 		beginTransaction();
-		super.update(project);
 		setModifiedBy(project, user);
+		super.update(project);
 		commitTransaction();
 	}
 
@@ -867,6 +867,15 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 			rollbackTransaction();
 			throw new BadRequestException("invalid sortlevel value(s): " + Joiner.on(", ").join(disallowed));
 		}
+	}
+
+	public ReindexStatus createReindexStatus(long project_id) {
+		openEntityManager();
+		Project project = read(project_id);
+		closeEntityManager();
+
+		ReindexStatus status = new ReindexStatus();
+		return status;
 	}
 
 }

@@ -61,6 +61,7 @@ public class AnnotationService extends AbstractStoredEntityService<Annotation> {
 
 	public void update(Annotation annotation, User user) {
 		beginTransaction();
+		annotation.setModifiedBy(user);
 		super.update(annotation);
 		commitTransaction();
 	}
