@@ -26,7 +26,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -84,14 +83,14 @@ public class AnnotationTypeMetadataItemResource extends AbstractElaborateResourc
 		return Response.created(createURI(created)).build();
 	}
 
-	@PUT
-	@Path("{id: [0-9]+}")
-	@Consumes(UTF8MediaType.APPLICATION_JSON)
-	@APIDesc("Updates the annotationtypeMetadataItem with the given id")
-	public void update(@PathParam("id") long id, AnnotationTypeMetadataItemInput input) {
-		input.setId(id);
-		annotationTypeMetadataItemService.update(input, getUser());
-	}
+	//	@PUT
+	//	@Path("{id: [0-9]+}")
+	//	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	//	@APIDesc("Updates the annotationtypeMetadataItem with the given id")
+	//	public void update(@PathParam("id") long id, AnnotationTypeMetadataItemInput input) {
+	//		input.setId(id);
+	//		annotationTypeMetadataItemService.update(input, getUser());
+	//	}
 
 	@DELETE
 	@Path("{id: [0-9]+}")
