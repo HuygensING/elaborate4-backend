@@ -43,11 +43,18 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.3</version>
 		</dependency>
+
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 			<version>${commons-configuration.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>${commons-email.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
@@ -311,7 +318,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-	
+
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>

@@ -22,12 +22,12 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.inject.Singleton;
+import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
 
 import nl.knaw.huygens.jaxrstools.exceptions.ConflictException;
@@ -36,11 +36,15 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
+import com.google.common.collect.Maps;
 import com.sun.jersey.api.NotFoundException;
 
+import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.UserSetting;
+import elaborate.freemarker.FreeMarker;
+import elaborate.util.Emailer;
 import elaborate.util.PasswordUtil;
 
 @Singleton
@@ -202,4 +206,29 @@ public class UserService extends AbstractStoredEntityService<User> {
 		commitTransaction();
 	}
 
+	public void sendResetPasswordMail(long id) {
+		Configuration config = Configuration.instance();
+		Emailer emailer = new Emailer(config.getSetting(Configuration.MAILHOST));
+		openEntityManager();
+		User user = read(id);
+		closeEntityManager();
+
+		composeAndSendEmail(config, emailer, user);
+	}
+
+	void composeAndSendEmail(Configuration config, Emailer emailer, User user) {
+		String from_email = config.getSetting(Configuration.FROM_EMAIL);
+		String from_name = config.getSetting(Configuration.FROM_NAME);
+		String to_email = user.getEmail();
+		String subject = "Elaborate4 Password reset";
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("user", user.getUsername());
+		map.put("url", config.getSetting(Configuration.WORK_URL) + "/resetpassword?username=" + user.getUsername());
+		String body = FreeMarker.templateToString("email.ftl", map, getClass());
+		try {
+			emailer.sendMail(from_email, from_name, to_email, subject, body);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
 }

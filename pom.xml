@@ -51,6 +51,7 @@
 		<yoga.version>1.0.0</yoga.version>
 		<solr.version>4.4.0</solr.version><!-- > 4.4.0 geeft problemen -->
 		<commons-configuration.version>1.6</commons-configuration.version><!-- because of hadoop-common dependency in solr-core -->
+		<commons-email.version>1.3.2</commons-email.version>
 
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>

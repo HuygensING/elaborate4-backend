@@ -22,7 +22,6 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -123,5 +122,12 @@ public class UserResource extends AbstractElaborateResource {
 		LOG.info("setUserSetting({},{},{})", new Object[] { id, field, value });
 		userService.setSetting(id, field, value, getUser());
 		return userService.getSettings(id);
+	}
+
+	@POST
+	@Path("{id: [0-9]+}/resetpassword")
+	@APIDesc("Sends a password reset mail for the user with the given id")
+	public void sendResetPasswordMail(@PathParam("id") long id) {
+		userService.sendResetPasswordMail(id);
 	}
 }

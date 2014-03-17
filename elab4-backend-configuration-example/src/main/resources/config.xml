@@ -22,42 +22,55 @@
   -->
 
 <config version="0.1">
-  <settings>
-    <!-- version number, will be returned by the /version resource -->
-    <version>4.0</version>
+	<settings>
+		<!-- version number, will be returned by the /version resource -->
+		<version>4.0</version>
 
-    <solr>
-      <!-- url of the SOLR index -->
-      <url>http://localhost:8080/solr-elab3/entries/</url>
-    </solr>
+		<!-- scheme, name and port of the backend server -->
+		<server>
+			<scheme>http</scheme>
+			<name>localhost</name>
+			<port>2014</port>
+		</server>
 
-    <server>
-      <!--  scheme, name and port of the backend server -->
-      <scheme>http</scheme>
-      <name>localhost</name>
-      <port>2014</port>
-    </server>
+    <!-- the front-end -->    
+		<work>
+		  <!-- base url of the frontend -->
+			<url>http://myelaborate.example.org</url>
+		</work>
 
-    <publication>
-      <!-- baseurl for the publication scripts & images -->
-      <cdn>cdn.huygens.knaw.nl/elaborate</cdn>
-      <!-- version of the publication scripts & images to use for the publication, for work type and collection type projects -->
-      <version>
-        <work>development</work>
-        <collection>development</collection>
-      </version>
-      <tomcat>
-        <!-- the baseurl of the tomcat server the published projects will be deployed to -->
-        <url>http://localhost:8080/</url>
-        <!-- the directory to deploy the publication war to -->
-        <webappdir>C:/devel/tomcat6/webapps/</webappdir>
-      </tomcat>
-    </publication>
+		<publication>
+			<!-- baseurl for the publication scripts & images -->
+			<cdn>cdn.huygens.knaw.nl/elaborate</cdn>
+			<!-- version of the publication scripts & images to use for the publication, for work type and collection type projects -->
+			<version>
+				<work>development</work>
+				<collection>development</collection>
+			</version>
+			<tomcat>
+				<!-- the baseurl of the tomcat server the published projects will be deployed to -->
+				<url>http://localhost:8080/</url>
+				<!-- the directory to deploy the publication war to -->
+				<webappdir>C:/devel/tomcat6/webapps/</webappdir>
+			</tomcat>
+		</publication>
 
-    <security>
-      <!-- set to true for federated login, currently only our Huygens Security Server is supported -->
-      <enabled>false</enabled>
-    </security>
+		<solr>
+			<!-- url of the SOLR index -->
+			<url>http://localhost:8080/solr-elab3/entries/</url>
+		</solr>
 
-  </settings>
+    <!-- mail settings for sending the "reset password" email -->
+		<email>
+			<mailhost>mailhost.example.org</mailhost>
+			<from_name>elaborate admin</from_name>
+			<from_address>donotreply@elaborate.example.org</from_address>
+		</email>
+
+		<security>
+			<!-- set to true for federated login, currently only our Huygens Security Server is supported -->
+			<enabled>false</enabled>
+		</security>
+
+	</settings>
 </config>
