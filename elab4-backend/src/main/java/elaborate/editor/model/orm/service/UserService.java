@@ -30,8 +30,11 @@ import javax.inject.Singleton;
 import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
 
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.ConflictException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+
+import org.apache.commons.lang.RandomStringUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -43,6 +46,7 @@ import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.UserSetting;
+import elaborate.editor.resources.orm.PasswordData;
 import elaborate.freemarker.FreeMarker;
 import elaborate.util.Emailer;
 import elaborate.util.PasswordUtil;
@@ -50,6 +54,7 @@ import elaborate.util.PasswordUtil;
 @Singleton
 public class UserService extends AbstractStoredEntityService<User> {
 	private static UserService instance = new UserService();
+	private final Map<Long, String> tokenMap = Maps.newHashMap();
 
 	private UserService() {}
 
@@ -223,12 +228,33 @@ public class UserService extends AbstractStoredEntityService<User> {
 		String subject = "Elaborate4 Password reset";
 		Map<String, Object> map = Maps.newHashMap();
 		map.put("user", user.getUsername());
-		map.put("url", config.getSetting(Configuration.WORK_URL) + "/resetpassword?username=" + user.getUsername());
+		String token = RandomStringUtils.randomAlphanumeric(20);
+		LOG.info("token={}", token);
+		tokenMap.put(user.getId(), token);
+		map.put("url", MessageFormat.format("{0}/resetpassword?username={1}&token={2}",//
+				config.getSetting(Configuration.WORK_URL),//
+				user.getUsername(),//
+				token//
+				));
 		String body = FreeMarker.templateToString("email.ftl", map, getClass());
 		try {
 			emailer.sendMail(from_email, from_name, to_email, subject, body);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void resetPassword(long userId, PasswordData passwordData) {
+		String expectedToken = tokenMap.get(userId);
+		if (expectedToken == null || !passwordData.getToken().equals(expectedToken)) {
+			throw new BadRequestException("token and userid don't match");
+		}
+
+		beginTransaction();
+		User user = super.read(userId);
+		byte[] encodedPassword = PasswordUtil.encode(passwordData.getNewPassword());
+		user.setEncodedPassword(encodedPassword);
+		persist(user);
+		commitTransaction();
 	}
 }

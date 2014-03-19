@@ -125,9 +125,17 @@ public class UserResource extends AbstractElaborateResource {
 	}
 
 	@POST
-	@Path("{id: [0-9]+}/resetpassword")
+	@Path("{id: [0-9]+}/passwordresetrequest")
 	@APIDesc("Sends a password reset mail for the user with the given id")
 	public void sendResetPasswordMail(@PathParam("id") long id) {
 		userService.sendResetPasswordMail(id);
+	}
+
+	@POST
+	@Path("{id: [0-9]+}/passwordreset")
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("resets the password for the user with the given id")
+	public void resetPassword(@PathParam("id") long id, PasswordData passwordData) {
+		userService.resetPassword(id, passwordData);
 	}
 }
