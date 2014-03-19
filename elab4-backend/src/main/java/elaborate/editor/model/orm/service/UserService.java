@@ -250,6 +250,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 			throw new BadRequestException("token and userid don't match");
 		}
 
+		tokenMap.remove(userId);
 		beginTransaction();
 		User user = super.read(userId);
 		byte[] encodedPassword = PasswordUtil.encode(passwordData.getNewPassword());
