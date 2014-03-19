@@ -50,6 +50,7 @@ import elaborate.editor.model.orm.LogEntry;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 import elaborate.editor.model.orm.service.ProjectService;
+import elaborate.editor.model.orm.service.ReindexStatus;
 import elaborate.editor.model.orm.service.TranscriptionService;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.jaxrs.APIDesc;
@@ -186,8 +187,11 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Path("{project_id: [0-9]+}/entrymetadatafields")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the metadatafields for the project entries of the project with the given project_id")
-	public void updateProjectEntryMetadataFields(@PathParam("project_id") long project_id, List<String> fields) {
+	public Response updateProjectEntryMetadataFields(@PathParam("project_id") long project_id, List<String> fields) {
 		projectService.setProjectEntryMetadataFields(project_id, fields, getUser());
+		ReindexStatus status = projectService.createReindexStatus(project_id);
+		return Response.created(status.getURI()).build();
+
 	}
 
 	/* project annotationtypes */

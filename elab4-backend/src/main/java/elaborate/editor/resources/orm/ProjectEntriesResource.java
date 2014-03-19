@@ -37,7 +37,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -235,7 +234,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 
 	private void checkForWellFormedBody(TranscriptionWrapper transcriptionWrapper) {
 		if (!XmlUtil.isWellFormed(XmlUtil.wrapInXml(transcriptionWrapper.getBody()))) {
-			throw new BadRequestException("xml in body not well-formed");
+			//			throw new BadRequestException("xml in body not well-formed");
 		}
 	}
 
