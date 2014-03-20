@@ -240,9 +240,15 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 			ProjectEntryMetadataItem pemi = pe.addMetadataItem(key, value, creator);
 			persist(pemi);
 		}
+		commitTransaction();
+
+		// This needs to go in a seperate transaction, because only after the previous commitTransaction has
+		// the projectentrymetadataitems been properly updated, which is needed for the reindex called from
+		// updateParents
+		beginTransaction();
+		pe = read(entry_id);
 		String logLine = MessageFormat.format("updated metadata for entry ''{0}''", pe.getName());
 		updateParents(pe, creator, logLine);
-
 		commitTransaction();
 	}
 

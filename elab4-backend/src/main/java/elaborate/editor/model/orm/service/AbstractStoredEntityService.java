@@ -126,7 +126,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	void setModifiedBy(AbstractTrackedEntity<?> trackedEntity, User modifier) {
 		trackedEntity.setModifiedBy(modifier);
 		trackedEntity.setModifiedOn(new Date());
-		merge(trackedEntity);
+		persist(trackedEntity);
 		if (trackedEntity instanceof ProjectEntry) {
 			ProjectEntry projectEntry = (ProjectEntry) trackedEntity;
 			getSolrIndexer().index(projectEntry, true);

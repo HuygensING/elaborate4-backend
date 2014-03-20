@@ -149,8 +149,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public void update(Project project, User user) {
 		beginTransaction();
-		setModifiedBy(project, user);
 		super.update(project);
+		setModifiedBy(project, user);
 		commitTransaction();
 	}
 
