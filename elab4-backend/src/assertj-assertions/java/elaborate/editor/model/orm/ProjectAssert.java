@@ -541,6 +541,27 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 	}
 
 	/**
+	 * Verifies that the actual Project has no projectEntryMetadataFieldnames.
+	 * @return this assertion object.
+	 * @throws AssertionError if the actual Project's projectEntryMetadataFieldnames is not empty.
+	 */
+	public ProjectAssert hasNoProjectEntryMetadataFieldnames() {
+		// check that actual Project we want to make assertions on is not null.
+		isNotNull();
+
+		// we override the default error message with a more explicit one
+		String assertjErrorMessage = "\nExpected :\n  <%s>\nnot to have projectEntryMetadataFieldnames but had :\n  <%s>";
+
+		// check
+		if (actual.getProjectEntryMetadataFieldnames().iterator().hasNext()) {
+			failWithMessage(assertjErrorMessage, actual, actual.getProjectEntryMetadataFieldnames());
+		}
+
+		// return the current assertion for method chaining
+		return this;
+	}
+
+	/**
 	 * Verifies that the actual Project's projectLeaderId is equal to the given one.
 	 * @param projectLeaderId the given projectLeaderId to compare the actual Project's projectLeaderId to.
 	 * @return this assertion object.
