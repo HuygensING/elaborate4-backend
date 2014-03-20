@@ -47,6 +47,7 @@ import nl.knaw.huygens.facetedsearch.SolrUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -140,8 +141,8 @@ public class Project extends AbstractDocument<Project> {
 	}
 
 	@JsonIgnore
-	public String[] getProjectEntryMetadataFieldnames() {
-		return project_entry_metadata_fieldnames.split(FIELDNAME_SEPARATOR);
+	public Iterable<String> getProjectEntryMetadataFieldnames() {
+		return Splitter.on(FIELDNAME_SEPARATOR).omitEmptyStrings().split(project_entry_metadata_fieldnames);
 	}
 
 	@JsonIgnore

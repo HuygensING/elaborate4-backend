@@ -130,7 +130,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		if (project.getProjectLeaderId() == 0) {
 			project.setProjectLeaderId(user.getId());
 		}
-		if (project.getProjectEntryMetadataFieldnames().length == 0) {
+		if (!project.getProjectEntryMetadataFieldnames().iterator().hasNext()) {
 			project.setProjectEntryMetadataFieldnames(DEFAULT_PROJECTENTRYMETADATAFIELDNAMES);
 		}
 		if (project.getAnnotationTypes().isEmpty()) {
@@ -176,7 +176,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Collection<Map<String, String>> projectEntryMetadata = Lists.newArrayList();
 		openEntityManager();
 		Project project = getProjectIfUserIsAllowed(id, user);
-		String[] projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+		Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
 
 		//		select l1.data as bewaarplaats,
 		//    l2.data as collectie,
@@ -352,10 +352,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		return projects;
 	}
 
-	public String[] getProjectEntryMetadataFields(long project_id, User user) {
+	public Iterable<String> getProjectEntryMetadataFields(long project_id, User user) {
 		openEntityManager();
 		Project project = getProjectIfUserIsAllowed(project_id, user);
-		String[] projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+		Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
 		closeEntityManager();
 		return projectEntryMetadataFieldnames;
 	}

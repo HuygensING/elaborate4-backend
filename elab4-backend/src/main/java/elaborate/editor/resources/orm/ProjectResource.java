@@ -43,6 +43,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.ImmutableList;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.Views;
@@ -179,8 +180,8 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Path("{project_id: [0-9]+}/entrymetadatafields")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the metadatafields for the project entries of the project with the given project_id")
-	public String[] getProjectEntryMetadataFields(@PathParam("project_id") long project_id) {
-		return projectService.getProjectEntryMetadataFields(project_id, getUser());
+	public Collection<String> getProjectEntryMetadataFields(@PathParam("project_id") long project_id) {
+		return ImmutableList.copyOf(projectService.getProjectEntryMetadataFields(project_id, getUser()));
 	}
 
 	@PUT

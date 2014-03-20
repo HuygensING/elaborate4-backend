@@ -109,7 +109,7 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 		StorableSearchData storableSearchData = find(StorableSearchData.class, searchId);
 		checkEntityFound(storableSearchData, searchId);
 		Project project = getEntityManager().find(Project.class, projectId);
-		String[] projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+		Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
 		Map<String, String> fieldnameMap = Maps.newHashMap();
 		for (String fieldName : projectEntryMetadataFieldnames) {
 			fieldnameMap.put(SolrUtils.facetName(fieldName), fieldName);

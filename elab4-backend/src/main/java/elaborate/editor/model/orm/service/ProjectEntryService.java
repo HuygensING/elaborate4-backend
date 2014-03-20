@@ -207,7 +207,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 
 		ProjectEntry pe = read(entry_id);
 		Map<String, String> map = Maps.newHashMap();
-		String[] projectEntryMetadataFieldnames = pe.getProject().getProjectEntryMetadataFieldnames();
+		Iterable<String> projectEntryMetadataFieldnames = pe.getProject().getProjectEntryMetadataFieldnames();
 		for (String fieldname : projectEntryMetadataFieldnames) {
 			map.put(fieldname, "");
 		}
