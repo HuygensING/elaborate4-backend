@@ -6,7 +6,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/assert/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/assertj-assertions/java"/>
         <dependent-module archiveName="elab4-common-4.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/elab4-common/elab4-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
