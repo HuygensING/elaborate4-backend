@@ -160,6 +160,10 @@ public class PublishTask extends LoggableObject implements Runnable {
 		ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
 	}
 
+	public long getProjectId() {
+		return projectId;
+	}
+
 	Map<String, String> getTypographicalAnnotationMap(Project project) {
 		Map<String, String> typographicalAnnotationMap = Maps.newHashMap();
 		Map<String, String> metadataMap = project.getMetadataMap();
@@ -755,4 +759,5 @@ public class PublishTask extends LoggableObject implements Runnable {
 		}
 
 	}
+
 }
