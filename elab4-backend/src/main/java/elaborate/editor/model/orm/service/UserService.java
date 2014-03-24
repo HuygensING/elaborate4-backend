@@ -85,6 +85,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 				// user doesn't already exist, that's good
 			}
 
+			normalizeEmailAddress(user);
 			User create = super.create(user);
 			commitTransaction();
 			return create;
@@ -92,6 +93,12 @@ public class UserService extends AbstractStoredEntityService<User> {
 		} else {
 			rollbackTransaction();
 			throw new UnauthorizedException("user " + creator.getUsername() + " is not authorized to create new users");
+		}
+	}
+
+	private void normalizeEmailAddress(User user) {
+		if (user.getEmail() != null) {
+			user.setEmail(user.getEmail().toLowerCase());
 		}
 	}
 
@@ -105,6 +112,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 
 	public User update(User user, User modifier) {
 		beginTransaction();
+		normalizeEmailAddress(user);
 		User updated = super.update(user);
 		commitTransaction();
 		return updated;
@@ -157,7 +165,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 		openEntityManager();
 		User user;
 		try {
-			user = (User) getEntityManager().createQuery("from User as u where u.email=?1").setParameter(1, emailAddress).getSingleResult();
+			user = (User) getEntityManager().createQuery("from User as u where u.email=?1").setParameter(1, emailAddress.toLowerCase()).getSingleResult();
 		} catch (NoResultException e) {
 			user = null;
 		}
@@ -211,13 +219,13 @@ public class UserService extends AbstractStoredEntityService<User> {
 		commitTransaction();
 	}
 
-	public void sendResetPasswordMail(long id) {
+	public void sendResetPasswordMail(String emailAddress) {
+		User user = getByEmail(emailAddress);
+		if (user == null) {
+			throw new BadRequestException("unknown e-mail address: " + emailAddress);
+		}
 		Configuration config = Configuration.instance();
 		Emailer emailer = new Emailer(config.getSetting(Configuration.MAILHOST));
-		openEntityManager();
-		User user = read(id);
-		closeEntityManager();
-
 		composeAndSendEmail(config, emailer, user);
 	}
 
@@ -231,9 +239,9 @@ public class UserService extends AbstractStoredEntityService<User> {
 		String token = RandomStringUtils.randomAlphanumeric(20);
 		LOG.info("token={}", token);
 		tokenMap.put(user.getId(), token);
-		map.put("url", MessageFormat.format("{0}/resetpassword?username={1}&token={2}",//
+		map.put("url", MessageFormat.format("{0}/resetpassword?emailaddress={1}&token={2}",//
 				config.getSetting(Configuration.WORK_URL),//
-				user.getUsername(),//
+				user.getEmail(),//
 				token//
 				));
 		String body = FreeMarker.templateToString("email.ftl", map, getClass());
@@ -244,15 +252,21 @@ public class UserService extends AbstractStoredEntityService<User> {
 		}
 	}
 
-	public void resetPassword(long userId, PasswordData passwordData) {
+	public void resetPassword(PasswordData passwordData) {
+		String emailAddress = passwordData.getEmailAddress();
+		User user = getByEmail(emailAddress);
+		if (user == null) {
+			throw new BadRequestException("unknown e-mail address: " + emailAddress);
+		}
+		Long userId = user.getId();
 		String expectedToken = tokenMap.get(userId);
 		if (expectedToken == null || !passwordData.getToken().equals(expectedToken)) {
-			throw new BadRequestException("token and userid don't match");
+			throw new BadRequestException("token and e-mail address don't match");
 		}
 
 		tokenMap.remove(userId);
 		beginTransaction();
-		User user = super.read(userId);
+		user = super.read(userId);
 		byte[] encodedPassword = PasswordUtil.encode(passwordData.getNewPassword());
 		user.setEncodedPassword(encodedPassword);
 		persist(user);

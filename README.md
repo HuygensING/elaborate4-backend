@@ -104,14 +104,15 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
   `DELETE /users/{user_id}`
   
 * request a password reset (sends email)
-  `POST /users/{user_id}/passwordresetrequest`
+  `POST /users/passwordresetrequest`
   
-  no data required, sends an email with a link to the password reset frontent page
+  send the user's e-mail address as data, sends an email with a link to the password reset frontent page
   
 * reset password
-  `POST /users/{user_id}/passwordreset`
+  `POST /users/passwordreset`
 
       {
+        "emailAddress" : "name@example.org",
         "newPassword" : "newpassword",
         "token" : "aasd13413as"
       }
