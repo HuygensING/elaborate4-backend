@@ -241,17 +241,30 @@ public class PublishTask extends LoggableObject implements Runnable {
 		map.put("title", StringUtils.defaultIfBlank(metadataMap.remove(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
 		map.put("publicationDate", new DateTime().toString("yyyy-MM-dd HH:mm"));
 		map.put("entries", entries);
+
 		map.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
 		List<String> publishableTextLayers = settings.getTextLayers();
 		map.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
+		
 		map.put("thumbnails", thumbnails);
 		map.put("entryMetadataFields", project.getProjectEntryMetadataFieldnames());
 		map.put("baseURL", getBaseURL(getBasename(project)));
 		map.put("annotationIndex", ANNOTATION_INDEX_JSON);
+
 		addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
 		addIfNotNull(map, "entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
 		addIfNotNull(map, "entryTermPlural", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_PLURAL));
 		map.put("metadata", metadataMap);
+
+//		Map<String, String> settingsMap = ProjectService.instance().getProjectSettings(project.getId(), project.getModifier());
+//		Map<String, Object> projectSettings = Maps.newHashMap();
+//		projectSettings.putAll(settingsMap);
+//		projectSettings.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
+//
+//		List<String> publishableTextLayers = settings.getTextLayers();
+//		projectSettings.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
+//
+//		map.put("settings", projectSettings);
 		return map;
 	}
 
