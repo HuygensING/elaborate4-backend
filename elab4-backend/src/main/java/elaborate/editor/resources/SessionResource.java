@@ -45,6 +45,7 @@ import com.google.common.collect.ImmutableMap;
 import elaborate.editor.model.SessionService;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;
+import elaborate.editor.resources.orm.PasswordData;
 import elaborate.jaxrs.APIDesc;
 
 @Path("sessions")
@@ -97,4 +98,20 @@ public class SessionResource extends AbstractElaborateResource {
 		sessionService.stopSession(sessionId);
 		return Response.ok().build();
 	}
+
+	@POST
+	@Path("passwordresetrequest")
+	@APIDesc("Sends a password reset mail for the user with the given emailAddress")
+	public void sendResetPasswordMail(String emailAddress) {
+		userService.sendResetPasswordMail(emailAddress);
+	}
+
+	@POST
+	@Path("passwordreset")
+	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("resets the password for the user with the given id")
+	public void resetPassword(PasswordData passwordData) {
+		userService.resetPassword(passwordData);
+	}
+
 }

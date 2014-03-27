@@ -124,18 +124,4 @@ public class UserResource extends AbstractElaborateResource {
 		return userService.getSettings(id);
 	}
 
-	@POST
-	@Path("passwordresetrequest")
-	@APIDesc("Sends a password reset mail for the user with the given emailAddress")
-	public void sendResetPasswordMail(String emailAddress) {
-		userService.sendResetPasswordMail(emailAddress);
-	}
-
-	@POST
-	@Path("passwordreset")
-	@Consumes(UTF8MediaType.APPLICATION_JSON)
-	@APIDesc("resets the password for the user with the given id")
-	public void resetPassword(PasswordData passwordData) {
-		userService.resetPassword(passwordData);
-	}
 }
