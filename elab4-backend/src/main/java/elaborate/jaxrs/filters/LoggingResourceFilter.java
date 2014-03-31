@@ -44,7 +44,7 @@ public class LoggingResourceFilter extends LoggableObject implements ResourceFil
 
 	@Override
 	public ContainerRequest filter(ContainerRequest request) {
-		LOG.info("request={}", verbalize(request));
+		//		LOG.info("request={}", verbalize(request));
 		//    sw.reset();
 		//    sw.start();
 		return request;
