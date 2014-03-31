@@ -1,6 +1,6 @@
 dest=../elab4-backend/src/main/resources/publication
 propfile=src/main/resources/version.properties
-tag=publication_backend_`date +"%Y%m%d%H%M%S"`
+tag=publication_backend_`date +"%Y.%m.%d.%H.%M.%S"`
 git tag $tag
 echo "build=$tag" > $propfile
 echo "builddate=`date`" >> $propfile
