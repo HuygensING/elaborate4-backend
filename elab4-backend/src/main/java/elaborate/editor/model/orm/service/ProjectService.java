@@ -80,6 +80,8 @@ import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
 
 public class ProjectService extends AbstractStoredEntityService<Project> {
+	private static final String PROJECT_NAME = "Project name";
+	private static final String PROJECT_TITLE = "Project title";
 	private static final String COUNT_KEY = "count";
 	private static final List<String> DEFAULT_PROJECTENTRYMETADATAFIELDNAMES = Lists.newArrayList();
 	private static ProjectService instance = new ProjectService();
@@ -315,6 +317,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 			Hibernate.initialize(projectMetadataItem);
 			map.put(projectMetadataItem.getField(), projectMetadataItem.getData());
 		}
+		map.put(PROJECT_TITLE, project.getTitle());
+		map.put(PROJECT_NAME, project.getName());
 
 		closeEntityManager();
 		return map;
@@ -600,7 +604,14 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		}
 
 		for (Entry<String, String> entry : settingsMap.entrySet()) {
-			ProjectMetadataItem pmi = project.addMetadata(entry.getKey(), entry.getValue(), user);
+			String key = entry.getKey();
+			String value = entry.getValue();
+			ProjectMetadataItem pmi = project.addMetadata(key, value, user);
+			if (PROJECT_TITLE.equals(key)) {
+				project.setTitle(value);
+			} else if (PROJECT_NAME.equals(key)) {
+				project.setName(value);
+			}
 			persist(pmi);
 		}
 		persist(project);
