@@ -189,7 +189,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 	}
 
 	private String getBaseURL(String basename) {
-		return "http://" + basename + "huygens.knaw.nl/edition/";
+		return "http://" + basename + ".huygens.knaw.nl/edition/";
 	}
 
 	//	private String getBaseURL(String basename) {
