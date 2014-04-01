@@ -138,7 +138,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		exportPojectData(entryData, thumbnails, annotationIndex);
 
 		String basename = getBasename(project);
-		String url = getBaseURL(basename);
+		String url = getBaseURL(project.getName());
 		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps), url);
 		// FIXME: fix, error bij de ystroom
 		if (entityManager.isOpen()) {
@@ -189,8 +189,12 @@ public class PublishTask extends LoggableObject implements Runnable {
 	}
 
 	private String getBaseURL(String basename) {
-		return config.getSetting(PUBLICATION_TOMCAT_URL) + basename;
+		return "http://" + basename + "huygens.knaw.nl/edition/";
 	}
+
+	//	private String getBaseURL(String basename) {
+	//		return config.getSetting(PUBLICATION_TOMCAT_URL) + basename;
+	//	}
 
 	private String getBasename(Project project) {
 		return "elab4-" + project.getName();
@@ -245,10 +249,11 @@ public class PublishTask extends LoggableObject implements Runnable {
 		map.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
 		List<String> publishableTextLayers = settings.getTextLayers();
 		map.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
-		
+
 		map.put("thumbnails", thumbnails);
 		map.put("entryMetadataFields", project.getProjectEntryMetadataFieldnames());
-		map.put("baseURL", getBaseURL(getBasename(project)));
+		//		map.put("baseURL", getBaseURL(getBasename(project)));
+		map.put("baseURL", getBaseURL(project.getName()));
 		map.put("annotationIndex", ANNOTATION_INDEX_JSON);
 
 		addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
@@ -256,15 +261,15 @@ public class PublishTask extends LoggableObject implements Runnable {
 		addIfNotNull(map, "entryTermPlural", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_PLURAL));
 		map.put("metadata", metadataMap);
 
-//		Map<String, String> settingsMap = ProjectService.instance().getProjectSettings(project.getId(), project.getModifier());
-//		Map<String, Object> projectSettings = Maps.newHashMap();
-//		projectSettings.putAll(settingsMap);
-//		projectSettings.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
-//
-//		List<String> publishableTextLayers = settings.getTextLayers();
-//		projectSettings.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
-//
-//		map.put("settings", projectSettings);
+		//		Map<String, String> settingsMap = ProjectService.instance().getProjectSettings(project.getId(), project.getModifier());
+		//		Map<String, Object> projectSettings = Maps.newHashMap();
+		//		projectSettings.putAll(settingsMap);
+		//		projectSettings.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
+		//
+		//		List<String> publishableTextLayers = settings.getTextLayers();
+		//		projectSettings.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
+		//
+		//		map.put("settings", projectSettings);
 		return map;
 	}
 
