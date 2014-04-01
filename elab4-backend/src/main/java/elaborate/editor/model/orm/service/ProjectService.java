@@ -80,7 +80,7 @@ import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
 
 public class ProjectService extends AbstractStoredEntityService<Project> {
-	private static final String PROJECT_NAME = "Project name";
+	private static final String PROJECT_NAME = "name";
 	private static final String PROJECT_TITLE = "Project title";
 	private static final String COUNT_KEY = "count";
 	private static final List<String> DEFAULT_PROJECTENTRYMETADATAFIELDNAMES = Lists.newArrayList();
