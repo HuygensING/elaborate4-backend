@@ -25,14 +25,11 @@
 		</init-param>
 
 		<init-param>
-			<!-- rc.getContainerRequestFilters().add(new GZIPContentEncodingFilter()); -->
 			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
 			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
 		</init-param>
 
 		<init-param>
-			<!-- rc.getContainerResponseFilters().add(new GZIPContentEncodingFilter()); -->
-			<!-- rc.getContainerResponseFilters().add(new CORSFilter()); -->
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
 			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter;nl.knaw.huygens.jaxrstools.filters.CORSFilter</param-value>
 		</init-param>
