@@ -22,7 +22,6 @@ package elaborate.backend.client;
  * #L%
  */
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -32,8 +31,10 @@ import nl.knaw.huygens.LoggableObject;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class Elab4RestClientTest extends LoggableObject {
 	private static Elab4RestClient e4;
 
