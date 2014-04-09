@@ -136,7 +136,7 @@ public class TeiMaker {
 			int n = 1;
 			for (Facsimile facsimile : entry.getFacsimiles()) {
 				Element surfaceElement = tei.createElement("surface");
-				surfaceElement.setAttribute("xml:id", "facs-" + entry.getName() + "-" + n++);
+				surfaceElement.setAttribute("xml:id", "facs-" + entry.getShortName() + "-" + n++);
 				surfaceElement.setAttribute("n", facsimile.getName());
 
 				Element graphicElement = tei.createElement("graphic");
@@ -266,7 +266,7 @@ public class TeiMaker {
 		if (StringUtils.isNotEmpty(folio)) {
 			pb.setAttribute("f", folio);
 		}
-		pb.setAttribute("facs", "#facs-" + projectEntry.getName() + "-" + pageno);
+		pb.setAttribute("facs", "#facs-" + projectEntry.getShortName() + "-" + pageno);
 		pb.setAttribute("n", String.valueOf(pageno++));
 		body.appendChild(pb);
 		return pageno;

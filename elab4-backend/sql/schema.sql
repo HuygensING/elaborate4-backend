@@ -4,7 +4,7 @@ drop table if exists version;
 create table version (
   version integer not null primary key
 );
-insert into version (version) values (12);
+insert into version (version) values (13);
 
 drop table if exists sequencer cascade;
 create table sequencer (
@@ -105,6 +105,7 @@ create table project_entries (
   id serial primary key,
   rev bigint not null,
   name text not null,
+  short_name text not null,
   publishable boolean not null default false,
   project_id integer not null,
   creator_id integer not null,

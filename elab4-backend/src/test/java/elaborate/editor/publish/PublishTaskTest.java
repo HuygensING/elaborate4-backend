@@ -70,8 +70,8 @@ public class PublishTaskTest extends AbstractTest {
 		when(mockProject.getLevel3()).thenReturn("level3");
 
 		PublishTask publishTask = new PublishTask(settings);
-		EntryData entry1 = new EntryData("uno", "entry1.json");
-		EntryData entry2 = new EntryData("due", "entry2.json");
+		EntryData entry1 = new EntryData("uno", "uno", "entry1.json");
+		EntryData entry2 = new EntryData("due", "due", "entry2.json");
 		List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -104,8 +104,8 @@ public class PublishTaskTest extends AbstractTest {
 		when(mockProject.getMetadataMap()).thenReturn(metadataMap);
 
 		PublishTask publishTask = new PublishTask(settings);
-		EntryData entry1 = new EntryData("uno", "entry1.json");
-		EntryData entry2 = new EntryData("due", "entry2.json");
+		EntryData entry1 = new EntryData("uno", "uno", "entry1.json");
+		EntryData entry2 = new EntryData("due", "due", "entry2.json");
 		List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();

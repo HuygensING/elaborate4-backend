@@ -128,7 +128,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 				status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
 				ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields, typographicalAnnotationMap);
 				long id = projectEntry.getId();
-				entryData.add(new EntryData(projectEntry.getName(), id + ".json"));
+				entryData.add(new EntryData(projectEntry.getName(), projectEntry.getShortName(), id + ".json"));
 				thumbnails.put(id, eed.thumbnailUrls);
 				annotationIndex.putAll(eed.annotationDataMap);
 				indexEntry(projectEntry);
@@ -189,7 +189,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 	}
 
 	private String getBaseURL(String basename) {
-		return "http://" + basename + ".huygens.knaw.nl/edition/";
+		return "http://resources.huygens.knaw.nl/" + basename + "/draft/";
 	}
 
 	//	private String getBaseURL(String basename) {
@@ -318,6 +318,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 
 		Map<String, Object> map = Maps.newHashMap();
 		map.put("name", projectEntry.getName());
+		map.put("shortName", projectEntry.getShortName());
 		map.put("id", projectEntry.getId());
 		map.put("facsimiles", getFacsimileURLs(projectEntry));
 		map.put("annotationDataMap", annotationDataMap);
@@ -747,9 +748,11 @@ public class PublishTask extends LoggableObject implements Runnable {
 	public static class EntryData {
 		public final String datafile;
 		public final String name;
+		public final String shortName;
 
-		public EntryData(String _name, String _datafile) {
+		public EntryData(String _name, String _shortName, String _datafile) {
 			this.name = _name;
+			this.shortName = _shortName;
 			this.datafile = _datafile;
 		}
 	}

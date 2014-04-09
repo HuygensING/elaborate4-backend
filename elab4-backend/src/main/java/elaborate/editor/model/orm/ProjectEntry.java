@@ -30,6 +30,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
@@ -62,6 +64,7 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 	 * properties to persist 
 	 */
 	private String name;
+	private String shortName;
 	private boolean publishable = false;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "projectEntry")
@@ -83,6 +86,19 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 
 	public ProjectEntry setName(String name) {
 		this.name = name;
+		if (StringUtils.isEmpty(this.shortName)) {
+			this.shortName = name.substring(0, Math.min(8, name.length() - 1));
+		}
+		return this;
+	}
+
+	@JsonView({ Views.Minimal.class })
+	public String getShortName() {
+		return shortName;
+	}
+
+	public ProjectEntry setShortName(String shortName) {
+		this.shortName = shortName;
 		return this;
 	}
 
@@ -94,7 +110,6 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 	public ProjectEntry setPublishable(boolean publishable) {
 		this.publishable = publishable;
 		return this;
-
 	}
 
 	@JsonIgnore
