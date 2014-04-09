@@ -76,6 +76,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		beginTransaction();
 		ProjectEntry projectEntry = super.read(entry_id);
 		projectEntry.setName(updateEntry.getName());
+		projectEntry.setShortName(updateEntry.getShortName());
 		projectEntry.setPublishable(updateEntry.isPublishable());
 		super.update(projectEntry);
 		persist(projectEntry.getProject().addLogEntry(MessageFormat.format("updated entry {0}", entry_id), user));
