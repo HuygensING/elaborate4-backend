@@ -82,6 +82,7 @@ import elaborate.editor.publish.Publisher;
 public class ProjectService extends AbstractStoredEntityService<Project> {
 	private static final String PROJECT_NAME = "name";
 	private static final String PROJECT_TITLE = "Project title";
+	private static final String PROJECT_LEADER = "Project leader";
 	private static final String COUNT_KEY = "count";
 	private static final List<String> DEFAULT_PROJECTENTRYMETADATAFIELDNAMES = Lists.newArrayList();
 	private static ProjectService instance = new ProjectService();
@@ -319,6 +320,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		}
 		map.put(PROJECT_TITLE, project.getTitle());
 		map.put(PROJECT_NAME, project.getName());
+		map.put(PROJECT_LEADER, String.valueOf(project.getProjectLeaderId()));
 
 		closeEntityManager();
 		return map;
@@ -633,6 +635,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				project.setTitle(value);
 			} else if (PROJECT_NAME.equals(key)) {
 				project.setName(value);
+			} else if (PROJECT_LEADER.equals(key)) {
+				project.setProjectLeaderId(Long.valueOf(value));
 			}
 			persist(pmi);
 		}
