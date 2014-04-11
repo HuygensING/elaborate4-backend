@@ -37,7 +37,6 @@ import org.joda.time.DateTime;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.Project;
@@ -65,18 +64,18 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 		String level2 = project.getLevel2();
 		String level3 = project.getLevel3();
 		if (!elaborateSearchParameters.isLevelFieldsSet()) {
-			elaborateSearchParameters.setLevelFields(level1, project.getLevel2(), project.getLevel3());
+			elaborateSearchParameters.setLevelFields(level1, level2, level3);
 		}
 		if (elaborateSearchParameters.getSearchInTranscriptions() && elaborateSearchParameters.getTextLayers().isEmpty()) {
 			elaborateSearchParameters.setTextLayers(ImmutableList.copyOf(project.getTextLayers()));
 		}
-		Set<String> resultFields = Sets.newHashSet(elaborateSearchParameters.getResultFields());
-		addIfNotEmpty(resultFields, level1);
-		addIfNotEmpty(resultFields, level2);
-		addIfNotEmpty(resultFields, level3);
+		//		Set<String> resultFields = Sets.newHashSet(elaborateSearchParameters.getResultFields());
+		//		addIfNotEmpty(resultFields, level1);
+		//		addIfNotEmpty(resultFields, level2);
+		//		addIfNotEmpty(resultFields, level3);
 		elaborateSearchParameters//
 				.setFacetFields(project.getFacetFields())//
-				.setResultFields(resultFields)//
+				//				.setResultFields(resultFields)//
 				.setFacetInfoMap(project.getFacetInfoMap());
 		try {
 			Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
