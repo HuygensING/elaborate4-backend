@@ -22,6 +22,8 @@ package elaborate.editor.resources;
  * #L%
  */
 
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -47,12 +49,45 @@ public class StatusResource extends AbstractElaborateResource {
 		return ImmutableMap.<String, Object> builder()//
 				.put("solrserver", getSolrStatus())//
 				.put("database", getDbStatus())//
+				.put("memory_in_mb", getMemoryStatus())//
 				.build();
+	}
+
+	private MemoryStatus getMemoryStatus() {
+		return new MemoryStatus();
+	}
+
+	static final int MB = 1024 * 1024;
+
+	static class MemoryStatus {
+		private final Runtime runtime;
+
+		public MemoryStatus() {
+			System.gc();
+			runtime = Runtime.getRuntime();
+		}
+
+		public long getUsed() {
+			return (getTotal() - getFree());
+		}
+
+		public long getTotal() {
+			return runtime.totalMemory() / MB;
+		}
+
+		public long getMax() {
+			return runtime.maxMemory() / MB;
+		}
+
+		public long getFree() {
+			return runtime.freeMemory() / MB;
+		}
 	}
 
 	private ServerStatus getDbStatus() {
 		EntityManager entityManager = HibernateUtil.getEntityManager();
-		String url = (String) entityManager.getEntityManagerFactory().getProperties().get("hibernate.connection.url");
+		Map<String, Object> properties = entityManager.getEntityManagerFactory().getProperties();
+		String url = (String) properties.get("javax.persistence.jdbc.url");
 		boolean online = entityManager.isOpen();
 		ServerStatus status = new ServerStatus(url, online);
 		entityManager.close();
