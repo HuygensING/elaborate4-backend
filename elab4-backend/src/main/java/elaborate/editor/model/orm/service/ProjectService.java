@@ -332,6 +332,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 		Project project = null;
 		List<ProjectUser> resultList = getEntityManager().createQuery("from ProjectUser where user_id=:userId and project_id=:projectId", ProjectUser.class).setParameter("userId", user.getId()).setParameter("projectId", project_id).getResultList();
+		logMemory();
 		if (!resultList.isEmpty()) {
 			project = resultList.get(0).getProject();
 			Hibernate.initialize(project);
@@ -348,12 +349,33 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<ProjectUser> resultList = createQuery.getResultList();
 		ImmutableList<ProjectUser> projectUsers = ImmutableList.copyOf(resultList);
 		List<Project> projects = Lists.newArrayList();
+		logMemory();
 		for (ProjectUser projectUser : projectUsers) {
 			Project project = projectUser.getProject();
 			Hibernate.initialize(project);
 			projects.add(project);
 		}
 		return projects;
+	}
+
+	void logMemory() {
+		int mb = 1024 * 1024;
+		System.gc();
+		//Getting the runtime reference from system
+		Runtime runtime = Runtime.getRuntime();
+		LOG.info("##### Heap utilization statistics [MB] #####");
+
+		//Print used memory
+		LOG.info("Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+
+		//Print free memory
+		LOG.info("Free Memory:" + runtime.freeMemory() / mb);
+
+		//Print total available memory
+		LOG.info("Total Memory:" + runtime.totalMemory() / mb);
+
+		//Print Maximum available memory
+		LOG.info("Max Memory:" + runtime.maxMemory() / mb);
 	}
 
 	public Iterable<String> getProjectEntryMetadataFields(long project_id, User user) {
