@@ -334,7 +334,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<ProjectUser> resultList = getEntityManager().createQuery("from ProjectUser where user_id=:userId and project_id=:projectId", ProjectUser.class).setParameter("userId", user.getId()).setParameter("projectId", project_id).getResultList();
 		if (!resultList.isEmpty()) {
 			project = resultList.get(0).getProject();
-			//			Hibernate.initialize(project);
+			Hibernate.initialize(project);
 		}
 		if (project == null) {
 			closeEntityManager();
@@ -350,7 +350,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<Project> projects = Lists.newArrayList();
 		for (ProjectUser projectUser : projectUsers) {
 			Project project = projectUser.getProject();
-			//			Hibernate.initialize(project);
+			Hibernate.initialize(project);
 			projects.add(project);
 		}
 		return projects;
