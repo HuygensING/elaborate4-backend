@@ -37,7 +37,8 @@ public class ElaborateQueryComposerTest {
 		sp.setTextLayers(ImmutableList.of("diplomatic"));
 		String expected = "*:*";
 
-		String query = queryComposer.composeQueryString(sp);
+		queryComposer.compose(sp);
+		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
 	}
 
@@ -49,8 +50,11 @@ public class ElaborateQueryComposerTest {
 				.setCaseSensitive(true);
 		String expected = "textlayercs_diplomatic:iets";
 
-		String query = queryComposer.composeQueryString(sp);
+		queryComposer.compose(sp);
+		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
+		String hquery = queryComposer.getHighlightQuery();
+		assertThat(hquery).isEqualTo(expected);
 	}
 
 	@Test
@@ -61,8 +65,11 @@ public class ElaborateQueryComposerTest {
 				.setCaseSensitive(true);
 		String expected = "textlayercs_diplomatic:(iets anders)";
 
-		String query = queryComposer.composeQueryString(sp);
+		queryComposer.compose(sp);
+		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
+		String hquery = queryComposer.getHighlightQuery();
+		assertThat(hquery).isEqualTo(expected);
 	}
 
 	@Test
@@ -75,8 +82,11 @@ public class ElaborateQueryComposerTest {
 				.setSearchInAnnotations(true);
 		String expected = "textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)";
 
-		String query = queryComposer.composeQueryString(sp);
+		queryComposer.compose(sp);
+		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
+		String hquery = queryComposer.getHighlightQuery();
+		assertThat(hquery).isEqualTo(expected);
 	}
 
 	@Test
@@ -86,10 +96,13 @@ public class ElaborateQueryComposerTest {
 				.setFuzzy(true)//
 				.setCaseSensitive(false)//
 				.setSearchInAnnotations(true);
-		String expected = "*:*";
+		String expected = "*:*"; // Because no textlayers are indicated
 
-		String query = queryComposer.composeQueryString(sp);
+		queryComposer.compose(sp);
+		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
+		String hquery = queryComposer.getHighlightQuery();
+		assertThat(hquery).isEqualTo(expected);
 	}
 
 	@Test
@@ -105,8 +118,11 @@ public class ElaborateQueryComposerTest {
 				.setSearchInTranscriptions(false);
 		String expected = "+(*:*) +metadata_folio_number:(199)";
 
-		String query = queryComposer.composeQueryString(sp);
+		queryComposer.compose(sp);
+		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
+		String hquery = queryComposer.getHighlightQuery();
+		assertThat(hquery).isEqualTo("*:*");
 	}
 
 }

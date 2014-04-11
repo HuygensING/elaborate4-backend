@@ -120,7 +120,8 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 	public Map<String, Object> search(FacetedSearchParameters<?> fsp) throws IndexException {
 		ElaborateSearchParameters sp = (ElaborateSearchParameters) fsp;
 		LOG.info("searchparameters={}", sp);
-		String queryString = queryComposer.composeQueryString(sp);
+		queryComposer.compose(sp);
+		String queryString = queryComposer.getSearchQuery();
 		String[] facetFields = sp.getFacetFields();
 		//		LOG.debug("search({},{})", queryString, sp.getSort());
 		Map<String, String> textFieldMap = sp.getTextFieldsToSearch();
@@ -140,7 +141,7 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 		query.set(HighlightParams.MERGE_CONTIGUOUS_FRAGMENTS, false);
 		query.set(HighlightParams.MAX_CHARS, -1);
 		query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[textFieldMap.size()]));
-		query.set(HighlightParams.Q, queryString);
+		query.set(HighlightParams.Q, queryComposer.getHighlightQuery());
 		query = setSort(query, sp);
 
 		Map<String, Object> data = getSearchData(sp, facetFields, query, fieldsToReturn);

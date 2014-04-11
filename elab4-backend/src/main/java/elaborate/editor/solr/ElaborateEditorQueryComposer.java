@@ -31,13 +31,25 @@ import nl.knaw.huygens.facetedsearch.SolrFields;
 import org.apache.commons.lang.StringUtils;
 
 public class ElaborateEditorQueryComposer extends ElaborateQueryComposer {
+	private String searchQuery;
+
 	@Override
-	public String composeQueryString(ElaborateSearchParameters sp) {
-		String joinedTermQuery = super.composeQueryString(sp);
+	public void compose(ElaborateSearchParameters sp) {
+		super.compose(sp);
+		String joinedTermQuery = super.getSearchQuery();
+
 		boolean joinedTermQueryIsEmpty = StringUtils.isEmpty(joinedTermQuery);
 		ElaborateEditorSearchParameters esp = (ElaborateEditorSearchParameters) sp;
-		return joinedTermQueryIsEmpty ? MessageFormat.format("{0}:{1,number,#}", SolrFields.PROJECT_ID, esp.getProjectId()) //
+		searchQuery = joinedTermQueryIsEmpty ? MessageFormat.format("{0}:{1,number,#}", SolrFields.PROJECT_ID, esp.getProjectId()) //
 				: MessageFormat.format("({0}) AND {1}:{2,number,#}", joinedTermQuery, SolrFields.PROJECT_ID, esp.getProjectId());
+	}
+
+	@Override
+	public String getSearchQuery() {
+		if (searchQuery == null) {
+			throw new RuntimeException("searchQuery not set, call compose() first");
+		}
+		return searchQuery;
 	}
 
 }

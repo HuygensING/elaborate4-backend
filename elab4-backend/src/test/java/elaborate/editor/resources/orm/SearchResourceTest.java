@@ -70,4 +70,7 @@ public class SearchResourceTest extends LoggableObject {
 		assertThat(path).isEqualTo("/projects/31415/search/1000000");
 	}
 
+	//TODO: add test:
+	// show that terms from the facetvalues in the query aren't highlighted.
+
 }

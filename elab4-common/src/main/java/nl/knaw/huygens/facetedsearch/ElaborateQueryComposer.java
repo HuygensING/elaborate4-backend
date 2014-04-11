@@ -22,7 +22,6 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
-
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -33,9 +32,11 @@ import com.google.common.collect.Lists;
 
 public class ElaborateQueryComposer implements QueryComposer {
 	private static final String FUZZY = "~0.75";
+	private String searchQuery;
+	private String highlightQuery;
 
 	@Override
-	public String composeQueryString(ElaborateSearchParameters sp) {
+	public void compose(ElaborateSearchParameters sp) {
 		List<String> textLayers = sp.getTextLayers();
 		String joinedTermQuery = "";
 		if (textLayers.isEmpty() || sp.getTerm().equals("*")) {
@@ -54,19 +55,25 @@ public class ElaborateQueryComposer implements QueryComposer {
 				joinedTermQuery = "*:*";
 			}
 		}
+		// the solr highlighter should only get the fulltextsearch part of the query
+		this.highlightQuery = joinedTermQuery;
 
+		List<String> facetQueries = composeFacetQueries(sp);
+		if (!facetQueries.isEmpty()) {
+			String joinedFacetQuery = Joiner.on(" ").join(facetQueries);
+			joinedTermQuery = MessageFormat.format("+({0}) {1}", joinedTermQuery, joinedFacetQuery);
+		}
+		this.searchQuery = joinedTermQuery;
+	}
+
+	private List<String> composeFacetQueries(ElaborateSearchParameters sp) {
 		List<String> facetQueries = Lists.newArrayList();
 		for (FacetParameter fp : sp.getFacetValues()) {
 			String values = Joiner.on(" ").join(fp.getEscapedValues());
 			String facetQuery = MessageFormat.format("+{0}:({1})", fp.getName(), values);
 			facetQueries.add(facetQuery);
 		}
-
-		if (!facetQueries.isEmpty()) {
-			joinedTermQuery = MessageFormat.format("+({0}) {1}", joinedTermQuery, Joiner.on(" ").join(facetQueries));
-		}
-
-		return joinedTermQuery;
+		return facetQueries;
 	}
 
 	private List<String> getTerms(ElaborateSearchParameters sp) {
@@ -81,6 +88,22 @@ public class ElaborateQueryComposer implements QueryComposer {
 		}
 
 		return terms;
+	}
+
+	@Override
+	public String getSearchQuery() {
+		if (searchQuery == null) {
+			throw new RuntimeException("searchQuery not set, call compose() first");
+		}
+		return searchQuery;
+	}
+
+	@Override
+	public String getHighlightQuery() {
+		if (highlightQuery == null) {
+			throw new RuntimeException("highlightQuery not set, call compose() first");
+		}
+		return highlightQuery;
 	}
 
 }

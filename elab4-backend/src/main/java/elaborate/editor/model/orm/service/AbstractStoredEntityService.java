@@ -165,6 +165,11 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		if (tlem.get() == null) {
 			tlem.set(ENTITY_MANAGER_FACTORY.createEntityManager());
 		}
+		EntityManager em = tlem.get();
+		if (em.isJoinedToTransaction()) {
+			em.flush();
+			em.clear();
+		}
 	}
 
 	/** end read **/
