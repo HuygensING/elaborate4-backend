@@ -24,22 +24,24 @@ package elaborate.editor.model;
 
 import java.util.Date;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 
 import com.google.common.collect.ImmutableList;
 
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.service.TranscriptionService;
 
 public class ModelFactory {
 	//  private static final String PERSISTENCE_UNIT_NAME = "nl.knaw.huygens.elaborate.jpa";
 	private static final String PERSISTENCE_UNIT_NAME = "nl.knaw.huygens.elaborate.old.jpa";
 	public static final ModelFactory INSTANCE = new ModelFactory();
+	private static TranscriptionService transcriptionService = TranscriptionService.instance();
+
 	private final static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-	private final static EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+	//	private final static EntityManager entityManager = entityManagerFactory.createEntityManager();
 
 	private ModelFactory() {}
 
@@ -88,14 +90,8 @@ public class ModelFactory {
 	}
 
 	public static TranscriptionType getDefaultTranscriptionType() {
-		ImmutableList<TranscriptionType> entities = getTranscriptionTypes();
+		ImmutableList<TranscriptionType> entities = transcriptionService.getTranscriptionTypes();
 		return entities.size() > 0 ? entities.get(0) : create(TranscriptionType.class).setName(TranscriptionType.DIPLOMATIC);
 	}
 
-	// TODO: move entitymanager dependency to service/doa
-	public static ImmutableList<TranscriptionType> getTranscriptionTypes() {
-		TypedQuery<TranscriptionType> createQuery = entityManager.createQuery("from TranscriptionType", TranscriptionType.class);
-		ImmutableList<TranscriptionType> list = ImmutableList.copyOf(createQuery.getResultList());
-		return list;
-	}
 }

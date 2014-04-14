@@ -58,30 +58,34 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 
 	public StorableSearchData createSearch(ElaborateEditorSearchParameters elaborateSearchParameters, User user) {
 		beginTransaction();
-		projectService.setEntityManager(getEntityManager());
-		Project project = projectService.getProjectIfUserIsAllowed(elaborateSearchParameters.getProjectId(), user);
-		String level1 = project.getLevel1();
-		String level2 = project.getLevel2();
-		String level3 = project.getLevel3();
-		if (!elaborateSearchParameters.isLevelFieldsSet()) {
-			elaborateSearchParameters.setLevelFields(level1, level2, level3);
-		}
-		if (elaborateSearchParameters.getSearchInTranscriptions() && elaborateSearchParameters.getTextLayers().isEmpty()) {
-			elaborateSearchParameters.setTextLayers(ImmutableList.copyOf(project.getTextLayers()));
-		}
-		//		Set<String> resultFields = Sets.newHashSet(elaborateSearchParameters.getResultFields());
-		//		addIfNotEmpty(resultFields, level1);
-		//		addIfNotEmpty(resultFields, level2);
-		//		addIfNotEmpty(resultFields, level3);
-		elaborateSearchParameters//
-				.setFacetFields(project.getFacetFields())//
-				//				.setResultFields(resultFields)//
-				.setFacetInfoMap(project.getFacetInfoMap());
 		try {
-			Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
-			StorableSearchData storableSearchData = new StorableSearchData().setResults(result);
-			persist(storableSearchData);
-			commitTransaction();
+			projectService.setEntityManager(getEntityManager());
+			Project project = projectService.getProjectIfUserIsAllowed(elaborateSearchParameters.getProjectId(), user);
+			String level1 = project.getLevel1();
+			String level2 = project.getLevel2();
+			String level3 = project.getLevel3();
+			if (!elaborateSearchParameters.isLevelFieldsSet()) {
+				elaborateSearchParameters.setLevelFields(level1, level2, level3);
+			}
+			if (elaborateSearchParameters.getSearchInTranscriptions() && elaborateSearchParameters.getTextLayers().isEmpty()) {
+				elaborateSearchParameters.setTextLayers(ImmutableList.copyOf(project.getTextLayers()));
+			}
+			//		Set<String> resultFields = Sets.newHashSet(elaborateSearchParameters.getResultFields());
+			//		addIfNotEmpty(resultFields, level1);
+			//		addIfNotEmpty(resultFields, level2);
+			//		addIfNotEmpty(resultFields, level3);
+			elaborateSearchParameters//
+					.setFacetFields(project.getFacetFields())//
+					//				.setResultFields(resultFields)//
+					.setFacetInfoMap(project.getFacetInfoMap());
+			StorableSearchData storableSearchData;
+			try {
+				Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
+				storableSearchData = new StorableSearchData().setResults(result);
+				persist(storableSearchData);
+			} finally {
+				commitTransaction();
+			}
 			return storableSearchData;
 
 		} catch (Exception e) {
@@ -103,17 +107,21 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 
 	public Map<String, Object> getSearchResult(long projectId, long searchId, int start, int rows, User user) {
 		Map<String, Object> resultsMap = Maps.newHashMap();
-		//    try {
-		openEntityManager();
-		StorableSearchData storableSearchData = find(StorableSearchData.class, searchId);
-		checkEntityFound(storableSearchData, searchId);
-		Project project = getEntityManager().find(Project.class, projectId);
-		Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
 		Map<String, String> fieldnameMap = Maps.newHashMap();
-		for (String fieldName : projectEntryMetadataFieldnames) {
-			fieldnameMap.put(SolrUtils.facetName(fieldName), fieldName);
+		openEntityManager();
+		StorableSearchData storableSearchData;
+		Project project;
+		try {
+			storableSearchData = find(StorableSearchData.class, searchId);
+			checkEntityFound(storableSearchData, searchId);
+			project = getEntityManager().find(Project.class, projectId);
+			Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+			for (String fieldName : projectEntryMetadataFieldnames) {
+				fieldnameMap.put(SolrUtils.facetName(fieldName), fieldName);
+			}
+		} finally {
+			closeEntityManager();
 		}
-		closeEntityManager();
 
 		if (storableSearchData != null) {
 			List<String> sortableFields = Lists.newArrayList("id", "name");
@@ -172,10 +180,13 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 	public void removeExpiredSearches() {
 		String cutoffDate = new DateTime().minusDays(1).toString("YYYY-MM-dd HH:mm:ss");
 		beginTransaction();
-		getEntityManager()//
-				.createQuery("delete StorableSearchData where created_on < '" + cutoffDate + "'")//
-				.executeUpdate();
-		commitTransaction();
+		try {
+			getEntityManager()//
+					.createQuery("delete StorableSearchData where created_on < '" + cutoffDate + "'")//
+					.executeUpdate();
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	@Override

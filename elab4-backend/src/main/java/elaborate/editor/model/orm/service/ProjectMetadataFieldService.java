@@ -58,17 +58,24 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
 	@Override
 	public ProjectMetadataField read(long entry_id) {
 		openEntityManager();
-		ProjectMetadataField projectMetadataField = super.read(entry_id);
-		closeEntityManager();
+		ProjectMetadataField projectMetadataField;
+		try {
+			projectMetadataField = super.read(entry_id);
+		} finally {
+			closeEntityManager();
+		}
 		return projectMetadataField;
 	}
 
 	public void update(ProjectMetadataField projectMetadataField, User user) {
 		if (rootOrAdmin(user)) {
 			beginTransaction();
-			projectMetadataField.setModifiedBy(user);
-			super.update(projectMetadataField);
-			commitTransaction();
+			try {
+				projectMetadataField.setModifiedBy(user);
+				super.update(projectMetadataField);
+			} finally {
+				commitTransaction();
+			}
 
 		} else {
 			throw new UnauthorizedException();
@@ -78,8 +85,11 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
 	public void delete(long entry_id, User user) {
 		if (rootOrAdmin(user)) {
 			beginTransaction();
-			super.delete(entry_id);
-			commitTransaction();
+			try {
+				super.delete(entry_id);
+			} finally {
+				commitTransaction();
+			}
 
 		} else {
 			throw new UnauthorizedException();
@@ -90,8 +100,12 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
 	public List<ProjectMetadataField> getAll(User user) {
 		if (rootOrAdmin(user)) {
 			openEntityManager();
-			ImmutableList<ProjectMetadataField> all = super.getAll();
-			closeEntityManager();
+			ImmutableList<ProjectMetadataField> all;
+			try {
+				all = super.getAll();
+			} finally {
+				closeEntityManager();
+			}
 			return all;
 
 		} else {
@@ -102,12 +116,15 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
 	public void create(ProjectMetadataField pmField, User user) {
 		if (rootOrAdmin(user)) {
 			beginTransaction();
-			pmField.setCreator(user);
-			pmField.setCreatedOn(new Date());
-			pmField.setModifier(user);
-			pmField.setModifiedOn(new Date());
-			super.create(pmField);
-			commitTransaction();
+			try {
+				pmField.setCreator(user);
+				pmField.setCreatedOn(new Date());
+				pmField.setModifier(user);
+				pmField.setModifiedOn(new Date());
+				super.create(pmField);
+			} finally {
+				commitTransaction();
+			}
 
 		} else {
 			throw new UnauthorizedException();

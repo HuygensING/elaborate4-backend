@@ -197,4 +197,5 @@ public class StringUtilTest extends LoggableObject {
 		build = UriBuilder.fromResource(SessionResource.class).scheme("http").host("rest.elaborate.huygens.knaw.nl").path(SessionResource.class.getMethod("logout", String.class)).build("TOKEN");
 		LOG.info("{}", build);
 	}
+
 }

@@ -22,7 +22,6 @@ package elaborate.editor.security;
  * #L%
  */
 
-
 import java.security.Principal;
 
 import javax.ws.rs.core.SecurityContext;

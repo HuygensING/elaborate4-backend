@@ -32,7 +32,7 @@ import elaborate.editor.model.orm.service.TranscriptionService;
 @Provider
 public class TranscriptionServiceProvider extends SingletonTypeInjectableProvider<Context, TranscriptionService> {
 
-  public TranscriptionServiceProvider() {
-    super(TranscriptionService.class, TranscriptionService.instance());
-  }
+	public TranscriptionServiceProvider() {
+		super(TranscriptionService.class, TranscriptionService.instance());
+	}
 }

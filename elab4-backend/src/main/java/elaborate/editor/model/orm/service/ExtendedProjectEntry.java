@@ -22,7 +22,6 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-
 import java.util.Date;
 
 import elaborate.editor.model.orm.Project;

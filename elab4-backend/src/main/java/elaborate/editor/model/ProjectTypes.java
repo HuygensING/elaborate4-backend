@@ -22,8 +22,7 @@ package elaborate.editor.model;
  * #L%
  */
 
-
 public class ProjectTypes {
-  public final static String WORK = "work";
-  public final static String COLLECTION = "collection";
+	public final static String WORK = "work";
+	public final static String COLLECTION = "collection";
 }

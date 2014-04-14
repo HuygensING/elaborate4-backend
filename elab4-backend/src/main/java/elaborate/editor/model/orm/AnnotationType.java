@@ -45,61 +45,61 @@ import elaborate.editor.model.AbstractTrackedEntity;
 @Table(name = "annotation_types")
 @XmlRootElement
 public class AnnotationType extends AbstractTrackedEntity<AnnotationType> {
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  private String name;
-  private String description;
+	private String name;
+	private String description;
 
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "annotationType")
-  private Set<AnnotationTypeMetadataItem> annotationTypeMetadataItems;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "annotationType")
+	private Set<AnnotationTypeMetadataItem> annotationTypeMetadataItems;
 
-  public String getName() {
-    return name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public AnnotationType setName(String name) {
-    this.name = name;
-    return this;
-  };
+	public AnnotationType setName(String name) {
+		this.name = name;
+		return this;
+	};
 
-  public String getDescription() {
-    return description;
-  };
+	public String getDescription() {
+		return description;
+	};
 
-  public AnnotationType setDescription(String description) {
-    this.description = description;
-    return this;
-  }
+	public AnnotationType setDescription(String description) {
+		this.description = description;
+		return this;
+	}
 
-  public Set<AnnotationTypeMetadataItem> getMetadataItems() {
-    return annotationTypeMetadataItems;
-  }
+	public Set<AnnotationTypeMetadataItem> getMetadataItems() {
+		return annotationTypeMetadataItems;
+	}
 
-  public AnnotationType setMetadataItems(Set<AnnotationTypeMetadataItem> annotationTypeMetadataItems) {
-    this.annotationTypeMetadataItems = annotationTypeMetadataItems;
-    return this;
-  };
+	public AnnotationType setMetadataItems(Set<AnnotationTypeMetadataItem> annotationTypeMetadataItems) {
+		this.annotationTypeMetadataItems = annotationTypeMetadataItems;
+		return this;
+	};
 
-  //  AnnotationTypeMetadataItem addMetadataItem(String name, String description) {
-  //    return null;
-  //  };
+	//  AnnotationTypeMetadataItem addMetadataItem(String name, String description) {
+	//    return null;
+	//  };
 
-  @Transient
-  Map<String, Object> getDataMap() {
-    final Map<String, Object> annotationTypeMap = Maps.newHashMap();
-    annotationTypeMap.put("name", getName());
-    annotationTypeMap.put("description", getDescription());
-    final List<Map<String, Object>> annotationTypeMetadataItemsList = Lists.newArrayList();
-    annotationTypeMap.put("metadata_items", annotationTypeMetadataItemsList);
-    for (final AnnotationTypeMetadataItem annotationTypeMetadataItem : getMetadataItems()) {
-      annotationTypeMetadataItemsList.add(annotationTypeMetadataItem.getDataMap());
-    }
-    return annotationTypeMap;
-  }
+	@Transient
+	Map<String, Object> getDataMap() {
+		final Map<String, Object> annotationTypeMap = Maps.newHashMap();
+		annotationTypeMap.put("name", getName());
+		annotationTypeMap.put("description", getDescription());
+		final List<Map<String, Object>> annotationTypeMetadataItemsList = Lists.newArrayList();
+		annotationTypeMap.put("metadata_items", annotationTypeMetadataItemsList);
+		for (final AnnotationTypeMetadataItem annotationTypeMetadataItem : getMetadataItems()) {
+			annotationTypeMetadataItemsList.add(annotationTypeMetadataItem.getDataMap());
+		}
+		return annotationTypeMap;
+	}
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-  }
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
 
 }

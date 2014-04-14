@@ -54,22 +54,32 @@ public class AnnotationService extends AbstractStoredEntityService<Annotation> {
 	/* CRUD methods */
 	public Annotation read(long id, User user) {
 		openEntityManager();
-		Annotation annotation = super.read(id);
-		closeEntityManager();
+		Annotation annotation;
+		try {
+			annotation = super.read(id);
+		} finally {
+			closeEntityManager();
+		}
 		return annotation;
 	}
 
 	public void update(Annotation annotation, User user) {
 		beginTransaction();
-		annotation.setModifiedBy(user);
-		super.update(annotation);
-		commitTransaction();
+		try {
+			annotation.setModifiedBy(user);
+			super.update(annotation);
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public void delete(long id, User user) {
 		beginTransaction();
-		super.delete(id);
-		commitTransaction();
+		try {
+			super.delete(id);
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	/* */
@@ -88,8 +98,12 @@ public class AnnotationService extends AbstractStoredEntityService<Annotation> {
 
 	public Annotation getAnnotationByAnnotationNo(Integer annotationNo) {
 		openEntityManager();
-		Annotation annotation = getAnnotationByAnnotationNo(annotationNo, getEntityManager());
-		closeEntityManager();
+		Annotation annotation;
+		try {
+			annotation = getAnnotationByAnnotationNo(annotationNo, getEntityManager());
+		} finally {
+			closeEntityManager();
+		}
 		return annotation;
 	}
 }

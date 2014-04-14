@@ -22,7 +22,6 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-
 public class PrevNext {
 	public long prev = -1;
 	public long next = -1;

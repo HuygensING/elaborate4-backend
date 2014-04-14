@@ -112,9 +112,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 			addDefaultFields(project, user);
 
 			beginTransaction();
-			Project created = super.create(project);
-			persist(created.addLogEntry("project created", user));
-			commitTransaction();
+			Project created;
+			try {
+				created = super.create(project);
+				persist(created.addLogEntry("project created", user));
+			} finally {
+				commitTransaction();
+			}
 			return created;
 		}
 	}
@@ -144,78 +148,95 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	}
 
 	public Project read(long project_id, User user) {
+		Project project;
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		closeEntityManager();
+		try {
+			project = getProjectIfUserIsAllowed(project_id, user);
+		} finally {
+			closeEntityManager();
+		}
 		return project;
 	}
 
 	public void update(Project project, User user) {
 		beginTransaction();
-		super.update(project);
-		setModifiedBy(project, user);
-		commitTransaction();
+		try {
+			super.update(project);
+			setModifiedBy(project, user);
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public void delete(long project_id, User user) {
 		beginTransaction();
-		super.delete(project_id);
-		getSolrIndexer().deindexProject(project_id);
-		LOG.info("user {} deleting project {}", user.getUsername(), project_id);
-		commitTransaction();
+		try {
+			super.delete(project_id);
+			getSolrIndexer().deindexProject(project_id);
+			LOG.info("user {} deleting project {}", user.getUsername(), project_id);
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	/* ---------------------------------------------------------------------------------------------------- */
 
 	public Collection<ProjectEntry> getProjectEntries(long id, User user) {
+		List<ProjectEntry> projectEntriesInOrder;
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(id, user);
-		List<ProjectEntry> projectEntriesInOrder = getProjectEntriesInOrder(id);
-		closeEntityManager();
+		try {
+			Project project = getProjectIfUserIsAllowed(id, user);
+			projectEntriesInOrder = getProjectEntriesInOrder(id);
+		} finally {
+			closeEntityManager();
+		}
 		return projectEntriesInOrder;
 	}
 
 	public Collection<Map<String, String>> getProjectEntryMetadata(long id, User user) {
 		Collection<Map<String, String>> projectEntryMetadata = Lists.newArrayList();
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(id, user);
-		Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+		try {
+			Project project = getProjectIfUserIsAllowed(id, user);
+			Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
 
-		//		select l1.data as bewaarplaats,
-		//    l2.data as collectie,
-		//    l3.data as signatuur,
-		//    l4.data as afzenders,
-		//    l5.data as ontvangers,
-		//    l6.data as datum
-		//from project_entries e
-		//left outer join project_entry_metadata_items l0
-		// on (l0.project_entry_id = e.id and l0.field='Scan(s)')
-		//left outer join project_entry_metadata_items l1
-		// on (l1.project_entry_id = e.id and l1.field='Bewaarplaats')
-		//left outer join project_entry_metadata_items l2
-		// on (l2.project_entry_id = e.id and l2.field='Collectie')
-		//left outer join project_entry_metadata_items l3
-		// on (l3.project_entry_id = e.id and l3.field='Signatuur')
-		//left outer join project_entry_metadata_items l4
-		// on (l4.project_entry_id = e.id and l4.field='Afzender(s)')
-		//left outer join project_entry_metadata_items l5
-		// on (l5.project_entry_id = e.id and l5.field='Ontvanger(s)')
-		//left outer join project_entry_metadata_items l6
-		// on (l6.project_entry_id = e.id and l6.field='Datum')
-		//where e.project_id = 44 and l0.data=''
-		//order by l0.data,l1.data, l2.data, l3.data ,l4.data, l5.data, l6.data;
+			//		select l1.data as bewaarplaats,
+			//    l2.data as collectie,
+			//    l3.data as signatuur,
+			//    l4.data as afzenders,
+			//    l5.data as ontvangers,
+			//    l6.data as datum
+			//from project_entries e
+			//left outer join project_entry_metadata_items l0
+			// on (l0.project_entry_id = e.id and l0.field='Scan(s)')
+			//left outer join project_entry_metadata_items l1
+			// on (l1.project_entry_id = e.id and l1.field='Bewaarplaats')
+			//left outer join project_entry_metadata_items l2
+			// on (l2.project_entry_id = e.id and l2.field='Collectie')
+			//left outer join project_entry_metadata_items l3
+			// on (l3.project_entry_id = e.id and l3.field='Signatuur')
+			//left outer join project_entry_metadata_items l4
+			// on (l4.project_entry_id = e.id and l4.field='Afzender(s)')
+			//left outer join project_entry_metadata_items l5
+			// on (l5.project_entry_id = e.id and l5.field='Ontvanger(s)')
+			//left outer join project_entry_metadata_items l6
+			// on (l6.project_entry_id = e.id and l6.field='Datum')
+			//where e.project_id = 44 and l0.data=''
+			//order by l0.data,l1.data, l2.data, l3.data ,l4.data, l5.data, l6.data;
 
-		List<ProjectEntry> projectEntriesInOrder = getProjectEntriesInOrder(id);
-		for (ProjectEntry projectEntry : projectEntriesInOrder) {
-			Map<String, String> metadata = Maps.newHashMap();
-			metadata.put("entryname", projectEntry.getName());
-			List<ProjectEntryMetadataItem> projectEntryMetadataItems = projectEntry.getProjectEntryMetadataItems();
-			for (ProjectEntryMetadataItem projectEntryMetadataItem : projectEntryMetadataItems) {
-				metadata.put(projectEntryMetadataItem.getField(), projectEntryMetadataItem.getData());
+			List<ProjectEntry> projectEntriesInOrder = getProjectEntriesInOrder(id);
+			for (ProjectEntry projectEntry : projectEntriesInOrder) {
+				Map<String, String> metadata = Maps.newHashMap();
+				metadata.put("entryname", projectEntry.getName());
+				List<ProjectEntryMetadataItem> projectEntryMetadataItems = projectEntry.getProjectEntryMetadataItems();
+				for (ProjectEntryMetadataItem projectEntryMetadataItem : projectEntryMetadataItems) {
+					metadata.put(projectEntryMetadataItem.getField(), projectEntryMetadataItem.getData());
+				}
+				projectEntryMetadata.add(metadata);
 			}
-			projectEntryMetadata.add(metadata);
+		} finally {
+			closeEntityManager();
 		}
-		closeEntityManager();
 		return projectEntryMetadata;
 	}
 
@@ -269,19 +290,22 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public ProjectEntry createProjectEntry(long id, ProjectEntry projectEntry, User user) {
 		beginTransaction();
+		ProjectEntry entry;
+		try {
+			Project project = find(getEntityClass(), id);
+			entry = project.addEntry(projectEntry.getName(), user);
+			persist(entry);
+			setModifiedBy(entry, user);
+			String[] textLayers = project.getTextLayers();
+			for (String textLayer : textLayers) {
+				Transcription transcription = entry.addTranscription(user).setTextLayer(textLayer);
+				persist(transcription);
+			}
+			persist(project.addLogEntry("added entry " + projectEntry.getName(), user));
 
-		Project project = find(getEntityClass(), id);
-		ProjectEntry entry = project.addEntry(projectEntry.getName(), user);
-		persist(entry);
-		setModifiedBy(entry, user);
-		String[] textLayers = project.getTextLayers();
-		for (String textLayer : textLayers) {
-			Transcription transcription = entry.addTranscription(user).setTextLayer(textLayer);
-			persist(transcription);
+		} finally {
+			commitTransaction();
 		}
-		persist(project.addLogEntry("added entry " + projectEntry.getName(), user));
-
-		commitTransaction();
 		return entry;
 	}
 
@@ -293,36 +317,42 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	};
 
 	public List<Project> getAll(User user) {
-		openEntityManager();
-
 		List<Project> projects;
-		if (rootOrAdmin(user)) {
-			projects = Lists.newArrayList(super.getAll());
-		} else {
-			projects = getProjectsForUser(user);
+		openEntityManager();
+		try {
+
+			if (rootOrAdmin(user)) {
+				projects = Lists.newArrayList(super.getAll());
+			} else {
+				projects = getProjectsForUser(user);
+			}
+			Collections.sort(projects, SORT_PROJECTS);
+		} finally {
+			closeEntityManager();
 		}
-		Collections.sort(projects, SORT_PROJECTS);
-		closeEntityManager();
 		return projects;
 	}
 
 	public Map<String, String> getProjectSettings(long project_id, User user) {
-		openEntityManager();
-
-		Project project = getProjectIfUserIsAllowed(project_id, user);
 		Map<String, String> map = Maps.newHashMap();
-		Hibernate.initialize(project);
-		List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
-		Hibernate.initialize(projectMetadataItems);
-		for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
-			Hibernate.initialize(projectMetadataItem);
-			map.put(projectMetadataItem.getField(), projectMetadataItem.getData());
-		}
-		map.put(PROJECT_TITLE, project.getTitle());
-		map.put(PROJECT_NAME, project.getName());
-		map.put(PROJECT_LEADER, String.valueOf(project.getProjectLeaderId()));
+		openEntityManager();
+		try {
 
-		closeEntityManager();
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Hibernate.initialize(project);
+			List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
+			Hibernate.initialize(projectMetadataItems);
+			for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
+				Hibernate.initialize(projectMetadataItem);
+				map.put(projectMetadataItem.getField(), projectMetadataItem.getData());
+			}
+			map.put(PROJECT_TITLE, project.getTitle());
+			map.put(PROJECT_NAME, project.getName());
+			map.put(PROJECT_LEADER, String.valueOf(project.getProjectLeaderId()));
+
+		} finally {
+			closeEntityManager();
+		}
 		return map;
 	}
 
@@ -382,79 +412,103 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public Iterable<String> getProjectEntryMetadataFields(long project_id, User user) {
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
-		closeEntityManager();
+		Iterable<String> projectEntryMetadataFieldnames;
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+		} finally {
+			closeEntityManager();
+		}
 		return projectEntryMetadataFieldnames;
 	}
 
 	public void setProjectEntryMetadataFields(long project_id, List<String> fields, User user) {
 		beginTransaction();
+		try {
 
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		project.setProjectEntryMetadataFieldnames(fields);
-		persist(project);
-		persist(project.addLogEntry("projectentrymetadatafields changed", user));
-		setModifiedBy(project, user);
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			project.setProjectEntryMetadataFieldnames(fields);
+			persist(project);
+			persist(project.addLogEntry("projectentrymetadatafields changed", user));
+			setModifiedBy(project, user);
 
-		commitTransaction();
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public Object getProjectAnnotationTypes(long project_id, User user) {
+		Set<AnnotationType> annotationTypes;
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		Set<AnnotationType> annotationTypes = project.getAnnotationTypes();
-		closeEntityManager();
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			annotationTypes = project.getAnnotationTypes();
+		} finally {
+			closeEntityManager();
+		}
 		return annotationTypes;
 	}
 
 	public List<Long> getProjectAnnotationTypeIds(long project_id, User user) {
 		List<Long> list = Lists.newArrayList();
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		for (AnnotationType annotationType : project.getAnnotationTypes()) {
-			list.add(annotationType.getId());
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			for (AnnotationType annotationType : project.getAnnotationTypes()) {
+				list.add(annotationType.getId());
+			}
+		} finally {
+			closeEntityManager();
 		}
-		closeEntityManager();
 		return list;
 	}
 
 	public void setProjectAnnotationTypes(long project_id, List<Long> annotationTypeIds, User user) {
 		beginTransaction();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
 
-		Set<AnnotationType> annotationTypes = Sets.newHashSet();
-		for (Long id : annotationTypeIds) {
-			AnnotationType at = getEntityManager().find(AnnotationType.class, id);
-			annotationTypes.add(at);
+			Set<AnnotationType> annotationTypes = Sets.newHashSet();
+			for (Long id : annotationTypeIds) {
+				AnnotationType at = getEntityManager().find(AnnotationType.class, id);
+				annotationTypes.add(at);
+			}
+			project.setAnnotationTypes(annotationTypes);
+			persist(project.addLogEntry("projectannotationtypes changed", user));
+
+			setModifiedBy(project, user);
+
+		} finally {
+			commitTransaction();
 		}
-		project.setAnnotationTypes(annotationTypes);
-		persist(project.addLogEntry("projectannotationtypes changed", user));
-
-		setModifiedBy(project, user);
-
-		commitTransaction();
 	}
 
 	public void setProjectAnnotationTypes(long project_id, Set<AnnotationType> annotationTypes, User user) {
 		beginTransaction();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
 
-		project.setAnnotationTypes(annotationTypes);
-		persist(project.addLogEntry("projectannotationtypes changed", user));
+			project.setAnnotationTypes(annotationTypes);
+			persist(project.addLogEntry("projectannotationtypes changed", user));
 
-		setModifiedBy(project, user);
+			setModifiedBy(project, user);
 
-		commitTransaction();
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public Map<String, Object> getProjectStatistics(long project_id, User user) {
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
+		Map<String, Object> statistics;
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
 
-		Map<String, Object> statistics = ImmutableMap.<String, Object> of("entries", getProjectEntriesStatistics(project_id, getEntityManager(), project));
+			statistics = ImmutableMap.<String, Object> of("entries", getProjectEntriesStatistics(project_id, getEntityManager(), project));
 
-		closeEntityManager();
+		} finally {
+			closeEntityManager();
+		}
 		return statistics;
 	}
 
@@ -567,91 +621,107 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public List<FacetInfo> getFacetInfo(long project_id, User user) {
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		List<FacetInfo> list = ImmutableList.copyOf(project.getFacetInfo());
-		closeEntityManager();
+		List<FacetInfo> list;
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			list = ImmutableList.copyOf(project.getFacetInfo());
+		} finally {
+			closeEntityManager();
+		}
 		return list;
 	}
 
 	public void setTextlayers(long project_id, List<String> textLayers, User user) {
 		beginTransaction();
-
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		List<String> previous = Lists.newArrayList(project.getTextLayers());
-		List<String> deletedTextLayers = previous;
-		deletedTextLayers.removeAll(textLayers);
-		project.setTextLayers(textLayers);
-
-		persist(project);
-		persist(project.addLogEntry("project textlayers changed", user));
-		setModifiedBy(project, user);
-
 		Set<Long> modifiedEntryIds = Sets.newHashSet();
-		if (!deletedTextLayers.isEmpty()) {
-			persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(deletedTextLayers), user));
-			for (String textlayer : deletedTextLayers) {
-				List resultList = getEntityManager()//
-						.createQuery("select e.id, t.id from ProjectEntry e join e.transcriptions as t with t.text_layer=:textlayer where e.project=:project")//
-						.setParameter("project", project)//
-						.setParameter("textlayer", textlayer)//
-						.getResultList();
-				for (Object object : resultList) {
-					Object[] ids = (Object[]) object;
-					Transcription transcription = getEntityManager().find(Transcription.class, ids[1]);
-					remove(transcription);
-					modifiedEntryIds.add((Long) ids[0]);
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			List<String> previous = Lists.newArrayList(project.getTextLayers());
+			List<String> deletedTextLayers = previous;
+			deletedTextLayers.removeAll(textLayers);
+			project.setTextLayers(textLayers);
+
+			persist(project);
+			persist(project.addLogEntry("project textlayers changed", user));
+			setModifiedBy(project, user);
+
+			if (!deletedTextLayers.isEmpty()) {
+				persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(deletedTextLayers), user));
+				for (String textlayer : deletedTextLayers) {
+					List resultList = getEntityManager()//
+							.createQuery("select e.id, t.id from ProjectEntry e join e.transcriptions as t with t.text_layer=:textlayer where e.project=:project")//
+							.setParameter("project", project)//
+							.setParameter("textlayer", textlayer)//
+							.getResultList();
+					for (Object object : resultList) {
+						Object[] ids = (Object[]) object;
+						Transcription transcription = getEntityManager().find(Transcription.class, ids[1]);
+						remove(transcription);
+						modifiedEntryIds.add((Long) ids[0]);
+					}
 				}
 			}
+		} finally {
+			commitTransaction();
 		}
-		commitTransaction();
 
 		beginTransaction();
-		for (Long id : modifiedEntryIds) {
-			ProjectEntry entry = getEntityManager().find(ProjectEntry.class, id);
-			setModifiedBy(entry, user);
+		try {
+			for (Long id : modifiedEntryIds) {
+				ProjectEntry entry = getEntityManager().find(ProjectEntry.class, id);
+				setModifiedBy(entry, user);
+			}
+		} finally {
+			commitTransaction();
 		}
-		commitTransaction();
 
 	}
 
 	public void setProjectSettings(long project_id, Map<String, String> settingsMap, User user) {
 		beginTransaction();
+		try {
 
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		if (!user.getPermissionFor(project).can(Action.EDIT_PROJECT_SETTINGS)) {
-			throw new UnauthorizedException();
-		}
-
-		List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
-		for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
-			getEntityManager().remove(projectMetadataItem);
-		}
-
-		for (Entry<String, String> entry : settingsMap.entrySet()) {
-			String key = entry.getKey();
-			String value = entry.getValue();
-			ProjectMetadataItem pmi = project.addMetadata(key, value, user);
-			if (PROJECT_TITLE.equals(key)) {
-				project.setTitle(value);
-			} else if (PROJECT_NAME.equals(key)) {
-				project.setName(value);
-			} else if (PROJECT_LEADER.equals(key)) {
-				project.setProjectLeaderId(Long.valueOf(value));
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			if (!user.getPermissionFor(project).can(Action.EDIT_PROJECT_SETTINGS)) {
+				throw new UnauthorizedException();
 			}
-			persist(pmi);
-		}
-		persist(project);
-		persist(project.addLogEntry("projectsettings changed", user));
-		setModifiedBy(project, user);
 
-		commitTransaction();
+			List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
+			for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
+				getEntityManager().remove(projectMetadataItem);
+			}
+
+			for (Entry<String, String> entry : settingsMap.entrySet()) {
+				String key = entry.getKey();
+				String value = entry.getValue();
+				ProjectMetadataItem pmi = project.addMetadata(key, value, user);
+				if (PROJECT_TITLE.equals(key)) {
+					project.setTitle(value);
+				} else if (PROJECT_NAME.equals(key)) {
+					project.setName(value);
+				} else if (PROJECT_LEADER.equals(key)) {
+					project.setProjectLeaderId(Long.valueOf(value));
+				}
+				persist(pmi);
+			}
+			persist(project);
+			persist(project.addLogEntry("projectsettings changed", user));
+			setModifiedBy(project, user);
+
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public Set<User> getProjectUsersFull(long project_id, User user) {
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		Set<User> projectUsers = project.getUsers();
-		closeEntityManager();
+		Set<User> projectUsers;
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			projectUsers = project.getUsers();
+		} finally {
+			closeEntityManager();
+		}
 		return projectUsers;
 	}
 
@@ -666,31 +736,38 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public User addProjectUser(long project_id, long user_id, User user) {
 		beginTransaction();
+		User projectUser;
+		try {
 
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		User projectUser = getProjectUser(user_id);
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			projectUser = getProjectUser(user_id);
 
-		project.getUsers().add(projectUser);
-		persist(project);
-		persist(project.addLogEntry("user " + projectUser.getUsername() + " added to project", user));
-		setModifiedBy(project, user);
+			project.getUsers().add(projectUser);
+			persist(project);
+			persist(project.addLogEntry("user " + projectUser.getUsername() + " added to project", user));
+			setModifiedBy(project, user);
 
-		commitTransaction();
+		} finally {
+			commitTransaction();
+		}
 		return projectUser;
 	}
 
 	public void deleteProjectUser(long project_id, long user_id, User user) {
 		beginTransaction();
+		try {
 
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		User projectUser = getProjectUser(user_id);
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			User projectUser = getProjectUser(user_id);
 
-		project.getUsers().remove(projectUser);
-		persist(project);
-		persist(project.addLogEntry("user " + projectUser.getUsername() + " removed from project", user));
-		setModifiedBy(project, user);
+			project.getUsers().remove(projectUser);
+			persist(project);
+			persist(project.addLogEntry("user " + projectUser.getUsername() + " removed from project", user));
+			setModifiedBy(project, user);
 
-		commitTransaction();
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	private User getProjectUser(long user_id) {
@@ -703,36 +780,53 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public List<LogEntry> getLogEntries(long project_id, User user) {
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		List<LogEntry> logEntries = Ordering.natural().sortedCopy(project.getLogEntries());
-		closeEntityManager();
+		List<LogEntry> logEntries;
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			logEntries = Ordering.natural().sortedCopy(project.getLogEntries());
+		} finally {
+			closeEntityManager();
+		}
 		return logEntries;
 	}
 
 	public String exportTei(long project_id, User user) {
+		String tei;
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		AnnotationType versregels = getEntityManager().createQuery("from AnnotationType where name=:name", AnnotationType.class).setParameter("name", "versregel").getSingleResult();
-		String tei = exportTei(project, null, versregels);
-		closeEntityManager();
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			AnnotationType versregels = getEntityManager().createQuery("from AnnotationType where name=:name", AnnotationType.class).setParameter("name", "versregel").getSingleResult();
+			tei = exportTei(project, null, versregels);
+		} finally {
+			closeEntityManager();
+		}
 		return tei;
 	}
 
 	public void exportPdf(long project_id, User user, String filename) {
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		PdfMaker pdfMaker = new PdfMaker(project, getEntityManager());
-		pdfMaker.saveToFile(filename);
-		closeEntityManager();
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			PdfMaker pdfMaker = new PdfMaker(project, getEntityManager());
+			pdfMaker.saveToFile(filename);
+		} finally {
+			closeEntityManager();
+		}
 	}
 
 	public Publication.Status createPublicationStatus(long project_id, User user) {
 		Publisher publisher = Publisher.instance();
+		boolean canPublish;
+		Project project;
+		Map<String, String> projectMetadata;
 		openEntityManager();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
-		boolean canPublish = user.getPermissionFor(project).can(Action.PUBLISH);
-		Map<String, String> projectMetadata = project.getMetadataMap();
-		closeEntityManager();
+		try {
+			project = getProjectIfUserIsAllowed(project_id, user);
+			canPublish = user.getPermissionFor(project).can(Action.PUBLISH);
+			projectMetadata = project.getMetadataMap();
+		} finally {
+			closeEntityManager();
+		}
 
 		if (!canPublish) {
 			throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
@@ -829,51 +923,61 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				.setGroupTextsByMetadata(groupTextsByMetadata)//
 				.addAnnotationTypeMapping(versregels, mapToL);
 
+		String xml;
 		openEntityManager();
-		String xml = new TeiMaker(project, config, getEntityManager()).toXML();
-		closeEntityManager();
+		try {
+			xml = new TeiMaker(project, config, getEntityManager()).toXML();
+		} finally {
+			closeEntityManager();
+		}
 		return xml;
 	}
 
 	public void updateProjectUserIds(long project_id, List<Long> userIds, User user) {
 		beginTransaction();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
 
-		Set<User> users = Sets.newHashSet();
-		for (Long userId : userIds) {
-			User puser = getProjectUser(userId);
-			users.add(puser);
+			Set<User> users = Sets.newHashSet();
+			for (Long userId : userIds) {
+				User puser = getProjectUser(userId);
+				users.add(puser);
+			}
+			project.setUsers(users);
+			persist(project.addLogEntry("projectusers changed", user));
+
+			setModifiedBy(project, user);
+
+		} finally {
+			commitTransaction();
 		}
-		project.setUsers(users);
-		persist(project.addLogEntry("projectusers changed", user));
-
-		setModifiedBy(project, user);
-
-		commitTransaction();
 	}
 
 	public void setMetadata(long project_id, String key, String value, User user) {
 		beginTransaction();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
 
-		ProjectMetadataItem item = null;
-		List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
-		for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
-			if (projectMetadataItem.getField().equals(key)) {
-				item = projectMetadataItem;
-				break;
+			ProjectMetadataItem item = null;
+			List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
+			for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
+				if (projectMetadataItem.getField().equals(key)) {
+					item = projectMetadataItem;
+					break;
+				}
 			}
-		}
-		if (item == null) {
-			ProjectMetadataItem pmi = project.addMetadata(key, value, user);
-			persist(pmi);
+			if (item == null) {
+				ProjectMetadataItem pmi = project.addMetadata(key, value, user);
+				persist(pmi);
 
-		} else {
-			item.setData(value);
-			persist(item);
-		}
+			} else {
+				item.setData(value);
+				persist(item);
+			}
 
-		commitTransaction();
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public void setProjectSortLevels(long project_id, List<String> levels, User user) {
@@ -908,8 +1012,11 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public ReindexStatus createReindexStatus(long project_id) {
 		openEntityManager();
-		Project project = read(project_id);
-		closeEntityManager();
+		try {
+			Project project = read(project_id);
+		} finally {
+			closeEntityManager();
+		}
 
 		ReindexStatus status = new ReindexStatus();
 		return status;

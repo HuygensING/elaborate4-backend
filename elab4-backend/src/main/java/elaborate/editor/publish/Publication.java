@@ -22,7 +22,6 @@ package elaborate.editor.publish;
  * #L%
  */
 
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;

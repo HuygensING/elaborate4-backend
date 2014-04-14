@@ -73,8 +73,12 @@ public class AnnotationTypeMetadataItemService extends AbstractStoredEntityServi
 
 	public AnnotationTypeMetadataItem read(long id, User reader) {
 		openEntityManager();
-		AnnotationTypeMetadataItem annotationType = super.read(id);
-		closeEntityManager();
+		AnnotationTypeMetadataItem annotationType;
+		try {
+			annotationType = super.read(id);
+		} finally {
+			closeEntityManager();
+		}
 		return annotationType;
 	}
 
@@ -104,12 +108,15 @@ public class AnnotationTypeMetadataItemService extends AbstractStoredEntityServi
 	/**/
 	public ImmutableList<AnnotationTypeMetadataItem> getAll(long annotationTypeId) {
 		openEntityManager();
-		AnnotationTypeService annotationTypeService = AnnotationTypeService.instance();
-		annotationTypeService.setEntityManager(getEntityManager());
-		AnnotationType annotationType = annotationTypeService.read(annotationTypeId);
-		ImmutableList<AnnotationTypeMetadataItem> list = ImmutableList.copyOf(annotationType.getMetadataItems());
-		closeEntityManager();
+		ImmutableList<AnnotationTypeMetadataItem> list;
+		try {
+			AnnotationTypeService annotationTypeService = AnnotationTypeService.instance();
+			annotationTypeService.setEntityManager(getEntityManager());
+			AnnotationType annotationType = annotationTypeService.read(annotationTypeId);
+			list = ImmutableList.copyOf(annotationType.getMetadataItems());
+		} finally {
+			closeEntityManager();
+		}
 		return list;
 	}
-
 }

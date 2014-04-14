@@ -22,7 +22,6 @@ package elaborate.editor.export.pdf;
  * #L%
  */
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -42,58 +41,58 @@ import elaborate.editor.model.orm.service.ProjectService;
 
 public class PdfMaker {
 
-  private PDDocument doc;
-  private final Project project;
-  private final EntityManager entityManager;
+	private PDDocument doc;
+	private final Project project;
+	private final EntityManager entityManager;
 
-  public PdfMaker(Project _project, EntityManager _entityManager) {
-    this.project = _project;
-    this.entityManager = _entityManager;
-    if (_project == null) {
-      doc = null;
+	public PdfMaker(Project _project, EntityManager _entityManager) {
+		this.project = _project;
+		this.entityManager = _entityManager;
+		if (_project == null) {
+			doc = null;
 
-    } else {
-      try {
-        doc = new PDDocument();
+		} else {
+			try {
+				doc = new PDDocument();
 
-        ProjectService projectService = ProjectService.instance();
-        projectService.setEntityManager(entityManager);
-        List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(project.getId());
+				ProjectService projectService = ProjectService.instance();
+				projectService.setEntityManager(entityManager);
+				List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(project.getId());
 
-        for (ProjectEntry projectEntry : projectEntriesInOrder) {
-          PDPage page = new PDPage();
-          doc.addPage(page);
+				for (ProjectEntry projectEntry : projectEntriesInOrder) {
+					PDPage page = new PDPage();
+					doc.addPage(page);
 
-          PDFont font = PDType1Font.HELVETICA_BOLD;
+					PDFont font = PDType1Font.HELVETICA_BOLD;
 
-          PDPageContentStream content = new PDPageContentStream(doc, page);
-          content.beginText();
-          content.setFont(font, 12);
-          content.drawString(projectEntry.getName());
-          for (Transcription transcription : projectEntry.getTranscriptions()) {
-            content.drawString(transcription.getTextLayer());
-            content.drawString(transcription.getBody());
-          }
+					PDPageContentStream content = new PDPageContentStream(doc, page);
+					content.beginText();
+					content.setFont(font, 12);
+					content.drawString(projectEntry.getName());
+					for (Transcription transcription : projectEntry.getTranscriptions()) {
+						content.drawString(transcription.getTextLayer());
+						content.drawString(transcription.getBody());
+					}
 
-          content.endText();
-          content.close();
-        }
+					content.endText();
+					content.close();
+				}
 
-      } catch (Exception e) {
-        System.out.println("Exception");
-      }
-    }
-  }
+			} catch (Exception e) {
+				System.out.println("Exception");
+			}
+		}
+	}
 
-  public void saveToFile(String filename) {
-    if (doc != null) {
-      try {
-        doc.save(filename);
-      } catch (COSVisitorException e) {
-        e.printStackTrace();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-  }
+	public void saveToFile(String filename) {
+		if (doc != null) {
+			try {
+				doc.save(filename);
+			} catch (COSVisitorException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

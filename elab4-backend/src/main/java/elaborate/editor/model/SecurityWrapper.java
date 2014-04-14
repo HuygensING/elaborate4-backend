@@ -22,7 +22,6 @@ package elaborate.editor.model;
  * #L%
  */
 
-
 import nl.knaw.huygens.security.client.HuygensAuthorizationHandler;
 import nl.knaw.huygens.security.client.UnauthorizedException;
 import nl.knaw.huygens.security.client.model.SecurityInformation;

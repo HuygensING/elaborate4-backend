@@ -22,7 +22,6 @@ package elaborate.editor.model.orm;
  * #L%
  */
 
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -37,23 +36,23 @@ import elaborate.editor.model.AbstractMetadataItem;
 @Table(name = "project_entry_metadata_items")
 @XmlRootElement
 public class ProjectEntryMetadataItem extends AbstractMetadataItem<ProjectEntryMetadataItem> {
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "project_entry_id", columnDefinition = "int4")
-  private ProjectEntry projectEntry;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "project_entry_id", columnDefinition = "int4")
+	private ProjectEntry projectEntry;
 
-  public ProjectEntry getProjectEntry() {
-    return projectEntry;
-  }
+	public ProjectEntry getProjectEntry() {
+		return projectEntry;
+	}
 
-  public ProjectEntryMetadataItem setProjectEntry(ProjectEntry _projectEntry) {
-    this.projectEntry = _projectEntry;
-    return this;
-  }
+	public ProjectEntryMetadataItem setProjectEntry(ProjectEntry _projectEntry) {
+		this.projectEntry = _projectEntry;
+		return this;
+	}
 
-  public String getFacetName() {
-    return SolrUtils.facetName(getField());
-  }
+	public String getFacetName() {
+		return SolrUtils.facetName(getField());
+	}
 
 }

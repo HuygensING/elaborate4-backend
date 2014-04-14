@@ -22,7 +22,6 @@ package elaborate.editor.model;
  * #L%
  */
 
-
 import java.util.Date;
 
 public class Session {

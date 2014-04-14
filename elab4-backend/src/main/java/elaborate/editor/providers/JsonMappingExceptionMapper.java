@@ -30,8 +30,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Provider
 public class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingException> {
-  @Override
-  public Response toResponse(JsonMappingException exception) {
-    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage()).build();
-  }
+	@Override
+	public Response toResponse(JsonMappingException exception) {
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage()).build();
+	}
 }

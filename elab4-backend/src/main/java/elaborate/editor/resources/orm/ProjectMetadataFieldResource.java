@@ -22,7 +22,6 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;

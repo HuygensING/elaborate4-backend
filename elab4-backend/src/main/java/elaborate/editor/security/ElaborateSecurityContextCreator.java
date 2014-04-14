@@ -22,7 +22,6 @@ package elaborate.editor.security;
  * #L%
  */
 
-
 import javax.ws.rs.core.SecurityContext;
 
 import nl.knaw.huygens.security.client.SecurityContextCreator;

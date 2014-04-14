@@ -72,8 +72,12 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 
 	public AnnotationType read(long id, User reader) {
 		openEntityManager();
-		AnnotationType annotationType = super.read(id);
-		closeEntityManager();
+		AnnotationType annotationType;
+		try {
+			annotationType = super.read(id);
+		} finally {
+			closeEntityManager();
+		}
 		return annotationType;
 	}
 
@@ -105,24 +109,32 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 	@Override
 	public ImmutableList<AnnotationType> getAll() {
 		openEntityManager();
-		ImmutableList<AnnotationType> all = super.getAll();
-		closeEntityManager();
+		ImmutableList<AnnotationType> all;
+		try {
+			all = super.getAll();
+		} finally {
+			closeEntityManager();
+		}
 		return all;
 	}
 
 	public AnnotationType getDefaultAnnotationType() {
 		//    ModelFactory.createAnnotationType("Uncategorized", "Any annotation", creator);
 		beginTransaction();
-		AnnotationType defaultAnnotationType = (AnnotationType) getEntityManager()//
-				.createQuery("from AnnotationType as at where at.name=?1")//
-				.setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME)//
-				.getSingleResult();
-		if (defaultAnnotationType == null) {
-			defaultAnnotationType = new AnnotationType().setName(DEFAULT_ANNOTATIONTYPE_NAME).setDescription("Any annotation");
-			User root = UserService.instance().getUser(1);
-			create(defaultAnnotationType, root);
+		AnnotationType defaultAnnotationType;
+		try {
+			defaultAnnotationType = (AnnotationType) getEntityManager()//
+					.createQuery("from AnnotationType as at where at.name=?1")//
+					.setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME)//
+					.getSingleResult();
+			if (defaultAnnotationType == null) {
+				defaultAnnotationType = new AnnotationType().setName(DEFAULT_ANNOTATIONTYPE_NAME).setDescription("Any annotation");
+				User root = UserService.instance().getUser(1);
+				create(defaultAnnotationType, root);
+			}
+		} finally {
+			commitTransaction();
 		}
-		commitTransaction();
 		return defaultAnnotationType;
 	}
 }

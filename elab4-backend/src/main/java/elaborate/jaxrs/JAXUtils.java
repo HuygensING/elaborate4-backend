@@ -22,7 +22,6 @@ package elaborate.jaxrs;
  * #L%
  */
 
-
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -43,88 +42,88 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
 
 public class JAXUtils {
-  public static class API {
-    public String path;
-    public ImmutableList<String> requestTypes;
-    public ImmutableList<String> requestContentTypes;
-    public ImmutableList<String> responseContentTypes;
-    public String description;
+	public static class API {
+		public String path;
+		public ImmutableList<String> requestTypes;
+		public ImmutableList<String> requestContentTypes;
+		public ImmutableList<String> responseContentTypes;
+		public String description;
 
-    public API(String path, ImmutableList<String> requestTypes, ImmutableList<String> requestContentTypes, ImmutableList<String> responseContentTypes, String desc) {
-      this.path = path;
-      this.requestTypes = requestTypes;
-      this.responseContentTypes = responseContentTypes;
-      this.requestContentTypes = requestContentTypes;
-      this.description = desc;
-    }
+		public API(String path, ImmutableList<String> requestTypes, ImmutableList<String> requestContentTypes, ImmutableList<String> responseContentTypes, String desc) {
+			this.path = path;
+			this.requestTypes = requestTypes;
+			this.responseContentTypes = responseContentTypes;
+			this.requestContentTypes = requestContentTypes;
+			this.description = desc;
+		}
 
-    public API modifyPath(String regex, String replacement) {
-      String newPath = path.replaceFirst(regex, replacement);
-      return new API(newPath, requestTypes, requestContentTypes, responseContentTypes, description);
-    }
-  }
+		public API modifyPath(String regex, String replacement) {
+			String newPath = path.replaceFirst(regex, replacement);
+			return new API(newPath, requestTypes, requestContentTypes, responseContentTypes, description);
+		}
+	}
 
-  /**
-   * Returns an API description for each HTTP method in the specified
-   * class if it has a <code>Path</code> annotation, or an empty list
-   * if the <code>Path</code> annotation is missing.
-   */
-  public static List<API> generateAPIs(Class<?> cls) {
-    List<API> list = Lists.newArrayList();
+	/**
+	 * Returns an API description for each HTTP method in the specified
+	 * class if it has a <code>Path</code> annotation, or an empty list
+	 * if the <code>Path</code> annotation is missing.
+	 */
+	public static List<API> generateAPIs(Class<?> cls) {
+		List<API> list = Lists.newArrayList();
 
-    String basePath = pathValueOf(cls);
-    if (!basePath.isEmpty()) {
-      for (Method method : cls.getMethods()) {
-        Builder<String> builder = ImmutableList.<String> builder();
-        if (method.isAnnotationPresent(GET.class)) {
-          builder.add(HttpMethod.GET);
-        }
-        if (method.isAnnotationPresent(POST.class)) {
-          builder.add(HttpMethod.POST);
-        }
-        if (method.isAnnotationPresent(PUT.class)) {
-          builder.add(HttpMethod.PUT);
-        }
-        if (method.isAnnotationPresent(DELETE.class)) {
-          builder.add(HttpMethod.DELETE);
-        }
+		String basePath = pathValueOf(cls);
+		if (!basePath.isEmpty()) {
+			for (Method method : cls.getMethods()) {
+				Builder<String> builder = ImmutableList.<String> builder();
+				if (method.isAnnotationPresent(GET.class)) {
+					builder.add(HttpMethod.GET);
+				}
+				if (method.isAnnotationPresent(POST.class)) {
+					builder.add(HttpMethod.POST);
+				}
+				if (method.isAnnotationPresent(PUT.class)) {
+					builder.add(HttpMethod.PUT);
+				}
+				if (method.isAnnotationPresent(DELETE.class)) {
+					builder.add(HttpMethod.DELETE);
+				}
 
-        ImmutableList<String> reqs = builder.build();
-        if (!reqs.isEmpty()) {
-          String subPath = pathValueOf(method);
-          String fullPath = subPath.isEmpty() ? basePath : basePath + "/" + subPath;
-          fullPath = fullPath.replaceAll("\\{([^:]*):[^}]*\\}", "{$1}");
-          list.add(new API(fullPath, reqs, requestContentTypesOf(method), responseContentTypesOf(method), descriptionOf(method)));
-        }
-      }
-    }
+				ImmutableList<String> reqs = builder.build();
+				if (!reqs.isEmpty()) {
+					String subPath = pathValueOf(method);
+					String fullPath = subPath.isEmpty() ? basePath : basePath + "/" + subPath;
+					fullPath = fullPath.replaceAll("\\{([^:]*):[^}]*\\}", "{$1}");
+					list.add(new API(fullPath, reqs, requestContentTypesOf(method), responseContentTypesOf(method), descriptionOf(method)));
+				}
+			}
+		}
 
-    return list;
-  }
+		return list;
+	}
 
-  /**
-   * Returns the path of the annotated element,
-   * or an empty string if no annotation is present.
-   */
-  static String pathValueOf(AnnotatedElement element) {
-    Path annotation = element.getAnnotation(Path.class);
-    String value = (annotation != null) ? annotation.value() : "";
-    return StringUtils.removeStart(value, "/");
-  }
+	/**
+	 * Returns the path of the annotated element,
+	 * or an empty string if no annotation is present.
+	 */
+	static String pathValueOf(AnnotatedElement element) {
+		Path annotation = element.getAnnotation(Path.class);
+		String value = (annotation != null) ? annotation.value() : "";
+		return StringUtils.removeStart(value, "/");
+	}
 
-  static ImmutableList<String> requestContentTypesOf(Method method) {
-    Consumes annotation = method.getAnnotation(Consumes.class);
-    return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String> of();
-  }
+	static ImmutableList<String> requestContentTypesOf(Method method) {
+		Consumes annotation = method.getAnnotation(Consumes.class);
+		return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String> of();
+	}
 
-  static ImmutableList<String> responseContentTypesOf(Method method) {
-    Produces annotation = method.getAnnotation(Produces.class);
-    return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String> of();
-  }
+	static ImmutableList<String> responseContentTypesOf(Method method) {
+		Produces annotation = method.getAnnotation(Produces.class);
+		return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String> of();
+	}
 
-  static String descriptionOf(Method method) {
-    APIDesc annotation = method.getAnnotation(APIDesc.class);
-    return (annotation != null) ? annotation.value() : "";
-  }
+	static String descriptionOf(Method method) {
+		APIDesc annotation = method.getAnnotation(APIDesc.class);
+		return (annotation != null) ? annotation.value() : "";
+	}
 
 }

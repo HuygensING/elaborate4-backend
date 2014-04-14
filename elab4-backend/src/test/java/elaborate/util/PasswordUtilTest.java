@@ -34,14 +34,14 @@ import com.google.common.base.Charsets;
 
 public class PasswordUtilTest {
 
-  @Ignore
-  @Test
-  public void testPassword() throws UnsupportedEncodingException {
-    final String password = "aap-noot-mies";
-    final byte[] passwordDigest2 = PasswordUtil.encode(password);
-    String encodedPassword = new String(Base64.encodeBase64(passwordDigest2), Charsets.UTF_8);
-    assertThat(PasswordUtil.matches(password, encodedPassword)).isTrue();
-    assertThat(PasswordUtil.matches("somethingelse", encodedPassword)).isFalse();
-  }
+	@Ignore
+	@Test
+	public void testPassword() throws UnsupportedEncodingException {
+		final String password = "aap-noot-mies";
+		final byte[] passwordDigest2 = PasswordUtil.encode(password);
+		String encodedPassword = new String(Base64.encodeBase64(passwordDigest2), Charsets.UTF_8);
+		assertThat(PasswordUtil.matches(password, encodedPassword)).isTrue();
+		assertThat(PasswordUtil.matches("somethingelse", encodedPassword)).isFalse();
+	}
 
 }

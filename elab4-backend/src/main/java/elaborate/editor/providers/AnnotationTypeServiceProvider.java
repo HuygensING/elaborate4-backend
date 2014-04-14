@@ -32,7 +32,7 @@ import elaborate.editor.model.orm.service.AnnotationTypeService;
 @Provider
 public class AnnotationTypeServiceProvider extends SingletonTypeInjectableProvider<Context, AnnotationTypeService> {
 
-  public AnnotationTypeServiceProvider() {
-    super(AnnotationTypeService.class, AnnotationTypeService.instance());
-  }
+	public AnnotationTypeServiceProvider() {
+		super(AnnotationTypeService.class, AnnotationTypeService.instance());
+	}
 }

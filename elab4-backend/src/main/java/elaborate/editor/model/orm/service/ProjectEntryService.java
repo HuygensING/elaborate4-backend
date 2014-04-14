@@ -67,34 +67,48 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	/* CRUD methods */
 	public ProjectEntry read(long entry_id, User user) {
 		openEntityManager();
-		ProjectEntry projectEntry = super.read(entry_id);
-		closeEntityManager();
+		ProjectEntry projectEntry;
+		try {
+			projectEntry = super.read(entry_id);
+		} finally {
+			closeEntityManager();
+		}
 		return projectEntry;
 	}
 
 	public void update(long entry_id, ProjectEntry updateEntry, User user) {
 		beginTransaction();
-		ProjectEntry projectEntry = super.read(entry_id);
-		projectEntry.setName(updateEntry.getName());
-		projectEntry.setShortName(updateEntry.getShortName());
-		projectEntry.setPublishable(updateEntry.isPublishable());
-		super.update(projectEntry);
-		persist(projectEntry.getProject().addLogEntry(MessageFormat.format("updated entry {0}", entry_id), user));
-		commitTransaction();
+		ProjectEntry projectEntry;
+		try {
+			projectEntry = super.read(entry_id);
+			projectEntry.setName(updateEntry.getName());
+			projectEntry.setShortName(updateEntry.getShortName());
+			projectEntry.setPublishable(updateEntry.isPublishable());
+			super.update(projectEntry);
+			persist(projectEntry.getProject().addLogEntry(MessageFormat.format("updated entry {0}", entry_id), user));
+		} finally {
+			commitTransaction();
+		}
 
 		beginTransaction();
-		projectEntry = super.read(entry_id);
-		setModifiedBy(projectEntry, user);
-		commitTransaction();
+		try {
+			projectEntry = super.read(entry_id);
+			setModifiedBy(projectEntry, user);
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public void delete(long entry_id, User user) {
 		beginTransaction();
-		ProjectEntry deletedProjectEntry = super.delete(entry_id);
-		getSolrIndexer().deindex(entry_id);
-		setModifiedBy(deletedProjectEntry.getProject(), user);
-		persist(deletedProjectEntry.getProject().addLogEntry(MessageFormat.format("deleted entry {0}", entry_id), user));
-		commitTransaction();
+		try {
+			ProjectEntry deletedProjectEntry = super.delete(entry_id);
+			getSolrIndexer().deindex(entry_id);
+			setModifiedBy(deletedProjectEntry.getProject(), user);
+			persist(deletedProjectEntry.getProject().addLogEntry(MessageFormat.format("deleted entry {0}", entry_id), user));
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	/* other public methods */
@@ -103,227 +117,275 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	public Collection<Transcription> getTranscriptions(long id, User user) {
 		addMissingTextLayers(id, user);
 		openEntityManager();
-		ProjectEntry projectEntry = find(getEntityClass(), id);
-		ImmutableList<Transcription> transcriptions = ImmutableList.copyOf(projectEntry.getTranscriptions());
-		closeEntityManager();
+		ImmutableList<Transcription> transcriptions;
+		try {
+			ProjectEntry projectEntry = find(getEntityClass(), id);
+			transcriptions = ImmutableList.copyOf(projectEntry.getTranscriptions());
+		} finally {
+			closeEntityManager();
+		}
 		return transcriptions;
 	}
 
 	private void addMissingTextLayers(long id, User user) {
 		beginTransaction();
-		ProjectEntry projectEntry = find(getEntityClass(), id);
-		Project project = projectEntry.getProject();
-		Set<String> textLayers = Sets.newHashSet(project.getTextLayers());
-		for (Transcription transcription : projectEntry.getTranscriptions()) {
-			textLayers.remove(transcription.getTextLayer());
-		}
-		if (!textLayers.isEmpty()) {
-			for (String textLayer : textLayers) {
-				Transcription transcription = projectEntry.addTranscription(user).setTextLayer(textLayer);
-				persist(transcription);
+		try {
+			ProjectEntry projectEntry = find(getEntityClass(), id);
+			Project project = projectEntry.getProject();
+			Set<String> textLayers = Sets.newHashSet(project.getTextLayers());
+			for (Transcription transcription : projectEntry.getTranscriptions()) {
+				textLayers.remove(transcription.getTextLayer());
 			}
+			if (!textLayers.isEmpty()) {
+				for (String textLayer : textLayers) {
+					Transcription transcription = projectEntry.addTranscription(user).setTextLayer(textLayer);
+					persist(transcription);
+				}
+			}
+		} finally {
+			commitTransaction();
 		}
-		commitTransaction();
 	}
 
 	public Transcription addTranscription(long id, TranscriptionWrapper transcriptionInput, User user) {
 		beginTransaction();
-		ProjectEntry projectEntry = find(getEntityClass(), id);
-		Transcription transcription = projectEntry.addTranscription(user)//
-				.setBody(transcriptionInput.getBodyForDb())//
-				.setTextLayer(transcriptionInput.getTextLayer());
-		persist(transcription);
-		commitTransaction();
+		Transcription transcription;
+		try {
+			ProjectEntry projectEntry = find(getEntityClass(), id);
+			transcription = projectEntry.addTranscription(user)//
+					.setBody(transcriptionInput.getBodyForDb())//
+					.setTextLayer(transcriptionInput.getTextLayer());
+			persist(transcription);
+		} finally {
+			commitTransaction();
+		}
 		return transcription;
 	}
 
 	/* facsimiles */
 	public Collection<Facsimile> getFacsimiles(long id, User user) {
 		openEntityManager();
-		ProjectEntry projectEntry = find(getEntityClass(), id);
-		ImmutableList<Facsimile> facsimiles = ImmutableList.copyOf(projectEntry.getFacsimiles());
-		closeEntityManager();
+		ImmutableList<Facsimile> facsimiles;
+		try {
+			ProjectEntry projectEntry = find(getEntityClass(), id);
+			facsimiles = ImmutableList.copyOf(projectEntry.getFacsimiles());
+		} finally {
+			closeEntityManager();
+		}
 		return facsimiles;
 	}
 
 	public Facsimile addFacsimile(long entry_id, Facsimile facsimileData, User user) {
 		beginTransaction();
-		ProjectEntry projectEntry = find(getEntityClass(), entry_id);
-		Project project = projectEntry.getProject();
+		Facsimile facsimile;
+		try {
+			ProjectEntry projectEntry = find(getEntityClass(), entry_id);
+			Project project = projectEntry.getProject();
 
-		Facsimile facsimile = projectEntry.addFacsimile(facsimileData.getName(), facsimileData.getTitle(), user)//
-				.setFilename(facsimileData.getFilename())//
-				.setZoomableUrl(facsimileData.getZoomableUrl());
-		persist(facsimile);
-		persist(project.addLogEntry(MessageFormat.format("added facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
-		commitTransaction();
+			facsimile = projectEntry.addFacsimile(facsimileData.getName(), facsimileData.getTitle(), user)//
+					.setFilename(facsimileData.getFilename())//
+					.setZoomableUrl(facsimileData.getZoomableUrl());
+			persist(facsimile);
+			persist(project.addLogEntry(MessageFormat.format("added facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
+		} finally {
+			commitTransaction();
+		}
 		return facsimile;
 	}
 
 	public Facsimile readFacsimile(long project_id, long facsimile_id, User user) {
 		openEntityManager();
-		projectService.setEntityManager(getEntityManager());
-		projectService.getProjectIfUserIsAllowed(project_id, user);
+		Facsimile facsimile;
+		try {
+			projectService.setEntityManager(getEntityManager());
+			projectService.getProjectIfUserIsAllowed(project_id, user);
 
-		Facsimile facsimile = find(Facsimile.class, facsimile_id);
-		closeEntityManager();
+			facsimile = find(Facsimile.class, facsimile_id);
+		} finally {
+			closeEntityManager();
+		}
 		return facsimile;
 	}
 
 	public Facsimile updateFacsimile(long project_id, long facsimile_id, Facsimile facsimileData, User user) {
 		beginTransaction();
-		projectService.setEntityManager(getEntityManager());
-		Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
+		Facsimile facsimile;
+		try {
+			projectService.setEntityManager(getEntityManager());
+			Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
 
-		Facsimile facsimile = find(Facsimile.class, facsimile_id);
-		if (facsimile == null) {
-			throw new NotFoundException("no facsimile with id " + facsimile_id + " found");
+			facsimile = find(Facsimile.class, facsimile_id);
+			if (facsimile == null) {
+				throw new NotFoundException("no facsimile with id " + facsimile_id + " found");
+			}
+			facsimile.setName(facsimileData.getName())//
+					.setFilename(facsimileData.getFilename())//
+					.setZoomableUrl(facsimileData.getZoomableUrl());
+			persist(facsimile);
+			ProjectEntry projectEntry = facsimile.getProjectEntry();
+			persist(project.addLogEntry(MessageFormat.format("updated facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
+		} finally {
+			commitTransaction();
 		}
-		facsimile.setName(facsimileData.getName())//
-				.setFilename(facsimileData.getFilename())//
-				.setZoomableUrl(facsimileData.getZoomableUrl());
-		persist(facsimile);
-		ProjectEntry projectEntry = facsimile.getProjectEntry();
-		persist(project.addLogEntry(MessageFormat.format("updated facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
-		commitTransaction();
 		return facsimile;
 	}
 
 	public Facsimile deleteFacsimile(long project_id, long facsimile_id, User user) {
 		beginTransaction();
-		projectService.setEntityManager(getEntityManager());
-		projectService.getProjectIfUserIsAllowed(project_id, user);
+		Facsimile facsimile;
+		try {
+			projectService.setEntityManager(getEntityManager());
+			projectService.getProjectIfUserIsAllowed(project_id, user);
 
-		Facsimile facsimile = find(Facsimile.class, facsimile_id);
-		ProjectEntry projectEntry = facsimile.getProjectEntry();
-		persist(projectEntry.getProject().addLogEntry(MessageFormat.format("deleted facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
-		remove(facsimile);
-		commitTransaction();
+			facsimile = find(Facsimile.class, facsimile_id);
+			ProjectEntry projectEntry = facsimile.getProjectEntry();
+			persist(projectEntry.getProject().addLogEntry(MessageFormat.format("deleted facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
+			remove(facsimile);
+		} finally {
+			commitTransaction();
+		}
 		return facsimile;
 	}
 
 	/* projectentrysettings */
 	public Map<String, String> getProjectEntrySettings(long entry_id, User user) {
 		openEntityManager();
-
-		ProjectEntry pe = read(entry_id);
 		Map<String, String> map = Maps.newHashMap();
-		Iterable<String> projectEntryMetadataFieldnames = pe.getProject().getProjectEntryMetadataFieldnames();
-		for (String fieldname : projectEntryMetadataFieldnames) {
-			map.put(fieldname, "");
-		}
-		for (ProjectEntryMetadataItem pemi : pe.getProjectEntryMetadataItems()) {
-			map.put(pemi.getField(), pemi.getData());
-		}
+		try {
+			ProjectEntry pe = read(entry_id);
+			Iterable<String> projectEntryMetadataFieldnames = pe.getProject().getProjectEntryMetadataFieldnames();
+			for (String fieldname : projectEntryMetadataFieldnames) {
+				map.put(fieldname, "");
+			}
+			for (ProjectEntryMetadataItem pemi : pe.getProjectEntryMetadataItems()) {
+				map.put(pemi.getField(), pemi.getData());
+			}
 
-		closeEntityManager();
+		} finally {
+			closeEntityManager();
+		}
 		return map;
 	}
 
 	public void updateProjectEntrySettings(long project_id, long entry_id, Map<String, Object> projectEntrySettings, User creator) {
 		beginTransaction();
-		projectService.setEntityManager(getEntityManager());
-		projectService.getProjectIfUserIsAllowed(project_id, creator);
+		ProjectEntry pe;
+		try {
+			projectService.setEntityManager(getEntityManager());
+			projectService.getProjectIfUserIsAllowed(project_id, creator);
 
-		ProjectEntry pe = read(entry_id);
-		for (ProjectEntryMetadataItem projectEntryMetadataItem : pe.getProjectEntryMetadataItems()) {
-			getEntityManager().remove(projectEntryMetadataItem);
-		}
+			pe = read(entry_id);
+			for (ProjectEntryMetadataItem projectEntryMetadataItem : pe.getProjectEntryMetadataItems()) {
+				getEntityManager().remove(projectEntryMetadataItem);
+			}
 
-		Object publishableSetting = projectEntrySettings.remove(ProjectEntry.PUBLISHABLE);
-		if (publishableSetting != null) {
-			pe.setPublishable((Boolean) publishableSetting);
-		}
+			Object publishableSetting = projectEntrySettings.remove(ProjectEntry.PUBLISHABLE);
+			if (publishableSetting != null) {
+				pe.setPublishable((Boolean) publishableSetting);
+			}
 
-		for (Entry<String, Object> settingsEntry : projectEntrySettings.entrySet()) {
-			String key = settingsEntry.getKey();
-			String value = (String) settingsEntry.getValue();
-			ProjectEntryMetadataItem pemi = pe.addMetadataItem(key, value, creator);
-			persist(pemi);
+			for (Entry<String, Object> settingsEntry : projectEntrySettings.entrySet()) {
+				String key = settingsEntry.getKey();
+				String value = (String) settingsEntry.getValue();
+				ProjectEntryMetadataItem pemi = pe.addMetadataItem(key, value, creator);
+				persist(pemi);
+			}
+		} finally {
+			commitTransaction();
 		}
-		commitTransaction();
 
 		// This needs to go in a seperate transaction, because only after the previous commitTransaction has
 		// the projectentrymetadataitems been properly updated, which is needed for the reindex called from
 		// updateParents
 		beginTransaction();
-		pe = read(entry_id);
-		String logLine = MessageFormat.format("updated metadata for entry ''{0}''", pe.getName());
-		updateParents(pe, creator, logLine);
-		commitTransaction();
+		try {
+			pe = read(entry_id);
+			String logLine = MessageFormat.format("updated metadata for entry ''{0}''", pe.getName());
+			updateParents(pe, creator, logLine);
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public void updateMultipleProjectEntrySettings(long project_id, MultipleProjectEntrySettings mpes, User user) {
 		beginTransaction();
-		projectService.setEntityManager(getEntityManager());
-		Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
-
-		Map<String, Object> settings = mpes.getSettings();
-		Set<Entry<String, Object>> settingsEntrySet = settings.entrySet();
 		Set<Long> modifiedEntryIds = Sets.newHashSet();
-		for (Long entry_id : mpes.getProjectEntryIds()) {
-			LOG.info("entryId={}", entry_id);
-			ProjectEntry pe = read(entry_id);
+		try {
+			projectService.setEntityManager(getEntityManager());
+			Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
 
-			if (mpes.changePublishable()) {
-				LOG.info("changepublishable to {}", mpes.getPublishableSetting());
-				pe.setPublishable(mpes.getPublishableSetting());
-			}
+			Map<String, Object> settings = mpes.getSettings();
+			Set<Entry<String, Object>> settingsEntrySet = settings.entrySet();
+			for (Long entry_id : mpes.getProjectEntryIds()) {
+				LOG.info("entryId={}", entry_id);
+				ProjectEntry pe = read(entry_id);
 
-			for (Entry<String, Object> entry : settingsEntrySet) {
-				String key = entry.getKey();
-				String value = (String) entry.getValue();
-
-				ProjectEntryMetadataItem pemItem = pe.getMetadataItem(key);
-				if (pemItem == null) {
-					LOG.info("add new setting: {}={}", key, value);
-					persist(pe.addMetadataItem(key, value, user));
-				} else {
-					LOG.info("modify existing setting: {}={}", key, value);
-					pemItem.setData(value);
-					persist(pemItem);
-					setModifiedBy(pemItem, user);
+				if (mpes.changePublishable()) {
+					LOG.info("changepublishable to {}", mpes.getPublishableSetting());
+					pe.setPublishable(mpes.getPublishableSetting());
 				}
-				modifiedEntryIds.add(entry_id);
-			}
-		}
-		setModifiedBy(project, user);
 
-		commitTransaction();
+				for (Entry<String, Object> entry : settingsEntrySet) {
+					String key = entry.getKey();
+					String value = (String) entry.getValue();
+
+					ProjectEntryMetadataItem pemItem = pe.getMetadataItem(key);
+					if (pemItem == null) {
+						LOG.info("add new setting: {}={}", key, value);
+						persist(pe.addMetadataItem(key, value, user));
+					} else {
+						LOG.info("modify existing setting: {}={}", key, value);
+						pemItem.setData(value);
+						persist(pemItem);
+						setModifiedBy(pemItem, user);
+					}
+					modifiedEntryIds.add(entry_id);
+				}
+			}
+			setModifiedBy(project, user);
+
+		} finally {
+			commitTransaction();
+		}
 
 		beginTransaction();
-		for (Long id : modifiedEntryIds) {
-			ProjectEntry pe = read(id);
-			setModifiedBy(pe, user);
+		try {
+			for (Long id : modifiedEntryIds) {
+				ProjectEntry pe = read(id);
+				setModifiedBy(pe, user);
+			}
+		} finally {
+			commitTransaction();
 		}
-		commitTransaction();
 
 	}
 
 	public PrevNext getPrevNextProjectEntryIds(long entry_id) {
 		openEntityManager();
-		projectService.setEntityManager(getEntityManager());
-
-		ProjectEntry pe = read(entry_id);
-		long project_id = pe.getProject().getId();
-		List<Long> projectEntryIdsInOrder = projectService.getProjectEntryIdsInOrder(project_id);
-		int index = projectEntryIdsInOrder.indexOf(entry_id);
-
 		PrevNext pn = new PrevNext();
-		int prevIndex = index - 1;
-		if (prevIndex > -1) {
-			pn.prev = projectEntryIdsInOrder.get(prevIndex);
-		}
+		try {
+			projectService.setEntityManager(getEntityManager());
 
-		int nextIndex = index + 1;
-		if (nextIndex < projectEntryIdsInOrder.size()) {
-			pn.next = projectEntryIdsInOrder.get(nextIndex);
-		}
+			ProjectEntry pe = read(entry_id);
+			long project_id = pe.getProject().getId();
+			List<Long> projectEntryIdsInOrder = projectService.getProjectEntryIdsInOrder(project_id);
+			int index = projectEntryIdsInOrder.indexOf(entry_id);
 
-		closeEntityManager();
+			int prevIndex = index - 1;
+			if (prevIndex > -1) {
+				pn.prev = projectEntryIdsInOrder.get(prevIndex);
+			}
+
+			int nextIndex = index + 1;
+			if (nextIndex < projectEntryIdsInOrder.size()) {
+				pn.next = projectEntryIdsInOrder.get(nextIndex);
+			}
+
+		} finally {
+			closeEntityManager();
+		}
 		return pn;
 	}
-
 	/* private methods */
 
 }

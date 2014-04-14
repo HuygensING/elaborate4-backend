@@ -22,7 +22,6 @@ package elaborate.editor.providers;
  * #L%
  */
 
-
 import javax.inject.Inject;
 import javax.ws.rs.ext.Provider;
 
@@ -33,7 +32,7 @@ import elaborate.editor.model.SessionService;
 @Provider
 public class SessionServiceProvider extends SingletonTypeInjectableProvider<Inject, SessionService> {
 
-  public SessionServiceProvider() {
-    super(SessionService.class, SessionService.instance());
-  }
+	public SessionServiceProvider() {
+		super(SessionService.class, SessionService.instance());
+	}
 }

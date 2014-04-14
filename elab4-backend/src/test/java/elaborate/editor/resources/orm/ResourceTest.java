@@ -33,14 +33,14 @@ import com.sun.jersey.test.framework.WebAppDescriptor;
 import elaborate.editor.model.ModelFactory;
 
 public class ResourceTest extends JerseyTest {
-  public Logger LOG = LoggerFactory.getLogger(getClass());
-  protected static EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
+	public Logger LOG = LoggerFactory.getLogger(getClass());
+	protected static EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
 
-  public ResourceTest() {
-    super(new WebAppDescriptor.Builder()//
-        .initParam("com.sun.jersey.config.property.packages", "elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers")//
-        .initParam("com.sun.jersey.spi.container.ResourceFilters", "elaborate.jaxrs.filters.ElaborateResourceFilterFactory")//
-        .build());
-  }
+	public ResourceTest() {
+		super(new WebAppDescriptor.Builder()//
+				.initParam("com.sun.jersey.config.property.packages", "elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers")//
+				.initParam("com.sun.jersey.spi.container.ResourceFilters", "elaborate.jaxrs.filters.ElaborateResourceFilterFactory")//
+				.build());
+	}
 
 }

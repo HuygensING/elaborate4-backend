@@ -22,7 +22,6 @@ package elaborate.editor.model.orm;
  * #L%
  */
 
-
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -41,34 +40,34 @@ import elaborate.editor.model.AbstractTrackedEntity;
 @Table(name = "project_metadata_fields")
 @XmlRootElement
 public class ProjectMetadataField extends AbstractTrackedEntity<ProjectMetadataField> {
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  String fieldName = "";
-  String valueOptions = "";
+	String fieldName = "";
+	String valueOptions = "";
 
-  public String getFieldName() {
-    return fieldName;
-  }
+	public String getFieldName() {
+		return fieldName;
+	}
 
-  public void setFieldName(String fieldName) {
-    this.fieldName = fieldName;
-  }
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
 
-  public String getValueOptions() {
-    return valueOptions;
-  }
+	public String getValueOptions() {
+		return valueOptions;
+	}
 
-  public void setValueOptions(String valueOptions) {
-    this.valueOptions = valueOptions;
-  }
+	public void setValueOptions(String valueOptions) {
+		this.valueOptions = valueOptions;
+	}
 
-  public boolean hasValueOptions() {
-    return StringUtils.isNotBlank(valueOptions);
-  }
+	public boolean hasValueOptions() {
+		return StringUtils.isNotBlank(valueOptions);
+	}
 
-  @Transient
-  public List<String> getValueOptionsAsList() {
-    return Lists.newArrayList(Splitter.on(',').split(valueOptions));
-  }
+	@Transient
+	public List<String> getValueOptionsAsList() {
+		return Lists.newArrayList(Splitter.on(',').split(valueOptions));
+	}
 
 }

@@ -105,23 +105,34 @@ public class UserService extends AbstractStoredEntityService<User> {
 	@Override
 	public User read(long userId) {
 		openEntityManager();
-		User user = super.read(userId);
-		closeEntityManager();
+		User user;
+		try {
+			user = super.read(userId);
+		} finally {
+			closeEntityManager();
+		}
 		return user;
 	}
 
 	public User update(User user, User modifier) {
 		beginTransaction();
-		normalizeEmailAddress(user);
-		User updated = super.update(user);
-		commitTransaction();
+		User updated;
+		try {
+			normalizeEmailAddress(user);
+			updated = super.update(user);
+		} finally {
+			commitTransaction();
+		}
 		return updated;
 	}
 
 	public void delete(long id, User modifier) {
 		beginTransaction();
-		super.delete(id);
-		commitTransaction();
+		try {
+			super.delete(id);
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	/* */
@@ -129,15 +140,18 @@ public class UserService extends AbstractStoredEntityService<User> {
 		Builder<String, String> settings = ImmutableMap.<String, String> builder();
 
 		openEntityManager();
-
-		User user = find(User.class, id);
-		if (user != null) {
-			for (UserSetting setting : user.getUserSettings()) {
-				settings.put(setting.getKey(), setting.getValue());
+		User user;
+		try {
+			user = find(User.class, id);
+			if (user != null) {
+				for (UserSetting setting : user.getUserSettings()) {
+					settings.put(setting.getKey(), setting.getValue());
+				}
 			}
-		}
 
-		closeEntityManager();
+		} finally {
+			closeEntityManager();
+		}
 
 		if (user == null) {
 			throw new NotFoundException("No user found with id " + id);
@@ -147,16 +161,17 @@ public class UserService extends AbstractStoredEntityService<User> {
 
 	public User getByUsernamePassword(String username, String password) {
 		openEntityManager();
-
-		byte[] encodedPassword = PasswordUtil.encode(password);
 		User user;
 		try {
+			byte[] encodedPassword = PasswordUtil.encode(password);
 			user = (User) getEntityManager().createQuery("from User as u where u.username=?1 and u.encodedpassword=?2").setParameter(1, username).setParameter(2, encodedPassword).getSingleResult();
+
 		} catch (NoResultException e) {
 			user = null;
-		}
 
-		closeEntityManager();
+		} finally {
+			closeEntityManager();
+		}
 
 		return user;
 	}
@@ -166,57 +181,73 @@ public class UserService extends AbstractStoredEntityService<User> {
 		User user;
 		try {
 			user = (User) getEntityManager().createQuery("from User as u where u.email=?1").setParameter(1, emailAddress.toLowerCase()).getSingleResult();
+
 		} catch (NoResultException e) {
 			user = null;
-		}
 
-		closeEntityManager();
+		} finally {
+			closeEntityManager();
+		}
 
 		return user;
 	}
 
 	public User getUser(long id) {
 		openEntityManager();
-		User user = find(User.class, id);
-		closeEntityManager();
+		User user;
+		try {
+			user = find(User.class, id);
+		} finally {
+			closeEntityManager();
+		}
 		return user;
 	}
 
 	@Override
 	public ImmutableList<User> getAll() {
 		openEntityManager();
-		ImmutableList<User> all = super.getAll();
-		closeEntityManager();
+		ImmutableList<User> all;
+		try {
+			all = super.getAll();
+		} finally {
+			closeEntityManager();
+		}
 		return all;
 	}
 
 	public void setSetting(long userId, String key, String value, User modifier) {
 		beginTransaction();
-		User user = read(userId);
-		if (!modifier.getUsername().equals(user.getUsername())) {
-			rollbackTransaction();
-			throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
+		try {
+			User user = read(userId);
+			if (!modifier.getUsername().equals(user.getUsername())) {
+				rollbackTransaction();
+				throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
+			}
+			UserSetting userSetting = user.setUserSetting(key, value);
+			persist(userSetting);
+		} finally {
+			commitTransaction();
 		}
-		UserSetting userSetting = user.setUserSetting(key, value);
-		persist(userSetting);
-		commitTransaction();
 	}
 
 	public void updateSettings(long userId, Map<String, String> newSettingsMap, User modifier) {
 		beginTransaction();
-		User user = read(userId);
-		if (!modifier.getUsername().equals(user.getUsername())) {
-			rollbackTransaction();
-			throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
-		}
+		try {
+			User user = read(userId);
+			if (!modifier.getUsername().equals(user.getUsername())) {
+				rollbackTransaction();
+				throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
+			}
 
-		for (Entry<String, String> entry : newSettingsMap.entrySet()) {
-			UserSetting userSetting = user.setUserSetting(entry.getKey(), entry.getValue());
-			persist(userSetting);
-		}
+			for (Entry<String, String> entry : newSettingsMap.entrySet()) {
+				UserSetting userSetting = user.setUserSetting(entry.getKey(), entry.getValue());
+				persist(userSetting);
+			}
 
-		persist(user);
-		commitTransaction();
+			persist(user);
+		} finally {
+			commitTransaction();
+		}
 	}
 
 	public void sendResetPasswordMail(String emailAddress) {
@@ -266,10 +297,13 @@ public class UserService extends AbstractStoredEntityService<User> {
 
 		tokenMap.remove(userId);
 		beginTransaction();
-		user = super.read(userId);
-		byte[] encodedPassword = PasswordUtil.encode(passwordData.getNewPassword());
-		user.setEncodedPassword(encodedPassword);
-		persist(user);
-		commitTransaction();
+		try {
+			user = super.read(userId);
+			byte[] encodedPassword = PasswordUtil.encode(passwordData.getNewPassword());
+			user.setEncodedPassword(encodedPassword);
+			persist(user);
+		} finally {
+			commitTransaction();
+		}
 	}
 }

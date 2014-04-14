@@ -58,7 +58,7 @@ public class XmlUtilTest extends LoggableObject {
 	//	@Test
 	//	public void testSelect() {
 	//		ProjectService ps = ProjectService.instance();
-	//		ps.openEntityManager();
+	//		ps.openEntityManager();try{
 	//		EntityManager em = ps.getEntityManager();
 	//		String textlayer = "Translation";
 	//		Project project = new Project().setId(1l);
@@ -73,6 +73,6 @@ public class XmlUtilTest extends LoggableObject {
 	//			LOG.info("id[0]={}", objects[0]);
 	//			LOG.info("id[1]={}", objects[1]);
 	//		}
-	//		ps.closeEntityManager();
+	//		ps.}finally{closeEntityManager();}
 	//	}
 }

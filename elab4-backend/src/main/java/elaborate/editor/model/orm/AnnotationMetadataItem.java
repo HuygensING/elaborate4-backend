@@ -38,44 +38,44 @@ import elaborate.editor.model.AbstractStoredEntity;
 @Table(name = "annotation_metadata_items")
 @XmlRootElement
 public class AnnotationMetadataItem extends AbstractStoredEntity<AnnotationMetadataItem> {
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "annotation_id", columnDefinition = "int4")
-  private Annotation annotation;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "annotation_id", columnDefinition = "int4")
+	private Annotation annotation;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "annotation_type_metadata_item_id", columnDefinition = "int4")
-  private AnnotationTypeMetadataItem annotationTypeMetadataItem;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "annotation_type_metadata_item_id", columnDefinition = "int4")
+	private AnnotationTypeMetadataItem annotationTypeMetadataItem;
 
-  private String data;
+	private String data;
 
-  @JsonIgnore
-  public Annotation getAnnotation() {
-    return annotation;
-  }
+	@JsonIgnore
+	public Annotation getAnnotation() {
+		return annotation;
+	}
 
-  public AnnotationMetadataItem setAnnotation(Annotation annotation) {
-    this.annotation = annotation;
-    return this;
-  }
+	public AnnotationMetadataItem setAnnotation(Annotation annotation) {
+		this.annotation = annotation;
+		return this;
+	}
 
-  public AnnotationTypeMetadataItem getAnnotationTypeMetadataItem() {
-    return annotationTypeMetadataItem;
-  }
+	public AnnotationTypeMetadataItem getAnnotationTypeMetadataItem() {
+		return annotationTypeMetadataItem;
+	}
 
-  public AnnotationMetadataItem setAnnotationTypeMetadataItem(AnnotationTypeMetadataItem annotationTypeMetadataItem) {
-    this.annotationTypeMetadataItem = annotationTypeMetadataItem;
-    return this;
-  }
+	public AnnotationMetadataItem setAnnotationTypeMetadataItem(AnnotationTypeMetadataItem annotationTypeMetadataItem) {
+		this.annotationTypeMetadataItem = annotationTypeMetadataItem;
+		return this;
+	}
 
-  public String getData() {
-    return data;
-  }
+	public String getData() {
+		return data;
+	}
 
-  public AnnotationMetadataItem setData(String data) {
-    this.data = data;
-    return this;
-  }
+	public AnnotationMetadataItem setData(String data) {
+		this.data = data;
+		return this;
+	}
 
 }

@@ -40,42 +40,42 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "project_users")
 @XmlRootElement
 public class ProjectUser implements Serializable {
-  private static final long serialVersionUID = 1L;
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(columnDefinition = "serial")
-  long id;
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "serial")
+	long id;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", columnDefinition = "int4")
-  private User user;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", columnDefinition = "int4")
+	private User user;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "project_id", columnDefinition = "int4")
-  private Project project;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "project_id", columnDefinition = "int4")
+	private Project project;
 
-  public long getId() {
-    return id;
-  }
+	public long getId() {
+		return id;
+	}
 
-  public void setId(long id) {
-    this.id = id;
-  }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-  public Project getProject() {
-    return project;
-  }
+	public Project getProject() {
+		return project;
+	}
 
-  public void setProject(Project project) {
-    this.project = project;
-  }
+	public void setProject(Project project) {
+		this.project = project;
+	}
 
-  public User getUser() {
-    return user;
-  }
+	public User getUser() {
+		return user;
+	}
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 }

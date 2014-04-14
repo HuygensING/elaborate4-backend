@@ -22,7 +22,6 @@ package elaborate.editor.model;
  * #L%
  */
 
-
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;

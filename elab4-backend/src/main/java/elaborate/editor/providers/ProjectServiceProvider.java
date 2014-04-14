@@ -22,7 +22,6 @@ package elaborate.editor.providers;
  * #L%
  */
 
-
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
@@ -33,7 +32,7 @@ import elaborate.editor.model.orm.service.ProjectService;
 @Provider
 public class ProjectServiceProvider extends SingletonTypeInjectableProvider<Context, ProjectService> {
 
-  public ProjectServiceProvider() {
-    super(ProjectService.class, ProjectService.instance());
-  }
+	public ProjectServiceProvider() {
+		super(ProjectService.class, ProjectService.instance());
+	}
 }

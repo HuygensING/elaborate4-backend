@@ -22,7 +22,6 @@ package elaborate.editor.model;
  * #L%
  */
 
-
 public enum Action {
 	DELETE, //
 	ADD, //
