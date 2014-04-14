@@ -295,14 +295,9 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 	}
 
 	public ImmutableList<TranscriptionType> getTranscriptionTypes() {
-		openEntityManager();
 		ImmutableList<TranscriptionType> list;
-		try {
-			TypedQuery<TranscriptionType> createQuery = getEntityManager().createQuery("from TranscriptionType", TranscriptionType.class);
-			list = ImmutableList.copyOf(createQuery.getResultList());
-		} finally {
-			closeEntityManager();
-		}
+		TypedQuery<TranscriptionType> createQuery = getEntityManager().createQuery("from TranscriptionType", TranscriptionType.class);
+		list = ImmutableList.copyOf(createQuery.getResultList());
 		return list;
 	}
 }

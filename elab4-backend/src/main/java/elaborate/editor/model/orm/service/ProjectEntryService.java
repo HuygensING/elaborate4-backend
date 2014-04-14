@@ -128,21 +128,25 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	}
 
 	private void addMissingTextLayers(long id, User user) {
-		beginTransaction();
+		ProjectEntry projectEntry;
+		Set<String> textLayers;
+		openEntityManager();
 		try {
-			ProjectEntry projectEntry = find(getEntityClass(), id);
+			projectEntry = find(getEntityClass(), id);
 			Project project = projectEntry.getProject();
-			Set<String> textLayers = Sets.newHashSet(project.getTextLayers());
+			textLayers = Sets.newHashSet(project.getTextLayers());
 			for (Transcription transcription : projectEntry.getTranscriptions()) {
 				textLayers.remove(transcription.getTextLayer());
 			}
-			if (!textLayers.isEmpty()) {
-				for (String textLayer : textLayers) {
-					Transcription transcription = projectEntry.addTranscription(user).setTextLayer(textLayer);
-					persist(transcription);
-				}
-			}
 		} finally {
+			closeEntityManager();
+		}
+		if (!textLayers.isEmpty()) {
+			beginTransaction();
+			for (String textLayer : textLayers) {
+				Transcription transcription = projectEntry.addTranscription(user).setTextLayer(textLayer);
+				persist(transcription);
+			}
 			commitTransaction();
 		}
 	}
