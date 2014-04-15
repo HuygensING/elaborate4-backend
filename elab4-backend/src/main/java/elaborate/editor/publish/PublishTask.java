@@ -82,8 +82,6 @@ public class PublishTask extends LoggableObject implements Runnable {
 	private static final String ZOOM_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/viewer2.1.html?rft_id=";
 	private static final String PUBLICATION_URL = "publicationURL";
 	private static final String PUBLICATION_TOMCAT_WEBAPPDIR = "publication.tomcat.webappdir";
-	private static final String PUBLICATION_TOMCAT_URL = "publication.tomcat.url";
-
 	private static final String ANNOTATION_INDEX_JSON = "annotation_index.json";
 
 	private final Publication.Status status;
@@ -188,13 +186,9 @@ public class PublishTask extends LoggableObject implements Runnable {
 		}
 	}
 
-	private String getBaseURL(String basename) {
-		return "http://resources.huygens.knaw.nl/" + basename + "/draft/";
+	String getBaseURL(String basename) {
+		return config.getSetting("publication.draft.url").replace("#", basename);
 	}
-
-	//	private String getBaseURL(String basename) {
-	//		return config.getSetting(PUBLICATION_TOMCAT_URL) + basename;
-	//	}
 
 	private String getBasename(Project project) {
 		return "elab4-" + project.getName();

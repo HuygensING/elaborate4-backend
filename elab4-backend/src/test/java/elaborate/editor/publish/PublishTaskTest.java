@@ -65,6 +65,7 @@ public class PublishTaskTest extends AbstractTest {
 		Project mockProject = mock(Project.class);
 		String projectTitle = "titel";
 		when(mockProject.getTitle()).thenReturn(projectTitle);
+		when(mockProject.getName()).thenReturn("project-name");
 		when(mockProject.getLevel1()).thenReturn("level1");
 		when(mockProject.getLevel2()).thenReturn("level2");
 		when(mockProject.getLevel3()).thenReturn("level3");
@@ -89,6 +90,7 @@ public class PublishTaskTest extends AbstractTest {
 	public void testGetProjectData_WithPublicationTitle() throws Exception {
 		Settings settings = mock(Publication.Settings.class);
 		Project mockProject = mock(Project.class);
+		when(mockProject.getName()).thenReturn("project-name");
 		when(mockProject.getLevel1()).thenReturn("level1");
 		when(mockProject.getLevel2()).thenReturn("level2");
 		when(mockProject.getLevel3()).thenReturn("level3");
@@ -210,5 +212,12 @@ public class PublishTaskTest extends AbstractTest {
 		AnnotationTypeData ad = new AnnotationTypeData().setName("name").setDescription("description");
 		String key = publishTask.annotationTypeKey(ad);
 		assertThat(key).isEqualTo("description [name]");
+	}
+
+	@Test
+	public void testGetBaseURLFillsInProjectname() throws Exception {
+		Settings settings = mock(Publication.Settings.class);
+		PublishTask publishTask = new PublishTask(settings);
+		assertThat(publishTask.getBaseURL("project-name")).isEqualTo("http://example.org/project-name/draft");
 	}
 }

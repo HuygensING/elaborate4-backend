@@ -33,13 +33,19 @@
 			<port>2014</port>
 		</server>
 
-    <!-- the front-end -->    
+		<!-- the front-end -->
 		<work>
-		  <!-- base url of the frontend -->
+			<!-- base url of the frontend -->
 			<url>http://myelaborate.example.org</url>
 		</work>
 
 		<publication>
+			<draft>
+				<!-- url template for the draft publication of a project -->
+				<!-- '#' will be replaced by the project name -->
+				<url>http://#.huygens.knaw.nl/draft/</url>
+			</draft>
+
 			<!-- baseurl for the publication scripts & images -->
 			<cdn>cdn.huygens.knaw.nl/elaborate</cdn>
 			<!-- version of the publication scripts & images to use for the publication, for work type and collection type projects -->
@@ -60,7 +66,7 @@
 			<url>http://localhost:8080/solr-elab3/entries/</url>
 		</solr>
 
-    <!-- mail settings for sending the "reset password" email -->
+		<!-- mail settings for sending the "reset password" email -->
 		<email>
 			<mailhost>mailhost.example.org</mailhost>
 			<from_name>elaborate admin</from_name>
