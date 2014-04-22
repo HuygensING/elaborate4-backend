@@ -28,6 +28,7 @@ import java.util.Date;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.LockModeType;
 import javax.persistence.TypedQuery;
 
@@ -189,7 +190,14 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 
 	/** commit and end write **/
 	public void commitTransaction() {
-		getEntityManager().getTransaction().commit();
+		EntityTransaction transaction = getEntityManager().getTransaction();
+		try {
+			transaction.commit();
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+			transaction.rollback();
+		}
 		closeEntityManager();
 	}
 
