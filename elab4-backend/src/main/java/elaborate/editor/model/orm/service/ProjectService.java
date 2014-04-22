@@ -132,7 +132,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 			project.setTextLayers(Lists.newArrayList(TranscriptionType.DIPLOMATIC));
 		}
 		if (StringUtils.isBlank(project.getName())) {
-			project.setName(SolrUtils.normalize(project.getTitle()));
+			project.setName(SolrUtils.normalize(project.getTitle().replace("_", "-")));
 		}
 		if (project.getProjectLeaderId() == 0) {
 			project.setProjectLeaderId(user.getId());
