@@ -347,7 +347,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				map.put(projectMetadataItem.getField(), projectMetadataItem.getData());
 			}
 			map.put(PROJECT_TITLE, project.getTitle());
-			map.put(PROJECT_NAME, project.getName());
+			map.put(PROJECT_NAME, project.getName().replace("_", "-"));
 			map.put(PROJECT_LEADER, String.valueOf(project.getProjectLeaderId()));
 
 		} finally {
