@@ -42,8 +42,6 @@ import javax.ws.rs.core.Response;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
-import org.apache.xalan.xsltc.compiler.util.InternalError;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableList;
 
@@ -77,12 +75,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns a list of all projects accessible to user")
 	public List<Project> getAll() {
-		try {
-			return projectService.getAll(getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.getAll(getUser());
 	}
 
 	@GET
@@ -90,12 +83,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the project with the given project_id")
 	public Project getProject(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.read(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.read(project_id, getUser());
 	}
 
 	@POST
@@ -103,13 +91,8 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed("ADMIN")
 	@APIDesc("Adds a new project")
 	public Response createProject(Project project) {
-		try {
-			projectService.create(project, getUser());
-			return Response.created(createURI(project)).build();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		projectService.create(project, getUser());
+		return Response.created(createURI(project)).build();
 	}
 
 	//	@PUT
@@ -126,12 +109,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed("ADMIN")
 	@APIDesc("Deletes the project with the given project_id")
 	public void deleteProject(@PathParam("project_id") long project_id) {
-		try {
-			projectService.delete(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		projectService.delete(project_id, getUser());
 	}
 
 	/* project settings */
@@ -142,15 +120,10 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates level1,2,3 of the project with the given project_id")
 	public void updateProjectSortLevels(@PathParam("project_id") long project_id, List<String> levels) {
-		try {
-			if (levels != null) {
-				projectService.setProjectSortLevels(project_id, levels, getUser());
-			} else {
-				throw new BadRequestException("no sortlevels sent");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
+		if (levels != null) {
+			projectService.setProjectSortLevels(project_id, levels, getUser());
+		} else {
+			throw new BadRequestException("no sortlevels sent");
 		}
 	}
 
@@ -159,12 +132,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the settings of the project with the given project_id")
 	public Map<String, String> getProjectSettings(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.getProjectSettings(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.getProjectSettings(project_id, getUser());
 	}
 
 	@PUT
@@ -173,15 +141,10 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates the settings of the project with the given project_id")
 	public void updateProjectSettings(@PathParam("project_id") long project_id, Map<String, String> settingsMap) {
-		try {
-			if (settingsMap != null) {
-				projectService.setProjectSettings(project_id, settingsMap, getUser());
-			} else {
-				throw new BadRequestException("no settingsMap sent");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
+		if (settingsMap != null) {
+			projectService.setProjectSettings(project_id, settingsMap, getUser());
+		} else {
+			throw new BadRequestException("no settingsMap sent");
 		}
 	}
 
@@ -191,12 +154,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates the textlayers settings of the project with the given project_id")
 	public void updateTextlayersSettings(@PathParam("project_id") long project_id, List<String> textLayers) {
-		try {
-			projectService.setTextlayers(project_id, textLayers, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		projectService.setTextlayers(project_id, textLayers, getUser());
 	}
 
 	//  /* project facets */
@@ -214,12 +172,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@APIDesc("Returns the metadata of the entries of the project with the given project_id")
 	@JsonView(Views.Extended.class)
 	public Collection<Map<String, String>> getProjectEntryMetadata(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.getProjectEntryMetadata(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.getProjectEntryMetadata(project_id, getUser());
 	}
 
 	/* project entry metadata */
@@ -228,12 +181,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the metadatafields for the project entries of the project with the given project_id")
 	public Collection<String> getProjectEntryMetadataFields(@PathParam("project_id") long project_id) {
-		try {
-			return ImmutableList.copyOf(projectService.getProjectEntryMetadataFields(project_id, getUser()));
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return ImmutableList.copyOf(projectService.getProjectEntryMetadataFields(project_id, getUser()));
 	}
 
 	@PUT
@@ -241,14 +189,9 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the metadatafields for the project entries of the project with the given project_id")
 	public Response updateProjectEntryMetadataFields(@PathParam("project_id") long project_id, List<String> fields) {
-		try {
-			projectService.setProjectEntryMetadataFields(project_id, fields, getUser());
-			ReindexStatus status = projectService.createReindexStatus(project_id);
-			return Response.created(status.getURI()).build();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		projectService.setProjectEntryMetadataFields(project_id, fields, getUser());
+		ReindexStatus status = projectService.createReindexStatus(project_id);
+		return Response.created(status.getURI()).build();
 
 	}
 
@@ -259,12 +202,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@JsonView(Views.Minimal.class)
 	@APIDesc("Returns the annotation types for the project with the given project_id")
 	public List<Long> getProjectAnnotationTypes(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.getProjectAnnotationTypeIds(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.getProjectAnnotationTypeIds(project_id, getUser());
 	}
 
 	@PUT
@@ -273,12 +211,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@JsonView(Views.Minimal.class)
 	@APIDesc("Updates the annotation types for the project with the given project_id")
 	public void setProjectAnnotationTypes(@PathParam("project_id") long project_id, List<Long> annotationTypeIds) {
-		try {
-			projectService.setProjectAnnotationTypes(project_id, annotationTypeIds, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		projectService.setProjectAnnotationTypes(project_id, annotationTypeIds, getUser());
 	}
 
 	/* project users */
@@ -287,12 +220,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the users assigned to the project with the given project_id, extended view")
 	public Object getProjectUsersExtended(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.getProjectUsersFull(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.getProjectUsersFull(project_id, getUser());
 	}
 
 	@GET
@@ -300,12 +228,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the user ids assigned to the project with the given project_id")
 	public List<Long> getProjectUsers(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.getProjectUserIds(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.getProjectUserIds(project_id, getUser());
 	}
 
 	@PUT
@@ -314,12 +237,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates the user ids assigned to the project with the given project_id")
 	public void updateProjectUsers(@PathParam("project_id") long project_id, List<Long> userIds) {
-		try {
-			projectService.updateProjectUserIds(project_id, userIds, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		projectService.updateProjectUserIds(project_id, userIds, getUser());
 	}
 
 	//  @PUT
@@ -347,24 +265,14 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the statistics of the project with the given project_id")
 	public Object getProjectStatistics(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.getProjectStatistics(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.getProjectStatistics(project_id, getUser());
 	}
 
 	/* project entries */
 
 	@Path("{project_id: [0-9]+}/entries")
 	public ProjectEntriesResource getProjectEntriesResource() {
-		try {
-			return new ProjectEntriesResource(getUser(), projectService);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return new ProjectEntriesResource(getUser(), projectService);
 	}
 
 	/* update multiple entry settings */
@@ -373,13 +281,8 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the settings of the project entries with the given entry_ids")
 	public void updateMultipleProjectEntrySettings(@PathParam("project_id") long project_id, MultipleProjectEntrySettings mpes) {
-		try {
-			LOG.info("in:{}", mpes);
-			projectEntryService.updateMultipleProjectEntrySettings(project_id, mpes, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		LOG.info("in:{}", mpes);
+		projectEntryService.updateMultipleProjectEntrySettings(project_id, mpes, getUser());
 	}
 
 	/* project loglines */
@@ -388,12 +291,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the logentries of the project with the given project_id")
 	public List<LogEntry> getLogEntries(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.getLogEntries(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.getLogEntries(project_id, getUser());
 	}
 
 	/* TEI export */
@@ -402,24 +300,14 @@ public class ProjectResource extends AbstractElaborateResource {
 	@Produces(MediaType.APPLICATION_XML)
 	@APIDesc("Returns the project with the given project_id as tei")
 	public String exportTei(@PathParam("project_id") long project_id) {
-		try {
-			return projectService.exportTei(project_id, getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return projectService.exportTei(project_id, getUser());
 	}
 
 	/* publish */
 
 	@Path("{project_id: [0-9]+}/draft")
 	public DraftPublicationResource getDraftResource() {
-		try {
-			return new DraftPublicationResource(getUser(), projectService);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return new DraftPublicationResource(getUser(), projectService);
 	}
 
 	//  @Path("{project_id: [0-9]+}/publicationrequest")
@@ -431,12 +319,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
 	@Path("{project_id: [0-9]+}/search")
 	public SearchResource getSearchResource() {
-		try {
-			return new SearchResource(getUser());
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new InternalError(e.getMessage());
-		}
+		return new SearchResource(getUser());
 	}
 
 }

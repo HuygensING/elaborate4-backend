@@ -46,11 +46,6 @@ public abstract class AbstractElaborateResource extends LoggableObject {
 	@Context
 	Request request;
 
-	//	@OPTIONS
-	//	public Response options() {
-	//		return Response.ok().header("Allow", "OPTIONS,GET,PUT,POST,DELETE,HEAD").build();
-	//	}
-
 	public User getUser() {
 		User user = null;
 		ContainerRequest cr = (ContainerRequest) request;
