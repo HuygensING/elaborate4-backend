@@ -23,10 +23,11 @@ package elaborate.util;
  */
 
 import static org.assertj.core.api.Assertions.assertThat;
+import nl.knaw.huygens.LoggableObject;
 
 import org.junit.Test;
 
-public class TextCaseTest {
+public class TextCaseTest extends LoggableObject {
 	@Test
 	public void testDetectLowerCase() {
 		assertThat(TextCase.detectCase("lower")).isEqualTo(TextCase.LOWER);
@@ -43,4 +44,5 @@ public class TextCaseTest {
 		assertThat(TextCase.CAPITALIZED.applyTo(string)).isEqualTo("Test");
 		assertThat(TextCase.MIXED.applyTo(string)).isEqualTo(string);
 	}
+
 }

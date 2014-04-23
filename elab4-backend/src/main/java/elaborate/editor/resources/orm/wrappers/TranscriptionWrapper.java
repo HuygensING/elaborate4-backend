@@ -47,13 +47,7 @@ public class TranscriptionWrapper extends LoggableObject {
 		setId(transcription.getId());
 		setTextLayer(transcription.getTextLayer());
 		String tBody = transcription.getBody();
-		try {
-			convertBodyForOutput(tBody);
-		} catch (Exception e) {
-			e.printStackTrace();
-			String fixed = XmlUtil.fixXhtml(tBody);
-			convertBodyForOutput(fixed);
-		}
+		convertBodyForOutput(tBody);
 	}
 
 	public long getId() {
