@@ -57,6 +57,21 @@ public class TranscriptionWrapperTest {
 		assertThat(tw.getBody()).isEqualTo(expected);
 	}
 
+	@Test
+	public void testTranscriptionWrapperWithBadXHtmlInput() throws Exception {
+		String textLayer = "textlayer";
+		String title = "title";
+		String body = "<body><span style=\"font-size:11.0pt;line-height:115%; font-family:\"Verdana\",\"sans-serif\";mso-fareast-font-family:Calibri;mso-fareast-theme-font: minor-latin;mso-bidi-font-family:\"Times New Roman\";mso-bidi-theme-font:minor-bidi; mso-ansi-language:NL;mso-fareast-language:EN-US;mso-bidi-language:AR-SA\">Hoezo mag ik niet copy-pasten vanuit Word? Maar ik wil het!</span></body>";
+
+		Transcription transcription = mockTranscription(textLayer, title, body);
+
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		//    assertThat( tw.title).isEqualTo(title);
+		assertThat(tw.getTextLayer()).isEqualTo(textLayer);
+		String expected = "Hoezo mag ik niet copy-pasten vanuit Word? Maar ik wil het!";
+		assertThat(tw.getBody()).isEqualTo(expected);
+	}
+
 	private Transcription mockTranscription(String textLayer, String title, String body) {
 		Transcription transcription = mock(Transcription.class);
 		when(transcription.getTextLayer()).thenReturn(textLayer);

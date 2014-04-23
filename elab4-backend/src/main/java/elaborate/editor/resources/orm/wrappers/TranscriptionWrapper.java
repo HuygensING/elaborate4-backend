@@ -46,7 +46,14 @@ public class TranscriptionWrapper extends LoggableObject {
 	public TranscriptionWrapper(Transcription transcription) {
 		setId(transcription.getId());
 		setTextLayer(transcription.getTextLayer());
-		convertBodyForOutput(transcription.getBody());
+		String tBody = transcription.getBody();
+		try {
+			convertBodyForOutput(tBody);
+		} catch (Exception e) {
+			e.printStackTrace();
+			String fixed = XmlUtil.fixXhtml(tBody);
+			convertBodyForOutput(fixed);
+		}
 	}
 
 	public long getId() {
@@ -87,7 +94,14 @@ public class TranscriptionWrapper extends LoggableObject {
 			xml = "<body>" + XmlUtil.fixXhtml(bodyIn) + "</body>";
 			LOG.info("fixed body:\n({})", xml);
 		}
-		Document document = Document.createFromXml(xml, true);
+		Document document;
+		try {
+			document = Document.createFromXml(xml, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			String fixed = xml.replaceAll("</?span[^>]*>", "");
+			document = Document.createFromXml(fixed, true);
+		}
 
 		TranscriptionBodyVisitor visitor = new TranscriptionBodyVisitor();
 		document.accept(visitor);
@@ -107,6 +121,7 @@ public class TranscriptionWrapper extends LoggableObject {
 	}
 
 	static String convertFromInput(String bodyIn) {
+		bodyIn = bodyIn.replaceAll("<br>", "<br/>");
 		getLOG(TranscriptionWrapper.class).info("body input={}", bodyIn);
 		String xml = Transcription.BODY_START + XmlUtil.fixXhtml(bodyIn) + Transcription.BODY_END;
 		Document document = Document.createFromXml(xml, true);
