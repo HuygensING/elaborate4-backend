@@ -97,7 +97,7 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 		@Override
 		public Traversal leaveElement(Element e, XmlContext c) {
 			if (!isEndMarker(e)) {
-				c.addCloseTag(TAG_SPAN);
+				c.addCloseTag(e);
 			}
 			return NEXT;
 		}

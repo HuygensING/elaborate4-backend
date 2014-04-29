@@ -44,6 +44,7 @@ import com.sun.jersey.api.NotFoundException;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
+import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.UserSetting;
 import elaborate.editor.resources.orm.PasswordData;
@@ -304,6 +305,18 @@ public class UserService extends AbstractStoredEntityService<User> {
 			persist(user);
 		} finally {
 			commitTransaction();
+		}
+	}
+
+	public void makeProjectLeader(Long userId, User user) {
+		beginTransaction();
+		User projectLeader = read(userId);
+		if (!projectLeader.hasRole(ElaborateRoles.PROJECTLEADER)) {
+			String roleString = projectLeader.getRoleString() + "," + ElaborateRoles.PROJECTLEADER;
+			projectLeader.setRoleString(roleString);
+			commitTransaction();
+		} else {
+			rollbackTransaction();
 		}
 	}
 }

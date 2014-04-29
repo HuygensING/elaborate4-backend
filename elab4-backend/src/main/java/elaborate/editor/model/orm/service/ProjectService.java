@@ -700,7 +700,9 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				} else if (PROJECT_NAME.equals(key)) {
 					project.setName(value);
 				} else if (PROJECT_LEADER.equals(key)) {
-					project.setProjectLeaderId(Long.valueOf(value));
+					Long userId = Long.valueOf(value);
+					project.setProjectLeaderId(userId);
+					UserService.instance().makeProjectLeader(userId, user);
 				}
 				persist(pmi);
 			}

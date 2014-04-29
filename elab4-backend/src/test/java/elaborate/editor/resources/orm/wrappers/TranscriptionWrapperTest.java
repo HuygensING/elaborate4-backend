@@ -100,4 +100,21 @@ public class TranscriptionWrapperTest {
 		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
 	}
 
+	@Test
+	public void testSuperscriptIsHandledWell() throws Exception {
+		TranscriptionWrapper tw = new TranscriptionWrapper();
+		tw.setBody("<sup>super</sup> normaal <sub>sub</sub><br><sup>super</sup> normaal <sub>sub<br></sub><sup>super</sup> normaal <sub>sub</sub><br>");
+		String expected = "<body><sup>super</sup> normaal <sub>sub</sub>\n<sup>super</sup> normaal <sub>sub\n</sub><sup>super</sup> normaal <sub>sub</sub>\n</body>";
+		assertThat(tw.getBodyForDb()).isEqualTo(expected);
+	}
+
+	@Test
+	public void testAnnotationMarkerIsHandledWell() throws Exception {
+		TranscriptionWrapper tw = new TranscriptionWrapper();
+		tw.setBody("<sup>super</sup> <span data-id=\"9075405\" data-marker=\"begin\"></span>normaal <sub><sup data-id=\"9075405\" data-marker=\"end\">1</sup>sub</sub><br><sup>super</sup> normaal <sub>sub<br></sub><sup>super</sup> normaal <sub>sub</sub><br>");
+		String expected = "<body><sup>super</sup> <ab id=\"9075405\"/>normaal <sub><ae id=\"9075405\"/>sub</sub>\n<sup>super</sup> normaal <sub>sub\n</sub><sup>super</sup> normaal <sub>sub</sub>\n</body>";
+		assertThat(tw.getBodyForDb()).isEqualTo(expected);
+	}
+
+	//	
 }

@@ -37,6 +37,13 @@ public class XmlUtilTest extends LoggableObject {
 	}
 
 	@Test
+	public void testFixSupSub() {
+		String supsubxml = "<sup>SUPER</sup> normaal <sub>sub</sub> <sup>SUPER</sup> normaal <sub>sub</sub>";
+		String fixedXml = XmlUtil.fixXhtml(supsubxml);
+		assertThat(fixedXml).isEqualTo(supsubxml);
+	}
+
+	@Test
 	public void testFixTagEndings() throws Exception {
 		String in = "<tag>bla<bla>babal<tag>\n</tag></bla></tag>whatever";
 		String fixed = "<tag>bla<bla>babal<tag></tag></bla></tag>\nwhatever";

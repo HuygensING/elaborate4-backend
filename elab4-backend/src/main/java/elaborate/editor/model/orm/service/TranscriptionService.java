@@ -91,13 +91,12 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 	public void update(long project_id, long transcription_id, TranscriptionWrapper wrapper, User user) {
 		beginTransaction();
 		try {
-
 			checkProjectPermissions(project_id, user);
 			Transcription transcription = read(transcription_id);
 			if (wrapper.getBody() != null) {
 				transcription.setBody(wrapper.getBodyForDb());
 			}
-			merge(transcription);
+			persist(transcription);
 			ProjectEntry projectEntry = transcription.getProjectEntry();
 			String logLine = MessageFormat.format("updated transcription ''{0}'' for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
 			updateParents(projectEntry, user, logLine);
@@ -110,7 +109,6 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 	public void delete(long project_id, long transcription_id, User user) {
 		beginTransaction();
 		try {
-
 			checkProjectPermissions(project_id, user);
 
 			Transcription transcription = find(Transcription.class, transcription_id);
