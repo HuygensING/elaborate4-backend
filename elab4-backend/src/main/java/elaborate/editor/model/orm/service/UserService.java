@@ -310,7 +310,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 
 	public void makeProjectLeader(Long userId, User user) {
 		beginTransaction();
-		User projectLeader = read(userId);
+		User projectLeader = super.read(userId);
 		if (!projectLeader.hasRole(ElaborateRoles.PROJECTLEADER)) {
 			String roleString = projectLeader.getRoleString() + "," + ElaborateRoles.PROJECTLEADER;
 			projectLeader.setRoleString(roleString);

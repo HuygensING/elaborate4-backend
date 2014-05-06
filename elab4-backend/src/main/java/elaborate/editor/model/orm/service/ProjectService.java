@@ -678,6 +678,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	}
 
 	public void setProjectSettings(long project_id, Map<String, String> settingsMap, User user) {
+		Long userId = -1l;
 		beginTransaction();
 		try {
 
@@ -700,9 +701,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				} else if (PROJECT_NAME.equals(key)) {
 					project.setName(value);
 				} else if (PROJECT_LEADER.equals(key)) {
-					Long userId = Long.valueOf(value);
+					userId = Long.valueOf(value);
 					project.setProjectLeaderId(userId);
-					UserService.instance().makeProjectLeader(userId, user);
 				}
 				persist(pmi);
 			}
@@ -712,6 +712,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 		} finally {
 			commitTransaction();
+			if (userId > -1) {
+				UserService userService = UserService.instance();
+				userService.makeProjectLeader(userId, user);
+			}
 		}
 	}
 

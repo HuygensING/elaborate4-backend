@@ -233,7 +233,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	}
 
 	private void checkForWellFormedBody(TranscriptionWrapper transcriptionWrapper) {
-		if (!XmlUtil.isWellFormed(XmlUtil.wrapInXml(transcriptionWrapper.getBody()))) {
+		if (!XmlUtil.isWellFormed(XmlUtil.wrapInXml(transcriptionWrapper.getBody().replace("<br>", "</br>")))) {
 			//			throw new BadRequestException("xml in body not well-formed");
 		}
 	}
