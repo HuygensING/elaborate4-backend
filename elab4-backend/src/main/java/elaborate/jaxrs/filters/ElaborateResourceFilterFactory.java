@@ -38,6 +38,7 @@ public class ElaborateResourceFilterFactory implements ResourceFilterFactory {
 	public List<ResourceFilter> create(AbstractMethod am) {
 		List<ResourceFilter> singletonList = Lists.newArrayList();
 		singletonList.add(new LoggingResourceFilter());
+		singletonList.add(new CacheHeaderFilter());
 
 		if (needsAuthorization(am)) {
 			singletonList.add(new AuthenticationResourceFilter());
