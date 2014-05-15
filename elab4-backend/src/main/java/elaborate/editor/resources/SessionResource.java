@@ -86,6 +86,7 @@ public class SessionResource extends AbstractElaborateResource {
 		}
 
 		Map<String, Object> content = ImmutableMap.<String, Object> of("token", token, "user", user);
+		userService.setUserIsLoggedIn(user);
 		return Response.ok(content).build();
 	}
 
@@ -95,6 +96,13 @@ public class SessionResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.TEXT_PLAIN)
 	@APIDesc("Logout the session with the given token")
 	public Response logout(@PathParam("token") String sessionId) {
+		User sessionUser;
+		try {
+			sessionUser = sessionService.getSessionUser(sessionId);
+			userService.setUserIsLoggedOut(sessionUser);
+		} catch (UnauthorizedException e) {
+			e.printStackTrace();
+		}
 		sessionService.stopSession(sessionId);
 		return Response.ok().build();
 	}

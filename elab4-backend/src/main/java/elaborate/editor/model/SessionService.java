@@ -125,10 +125,10 @@ public class SessionService extends LoggableObject {
 		return user != null ? new ElaborateSecurityContext(user) : null;
 	}
 
-	public User getSessionUser(String hsid) throws UnauthorizedException {
-		Session session = sessionMap.get(hsid);
+	public User getSessionUser(String sessionId) throws UnauthorizedException {
+		Session session = sessionMap.get(sessionId);
 		if (session == null) {
-			session = SecurityWrapper.createSession(hsid);
+			session = SecurityWrapper.createSession(sessionId);
 		}
 		long userId = session.getUserId();
 		User user = userService.read(userId);

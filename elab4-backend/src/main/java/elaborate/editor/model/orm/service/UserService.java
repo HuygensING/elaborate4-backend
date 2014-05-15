@@ -23,6 +23,8 @@ package elaborate.editor.model.orm.service;
  */
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -45,6 +47,7 @@ import com.sun.jersey.api.NotFoundException;
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.ElaborateRoles;
+import elaborate.editor.model.UserSettings;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.UserSetting;
 import elaborate.editor.resources.orm.PasswordData;
@@ -319,4 +322,27 @@ public class UserService extends AbstractStoredEntityService<User> {
 			rollbackTransaction();
 		}
 	}
+
+	public void setUserIsLoggedIn(User user) {
+		updateLoginStatus(user, false);
+	}
+
+	public void setUserIsLoggedOut(User user) {
+		updateLoginStatus(user, true);
+	}
+
+	public void updateLoginStatus(User user, boolean loggingOff) {
+		beginTransaction();
+		user = super.read(user.getId());
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (loggingOff && user.isLoggedIn()) {
+			persist(user.setUserSetting(UserSettings.ONLINE_STATUS, User.STATUS_OFFLINE));
+			persist(user.setUserSetting(UserSettings.LOGOUT_TIME, simpleDateFormat.format(new Date())));
+		} else if (!loggingOff && !user.isLoggedIn()) {
+			persist(user.setUserSetting(UserSettings.ONLINE_STATUS, User.STATUS_ONLINE));
+			persist(user.setUserSetting(UserSettings.LOGIN_TIME, simpleDateFormat.format(new Date())));
+		}
+		commitTransaction();
+	}
+
 }

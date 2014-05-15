@@ -22,8 +22,6 @@ package elaborate.editor.model.orm;
  * #L%
  */
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -56,8 +54,8 @@ import elaborate.editor.model.UserSettings;
 @XmlRootElement(name = "user")
 public class User extends AbstractStoredEntity<User> {
 	private static final long serialVersionUID = 1L;
-	private static final String STATUS_ONLINE = "online";
-	private static final String STATUS_OFFLINE = "offline";
+	public static final String STATUS_ONLINE = "online";
+	public static final String STATUS_OFFLINE = "offline";
 
 	/* properties to persist */
 	@Column(unique = true)
@@ -261,17 +259,6 @@ public class User extends AbstractStoredEntity<User> {
 		String level2 = getUserSetting(UserSettings.projectLevel(project_id, 2), "");
 		String level3 = getUserSetting(UserSettings.projectLevel(project_id, 3), "");
 		return new String[] { level1, level2, level3 };
-	}
-
-	public void updateLoginStatus(boolean loggingOff) {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (loggingOff && isLoggedIn()) {
-			setUserSetting(UserSettings.ONLINE_STATUS, STATUS_OFFLINE);
-			setUserSetting(UserSettings.LOGOUT_TIME, simpleDateFormat.format(new Date()));
-		} else if (!loggingOff && !isLoggedIn()) {
-			setUserSetting(UserSettings.ONLINE_STATUS, STATUS_ONLINE);
-			setUserSetting(UserSettings.LOGIN_TIME, simpleDateFormat.format(new Date()));
-		}
 	}
 
 	public boolean isLoggedIn() {
