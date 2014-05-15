@@ -344,8 +344,9 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 						persist(pemItem);
 						setModifiedBy(pemItem, user);
 					}
-					modifiedEntryIds.add(entry_id);
 				}
+
+				modifiedEntryIds.add(entry_id);
 			}
 			setModifiedBy(project, user);
 
