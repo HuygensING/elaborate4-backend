@@ -325,8 +325,9 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 				ProjectEntry pe = read(entry_id);
 
 				if (mpes.changePublishable()) {
-					LOG.info("changepublishable to {}", mpes.getPublishableSetting());
+					LOG.info("change publishable to {}", mpes.getPublishableSetting());
 					pe.setPublishable(mpes.getPublishableSetting());
+					persist(pe);
 				}
 
 				for (Entry<String, Object> entry : settingsEntrySet) {
