@@ -28,4 +28,6 @@ public interface QueryComposer {
 	public String getSearchQuery();
 
 	public String getHighlightQuery();
+
+	public boolean mustHighlight();
 }

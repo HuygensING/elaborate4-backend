@@ -34,6 +34,7 @@ public class ElaborateQueryComposer implements QueryComposer {
 	private static final String FUZZY = "~0.75";
 	private String searchQuery;
 	private String highlightQuery;
+	private boolean mustHighlight = false;
 
 	@Override
 	public void compose(ElaborateSearchParameters sp) {
@@ -56,7 +57,12 @@ public class ElaborateQueryComposer implements QueryComposer {
 			}
 		}
 		// the solr highlighter should only get the fulltextsearch part of the query
-		this.highlightQuery = joinedTermQuery;
+		if (joinedTermQuery.equals("*:*")) {
+			mustHighlight = false;
+		} else {
+			mustHighlight = true;
+			this.highlightQuery = joinedTermQuery;
+		}
 
 		List<String> facetQueries = composeFacetQueries(sp);
 		if (!facetQueries.isEmpty()) {
@@ -104,6 +110,11 @@ public class ElaborateQueryComposer implements QueryComposer {
 			throw new RuntimeException("highlightQuery not set, call compose() first");
 		}
 		return highlightQuery;
+	}
+
+	@Override
+	public boolean mustHighlight() {
+		return mustHighlight;
 	}
 
 }

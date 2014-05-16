@@ -24,6 +24,7 @@ package nl.knaw.huygens.facetedsearch;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,6 +33,7 @@ import java.util.regex.Pattern;
 
 import nl.knaw.huygens.LoggableObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
@@ -45,9 +47,12 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.HighlightParams;
 
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
+import com.google.common.collect.Sets;
 
 public abstract class AbstractSolrServer extends LoggableObject implements SolrServerWrapper {
 	public static final String KEY_NUMFOUND = "numFound";
@@ -68,6 +73,15 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 	public void initialize() throws IndexException {
 		try {
 			server.deleteByQuery("*:*");
+		} catch (Exception e) {
+			throw new IndexException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void optimize() throws IndexException {
+		try {
+			server.optimize();
 		} catch (Exception e) {
 			throw new IndexException(e.getMessage());
 		}
@@ -133,15 +147,18 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 				.setRows(ROWS)//
 				.addFacetField(facetFields)//
 				.setFacetMinCount(1)//
-				.setFacetLimit(FACET_LIMIT)//
-				.setHighlight(true)//
-				.setHighlightSnippets(500)//
-				.setHighlightFragsize(HIGHLIGHT_FRAGSIZE);
+				.setFacetLimit(FACET_LIMIT);
+		if (queryComposer.mustHighlight()) {
+			query//
+					.setHighlight(true)//
+					.setHighlightSnippets(500)//
+					.setHighlightFragsize(HIGHLIGHT_FRAGSIZE);
 
-		query.set(HighlightParams.MERGE_CONTIGUOUS_FRAGMENTS, false);
-		query.set(HighlightParams.MAX_CHARS, -1);
-		query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[textFieldMap.size()]));
-		query.set(HighlightParams.Q, queryComposer.getHighlightQuery());
+			query.set(HighlightParams.MERGE_CONTIGUOUS_FRAGMENTS, false);
+			query.set(HighlightParams.MAX_CHARS, -1);
+			query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[textFieldMap.size()]));
+			query.set(HighlightParams.Q, queryComposer.getHighlightQuery());
+		}
 		query = setSort(query, sp);
 
 		Map<String, Object> data = getSearchData(sp, facetFields, query, fieldsToReturn);
@@ -167,7 +184,8 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 			for (SolrDocument document : documents) {
 				String docId = document.getFieldValue(SolrFields.DOC_ID).toString();
 				ids.add(docId);
-				Map<String, Object> result = entryView(document, fieldsToReturn, highlighting.get(docId), sp.getTextFieldsToSearch());
+				Map<String, List<String>> map = (Map<String, List<String>>) ((highlighting == null) ? ImmutableMap.of() : highlighting.get(docId));
+				Map<String, Object> result = entryView(document, fieldsToReturn, map, sp.getTextFieldsToSearch());
 				results.add(result);
 				for (Integer integer : ((Map<String, Integer>) result.get("terms")).values()) {
 					occurrences += integer;
@@ -259,28 +277,19 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 	 * @return query the SolrQuery 
 	 */
 	private SolrQuery setSort(SolrQuery query, ElaborateSearchParameters sp) {
-		//		boolean ascending = sp.isAscending();
-		//		String sortField = sp.getSort();
-		//		ORDER sortOrder = ascending ? SolrQuery.ORDER.asc : SolrQuery.ORDER.desc;
-
-		//		if (SolrFields.SCORE.equals(sortField)) {
-		//			query.addSort(SolrFields.SCORE, ascending ? SolrQuery.ORDER.desc : SolrQuery.ORDER.asc);
-		//
-		//		} else if (sortField != null) {
-		//			query.addSort(sortField, sortOrder);
-		//		}
-
-		List<SortParameter> sortParameters = sp.getSortParameters();
+		LinkedHashSet<SortParameter> sortParameters = sp.getSortParameters();
 		for (SortParameter sortParameter : sortParameters) {
-			String facetName = SolrUtils.facetName(sortParameter.getFieldname());
-			ORDER solrOrder = solrOrder(sortParameter.getDirection());
-			query.addSort(facetName, solrOrder);
+			if (StringUtils.isNotBlank(sortParameter.getFieldname())) {
+				String facetName = SolrUtils.facetName(sortParameter.getFieldname());
+				ORDER solrOrder = solrOrder(sortParameter.getDirection());
+				query.addSort(facetName, solrOrder);
+			}
 		}
 
-		query.addSort(sp.getLevel1Field(), SolrQuery.ORDER.asc);
-		query.addSort(sp.getLevel2Field(), SolrQuery.ORDER.asc);
-		query.addSort(sp.getLevel3Field(), SolrQuery.ORDER.asc);
-		query.addSort(SolrFields.NAME, SolrQuery.ORDER.asc);
+		LinkedHashSet<String> levelFields = Sets.newLinkedHashSet(ImmutableList.of(sp.getLevel1Field(), sp.getLevel2Field(), sp.getLevel3Field(), SolrFields.NAME));
+		for (String sortField : levelFields) {
+			query.addSort(sortField, SolrQuery.ORDER.asc);
+		}
 		return query;
 	}
 

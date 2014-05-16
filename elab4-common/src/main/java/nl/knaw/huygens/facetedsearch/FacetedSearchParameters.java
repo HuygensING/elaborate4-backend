@@ -22,13 +22,16 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 @SuppressWarnings("unchecked")
 public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
@@ -39,7 +42,7 @@ public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
 	private Map<String, FacetInfo> facetInfoMap;
 	private Collection<String> resultFields = Lists.newArrayList();
 	private boolean fuzzy = false;
-	private List<SortParameter> sortParameters = Lists.newArrayList();
+	private LinkedHashSet<SortParameter> sortParameters = Sets.newLinkedHashSet();
 
 	public T setTerm(final String term) {
 		if (StringUtils.isNotBlank(term)) {
@@ -70,8 +73,9 @@ public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
 		return facetFields;
 	}
 
-	public T setResultFields(Collection<String> orderLevels) {
-		this.resultFields = orderLevels;
+	public T setResultFields(Collection<String> _resultFields) {
+		this.resultFields = Sets.newHashSet(_resultFields);
+		this.resultFields.removeAll(Arrays.asList("", null));
 		return (T) this;
 	}
 
@@ -106,12 +110,12 @@ public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
 		return (T) this;
 	}
 
-	public List<SortParameter> getSortParameters() {
+	public LinkedHashSet<SortParameter> getSortParameters() {
 		return sortParameters;
 	}
 
 	public FacetedSearchParameters<T> setSortParameters(List<SortParameter> sortParameters) {
-		this.sortParameters = sortParameters;
+		this.sortParameters = new LinkedHashSet<SortParameter>(sortParameters);
 		return this;
 	}
 

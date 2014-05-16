@@ -42,7 +42,7 @@ public class ElaborateEditorQueryComposerTest extends LoggableObject {
 
 		queryComposer.compose(sp);
 		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.getHighlightQuery()).isEqualTo("*:*");
+		assertThat(queryComposer.mustHighlight()).isFalse();
 	}
 
 	@Test
@@ -57,6 +57,7 @@ public class ElaborateEditorQueryComposerTest extends LoggableObject {
 
 		queryComposer.compose(sp);
 		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+		assertThat(queryComposer.mustHighlight()).isTrue();
 		assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
 	}
 
@@ -72,6 +73,7 @@ public class ElaborateEditorQueryComposerTest extends LoggableObject {
 
 		queryComposer.compose(sp);
 		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+		assertThat(queryComposer.mustHighlight()).isTrue();
 		assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
 	}
 
@@ -89,6 +91,7 @@ public class ElaborateEditorQueryComposerTest extends LoggableObject {
 
 		queryComposer.compose(sp);
 		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+		assertThat(queryComposer.mustHighlight()).isTrue();
 		assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
 	}
 
@@ -104,7 +107,7 @@ public class ElaborateEditorQueryComposerTest extends LoggableObject {
 
 		queryComposer.compose(sp);
 		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.getHighlightQuery()).isEqualTo("*:*");
+		assertThat(queryComposer.mustHighlight()).isFalse();
 	}
 
 	@Test
@@ -123,7 +126,7 @@ public class ElaborateEditorQueryComposerTest extends LoggableObject {
 
 		queryComposer.compose(sp);
 		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.getHighlightQuery()).isEqualTo("*:*");
+		assertThat(queryComposer.mustHighlight()).isFalse();
 	}
 
 }

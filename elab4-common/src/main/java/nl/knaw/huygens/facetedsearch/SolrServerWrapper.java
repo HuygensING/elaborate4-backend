@@ -42,6 +42,11 @@ public interface SolrServerWrapper {
 	void shutdown() throws IndexException;
 
 	/**
+	 * optimize the database, time and diskspace heavy!
+	 */
+	void optimize() throws IndexException;
+
+	/**
 	 * Checks the running status of the server.
 	 * @return the boolean value <code>true</code> if everything is OK,
 	 * <code>false</code> otherwise.

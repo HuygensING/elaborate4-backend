@@ -53,6 +53,7 @@ public class ElaborateQueryComposerTest {
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
+		assertThat(queryComposer.mustHighlight()).isTrue();
 		String hquery = queryComposer.getHighlightQuery();
 		assertThat(hquery).isEqualTo(expected);
 	}
@@ -68,6 +69,7 @@ public class ElaborateQueryComposerTest {
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
+		assertThat(queryComposer.mustHighlight()).isTrue();
 		String hquery = queryComposer.getHighlightQuery();
 		assertThat(hquery).isEqualTo(expected);
 	}
@@ -85,6 +87,7 @@ public class ElaborateQueryComposerTest {
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
+		assertThat(queryComposer.mustHighlight()).isTrue();
 		String hquery = queryComposer.getHighlightQuery();
 		assertThat(hquery).isEqualTo(expected);
 	}
@@ -101,8 +104,7 @@ public class ElaborateQueryComposerTest {
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
-		String hquery = queryComposer.getHighlightQuery();
-		assertThat(hquery).isEqualTo(expected);
+		assertThat(queryComposer.mustHighlight()).isFalse();
 	}
 
 	@Test
@@ -121,8 +123,7 @@ public class ElaborateQueryComposerTest {
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
-		String hquery = queryComposer.getHighlightQuery();
-		assertThat(hquery).isEqualTo("*:*");
+		assertThat(queryComposer.mustHighlight()).isFalse();
 	}
 
 }

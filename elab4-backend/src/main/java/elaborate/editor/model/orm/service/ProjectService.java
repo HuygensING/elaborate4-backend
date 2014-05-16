@@ -364,7 +364,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 		Project project = null;
 		List<ProjectUser> resultList = getEntityManager().createQuery("from ProjectUser where user_id=:userId and project_id=:projectId", ProjectUser.class).setParameter("userId", user.getId()).setParameter("projectId", project_id).getResultList();
-		logMemory();
+		//		logMemory();
 		if (!resultList.isEmpty()) {
 			project = resultList.get(0).getProject();
 			Hibernate.initialize(project);

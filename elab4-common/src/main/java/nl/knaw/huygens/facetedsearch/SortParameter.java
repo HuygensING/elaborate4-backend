@@ -1,5 +1,8 @@
 package nl.knaw.huygens.facetedsearch;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /*
  * #%L
  * elab4-common
@@ -21,7 +24,6 @@ package nl.knaw.huygens.facetedsearch;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 
 public class SortParameter {
 	private String fieldname;
@@ -45,4 +47,13 @@ public class SortParameter {
 		return this;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		return EqualsBuilder.reflectionEquals(this, other);
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
 }
