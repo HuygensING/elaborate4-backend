@@ -52,8 +52,8 @@ public class CacheHeaderFilter extends LoggableObject implements ResourceFilter,
 	@Override
 	public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
 		MultivaluedMap<String, Object> httpHeaders = response.getHttpHeaders();
-		httpHeaders.add("Pragma", "no-cache");
-		httpHeaders.add("Cache-Control", "no-cache, must-revalidate");
+		httpHeaders.putSingle("Pragma", "no-cache");
+		httpHeaders.putSingle("Cache-Control", "no-cache, must-revalidate");
 		return response;
 	}
 
