@@ -101,6 +101,7 @@ public class TranscriptionWrapper extends LoggableObject {
 		document.accept(visitor);
 
 		setBody(visitor.getContext().getResult()//
+				.replaceAll("<[a-zA-Z]+/>", "")//
 				.replaceAll("\n", "<br>")//
 				.trim());
 		annotationNumbers = visitor.getAnnotationIds();

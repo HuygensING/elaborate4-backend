@@ -81,6 +81,15 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
+	public void testConvertBodyWithEmptyTagsForOutput() throws Exception {
+		String in = "<body>bla <i></i> bla <strong></strong> bla</body>";
+		String expected = "bla  bla  bla";
+		Transcription transcription = mockTranscription("textLayer", "title", in);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		assertThat(tw.getBody()).isEqualTo(expected);
+	}
+
+	@Test
 	public void testConvertBodyForOutput() throws Exception {
 		String in = "<body>  <ab id=\"9085822\"/>bla <ab id=\"9085821\"/>die<ae id=\"9085822\"/> bla<ae id=\"9085821\"/>\nhello world  </body>";
 		String expected = "<span data-id=\"9085822\" data-marker=\"begin\"></span>bla <span data-id=\"9085821\" data-marker=\"begin\"></span>die<sup data-id=\"9085822\" data-marker=\"end\">1</sup> bla<sup data-id=\"9085821\" data-marker=\"end\">2</sup><br>hello world";
