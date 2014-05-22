@@ -51,6 +51,10 @@ public class Session {
 		return federated;
 	}
 
+	public Date getLastAccessed() {
+		return lastAccessed;
+	}
+
 	public Session setFederated(boolean federated) {
 		this.federated = federated;
 		return this;

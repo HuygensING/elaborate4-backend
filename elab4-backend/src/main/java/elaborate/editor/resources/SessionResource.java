@@ -22,11 +22,13 @@ package elaborate.editor.resources;
  * #L%
  */
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -43,6 +45,7 @@ import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.ImmutableMap;
 
 import elaborate.editor.model.SessionService;
+import elaborate.editor.model.SessionService.SessionUserInfo;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;
 import elaborate.editor.resources.orm.PasswordData;
@@ -122,4 +125,11 @@ public class SessionResource extends AbstractElaborateResource {
 		userService.resetPassword(passwordData);
 	}
 
+	@GET
+	@Path("activeusers")
+	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@APIDesc("returns all users in active sessions")
+	public Collection<SessionUserInfo> getActiveUsers() {
+		return sessionService.getActiveSessionUsersInfo();
+	}
 }

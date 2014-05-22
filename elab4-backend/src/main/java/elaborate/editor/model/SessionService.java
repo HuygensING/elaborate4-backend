@@ -22,6 +22,8 @@ package elaborate.editor.model;
  * #L%
  */
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,6 +35,7 @@ import nl.knaw.huygens.security.client.UnauthorizedException;
 
 import org.apache.commons.lang.RandomStringUtils;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -133,5 +136,35 @@ public class SessionService extends LoggableObject {
 		long userId = session.getUserId();
 		User user = userService.read(userId);
 		return user;
+	}
+
+	public Collection<SessionUserInfo> getActiveSessionUsersInfo() {
+		removeExpiredSessions();
+		Collection<Session> values = sessionMap.values();
+		Map<Long, SessionUserInfo> userinfo = Maps.newHashMap();
+		for (Session session : values) {
+			long userId = session.getUserId();
+			if (userinfo.containsKey(userId)) {
+				SessionUserInfo info = userinfo.get(userId);
+				if (info.lastAccessed.before(session.getLastAccessed())) {
+					info.lastAccessed = session.getLastAccessed();
+				}
+			} else {
+				SessionUserInfo info = new SessionUserInfo();
+				User user = userService.read(userId);
+				info.email = user.getEmail();
+				info.lastAccessed = session.getLastAccessed();
+				info.username = user.getUsername();
+				userinfo.put(userId, info);
+			}
+		}
+		return userinfo.values();
+	}
+
+	public static class SessionUserInfo {
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
+		public Date lastAccessed;
+		public String email;
+		public String username;
 	}
 }
