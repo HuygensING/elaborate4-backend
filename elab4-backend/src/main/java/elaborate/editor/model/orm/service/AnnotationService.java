@@ -22,13 +22,17 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import com.google.common.collect.Lists;
+
 import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.User;
 
 @Singleton
@@ -105,5 +109,19 @@ public class AnnotationService extends AbstractStoredEntityService<Annotation> {
 			closeEntityManager();
 		}
 		return annotation;
+	}
+
+	public Collection<Annotation> getAnnotationsByAnnotationType(AnnotationType annotationType, EntityManager entityManager) {
+		List<Annotation> list = Lists.newArrayList();
+		try {
+			List<Annotation> resultList = entityManager.createQuery("from Annotation where annotationType=:type", Annotation.class)//
+					.setParameter("type", annotationType)//
+					.getResultList();
+			return resultList.isEmpty() ? list : resultList;
+
+		} catch (NoResultException e) {
+			return list;
+		}
+
 	}
 }

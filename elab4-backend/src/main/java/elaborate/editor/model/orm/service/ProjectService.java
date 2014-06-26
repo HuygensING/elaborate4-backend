@@ -499,6 +499,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	}
 
 	public Map<String, Object> getProjectStatistics(long project_id, User user) {
+		removeOrphanedAnnotations(project_id);
 		openEntityManager();
 		Map<String, Object> statistics;
 		try {
@@ -514,7 +515,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	private Map<String, Object> getProjectEntriesStatistics(long project_id, EntityManager entityManager, Project project) {
 		Long transcriptionCount = getTranscriptionCount(project_id, entityManager);
-		Long annotationCount = getAnnotationCount(project_id, entityManager);
+		//		Long annotationCount = getAnnotationCount(project_id, entityManager);
 		Long facsimileCount = getFacsimileCount(project_id, entityManager);
 
 		Map<String, Object> textLayerCountMap = getTextLayerCountMap(project_id, entityManager, project);
@@ -524,8 +525,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 		Map<String, Object> annotationTypeCountMap = getAnnotationTypeCountMap(project_id, entityManager, project);
 		Map<String, Object> annotationStatistics = Maps.newHashMap();
-		annotationStatistics.put(COUNT_KEY, annotationCount);
 		annotationStatistics.put("annotationtypes", annotationTypeCountMap);
+		Collection<Object> values = annotationTypeCountMap.values();
+		int annotationCount = 0;
+		for (Object typecount : values) {
+			annotationCount += (Long) typecount;
+		}
+		annotationStatistics.put(COUNT_KEY, annotationCount);
 
 		Map<String, Object> parts = Maps.newHashMap();
 		parts.put("transcriptions", transcriptionStatistics);
@@ -549,18 +555,18 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		return transcriptionCount;
 	}
 
-	private Long getAnnotationCount(long project_id, EntityManager entityManager) {
-		Long annotationCount = (Long) entityManager//
-				.createQuery("select count(*) from Annotation"//
-						+ " where transcription_id in"//
-						+ "   (select id from Transcription"//
-						+ "     where project_entry_id in"//
-						+ "      (select id from ProjectEntry where project_id=:project_id))"//
-				)//
-				.setParameter("project_id", project_id)//
-				.getSingleResult();
-		return annotationCount;
-	}
+	//	private Long getAnnotationCount(long project_id, EntityManager entityManager) {
+	//		Long annotationCount = (Long) entityManager//
+	//				.createQuery("select count(*) from Annotation"//
+	//						+ " where transcription_id in"//
+	//						+ "   (select id from Transcription"//
+	//						+ "     where project_entry_id in"//
+	//						+ "      (select id from ProjectEntry where project_id=:project_id))"//
+	//				)//
+	//				.setParameter("project_id", project_id)//
+	//				.getSingleResult();
+	//		return annotationCount;
+	//	}
 
 	private Long getFacsimileCount(long project_id, EntityManager entityManager) {
 		Long facsimileCount = (Long) entityManager//
@@ -1026,6 +1032,23 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 		ReindexStatus status = new ReindexStatus();
 		return status;
+	}
+
+	/**
+	 * Remove annotations that have no corresponding annotationmarkers (begin and end) in the Transcription Body
+	 * @param modifier The User credited with the removal
+	 */
+	public void removeOrphanedAnnotations(long project_id) {
+		beginTransaction();
+		Project project = read(project_id);
+		TranscriptionService transcriptionService = TranscriptionService.instance();
+		transcriptionService.setEntityManager(getEntityManager());
+		for (ProjectEntry projectEntry : project.getProjectEntries()) {
+			for (Transcription transcription : projectEntry.getTranscriptions()) {
+				transcriptionService.removeOrphanedAnnotations(transcription);
+			}
+		}
+		commitTransaction();
 	}
 
 }

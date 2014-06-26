@@ -22,7 +22,6 @@ package elaborate.backend.client;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +58,7 @@ public class Elab4RestClient extends LoggableObject {
 				.request(MediaType.APPLICATION_JSON)//
 				.post(Entity.form(form));
 
-		boolean success = (response.getStatus() == Status.OK.getStatusCode());
+		boolean success = (response.getStatus() == Status.OK.getStatusCode() || response.getStatus() == Status.FOUND.getStatusCode());
 		if (success) {
 			Map<String, Object> map = response.readEntity(Map.class);
 			token = (String) map.get("token");

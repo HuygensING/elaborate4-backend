@@ -110,6 +110,13 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
+	public void testConvertFromInputWithBadChar() throws Exception {
+		String in = "the smiling ones danced like blooming girls, I presumed boldly to rank the former";
+		String expected = "<body>the smiling ones danced like blooming girls, I presumed boldly to rank  the former</body>";
+		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
+	}
+
+	@Test
 	public void testSuperscriptIsHandledWell() throws Exception {
 		TranscriptionWrapper tw = new TranscriptionWrapper();
 		tw.setBody("<sup>super</sup> normaal <sub>sub</sub><br><sup>super</sup> normaal <sub>sub<br></sub><sup>super</sup> normaal <sub>sub</sub><br>");

@@ -116,7 +116,8 @@ public class TranscriptionWrapper extends LoggableObject {
 	}
 
 	static String convertFromInput(String bodyIn) {
-		bodyIn = bodyIn.replaceAll("<br>", "<br/>");
+		//		0x1a
+		bodyIn = bodyIn.replaceAll("<br>", "<br/>").replace("\u001A", " ").replace("", " ");
 		getLOG(TranscriptionWrapper.class).info("body input={}", bodyIn);
 		String xml = Transcription.BODY_START + XmlUtil.fixXhtml(bodyIn) + Transcription.BODY_END;
 		Document document = Document.createFromXml(xml, true);

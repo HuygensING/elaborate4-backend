@@ -22,7 +22,11 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
+import java.util.List;
+
 import javax.inject.Singleton;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
@@ -137,4 +141,17 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 		}
 		return defaultAnnotationType;
 	}
+
+	public AnnotationType getAnnotationTypeByName(String name, EntityManager entityManager) {
+		try {
+			List<AnnotationType> resultList = entityManager.createQuery("from AnnotationType where name=:name", AnnotationType.class)//
+					.setParameter("name", name)//
+					.getResultList();
+			return resultList.isEmpty() ? null : resultList.get(0);
+
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
 }

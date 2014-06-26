@@ -29,13 +29,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Singleton;
 import javax.persistence.TypedQuery;
 
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -298,4 +302,75 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		list = ImmutableList.copyOf(createQuery.getResultList());
 		return list;
 	}
+
+	void removeOrphanedAnnotations(Transcription transcription) {
+		for (Annotation annotation : transcription.getAnnotations()) {
+			String annotatedText = annotation.getAnnotatedText();
+			if ("".equals(annotatedText)) {
+				getEntityManager().remove(annotation);
+			}
+		}
+	}
+
+	static Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
+		@Override
+		public Integer apply(Annotation annotation) {
+			return annotation.getAnnotationNo();
+		}
+	};
+
+	void removeOrphanedAnnotationReferences(Transcription transcription) {
+		List<Annotation> annotations = Lists.newArrayList(transcription.getAnnotations());
+		Set<Integer> annotationNoSet = Sets.newHashSet(Iterables.transform(annotations, EXTRACT_ANNOTATION_NO));
+		Set<String> orphanedAnnotationTags = Sets.newHashSet();
+		String body = transcription.getBody();
+		String format = "(?m)(?s)<%s id=\"(.*?)\"/>";
+		String startRegex = String.format(format, Transcription.BodyTags.ANNOTATION_BEGIN); //
+		Pattern startPattern = Pattern.compile(startRegex);
+		Matcher startMatcher = startPattern.matcher(body);
+		String endRegex = String.format(format, Transcription.BodyTags.ANNOTATION_END); //
+		Pattern endPattern = Pattern.compile(endRegex);
+		Matcher endMatcher = endPattern.matcher(body);
+		processTags(annotationNoSet, orphanedAnnotationTags, startMatcher);
+		processTags(annotationNoSet, orphanedAnnotationTags, endMatcher);
+		if (!orphanedAnnotationTags.isEmpty()) {
+			for (String id : orphanedAnnotationTags) {
+				String beginTag = annotationBeginTag(id);
+				String endTag = annotationEndTag(id);
+				body = body.replace(beginTag, "").replace(endTag, "");
+			}
+			transcription.setBody(body);
+			getEntityManager().persist(transcription);
+		}
+	}
+
+	private String annotationEndTag(Object annotationNo) {
+		String endtag = String.format("<%s id=\"%s\"/>", //
+				Transcription.BodyTags.ANNOTATION_END, //
+				annotationNo);
+		return endtag;
+	}
+
+	private String annotationBeginTag(Object annotationNo) {
+		String begintag = String.format("<%s id=\"%s\"/>", //
+				Transcription.BodyTags.ANNOTATION_BEGIN, //
+				annotationNo);
+		return begintag;
+	}
+
+	private void processTags(Set<Integer> annotationNoSet, Set<String> orphanedAnnotationTags, Matcher matcher) {
+		while (matcher.find()) {
+			final String aNoString = matcher.group(1);
+			try {
+				final Integer aNo = Integer.valueOf(aNoString);
+				if (!annotationNoSet.contains(aNo)) {
+					orphanedAnnotationTags.add(aNoString);
+				}
+			} catch (final NumberFormatException e) {
+				LOG.warn("found illegal annotationNo '{}'; removing.", aNoString);
+				orphanedAnnotationTags.add(aNoString);
+			}
+		}
+	}
+
 }
