@@ -145,12 +145,6 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
 	//  @Implemented
 	//  void removeAnnotation(Annotation annotation, User modifier);
 	//
-	//  /**
-	//   * Remove annotations that have no corresponding annotationmarkers in the Transcription Body
-	//   * @param modifier The User credited with the removal
-	//   */
-	//  @Implemented
-	//  void removeOrphanedAnnotations(User modifier);
 	//
 	//  /**
 	//   * Remove annotation markers in the Transcription Body that have no corresponding annotation
@@ -195,77 +189,6 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
 	//    transcription.setBody(transcription.getBody().replace(begintag, "").replace(endtag, ""));
 	//    ModelFactory.delete(annotation, deleter);
 	//    ModelFactory.save(transcription, deleter);
-	//  }
-	//
-	//  private String annotationEndTag(Object annotationNo) {
-	//    String endtag = String.format("<%s id=\"%s\"/>", //
-	//        TranscriptionBodyTags.ANNOTATION_END, //
-	//        annotationNo);
-	//    return endtag;
-	//  }
-	//
-	//  private String annotationBeginTag(Object annotationNo) {
-	//    String begintag = String.format("<%s id=\"%s\"/>", //
-	//        TranscriptionBodyTags.ANNOTATION_BEGIN, //
-	//        annotationNo);
-	//    return begintag;
-	//  }
-	//
-	//  public void removeOrphanedAnnotations(User deleter) {
-	//    Annotation[] annotations = transcription.getAnnotations();
-	//    for (Annotation annotation : annotations) {
-	//      String annotatedText = annotation.getAnnotatedText();
-	//      if ("".equals(annotatedText)) {
-	//        ModelFactory.delete(annotation, deleter);
-	//      }
-	//    }
-	//  }
-	//
-	//  static Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
-	//    @Override
-	//    public Integer apply(Annotation annotation) {
-	//      return annotation.getAnnotationNo();
-	//    }
-	//  };
-	//
-	//  public void removeOrphanedAnnotationReferences(User modifier) {
-	//    List<Annotation> annotations = Lists.newArrayList(transcription.getAnnotations());
-	//    Set<Integer> annotationNoSet = Sets.newHashSet(Iterables.transform(annotations, EXTRACT_ANNOTATION_NO));
-	//    Set<String> orphanedAnnotationTags = Sets.newHashSet();
-	//    String body = transcription.getBody();
-	//    String format = "(?m)(?s)<%s id=\"(.*?)\"/>";
-	//    String startRegex = String.format(format, TranscriptionBodyTags.ANNOTATION_BEGIN); //
-	//    Pattern startPattern = Pattern.compile(startRegex);
-	//    Matcher startMatcher = startPattern.matcher(body);
-	//    String endRegex = String.format(format, TranscriptionBodyTags.ANNOTATION_END); //
-	//    Pattern endPattern = Pattern.compile(endRegex);
-	//    Matcher endMatcher = endPattern.matcher(body);
-	//    processTags(annotationNoSet, orphanedAnnotationTags, startMatcher);
-	//    processTags(annotationNoSet, orphanedAnnotationTags, endMatcher);
-	//    if (!orphanedAnnotationTags.isEmpty()) {
-	//      for (String id : orphanedAnnotationTags) {
-	//        String beginTag = annotationBeginTag(id);
-	//        String endTag = annotationEndTag(id);
-	//        body = body.replace(beginTag, "").replace(endTag, "");
-	//      }
-	//      transcription.setBody(body);
-	//      ModelFactory.save(transcription, modifier);
-	//    }
-	//  }
-	//
-	//  private void processTags(Set<Integer> annotationNoSet, Set<String> orphanedAnnotationTags, Matcher matcher) {
-	//    while (matcher.find()) {
-	//      final String aNoString = matcher.group(1);
-	//      try {
-	//        final Integer aNo = Integer.valueOf(aNoString);
-	//        if (!annotationNoSet.contains(aNo)) {
-	//          orphanedAnnotationTags.add(aNoString);
-	//        }
-	//      } catch (final NumberFormatException e) {
-	//        LOG.warn("found illegal annotationNo '{}'; removing.", aNoString);
-	//        orphanedAnnotationTags.add(aNoString);
-	//      }
-	//    }
 	//  }
 	//
 	//  public boolean hasTranscriptionType(TranscriptionType transcriptionType) {
