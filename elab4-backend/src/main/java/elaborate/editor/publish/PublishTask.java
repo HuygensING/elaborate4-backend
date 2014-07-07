@@ -281,10 +281,10 @@ public class PublishTask extends LoggableObject implements Runnable {
 	//    return metamap;
 	//  }
 
-	private static final Comparator<Facsimile> SORT_ON_FILENAME = new Comparator<Facsimile>() {
+	private static final Comparator<Facsimile> SORT_ON_NAME = new Comparator<Facsimile>() {
 		@Override
 		public int compare(Facsimile f1, Facsimile f2) {
-			return f1.getFilename().compareTo(f2.getFilename());
+			return f1.getName().compareTo(f2.getName());
 		}
 	};
 
@@ -422,11 +422,13 @@ public class PublishTask extends LoggableObject implements Runnable {
 	}
 
 	private List<Map<String, String>> getFacsimileURLs(ProjectEntry projectEntry) {
-		List<Facsimile> facsimiles = projectEntry.getFacsimiles();
-		Collections.sort(facsimiles, SORT_ON_FILENAME);
+		List<Facsimile> facsimiles = Lists.newArrayList(projectEntry.getFacsimiles());
+		Collections.sort(facsimiles, SORT_ON_NAME);
 		List<Map<String, String>> facsimileURLs = Lists.newArrayList();
 		for (Facsimile facsimile : facsimiles) {
-			facsimileURLs.add(getFacsimileData(facsimile.getZoomableUrl()));
+			Map<String, String> facsimileData = getFacsimileData(facsimile.getZoomableUrl());
+			facsimileData.put("title", facsimile.getName());
+			facsimileURLs.add(facsimileData);
 		}
 		return facsimileURLs;
 	}

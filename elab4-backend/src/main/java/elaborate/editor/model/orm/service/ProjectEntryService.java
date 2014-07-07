@@ -24,6 +24,8 @@ package elaborate.editor.model.orm.service;
 
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,6 +34,7 @@ import java.util.Set;
 import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -167,12 +170,20 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	}
 
 	/* facsimiles */
+	private static final Comparator<? super Facsimile> ON_NAME = new Comparator<Facsimile>() {
+		@Override
+		public int compare(Facsimile f1, Facsimile f2) {
+			return f1.getName().compareTo(f2.getName());
+		}
+	};
+
 	public Collection<Facsimile> getFacsimiles(long id, User user) {
 		openEntityManager();
-		ImmutableList<Facsimile> facsimiles;
+		List<Facsimile> facsimiles;
 		try {
 			ProjectEntry projectEntry = find(getEntityClass(), id);
-			facsimiles = ImmutableList.copyOf(projectEntry.getFacsimiles());
+			facsimiles = Lists.newArrayList(projectEntry.getFacsimiles());
+			Collections.sort(facsimiles, ON_NAME);
 		} finally {
 			closeEntityManager();
 		}
