@@ -163,6 +163,10 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 					.setBody(transcriptionInput.getBodyForDb())//
 					.setTextLayer(transcriptionInput.getTextLayer());
 			persist(transcription);
+
+			TranscriptionService transcriptionService = TranscriptionService.instance();
+			transcriptionService.setEntityManager(getEntityManager());
+			transcriptionService.cleanupAnnotations(transcription);
 		} finally {
 			commitTransaction();
 		}

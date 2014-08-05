@@ -128,7 +128,7 @@ public class TranscriptionWrapper extends LoggableObject {
 		TranscriptionBodyInputVisitor visitor = new TranscriptionBodyInputVisitor();
 		document.accept(visitor);
 
-		String bodyOut = visitor.getContext().getResult().trim();
+		String bodyOut = visitor.getContext().getResult().replace("<span class=\"hilite\" data-highlight=\"\"></span>", "").trim();
 		return bodyOut;
 	}
 

@@ -24,6 +24,7 @@ package elaborate.jaxrs.filters;
 
 import java.util.List;
 
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.SecurityContext;
 
 import nl.knaw.huygens.LoggableObject;
@@ -52,7 +53,14 @@ public class AuthenticationResourceFilter extends LoggableObject implements Reso
 			return request;
 		}
 
+		// Authentication via header or cookie
 		String authentication = request.getHeaderValue(HEADER);
+		if (StringUtils.isBlank(authentication)) {
+			Cookie cookie = request.getCookies().get(HEADER);
+			if (cookie != null) {
+				authentication = cookie.getValue();
+			}
+		}
 		//    LOG.info("authentication={}", authentication);
 		if (StringUtils.isNotBlank(authentication)) {
 			List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
@@ -69,6 +77,8 @@ public class AuthenticationResourceFilter extends LoggableObject implements Reso
 					throw new UnauthorizedException(e.getMessage());
 				}
 			}
+		} else {
+
 		}
 		throw new UnauthorizedException("No valid " + HEADER + " header in request");
 	}

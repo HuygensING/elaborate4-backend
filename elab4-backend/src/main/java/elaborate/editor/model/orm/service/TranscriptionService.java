@@ -101,6 +101,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 				transcription.setBody(wrapper.getBodyForDb());
 			}
 			persist(transcription);
+			cleanupAnnotations(transcription);
 			ProjectEntry projectEntry = transcription.getProjectEntry();
 			String logLine = MessageFormat.format("updated transcription ''{0}'' for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
 			updateParents(projectEntry, user, logLine);
@@ -371,6 +372,11 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 				orphanedAnnotationTags.add(aNoString);
 			}
 		}
+	}
+
+	public void cleanupAnnotations(Transcription transcription) {
+		removeOrphanedAnnotations(transcription);
+		removeOrphanedAnnotationReferences(transcription);
 	}
 
 }

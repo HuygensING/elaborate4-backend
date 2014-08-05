@@ -64,7 +64,7 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
 	private String text_layer;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "transcription")
-	private List<Annotation> annotations;
+	private List<Annotation> annotations = Lists.newArrayList();
 
 	//  public static Transcription create() {
 	//    return new Transcription();
