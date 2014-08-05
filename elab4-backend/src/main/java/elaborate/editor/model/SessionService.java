@@ -48,7 +48,7 @@ import elaborate.editor.security.ElaborateSecurityContext;
 public class SessionService extends LoggableObject {
 	private static SessionService instance;
 	private static final int MINUTES = 1000 * 60;
-	static final int SESSION_TIMEOUT = 60 * MINUTES;
+	static final int SESSION_TIMEOUT = 8 * 60 * MINUTES;
 	private static final int SESSIONID_SIZE = 20;
 	Map<String, Session> sessionMap = Maps.newHashMap();
 	UserService userService = UserService.instance();
