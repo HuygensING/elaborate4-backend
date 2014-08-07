@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.knaw.huygens.elab4</groupId>
 	<artifactId>elab4</artifactId>
-	<version>4.0-SNAPSHOT</version>
+	<version>4.0.1</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2011</inceptionYear>
 
@@ -41,7 +41,7 @@
 		<jsr250-api.version>1.0</jsr250-api.version>
 		<jtidy.version>r938</jtidy.version>
 		<postgresql.version>9.3-1100-jdbc4</postgresql.version>
-		<!-- <security.version>2.2.1</security.version> --><!--  nog niet voldoende getest -->
+		<!-- <security.version>2.2.1</security.version> --><!-- nog niet voldoende getest -->
 		<security.version>2.1.4</security.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
 		<slf4j.version>1.7.6</slf4j.version>
@@ -113,6 +113,15 @@
 			</plugin>
 
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>${maven-license.version}</version>
@@ -132,6 +141,14 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>${wagon-ssh.version}</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<organization>
