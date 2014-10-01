@@ -731,6 +731,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		try {
 			Project project = getProjectIfUserIsAllowed(project_id, user);
 			projectUsers = project.getUsers();
+			Hibernate.initialize(projectUsers);
 		} finally {
 			closeEntityManager();
 		}
@@ -739,9 +740,14 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public List<Long> getProjectUserIds(long project_id, User user) {
 		List<Long> list = Lists.newArrayList();
-		Set<User> users = getProjectUsersFull(project_id, user);
-		for (User pUser : users) {
-			list.add(pUser.getId());
+		openEntityManager();
+		try {
+			Project project = getProjectIfUserIsAllowed(project_id, user);
+			for (User pUser : project.getUsers()) {
+				list.add(pUser.getId());
+			}
+		} finally {
+			closeEntityManager();
 		}
 		return list;
 	}

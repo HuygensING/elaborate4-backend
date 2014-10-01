@@ -93,7 +93,7 @@ public class Project extends AbstractDocument<Project> {
 	})
 	Set<AnnotationType> annotationTypes = Sets.newHashSet();
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(//
 	name = "project_users", //
 	joinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) },//
