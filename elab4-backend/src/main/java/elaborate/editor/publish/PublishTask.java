@@ -502,13 +502,13 @@ public class PublishTask extends LoggableObject implements Runnable {
 		FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
 	}
 
-	private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields, Map<String, String> typograhicalAnnotationMap) {
+	private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields, Map<String, String> typographicalAnnotationMap) {
 		//    String entryFilename = entryFilename(entryNum);
 		String entryFilename = projectEntry.getId() + ".json";
 		File json = new File(jsonDir, entryFilename);
 		EntityManager entityManager = HibernateUtil.getEntityManager();
 		entityManager.merge(projectEntry);
-		Map<String, Object> entryData = getProjectEntryData(projectEntry, projectEntryMetadataFields, typograhicalAnnotationMap);
+		Map<String, Object> entryData = getProjectEntryData(projectEntry, projectEntryMetadataFields, typographicalAnnotationMap);
 		Multimap<String, AnnotationIndexData> annotationDataMap = (Multimap<String, AnnotationIndexData>) entryData.remove("annotationDataMap");
 		entityManager.close();
 		exportJson(json, entryData);
