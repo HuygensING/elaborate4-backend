@@ -669,7 +669,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 
 		public AnnotationData setText(String body) {
 			//			this.body = XmlUtil.removeXMLtags(body.replaceAll("<span class=\"annotationStub\">.*?</span>", "")).trim();
-			this.body = body.replaceAll("<span class=\"annotationStub\">.*?</span>", "").trim();
+			this.body = body.trim();
 			return this;
 		}
 
