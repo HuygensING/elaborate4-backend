@@ -172,7 +172,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
 			ProjectEntry projectEntry = transcription.getProjectEntry();
 
-			String logLine = MessageFormat.format("added annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''", annotationType.getName(), transcription.getTextLayer(), projectEntry.getName());
+			String logLine = MessageFormat.format("added annotation ''{0}'' for transcription ''{1}'' in entry ''{2}''", annotationType.getName(), transcription.getTextLayer(), projectEntry.getName());
 			updateParents(projectEntry, user, logLine);
 		} finally {
 			commitTransaction();
@@ -265,6 +265,17 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 					annotationMetadataItems.add(item);
 				}
 			}
+
+			Transcription transcription = annotation.getTranscription();
+			ProjectEntry projectEntry = transcription.getProjectEntry();
+			String logLine = MessageFormat.format(//
+					"updated ''{0}'' annotation on ''{1}'' in transcription ''{2}'' in entry ''{3}''", //
+					annotation.getAnnotationType().getName(), //
+					annotation.getAnnotatedText(), //
+					transcription.getTextLayer(), //
+					projectEntry.getName()//
+					);
+			updateParents(projectEntry, user, logLine);
 
 			//    String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
 			//      annotationMetadataItem.setData(update.metadata.get(name));
