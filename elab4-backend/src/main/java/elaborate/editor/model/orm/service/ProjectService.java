@@ -961,14 +961,38 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				User puser = getProjectUser(userId);
 				users.add(puser);
 			}
+			Set<User> prevUsers = project.getUsers();
+			String diff = getDiff(prevUsers, users);
 			project.setUsers(users);
-			persist(project.addLogEntry("projectusers changed", user));
+			persist(project.addLogEntry("projectusers changed: " + diff, user));
 
 			setModifiedBy(project, user);
 
 		} finally {
 			commitTransaction();
 		}
+	}
+
+	private String getDiff(Set<User> prevUsers, Set<User> users) {
+		List<String> added = Lists.newArrayList();
+		for (User user : users) {
+			if (!prevUsers.contains(user)) {
+				added.add(user.getUsername());
+			}
+		}
+		List<String> deleted = Lists.newArrayList();
+		for (User user : prevUsers) {
+			if (!users.contains(user)) {
+				deleted.add(user.getUsername());
+			}
+		}
+		// updateProjectUserIds is called on every single add/delete, so only 1 add or del should be found.
+		if (!added.isEmpty()) {
+			return "user " + added.get(0) + " added";
+		} else if (!deleted.isEmpty()) {
+			return "user " + deleted.get(0) + " removed";
+		}
+		return "";
 	}
 
 	public void setMetadata(long project_id, String key, String value, User user) {
