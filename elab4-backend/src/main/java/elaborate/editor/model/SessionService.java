@@ -23,6 +23,8 @@ package elaborate.editor.model;
  */
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +140,13 @@ public class SessionService extends LoggableObject {
 		return user;
 	}
 
+	private static final Comparator<SessionUserInfo> ON_LAST_ACCESSED = new Comparator<SessionUserInfo>() {
+		@Override
+		public int compare(SessionUserInfo i0, SessionUserInfo i1) {
+			return i1.lastAccessed.compareTo(i0.lastAccessed);
+		}
+	};
+
 	public Collection<SessionUserInfo> getActiveSessionUsersInfo() {
 		removeExpiredSessions();
 		Collection<Session> values = sessionMap.values();
@@ -158,11 +167,13 @@ public class SessionService extends LoggableObject {
 				userinfo.put(userId, info);
 			}
 		}
-		return userinfo.values();
+		List<SessionUserInfo> activeSessionUserInfoCollection = Lists.newArrayList(userinfo.values());
+		Collections.sort(activeSessionUserInfoCollection, ON_LAST_ACCESSED);
+		return activeSessionUserInfoCollection;
 	}
 
 	public static class SessionUserInfo {
-		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+2")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Amsterdam")
 		public Date lastAccessed;
 		public String email;
 		public String username;
