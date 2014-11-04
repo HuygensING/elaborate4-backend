@@ -72,7 +72,7 @@ public class SearchResource extends AbstractElaborateResource {
 	@POST
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@Produces(UTF8MediaType.APPLICATION_JSON)
-	public Response createSearch(//
+	public synchronized Response createSearch(//
 			@PathParam("project_id") long projectId,//
 			ElaborateEditorSearchParameters elaborateSearchParameters//
 	) {
