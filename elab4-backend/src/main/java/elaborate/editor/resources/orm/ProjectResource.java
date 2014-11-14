@@ -237,6 +237,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates the user ids assigned to the project with the given project_id")
 	public void updateProjectUsers(@PathParam("project_id") long project_id, List<Long> userIds) {
+		LOG.info("updateProjectUsers: project_id={}, userIds={}", project_id, userIds);
 		projectService.updateProjectUserIds(project_id, userIds, getUser());
 	}
 
