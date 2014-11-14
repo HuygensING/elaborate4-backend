@@ -83,7 +83,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		openEntityManager();
 		Transcription transcription;
 		try {
-			checkProjectPermissions(project_id, user);
+			abortUnlessUserHasReadPermissionsForProject(user, project_id);
 
 			transcription = read(transcription_id);
 		} finally {
@@ -95,7 +95,8 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 	public void update(long project_id, long transcription_id, TranscriptionWrapper wrapper, User user) {
 		beginTransaction();
 		try {
-			checkProjectPermissions(project_id, user);
+			abortUnlessUserHasWritePermissionsForProject(user, project_id);
+
 			Transcription transcription = read(transcription_id);
 			if (wrapper.getBody() != null) {
 				transcription.setBody(wrapper.getBodyForDb());
@@ -114,7 +115,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 	public void delete(long project_id, long transcription_id, User user) {
 		beginTransaction();
 		try {
-			checkProjectPermissions(project_id, user);
+			abortUnlessUserHasWritePermissionsForProject(user, project_id);
 
 			Transcription transcription = find(Transcription.class, transcription_id);
 			checkEntityFound(transcription, transcription_id);
@@ -128,7 +129,6 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 			String logLine = MessageFormat.format("deleted transcription ''{0}'' and its annotations for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
 
 			updateParents(projectEntry, user, logLine);
-
 		} finally {
 			commitTransaction();
 		}
@@ -139,7 +139,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		openEntityManager();
 		List<Annotation> annotations;
 		try {
-			checkProjectPermissions(project_id, user);
+			abortUnlessUserHasReadPermissionsForProject(user, project_id);
 
 			Transcription transcription = read(transcription_id);
 			annotations = ImmutableList.copyOf(transcription.getAnnotations());
@@ -156,7 +156,8 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		beginTransaction();
 		Annotation annotation;
 		try {
-			checkProjectPermissions(project_id, user);
+			abortUnlessUserHasWritePermissionsForProject(user, project_id);
+
 			Transcription transcription = read(transcription_id);
 			annotation = ModelFactory.createTrackedEntity(Annotation.class, user);
 			annotation.setTranscription(transcription);
@@ -233,7 +234,8 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		openEntityManager();
 		Annotation annotation;
 		try {
-			checkProjectPermissions(project_id, user);
+			abortUnlessUserHasReadPermissionsForProject(user, project_id);
+
 			annotation = find(Annotation.class, annotation_id);
 		} finally {
 			closeEntityManager();
@@ -244,7 +246,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 	public void updateAnnotation(long project_id, long annotation_id, AnnotationInputWrapper update, User user) {
 		beginTransaction();
 		try {
-			checkProjectPermissions(project_id, user);
+			abortUnlessUserHasWritePermissionsForProject(user, project_id);
 
 			Annotation annotation = find(Annotation.class, annotation_id);
 			AnnotationType annotationType = getAnnotationType(update);
@@ -290,8 +292,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 	public void deleteAnnotation(long project_id, long annotation_id, User user) {
 		beginTransaction();
 		try {
-
-			checkProjectPermissions(project_id, user);
+			abortUnlessUserHasWritePermissionsForProject(user, project_id);
 
 			Annotation annotation = find(Annotation.class, annotation_id);
 			remove(annotation);
@@ -302,7 +303,6 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 			String logLine = MessageFormat.format("deleted annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''", annotation.getAnnotationType().getName(), transcription.getTextLayer(), projectEntry.getName());
 
 			updateParents(projectEntry, user, logLine);
-
 		} finally {
 			commitTransaction();
 		}

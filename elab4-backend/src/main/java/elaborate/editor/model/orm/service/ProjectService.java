@@ -151,7 +151,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Project project;
 		openEntityManager();
 		try {
-			project = getProjectIfUserIsAllowed(project_id, user);
+			project = getProjectIfUserCanRead(project_id, user);
 		} finally {
 			closeEntityManager();
 		}
@@ -185,7 +185,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<ProjectEntry> projectEntriesInOrder;
 		openEntityManager();
 		try {
-			Project project = getProjectIfUserIsAllowed(id, user);
+			Project project = getProjectIfUserCanRead(id, user);
 			projectEntriesInOrder = getProjectEntriesInOrder(id);
 		} finally {
 			closeEntityManager();
@@ -197,7 +197,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Collection<Map<String, String>> projectEntryMetadata = Lists.newArrayList();
 		openEntityManager();
 		try {
-			Project project = getProjectIfUserIsAllowed(id, user);
+			Project project = getProjectIfUserCanRead(id, user);
 			Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
 
 			//		select l1.data as bewaarplaats,
@@ -338,7 +338,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		openEntityManager();
 		try {
 
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			Hibernate.initialize(project);
 			List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
 			Hibernate.initialize(projectMetadataItems);
@@ -357,13 +357,18 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	}
 
 	/* private methods*/
-	Project getProjectIfUserIsAllowed(long project_id, User user) {
+	// Throws Unauthorized acception when user has no read access rights to the project with id project_id
+	Project getProjectIfUserCanRead(long project_id, User user) {
 		if (rootOrAdmin(user)) {
 			return super.read(project_id);
 		}
 
 		Project project = null;
-		List<ProjectUser> resultList = getEntityManager().createQuery("from ProjectUser where user_id=:userId and project_id=:projectId", ProjectUser.class).setParameter("userId", user.getId()).setParameter("projectId", project_id).getResultList();
+		List<ProjectUser> resultList = getEntityManager()//
+				.createQuery("from ProjectUser where user_id=:userId and project_id=:projectId", ProjectUser.class)//
+				.setParameter("userId", user.getId())//
+				.setParameter("projectId", project_id)//
+				.getResultList();
 		//		logMemory();
 		if (!resultList.isEmpty()) {
 			project = resultList.get(0).getProject();
@@ -414,7 +419,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		openEntityManager();
 		Iterable<String> projectEntryMetadataFieldnames;
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
 		} finally {
 			closeEntityManager();
@@ -426,7 +431,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		beginTransaction();
 		try {
 
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			project.setProjectEntryMetadataFieldnames(fields);
 			persist(project);
 			persist(project.addLogEntry("projectentrymetadatafields changed", user));
@@ -441,7 +446,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Set<AnnotationType> annotationTypes;
 		openEntityManager();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			annotationTypes = project.getAnnotationTypes();
 		} finally {
 			closeEntityManager();
@@ -453,7 +458,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<Long> list = Lists.newArrayList();
 		openEntityManager();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			for (AnnotationType annotationType : project.getAnnotationTypes()) {
 				list.add(annotationType.getId());
 			}
@@ -466,7 +471,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public void setProjectAnnotationTypes(long project_id, List<Long> annotationTypeIds, User user) {
 		beginTransaction();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 
 			Set<AnnotationType> annotationTypes = Sets.newHashSet();
 			for (Long id : annotationTypeIds) {
@@ -486,7 +491,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public void setProjectAnnotationTypes(long project_id, Set<AnnotationType> annotationTypes, User user) {
 		beginTransaction();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 
 			project.setAnnotationTypes(annotationTypes);
 			persist(project.addLogEntry("projectannotationtypes changed", user));
@@ -503,7 +508,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		openEntityManager();
 		Map<String, Object> statistics;
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 
 			statistics = ImmutableMap.<String, Object> of("entries", getProjectEntriesStatistics(project_id, getEntityManager(), project));
 
@@ -629,7 +634,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		openEntityManager();
 		List<FacetInfo> list;
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			list = ImmutableList.copyOf(project.getFacetInfo());
 		} finally {
 			closeEntityManager();
@@ -641,7 +646,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		beginTransaction();
 		Set<Long> modifiedEntryIds = Sets.newHashSet();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			List<String> previous = Lists.newArrayList(project.getTextLayers());
 			List<String> deletedTextLayers = previous;
 			deletedTextLayers.removeAll(textLayers);
@@ -688,7 +693,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		beginTransaction();
 		try {
 
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			if (!user.getPermissionFor(project).can(Action.EDIT_PROJECT_SETTINGS)) {
 				throw new UnauthorizedException();
 			}
@@ -729,7 +734,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		openEntityManager();
 		Set<User> projectUsers;
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			projectUsers = project.getUsers();
 			Hibernate.initialize(projectUsers);
 		} finally {
@@ -742,7 +747,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<Long> list = Lists.newArrayList();
 		openEntityManager();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			for (User pUser : project.getUsers()) {
 				list.add(pUser.getId());
 			}
@@ -757,7 +762,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		User projectUser;
 		try {
 
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			projectUser = getProjectUser(user_id);
 
 			project.getUsers().add(projectUser);
@@ -775,7 +780,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		beginTransaction();
 		try {
 
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			User projectUser = getProjectUser(user_id);
 
 			project.getUsers().remove(projectUser);
@@ -800,7 +805,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		openEntityManager();
 		List<LogEntry> logEntries;
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			logEntries = Ordering.natural().sortedCopy(project.getLogEntries());
 		} finally {
 			closeEntityManager();
@@ -812,7 +817,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		String tei;
 		openEntityManager();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			AnnotationType versregels = getEntityManager().createQuery("from AnnotationType where name=:name", AnnotationType.class).setParameter("name", "versregel").getSingleResult();
 			tei = exportTei(project, null, versregels);
 		} finally {
@@ -824,7 +829,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public void exportPdf(long project_id, User user, String filename) {
 		openEntityManager();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 			PdfMaker pdfMaker = new PdfMaker(project, getEntityManager());
 			pdfMaker.saveToFile(filename);
 		} finally {
@@ -839,7 +844,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Map<String, String> projectMetadata;
 		openEntityManager();
 		try {
-			project = getProjectIfUserIsAllowed(project_id, user);
+			project = getProjectIfUserCanRead(project_id, user);
 			canPublish = user.getPermissionFor(project).can(Action.PUBLISH);
 			projectMetadata = project.getMetadataMap();
 		} finally {
@@ -954,7 +959,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public void updateProjectUserIds(long project_id, List<Long> userIds, User user) {
 		beginTransaction();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 
 			Set<User> users = Sets.newHashSet();
 			for (Long userId : userIds) {
@@ -998,7 +1003,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public void setMetadata(long project_id, String key, String value, User user) {
 		beginTransaction();
 		try {
-			Project project = getProjectIfUserIsAllowed(project_id, user);
+			Project project = getProjectIfUserCanRead(project_id, user);
 
 			ProjectMetadataItem item = null;
 			List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
@@ -1024,7 +1029,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public void setProjectSortLevels(long project_id, List<String> levels, User user) {
 		beginTransaction();
-		Project project = getProjectIfUserIsAllowed(project_id, user);
+		Project project = getProjectIfUserCanRead(project_id, user);
 		if (!user.getPermissionFor(project).can(Action.EDIT_PROJECT_SETTINGS)) {
 			throw new UnauthorizedException();
 		}

@@ -187,6 +187,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@PUT
 	@Path("{project_id: [0-9]+}/entrymetadatafields")
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
+	@RolesAllowed({ "ADMIN" })
 	@APIDesc("Updates the metadatafields for the project entries of the project with the given project_id")
 	public Response updateProjectEntryMetadataFields(@PathParam("project_id") long project_id, List<String> fields) {
 		projectService.setProjectEntryMetadataFields(project_id, fields, getUser());
@@ -280,6 +281,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@PUT
 	@Path("{project_id: [0-9]+}/multipleentrysettings")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
+	@RolesAllowed({ "USER", "ADMIN" })
 	@APIDesc("Updates the settings of the project entries with the given entry_ids")
 	public void updateMultipleProjectEntrySettings(@PathParam("project_id") long project_id, MultipleProjectEntrySettings mpes) {
 		LOG.info("in:{}", mpes);

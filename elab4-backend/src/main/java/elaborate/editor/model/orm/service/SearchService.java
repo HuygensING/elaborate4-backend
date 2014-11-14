@@ -60,7 +60,7 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 		beginTransaction();
 		try {
 			projectService.setEntityManager(getEntityManager());
-			Project project = projectService.getProjectIfUserIsAllowed(elaborateSearchParameters.getProjectId(), user);
+			Project project = projectService.getProjectIfUserCanRead(elaborateSearchParameters.getProjectId(), user);
 			String level1 = project.getLevel1();
 			String level2 = project.getLevel2();
 			String level3 = project.getLevel3();
