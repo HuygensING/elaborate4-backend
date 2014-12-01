@@ -128,6 +128,7 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 			sortableFields.addAll(ImmutableList.copyOf(project.getFacetFields()));
 
 			resultsMap = storableSearchData.getResults();
+			resultsMap.put("solrterm", resultsMap.remove("term"));// sending back as 'term' is confusing for the frontend
 
 			List<String> ids = (List<String>) resultsMap.remove("ids");
 			List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
