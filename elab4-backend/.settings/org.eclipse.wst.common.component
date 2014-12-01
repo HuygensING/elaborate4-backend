@@ -9,7 +9,7 @@
         <dependent-module archiveName="elab4-common-4.0.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/elab4-common/elab4-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/nl/knaw/huygens/elab4/elab4-backend-configuration-example/4.0-SNAPSHOT/elab4-backend-configuration-example-4.0-SNAPSHOT.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/*.xml&amp;excludes=META-INF/MANIFEST.MF">
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/nl/knaw/huygens/elab4/elab4-backend-configuration-example/4.0.1/elab4-backend-configuration-example-4.0.1.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/*.xml&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/slf/?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
