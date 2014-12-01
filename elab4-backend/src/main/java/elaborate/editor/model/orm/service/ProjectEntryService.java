@@ -217,7 +217,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		Facsimile facsimile;
 		try {
 			projectService.setEntityManager(getEntityManager());
-			projectService.getProjectIfUserIsAllowed(project_id, user);
+			projectService.getProjectIfUserCanRead(project_id, user);
 
 			facsimile = find(Facsimile.class, facsimile_id);
 		} finally {
@@ -231,7 +231,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		Facsimile facsimile;
 		try {
 			projectService.setEntityManager(getEntityManager());
-			Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
+			Project project = projectService.getProjectIfUserCanRead(project_id, user);
 
 			facsimile = find(Facsimile.class, facsimile_id);
 			if (facsimile == null) {
@@ -254,7 +254,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		Facsimile facsimile;
 		try {
 			projectService.setEntityManager(getEntityManager());
-			projectService.getProjectIfUserIsAllowed(project_id, user);
+			projectService.getProjectIfUserCanRead(project_id, user);
 
 			facsimile = find(Facsimile.class, facsimile_id);
 			ProjectEntry projectEntry = facsimile.getProjectEntry();
@@ -291,7 +291,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		ProjectEntry pe;
 		try {
 			projectService.setEntityManager(getEntityManager());
-			projectService.getProjectIfUserIsAllowed(project_id, creator);
+			projectService.getProjectIfUserCanRead(project_id, creator);
 
 			pe = read(entry_id);
 			for (ProjectEntryMetadataItem projectEntryMetadataItem : pe.getProjectEntryMetadataItems()) {
@@ -331,7 +331,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		Set<Long> modifiedEntryIds = Sets.newHashSet();
 		try {
 			projectService.setEntityManager(getEntityManager());
-			Project project = projectService.getProjectIfUserIsAllowed(project_id, user);
+			Project project = projectService.getProjectIfUserCanRead(project_id, user);
 
 			Map<String, Object> settings = mpes.getSettings();
 			Set<Entry<String, Object>> settingsEntrySet = settings.entrySet();

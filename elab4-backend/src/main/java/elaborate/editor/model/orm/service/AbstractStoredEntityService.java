@@ -35,6 +35,7 @@ import javax.persistence.TypedQuery;
 import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
@@ -232,10 +233,34 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		}
 	}
 
-	Project checkProjectPermissions(long project_id, User user) {
+	Project checkProjectReadPermissions(long project_id, User user) {
 		initServices();
 		projectService.setEntityManager(getEntityManager());
-		return projectService.getProjectIfUserIsAllowed(project_id, user);
+		return projectService.getProjectIfUserCanRead(project_id, user);
+	}
+
+	/**
+	 * Throws UnAuthorizedException if the user has no read permissions for the project
+	 */
+	void abortUnlessUserHasReadPermissionsForProject(User user, long project_id) {
+		checkProjectReadPermissions(project_id, user);
+	}
+
+	Project checkProjectWritePermissions(long project_id, User user) {
+		Project project = checkProjectReadPermissions(project_id, user);
+		if (user.getPermissionFor(project).canWrite()) {
+			return project;
+		} else {
+			//			closeEntityManager();
+			throw new UnauthorizedException();
+		}
+	}
+
+	/**
+	 * Throws UnAuthorizedException if the user has no write permissions for the project
+	 */
+	void abortUnlessUserHasWritePermissionsForProject(User user, long project_id) {
+		checkProjectWritePermissions(project_id, user);
 	}
 
 	void updateParents(ProjectEntry projectEntry, User user, String logLine) {

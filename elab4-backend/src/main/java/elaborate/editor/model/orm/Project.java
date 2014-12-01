@@ -93,7 +93,7 @@ public class Project extends AbstractDocument<Project> {
 	})
 	Set<AnnotationType> annotationTypes = Sets.newHashSet();
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(//
 	name = "project_users", //
 	joinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) },//
@@ -147,7 +147,7 @@ public class Project extends AbstractDocument<Project> {
 
 	@JsonIgnore
 	public String[] getFacetFields() {
-		Set<String> facetFields = Project.DEFAULT_FACETFIELDS;
+		Set<String> facetFields = Sets.newLinkedHashSet(Project.DEFAULT_FACETFIELDS);
 		for (String pemfn : getProjectEntryMetadataFieldnames()) {
 			facetFields.add(SolrUtils.facetName(pemfn));
 		}

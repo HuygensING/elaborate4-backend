@@ -10,10 +10,10 @@
   	See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along 
   	with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L% -->
-<web-app id="elaborate-backend" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
 	<display-name>eLaborate back-end</display-name>
-	<description>RESTfull back-end for eLaborate</description>
+	<description>RESTful back-end for eLaborate</description>
 	<servlet>
 		<servlet-name>JerseyRESTService</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
