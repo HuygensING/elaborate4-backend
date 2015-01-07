@@ -106,7 +106,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	/* CRUD methods */
 	public Project create(Project project, User user) {
 		if (!rootOrAdmin(user)) {
-			throw new UnauthorizedException();
+			throw new UnauthorizedException("user " + user.getUsername() + " has no admin rights");
 
 		} else {
 			addDefaultFields(project, user);
@@ -376,7 +376,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		}
 		if (project == null) {
 			closeEntityManager();
-			throw new UnauthorizedException();
+			throw new UnauthorizedException("user " + user.getUsername() + " has no read permission for project " + project.getName());
 		}
 		return project;
 	}
@@ -695,7 +695,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 			Project project = getProjectIfUserCanRead(project_id, user);
 			if (!user.getPermissionFor(project).can(Action.EDIT_PROJECT_SETTINGS)) {
-				throw new UnauthorizedException();
+				throw new UnauthorizedException("user " + user.getUsername() + " has no projectsettings permission for project " + project.getName());
 			}
 
 			List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
@@ -1031,7 +1031,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		beginTransaction();
 		Project project = getProjectIfUserCanRead(project_id, user);
 		if (!user.getPermissionFor(project).can(Action.EDIT_PROJECT_SETTINGS)) {
-			throw new UnauthorizedException();
+			throw new UnauthorizedException("user " + user.getUsername() + " has no projectsettings permission for project " + project.getName());
 		}
 		List<String> newLevels = Lists.newArrayList("", "", "");
 

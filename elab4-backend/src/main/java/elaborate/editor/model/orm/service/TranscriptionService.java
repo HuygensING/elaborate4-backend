@@ -79,25 +79,25 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
 	//  AnnotationService annotationService = AnnotationService.instance();
 
-	public Transcription read(long project_id, long transcription_id, User user) {
+	public Transcription read(long transcription_id, User user) {
 		openEntityManager();
 		Transcription transcription;
 		try {
-			abortUnlessUserHasReadPermissionsForProject(user, project_id);
-
 			transcription = read(transcription_id);
+			long project_id = transcription.getProjectEntry().getProject().getId();
+			abortUnlessUserHasReadPermissionsForProject(user, project_id);
 		} finally {
 			closeEntityManager();
 		}
 		return transcription;
 	}
 
-	public void update(long project_id, long transcription_id, TranscriptionWrapper wrapper, User user) {
+	public void update(long transcription_id, TranscriptionWrapper wrapper, User user) {
 		beginTransaction();
 		try {
-			abortUnlessUserHasWritePermissionsForProject(user, project_id);
-
 			Transcription transcription = read(transcription_id);
+			long project_id = transcription.getProjectEntry().getProject().getId();
+			abortUnlessUserHasWritePermissionsForProject(user, project_id);
 			if (wrapper.getBody() != null) {
 				transcription.setBody(wrapper.getBodyForDb());
 			}
@@ -112,13 +112,13 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		}
 	}
 
-	public void delete(long project_id, long transcription_id, User user) {
+	public void delete(long transcription_id, User user) {
 		beginTransaction();
 		try {
-			abortUnlessUserHasWritePermissionsForProject(user, project_id);
-
 			Transcription transcription = find(Transcription.class, transcription_id);
 			checkEntityFound(transcription, transcription_id);
+			long project_id = transcription.getProjectEntry().getProject().getId();
+			abortUnlessUserHasWritePermissionsForProject(user, project_id);
 			for (Annotation annotation : transcription.getAnnotations()) {
 				remove(annotation);
 			}
@@ -135,13 +135,13 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 	}
 
 	/* annotations */
-	public Collection<Annotation> getAnnotations(long project_id, long transcription_id, User user) {
+	public Collection<Annotation> getAnnotations(long transcription_id, User user) {
 		openEntityManager();
 		List<Annotation> annotations;
 		try {
-			abortUnlessUserHasReadPermissionsForProject(user, project_id);
-
 			Transcription transcription = read(transcription_id);
+			long project_id = transcription.getProjectEntry().getProject().getId();
+			abortUnlessUserHasReadPermissionsForProject(user, project_id);
 			annotations = ImmutableList.copyOf(transcription.getAnnotations());
 
 		} finally {
@@ -152,13 +152,14 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
 	private static final int ANNOTATION_NO_START = 9000000;
 
-	public Annotation addAnnotation(long project_id, long transcription_id, AnnotationInputWrapper annotationInput, User user) {
+	public Annotation addAnnotation(long transcription_id, AnnotationInputWrapper annotationInput, User user) {
 		beginTransaction();
 		Annotation annotation;
 		try {
+			Transcription transcription = read(transcription_id);
+			long project_id = transcription.getProjectEntry().getProject().getId();
 			abortUnlessUserHasWritePermissionsForProject(user, project_id);
 
-			Transcription transcription = read(transcription_id);
 			annotation = ModelFactory.createTrackedEntity(Annotation.class, user);
 			annotation.setTranscription(transcription);
 			annotation.setBody(annotationInput.body);
@@ -230,25 +231,28 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		return annotationMetadataItems;
 	}
 
-	public Annotation readAnnotation(long project_id, long annotation_id, User user) {
+	public Annotation readAnnotation(long annotation_id, User user) {
 		openEntityManager();
 		Annotation annotation;
 		try {
-			abortUnlessUserHasReadPermissionsForProject(user, project_id);
-
 			annotation = find(Annotation.class, annotation_id);
+			long project_id = annotation.getTranscription().getProjectEntry().getProject().getId();
+			abortUnlessUserHasReadPermissionsForProject(user, project_id);
 		} finally {
 			closeEntityManager();
 		}
 		return annotation;
 	}
 
-	public void updateAnnotation(long project_id, long annotation_id, AnnotationInputWrapper update, User user) {
+	public void updateAnnotation(long annotation_id, AnnotationInputWrapper update, User user) {
 		beginTransaction();
 		try {
+			Annotation annotation = find(Annotation.class, annotation_id);
+			Transcription transcription = annotation.getTranscription();
+			ProjectEntry projectEntry = transcription.getProjectEntry();
+			long project_id = projectEntry.getProject().getId();
 			abortUnlessUserHasWritePermissionsForProject(user, project_id);
 
-			Annotation annotation = find(Annotation.class, annotation_id);
 			AnnotationType annotationType = getAnnotationType(update);
 			annotation.setBody(update.body).setAnnotationType(annotationType);
 			persist(annotation);
@@ -268,8 +272,6 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 				}
 			}
 
-			Transcription transcription = annotation.getTranscription();
-			ProjectEntry projectEntry = transcription.getProjectEntry();
 			String logLine = MessageFormat.format(//
 					"updated ''{0}'' annotation on ''{1}'' in transcription ''{2}'' in entry ''{3}''", //
 					annotation.getAnnotationType().getName(), //
@@ -289,16 +291,16 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		}
 	}
 
-	public void deleteAnnotation(long project_id, long annotation_id, User user) {
+	public void deleteAnnotation(long annotation_id, User user) {
 		beginTransaction();
 		try {
-			abortUnlessUserHasWritePermissionsForProject(user, project_id);
-
 			Annotation annotation = find(Annotation.class, annotation_id);
-			remove(annotation);
-
 			Transcription transcription = annotation.getTranscription();
 			ProjectEntry projectEntry = transcription.getProjectEntry();
+			long project_id = projectEntry.getProject().getId();
+			abortUnlessUserHasWritePermissionsForProject(user, project_id);
+
+			remove(annotation);
 
 			String logLine = MessageFormat.format("deleted annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''", annotation.getAnnotationType().getName(), transcription.getTextLayer(), projectEntry.getName());
 

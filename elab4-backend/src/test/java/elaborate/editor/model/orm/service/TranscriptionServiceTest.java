@@ -48,7 +48,7 @@ public class TranscriptionServiceTest extends AbstractTest {
 		annotationInput.body = "body";
 		User root = mock(User.class);
 		when(root.isRoot()).thenReturn(true);
-		Annotation annotation = ts.addAnnotation(1, 1, annotationInput, root);
+		Annotation annotation = ts.addAnnotation(1, annotationInput, root);
 		LOG.info("annotation={}", annotation);
 		assertThat(annotation).isNotNull();
 		assertThat(annotation).hasBody("body");

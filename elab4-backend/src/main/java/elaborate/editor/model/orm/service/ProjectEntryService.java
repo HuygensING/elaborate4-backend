@@ -31,12 +31,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.sun.jersey.api.NotFoundException;
 
 import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
@@ -70,35 +72,56 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	/* CRUD methods */
 	public ProjectEntry read(long entry_id, User user) {
 		openEntityManager();
+		boolean canRead = true;
+		Project project;
 		ProjectEntry projectEntry;
 		try {
 			projectEntry = super.read(entry_id);
+			project = projectEntry.getProject();
+			canRead = user.getPermissionFor(project).canRead();
 		} finally {
 			closeEntityManager();
+		}
+		if (!canRead) {
+			throw new UnauthorizedException("user " + user.getUsername() + " is not allowed to read entry " + entry_id + " of project " + project.getName());
 		}
 		return projectEntry;
 	}
 
 	public void update(long entry_id, ProjectEntry updateEntry, User user) {
+		boolean ok = true;
 		beginTransaction();
 		ProjectEntry projectEntry;
 		try {
 			projectEntry = super.read(entry_id);
-			projectEntry.setName(updateEntry.getName());
-			projectEntry.setShortName(updateEntry.getShortName());
-			projectEntry.setPublishable(updateEntry.isPublishable());
-			super.update(projectEntry);
-			persist(projectEntry.getProject().addLogEntry(MessageFormat.format("updated entry {0}", entry_id), user));
+			Project project = projectEntry.getProject();
+			if (!user.getPermissionFor(project).canWrite()) {
+				ok = false;
+			} else {
+				projectEntry.setName(updateEntry.getName());
+				projectEntry.setShortName(updateEntry.getShortName());
+				projectEntry.setPublishable(updateEntry.isPublishable());
+				super.update(projectEntry);
+				persist(projectEntry.getProject().addLogEntry(MessageFormat.format("updated entry {0}", entry_id), user));
+			}
 		} finally {
-			commitTransaction();
+			if (ok) {
+				commitTransaction();
+			} else {
+				rollbackTransaction();
+			}
 		}
+		if (ok) {
+			beginTransaction();
+			try {
+				projectEntry = super.read(entry_id);
+				setModifiedBy(projectEntry, user);
+			} finally {
+				commitTransaction();
+			}
+		} else {
+			throw new UnauthorizedException("user is not allowed to read entry");
 
-		beginTransaction();
-		try {
-			projectEntry = super.read(entry_id);
-			setModifiedBy(projectEntry, user);
-		} finally {
-			commitTransaction();
 		}
 	}
 
@@ -201,7 +224,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 			ProjectEntry projectEntry = find(getEntityClass(), entry_id);
 			Project project = projectEntry.getProject();
 
-			facsimile = projectEntry.addFacsimile(facsimileData.getName(), facsimileData.getTitle(), user)//
+			facsimile = projectEntry//
+					.addFacsimile(facsimileData.getName(), facsimileData.getTitle(), user)//
 					.setFilename(facsimileData.getFilename())//
 					.setZoomableUrl(facsimileData.getZoomableUrl());
 			persist(facsimile);
@@ -212,36 +236,32 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		return facsimile;
 	}
 
-	public Facsimile readFacsimile(long project_id, long facsimile_id, User user) {
+	public Facsimile readFacsimile(long facsimile_id, User user) {
 		openEntityManager();
 		Facsimile facsimile;
 		try {
-			projectService.setEntityManager(getEntityManager());
+			facsimile = getFacsimile(facsimile_id);
+			long project_id = facsimile.getProjectEntry().getProject().getId();
 			projectService.getProjectIfUserCanRead(project_id, user);
-
-			facsimile = find(Facsimile.class, facsimile_id);
 		} finally {
 			closeEntityManager();
 		}
 		return facsimile;
 	}
 
-	public Facsimile updateFacsimile(long project_id, long facsimile_id, Facsimile facsimileData, User user) {
+	public Facsimile updateFacsimile(long facsimile_id, Facsimile facsimileData, User user) {
 		beginTransaction();
 		Facsimile facsimile;
 		try {
-			projectService.setEntityManager(getEntityManager());
+			facsimile = getFacsimile(facsimile_id);
+			ProjectEntry projectEntry = facsimile.getProjectEntry();
+			long project_id = projectEntry.getProject().getId();
 			Project project = projectService.getProjectIfUserCanRead(project_id, user);
 
-			facsimile = find(Facsimile.class, facsimile_id);
-			if (facsimile == null) {
-				throw new NotFoundException("no facsimile with id " + facsimile_id + " found");
-			}
 			facsimile.setName(facsimileData.getName())//
 					.setFilename(facsimileData.getFilename())//
 					.setZoomableUrl(facsimileData.getZoomableUrl());
 			persist(facsimile);
-			ProjectEntry projectEntry = facsimile.getProjectEntry();
 			persist(project.addLogEntry(MessageFormat.format("updated facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
 		} finally {
 			commitTransaction();
@@ -249,19 +269,30 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		return facsimile;
 	}
 
-	public Facsimile deleteFacsimile(long project_id, long facsimile_id, User user) {
+	public Facsimile deleteFacsimile(long facsimile_id, User user) {
 		beginTransaction();
 		Facsimile facsimile;
 		try {
-			projectService.setEntityManager(getEntityManager());
+			facsimile = getFacsimile(facsimile_id);
+			ProjectEntry projectEntry = facsimile.getProjectEntry();
+			Project project = projectEntry.getProject();
+			long project_id = project.getId();
 			projectService.getProjectIfUserCanRead(project_id, user);
 
-			facsimile = find(Facsimile.class, facsimile_id);
-			ProjectEntry projectEntry = facsimile.getProjectEntry();
-			persist(projectEntry.getProject().addLogEntry(MessageFormat.format("deleted facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
+			persist(project.addLogEntry(MessageFormat.format("deleted facsimile ''{0}'' for entry ''{1}''", facsimile.getFilename(), projectEntry.getName()), user));
 			remove(facsimile);
 		} finally {
 			commitTransaction();
+		}
+		return facsimile;
+	}
+
+	private Facsimile getFacsimile(long facsimile_id) {
+		Facsimile facsimile;
+		projectService.setEntityManager(getEntityManager());
+		facsimile = find(Facsimile.class, facsimile_id);
+		if (facsimile == null) {
+			throw new NotFoundException("no facsimile with id " + facsimile_id + " found");
 		}
 		return facsimile;
 	}
@@ -286,14 +317,16 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		return map;
 	}
 
-	public void updateProjectEntrySettings(long project_id, long entry_id, Map<String, Object> projectEntrySettings, User creator) {
+	public void updateProjectEntrySettings(long entry_id, Map<String, Object> projectEntrySettings, User creator) {
 		beginTransaction();
 		ProjectEntry pe;
 		try {
 			projectService.setEntityManager(getEntityManager());
-			projectService.getProjectIfUserCanRead(project_id, creator);
 
 			pe = read(entry_id);
+			long project_id = pe.getProject().getId();
+			projectService.getProjectIfUserCanRead(project_id, creator);
+
 			for (ProjectEntryMetadataItem projectEntryMetadataItem : pe.getProjectEntryMetadataItems()) {
 				getEntityManager().remove(projectEntryMetadataItem);
 			}
@@ -327,6 +360,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 	}
 
 	public void updateMultipleProjectEntrySettings(long project_id, MultipleProjectEntrySettings mpes, User user) {
+		boolean ok = true;
 		beginTransaction();
 		Set<Long> modifiedEntryIds = Sets.newHashSet();
 		try {
@@ -338,6 +372,11 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 			for (Long entry_id : mpes.getProjectEntryIds()) {
 				LOG.info("entryId={}", entry_id);
 				ProjectEntry pe = read(entry_id);
+
+				if (pe.getProject().getId() != project_id) {
+					ok = false;
+					throw new BadRequestException("entry " + entry_id + " does not belong in project " + project_id);
+				}
 
 				if (mpes.changePublishable()) {
 					LOG.info("change publishable to {}", mpes.getPublishableSetting());
@@ -366,19 +405,24 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 			setModifiedBy(project, user);
 
 		} finally {
-			commitTransaction();
-		}
-
-		beginTransaction();
-		try {
-			for (Long id : modifiedEntryIds) {
-				ProjectEntry pe = read(id);
-				setModifiedBy(pe, user);
+			if (ok) {
+				commitTransaction();
+			} else {
+				rollbackTransaction();
 			}
-		} finally {
-			commitTransaction();
 		}
 
+		if (ok) {
+			beginTransaction();
+			try {
+				for (Long id : modifiedEntryIds) {
+					ProjectEntry pe = read(id);
+					setModifiedBy(pe, user);
+				}
+			} finally {
+				commitTransaction();
+			}
+		}
 	}
 
 	public PrevNext getPrevNextProjectEntryIds(long entry_id) {

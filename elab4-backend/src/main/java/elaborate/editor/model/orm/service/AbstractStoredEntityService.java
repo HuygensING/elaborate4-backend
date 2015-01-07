@@ -111,6 +111,12 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	}
 
 	/* private */
+	/**	
+	 * @param entity the StoredEntity to check for null
+	 * @param id the id of the StoredEntity that was searched for
+	 * 
+	 * @throws NotFoundException when there was no entity found with the given id 
+	 */
 	protected void checkEntityFound(T entity, long id) {
 		if (entity == null) {
 			closeEntityManager();
@@ -252,7 +258,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 			return project;
 		} else {
 			//			closeEntityManager();
-			throw new UnauthorizedException();
+			throw new UnauthorizedException("user " + user.getUsername() + " has no write permission for project " + project.getName());
 		}
 	}
 

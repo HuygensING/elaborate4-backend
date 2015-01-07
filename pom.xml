@@ -20,7 +20,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<elab4.version>4.0.1</elab4.version>
+		<elab4.version>${project.parent.version}</elab4.version>
 		<elab4-config.version>1.0</elab4-config.version>
 
 		<c3p0.version>0.9.1.2</c3p0.version>

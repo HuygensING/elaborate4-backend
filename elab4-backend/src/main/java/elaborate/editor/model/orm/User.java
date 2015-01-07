@@ -36,6 +36,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
@@ -269,6 +272,38 @@ public class User extends AbstractStoredEntity<User> {
 
 	public Permission getPermissionFor(Object object) {
 		return Permissions.getPermission(this, object);
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()//
+				.append(username) //
+				.append(firstname) //
+				.append(lastname) //
+				.append(email) //
+				.append(rolestring) //
+				.toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		User other = (User) obj;
+		return new EqualsBuilder()//
+				.append(username, other.getUsername())//
+				.append(email, other.getEmail())//
+				.append(firstname, other.getFirstName())//
+				.append(lastname, other.getLastName())//
+				.append(rolestring, other.getRoleString())//
+				.isEquals();
 	}
 
 }

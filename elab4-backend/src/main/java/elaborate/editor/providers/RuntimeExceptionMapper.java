@@ -6,19 +6,31 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import nl.knaw.huygens.LoggableObject;
-import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
+
+import com.sun.jersey.api.container.MappableContainerException;
 
 @Provider
 public class RuntimeExceptionMapper extends LoggableObject implements ExceptionMapper<RuntimeException> {
-
 	@Override
 	public Response toResponse(RuntimeException exception) {
+		LOG.info("RuntimeExceptionMapper.toResonse()");
 		if (exception instanceof WebApplicationException) {
-			throw exception;
+			WebApplicationException internalException = (WebApplicationException) exception;
+			return internalException.getResponse();
 		}
-		LOG.error("{}", exception.getMessage());
-		exception.printStackTrace();
-		throw new InternalServerErrorException(exception.getMessage());
+		throw new MappableContainerException(exception);
+
+		//		ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+		//		builder.type(MediaType.TEXT_PLAIN_TYPE);
+		//		builder.entity(exception.getStackTrace());
+		//		return builder.build();
+
+		//		if (exception instanceof WebApplicationException) {
+		//			throw exception;
+		//		}
+		//		LOG.error("{}", exception.getMessage());
+		//		exception.printStackTrace();
+		//		throw new InternalServerErrorException(exception.getMessage());
 	}
 
 }

@@ -140,7 +140,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("Updates the settings of the project entry with the given entry_id")
 	public void updateProjectEntrySettings(@PathParam("project_id") long project_id, @PathParam("entry_id") long entry_id, Map<String, Object> projectEntrySettings) {
-		projectEntryService.updateProjectEntrySettings(project_id, entry_id, projectEntrySettings, user);
+		projectEntryService.updateProjectEntrySettings(entry_id, projectEntrySettings, user);
 	}
 
 	/* facsimiles */
@@ -169,7 +169,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@APIDesc("Returns the facsimile with the given facsimile_id of the project entry with the given entry_id of the project with the given project_id")
 	@JsonView(Views.Minimal.class)
 	public Facsimile getFacsimile(@PathParam("project_id") long project_id, @PathParam("facsimile_id") long facsimile_id) {
-		Facsimile facsimile = projectEntryService.readFacsimile(project_id, facsimile_id, user);
+		Facsimile facsimile = projectEntryService.readFacsimile(facsimile_id, user);
 		return facsimile;
 	}
 
@@ -179,7 +179,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("Updates the facsimile with the given facsimile_id of the project entry with the given entry_id of the project with the given project_id")
 	public void updateFacsimile(@PathParam("project_id") long project_id, @PathParam("facsimile_id") long facsimile_id, Facsimile newFacsimileData) {
-		projectEntryService.updateFacsimile(project_id, facsimile_id, newFacsimileData, user);
+		projectEntryService.updateFacsimile(facsimile_id, newFacsimileData, user);
 	}
 
 	@DELETE
@@ -187,7 +187,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("Deletes the facsimile with the given facsimile_id of the project entry with the given entry_id of the project with the given project_id, and all its dependencies (annotations")
 	public void deleteFacsimile(@PathParam("project_id") long project_id, @PathParam("facsimile_id") long facsimile_id) {
-		projectEntryService.deleteFacsimile(project_id, facsimile_id, user);
+		projectEntryService.deleteFacsimile(facsimile_id, user);
 	}
 
 	/* transcriptions*/
@@ -221,7 +221,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the transcription with the given transcription_id of the project entry with the given entry_id of the project with the given project_id")
 	public TranscriptionWrapper getTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id) {
-		Transcription transcription = transcriptionService.read(project_id, transcription_id, user);
+		Transcription transcription = transcriptionService.read(transcription_id, user);
 		return new TranscriptionWrapper(transcription);
 	}
 
@@ -233,7 +233,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	public void updateTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id, TranscriptionWrapper transcriptionWrapper) {
 		LOG.info("transcription in={}", transcriptionWrapper);
 		checkForWellFormedBody(transcriptionWrapper);
-		transcriptionService.update(project_id, transcription_id, transcriptionWrapper, user);
+		transcriptionService.update(transcription_id, transcriptionWrapper, user);
 	}
 
 	private void checkForWellFormedBody(TranscriptionWrapper transcriptionWrapper) {
@@ -247,7 +247,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("Deletes the transcription with the given transcription_id of the project entry with the given entry_id of the project with the given project_id, and all its dependencies (annotations")
 	public void deleteTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id) {
-		transcriptionService.delete(project_id, transcription_id, user);
+		transcriptionService.delete(transcription_id, user);
 	}
 
 	/* annotations*/
@@ -256,7 +256,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the annotations of the transcription with the given transcription_id of the project entry with the given entry_id")
 	public Collection<Annotation> getAnnotations(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id) {
-		return transcriptionService.getAnnotations(project_id, transcription_id, user);
+		return transcriptionService.getAnnotations(transcription_id, user);
 	}
 
 	@POST
@@ -265,7 +265,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("Add an annotation to the transcription with the given transcription_id of the project entry with the given entry_id")
 	public Response addAnnotation(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id, AnnotationInputWrapper annotationInput) {
-		Annotation created = transcriptionService.addAnnotation(project_id, transcription_id, annotationInput, user);
+		Annotation created = transcriptionService.addAnnotation(transcription_id, annotationInput, user);
 		return Response.created(createURI(created)).build();
 	}
 
@@ -274,7 +274,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the annotation with the given annotation_id of the transcription with the given transcription_id of the project entry with the given entry_id")
 	public Annotation getAnnotation(@PathParam("project_id") long project_id, @PathParam("annotation_id") long annotation_id) {
-		return transcriptionService.readAnnotation(project_id, annotation_id, user);
+		return transcriptionService.readAnnotation(annotation_id, user);
 	}
 
 	@PUT
@@ -283,7 +283,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("updates the annotation with the given annotation_id of the transcription with the given transcription_id of the project entry with the given entry_id")
 	public void updateAnnotation(@PathParam("project_id") long project_id, @PathParam("annotation_id") long annotation_id, AnnotationInputWrapper annotationInput) {
-		transcriptionService.updateAnnotation(project_id, annotation_id, annotationInput, user);
+		transcriptionService.updateAnnotation(annotation_id, annotationInput, user);
 	}
 
 	@DELETE
@@ -291,6 +291,6 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("updates the annotation with the given annotation_id of the transcription with the given transcription_id of the project entry with the given entry_id")
 	public void deleteAnnotation(@PathParam("project_id") long project_id, @PathParam("annotation_id") long annotation_id) {
-		transcriptionService.deleteAnnotation(project_id, annotation_id, user);
+		transcriptionService.deleteAnnotation(annotation_id, user);
 	}
 }

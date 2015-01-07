@@ -78,7 +78,7 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
 			}
 
 		} else {
-			throw new UnauthorizedException();
+			throw new UnauthorizedException("user " + user.getUsername() + " has no admin rights");
 		}
 	}
 
@@ -92,7 +92,7 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
 			}
 
 		} else {
-			throw new UnauthorizedException();
+			throw new UnauthorizedException("user " + user.getUsername() + " has no admin rights");
 		}
 	}
 
@@ -109,7 +109,7 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
 			return all;
 
 		} else {
-			throw new UnauthorizedException();
+			throw new UnauthorizedException("user " + user.getUsername() + " has no admin rights");
 		}
 	}
 
@@ -127,7 +127,7 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
 			}
 
 		} else {
-			throw new UnauthorizedException();
+			throw new UnauthorizedException("user " + user.getUsername() + " has no admin rights");
 		}
 	}
 
