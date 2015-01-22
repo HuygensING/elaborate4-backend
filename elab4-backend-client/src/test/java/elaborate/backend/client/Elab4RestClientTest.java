@@ -31,16 +31,15 @@ import nl.knaw.huygens.LoggableObject;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
+//@Ignore
 public class Elab4RestClientTest extends LoggableObject {
 	private static Elab4RestClient e4;
 
 	@Before
 	public void before() {
-		e4 = new Elab4RestClient("http://rest.elaborate.huygens.knaw.nl");
+		e4 = new Elab4RestClient("http://localhost:2013");
 	}
 
 	@After
@@ -73,7 +72,19 @@ public class Elab4RestClientTest extends LoggableObject {
 	}
 
 	private void loginAsRoot() {
-		boolean success = e4.login("root", "toor");
+		boolean success = e4.login("root", "d3gelijk");
 		assertThat(success).isTrue();
+	}
+
+	@Test
+	public void testCNWPagebreakFix() throws Exception {
+		loginAsRoot();
+		int projectId = 44; // CNW
+		List<Map<String, Object>> transcriptionMaps = e4.getProjectEntryTextLayers(projectId, 24857);
+		for (Map<String, Object> transcriptionMap : transcriptionMaps) {
+			int id = (Integer) transcriptionMap.get("id");
+			String body = (String) transcriptionMap.get("body");
+			LOG.info("{}: {}", id, body);
+		}
 	}
 }

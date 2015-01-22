@@ -197,15 +197,18 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 
 	/** commit and end write **/
 	public void commitTransaction() {
-		EntityTransaction transaction = getEntityManager().getTransaction();
-		try {
-			transaction.commit();
-		} catch (Exception e) {
-			LOG.error(e.getMessage());
-			e.printStackTrace();
-			transaction.rollback();
+		EntityManager entityManager = getEntityManager();
+		if (entityManager != null) {
+			EntityTransaction transaction = entityManager.getTransaction();
+			try {
+				transaction.commit();
+			} catch (Exception e) {
+				LOG.error(e.getMessage());
+				e.printStackTrace();
+				transaction.rollback();
+			}
+			closeEntityManager();
 		}
-		closeEntityManager();
 	}
 
 	/** discard changes and end write **/

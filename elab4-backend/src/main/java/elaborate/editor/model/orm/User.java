@@ -293,7 +293,7 @@ public class User extends AbstractStoredEntity<User> {
 		if (obj == this) {
 			return true;
 		}
-		if (obj.getClass() != getClass()) {
+		if (!(obj instanceof User)) {
 			return false;
 		}
 		User other = (User) obj;

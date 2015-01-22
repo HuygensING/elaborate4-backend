@@ -338,7 +338,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 
 			for (Entry<String, Object> settingsEntry : projectEntrySettings.entrySet()) {
 				String key = settingsEntry.getKey();
-				String value = (String) settingsEntry.getValue();
+				String value = ((String) settingsEntry.getValue()).trim();
 				ProjectEntryMetadataItem pemi = pe.addMetadataItem(key, value, creator);
 				persist(pemi);
 			}
