@@ -32,7 +32,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Singleton;
 import javax.persistence.TypedQuery;
 
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
