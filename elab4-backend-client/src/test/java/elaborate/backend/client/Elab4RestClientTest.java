@@ -31,9 +31,10 @@ import nl.knaw.huygens.LoggableObject;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-//@Ignore
+@Ignore
 public class Elab4RestClientTest extends LoggableObject {
 	private static Elab4RestClient e4;
 
