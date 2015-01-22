@@ -131,19 +131,21 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 			resultsMap.put("solrterm", resultsMap.remove("term"));// sending back as 'term' is confusing for the frontend
 
 			List<String> ids = (List<String>) resultsMap.remove("ids");
-			List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
+			if (ids != null) {
+				List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
 
-			int lo = ResourceUtil.toRange(start, 0, ids.size());
-			int hi = ResourceUtil.toRange(lo + rows, 0, ids.size());
-			results = results.subList(lo, hi);
-			groupMetadata(results, fieldnameMap);
+				int lo = ResourceUtil.toRange(start, 0, ids.size());
+				int hi = ResourceUtil.toRange(lo + rows, 0, ids.size());
+				results = results.subList(lo, hi);
+				groupMetadata(results, fieldnameMap);
 
-			resultsMap.put("ids", ids);
-			resultsMap.put("results", results);
-			resultsMap.put("start", lo);
-			resultsMap.put("rows", hi - lo);
+				resultsMap.put("ids", ids);
+				resultsMap.put("results", results);
+				resultsMap.put("start", lo);
+				resultsMap.put("rows", hi - lo);
 
-			resultsMap.put("sortableFields", sortableFields);
+				resultsMap.put("sortableFields", sortableFields);
+			}
 		}
 		return resultsMap;
 	}
