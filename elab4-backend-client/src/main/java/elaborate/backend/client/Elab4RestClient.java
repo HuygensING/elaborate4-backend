@@ -34,6 +34,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import jersey.repackaged.com.google.common.collect.Maps;
 import nl.knaw.huygens.LoggableObject;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -82,7 +83,7 @@ public class Elab4RestClient extends LoggableObject {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<String, String> getProjectEntryMetadata(int projectId, int entryId) {
+	public Map<String, String> getProjectEntryMetadata(long projectId, long entryId) {
 		Map<String, String> map = projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("settings")//
 				.request()//
 				.header("Authorization", "SimpleAuth " + token)//
@@ -96,11 +97,25 @@ public class Elab4RestClient extends LoggableObject {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String, String>> getProjectEntryTextLayers(int projectId, int entryId) {
-		List<Map<String, String>> map = projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("transcriptions")//
+	public List<Map<String, Object>> getProjectEntryTextLayers(long projectId, long entryId) {
+		List<Map<String, Object>> map = projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("transcriptions")//
 				.request()//
 				.header("Authorization", "SimpleAuth " + token)//
 				.get(List.class);
 		return map;
 	}
+
+	public void setProjectEntryTextLayerBody(int projectId, int entryId, int transcriptionId, String newBody) {
+		Map<String, Object> transcription = Maps.newHashMap();
+		transcription.put("body", newBody);
+		Entity<?> entity = Entity.entity(transcription, MediaType.APPLICATION_JSON);
+		Response response = projectsTarget.path(String.valueOf(projectId))//
+				.path("entries").path(String.valueOf(entryId))//
+				.path("transcriptions").path(String.valueOf(transcriptionId))//
+				.request(MediaType.APPLICATION_JSON)//
+				.header("Authorization", "SimpleAuth " + token)//
+				.put(entity);
+		LOG.info("response.status={}", response.getStatus());
+	}
+
 }
