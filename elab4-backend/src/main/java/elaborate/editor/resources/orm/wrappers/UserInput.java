@@ -56,21 +56,10 @@ public class UserInput {
 
 	public User getUser() {
 		User user = (id == NULL_ID) ? new User() : UserService.instance().getUser(id);
-		if (StringUtils.isNotBlank(username)) {
-			user.setUsername(username);
-		}
-
-		if (StringUtils.isNotBlank(email)) {
-			user.setEmail(email);
-		}
-
-		if (StringUtils.isNotBlank(firstName)) {
-			user.setFirstName(firstName);
-		}
-
-		if (StringUtils.isNotBlank(lastName)) {
-			user.setLastName(lastName);
-		}
+		user.setUsername(StringUtils.defaultIfEmpty(username, ""))//
+				.setEmail(StringUtils.defaultIfEmpty(email, ""))//
+				.setFirstName(StringUtils.defaultIfEmpty(firstName, ""))//
+				.setLastName(StringUtils.defaultIfEmpty(lastName, ""));
 
 		if (StringUtils.isNotBlank(role)) {
 			user.setRoleString(ElaborateRoles.getRolestringFor(role));
@@ -82,6 +71,8 @@ public class UserInput {
 
 		if (StringUtils.isNotBlank(firstName) || StringUtils.isNotBlank(lastName)) {
 			user.setTitle(Joiner.on(", ").skipNulls().join(new String[] { user.getLastName(), user.getFirstName() }));
+		} else {
+			user.setTitle(user.getUsername().replaceAll("_", " "));
 		}
 		return user;
 	}
