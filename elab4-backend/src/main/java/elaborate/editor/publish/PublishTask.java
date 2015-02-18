@@ -245,7 +245,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		map.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
 
 		map.put("thumbnails", thumbnails);
-		map.put("entryMetadataFields", project.getProjectEntryMetadataFieldnames());
+		//		map.put("entryMetadataFields", project.getProjectEntryMetadataFieldnames());
 		//		map.put("baseURL", getBaseURL(getBasename(project)));
 		map.put("baseURL", getBaseURL(project.getName()));
 		map.put("annotationIndex", ANNOTATION_INDEX_JSON);
@@ -480,6 +480,8 @@ public class PublishTask extends LoggableObject implements Runnable {
 		EntityManager entityManager = HibernateUtil.getEntityManager();
 		Project project = entityManager.find(Project.class, projectId);
 		Map<String, Object> projectData = getProjectData(project, entryData, thumbnails);
+		projectData.put("entryMetadataFields", settings.getProjectEntryMetadataFields());
+
 		entityManager.close();
 		exportJson(json, projectData);
 
