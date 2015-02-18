@@ -31,7 +31,6 @@ public class ElaborateSecurityContextCreator implements SecurityContextCreator {
 
 	@Override
 	public SecurityContext createSecurityContext(SecurityInformation securityInformation) {
-		//TODO: implement
 		return null;
 	}
 

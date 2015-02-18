@@ -134,6 +134,7 @@ public class SessionService extends LoggableObject {
 		Session session = sessionMap.get(sessionId);
 		if (session == null) {
 			session = SecurityWrapper.createSession(sessionId);
+			sessionMap.put(sessionId, session);
 		}
 		long userId = session.getUserId();
 		User user = userService.read(userId);
