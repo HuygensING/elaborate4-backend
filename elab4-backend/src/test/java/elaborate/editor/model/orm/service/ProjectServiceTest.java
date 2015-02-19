@@ -25,6 +25,7 @@ import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.Map;
 
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
@@ -91,6 +92,13 @@ public class ProjectServiceTest extends AbstractTest {
 		List<Long> idList = projectService.getProjectEntryIdsInOrder(1);
 		LOG.info("ids:{}", idList);
 		assertThat(idList).isNotEmpty();
+	}
+
+	@Test
+	public void testGetAnnotationTypesForProject() throws Exception {
+		Map<Integer, String> annotationTypesForProject = projectService.getAnnotationTypesForProject(44l);
+		assertThat(annotationTypesForProject).isNotEmpty();
+		LOG.info("annotationTypesForProject={}", annotationTypesForProject);
 	}
 
 	//  @Test

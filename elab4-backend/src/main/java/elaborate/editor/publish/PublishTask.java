@@ -95,6 +95,8 @@ public class PublishTask extends LoggableObject implements Runnable {
 
 	Configuration config = Configuration.instance();
 	private EntityManager entityManager;
+	private Map<Integer, String> annotationTypes;
+	private Map<Integer, Map<String, String>> annotationParameters;
 
 	public PublishTask(Publication.Settings settings) {
 		this.settings = settings;
@@ -114,6 +116,8 @@ public class PublishTask extends LoggableObject implements Runnable {
 		ps.setEntityManager(entityManager);
 		//    annotationService.setEntityManager(entityManager);
 		List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
+		annotationTypes = ps.getAnnotationTypesForProject(projectId);
+		annotationParameters = ps.getAnnotationParametersForProject(projectId);
 		int entryNum = 1;
 		List<EntryData> entryData = Lists.newArrayList();
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -346,7 +350,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 	}
 
 	private TextlayerData getTextlayerData(Transcription transcription) {
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationTypes, annotationParameters);
 		TextlayerData textlayerData = new TextlayerData()//
 				.setText(tw.getBody())//
 				.setAnnotations(getAnnotationData(tw.annotationNumbers));

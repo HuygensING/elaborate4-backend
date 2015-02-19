@@ -23,6 +23,7 @@ package elaborate.editor.resources.orm.wrappers;
  */
 
 import java.util.List;
+import java.util.Map;
 
 import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.tei.Document;
@@ -41,13 +42,28 @@ public class TranscriptionWrapper extends LoggableObject {
 	private String textLayer = "";
 	private String body = "";
 
-	public TranscriptionWrapper() {}
+	@JsonIgnore
+	private final Map<Integer, String> annotationTypes;
 
-	public TranscriptionWrapper(Transcription transcription) {
+	@JsonIgnore
+	private final Map<Integer, Map<String, String>> annotationParameters;
+
+	public TranscriptionWrapper() {
+		this.annotationTypes = null;
+		this.annotationParameters = null;
+	}
+
+	public TranscriptionWrapper(Transcription transcription, Map<Integer, String> annotationTypes, Map<Integer, Map<String, String>> annotationParameters) {
+		this.annotationTypes = annotationTypes;
+		this.annotationParameters = annotationParameters;
 		setId(transcription.getId());
 		setTextLayer(transcription.getTextLayer());
 		String tBody = transcription.getBody();
 		convertBodyForOutput(tBody);
+	}
+
+	public TranscriptionWrapper(Transcription transcription) {
+		this(transcription, null, null);
 	}
 
 	public long getId() {
@@ -97,7 +113,7 @@ public class TranscriptionWrapper extends LoggableObject {
 			document = Document.createFromXml(fixed, true);
 		}
 
-		TranscriptionBodyVisitor visitor = new TranscriptionBodyVisitor();
+		TranscriptionBodyVisitor visitor = new TranscriptionBodyVisitor(annotationTypes, annotationParameters);
 		document.accept(visitor);
 
 		setBody(visitor.getContext().getResult()//

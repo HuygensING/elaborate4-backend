@@ -26,7 +26,10 @@ import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.ElementHandler;
@@ -44,9 +47,13 @@ import elaborate.editor.model.orm.Transcription;
 public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 	private static int notenum;
 	private static List<Integer> annotationIds;
+	private static Map<Integer, String> annotationTypes;
+	private static Map<Integer, Map<String, String>> annotationParameters;
 
-	public TranscriptionBodyVisitor() {
+	public TranscriptionBodyVisitor(Map<Integer, String> _annotationTypes, Map<Integer, Map<String, String>> _annotationParameters) {
 		super(new XmlContext());
+		annotationTypes = _annotationTypes;
+		annotationParameters = _annotationParameters;
 		notenum = 1;
 		annotationIds = Lists.newArrayList();
 		setTextHandler(new XmlTextHandler<XmlContext>());
@@ -73,11 +80,25 @@ public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 
 		@Override
 		public Traversal enterElement(Element e, XmlContext c) {
-			String id = e.getAttribute("id");
-			if (StringUtils.isNotBlank(id)) {
+			String idString = e.getAttribute("id");
+			if (StringUtils.isNotBlank(idString)) {
+				Integer id = Integer.valueOf(idString);
 				Element span = new Element(TAG_SPAN);
 				span.setAttribute("data-marker", "begin");
-				span.setAttribute("data-id", id);
+				span.setAttribute("data-id", idString);
+				if (annotationTypes != null) {
+					span.setAttribute("data-type", annotationTypes.get(id));
+					if (annotationParameters != null) {
+						Map<String, String> parameters = annotationParameters.get(id);
+						if (parameters != null) {
+							for (Entry<String, String> entry : parameters.entrySet()) {
+								String key = SolrUtils.normalize(entry.getKey());
+								String value = entry.getValue();
+								span.setAttribute("data-param-" + key, value);
+							}
+						}
+					}
+				}
 				c.addOpenTag(span);
 			}
 			return STOP;

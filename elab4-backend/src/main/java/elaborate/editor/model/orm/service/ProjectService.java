@@ -1086,4 +1086,39 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		commitTransaction();
 	}
 
+	public Map<Integer, String> getAnnotationTypesForProject(Long projectId) {
+		Map<Integer, String> annotationTypes = Maps.newHashMap();
+		Project project = read(projectId);
+		List resultList = getEntityManager()//
+				.createQuery("select a.annotationNo, at.name from Annotation as a inner join a.annotationType as at where a.transcription.projectEntry.project=:project")//
+				.setParameter("project", project)//
+				.getResultList();
+		for (Object result : resultList) {
+			Object[] objects = (Object[]) result;
+			annotationTypes.put((Integer) objects[0], (String) objects[1]);
+		}
+
+		return annotationTypes;
+	}
+
+	public Map<Integer, Map<String, String>> getAnnotationParametersForProject(Long projectId) {
+		Map<Integer, Map<String, String>> annotationParameters = Maps.newHashMap();
+		Project project = read(projectId);
+		List resultList = getEntityManager()//
+				.createQuery("select a.annotationNo, am.annotationTypeMetadataItem.name, am.data  from Annotation as a    join a.annotationMetadataItems as am  where a.transcription.projectEntry.project=:project")//
+				.setParameter("project", project)//
+				.getResultList();
+		for (Object result : resultList) {
+			Object[] objects = (Object[]) result;
+			Integer annotationNo = (Integer) objects[0];
+			Map<String, String> map = annotationParameters.get(annotationNo);
+			if (map == null) {
+				map = Maps.newHashMap();
+				annotationParameters.put(annotationNo, map);
+			}
+			map.put((String) objects[1], (String) objects[2]);
+		}
+		return annotationParameters;
+	}
+
 }
