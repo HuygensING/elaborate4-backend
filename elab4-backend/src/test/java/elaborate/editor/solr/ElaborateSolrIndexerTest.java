@@ -29,9 +29,6 @@ import java.util.List;
 import nl.knaw.huygens.facetedsearch.SolrFields;
 
 import org.apache.solr.common.SolrInputDocument;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -42,12 +39,11 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.ProjectEntryMetadataItem;
 import elaborate.editor.model.orm.User;
 
-@Ignore
 public class ElaborateSolrIndexerTest extends AbstractTest {
 
 	private ProjectEntry entry;
 
-	@Before
+	//	@Before
 	public void setUp() throws Exception {
 		Project project = new Project();
 		List<ProjectEntryMetadataItem> projectEntryMetadataItems = ImmutableList.<ProjectEntryMetadataItem> of();
@@ -61,10 +57,10 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 				.setTextLayer("layer2");
 	}
 
-	@After
+	//	@After
 	public void tearDown() throws Exception {}
 
-	@Test
+	//	@Test
 	public void testGetSolrInputDocument() throws Exception {
 		SolrInputDocument docForEditor = ElaborateSolrIndexer.getSolrInputDocument(entry, false);
 		assertThat(docForEditor != null).isTrue();
@@ -89,5 +85,40 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 		String expected = "";
 		String out = ElaborateSolrIndexer.convert(xml);
 		assertThat(out).isEqualTo(expected);
+	}
+
+	@Test
+	public void testExtractCorrespondentsFromValueWithSlash() throws Exception {
+		String value = "Boddaert, Elisabeth Carolina/Spengler, Constantia Gerharda Heije van";
+		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
+		assertThat(extractCorrespondents).containsExactly("Boddaert, Elisabeth Carolina", "Spengler, Constantia Gerharda Heije van");
+	}
+
+	@Test
+	public void testExtractCorrespondentsFromValueWithSlashAndHash() throws Exception {
+		String value = "Groesbeek, Klaas/Nijhoff, Paulus#Scheltema & Holkema's Boekhandel, Uitgeverij";
+		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
+		assertThat(extractCorrespondents).containsExactly("Groesbeek, Klaas", "Nijhoff, Paulus");
+	}
+
+	@Test
+	public void testExtractCorrespondentsFromValueWithArrow() throws Exception {
+		String value = "Alberdingk Thijm, Karel Joan Lodewijk-->Verwey, Albert";
+		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
+		assertThat(extractCorrespondents).containsExactly("Alberdingk Thijm, Karel Joan Lodewijk", "Verwey, Albert");
+	}
+
+	@Test
+	public void testExtractCorrespondentsFromValueWithSlashedAndArrow() throws Exception {
+		String value = "Groesbeek, Klaas/Nijhoff, Paulus-->Verwey, Albert/Alberdingk Thijm, Karel Joan Lodewijk";
+		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
+		assertThat(extractCorrespondents).containsExactly("Groesbeek, Klaas", "Nijhoff, Paulus", "Verwey, Albert", "Alberdingk Thijm, Karel Joan Lodewijk");
+	}
+
+	@Test
+	public void testExtractCorrespondentsFromSingleValue() throws Exception {
+		String value = "Aert, Louis";
+		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
+		assertThat(extractCorrespondents).containsExactly("Aert, Louis");
 	}
 }

@@ -33,6 +33,7 @@ import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYER_PREFIX;
 import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import nl.knaw.huygens.facetedsearch.SolrUtils;
@@ -45,6 +46,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import elaborate.editor.config.Configuration;
@@ -88,6 +90,8 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			String facetName = SolrUtils.facetName(field);
 			String value = projectEntry.getMetadataValue(field);
 			doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL), 1.0f);
+			// TODO: This is CNW specific, refacoring needed
+			handleCNWCorrespondents(facetName, value, doc);
 		}
 		Set<String> textLayersProcessed = Sets.newHashSet();
 		for (Transcription transcription : projectEntry.getTranscriptions()) {
@@ -114,6 +118,35 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			doc.addField(PROJECT_ID, projectEntry.getProject().getId());
 		}
 		return doc;
+	}
+
+	private static void handleCNWCorrespondents(String facetName, String value, SolrInputDocument doc) {
+		if ("metadata_afzender_s".equals(facetName) || "metadata_ontvanger_s".equals(facetName)) {
+			for (String correspondent : extractCorrespondents(value)) {
+				doc.addField("metadata_correspondents", correspondent, 1.0f);
+			}
+		}
+	}
+
+	protected static List<String> extractCorrespondents(String value) {
+		List<String> correspondents = Lists.newArrayList();
+		if (value.contains("-->")) {
+			String[] subValues = value.split("-->");
+			for (String subValue : subValues) {
+				correspondents.addAll(extractCorrespondents(subValue));
+			}
+		} else if (value.contains("/")) {
+			String[] subValues = value.split("/");
+			for (String subValue : subValues) {
+				correspondents.addAll(extractCorrespondents(subValue));
+			}
+		} else if (value.contains("#")) {
+			String[] subValues = value.split("#");
+			correspondents.addAll(extractCorrespondents(subValues[0]));
+		} else {
+			correspondents.add(value);
+		}
+		return correspondents;
 	}
 
 	// -- private methods
