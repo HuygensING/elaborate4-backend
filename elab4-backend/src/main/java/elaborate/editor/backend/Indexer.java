@@ -50,6 +50,7 @@ public class Indexer {
 		sw.start();
 		ElaborateSolrIndexer solr = new ElaborateSolrIndexer();
 		if (wipeIndexFirst) {
+			LOG.info("clearing index");
 			solr.clear();
 		}
 		EntityManager entityManager = HibernateUtil.getEntityManager();
