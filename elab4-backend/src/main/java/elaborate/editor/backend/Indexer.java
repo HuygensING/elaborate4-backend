@@ -45,7 +45,7 @@ public class Indexer {
 
 	@SuppressWarnings("boxing")
 	public static void main(String[] args) {
-		boolean wipeIndexFirst = "-w".equals(args[0]);
+		boolean wipeIndexFirst = args.length == 0 ? false : "-w".equals(args[0]);
 		StopWatch sw = new StopWatch();
 		sw.start();
 		ElaborateSolrIndexer solr = new ElaborateSolrIndexer();
