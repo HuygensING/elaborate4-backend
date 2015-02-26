@@ -45,10 +45,13 @@ public class Indexer {
 
 	@SuppressWarnings("boxing")
 	public static void main(String[] args) {
+		boolean wipeIndexFirst = "-w".equals(args[0]);
 		StopWatch sw = new StopWatch();
 		sw.start();
 		ElaborateSolrIndexer solr = new ElaborateSolrIndexer();
-		solr.clear();
+		if (wipeIndexFirst) {
+			solr.clear();
+		}
 		EntityManager entityManager = HibernateUtil.getEntityManager();
 		try {
 			ProjectEntryService projectEntryService = ProjectEntryService.instance();
