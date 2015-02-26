@@ -88,8 +88,8 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 		Project project = projectEntry.getProject();
 		for (String field : project.getProjectEntryMetadataFieldnames()) {
 			String facetName = SolrUtils.facetName(field);
-			String value = projectEntry.getMetadataValue(field).replaceAll("\\r?\\n", "/");
-			doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL), 1.0f);
+			String value = projectEntry.getMetadataValue(field);
+			doc.addField(facetName, StringUtils.defaultIfBlank(value.replaceAll("\\r?\\n", "/"), EMPTYVALUE_SYMBOL), 1.0f);
 			// TODO: This is CNW specific, refacoring needed
 			handleCNWCorrespondents(facetName, value, doc);
 		}
