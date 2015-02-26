@@ -62,7 +62,13 @@ public class Indexer {
 			LOG.info("indexing {} projectEntries", size);
 			int n = 1;
 			for (ProjectEntry projectEntry : projectentries) {
-				LOG.info("indexing projectEntry {} ({}/{} = {}%)", new Object[] { projectEntry.getId(), n, size, percentage(n, size) });
+				LOG.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
+						new Object[] { //
+						projectEntry.getId(), n, size, //
+								percentage(n, size), //
+								time_remaining(n, size, sw.getTime()) //
+						} //
+				);
 				solr.index(projectEntry, autoCommit(n));
 				n++;
 			}
@@ -74,6 +80,11 @@ public class Indexer {
 		LOG.info("done in {}", convert(sw.getTime()));
 	}
 
+	private static String time_remaining(int n, long total, long timeelapsed) {
+		long timeRemaining = (timeelapsed / n) * (total - n);
+		return convert(timeRemaining);
+	}
+
 	private static String percentage(int part, int total) {
 		return new DecimalFormat("0.00").format((double) (100 * part) / (double) total);
 	}
@@ -83,7 +94,7 @@ public class Indexer {
 	}
 
 	public static String convert(long ms) {
-		Date date = new Date(ms);
+		Date date = new Date(ms - (1000 * 60 * 60));
 		DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
 		return formatter.format(date);
 	}
