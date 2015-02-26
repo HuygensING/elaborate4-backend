@@ -81,7 +81,7 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 		assertThat(docForEditor.getField(SolrFields.PUBLISHABLE).getValue()).isEqualTo(mockEntry.isPublishable());
 		assertThat(docForEditor.getField("metadata_multiline").getValue()).isEqualTo("Metadata/values/with/multiple/lines");
 
-		when(mockEntry.getMetadataValue("multiline")).thenReturn("Metadata\r\nvalues\r\nwith\r\nmultiple\r\nlines");
+		when(mockEntry.getMetadataValue("multiline")).thenReturn("Metadata\rvalues\rwith\rmultiple\r\nlines");
 		SolrInputDocument docForPublication = ElaborateSolrIndexer.getSolrInputDocument(mockEntry, true);
 		assertThat(docForPublication != null).isTrue();
 		LOG.info("docForPublication={}", docForPublication);
