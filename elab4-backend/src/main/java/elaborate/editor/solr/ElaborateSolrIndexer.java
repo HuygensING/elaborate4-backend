@@ -91,7 +91,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			String value = projectEntry.getMetadataValue(field);
 			doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL).replaceAll("\\r?\\n|\\r", "/"), 1.0f);
 			// TODO: This is CNW specific, refactoring needed
-			//			handleCNWCorrespondents(facetName, value, doc);
+			handleCNWCorrespondents(facetName, value, doc);
 		}
 		Set<String> textLayersProcessed = Sets.newHashSet();
 		for (Transcription transcription : projectEntry.getTranscriptions()) {
@@ -123,7 +123,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 	private static void handleCNWCorrespondents(String facetName, String value, SolrInputDocument doc) {
 		if ("metadata_afzender_s".equals(facetName) || "metadata_ontvanger_s".equals(facetName)) {
 			for (String correspondent : extractCorrespondents(value)) {
-				doc.addField("metadata_correspondents", correspondent, 1.0f);
+				doc.addField("mv_metadata_correspondents", correspondent, 1.0f);
 			}
 		}
 	}
