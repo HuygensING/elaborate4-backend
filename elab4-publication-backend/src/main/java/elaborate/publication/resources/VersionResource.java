@@ -46,6 +46,7 @@ public class VersionResource {
 		Map<String, String> data = Maps.newHashMap();
 		data.put("build", getProperty("build"));
 		data.put("builddate", getProperty("builddate"));
+		//		data.put("draft_builddate", getProperty("draft_builddate"));
 		//    data.put("version", Configuration.instance().getStringSetting("version", "[undefined]"));
 		return data;
 	}

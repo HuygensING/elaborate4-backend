@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import nl.knaw.huygens.datable.Datable;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
@@ -54,9 +55,12 @@ import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
+import elaborate.util.CNWUtil;
 import elaborate.util.XmlUtil;
 
 public class ElaborateSolrIndexer extends SolrIndexer {
+	private static final CNWUtil CNW_UTIL = new CNWUtil();
+
 	public ElaborateSolrIndexer() {
 		super(getServer(), ID);
 	}
@@ -90,8 +94,10 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			String facetName = SolrUtils.facetName(field);
 			String value = projectEntry.getMetadataValue(field);
 			doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL).replaceAll("\\r?\\n|\\r", "/"), 1.0f);
-			// TODO: This is CNW specific, refactoring needed
-			handleCNWCorrespondents(facetName, value, doc);
+			if (forPublication) {
+				// TODO: This is CNW specific, refactoring needed
+				handleCNWFacets(facetName, value, doc);
+			}
 		}
 		Set<String> textLayersProcessed = Sets.newHashSet();
 		for (Transcription transcription : projectEntry.getTranscriptions()) {
@@ -120,11 +126,17 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 		return doc;
 	}
 
-	private static void handleCNWCorrespondents(String facetName, String value, SolrInputDocument doc) {
+	private static void handleCNWFacets(String facetName, String value, SolrInputDocument doc) {
 		if ("metadata_afzender_s".equals(facetName) || "metadata_ontvanger_s".equals(facetName)) {
 			for (String correspondent : extractCorrespondents(value)) {
 				doc.addField("mv_metadata_correspondents", correspondent, 1.0f);
 			}
+		} else if ("metadata_datum".equals(facetName)) {
+			Datable datable = new Datable(CNW_UTIL.convertDate(value));
+			doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
+			doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
+			//			doc.addField("metadata_datum_lower", datable.getFromDate(), 1.0f);
+			//			doc.addField("metadata_datum_upper", datable.getToDate(), 1.0f);
 		}
 	}
 
@@ -144,7 +156,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			String[] subValues = value.split("#");
 			correspondents.addAll(extractCorrespondents(subValues[0]));
 		} else {
-			correspondents.add(value);
+			correspondents.add(value.trim());
 		}
 		return correspondents;
 	}

@@ -22,11 +22,11 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
-
 public enum FacetType {
-  LIST, //
-  BOOLEAN, //
-  DATE, //
-  PERSON, //
-  PLACE
+	LIST, //
+	BOOLEAN, //
+	DATE, //
+	RANGE, //
+	PERSON, //
+	PLACE
 }

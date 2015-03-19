@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.facetedsearch.FacetType;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -48,6 +49,8 @@ public class SearchConfig {
 			FacetInfo value = entry.getValue();
 			if (metadataFieldsForFacets.contains(value.getTitle())) {
 				facetInfoMap.put(key, value);
+				// TODO: refactor or remove! kludge for CNW
+				insertFacetsForCNW(project, key);
 			}
 		}
 		facetFields = ImmutableList.copyOf(facetInfoMap.keySet());
@@ -56,6 +59,21 @@ public class SearchConfig {
 				fieldOf(project.getLevel2()),//
 				fieldOf(project.getLevel3())//
 				);
+	}
+
+	private void insertFacetsForCNW(Project project, String key) {
+		if (project.getId() == 44) {
+			if (key.equals("metadata_ontvanger_s")) {
+				FacetInfo facetInfo = new FacetInfo()//
+						.setName("mv_metadata_correspondents")//
+						.setTitle("Correspondent")//
+						.setType(FacetType.LIST);
+				facetInfoMap.put("mv_metadata_correspondents", facetInfo);
+			}
+			//			if (key.equals("metadata_datum")) {
+			//				facetInfoMap.get(key).setType(FacetType.RANGE);
+			//			}
+		}
 	}
 
 	private String fieldOf(String level) {

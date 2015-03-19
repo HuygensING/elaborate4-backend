@@ -32,6 +32,11 @@
 			<artifactId>security-client</artifactId>
 			<version>${security.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>nl.knaw.huygens</groupId>
+			<artifactId>datables</artifactId>
+			<version>${datables.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
