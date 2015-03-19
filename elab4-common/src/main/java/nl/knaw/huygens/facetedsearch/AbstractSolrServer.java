@@ -297,26 +297,26 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 		return "asc".equals(direction) ? SolrQuery.ORDER.asc : SolrQuery.ORDER.desc;
 	}
 
-	/**
-	 * Sets the sort criteria for the query.
-	 */
-	private SolrQuery setSort1(SolrQuery query, ElaborateSearchParameters sp) {
-		boolean ascending = sp.isAscending();
-		String sortField = sp.getSort();
-		ORDER sortOrder = ascending ? SolrQuery.ORDER.asc : SolrQuery.ORDER.desc;
-		if (SolrFields.SCORE.equals(sortField)) {
-			query.addSort(SolrFields.SCORE, ascending ? SolrQuery.ORDER.desc : SolrQuery.ORDER.asc);
-
-		} else if (sortField != null) {
-			query.addSort(sortField, sortOrder);
-		}
-
-		query.addSort(sp.getLevel1Field(), SolrQuery.ORDER.asc);
-		query.addSort(sp.getLevel2Field(), SolrQuery.ORDER.asc);
-		query.addSort(sp.getLevel3Field(), SolrQuery.ORDER.asc);
-		query.addSort(SolrFields.NAME, SolrQuery.ORDER.asc);
-		return query;
-	}
+	//	/**
+	//	 * Sets the sort criteria for the query.
+	//	 */
+	//	private SolrQuery setSort1(SolrQuery query, ElaborateSearchParameters sp) {
+	//		boolean ascending = sp.isAscending();
+	//		String sortField = sp.getSort();
+	//		ORDER sortOrder = ascending ? SolrQuery.ORDER.asc : SolrQuery.ORDER.desc;
+	//		if (SolrFields.SCORE.equals(sortField)) {
+	//			query.addSort(SolrFields.SCORE, ascending ? SolrQuery.ORDER.desc : SolrQuery.ORDER.asc);
+	//
+	//		} else if (sortField != null) {
+	//			query.addSort(sortField, sortOrder);
+	//		}
+	//
+	//		query.addSort(sp.getLevel1Field(), SolrQuery.ORDER.asc);
+	//		query.addSort(sp.getLevel2Field(), SolrQuery.ORDER.asc);
+	//		query.addSort(sp.getLevel3Field(), SolrQuery.ORDER.asc);
+	//		query.addSort(SolrFields.NAME, SolrQuery.ORDER.asc);
+	//		return query;
+	//	}
 
 	/**
 	 * Returns a list of facetinfo with counts.

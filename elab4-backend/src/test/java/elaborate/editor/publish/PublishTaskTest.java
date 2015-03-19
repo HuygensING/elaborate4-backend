@@ -114,6 +114,7 @@ public class PublishTaskTest extends AbstractTest {
 		Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
 		assertThat(projectData.get("title")).isEqualTo(publicationTitle);
 
+		@SuppressWarnings("unchecked")
 		Map<String, List<String>> map = (Map<String, List<String>>) projectData.get("metadata");
 		assertThat(map).doesNotContainKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
 
