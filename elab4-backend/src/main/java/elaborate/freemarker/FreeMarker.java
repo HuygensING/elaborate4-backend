@@ -37,12 +37,14 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.Version;
 
 public class FreeMarker {
+	private static final Version VERSION = Configuration.VERSION_2_3_21;
 	static Logger LOG = LoggerFactory.getLogger(FreeMarker.class);
-	private static final Configuration FREEMARKER = new Configuration();
+	private static final Configuration FREEMARKER = new Configuration(VERSION);
 	static {
-		FREEMARKER.setObjectWrapper(new DefaultObjectWrapper());
+		FREEMARKER.setObjectWrapper(new DefaultObjectWrapper(VERSION));
 	}
 
 	public static String templateToString(String fmTemplate, Object fmRootMap, Class<?> clazz) {
