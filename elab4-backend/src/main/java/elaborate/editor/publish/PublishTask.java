@@ -40,6 +40,7 @@ import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
 import nl.knaw.huygens.facetedsearch.IndexException;
 import nl.knaw.huygens.facetedsearch.LocalSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -484,7 +485,9 @@ public class PublishTask extends LoggableObject implements Runnable {
 		EntityManager entityManager = HibernateUtil.getEntityManager();
 		Project project = entityManager.find(Project.class, projectId);
 		Map<String, Object> projectData = getProjectData(project, entryData, thumbnails);
-		projectData.put("entryMetadataFields", settings.getProjectEntryMetadataFields());
+		List<String> projectEntryMetadataFields = settings.getProjectEntryMetadataFields();
+		projectData.put("entryMetadataFields", projectEntryMetadataFields);
+		cnwKludge(project, projectData, projectEntryMetadataFields);
 
 		entityManager.close();
 		exportJson(json, projectData);
@@ -506,6 +509,32 @@ public class PublishTask extends LoggableObject implements Runnable {
 				"VERSION", version//
 				);
 		FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
+	}
+
+	private void cnwKludge(Project project, Map<String, Object> projectData, List<String> projectEntryMetadataFields) {
+		if (project.getId() == 44) {
+			List<String> fieldnames = Lists.newArrayListWithExpectedSize(projectEntryMetadataFields.size());
+			for (String fieldTitle : projectEntryMetadataFields) {
+				fieldnames.add(SolrUtils.facetName(fieldTitle));
+			}
+			projectData.put("entryMetadataFields", fieldnames);
+
+			List<String> levelTitles = (List<String>) projectData.get("levels");
+			List<String> levelFieldNames = Lists.newArrayListWithExpectedSize(levelTitles.size());
+			for (String levelTitle : levelTitles) {
+				levelFieldNames.add(SolrUtils.facetName(levelTitle));
+			}
+			projectData.put("levels", levelFieldNames);
+
+			projectData.put("personMetadataFields", ImmutableList.of(//
+					"dynamic_s_koppelnaam", "dynamic_s_altname", "dynamic_s_gender", //
+					"dynamic_i_birthyear", "dynamic_i_deathyear", "dynamic_s_networkdomain",//
+					"dynamic_s_characteristic", "dynamic_s_subdomain", "dynamic_s_domain"/*, "dynamic_s_membership"*///
+			));
+			projectData.put("personLevels", ImmutableList.of(//
+					"dynamic_sort_name", "dynamic_k_birthDate", "dynamic_k_deathDate"//
+			));
+		}
 	}
 
 	private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields, Map<String, String> typographicalAnnotationMap) {
