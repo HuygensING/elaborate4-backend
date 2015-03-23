@@ -258,6 +258,12 @@
 
 		<plugins>
 			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.1.0.M0</version>
+			</plugin>
+
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>${tomcat-maven.version}</version>
@@ -266,12 +272,6 @@
 					<url>${tomcat.manager.url}</url>
 					<path>${tomcat.path}</path>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.1.0.M0</version>
 			</plugin>
 
 			<plugin>
