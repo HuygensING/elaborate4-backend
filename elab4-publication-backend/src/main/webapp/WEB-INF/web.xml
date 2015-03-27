@@ -24,6 +24,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="elaborate_publication" version="3.0">
   <display-name>eLaborate publication</display-name>
   <description>eLaborate publication</description>
+
   <servlet>
     <servlet-name>JerseyRESTService</servlet-name>
     <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -45,9 +46,11 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+
   <listener>
     <listener-class>se.jiderhamn.classloader.leak.prevention.ClassLoaderLeakPreventor</listener-class>
   </listener>
+
   <filter>
     <filter-name>UrlRewriteFilter</filter-name>
     <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
@@ -56,10 +59,12 @@
       <param-value>-1</param-value>
     </init-param>
   </filter>
+
   <servlet-mapping>
     <servlet-name>JerseyRESTService</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
+
   <filter-mapping>
     <filter-name>UrlRewriteFilter</filter-name>
     <url-pattern>/entry/*</url-pattern>
@@ -68,6 +73,9 @@
     <url-pattern>/search/*</url-pattern>
     <url-pattern>/annotations</url-pattern>
     <url-pattern>/annotations/*</url-pattern>
+    <url-pattern>/person/*</url-pattern>
+    <url-pattern>/person-search</url-pattern>
+    <url-pattern>/person-search/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
