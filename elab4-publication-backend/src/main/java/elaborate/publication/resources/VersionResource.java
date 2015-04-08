@@ -63,11 +63,4 @@ public class VersionResource {
 		return propertyResourceBundle.getString(key);
 	}
 
-	@POST
-	@Produces(UTF8MediaType.TEXT_PLAIN)
-	public Object postObject() {
-		String object = "Hello World!";
-		return object;
-	}
-
 }
