@@ -27,8 +27,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,6 +81,7 @@ import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
 
 public class PublishTask extends LoggableObject implements Runnable {
+	private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static final String THUMBNAIL_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=";
 	private static final String ZOOM_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/viewer2.1.html?rft_id=";
 	private static final String PUBLICATION_URL = "publicationURL";
@@ -143,6 +146,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		String basename = getBasename(project);
 		String url = getBaseURL(project.getName());
 		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps), url);
+		exportBuildDate();
 		// FIXME: fix, error bij de ystroom
 		if (entityManager.isOpen()) {
 			entityManager.close();
@@ -202,6 +206,15 @@ public class PublishTask extends LoggableObject implements Runnable {
 	private void exportSearchConfig(Project project, List<String> facetFields, String baseurl) {
 		File json = new File(distDir, "WEB-INF/classes/config.json");
 		exportJson(json, new SearchConfig(project, facetFields).setBaseURL(baseurl));
+	}
+
+	private void exportBuildDate() {
+		File properties = new File(distDir, "WEB-INF/classes/version.properties");
+		try {
+			FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private List<String> getProjectEntryMetadataFields(ProjectService ps) {
