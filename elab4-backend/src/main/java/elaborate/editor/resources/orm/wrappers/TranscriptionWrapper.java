@@ -117,8 +117,10 @@ public class TranscriptionWrapper extends LoggableObject {
 		document.accept(visitor);
 
 		setBody(visitor.getContext().getResult()//
-				.replaceAll("<[a-zA-Z]+/>", "")//
+				.replaceAll("(?s)\\s+$", "")// remove whitespace at end of body
+				.replaceAll("<[a-zA-Z]+/>", "")// remove milestone/empty tags
 				.replaceAll("\n", "<br>")//
+				.replaceAll("(<br>)+$", "")//
 				.trim());
 		annotationNumbers = visitor.getAnnotationIds();
 	}

@@ -103,6 +103,15 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
+	public void testConvertBodyForOutput_with_superfluous_newlines_at_the_end() throws Exception {
+		String in = "<body>lorem epsum doleres whatever\n \n\n\n</body>";
+		String expected = "lorem epsum doleres whatever";
+		Transcription transcription = mockTranscription("textLayer", "title", in);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		assertThat(tw.getBody()).isEqualTo(expected);
+	}
+
+	@Test
 	public void testConvertFromInput() throws Exception {
 		String in = "<span data-marker=\"begin\" data-id=\"9085822\">bla die bla</span><sup data-marker=\"end\" data-id=\"9085822\">1</sup><br>hello world";
 		String expected = "<body><ab id=\"9085822\"/>bla die bla<ae id=\"9085822\"/>\nhello world</body>";
