@@ -101,4 +101,14 @@ public class SolrUtilsTest {
 		assertThat(SolrUtils.fuzzy("hugo de groot")).isEqualTo("hugo~0.7 AND de~0.5 AND groot~0.7");
 	}
 
+	@Test
+	public void testIfFieldNameUsedReturnFieldname() {
+		assertThat(SolrUtils.facetName("metadata_date")).isEqualTo("metadata_date");
+	}
+
+	@Test
+	public void testIfFieldTitleUsedReturnFacetFieldName() {
+		assertThat(SolrUtils.facetName("Date")).isEqualTo("metadata_date");
+	}
+
 }

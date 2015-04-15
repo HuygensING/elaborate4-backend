@@ -97,7 +97,11 @@ public class SolrUtils {
 	}
 
 	public static String facetName(String fieldname) {
-		return METADATAFIELD_PREFIX + normalize(fieldname);
+		if (fieldname.startsWith(METADATAFIELD_PREFIX)) {
+			return fieldname;
+		} else {
+			return METADATAFIELD_PREFIX + normalize(fieldname);
+		}
 	}
 
 }
