@@ -542,11 +542,11 @@ public class PublishTask extends LoggableObject implements Runnable {
 			projectData.put("personMetadataFields", ImmutableList.of(//
 					"dynamic_s_koppelnaam", "dynamic_s_altname", "dynamic_s_gender", //
 					"dynamic_i_birthyear", "dynamic_i_deathyear", "dynamic_s_networkdomain",//
-					"dynamic_s_characteristic", "dynamic_s_subdomain", "dynamic_s_domain",//
+					"dynamic_s_characteristic", "dynamic_s_subdomain", "dynamic_s_domain", "dynamic_s_combineddomain",//
 					"dynamic_s_periodical", "dynamic_s_membership"//
 			));
 			projectData.put("personLevels", ImmutableList.of(//
-					"dynamic_sort_name", "dynamic_k_birthDate", "dynamic_k_deathDate"//
+					"dynamic_sort_name", "dynamic_k_birthDate", "dynamic_k_deathDate", "dynamic_sort_networkdomain", "dynamic_sort_gender"//
 			));
 		}
 	}
