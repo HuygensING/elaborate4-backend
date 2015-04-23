@@ -41,6 +41,7 @@ public class TranscriptionWrapper extends LoggableObject {
 	private long id = 0l;
 	private String textLayer = "";
 	private String body = "";
+	private static final String NBSP = "\\u00A0";
 
 	@JsonIgnore
 	private final Map<Integer, String> annotationTypes;
@@ -117,10 +118,11 @@ public class TranscriptionWrapper extends LoggableObject {
 		document.accept(visitor);
 
 		setBody(visitor.getContext().getResult()//
-				.replaceAll("(?s)\\s+$", "")// remove whitespace at end of body
+				.replaceAll("(?s)[" + NBSP + "\\s]+$", "")// remove whitespace at end of body
 				.replaceAll("<[a-zA-Z]+/>", "")// remove milestone/empty tags
 				.replaceAll("\n", "<br>")//
 				.replaceAll("(<br>)+$", "")//
+				.replaceAll(NBSP, "&nbsp;") //
 				.trim());
 		annotationNumbers = visitor.getAnnotationIds();
 	}
