@@ -232,6 +232,12 @@
 			<artifactId>hibernate-testing</artifactId>
 			<version>${hibernate.version}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>tools</artifactId>
+					<groupId>com.sun</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
