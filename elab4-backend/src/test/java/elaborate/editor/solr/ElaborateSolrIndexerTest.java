@@ -28,9 +28,11 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.SolrFields;
 
 import org.apache.solr.common.SolrInputDocument;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -72,9 +74,9 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 		when(mockEntry.isPublishable()).thenReturn(true);
 		when(mockEntry.getMetadataValue("multiline")).thenReturn("Metadata\nvalues\nwith\nmultiple\nlines");
 
-		SolrInputDocument docForEditor = ElaborateSolrIndexer.getSolrInputDocument(mockEntry, false);
+		SolrInputDocument docForEditor = ElaborateSolrIndexer.getSolrInputDocument(mockEntry, false, null);
 		assertThat(docForEditor != null).isTrue();
-		LOG.info("docForEditor={}", docForEditor);
+		Log.info("docForEditor={}", docForEditor);
 		assertThat(docForEditor.getField(SolrFields.ID).getValue()).isEqualTo(mockEntry.getId());
 		assertThat(docForEditor.getField(SolrFields.NAME).getValue()).isEqualTo(mockEntry.getName());
 		assertThat(docForEditor.getField(SolrFields.PROJECT_ID).getValue()).isEqualTo(mockEntry.getProject().getId());
@@ -82,9 +84,9 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 		assertThat(docForEditor.getField("metadata_multiline").getValue()).isEqualTo("Metadata/values/with/multiple/lines");
 
 		when(mockEntry.getMetadataValue("multiline")).thenReturn("Metadata\rvalues\rwith\rmultiple\r\nlines");
-		SolrInputDocument docForPublication = ElaborateSolrIndexer.getSolrInputDocument(mockEntry, true);
+		SolrInputDocument docForPublication = ElaborateSolrIndexer.getSolrInputDocument(mockEntry, true, Lists.<String> newArrayList());
 		assertThat(docForPublication != null).isTrue();
-		LOG.info("docForPublication={}", docForPublication);
+		Log.info("docForPublication={}", docForPublication);
 		assertThat(docForPublication.getField(SolrFields.ID).getValue()).isEqualTo(mockEntry.getId());
 		assertThat(docForPublication.getField(SolrFields.NAME).getValue()).isEqualTo(mockEntry.getName());
 		assertThat(docForPublication.getField(SolrFields.PROJECT_ID)).isEqualTo(null);

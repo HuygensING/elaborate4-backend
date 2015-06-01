@@ -23,11 +23,10 @@ package elaborate.util;
  */
 
 import static org.assertj.core.api.Assertions.assertThat;
-import nl.knaw.huygens.LoggableObject;
 
 import org.junit.Test;
 
-public class XmlUtilTest extends LoggableObject {
+public class XmlUtilTest   {
 
 	@Test
 	public void testFixXhtml() {
@@ -74,11 +73,11 @@ public class XmlUtilTest extends LoggableObject {
 	//				.setParameter("project", project)//
 	//				.setParameter("textlayer", textlayer)//
 	//				.getResultList();
-	//		LOG.info("result={}", resultList);
+	//		Log.info("result={}", resultList);
 	//		for (Object object : resultList) {
 	//			Object[] objects = (Object[]) object;
-	//			LOG.info("id[0]={}", objects[0]);
-	//			LOG.info("id[1]={}", objects[1]);
+	//			Log.info("id[0]={}", objects[0]);
+	//			Log.info("id[1]={}", objects[1]);
 	//		}
 	//		ps.}finally{closeEntityManager();}
 	//	}

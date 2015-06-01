@@ -33,8 +33,6 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import nl.knaw.huygens.LoggableObject;
-
 import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.tidy.Tidy;
@@ -42,7 +40,7 @@ import org.w3c.tidy.Tidy;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
-public class StringUtil extends LoggableObject {
+public class StringUtil   {
 	private static final String UTF8 = "UTF8";
 	static Tidy TIDY = new Tidy();
 	static {
@@ -105,7 +103,7 @@ public class StringUtil extends LoggableObject {
 	public static String replace(String originalTerm, String replacementTerm, String body, List<Integer> occurrencesToReplace, boolean preserveCase) {
 		StringTokenizer tokenizer = new StringTokenizer(body, DELIM, true);
 
-		//    LOG.info("body:[{}]", body);
+		//    Log.info("body:[{}]", body);
 		StringBuilder replaced = new StringBuilder(body.length());
 		int occurrence = 1;
 		while (tokenizer.hasMoreTokens()) {
@@ -120,7 +118,7 @@ public class StringUtil extends LoggableObject {
 				replaced.append(token);
 			}
 		}
-		//    LOG.info("replaced:[{}]", replaced);
+		//    Log.info("replaced:[{}]", replaced);
 		return replaced.toString();
 	}
 
@@ -136,7 +134,7 @@ public class StringUtil extends LoggableObject {
 		StringBuilder replaced = new StringBuilder(textWithURLs.length());
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
-			//      LOG.info("token={}", token);
+			//      Log.info("token={}", token);
 			try {
 				URL url = new URL(token);
 				// If possible then replace with anchor...

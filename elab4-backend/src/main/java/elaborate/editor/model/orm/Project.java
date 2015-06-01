@@ -320,7 +320,7 @@ public class Project extends AbstractDocument<Project> {
 	//  //    List<ProjectEntry> entries = Lists.newArrayList(project.getProjectEntries());
 	//  //    Collections.sort(entries, getEntryComparator());
 	//  //    sw.stop();
-	//  //    LOG.info("entrysort took:" + sw.getTime() + " milliseconds");
+	//  //    Log.info("entrysort took:" + sw.getTime() + " milliseconds");
 	//  //    return entries;
 	//  //  }
 	//
@@ -335,10 +335,10 @@ public class Project extends AbstractDocument<Project> {
 	//    Integer projectId = Integer.valueOf(project.getId().toString());
 	//    List<ProjectEntryProxy> entries = ProjectEntryProxyFactory.select(projectId, filter, level);
 	//    //    for (ProjectEntryProxy projectEntryProxy : entries) {
-	//    //      LOG.info("proxy='{}'", projectEntryProxy);
+	//    //      Log.info("proxy='{}'", projectEntryProxy);
 	//    //    }
 	//    sw.stop();
-	//    LOG.info("entrysort of " + entries.size() + " entries took:" + sw.getTime() + " milliseconds");
+	//    Log.info("entrysort of " + entries.size() + " entries took:" + sw.getTime() + " milliseconds");
 	//    return entries;
 	//  }
 	//
@@ -361,14 +361,14 @@ public class Project extends AbstractDocument<Project> {
 	//    Query q = new Query(projectTerm).join(joinBuilder.toString()).orderBy("l1.data,l2.data,l3.data,name");
 	//    StringBuilder sb = new StringBuilder();
 	//    q.appendToSQL(sb);
-	//    //    LOG.info("query={}", sb.toString());
+	//    //    Log.info("query={}", sb.toString());
 	//    List<ProjectEntry> entries = Lists.newArrayList(ModelFactory.getEntities(ProjectEntry.class, q));
 	//    if (!filter.isEmpty()) {
 	//      entries = Lists.newArrayList(Iterables.filter(entries, filterPredicate(filter)));
 	//    }
 	//
 	//    sw.stop();
-	//    LOG.info("entrysort of " + entries.size() + " entries took:" + sw.getTime() + " milliseconds");
+	//    Log.info("entrysort of " + entries.size() + " entries took:" + sw.getTime() + " milliseconds");
 	//    return entries;
 	//  }
 	//

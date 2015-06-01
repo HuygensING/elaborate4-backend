@@ -31,7 +31,7 @@ import java.util.Map;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriBuilderException;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
@@ -44,7 +44,7 @@ import elaborate.editor.resources.SessionResource;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
-public class StringUtilTest extends LoggableObject {
+public class StringUtilTest {
 
 	@Test
 	public void testReplace1() {
@@ -140,7 +140,7 @@ public class StringUtilTest extends LoggableObject {
 	public void testFixXML() {
 		String brokenxml = "<xml>a&b, bla &amp; co; 4 > 2 < 3; &gt;</xml>";
 		String xml = StringUtil.fixXML(brokenxml);
-		//    LOG.info(xml);
+		//    Log.info(xml);
 		XmlTestUtil.assertXmlIsWellFormed(xml);
 		String expected = "<xml>a&amp;b, bla &amp; co; 4 &gt; 2 &lt; 3; &gt;</xml>";
 		assertThat(xml).isEqualTo(expected);
@@ -175,7 +175,7 @@ public class StringUtilTest extends LoggableObject {
 
 	private void testHTML2XML(String html, String expected) {
 		String xmlBody = StringUtil.html2xml(html);
-		LOG.info(xmlBody);
+		Log.info(xmlBody);
 		XmlTestUtil.assertXmlIsWellFormed(wrap(xmlBody));
 		assertThat(xmlBody).isEqualTo(expected);
 	}
@@ -187,15 +187,15 @@ public class StringUtilTest extends LoggableObject {
 	@Test
 	public void test2() {
 		String cutoffDate = new DateTime().minusDays(1).toString("YYYY-MM-dd HH:mm:ss");
-		LOG.info(cutoffDate);
-		LOG.info("{} ms", Hours.ONE.toStandardSeconds().getSeconds() * 1000);
+		Log.info(cutoffDate);
+		Log.info("{} ms", Hours.ONE.toStandardSeconds().getSeconds() * 1000);
 	}
 
 	@Test
 	public void testURIBuilder() throws IllegalArgumentException, UriBuilderException, SecurityException, NoSuchMethodException {
 		URI build = null;
 		build = UriBuilder.fromResource(SessionResource.class).scheme("http").host("rest.elaborate.huygens.knaw.nl").path(SessionResource.class.getMethod("logout", String.class)).build("TOKEN");
-		LOG.info("{}", build);
+		Log.info("{}", build);
 	}
 
 }

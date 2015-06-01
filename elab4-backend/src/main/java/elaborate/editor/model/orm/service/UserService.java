@@ -32,6 +32,7 @@ import javax.inject.Singleton;
 import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.ConflictException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
@@ -272,7 +273,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 		Map<String, Object> map = Maps.newHashMap();
 		map.put("user", user.getUsername());
 		String token = RandomStringUtils.randomAlphanumeric(20);
-		LOG.info("token={}", token);
+		Log.info("token={}", token);
 		tokenMap.put(user.getId(), token);
 		map.put("url", MessageFormat.format("{0}/resetpassword?emailaddress={1}&token={2}",//
 				config.getSetting(Configuration.WORK_URL),//

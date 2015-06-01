@@ -23,6 +23,5 @@ package nl.knaw.huygens;
  */
 
 
-import nl.knaw.huygens.LoggableObject;
 
-public class AbstractTest extends LoggableObject {}
+public class AbstractTest   {}

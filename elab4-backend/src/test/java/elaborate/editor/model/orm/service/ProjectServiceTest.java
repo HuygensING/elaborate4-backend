@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Map;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import org.junit.After;
@@ -84,13 +85,13 @@ public class ProjectServiceTest extends AbstractTest {
 	public void testGetAll() throws Exception {
 		List<Project> all = projectService.getAll(root);
 		assertThat(all).isNotEmpty();
-		LOG.info("{}", all.size());
+		Log.info("{}", all.size());
 	}
 
 	@Test
 	public void testGetProjectEntryIdsInOrder() throws Exception {
 		List<Long> idList = projectService.getProjectEntryIdsInOrder(1);
-		LOG.info("ids:{}", idList);
+		Log.info("ids:{}", idList);
 		assertThat(idList).isNotEmpty();
 	}
 
@@ -98,7 +99,7 @@ public class ProjectServiceTest extends AbstractTest {
 	public void testGetAnnotationTypesForProject() throws Exception {
 		Map<Integer, String> annotationTypesForProject = projectService.getAnnotationTypesForProject(44l);
 		assertThat(annotationTypesForProject).isNotEmpty();
-		LOG.info("annotationTypesForProject={}", annotationTypesForProject);
+		Log.info("annotationTypesForProject={}", annotationTypesForProject);
 	}
 
 	//  @Test

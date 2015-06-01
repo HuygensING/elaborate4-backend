@@ -8,12 +8,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-public class CNWUtil extends LoggableObject {
+public class CNWUtil {
 
 	public String convertDate(String dateString) {
 		String edtf = dateString//
@@ -214,7 +214,7 @@ public class CNWUtil extends LoggableObject {
 					from = from + "-01";
 
 				} else {
-					LOG.warn("Unexpected: from={}", from);
+					Log.warn("Unexpected: from={}", from);
 				}
 			}
 			String to = iterator.next();
@@ -227,7 +227,7 @@ public class CNWUtil extends LoggableObject {
 					to = to + "-" + lastDayOfTheMonth(dmy);
 
 				} else {
-					LOG.warn("Unexpected: from={}", from);
+					Log.warn("Unexpected: from={}", from);
 				}
 
 			}
@@ -235,13 +235,13 @@ public class CNWUtil extends LoggableObject {
 		}
 
 		if (!dateString.equals(edtf)) {
-			//			LOG.info("'{}'->'{}'", dateString, edtf);
+			//			Log.info("'{}'->'{}'", dateString, edtf);
 		}
 		return edtf.replaceAll(" ", "");
 	}
 
 	private int lastDayOfTheMonth(List<String> dmy) {
-		//		LOG.info("dmy={}", dmy);
+		//		Log.info("dmy={}", dmy);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.valueOf(dmy.get(0)));
 		cal.set(Calendar.MONTH, Integer.valueOf(dmy.get(1)));

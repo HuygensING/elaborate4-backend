@@ -28,9 +28,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Charsets;
 
 import freemarker.template.Configuration;
@@ -41,7 +38,6 @@ import freemarker.template.Version;
 
 public class FreeMarker {
 	private static final Version VERSION = Configuration.VERSION_2_3_21;
-	static Logger LOG = LoggerFactory.getLogger(FreeMarker.class);
 	private static final Configuration FREEMARKER = new Configuration(VERSION);
 	static {
 		FREEMARKER.setObjectWrapper(new DefaultObjectWrapper(VERSION));

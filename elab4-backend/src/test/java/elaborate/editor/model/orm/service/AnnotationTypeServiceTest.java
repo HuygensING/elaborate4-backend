@@ -21,16 +21,17 @@ package elaborate.editor.model.orm.service;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
@@ -48,11 +49,10 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 	private static User root;
 	private static User reader;
 	private static User admin;
-	static Logger LOG = getLOG(AnnotationTypeServiceTest.class);
 
 	@BeforeClass
 	public static void setupClass() {
-		LOG.info("setupClass - start");
+		Log.info("setupClass - start");
 		service = AnnotationTypeService.instance();
 
 		projectleader = new User().setRoleString(ElaborateRoles.PROJECTLEADER);
@@ -73,7 +73,7 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 
 		ImmutableList<AnnotationType> all = service.getAll();
 		assertThat(all).isEmpty();
-		LOG.info("setupClass - end");
+		Log.info("setupClass - end");
 	}
 
 	//  private static void testdb() {
@@ -88,13 +88,13 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 	//      for (int i = 1; i < columnCount; i++) {
 	//        System.out.print(metaData.getColumnName(i) + " | ");
 	//      }
-	//      LOG.info("");
+	//      Log.info("");
 	//
 	//      while (rs.next()) {
 	//        for (int i = 1; i < columnCount; i++) {
 	//          System.out.print(rs.getString(i) + " | ");
 	//        }
-	//        LOG.info("");
+	//        Log.info("");
 	//      }
 	//      conn.close();
 	//    } catch (ClassNotFoundException e) {
@@ -109,9 +109,9 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 
 	@AfterClass
 	public static void teardownClass() {
-		LOG.info("teardownClass - start");
+		Log.info("teardownClass - start");
 		service = null;
-		LOG.info("teardownClass - end");
+		Log.info("teardownClass - end");
 	}
 
 	@Test

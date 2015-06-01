@@ -105,7 +105,7 @@ public class SearchResource extends AbstractElaborateResource {
 
 	void addPrevNextURIs(Map<String, Object> searchResult, long projectId, long searchId, int start, int rows) {
 		int prevStart = Math.max(0, start - rows);
-		//		LOG.info("prevStart={}", prevStart);
+		//		Log.info("prevStart={}", prevStart);
 		String path = MessageFormat.format("/projects/{0,number,#}/search/{1,number,#}", projectId, searchId);
 		if (start > 0) {
 			addURI(searchResult, KEY_PREV, path, prevStart, rows);
@@ -113,7 +113,7 @@ public class SearchResource extends AbstractElaborateResource {
 
 		int nextStart = start + rows;
 		int size = (Integer) searchResult.get(AbstractSolrServer.KEY_NUMFOUND);
-		//		LOG.info("nextStart={}, size={}", nextStart, size);
+		//		Log.info("nextStart={}, size={}", nextStart, size);
 		if (nextStart < size) {
 			addURI(searchResult, KEY_NEXT, path, start + rows, rows);
 		}

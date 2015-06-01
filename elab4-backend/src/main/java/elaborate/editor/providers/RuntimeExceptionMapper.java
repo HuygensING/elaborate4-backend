@@ -22,21 +22,20 @@ package elaborate.editor.providers;
  * #L%
  */
 
-
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 
 import com.sun.jersey.api.container.MappableContainerException;
 
 @Provider
-public class RuntimeExceptionMapper extends LoggableObject implements ExceptionMapper<RuntimeException> {
+public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
 	@Override
 	public Response toResponse(RuntimeException exception) {
-		LOG.info("RuntimeExceptionMapper.toResonse()");
+		Log.info("RuntimeExceptionMapper.toResonse()");
 		if (exception instanceof WebApplicationException) {
 			WebApplicationException internalException = (WebApplicationException) exception;
 			return internalException.getResponse();
@@ -51,7 +50,7 @@ public class RuntimeExceptionMapper extends LoggableObject implements ExceptionM
 		//		if (exception instanceof WebApplicationException) {
 		//			throw exception;
 		//		}
-		//		LOG.error("{}", exception.getMessage());
+		//		Log.error("{}", exception.getMessage());
 		//		exception.printStackTrace();
 		//		throw new InternalServerErrorException(exception.getMessage());
 	}

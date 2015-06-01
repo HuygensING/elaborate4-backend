@@ -24,15 +24,13 @@ package elaborate.jaxrs.filters;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import nl.knaw.huygens.LoggableObject;
-
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
-public class CacheHeaderFilter extends LoggableObject implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
+public class CacheHeaderFilter   implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
 
 	@Override
 	public ContainerRequestFilter getRequestFilter() {

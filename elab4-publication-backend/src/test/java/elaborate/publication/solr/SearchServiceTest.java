@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.FacetType;
 
@@ -41,7 +41,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class SearchServiceTest extends LoggableObject {
+public class SearchServiceTest {
 
 	@Test
 	public void testReadConfigMap() throws Exception {
@@ -53,18 +53,18 @@ public class SearchServiceTest extends LoggableObject {
 				+ "},"//
 				+ "'facetFields':['metadata_field1','metadata_field2','metadata_field3']"//  
 				+ "}").replaceAll("'", "\\\"");
-		LOG.info("{}", a);
+		Log.info("{}", a);
 		InputStream reader = new ByteArrayInputStream(a.getBytes());
 		Map<String, Object> configMap = SearchService.readConfigMap(reader);
 		assertThat(configMap).isNotEmpty();
 
 		//    assertTrue(configMap.containsKey("facetFields"));
 		//    List<String> facetFields = (List<String>) configMap.get("facetFields");
-		//    LOG.info("facetFields={}", facetFields);
+		//    Log.info("facetFields={}", facetFields);
 		//    assertFalse(facetFields.isEmpty());
 
 		Map<String, Map<String, String>> facetInfoMap = (Map<String, Map<String, String>>) configMap.get("facetInfoMap");
-		LOG.info("facetInfoMap={}", facetInfoMap);
+		Log.info("facetInfoMap={}", facetInfoMap);
 		assertThat(facetInfoMap).isNotNull();
 		assertThat(facetInfoMap.keySet()).isNotEmpty();
 

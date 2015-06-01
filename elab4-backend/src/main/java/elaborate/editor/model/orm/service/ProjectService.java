@@ -36,6 +36,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
@@ -173,7 +174,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		try {
 			super.delete(project_id);
 			getSolrIndexer().deindexProject(project_id);
-			LOG.info("user {} deleting project {}", user.getUsername(), project_id);
+			Log.info("user {} deleting project {}", user.getUsername(), project_id);
 		} finally {
 			commitTransaction();
 		}
@@ -400,19 +401,19 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		System.gc();
 		//Getting the runtime reference from system
 		Runtime runtime = Runtime.getRuntime();
-		LOG.info("##### Heap utilization statistics [MB] #####");
+		Log.info("##### Heap utilization statistics [MB] #####");
 
 		//Print used memory
-		LOG.info("Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+		Log.info("Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
 		//Print free memory
-		LOG.info("Free Memory:" + runtime.freeMemory() / mb);
+		Log.info("Free Memory:" + runtime.freeMemory() / mb);
 
 		//Print total available memory
-		LOG.info("Total Memory:" + runtime.totalMemory() / mb);
+		Log.info("Total Memory:" + runtime.totalMemory() / mb);
 
 		//Print Maximum available memory
-		LOG.info("Max Memory:" + runtime.maxMemory() / mb);
+		Log.info("Max Memory:" + runtime.maxMemory() / mb);
 	}
 
 	public Iterable<String> getProjectEntryMetadataFields(long project_id, User user) {

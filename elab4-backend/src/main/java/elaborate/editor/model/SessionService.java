@@ -32,7 +32,6 @@ import java.util.Map.Entry;
 
 import javax.inject.Singleton;
 
-import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.security.client.UnauthorizedException;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -47,7 +46,7 @@ import elaborate.editor.model.orm.service.UserService;
 import elaborate.editor.security.ElaborateSecurityContext;
 
 @Singleton
-public class SessionService extends LoggableObject {
+public class SessionService   {
 	private static SessionService instance;
 	private static final int MINUTES = 1000 * 60;
 	static final int SESSION_TIMEOUT = 8 * 60 * MINUTES;
@@ -67,7 +66,7 @@ public class SessionService extends LoggableObject {
 	public String startSession(User user) {
 		String sessionId = RandomStringUtils.randomAlphanumeric(SESSIONID_SIZE);
 		sessionMap.put(sessionId, new Session(user.getId()));
-		//    LOG.info("sessionMap={}", sessionMap);
+		//    Log.info("sessionMap={}", sessionMap);
 		return sessionId;
 	}
 
@@ -76,7 +75,7 @@ public class SessionService extends LoggableObject {
 		if (session != null && session.isFederated()) {
 			SecurityWrapper.delete(sessionId);
 		}
-		//    LOG.info("sessionMap={}", sessionMap);
+		//    Log.info("sessionMap={}", sessionMap);
 	}
 
 	public boolean isSessionActive(String sessionId) {

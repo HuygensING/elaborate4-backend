@@ -159,7 +159,7 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
 	//      try {
 	//        annotationMetadataItem.delete();
 	//      } catch (StorageException e) {
-	//        LOG.error("Couldn't delete");
+	//        Log.error("Couldn't delete");
 	//        throw new RuntimeException(e);
 	//      }
 	//    }
@@ -204,8 +204,8 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
 				getAnnotationNo(),//
 				Transcription.BodyTags.ANNOTATION_END, //
 				getAnnotationNo());
-		//    LOG.info("regex={}", regex);
-		//    LOG.info("body={}", body);
+		//    Log.info("regex={}", regex);
+		//    Log.info("body={}", body);
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(body);
 		return matcher.find() ? matcher.group(1) : "";

@@ -32,7 +32,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.LockModeType;
 import javax.persistence.TypedQuery;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
@@ -52,7 +52,7 @@ import elaborate.editor.solr.ElaborateEditorQueryComposer;
 import elaborate.editor.solr.ElaborateSolrIndexer;
 
 @Singleton
-public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> extends LoggableObject {
+public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> {
 	private SolrServerWrapper solrserver = null;
 	private ElaborateSolrIndexer solrindexer = null;
 	private ProjectService projectService = null;
@@ -203,7 +203,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 			try {
 				transaction.commit();
 			} catch (Exception e) {
-				LOG.error(e.getMessage());
+				Log.error(e.getMessage());
 				e.printStackTrace();
 				transaction.rollback();
 			}

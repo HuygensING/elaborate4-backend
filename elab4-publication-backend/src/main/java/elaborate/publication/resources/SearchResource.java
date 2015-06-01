@@ -42,7 +42,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
 import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.SearchData;
@@ -56,7 +56,7 @@ import com.google.common.collect.ImmutableList;
 import elaborate.publication.solr.SearchService;
 
 @Path("search")
-public class SearchResource extends LoggableObject {
+public class SearchResource {
 	private static final String SEARCH_PATH_TEMPLATE = "/search/{0,number,#}";
 	static final String KEY_NEXT = "_next";
 	static final String KEY_PREV = "_prev";
@@ -86,7 +86,7 @@ public class SearchResource extends LoggableObject {
 	public Response createSearch(//
 			ElaborateSearchParameters elaborateSearchParameters//
 	) {
-		LOG.info("elaborateSearchParameters:{}", elaborateSearchParameters);
+		Log.info("elaborateSearchParameters:{}", elaborateSearchParameters);
 		searchService.setSolrDir(getSolrDir());
 		SearchData search = searchService.createSearch(elaborateSearchParameters);
 		return Response.created(createURI(search)).build();
@@ -122,7 +122,7 @@ public class SearchResource extends LoggableObject {
 
 	void addPrevNextURIs(Map<String, Object> searchResult, long searchId, int start, int rows) {
 		int prevStart = Math.max(0, start - rows);
-		LOG.info("prevStart={}", prevStart);
+		Log.info("prevStart={}", prevStart);
 		String path = MessageFormat.format(SEARCH_PATH_TEMPLATE, searchId);
 		if (start > 0) {
 			addURI(searchResult, KEY_PREV, path, prevStart, rows);
@@ -130,7 +130,7 @@ public class SearchResource extends LoggableObject {
 
 		int nextStart = start + rows;
 		int size = (Integer) searchResult.get(AbstractSolrServer.KEY_NUMFOUND);
-		LOG.info("nextStart={}, size={}", nextStart, size);
+		Log.info("nextStart={}, size={}", nextStart, size);
 		if (nextStart < size) {
 			addURI(searchResult, KEY_NEXT, path, start + rows, rows);
 		}

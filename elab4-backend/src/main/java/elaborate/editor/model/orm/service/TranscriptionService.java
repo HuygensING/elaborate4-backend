@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import javax.inject.Singleton;
 import javax.persistence.TypedQuery;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 
 import com.google.common.base.Function;
@@ -381,7 +382,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 					orphanedAnnotationTags.add(aNoString);
 				}
 			} catch (final NumberFormatException e) {
-				LOG.warn("found illegal annotationNo '{}'; removing.", aNoString);
+				Log.warn("found illegal annotationNo '{}'; removing.", aNoString);
 				orphanedAnnotationTags.add(aNoString);
 			}
 		}

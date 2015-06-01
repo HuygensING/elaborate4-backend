@@ -25,6 +25,7 @@ package nl.knaw.huygens.facetedsearch;
 import java.io.IOException;
 
 import nl.knaw.huygens.AbstractTest;
+import nl.knaw.huygens.Log;
 
 import org.junit.Test;
 
@@ -36,6 +37,6 @@ public class ElaborateSearchParametersTest extends AbstractTest {
 	@Test
 	public void testJson() throws JsonGenerationException, JsonMappingException, IOException {
 		ElaborateSearchParameters e = new ElaborateSearchParameters();
-		LOG.info(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(e));
+		Log.info(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(e));
 	}
 }

@@ -44,6 +44,7 @@ public class SearchConfig {
 	String baseURL;
 
 	public SearchConfig(Project project, List<String> metadataFieldsForFacets) {
+		// TODO: handle multivalued facets
 		for (Entry<String, FacetInfo> entry : project.getFacetInfoMap().entrySet()) {
 			String key = entry.getKey();
 			FacetInfo value = entry.getValue();

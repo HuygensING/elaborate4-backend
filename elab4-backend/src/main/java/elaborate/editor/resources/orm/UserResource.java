@@ -35,6 +35,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import com.google.common.collect.ImmutableList;
@@ -101,7 +102,7 @@ public class UserResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns a map of the settings for the user with the given id")
 	public ImmutableMap<String, String> getUserSettings(@PathParam("id") long id) {
-		LOG.info("getUserSettings({})", new Object[] { id });
+		Log.info("getUserSettings({})", new Object[] { id });
 		return userService.getSettings(id);
 	}
 
@@ -119,7 +120,7 @@ public class UserResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Adds or sets a setting for the given field for the user with the given id, returns the new settings")
 	public Object setUserSetting(@PathParam("id") long id, @PathParam("field") String field, String value) {
-		LOG.info("setUserSetting({},{},{})", new Object[] { id, field, value });
+		Log.info("setUserSetting({},{},{})", new Object[] { id, field, value });
 		userService.setSetting(id, field, value, getUser());
 		return userService.getSettings(id);
 	}

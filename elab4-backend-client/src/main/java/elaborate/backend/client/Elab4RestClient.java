@@ -35,11 +35,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import jersey.repackaged.com.google.common.collect.Maps;
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-public class Elab4RestClient extends LoggableObject {
+public class Elab4RestClient {
 	private final WebTarget sessionsTarget;
 	private final WebTarget projectsTarget;
 	private final WebTarget elab4;
@@ -115,7 +115,7 @@ public class Elab4RestClient extends LoggableObject {
 				.request(MediaType.APPLICATION_JSON)//
 				.header("Authorization", "SimpleAuth " + token)//
 				.put(entity);
-		LOG.info("response.status={}", response.getStatus());
+		Log.info("response.status={}", response.getStatus());
 	}
 
 }

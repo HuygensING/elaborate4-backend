@@ -38,7 +38,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.XmlContext;
 
@@ -51,7 +50,7 @@ import com.google.common.base.Charsets;
 
 import elaborate.util.XmlUtil;
 
-public class HtmlTeiConverter extends LoggableObject {
+public class HtmlTeiConverter   {
 	private Document teiDocument;
 	private final TeiConversionConfig config;
 	private final EntityManager entityManager;
@@ -63,7 +62,7 @@ public class HtmlTeiConverter extends LoggableObject {
 		if (_html == null) {
 			html = "";
 		}
-		//    LOG.info("html in = ''{}''", html);
+		//    Log.info("html in = ''{}''", html);
 		String xml = toXml(html);
 		String teiSource = convert2TEI(xml, transcriptionType);
 		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();

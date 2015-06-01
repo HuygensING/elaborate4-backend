@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
@@ -370,7 +371,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 			Map<String, Object> settings = mpes.getSettings();
 			Set<Entry<String, Object>> settingsEntrySet = settings.entrySet();
 			for (Long entry_id : mpes.getProjectEntryIds()) {
-				LOG.info("entryId={}", entry_id);
+				Log.info("entryId={}", entry_id);
 				ProjectEntry pe = read(entry_id);
 
 				if (pe.getProject().getId() != project_id) {
@@ -379,7 +380,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 				}
 
 				if (mpes.changePublishable()) {
-					LOG.info("change publishable to {}", mpes.getPublishableSetting());
+					Log.info("change publishable to {}", mpes.getPublishableSetting());
 					pe.setPublishable(mpes.getPublishableSetting());
 					persist(pe);
 				}
@@ -390,10 +391,10 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 
 					ProjectEntryMetadataItem pemItem = pe.getMetadataItem(key);
 					if (pemItem == null) {
-						LOG.info("add new setting: {}={}", key, value);
+						Log.info("add new setting: {}={}", key, value);
 						persist(pe.addMetadataItem(key, value, user));
 					} else {
-						LOG.info("modify existing setting: {}={}", key, value);
+						Log.info("modify existing setting: {}={}", key, value);
 						pemItem.setData(value);
 						persist(pemItem);
 						setModifiedBy(pemItem, user);

@@ -23,7 +23,6 @@ package elaborate.editor.solr;
  */
 
 import static org.assertj.core.api.Assertions.assertThat;
-import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.facetedsearch.FacetParameter;
 import nl.knaw.huygens.facetedsearch.QueryComposer;
 
@@ -31,7 +30,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-public class ElaborateEditorQueryComposerTest extends LoggableObject {
+public class ElaborateEditorQueryComposerTest   {
 	static final QueryComposer queryComposer = new ElaborateEditorQueryComposer();
 
 	@Test

@@ -27,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.text.MessageFormat;
 import java.util.Map;
 
-import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
 
 import org.junit.After;
@@ -36,7 +35,7 @@ import org.junit.Test;
 
 import com.google.common.collect.Maps;
 
-public class SearchResourceTest extends LoggableObject {
+public class SearchResourceTest   {
 
 	@Before
 	public void setUp() throws Exception {}

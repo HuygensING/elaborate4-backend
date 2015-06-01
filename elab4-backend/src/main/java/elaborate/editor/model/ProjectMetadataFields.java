@@ -33,6 +33,7 @@ public class ProjectMetadataFields {
 	public static final String PUBLISHABLE_PROJECT_ENTRY_METADATA_FIELDS = "publishableProjectEntryMetadataFields";
 	public static final String FACETABLE_PROJECT_ENTRY_METADATA_FIELDS = "facetableProjectEntryMetadataFields";
 	public static final String PUBLISHABLE_TEXT_LAYERS = "publishableTextLayers";
+	public static final String MULTIVALUED_METADATA_FIELDS = "multivaluedProjectEntryMetadataFields";
 
 	public static final String ANNOTATIONTYPE_BOLD_DESCRIPTION = "annotationtype.b.description";
 	public static final String ANNOTATIONTYPE_BOLD_NAME = "annotationtype.b.name";

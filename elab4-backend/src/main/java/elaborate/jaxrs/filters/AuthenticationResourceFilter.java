@@ -27,7 +27,6 @@ import java.util.List;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.SecurityContext;
 
-import nl.knaw.huygens.LoggableObject;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import org.apache.commons.lang.StringUtils;
@@ -41,7 +40,7 @@ import com.sun.jersey.spi.container.ResourceFilter;
 
 import elaborate.editor.model.SessionService;
 
-public class AuthenticationResourceFilter extends LoggableObject implements ResourceFilter, ContainerRequestFilter {
+public class AuthenticationResourceFilter   implements ResourceFilter, ContainerRequestFilter {
 	public static final String HEADER = "Authorization";
 
 	SessionService sessionService = SessionService.instance();
@@ -61,7 +60,7 @@ public class AuthenticationResourceFilter extends LoggableObject implements Reso
 				authentication = cookie.getValue();
 			}
 		}
-		//    LOG.info("authentication={}", authentication);
+		//    Log.info("authentication={}", authentication);
 		if (StringUtils.isNotBlank(authentication)) {
 			List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
 			if (parts.size() == 2) {

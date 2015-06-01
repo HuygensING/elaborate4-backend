@@ -88,7 +88,7 @@ public class AnnotationService extends AbstractStoredEntityService<Annotation> {
 
 	/* */
 	public Annotation getAnnotationByAnnotationNo(int annotationNo, EntityManager entityManager) {
-		//		LOG.info("annotationNo={}", annotationNo);
+		//		Log.info("annotationNo={}", annotationNo);
 		try {
 			List<Annotation> resultList = entityManager.createQuery("from Annotation where annotationNo=:no", Annotation.class)//
 					.setParameter("no", annotationNo)//

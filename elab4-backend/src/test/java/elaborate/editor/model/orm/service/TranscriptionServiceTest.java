@@ -24,6 +24,7 @@ package elaborate.editor.model.orm.service;
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import nl.knaw.huygens.Log;
 
 import org.junit.After;
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class TranscriptionServiceTest extends AbstractTest {
 		User root = mock(User.class);
 		when(root.isRoot()).thenReturn(true);
 		Annotation annotation = ts.addAnnotation(1, annotationInput, root);
-		LOG.info("annotation={}", annotation);
+		Log.info("annotation={}", annotation);
 		assertThat(annotation).isNotNull();
 		assertThat(annotation).hasBody("body");
 	}

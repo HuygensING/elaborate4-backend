@@ -30,15 +30,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 
-import nl.knaw.huygens.LoggableObject;
-
 import com.sun.jersey.spi.container.ContainerRequest;
 
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.security.ElaborateSecurityContext;
 
-public abstract class AbstractElaborateResource extends LoggableObject {
+public abstract class AbstractElaborateResource   {
 	public AbstractElaborateResource() {
 		java.util.logging.Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
 	}

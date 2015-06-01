@@ -24,16 +24,12 @@ package elaborate.editor.resources.orm;
 
 import javax.persistence.EntityManagerFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.WebAppDescriptor;
 
 import elaborate.editor.model.ModelFactory;
 
 public class ResourceTest extends JerseyTest {
-	public Logger LOG = LoggerFactory.getLogger(getClass());
 	protected static EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
 
 	public ResourceTest() {

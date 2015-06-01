@@ -33,9 +33,11 @@ import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYER_PREFIX;
 import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.datable.Datable;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.tei.Document;
@@ -67,12 +69,12 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 
 	private static SolrServer getServer() {
 		String solrURL = Configuration.instance().getSetting(Configuration.SOLR_URL_KEY);
-		LOG.info("connecting with SOLR server on {}", solrURL);
+		Log.info("connecting with SOLR server on {}", solrURL);
 		return new HttpSolrServer(solrURL);
 	}
 
 	public void index(ProjectEntry projectEntry, boolean commitNow) {
-		super.index(getSolrInputDocument(projectEntry, false), commitNow);
+		super.index(getSolrInputDocument(projectEntry, false, null), commitNow);
 	}
 
 	public void deindex(ProjectEntry e) {
@@ -85,7 +87,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 		commit();
 	}
 
-	public static SolrInputDocument getSolrInputDocument(ProjectEntry projectEntry, boolean forPublication) {
+	public static SolrInputDocument getSolrInputDocument(ProjectEntry projectEntry, boolean forPublication, Collection<String> facetsToSplit) {
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.addField(ID, projectEntry.getId());
 		doc.addField(NAME, projectEntry.getName());
@@ -97,6 +99,9 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			if (forPublication) {
 				// TODO: This is CNW specific, refactoring needed
 				handleCNWFacets(facetName, value, doc);
+				if (facetsToSplit.contains(facetName)) {
+					handleMultiValuedFields(facetName, value, doc);
+				}
 			}
 		}
 		Set<String> textLayersProcessed = Sets.newHashSet();
@@ -104,7 +109,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			String tBody = convert(transcription.getBody());
 			String textLayer = SolrUtils.normalize(transcription.getTextLayer());
 			if (textLayersProcessed.contains(textLayer)) {
-				LOG.error("duplicate textlayer {} for entry {}", textLayer, projectEntry.getId());
+				Log.error("duplicate textlayer {} for entry {}", textLayer, projectEntry.getId());
 			} else {
 				doc.addField(TEXTLAYER_PREFIX + textLayer, tBody);
 				doc.addField(TEXTLAYERCS_PREFIX + textLayer, tBody);
@@ -124,6 +129,10 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			doc.addField(PROJECT_ID, projectEntry.getProject().getId());
 		}
 		return doc;
+	}
+
+	private static void handleMultiValuedFields(String facetName, String value, SolrInputDocument doc) {
+
 	}
 
 	private static void handleCNWFacets(String facetName, String value, SolrInputDocument doc) {
@@ -174,7 +183,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			return rawResult;
 
 		} catch (Exception e) {
-			LOG.error(e.getMessage());
+			Log.error(e.getMessage());
 			return XmlUtil.removeXMLtags(xml);
 		}
 	}
@@ -185,10 +194,10 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			server.deleteByQuery("project_id:" + project_id);
 			server.commit();
 		} catch (SolrServerException e) {
-			LOG.error("deindexProject failed:");
+			Log.error("deindexProject failed:");
 			e.printStackTrace();
 		} catch (IOException e) {
-			LOG.error("deindexProject failed:");
+			Log.error("deindexProject failed:");
 			e.printStackTrace();
 		}
 	}

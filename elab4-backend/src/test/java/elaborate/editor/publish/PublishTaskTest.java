@@ -27,9 +27,11 @@ import static org.assertj.core.api.Assertions.entry;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
 
 import org.apache.commons.lang.StringUtils;
@@ -79,10 +81,10 @@ public class PublishTaskTest extends AbstractTest {
 		Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
 		assertThat(projectData.get("title")).isEqualTo(projectTitle);
 
-		LOG.info("projectData={}", projectData);
+		Log.info("projectData={}", projectData);
 
 		String json = PublishTask.toJson(projectData);
-		LOG.info("json={}", json);
+		Log.info("json={}", json);
 		assertThat(json).isNotEmpty();
 	}
 
@@ -123,10 +125,10 @@ public class PublishTaskTest extends AbstractTest {
 		assertThat(projectData).doesNotContainKey("entryTermSingular");
 		assertThat(projectData.get("textFont")).isEqualTo("comicsans");
 
-		LOG.info("projectData={}", projectData);
+		Log.info("projectData={}", projectData);
 
 		String json = PublishTask.toJson(projectData);
-		LOG.info("json={}", json);
+		Log.info("json={}", json);
 		assertThat(StringUtils.isNotBlank(json)).isTrue();
 	}
 
@@ -157,10 +159,10 @@ public class PublishTaskTest extends AbstractTest {
 		Map<String, Object> projectEntryData = publishTask.getProjectEntryData(entry, projectEntryMetadataFields, map);
 		assertThat(projectEntryData.get("name")).isEqualTo(entryName);
 
-		LOG.info("projectEntryData={}", projectEntryData);
+		Log.info("projectEntryData={}", projectEntryData);
 
 		String json = PublishTask.toJson(projectEntryData);
-		LOG.info("json={}", json);
+		Log.info("json={}", json);
 		assertThat(json).isNotEmpty();
 	}
 
@@ -172,7 +174,7 @@ public class PublishTaskTest extends AbstractTest {
 				.setLevel1("Field1")//
 				.setLevel2("Field3");
 		SearchConfig searchConfig = new SearchConfig(project, selectedProjectEntryMetadataFields);
-		LOG.info("searchConfig={}", searchConfig);
+		Log.info("searchConfig={}", searchConfig);
 		assertThat(searchConfig).isNotNull();
 
 		Map<String, FacetInfo> map = searchConfig.getFacetInfoMap();
@@ -180,7 +182,7 @@ public class PublishTaskTest extends AbstractTest {
 		assertThat(map).containsKey("metadata_field1");
 		assertThat(map).doesNotContainKey("publishable");
 		String json = PublishTask.toJson(searchConfig);
-		LOG.info(json);
+		Log.info(json);
 		assertThat(json).isNotNull();
 	}
 
@@ -221,5 +223,20 @@ public class PublishTaskTest extends AbstractTest {
 		Settings settings = mock(Publication.Settings.class);
 		PublishTask publishTask = new PublishTask(settings);
 		assertThat(publishTask.getBaseURL("project-name")).isEqualTo("http://example.org/project-name/draft");
+	}
+
+	@Test
+	public void testMultiValuedFacets() {
+		Project project = mock(Project.class);
+		Settings settings = mock(Publication.Settings.class);
+		PublishTask publishTask = new PublishTask(settings);
+		Map<String, String> metadataMap = ImmutableMap.of(//
+				ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS, "MultivaluedField 1;MultivaluedField 2"//
+		);
+		when(project.getMetadataMap()).thenReturn(metadataMap);
+
+		Collection<String> facetsToSplit = publishTask.getFacetsToSplit(project);
+
+		assertThat(facetsToSplit).containsExactly("metadata_multivaluedfield_1", "metadata_multivaluedfield_2");
 	}
 }

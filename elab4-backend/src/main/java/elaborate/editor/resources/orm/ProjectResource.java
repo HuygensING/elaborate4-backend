@@ -39,6 +39,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
@@ -238,7 +239,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed("ADMIN")
 	@APIDesc("Updates the user ids assigned to the project with the given project_id")
 	public void updateProjectUsers(@PathParam("project_id") long project_id, List<Long> userIds) {
-		LOG.info("updateProjectUsers: project_id={}, userIds={}", project_id, userIds);
+		Log.info("updateProjectUsers: project_id={}, userIds={}", project_id, userIds);
 		projectService.updateProjectUserIds(project_id, userIds, getUser());
 	}
 
@@ -284,7 +285,7 @@ public class ProjectResource extends AbstractElaborateResource {
 	@RolesAllowed({ "USER", "ADMIN" })
 	@APIDesc("Updates the settings of the project entries with the given entry_ids")
 	public void updateMultipleProjectEntrySettings(@PathParam("project_id") long project_id, MultipleProjectEntrySettings mpes) {
-		LOG.info("in:{}", mpes);
+		Log.info("in:{}", mpes);
 		projectEntryService.updateMultipleProjectEntrySettings(project_id, mpes, getUser());
 	}
 

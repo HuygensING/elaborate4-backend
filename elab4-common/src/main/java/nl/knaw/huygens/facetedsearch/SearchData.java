@@ -29,8 +29,6 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import nl.knaw.huygens.LoggableObject;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -38,7 +36,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @XmlRootElement(name = "searchdata")
-public class SearchData extends LoggableObject {
+public class SearchData   {
 	private final long id;
 	private Date created_on = new Date();
 	String json = "{}";

@@ -25,12 +25,10 @@ package elaborate.editor.publish;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.LoggableObject;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
-public class Publisher extends LoggableObject {
+public class Publisher   {
 	private static Publisher instance;
 	final Map<String, PublishTask> taskIndex = Maps.newHashMap();
 

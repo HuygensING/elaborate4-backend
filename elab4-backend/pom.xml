@@ -16,6 +16,12 @@
 			<groupId>nl.knaw.huygens.elab4</groupId>
 			<artifactId>elab4-common</artifactId>
 			<version>${project.parent.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>nl.knaw.huygens</groupId>
@@ -31,6 +37,12 @@
 			<groupId>nl.knaw.huygens</groupId>
 			<artifactId>security-client</artifactId>
 			<version>${security.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>nl.knaw.huygens</groupId>

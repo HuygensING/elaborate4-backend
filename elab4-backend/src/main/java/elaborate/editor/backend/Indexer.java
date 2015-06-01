@@ -30,9 +30,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import nl.knaw.huygens.Log;
+
 import org.apache.commons.lang.time.StopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.service.ProjectEntryService;
@@ -41,7 +41,6 @@ import elaborate.util.HibernateUtil;
 
 public class Indexer {
 	private static final int COMMIT_EVERY_N_RECORDS = 100;
-	private static final Logger LOG = LoggerFactory.getLogger(Indexer.class);
 
 	@SuppressWarnings("boxing")
 	public static void main(String[] args) {
@@ -50,7 +49,7 @@ public class Indexer {
 		sw.start();
 		ElaborateSolrIndexer solr = new ElaborateSolrIndexer();
 		if (wipeIndexFirst) {
-			LOG.info("clearing index");
+			Log.info("clearing index");
 			solr.clear();
 		}
 		EntityManager entityManager = HibernateUtil.getEntityManager();
@@ -59,10 +58,10 @@ public class Indexer {
 			projectEntryService.setEntityManager(entityManager);
 			List<ProjectEntry> projectentries = projectEntryService.getAll();
 			int size = projectentries.size();
-			LOG.info("indexing {} projectEntries", size);
+			Log.info("indexing {} projectEntries", size);
 			int n = 1;
 			for (ProjectEntry projectEntry : projectentries) {
-				LOG.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
+				Log.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
 						new Object[] { //
 						projectEntry.getId(), n, size, //
 								percentage(n, size), //
@@ -77,7 +76,7 @@ public class Indexer {
 		}
 		solr.commit();
 		sw.stop();
-		LOG.info("done in {}", convert(sw.getTime()));
+		Log.info("done in {}", convert(sw.getTime()));
 	}
 
 	private static String time_remaining(int n, long total, long timeelapsed) {

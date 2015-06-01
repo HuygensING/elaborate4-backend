@@ -30,9 +30,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import nl.knaw.huygens.Log;
+
 import org.apache.commons.lang.time.StopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
@@ -41,7 +41,6 @@ import elaborate.util.HibernateUtil;
 
 public class AnnotationMarkerScrubber {
 	private static final int COMMIT_EVERY_N_RECORDS = 100;
-	private static final Logger LOG = LoggerFactory.getLogger(AnnotationMarkerScrubber.class);
 
 	@SuppressWarnings("boxing")
 	public static void main(String[] args) {
@@ -57,7 +56,7 @@ public class AnnotationMarkerScrubber {
 			int size = resultList.size();
 			int n = 1;
 			for (Transcription t : resultList) {
-				LOG.info("indexing transcription {} ({}/{} = {}%)", new Object[] { t.getId(), n, size, percentage(n, size) });
+				Log.info("indexing transcription {} ({}/{} = {}%)", new Object[] { t.getId(), n, size, percentage(n, size) });
 				String bodyBefore = t.getBody();
 				ts.cleanupAnnotations(t);
 				String bodyAfter = t.getBody();
@@ -65,8 +64,8 @@ public class AnnotationMarkerScrubber {
 					ProjectEntry projectEntry = t.getProjectEntry();
 					String projectname = projectEntry.getProject().getName();
 					long entryId = projectEntry.getId();
-					LOG.info("url: http://test.elaborate.huygens.knaw.nl/projects/{}/entries/{}/transcriptions/{}", projectname, entryId, t.getTextLayer());
-					LOG.info("body changed:\nbefore: {}\nafter:{}", bodyBefore, bodyAfter);
+					Log.info("url: http://test.elaborate.huygens.knaw.nl/projects/{}/entries/{}/transcriptions/{}", projectname, entryId, t.getTextLayer());
+					Log.info("body changed:\nbefore: {}\nafter:{}", bodyBefore, bodyAfter);
 				}
 				n++;
 			}
@@ -74,7 +73,7 @@ public class AnnotationMarkerScrubber {
 			HibernateUtil.commitTransaction(entityManager);
 		}
 		sw.stop();
-		LOG.info("done in {}", convert(sw.getTime()));
+		Log.info("done in {}", convert(sw.getTime()));
 	}
 
 	private static String percentage(int part, int total) {

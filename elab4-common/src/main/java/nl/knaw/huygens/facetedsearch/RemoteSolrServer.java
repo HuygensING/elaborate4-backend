@@ -22,6 +22,8 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
+import nl.knaw.huygens.Log;
+
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 
 public class RemoteSolrServer extends AbstractSolrServer {
@@ -35,7 +37,7 @@ public class RemoteSolrServer extends AbstractSolrServer {
 
 	@Override
 	public void setServer() {
-		LOG.info("SOLR URL = {}", solrUrl);
+		Log.info("SOLR URL = {}", solrUrl);
 		server = new HttpSolrServer(solrUrl);
 	}
 

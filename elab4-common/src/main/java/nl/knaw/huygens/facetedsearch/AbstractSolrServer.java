@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -54,7 +54,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 
-public abstract class AbstractSolrServer extends LoggableObject implements SolrServerWrapper {
+public abstract class AbstractSolrServer implements SolrServerWrapper {
 	public static final String KEY_NUMFOUND = "numFound";
 	private static final int HIGHLIGHT_FRAGSIZE = 100;
 	private static final int ROWS = 50000;
@@ -102,7 +102,7 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 		try {
 			return server.ping().getStatus() == 0;
 		} catch (Exception e) {
-			LOG.error("ping failed with '{}'", e.getMessage());
+			Log.error("ping failed with '{}'", e.getMessage());
 			return false;
 		}
 	}
@@ -133,11 +133,11 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 	@Override
 	public Map<String, Object> search(FacetedSearchParameters<?> fsp) throws IndexException {
 		ElaborateSearchParameters sp = (ElaborateSearchParameters) fsp;
-		LOG.info("searchparameters={}", sp);
+		Log.info("searchparameters={}", sp);
 		queryComposer.compose(sp);
 		String queryString = queryComposer.getSearchQuery();
 		String[] facetFields = sp.getFacetFields();
-		//		LOG.debug("search({},{})", queryString, sp.getSort());
+		//		Log.debug("search({},{})", queryString, sp.getSort());
 		Map<String, String> textFieldMap = sp.getTextFieldsToSearch();
 
 		SolrQuery query = new SolrQuery();
@@ -169,9 +169,9 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 		Map<String, Object> data = Maps.newHashMap();
 		data.put("term", query.getQuery());
 		try {
-			LOG.info("query=\n{}", query);
+			Log.info("query=\n{}", query);
 			QueryResponse response = server.query(query);
-			LOG.debug("response='{}'", response);
+			Log.debug("response='{}'", response);
 
 			SolrDocumentList documents = response.getResults();
 			data.put(KEY_NUMFOUND, documents.getNumFound());
@@ -197,7 +197,7 @@ public abstract class AbstractSolrServer extends LoggableObject implements SolrS
 			data.put("facets", getFacetCountList(sp, facetFields, response));
 
 		} catch (SolrServerException e) {
-			LOG.error(e.getMessage());
+			Log.error(e.getMessage());
 			throw new IndexException(e.getMessage());
 		}
 		data.put("solrquery", query.toString());

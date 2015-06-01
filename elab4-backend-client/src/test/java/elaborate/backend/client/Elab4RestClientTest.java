@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +35,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore
-public class Elab4RestClientTest extends LoggableObject {
+public class Elab4RestClientTest {
 	private static Elab4RestClient e4;
 
 	@Before
@@ -62,7 +62,7 @@ public class Elab4RestClientTest extends LoggableObject {
 	@Test
 	public void testVersion() throws Exception {
 		Map<String, String> versionMap = e4.getVersion();
-		LOG.info("{}", versionMap);
+		Log.info("{}", versionMap);
 		assertThat(versionMap).containsKey("version");
 	}
 
@@ -85,7 +85,7 @@ public class Elab4RestClientTest extends LoggableObject {
 		for (Map<String, Object> transcriptionMap : transcriptionMaps) {
 			int id = (Integer) transcriptionMap.get("id");
 			String body = (String) transcriptionMap.get("body");
-			LOG.info("{}: {}", id, body);
+			Log.info("{}: {}", id, body);
 		}
 	}
 }

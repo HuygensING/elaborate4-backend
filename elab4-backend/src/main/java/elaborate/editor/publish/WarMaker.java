@@ -30,11 +30,11 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 
 import com.google.common.collect.Lists;
 
-public class WarMaker extends LoggableObject {
+public class WarMaker {
 	private final String basename;
 	private final File sourceDir;
 	private final File destinationDir;
@@ -55,9 +55,9 @@ public class WarMaker extends LoggableObject {
 			FileOutputStream fos = new FileOutputStream(zipFile);
 			ZipOutputStream zos = new ZipOutputStream(fos);
 
-			LOG.debug("Output to Zip : {}", zipFile);
+			Log.debug("Output to Zip : {}", zipFile);
 			for (String file : fileList) {
-				LOG.debug("File Added : {}", file);
+				Log.debug("File Added : {}", file);
 				ZipEntry ze = new ZipEntry(file.replaceAll("\\\\", "/"));
 				zos.putNextEntry(ze);
 				FileInputStream in = new FileInputStream(new File(sourceDir, file));
@@ -73,7 +73,7 @@ public class WarMaker extends LoggableObject {
 			zos.closeEntry();
 			zos.close();
 
-			LOG.debug("Done");
+			Log.debug("Done");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

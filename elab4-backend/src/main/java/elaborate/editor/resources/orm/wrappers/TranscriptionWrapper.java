@@ -25,7 +25,7 @@ package elaborate.editor.resources.orm.wrappers;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -37,7 +37,7 @@ import com.google.common.collect.Lists;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.XmlUtil;
 
-public class TranscriptionWrapper extends LoggableObject {
+public class TranscriptionWrapper {
 	private long id = 0l;
 	private String textLayer = "";
 	private String body = "";
@@ -98,12 +98,12 @@ public class TranscriptionWrapper extends LoggableObject {
 	public List<Integer> annotationNumbers = Lists.newArrayList();
 
 	void convertBodyForOutput(String bodyIn) {
-		//		LOG.info("body from db={}", bodyIn);
+		//		Log.info("body from db={}", bodyIn);
 		String xml = bodyIn;
 		if (!XmlUtil.isWellFormed(bodyIn)) {
-			LOG.error("body not well-formed:\n({})", bodyIn);
+			Log.error("body not well-formed:\n({})", bodyIn);
 			xml = "<body>" + XmlUtil.fixXhtml(bodyIn) + "</body>";
-			LOG.info("fixed body:\n({})", xml);
+			Log.info("fixed body:\n({})", xml);
 		}
 		Document document;
 		try {
@@ -142,7 +142,7 @@ public class TranscriptionWrapper extends LoggableObject {
 				.replace("", " ")//
 				.replace("&nbsp;", "&#160;")//
 		;
-		getLOG(TranscriptionWrapper.class).info("body input={}", bodyIn);
+		Log.info("body input={}", bodyIn);
 		String xml = Transcription.BODY_START + XmlUtil.fixXhtml(bodyIn) + Transcription.BODY_END;
 		Document document = Document.createFromXml(xml, true);
 		TranscriptionBodyInputVisitor visitor = new TranscriptionBodyInputVisitor();

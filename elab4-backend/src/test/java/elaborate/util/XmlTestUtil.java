@@ -31,15 +31,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import nl.knaw.huygens.Log;
+
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class XmlTestUtil {
-	static Logger LOG = LoggerFactory.getLogger(XmlTestUtil.class);
 
 	public static void assertXmlIsWellFormed(String xml) {
 		DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
@@ -52,7 +51,7 @@ public class XmlTestUtil {
 		} catch (ParserConfigurationException e) {
 			throw new RuntimeException(e);
 		} catch (SAXException e) {
-			LOG.info("xml={}", xml);
+			Log.info("xml={}", xml);
 			throw new RuntimeException(e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

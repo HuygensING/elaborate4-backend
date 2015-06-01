@@ -37,6 +37,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -231,7 +232,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@RolesAllowed("USER")
 	@APIDesc("Updates the transcription with the given transcription_id of the project entry with the given entry_id of the project with the given project_id")
 	public void updateTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id, TranscriptionWrapper transcriptionWrapper) {
-		LOG.info("transcription in={}", transcriptionWrapper);
+		Log.info("transcription in={}", transcriptionWrapper);
 		checkForWellFormedBody(transcriptionWrapper);
 		transcriptionService.update(transcription_id, transcriptionWrapper, user);
 	}

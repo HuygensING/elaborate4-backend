@@ -222,7 +222,7 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 	//    Query query = new Query(entryTerm, fieldTerm);
 	//    ProjectEntryMetadataItem[] entities = ModelFactory.getEntities(ProjectEntryMetadataItem.class, query);
 	//    if (entities.length > 1) {
-	//      LOG.error("query {} gave too many ProjectMetadataItems: {}", query, entities);
+	//      Log.error("query {} gave too many ProjectMetadataItems: {}", query, entities);
 	//    }
 	//    return entities.length == 0 ? null : entities[0];
 	//  }

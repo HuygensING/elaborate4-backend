@@ -26,6 +26,7 @@ import static nl.knaw.huygens.tei.Traversal.NEXT;
 
 import java.util.TreeSet;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
@@ -33,14 +34,9 @@ import nl.knaw.huygens.tei.ElementHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import elaborate.util.XmlUtil;
 
 public class AnnotationBodyConverter {
-	static Logger LOG = LoggerFactory.getLogger(AnnotationBodyConverter.class);
 	static TreeSet<String> unhandledTags = new TreeSet<String>();
 
 	@SuppressWarnings("synthetic-access")
@@ -59,7 +55,7 @@ public class AnnotationBodyConverter {
 
 			document.accept(visitor);
 			if (!unhandledTags.isEmpty()) {
-				LOG.warn("unhandled tags: {} for annotation body {}", unhandledTags, fixedXml);
+				Log.warn("unhandled tags: {} for annotation body {}", unhandledTags, fixedXml);
 			}
 			return visitor.getContext().getResult();
 

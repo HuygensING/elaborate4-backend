@@ -28,6 +28,7 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
 
@@ -93,8 +94,8 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 			if (getEntityManager().getTransaction().isActive()) {
 				rollbackTransaction();
 			}
-			LOG.error(e.getMessage());
-			LOG.error("e={}", e);
+			Log.error(e.getMessage());
+			Log.error("e={}", e);
 			throw new InternalServerErrorException(e.getMessage());
 		}
 	}
@@ -168,14 +169,14 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 							} else if (values.size() == 1) {
 								metadata.put(name, values.get(0));
 							} else if (values.size() > 1) {
-								LOG.warn("unexpected: multiple values: {}", values);
+								Log.warn("unexpected: multiple values: {}", values);
 								metadata.put(name, values.get(0));
 							}
 						}
 					}
 				}
 			}
-			//			LOG.info("metadata:{}", metadata);
+			//			Log.info("metadata:{}", metadata);
 			resultmap.put("metadata", metadata);
 		}
 	}

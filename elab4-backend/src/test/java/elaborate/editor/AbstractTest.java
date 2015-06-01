@@ -22,6 +22,5 @@ package elaborate.editor;
  * #L%
  */
 
-import nl.knaw.huygens.LoggableObject;
 
-public class AbstractTest extends LoggableObject {}
+public class AbstractTest   {}

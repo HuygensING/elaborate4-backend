@@ -28,7 +28,7 @@ import java.util.Date;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 
 import com.google.common.collect.ImmutableList;
 
@@ -36,16 +36,16 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.SearchService;
 import elaborate.editor.model.orm.service.UserService;
 
-public class ApplicationInitializer extends LoggableObject implements ServletContextListener {
+public class ApplicationInitializer implements ServletContextListener {
 
 	public ApplicationInitializer() {
 		System.setProperty("application.starttime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
-		LOG.info("clearing expired searches");
+		Log.info("clearing expired searches");
 		SearchService searchService = SearchService.instance();
 		searchService.removeExpiredSearches();
 
-		LOG.info("logging out all users");
+		Log.info("logging out all users");
 		UserService userService = UserService.instance();
 		ImmutableList<User> all = userService.getAll();
 		for (User user : all) {
@@ -55,13 +55,13 @@ public class ApplicationInitializer extends LoggableObject implements ServletCon
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		LOG.info("initializing context");
-		LOG.info("serverinfo={}", sce.getServletContext().getServerInfo());
+		Log.info("initializing context");
+		Log.info("serverinfo={}", sce.getServletContext().getServerInfo());
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		LOG.info("destroying context");
+		Log.info("destroying context");
 	}
 
 }

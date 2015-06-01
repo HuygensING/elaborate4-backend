@@ -31,17 +31,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import nl.knaw.huygens.Log;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Entities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XmlUtil {
-	static Logger LOG = LoggerFactory.getLogger(XmlUtil.class);
 	private static final String XML_CLOSE_TAG = "</xml>";
 	private static final String XML_OPEN_TAG = "<xml>";
 
@@ -64,7 +63,7 @@ public class XmlUtil {
 			return false;
 		} catch (SAXException e1) {
 			e1.printStackTrace();
-			LOG.error("body={}", body);
+			Log.error("body={}", body);
 			return false;
 		} catch (IOException e) {
 			e.printStackTrace();

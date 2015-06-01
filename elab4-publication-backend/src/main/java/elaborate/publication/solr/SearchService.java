@@ -34,7 +34,7 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
 import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.FacetInfo;
@@ -55,7 +55,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 @Singleton
-public class SearchService extends LoggableObject {
+public class SearchService {
 	private static final SearchService instance = new SearchService();
 
 	private final Map<Long, SearchData> searchDataIndex = Maps.newHashMap();
@@ -82,16 +82,16 @@ public class SearchService extends LoggableObject {
 				.setFacetInfoMap(getFacetInfoMap())//
 				.setLevelFields(defaultSortOrder[0], defaultSortOrder[1], defaultSortOrder[2]);
 		try {
-			LOG.info("searchParameters={}", elaborateSearchParameters);
+			Log.info("searchParameters={}", elaborateSearchParameters);
 			Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
-			LOG.info("result={}", result);
+			Log.info("result={}", result);
 			SearchData searchData = new SearchData().setResults(result);
 			searchDataIndex.put(searchData.getId(), searchData);
 			return searchData;
 
 		} catch (Exception e) {
-			LOG.error(e.getMessage());
-			LOG.error("e={}", e);
+			Log.error(e.getMessage());
+			Log.error("e={}", e);
 			e.printStackTrace();
 			throw new InternalServerErrorException(e.getMessage());
 		}
@@ -111,14 +111,14 @@ public class SearchService extends LoggableObject {
 			List<String> ids = (List<String>) resultsMap.remove("ids");
 			List<Map<String, Object>> results = (List<Map<String, Object>>) resultsMap.remove("results");
 
-			LOG.info("start={}, rows={}", start, rows);
+			Log.info("start={}, rows={}", start, rows);
 			int lo = toRange(start, 0, ids.size());
 			int hi = toRange(lo + rows, 0, ids.size());
-			LOG.info("lo={}, hi={}", lo, hi);
+			Log.info("lo={}, hi={}", lo, hi);
 			results = results.subList(lo, hi);
-			LOG.info("results={}", results);
+			Log.info("results={}", results);
 			groupMetadata(results);
-			LOG.info("after groupMetadata: results={}", results);
+			Log.info("after groupMetadata: results={}", results);
 
 			resultsMap.put("ids", ids);
 			resultsMap.put("results", results);
@@ -149,14 +149,14 @@ public class SearchService extends LoggableObject {
 							} else if (values.size() == 1) {
 								metadata.put(name, values.get(0));
 							} else if (values.size() > 1) {
-								LOG.warn("unexpected: multiple values: {}", values);
+								Log.warn("unexpected: multiple values: {}", values);
 								metadata.put(name, values.get(0));
 							}
 						}
 					}
 				}
 			}
-			LOG.info("metadata:{}", metadata);
+			Log.info("metadata:{}", metadata);
 			resultmap.put("metadata", metadata);
 		}
 	}
@@ -203,7 +203,7 @@ public class SearchService extends LoggableObject {
 	}
 
 	void loadConfig() {
-		LOG.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
+		Log.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
 		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.json");
 		try {
 			Map<String, Object> configMap = readConfigMap(inputStream);

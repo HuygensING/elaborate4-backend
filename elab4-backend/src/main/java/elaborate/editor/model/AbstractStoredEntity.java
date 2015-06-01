@@ -32,8 +32,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 
-import nl.knaw.huygens.LoggableObject;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -42,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 // Jackson, please ignore the handles on the proxies!
-public abstract class AbstractStoredEntity<T extends AbstractStoredEntity<T>> extends LoggableObject implements Serializable {
+public abstract class AbstractStoredEntity<T extends AbstractStoredEntity<T>>   implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

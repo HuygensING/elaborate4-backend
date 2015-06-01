@@ -24,14 +24,13 @@ package elaborate.editor.solr;
 
 import java.io.IOException;
 
+import nl.knaw.huygens.Log;
+
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SolrIndexer {
-	protected static final Logger LOG = LoggerFactory.getLogger(SolrIndexer.class);
 	private static final int STATUS_OK = 0;
 	private final SolrServer server;
 	private final String idField;
@@ -68,7 +67,7 @@ public class SolrIndexer {
 		boolean isUp = false;
 		try {
 			int status = this.server.ping().getStatus();
-			LOG.info("solrserver status = {}", status);
+			Log.info("solrserver status = {}", status);
 			isUp = (status == STATUS_OK);
 		} catch (SolrServerException e) {
 			e.printStackTrace();
@@ -92,7 +91,7 @@ public class SolrIndexer {
 		try {
 			String id = String.valueOf(doc.getField(idField).getValue());
 			this.server.deleteById(id);
-			//        LOG.info("doc={}", doc);
+			//        Log.info("doc={}", doc);
 			this.server.add(doc);
 			if (commitNow) {
 				this.server.commit();

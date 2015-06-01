@@ -28,6 +28,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -37,7 +38,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import nl.knaw.huygens.LoggableObject;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
 import nl.knaw.huygens.facetedsearch.IndexException;
 import nl.knaw.huygens.facetedsearch.LocalSolrServer;
@@ -53,12 +54,14 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 import elaborate.editor.config.Configuration;
@@ -80,7 +83,8 @@ import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
 
-public class PublishTask extends LoggableObject implements Runnable {
+public class PublishTask implements Runnable {
+	private static final String MULTIVALUED_DIVIDER = " | ";
 	private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static final String THUMBNAIL_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=";
 	private static final String ZOOM_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/viewer2.1.html?rft_id=";
@@ -128,7 +132,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 		Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
 		Project project = entityManager.find(Project.class, projectId);
 		Map<String, String> typographicalAnnotationMap = getTypographicalAnnotationMap(project);
-
+		Collection<String> facetsToSplit = getFacetsToSplit(project);
 		for (ProjectEntry projectEntry : projectEntriesInOrder) {
 			if (projectEntry.isPublishable()) {
 				status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
@@ -137,7 +141,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 				entryData.add(new EntryData(projectEntry.getName(), projectEntry.getShortName(), id + ".json"));
 				thumbnails.put(id, eed.thumbnailUrls);
 				annotationIndex.putAll(eed.annotationDataMap);
-				indexEntry(projectEntry);
+				indexEntry(projectEntry, facetsToSplit);
 			}
 		}
 		commitAndCloseSolr();
@@ -165,6 +169,17 @@ public class PublishTask extends LoggableObject implements Runnable {
 		entityManager = HibernateUtil.getEntityManager();
 		ps.setEntityManager(entityManager);
 		ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
+	}
+
+	Collection<String> getFacetsToSplit(Project project) {
+		Collection<String> facetsToSplit = Sets.newHashSet();
+		String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
+		if (StringUtils.isNotBlank(value)) {
+			for (String fieldName : Splitter.on(";").split(value)) {
+				facetsToSplit.add(SolrUtils.facetName(fieldName));
+			}
+		}
+		return facetsToSplit;
 	}
 
 	public long getProjectId() {
@@ -352,11 +367,11 @@ public class PublishTask extends LoggableObject implements Runnable {
 			try {
 				TextlayerData textlayerData = getTextlayerData(transcription);
 				if (textlayerData.getText().length() < 20) {
-					LOG.warn("empty {} transcription for entry {}", transcription.getTextLayer(), projectEntry.getId());
+					Log.warn("empty {} transcription for entry {}", transcription.getTextLayer(), projectEntry.getId());
 				}
 				map.put(transcription.getTextLayer(), textlayerData);
 			} catch (Exception e) {
-				LOG.error("Error '{}' for transcription {}, body: '{}'", new Object[] { e.getMessage(), transcription.getId(), transcription.getBody() });
+				Log.error("Error '{}' for transcription {}, body: '{}'", new Object[] { e.getMessage(), transcription.getId(), transcription.getBody() });
 				e.printStackTrace();
 			}
 		}
@@ -460,7 +475,7 @@ public class PublishTask extends LoggableObject implements Runnable {
 
 	private void prepareDirectories() {
 		rootDir = Files.createTempDir();
-		LOG.info("directory={}", rootDir);
+		Log.info("directory={}", rootDir);
 		distDir = new File(rootDir, "dist");
 		URL resource = Thread.currentThread().getContextClassLoader().getResource("publication");
 		try {
@@ -596,8 +611,8 @@ public class PublishTask extends LoggableObject implements Runnable {
 		}
 	}
 
-	private void indexEntry(ProjectEntry projectEntry) {
-		SolrInputDocument doc = ElaborateSolrIndexer.getSolrInputDocument(projectEntry, true);
+	private void indexEntry(ProjectEntry projectEntry, Collection<String> facetsToSplit) {
+		SolrInputDocument doc = ElaborateSolrIndexer.getSolrInputDocument(projectEntry, true, facetsToSplit);
 		try {
 			solrServer.add(doc);
 		} catch (IndexException e) {

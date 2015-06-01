@@ -24,8 +24,6 @@ package elaborate.jaxrs.filters;
 
 import java.text.MessageFormat;
 
-import nl.knaw.huygens.LoggableObject;
-
 import org.joda.time.DateTime;
 
 import com.sun.jersey.spi.container.ContainerRequest;
@@ -34,7 +32,7 @@ import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
-public class LoggingResourceFilter extends LoggableObject implements ResourceFilter, ContainerRequestFilter, ContainerResponseFilter {
+public class LoggingResourceFilter   implements ResourceFilter, ContainerRequestFilter, ContainerResponseFilter {
 	//  private final StopWatch sw = new StopWatch();
 
 	@Override
@@ -44,7 +42,7 @@ public class LoggingResourceFilter extends LoggableObject implements ResourceFil
 
 	@Override
 	public ContainerRequest filter(ContainerRequest request) {
-		//		LOG.info("request={}", verbalize(request));
+		//		Log.info("request={}", verbalize(request));
 		//    sw.reset();
 		//    sw.start();
 		return request;
@@ -58,7 +56,7 @@ public class LoggingResourceFilter extends LoggableObject implements ResourceFil
 	@Override
 	public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
 		//    sw.stop();
-		//    LOG.info("request took {} ms", sw.getTime());
+		//    Log.info("request took {} ms", sw.getTime());
 		System.out.println(commonLogLine(request, response));
 		return response;
 	}
