@@ -26,7 +26,9 @@
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <title>Huygens ING</title>
+    <#if TYPE != "boschdoc">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    </#if>
     <link href="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/css/main.css" rel="stylesheet" type="text/css">
 <!--    <script src="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/js/rangy-browser/lib/rangy-core.js"></script>
     <script src="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/js/rangy-browser/lib/rangy-cssclassapplier.js"></script> --> 
