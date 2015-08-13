@@ -29,8 +29,13 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
 
 public class FacetParameter {
+	public enum AndOr {
+		and, or
+	}
+
 	String name = "";
 	List<String> values = Lists.newArrayList();
+	private AndOr combineValuesWith = AndOr.or;
 
 	public String getName() {
 		return name;
@@ -56,5 +61,18 @@ public class FacetParameter {
 			builder.add(SolrUtils.escapeFacetValue(value));
 		}
 		return builder.build();
+	}
+
+	public AndOr getCombineValuesWith() {
+		return combineValuesWith;
+	}
+
+	public FacetParameter setCombineValuesWith(String combineValuesWith) {
+		this.combineValuesWith = AndOr.valueOf(combineValuesWith);
+		return this;
+	}
+
+	public boolean combineValuesWithAnd() {
+		return combineValuesWith.equals(AndOr.and);
 	}
 }

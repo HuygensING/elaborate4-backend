@@ -75,7 +75,8 @@ public class ElaborateQueryComposer implements QueryComposer {
 	private List<String> composeFacetQueries(ElaborateSearchParameters sp) {
 		List<String> facetQueries = Lists.newArrayList();
 		for (FacetParameter fp : sp.getFacetValues()) {
-			String values = Joiner.on(" ").join(fp.getEscapedValues());
+			String prefix = fp.combineValuesWithAnd() ? "+" : "";
+			String values = prefix + Joiner.on(" " + prefix).join(fp.getEscapedValues());
 			String facetQuery = MessageFormat.format("+{0}:({1})", fp.getName(), values);
 			facetQueries.add(facetQuery);
 		}
