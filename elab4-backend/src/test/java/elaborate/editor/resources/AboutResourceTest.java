@@ -22,7 +22,6 @@ package elaborate.editor.resources;
  * #L%
  */
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Map;
@@ -32,10 +31,10 @@ import org.junit.Test;
 public class AboutResourceTest {
 
 	@Test
-	public void testGetVersion() throws Exception {
-		AboutResource vr = new AboutResource();
-		Map<String, String> version = vr.getVersion();
-		assertThat(version).containsKey("publication_backend_build");
+	public void testGetAbout() throws Exception {
+		AboutResource r = new AboutResource();
+		Map<String, String> about = r.getAbout();
+		assertThat(about).containsKey("publication_backend_build");
 	}
 
 }
