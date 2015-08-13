@@ -30,12 +30,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import com.google.common.collect.Maps;
 
-@Path("version")
-public class VersionResource {
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+@Path("about")
+public class AboutResource {
 	private static PropertyResourceBundle propertyResourceBundle;
 
 	@GET
@@ -54,7 +54,7 @@ public class VersionResource {
 	private static synchronized String getProperty(String key) {
 		if (propertyResourceBundle == null) {
 			try {
-				propertyResourceBundle = new PropertyResourceBundle(Thread.currentThread().getContextClassLoader().getResourceAsStream("version.properties"));
+				propertyResourceBundle = new PropertyResourceBundle(Thread.currentThread().getContextClassLoader().getResourceAsStream("about.properties"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

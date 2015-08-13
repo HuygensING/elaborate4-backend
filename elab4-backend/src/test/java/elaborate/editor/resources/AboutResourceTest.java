@@ -29,11 +29,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class VersionResourceTest {
+public class AboutResourceTest {
 
 	@Test
 	public void testGetVersion() throws Exception {
-		VersionResource vr = new VersionResource();
+		AboutResource vr = new AboutResource();
 		Map<String, String> version = vr.getVersion();
 		assertThat(version).containsKey("publication_backend_build");
 	}

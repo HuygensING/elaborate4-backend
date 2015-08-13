@@ -224,7 +224,7 @@ public class PublishTask implements Runnable {
 	}
 
 	private void exportBuildDate() {
-		File properties = new File(distDir, "WEB-INF/classes/version.properties");
+		File properties = new File(distDir, "WEB-INF/classes/about.properties");
 		try {
 			FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), true);
 		} catch (IOException e) {

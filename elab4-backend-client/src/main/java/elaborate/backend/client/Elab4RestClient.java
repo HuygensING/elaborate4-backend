@@ -34,10 +34,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
+
 import jersey.repackaged.com.google.common.collect.Maps;
 import nl.knaw.huygens.Log;
-
-import org.glassfish.jersey.jackson.JacksonFeature;
 
 public class Elab4RestClient {
 	private final WebTarget sessionsTarget;
@@ -68,9 +68,9 @@ public class Elab4RestClient {
 		return success;
 	}
 
-	public Map<String, String> getVersion() {
-		Map<String, String> version = elab4.path("version").request().get(Map.class);
-		return version;
+	public Map<String, String> getAbout() {
+		Map<String, String> about = elab4.path("about").request().get(Map.class);
+		return about;
 	}
 
 	@SuppressWarnings("unchecked")

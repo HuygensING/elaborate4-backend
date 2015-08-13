@@ -30,15 +30,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import com.google.common.collect.Maps;
 
 import elaborate.editor.config.Configuration;
 import elaborate.jaxrs.APIDesc;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
-@Path("version")
-public class VersionResource extends AbstractElaborateResource {
+@Path("about")
+public class AboutResource extends AbstractElaborateResource {
 	private static PropertyResourceBundle propertyResourceBundle;
 	private static PropertyResourceBundle publicationPropertyResourceBundle;
 
@@ -59,7 +58,7 @@ public class VersionResource extends AbstractElaborateResource {
 	private static synchronized String getProperty(String key) {
 		if (propertyResourceBundle == null) {
 			try {
-				propertyResourceBundle = new PropertyResourceBundle(Thread.currentThread().getContextClassLoader().getResourceAsStream("version.properties"));
+				propertyResourceBundle = new PropertyResourceBundle(Thread.currentThread().getContextClassLoader().getResourceAsStream("about.properties"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -70,7 +69,7 @@ public class VersionResource extends AbstractElaborateResource {
 	private static synchronized String getPublicationProperty(String key) {
 		if (publicationPropertyResourceBundle == null) {
 			try {
-				publicationPropertyResourceBundle = new PropertyResourceBundle(Thread.currentThread().getContextClassLoader().getResourceAsStream("publication/WEB-INF/classes/version.properties"));
+				publicationPropertyResourceBundle = new PropertyResourceBundle(Thread.currentThread().getContextClassLoader().getResourceAsStream("publication/WEB-INF/classes/about.properties"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

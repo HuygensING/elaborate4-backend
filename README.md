@@ -46,9 +46,9 @@ copy the .war in target/ to your tomcat's webapp directory
 REST API
 ========
 
-### version
+### about
 
-  `GET /version`
+  `GET /about`
 
 returns the backend build version as JSON
 

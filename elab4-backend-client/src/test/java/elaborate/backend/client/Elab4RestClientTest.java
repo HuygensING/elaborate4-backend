@@ -61,7 +61,7 @@ public class Elab4RestClientTest {
 
 	@Test
 	public void testVersion() throws Exception {
-		Map<String, String> versionMap = e4.getVersion();
+		Map<String, String> versionMap = e4.getAbout();
 		Log.info("{}", versionMap);
 		assertThat(versionMap).containsKey("version");
 	}
