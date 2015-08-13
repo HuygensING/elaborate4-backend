@@ -174,7 +174,7 @@ public class PublishTask implements Runnable {
 		String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
 		if (StringUtils.isNotBlank(value)) {
 			for (String fieldName : Splitter.on(";").split(value)) {
-				facetsToSplit.add("mv_" + SolrUtils.facetName(fieldName));
+				facetsToSplit.add(SolrUtils.facetName(fieldName));
 			}
 		}
 		return facetsToSplit;

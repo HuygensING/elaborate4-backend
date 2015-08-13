@@ -23,7 +23,7 @@ public class SearchConfigTest {
 				.setLevel1("Field1")//
 				.setLevel2("Field3");
 		List<String> metadataFieldsForFacets = ImmutableList.of("Field 1", "Field 2", "MultiField 1", "MultiField 2");
-		Collection<String> multivaluedFacetNames = ImmutableList.of("mv_metadata_multifield_1", "mv_metadata_multifield_2");
+		Collection<String> multivaluedFacetNames = ImmutableList.of("metadata_multifield_1", "metadata_multifield_2");
 
 		SearchConfig ac = new SearchConfig(project, metadataFieldsForFacets, multivaluedFacetNames);
 		Map<String, FacetInfo> facetInfoMap = ac.getFacetInfoMap();

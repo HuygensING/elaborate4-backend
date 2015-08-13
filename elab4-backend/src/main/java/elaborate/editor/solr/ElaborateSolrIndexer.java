@@ -133,8 +133,9 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 	}
 
 	private static void handleMultiValuedFields(String facetName, String multiValue, SolrInputDocument doc) {
+		Log.info("facetName={}", facetName);
+		doc.removeField(facetName);
 		for (String value : Splitter.on(MULTIVALUED_DIVIDER).trimResults().split(multiValue)) {
-			doc.removeField(facetName);
 			doc.addField("mv_" + facetName, value, 1.0f);
 		}
 	}

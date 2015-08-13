@@ -52,7 +52,7 @@ public class SearchConfig {
 			String facetTitle = facetInfo.getTitle();
 
 			if (metadataFieldsForFacets.contains(facetTitle)) {
-				if (multivaluedFacetNames.contains(MULTIVALUED_PREFIX + facetName)) {
+				if (multivaluedFacetNames.contains(facetName)) {
 					facetName = MULTIVALUED_PREFIX + facetName;
 					facetInfo.setName(facetName);
 				}

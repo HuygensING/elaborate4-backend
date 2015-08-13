@@ -26,10 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collection;
 import java.util.List;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.SolrFields;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.assertj.core.util.Lists;
@@ -40,6 +38,8 @@ import com.google.common.collect.ImmutableList;
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.SolrFields;
 
 public class ElaborateSolrIndexerTest extends AbstractTest {
 
@@ -92,6 +92,42 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 		assertThat(docForPublication.getField(SolrFields.PROJECT_ID)).isEqualTo(null);
 		assertThat(docForPublication.getField(SolrFields.PUBLISHABLE)).isEqualTo(null);
 		assertThat(docForEditor.getField("metadata_multiline").getValue()).isEqualTo("Metadata/values/with/multiple/lines");
+	}
+
+	@Test
+	public void test_multivalued_metadata_is_split_into_multiple_fields() throws Exception {
+		// Setup mock project
+		Project mockProject = mock(Project.class);
+		when(mockProject.getId()).thenReturn(2l);
+		when(mockProject.getProjectEntryMetadataFieldnames()).thenReturn(ImmutableList.of("Field 1", "MultiField 1"));
+
+		// Setup mock projectentry
+		ProjectEntry mockEntry = mock(ProjectEntry.class);
+		when(mockEntry.getId()).thenReturn(1l);
+		when(mockEntry.getName()).thenReturn("name");
+		when(mockEntry.getProject()).thenReturn(mockProject);
+		when(mockEntry.isPublishable()).thenReturn(true);
+		when(mockEntry.getMetadataValue("Field 1")).thenReturn("Value 1 | Value 2 | Value 3");
+		when(mockEntry.getMetadataValue("MultiField 1")).thenReturn("Value 1 | Value 2 | Value 3");
+
+		SolrInputDocument docForEditor = ElaborateSolrIndexer.getSolrInputDocument(mockEntry, false, null);
+		assertThat(docForEditor != null).isTrue();
+		Log.info("docForEditor={}", docForEditor);
+		assertThat(docForEditor.getField(SolrFields.ID).getValue()).isEqualTo(mockEntry.getId());
+		assertThat(docForEditor.getField(SolrFields.NAME).getValue()).isEqualTo(mockEntry.getName());
+		assertThat(docForEditor.getField(SolrFields.PROJECT_ID).getValue()).isEqualTo(mockEntry.getProject().getId());
+		assertThat(docForEditor.getField(SolrFields.PUBLISHABLE).getValue()).isEqualTo(mockEntry.isPublishable());
+		assertThat(docForEditor.getField("metadata_multifield_1").getValue()).isEqualTo("Value 1 | Value 2 | Value 3");
+
+		Collection<String> multiValuedFacetNames = ImmutableList.of("metadata_multifield_1");
+		SolrInputDocument docForPublication = ElaborateSolrIndexer.getSolrInputDocument(mockEntry, true, multiValuedFacetNames);
+		assertThat(docForPublication != null).isTrue();
+		Log.info("docForPublication={}", docForPublication);
+		assertThat(docForPublication.getField(SolrFields.ID).getValue()).isEqualTo(mockEntry.getId());
+		assertThat(docForPublication.getField(SolrFields.NAME).getValue()).isEqualTo(mockEntry.getName());
+		assertThat(docForPublication.getField(SolrFields.PROJECT_ID)).isEqualTo(null);
+		assertThat(docForPublication.getField(SolrFields.PUBLISHABLE)).isEqualTo(null);
+		assertThat(docForPublication.getField("mv_metadata_multifield_1").getValues()).containsOnly("Value 1", "Value 2", "Value 3");
 	}
 
 	@Test

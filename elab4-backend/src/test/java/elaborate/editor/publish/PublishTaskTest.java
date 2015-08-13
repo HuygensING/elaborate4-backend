@@ -237,6 +237,6 @@ public class PublishTaskTest extends AbstractTest {
 
 		Collection<String> facetsToSplit = publishTask.getFacetsToSplit(project);
 
-		assertThat(facetsToSplit).containsOnly("mv_metadata_multivaluedfield_1", "mv_metadata_multivaluedfield_2");
+		assertThat(facetsToSplit).containsOnly("metadata_multivaluedfield_1", "metadata_multivaluedfield_2");
 	}
 }
