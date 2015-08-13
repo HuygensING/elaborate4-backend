@@ -26,4 +26,5 @@ public class ProjectTypes {
 	public final static String WORK = "work";
 	public final static String COLLECTION = "collection";
 	public final static String CORRESPONDENTIENETWERK = "correspondentienetwerk";
+	public final static String BOSCHDOC = "boschdoc";
 }
