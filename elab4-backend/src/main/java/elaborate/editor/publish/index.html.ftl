@@ -32,7 +32,7 @@
     <script src="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/js/rangy-browser/lib/rangy-cssclassapplier.js"></script> --> 
     <script>
     var BASE_URL='${BASE_URL}';
-    window.onload = function() { rangy.init() }
+<!--    window.onload = function() { rangy.init() } -->
     </script>
     <script src="//${ELABORATE_CDN}/publication/${TYPE}/${VERSION}/js/main.js"></script>
   </head>
