@@ -130,7 +130,7 @@ public class PublishTask implements Runnable {
 		Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
 		Project project = entityManager.find(Project.class, projectId);
 		Map<String, String> typographicalAnnotationMap = getTypographicalAnnotationMap(project);
-		Collection<String> facetsToSplit = getFacetsToSplit(project);
+		Collection<String> multivaluedFacetNames = getFacetsToSplit(project);
 		for (ProjectEntry projectEntry : projectEntriesInOrder) {
 			if (projectEntry.isPublishable()) {
 				status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
@@ -139,7 +139,7 @@ public class PublishTask implements Runnable {
 				entryData.add(new EntryData(projectEntry.getName(), projectEntry.getShortName(), id + ".json"));
 				thumbnails.put(id, eed.thumbnailUrls);
 				annotationIndex.putAll(eed.annotationDataMap);
-				indexEntry(projectEntry, facetsToSplit);
+				indexEntry(projectEntry, multivaluedFacetNames);
 			}
 		}
 		commitAndCloseSolr();
@@ -147,7 +147,7 @@ public class PublishTask implements Runnable {
 
 		String basename = getBasename(project);
 		String url = getBaseURL(project.getName());
-		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps), facetsToSplit, url);
+		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps), multivaluedFacetNames, url);
 		exportBuildDate();
 		// FIXME: fix, error bij de ystroom
 		if (entityManager.isOpen()) {
@@ -174,7 +174,7 @@ public class PublishTask implements Runnable {
 		String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
 		if (StringUtils.isNotBlank(value)) {
 			for (String fieldName : Splitter.on(";").split(value)) {
-				facetsToSplit.add(SolrUtils.facetName(fieldName));
+				facetsToSplit.add("mv_" + SolrUtils.facetName(fieldName));
 			}
 		}
 		return facetsToSplit;
@@ -216,9 +216,9 @@ public class PublishTask implements Runnable {
 		return "elab4-" + project.getName();
 	}
 
-	private void exportSearchConfig(Project project, List<String> facetFields, Collection<String> multivaluedFacets, String baseurl) {
+	private void exportSearchConfig(Project project, List<String> facetFields, Collection<String> multivaluedFacetNames, String baseurl) {
 		File json = new File(distDir, "WEB-INF/classes/config.json");
-		exportJson(json, new SearchConfig(project, facetFields, multivaluedFacets).setBaseURL(baseurl));
+		exportJson(json, new SearchConfig(project, facetFields, multivaluedFacetNames).setBaseURL(baseurl));
 	}
 
 	private void exportBuildDate() {

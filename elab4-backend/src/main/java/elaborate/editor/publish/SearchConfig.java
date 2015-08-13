@@ -45,14 +45,14 @@ public class SearchConfig {
 	List<String> defaultSortOrder = Lists.newArrayList();
 	String baseURL;
 
-	public SearchConfig(Project project, List<String> metadataFieldsForFacets, Collection<String> multivaluedFacetTitles) {
+	public SearchConfig(Project project, List<String> metadataFieldsForFacets, Collection<String> multivaluedFacetNames) {
 		for (Entry<String, FacetInfo> entry : project.getFacetInfoMap().entrySet()) {
 			String facetName = entry.getKey();
 			FacetInfo facetInfo = entry.getValue();
 			String facetTitle = facetInfo.getTitle();
 
 			if (metadataFieldsForFacets.contains(facetTitle)) {
-				if (multivaluedFacetTitles.contains(facetTitle)) {
+				if (multivaluedFacetNames.contains(MULTIVALUED_PREFIX + facetName)) {
 					facetName = MULTIVALUED_PREFIX + facetName;
 					facetInfo.setName(facetName);
 				}

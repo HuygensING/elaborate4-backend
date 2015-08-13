@@ -39,11 +39,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-import nl.knaw.huygens.facetedsearch.FacetType;
-import nl.knaw.huygens.facetedsearch.SolrFields;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
@@ -54,6 +49,10 @@ import com.google.common.collect.Sets;
 
 import elaborate.editor.model.AbstractDocument;
 import elaborate.editor.model.ModelFactory;
+import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.facetedsearch.FacetType;
+import nl.knaw.huygens.facetedsearch.SolrFields;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 @Entity
 @Table(name = "projects")
@@ -66,7 +65,7 @@ public class Project extends AbstractDocument<Project> {
 	private static final Set<String> DEFAULT_FACETFIELDS = Sets.newLinkedHashSet(Lists.newArrayList("publishable"));
 	private static final Set<FacetInfo> DEFAULT_FACETINFO = Sets.newHashSet(//
 			new FacetInfo().setName(SolrFields.PUBLISHABLE).setTitle(ProjectEntry.PUBLISHABLE).setType(FacetType.BOOLEAN)//
-			);
+	);
 
 	/* properties to persist */
 	private String level_1 = "";
@@ -88,7 +87,7 @@ public class Project extends AbstractDocument<Project> {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(//
 	name = "project_annotation_types", //
-	joinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) },//
+	joinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) }, //
 	inverseJoinColumns = { @JoinColumn(name = "annotation_type_id", columnDefinition = "int4", nullable = false, updatable = false) //
 	})
 	Set<AnnotationType> annotationTypes = Sets.newHashSet();
@@ -96,7 +95,7 @@ public class Project extends AbstractDocument<Project> {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(//
 	name = "project_users", //
-	joinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) },//
+	joinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) }, //
 	inverseJoinColumns = { @JoinColumn(name = "user_id", columnDefinition = "int4", nullable = false, updatable = false) //
 	})
 	private Set<User> users;
@@ -156,6 +155,7 @@ public class Project extends AbstractDocument<Project> {
 
 	@JsonIgnore
 	public List<FacetInfo> getFacetInfo() {
+		// TODO: move knowledge of multivaluedfacets here, from SearchConfig
 		List<FacetInfo> list = Lists.newArrayList(DEFAULT_FACETINFO);
 		for (String pemfn : getProjectEntryMetadataFieldnames()) {
 			list.add(new FacetInfo()//
