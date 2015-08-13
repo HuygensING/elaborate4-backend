@@ -40,7 +40,7 @@
 		<freemarker.version>2.3.23</freemarker.version>
 		<guava.version>19.0-rc1</guava.version>
 		<guice.version>4.0</guice.version>
-		<hibernate.version>5.0.0.CR4</hibernate.version>
+		<hibernate.version>4.3.8.Final</hibernate.version>
 		<hsqldb.version>2.3.3</hsqldb.version>
 		<jackson.version>2.3.0</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
 		<javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
