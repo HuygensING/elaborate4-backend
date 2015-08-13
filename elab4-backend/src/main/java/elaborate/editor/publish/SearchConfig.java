@@ -1,5 +1,7 @@
 package elaborate.editor.publish;
 
+import java.util.Collection;
+
 /*
  * #%L
  * elab4-backend
@@ -26,9 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-import nl.knaw.huygens.facetedsearch.FacetType;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.ImmutableList;
@@ -36,40 +35,50 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import elaborate.editor.model.orm.Project;
+import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.facetedsearch.FacetType;
 
 public class SearchConfig {
+	private static final String MULTIVALUED_PREFIX = "mv_";
 	List<String> facetFields = Lists.newArrayList();
 	Map<String, FacetInfo> facetInfoMap = Maps.newLinkedHashMap();
 	List<String> defaultSortOrder = Lists.newArrayList();
 	String baseURL;
 
-	public SearchConfig(Project project, List<String> metadataFieldsForFacets) {
-		// TODO: handle multivalued facets
+	public SearchConfig(Project project, List<String> metadataFieldsForFacets, Collection<String> multivaluedFacetTitles) {
 		for (Entry<String, FacetInfo> entry : project.getFacetInfoMap().entrySet()) {
-			String key = entry.getKey();
-			FacetInfo value = entry.getValue();
-			if (metadataFieldsForFacets.contains(value.getTitle())) {
-				facetInfoMap.put(key, value);
+			String facetName = entry.getKey();
+			FacetInfo facetInfo = entry.getValue();
+			String facetTitle = facetInfo.getTitle();
+
+			if (metadataFieldsForFacets.contains(facetTitle)) {
+				if (multivaluedFacetTitles.contains(facetTitle)) {
+					facetName = MULTIVALUED_PREFIX + facetName;
+					facetInfo.setName(facetName);
+				}
+				facetInfoMap.put(facetName, facetInfo);
 				// TODO: refactor or remove! kludge for CNW
-				insertFacetsForCNW(project, key);
+				insertFacetsForCNW(project, facetName);
 			}
 		}
+
 		facetFields = ImmutableList.copyOf(facetInfoMap.keySet());
+
 		defaultSortOrder = ImmutableList.of(//
-				fieldOf(project.getLevel1()),//
-				fieldOf(project.getLevel2()),//
+				fieldOf(project.getLevel1()), //
+				fieldOf(project.getLevel2()), //
 				fieldOf(project.getLevel3())//
-				);
+		);
 	}
 
 	private void insertFacetsForCNW(Project project, String key) {
 		if (project.getId() == 44) {
 			if (key.equals("metadata_ontvanger_s")) {
 				FacetInfo facetInfo = new FacetInfo()//
-						.setName("mv_metadata_correspondents")//
+						.setName(MULTIVALUED_PREFIX + "metadata_correspondents")//
 						.setTitle("Correspondent")//
 						.setType(FacetType.LIST);
-				facetInfoMap.put("mv_metadata_correspondents", facetInfo);
+				facetInfoMap.put(MULTIVALUED_PREFIX + "metadata_correspondents", facetInfo);
 			}
 			//			if (key.equals("metadata_datum")) {
 			//				facetInfoMap.get(key).setType(FacetType.RANGE);

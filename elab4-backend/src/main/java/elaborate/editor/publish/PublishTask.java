@@ -38,13 +38,6 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
-import nl.knaw.huygens.facetedsearch.IndexException;
-import nl.knaw.huygens.facetedsearch.LocalSolrServer;
-import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
@@ -82,9 +75,14 @@ import elaborate.editor.solr.ElaborateSolrIndexer;
 import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
+import nl.knaw.huygens.facetedsearch.IndexException;
+import nl.knaw.huygens.facetedsearch.LocalSolrServer;
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 public class PublishTask implements Runnable {
-	private static final String MULTIVALUED_DIVIDER = " | ";
 	private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static final String THUMBNAIL_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=";
 	private static final String ZOOM_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/viewer2.1.html?rft_id=";
@@ -149,7 +147,7 @@ public class PublishTask implements Runnable {
 
 		String basename = getBasename(project);
 		String url = getBaseURL(project.getName());
-		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps), url);
+		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps), facetsToSplit, url);
 		exportBuildDate();
 		// FIXME: fix, error bij de ystroom
 		if (entityManager.isOpen()) {
@@ -218,9 +216,9 @@ public class PublishTask implements Runnable {
 		return "elab4-" + project.getName();
 	}
 
-	private void exportSearchConfig(Project project, List<String> facetFields, String baseurl) {
+	private void exportSearchConfig(Project project, List<String> facetFields, Collection<String> multivaluedFacets, String baseurl) {
 		File json = new File(distDir, "WEB-INF/classes/config.json");
-		exportJson(json, new SearchConfig(project, facetFields).setBaseURL(baseurl));
+		exportJson(json, new SearchConfig(project, facetFields, multivaluedFacets).setBaseURL(baseurl));
 	}
 
 	private void exportBuildDate() {
@@ -531,11 +529,11 @@ public class PublishTask implements Runnable {
 		String version = configuration.getSetting("publication.version." + projectType);
 		String cdnBaseURL = configuration.getSetting("publication.cdn");
 		Map<String, Object> fmRootMap = ImmutableMap.of(//
-				"BASE_URL", projectData.get("baseURL"),//
-				"TYPE", projectType,//
-				"ELABORATE_CDN", cdnBaseURL,//
+				"BASE_URL", projectData.get("baseURL"), //
+				"TYPE", projectType, //
+				"ELABORATE_CDN", cdnBaseURL, //
 				"VERSION", version//
-				);
+		);
 		FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
 	}
 
@@ -554,11 +552,12 @@ public class PublishTask implements Runnable {
 			}
 			projectData.put("levels", levelFieldNames);
 
-			projectData.put("personMetadataFields", ImmutableList.of(//
-					"dynamic_s_koppelnaam", "dynamic_s_altname", "dynamic_s_gender", //
-					"dynamic_i_birthyear", "dynamic_i_deathyear", "dynamic_s_networkdomain",//
-					"dynamic_s_characteristic", "dynamic_s_subdomain", "dynamic_s_domain", "dynamic_s_combineddomain",//
-					"dynamic_s_periodical", "dynamic_s_membership"//
+			projectData.put("personMetadataFields",
+					ImmutableList.of(//
+							"dynamic_s_koppelnaam", "dynamic_s_altname", "dynamic_s_gender", //
+							"dynamic_i_birthyear", "dynamic_i_deathyear", "dynamic_s_networkdomain", //
+							"dynamic_s_characteristic", "dynamic_s_subdomain", "dynamic_s_domain", "dynamic_s_combineddomain", //
+							"dynamic_s_periodical", "dynamic_s_membership"//
 			));
 			projectData.put("personLevels", ImmutableList.of(//
 					"dynamic_sort_name", "dynamic_k_birthDate", "dynamic_k_deathDate", "dynamic_sort_networkdomain", "dynamic_sort_gender"//

@@ -31,9 +31,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -52,6 +49,8 @@ import elaborate.editor.publish.Publication.Settings;
 import elaborate.editor.publish.PublishTask.AnnotationData;
 import elaborate.editor.publish.PublishTask.AnnotationTypeData;
 import elaborate.editor.publish.PublishTask.EntryData;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.FacetInfo;
 
 public class PublishTaskTest extends AbstractTest {
 
@@ -173,7 +172,8 @@ public class PublishTaskTest extends AbstractTest {
 				.setProjectEntryMetadataFieldnames(ImmutableList.of("Field1", "Field2", "Field3", "field4"))//
 				.setLevel1("Field1")//
 				.setLevel2("Field3");
-		SearchConfig searchConfig = new SearchConfig(project, selectedProjectEntryMetadataFields);
+		Collection<String> multivaluedFacetTitles = Lists.newArrayList();
+		SearchConfig searchConfig = new SearchConfig(project, selectedProjectEntryMetadataFields, multivaluedFacetTitles);
 		Log.info("searchConfig={}", searchConfig);
 		assertThat(searchConfig).isNotNull();
 
@@ -199,9 +199,9 @@ public class PublishTaskTest extends AbstractTest {
 		PublishTask publishTask = new PublishTask(settings);
 		Project project = mock(Project.class);
 		Map<String, String> metadataMap = ImmutableMap.of(//
-				ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold",//
-				ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION, "Vetgedrukt",//
-				ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, "italic",//
+				ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold", //
+				ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION, "Vetgedrukt", //
+				ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, "italic", //
 				ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION, ""//
 		);
 		when(project.getMetadataMap()).thenReturn(metadataMap);

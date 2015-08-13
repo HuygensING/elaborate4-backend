@@ -37,18 +37,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.datable.Datable;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.tei.Document;
-import nl.knaw.huygens.tei.XmlContext;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -59,9 +54,15 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.CNWUtil;
 import elaborate.util.XmlUtil;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.datable.Datable;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.tei.Document;
+import nl.knaw.huygens.tei.XmlContext;
 
 public class ElaborateSolrIndexer extends SolrIndexer {
 	private static final CNWUtil CNW_UTIL = new CNWUtil();
+	private static final String MULTIVALUED_DIVIDER = " | ";
 
 	public ElaborateSolrIndexer() {
 		super(getServer(), ID);
@@ -97,7 +98,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			String value = projectEntry.getMetadataValue(field);
 			doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL).replaceAll("\\r?\\n|\\r", "/"), 1.0f);
 			if (forPublication) {
-				// TODO: This is CNW specific, refactoring needed
+				// TODO: This is CNW/BoschDoc specific, refactoring needed
 				handleCNWFacets(facetName, value, doc);
 				if (facetsToSplit.contains(facetName)) {
 					handleMultiValuedFields(facetName, value, doc);
@@ -131,8 +132,11 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 		return doc;
 	}
 
-	private static void handleMultiValuedFields(String facetName, String value, SolrInputDocument doc) {
-
+	private static void handleMultiValuedFields(String facetName, String multiValue, SolrInputDocument doc) {
+		for (String value : Splitter.on(MULTIVALUED_DIVIDER).trimResults().split(multiValue)) {
+			doc.removeField(facetName);
+			doc.addField("mv_" + facetName, value, 1.0f);
+		}
 	}
 
 	private static void handleCNWFacets(String facetName, String value, SolrInputDocument doc) {
