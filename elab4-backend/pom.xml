@@ -278,7 +278,7 @@
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.1.0.M0</version>
+				<version>${jetty-maven.version}</version>
 			</plugin>
 
 			<plugin>
@@ -304,7 +304,7 @@
 			<plugin>
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-assertions-generator-maven-plugin</artifactId>
-				<version>1.2.0</version>
+				<version>${assertj-assertions-generator}</version>
 				<configuration>
 					<!-- <packages> <param>your.first.package</param> <param>your.second.package</param> </packages> -->
 					<classes>
@@ -323,7 +323,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.8</version>
+				<version>${build-helper-maven.version}</version>
 				<executions>
 					<execution>
 						<id>add-test-source</id>
