@@ -23,7 +23,7 @@
 			will be redirected to / in a transparent fashion, that is,
 			the users will see these URLs but in reality be served index.html.
 		</note>
-		<from>/(entry|index|search|annotations|person|person-search)(/.*)?$</from>
+		<from>(/(en|es|nl))?/(entry|index|search|annotations|person|person-search)(/.*)?$</from>
 		<to>/index.html</to>
 	</rule>
 
