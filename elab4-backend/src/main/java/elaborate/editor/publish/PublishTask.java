@@ -420,7 +420,7 @@ public class PublishTask implements Runnable {
 	//  }
 
 	private AnnotationTypeData getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
-		Map<String, Object> metadata = getMetadata(meta);
+		Map<String, Object> metadata = getMetadataMap(meta);
 		AnnotationTypeData annotationTypeData = new AnnotationTypeData()//
 				.setId(annotationType.getId())//
 				.setName(annotationType.getName())//
@@ -429,7 +429,7 @@ public class PublishTask implements Runnable {
 		return annotationTypeData;
 	}
 
-	private Map<String, Object> getMetadata(Set<AnnotationMetadataItem> meta) {
+	private Map<String, Object> getMetadataMap(Set<AnnotationMetadataItem> meta) {
 		Map<String, Object> map = Maps.newHashMap();
 		for (AnnotationMetadataItem annotationMetadataItem : meta) {
 			map.put(annotationMetadataItem.getAnnotationTypeMetadataItem().getName(), annotationMetadataItem.getData());
@@ -802,6 +802,16 @@ public class PublishTask implements Runnable {
 		public Metadata(String _field, String _value) {
 			field = _field;
 			value = StringUtils.defaultIfBlank(_value, "");
+		}
+	}
+
+	public static class MultivaluedMetadata {
+		public String field = "";
+		public List<String> value = Lists.newArrayList();
+
+		public MultivaluedMetadata(String _field, String _value) {
+			field = _field;
+			value = Splitter.on(" | ").omitEmptyStrings().trimResults().splitToList(_value);
 		}
 	}
 
