@@ -48,6 +48,7 @@ public class ElaborateQueryComposer implements QueryComposer {
 			String termQuery = (terms.size() == 1) ? terms.get(0) : MessageFormat.format("({0})", Joiner.on(" ").join(terms));
 
 			List<String> fieldQueries = Lists.newArrayList();
+			fieldQueries.add(MessageFormat.format("name:{0}", termQuery)); // always search in entry title as well
 			for (String field : sp.getTextFieldsToSearch().keySet()) {
 				fieldQueries.add(MessageFormat.format("{0}:{1}", field, termQuery));
 			}

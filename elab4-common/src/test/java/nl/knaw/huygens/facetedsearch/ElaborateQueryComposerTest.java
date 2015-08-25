@@ -48,7 +48,7 @@ public class ElaborateQueryComposerTest {
 		sp.setTerm("iets")//
 				.setTextLayers(ImmutableList.of("Diplomatic"))//
 				.setCaseSensitive(true);
-		String expected = "textlayercs_diplomatic:iets";
+		String expected = "name:iets textlayercs_diplomatic:iets";
 
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
@@ -64,7 +64,7 @@ public class ElaborateQueryComposerTest {
 		sp.setTerm("iets anders")//
 				.setTextLayers(ImmutableList.of("Diplomatic"))//
 				.setCaseSensitive(true);
-		String expected = "textlayercs_diplomatic:(iets anders)";
+		String expected = "name:(iets anders) textlayercs_diplomatic:(iets anders)";
 
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
@@ -82,7 +82,7 @@ public class ElaborateQueryComposerTest {
 				.setTextLayers(ImmutableList.of("Diplomatic", "Comments"))//
 				.setCaseSensitive(false)//
 				.setSearchInAnnotations(true);
-		String expected = "textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)";
+		String expected = "name:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)";
 
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
@@ -110,20 +110,20 @@ public class ElaborateQueryComposerTest {
 	@Test
 	public void testcomposeQueryString6() throws Exception {
 		//  {"searchInAnnotations":false,"searchInTranscriptions":false,"facetValues":[{"name":"metadata_folio_number","values":["199"]}],"term":"a*"}
-		ElaborateSearchParameters sp = new ElaborateSearchParameters();
-		sp.setTerm("a*")//
+		ElaborateSearchParameters sp = new ElaborateSearchParameters()//
+				.setTerm("a*")//
 				.setFuzzy(true)//
 				.setCaseSensitive(false)//
 				.setTextLayers(ImmutableList.of("Diplomatic"))//
 				.setFacetValues(ImmutableList.of(new FacetParameter().setName("metadata_folio_number").setValues(ImmutableList.of("199"))))//
 				.setSearchInAnnotations(false)//
 				.setSearchInTranscriptions(false);
-		String expected = "+(*:*) +metadata_folio_number:(199)";
+		String expected = "+(name:a*~0.75) +metadata_folio_number:(199)";
 
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();
 		assertThat(query).isEqualTo(expected);
-		assertThat(queryComposer.mustHighlight()).isFalse();
+		assertThat(queryComposer.mustHighlight()).isTrue();
 	}
 
 }
