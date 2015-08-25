@@ -110,7 +110,7 @@
 
 		<!-- Elaborate3 fields -->
     <field name="id" type="long" indexed="true" stored="true" required="true"/>
-    <field name="name" type="string" indexed="true" stored="true" required="true"/>
+    <field name="name" type="text_general_rev" indexed="true" stored="true" required="true"/>
     <field name="project_id" type="long" indexed="true" stored="true" required="true"/>
     <field name="publishable" type="boolean" indexed="true" stored="true" required="true"/>
 

@@ -26,9 +26,9 @@
   <fields>
     <field name="_version_" type="long" indexed="true" stored="true"/>
 
-		<!-- Elaborate3 fields -->
+		<!-- Elaborate4 fields -->
     <field name="id" type="long" indexed="true" stored="true" required="true"/>
-    <field name="name" type="string" indexed="true" stored="true" required="true"/>
+    <field name="name" type="text_general_rev" indexed="true" stored="true" required="true"/>
 
     <dynamicField name="metadata_*" type="string" indexed="true" stored="true" multiValued="false"/>
     <dynamicField name="mv_metadata_*" type="string" indexed="true" stored="true" multiValued="true"/>
