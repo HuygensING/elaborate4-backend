@@ -25,9 +25,6 @@ package elaborate.editor.resources.orm.wrappers;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.tei.Document;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -36,6 +33,8 @@ import com.google.common.collect.Lists;
 
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.XmlUtil;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.tei.Document;
 
 public class TranscriptionWrapper {
 	private long id = 0l;
@@ -121,6 +120,8 @@ public class TranscriptionWrapper {
 				.replaceAll("(?s)[" + NBSP + "\\s]+$", "")// remove whitespace at end of body
 				.replaceAll("<[a-zA-Z]+/>", "")// remove milestone/empty tags
 				.replaceAll("\n", "<br>")//
+				.replaceAll("<strong>", "<b>")//
+				.replaceAll("</strong>", "</b>")//
 				.replaceAll("(<br>)+$", "")//
 				.replaceAll(NBSP, "&nbsp;") //
 				.trim());
@@ -141,7 +142,7 @@ public class TranscriptionWrapper {
 				.replace("\u001A", " ")//		0x1a
 				.replace("", " ")//
 				.replace("&nbsp;", "&#160;")//
-		;
+				;
 		Log.info("body input={}", bodyIn);
 		String xml = Transcription.BODY_START + XmlUtil.fixXhtml(bodyIn) + Transcription.BODY_END;
 		Document document = Document.createFromXml(xml, true);
