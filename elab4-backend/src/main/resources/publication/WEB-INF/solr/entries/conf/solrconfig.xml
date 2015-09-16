@@ -197,7 +197,7 @@
 			that can be used by name on each Update Request -->
 		<!-- <lst name="defaults"> <str name="update.chain">dedupe</str> </lst> -->
   </requestHandler>
-  <requestHandler name="/update/json" class="solr.JsonUpdateRequestHandler">
+<!--   <requestHandler name="/update/json" class="solr.JsonUpdateRequestHandler">
     <lst name="defaults">
       <str name="stream.contentType">application/json</str>
     </lst>
@@ -206,7 +206,7 @@
     <lst name="defaults">
       <str name="stream.contentType">application/csv</str>
     </lst>
-  </requestHandler>
+  </requestHandler> -->
   <requestHandler name="/update/extract" startup="lazy" class="solr.extraction.ExtractingRequestHandler">
     <lst name="defaults">
       <str name="lowernames">true</str>
