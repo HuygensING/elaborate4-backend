@@ -33,6 +33,8 @@ import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYER_PREFIX;
 import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -147,10 +149,11 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			}
 		} else if ("metadata_datum".equals(facetName)) {
 			Datable datable = new Datable(CNW_UTIL.convertDate(value));
-			doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
-			doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
-			//			doc.addField("metadata_datum_lower", datable.getFromDate(), 1.0f);
-			//			doc.addField("metadata_datum_upper", datable.getToDate(), 1.0f);
+			//			doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
+			//			doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
+			DateFormat dateFormat = new SimpleDateFormat("YYYYMMdd");
+			doc.addField("metadata_datum_lower", dateFormat.format(datable.getFromDate()), 1.0f);
+			doc.addField("metadata_datum_upper", dateFormat.format(datable.getToDate()), 1.0f);
 		}
 	}
 

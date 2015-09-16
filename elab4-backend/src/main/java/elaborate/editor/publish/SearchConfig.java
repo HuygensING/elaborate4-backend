@@ -80,9 +80,9 @@ public class SearchConfig {
 						.setType(FacetType.LIST);
 				facetInfoMap.put(MULTIVALUED_PREFIX + "metadata_correspondents", facetInfo);
 			}
-			//			if (key.equals("metadata_datum")) {
-			//				facetInfoMap.get(key).setType(FacetType.RANGE);
-			//			}
+			if (key.equals("metadata_datum")) {
+				facetInfoMap.get(key).setType(FacetType.RANGE);
+			}
 		}
 	}
 
