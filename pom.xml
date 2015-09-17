@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.knaw.huygens.elab4</groupId>
 	<artifactId>elab4</artifactId>
-	<version>4.0.5-SNAPSHOT</version>
+	<version>4.0.5</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2011</inceptionYear>
 
@@ -35,6 +35,7 @@
 		<commons-lang.version>2.6</commons-lang.version>
 		<commons-logging.version>1.2</commons-logging.version>
 		<datables.version>1.0.2</datables.version>
+		<facetedsearchtools.version>0.3.0</facetedsearchtools.version>
 		<fest.version>1.0.16</fest.version>
 		<flexjson.version>3.3</flexjson.version>
 		<freemarker.version>2.3.23</freemarker.version>
