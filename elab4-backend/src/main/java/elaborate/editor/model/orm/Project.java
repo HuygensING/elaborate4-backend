@@ -49,10 +49,10 @@ import com.google.common.collect.Sets;
 
 import elaborate.editor.model.AbstractDocument;
 import elaborate.editor.model.ModelFactory;
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-import nl.knaw.huygens.facetedsearch.FacetType;
 import nl.knaw.huygens.facetedsearch.SolrFields;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
 
 @Entity
 @Table(name = "projects")

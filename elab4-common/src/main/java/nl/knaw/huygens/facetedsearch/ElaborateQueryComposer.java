@@ -76,10 +76,22 @@ public class ElaborateQueryComposer implements QueryComposer {
 	private List<String> composeFacetQueries(ElaborateSearchParameters sp) {
 		List<String> facetQueries = Lists.newArrayList();
 		for (FacetParameter fp : sp.getFacetValues()) {
-			String prefix = fp.combineValuesWithAnd() ? "+" : "";
-			String values = prefix + Joiner.on(" " + prefix).join(fp.getEscapedValues());
-			String facetQuery = MessageFormat.format("+{0}:({1})", fp.getName(), values);
-			facetQueries.add(facetQuery);
+			if (!fp.isRangeFacetParameter()) {
+				String prefix = fp.combineValuesWithAnd() ? "+" : "";
+				String values = prefix + Joiner.on(" " + prefix).join(fp.getEscapedValues());
+				String facetQuery = MessageFormat.format("+{0}:({1})", fp.getName(), values);
+				facetQueries.add(facetQuery);
+
+			} else {
+				long lowerDate = fp.getLowerLimit();
+				long upperDate = fp.getUpperLimit();
+				String rangeQuery = MessageFormat.format(//
+						"+{0}_lower:[{1,number,#} TO {2,number,#}] +{0}_upper:[{1,number,#} TO {2,number,#}]", //
+						fp.getName(), lowerDate, upperDate//
+				);
+				facetQueries.add(rangeQuery);
+			}
+			//
 		}
 		return facetQueries;
 	}

@@ -131,6 +131,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			doc.addField(PUBLISHABLE, projectEntry.isPublishable(), 1.0f);
 			doc.addField(PROJECT_ID, projectEntry.getProject().getId());
 		}
+		Log.info("doc={}", doc);
 		return doc;
 	}
 

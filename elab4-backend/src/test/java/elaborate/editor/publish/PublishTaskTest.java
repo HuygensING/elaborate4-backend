@@ -51,7 +51,7 @@ import elaborate.editor.publish.PublishTask.AnnotationData;
 import elaborate.editor.publish.PublishTask.AnnotationTypeData;
 import elaborate.editor.publish.PublishTask.EntryData;
 import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.solr.FacetInfo;
 
 public class PublishTaskTest extends AbstractTest {
 

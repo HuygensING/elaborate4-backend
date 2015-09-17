@@ -36,12 +36,6 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 
@@ -79,6 +73,11 @@ import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+import nl.knaw.huygens.solr.FacetInfo;
 
 public class ProjectService extends AbstractStoredEntityService<Project> {
 	private static final String PROJECT_NAME = "name";
@@ -244,9 +243,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public List<ProjectEntry> getProjectEntriesInOrder0(long id) {
 		find(getEntityClass(), id);
 		List<ProjectEntry> resultList = getEntityManager()//.
-				.createQuery("from ProjectEntry pe" + //
-						" where project_id=:projectId" + //
-						" order by pe.name",//
+				.createQuery(
+						"from ProjectEntry pe" + //
+								" where project_id=:projectId" + //
+								" order by pe.name", //
 						ProjectEntry.class)//
 				.setParameter("projectId", id)//
 				.getResultList();
@@ -272,12 +272,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public List<Long> getProjectEntryIdsInOrder(long id) {
 		Project project = find(getEntityClass(), id);
 		List<Long> resultList = getEntityManager()//.
-				.createQuery("select pe.id from ProjectEntry pe" + //
-						" left join pe.projectEntryMetadataItems l1 with l1.field=:level1" + //
-						" left join pe.projectEntryMetadataItems l2 with l2.field=:level2" + //
-						" left join pe.projectEntryMetadataItems l3 with l3.field=:level3" + //
-						" where project_id=:projectId" + //
-						" order by l1.data,l2.data,l3.data,pe.name",//
+				.createQuery(
+						"select pe.id from ProjectEntry pe" + //
+								" left join pe.projectEntryMetadataItems l1 with l1.field=:level1" + //
+								" left join pe.projectEntryMetadataItems l2 with l2.field=:level2" + //
+								" left join pe.projectEntryMetadataItems l3 with l3.field=:level3" + //
+								" where project_id=:projectId" + //
+								" order by l1.data,l2.data,l3.data,pe.name", //
 						Long.class)//
 				.setParameter("level1", project.getLevel1())//
 				.setParameter("level2", project.getLevel2())//
@@ -555,7 +556,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				.createQuery("select count(*) from Transcription"//
 						+ " where project_entry_id in"//
 						+ " (select id from ProjectEntry where project_id=:project_id)"//
-				)//
+		)//
 				.setParameter("project_id", project_id)//
 				.getSingleResult();
 		return transcriptionCount;
@@ -579,7 +580,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				.createQuery("select count(*) from"//
 						+ " Facsimile where project_entry_id in"//
 						+ " (select id from ProjectEntry where project_id=:project_id)"//
-				)//
+		)//
 				.setParameter("project_id", project_id)//
 				.getSingleResult();
 		return facsimileCount;
@@ -593,7 +594,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 							+ " where text_layer = :text_layer"//
 							+ " and project_entry_id in"//
 							+ " (select id from ProjectEntry where project_id=:project_id)"//
-					)//
+			)//
 					.setParameter("text_layer", textLayer)//
 					.setParameter("project_id", project_id)//
 					.getSingleResult();
@@ -612,7 +613,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 							+ "     (select id from Transcription"//
 							+ "       where project_entry_id in"//
 							+ "         (select id from ProjectEntry where project_id=:project_id))"//
-					)//
+			)//
 					.setParameter("annotation_type_id", annotationType.getId())//
 					.setParameter("project_id", project_id)//
 					.getSingleResult();
@@ -625,7 +626,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Long entriesCount = (Long) entityManager//
 				.createQuery("select count(*) from ProjectEntry"//
 						+ " where project_id=:project_id"//
-				)//
+		)//
 				.setParameter("project_id", project_id)//
 				.getSingleResult();
 		return entriesCount;

@@ -24,10 +24,12 @@ package nl.knaw.huygens.facetedsearch;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,6 +55,10 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 
 import nl.knaw.huygens.Log;
+import nl.knaw.huygens.solr.FacetCount;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
+import nl.knaw.huygens.solr.RangeOption;
 
 public abstract class AbstractSolrServer implements SolrServerWrapper {
 	public static final String KEY_NUMFOUND = "numFound";
@@ -136,7 +142,7 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 		Log.info("searchparameters={}", sp);
 		queryComposer.compose(sp);
 		String queryString = queryComposer.getSearchQuery();
-		String[] facetFields = sp.getFacetFields();
+		String[] facetFields = getFacetFields(sp);
 		//		Log.debug("search({},{})", queryString, sp.getSort());
 		Map<String, String> textFieldMap = sp.getTextFieldsToSearch();
 
@@ -163,6 +169,16 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 
 		Map<String, Object> data = getSearchData(sp, facetFields, query, fieldsToReturn);
 		return data;
+	}
+
+	private String[] getFacetFields(ElaborateSearchParameters sp) {
+		String[] facetFields = sp.getFacetFields();
+		List<String> facetFieldList = Lists.newArrayList(facetFields);
+		for (RangeField rangeField : sp.getRanges()) {
+			facetFieldList.add(rangeField.lowerField);
+			facetFieldList.add(rangeField.upperField);
+		}
+		return facetFieldList.toArray(new String[] {});
 	}
 
 	private Map<String, Object> getSearchData(ElaborateSearchParameters sp, String[] facetFields, SolrQuery query, String[] fieldsToReturn) throws IndexException {
@@ -215,7 +231,37 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 				}
 			}
 		}
+		Map<String, Range> rangeMap = getRangeMap(sp, response);
+		Set<Entry<String, Range>> entrySet = rangeMap.entrySet();
+		for (Entry<String, Range> entry : entrySet) {
+			String name = entry.getKey();
+			Range range = entry.getValue();
+			RangeOption option = new RangeOption().setLowerLimit(range.lowest).setUpperLimit(range.highest);
+			FacetCount fc = new FacetCount().setName(name + "_range").setTitle(name + " range").setType(FacetType.RANGE).addOption(option);
+			facets.add(fc);
+		}
 		return facets;
+	}
+
+	private Map<String, Range> getRangeMap(ElaborateSearchParameters sp, QueryResponse response) {
+		Map<String, Range> map = Maps.newHashMap();
+		for (RangeField rangeField : sp.getRanges()) {
+			Set<Integer> values = Sets.newHashSet();
+			List<String> rangeFields = ImmutableList.of(rangeField.lowerField, rangeField.upperField);
+			for (String facetFieldName : rangeFields) {
+				FacetField facetField = response.getFacetField(facetFieldName);
+				for (Count count : facetField.getValues()) {
+					values.add(Integer.valueOf(count.getName()));
+				}
+			}
+			if (!values.isEmpty()) {
+				List<Integer> list = Lists.newArrayList(values);
+				Collections.sort(list);
+				Range r = new Range(list.get(0), list.get(list.size() - 1));
+				map.put(rangeField.name, r);
+			}
+		}
+		return map;
 	}
 
 	private Map<String, Object> entryView(SolrDocument document, String[] fieldsToReturn, Map<String, List<String>> kwicMap, Map<String, String> fieldMap) {
@@ -325,36 +371,18 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 	 * @param type 
 	 */
 	protected FacetCount convertFacet(FacetField field, String title, FacetType type) {
-		Log.warn("convertFacet({}, {}, {})", field, title, type);
 		if (field != null) {
 			FacetCount facetCount = new FacetCount()//
 					.setName(field.getName())//
 					.setTitle(title)//
 					.setType(type);
 			List<Count> counts = field.getValues();
-
 			if (counts != null) {
-				if (FacetType.LIST.equals(type)) {
-					for (Count count : counts) {
-						FacetCount.ListOption option = new FacetCount.ListOption()//
-								.setName(count.getName())//
-								.setCount(count.getCount());
-						facetCount.addOption(option);
-					}
-
-				} else if (FacetType.RANGE.equals(type)) {
-					long lowerLimit = 99999999;
-					long upperLimit = 0;
-					for (Count count : counts) {
-						String rangeValueString = count.getName();
-						long longValue = Long.valueOf(rangeValueString);
-						lowerLimit = Math.min(lowerLimit, longValue);
-						upperLimit = Math.max(upperLimit, longValue);
-					}
-					facetCount.addOption(new FacetCount.RangeOption()//
-							.setLowerLimit(lowerLimit)//
-							.setUpperLimit(upperLimit)//
-					);
+				for (Count count : counts) {
+					FacetCount.Option option = new FacetCount.Option()//
+							.setName(count.getName())//
+							.setCount(count.getCount());
+					facetCount.addOption(option);
 				}
 			}
 			return facetCount;
@@ -377,4 +405,18 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 		return terms;
 	}
 
+	public static class Range {
+		public int lowest;
+		public int highest;
+
+		public Range(int lowest, int highest) {
+			this.lowest = lowest;
+			this.highest = highest;
+		}
+
+		public void combineWith(Range other) {
+			this.lowest = Math.min(this.lowest, other.lowest);
+			this.highest = Math.max(this.highest, other.highest);
+		}
+	}
 }

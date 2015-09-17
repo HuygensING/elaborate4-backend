@@ -46,13 +46,14 @@ import com.google.common.collect.Maps;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
 import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-import nl.knaw.huygens.facetedsearch.FacetType;
 import nl.knaw.huygens.facetedsearch.LocalSolrServer;
+import nl.knaw.huygens.facetedsearch.RangeField;
 import nl.knaw.huygens.facetedsearch.SearchData;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
 
 @Singleton
 public class SearchService {
@@ -62,6 +63,7 @@ public class SearchService {
 	private SolrServerWrapper solrServer;
 	private String solrDir;
 	private Map<String, FacetInfo> facetInfoMap;
+	private List<RangeField> rangeFields;
 	private String[] facetFields;
 	private String[] defaultSortOrder;
 
@@ -80,11 +82,12 @@ public class SearchService {
 		elaborateSearchParameters//
 				.setFacetFields(getFacetFields())//
 				.setFacetInfoMap(getFacetInfoMap())//
+				.setRanges(getRangeFields())//
 				.setLevelFields(defaultSortOrder[0], defaultSortOrder[1], defaultSortOrder[2]);
 		try {
-			Log.debug("searchParameters={}", elaborateSearchParameters);
+			Log.info("searchParameters={}", elaborateSearchParameters);
 			Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
-			Log.debug("result={}", result);
+			Log.info("result={}", result);
 			SearchData searchData = new SearchData().setResults(result);
 			searchDataIndex.put(searchData.getId(), searchData);
 			return searchData;
@@ -198,8 +201,16 @@ public class SearchService {
 		return facetInfoMap;
 	}
 
+	private List<RangeField> getRangeFields() {
+		return rangeFields;
+	}
+
 	void setFacetInfoMap(Map<String, FacetInfo> _facetInfoMap) {
 		facetInfoMap = _facetInfoMap;
+	}
+
+	void setRangeFields(List<RangeField> rangeFields) {
+		this.rangeFields = rangeFields;
 	}
 
 	void loadConfig() {
@@ -208,6 +219,7 @@ public class SearchService {
 		try {
 			Map<String, Object> configMap = readConfigMap(inputStream);
 			setFacetInfoMap(toMap(configMap.get("facetInfoMap")));
+			setRangeFields(toRangeFieldList(configMap.get("rangeFields")));
 			facetFields = toStringArray(configMap.get("facetFields"));
 			defaultSortOrder = toStringArray(configMap.get("defaultSortOrder"));
 			hostname = (String) configMap.get("baseURL");
@@ -216,22 +228,29 @@ public class SearchService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	static List<RangeField> toRangeFieldList(Object object) {
+		List<RangeField> list = Lists.newArrayList();
+		List<Map<String, Object>> mapList = (List<Map<String, Object>>) object;
+		for (Map<String, Object> map : mapList) {
+			list.add(new RangeField((String) map.get("name"), (String) map.get("lowerField"), (String) map.get("upperField")));
+		}
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
 	static String[] toStringArray(Object object) {
 		return ((List<String>) object).toArray(new String[] {});
 	}
 
+	@SuppressWarnings("unchecked")
 	static Map<String, FacetInfo> toMap(Object object) {
 		Map<String, Map<String, String>> inMap = (Map<String, Map<String, String>>) object;
 		Map<String, FacetInfo> outMap = Maps.newHashMapWithExpectedSize(inMap.size());
 		for (Entry<String, Map<String, String>> entry : inMap.entrySet()) {
 			String key = entry.getKey();
 			Map<String, String> value = entry.getValue();
-			outMap.put(key,
-					new FacetInfo()//
-							.setName(value.get("name"))//
-							.setTitle(value.get("title"))//
-							.setType(FacetType.valueOf(value.get("type")))//
-			);
+			outMap.put(key, new FacetInfo().setName(value.get("name")).setTitle(value.get("title")).setType(FacetType.valueOf(value.get("type"))));
 		}
 		return outMap;
 	}

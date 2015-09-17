@@ -25,21 +25,25 @@ package elaborate.publication.solr;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-import nl.knaw.huygens.facetedsearch.FacetType;
-
 import org.assertj.core.data.MapEntry;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.RangeField;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
 
 public class SearchServiceTest {
 
@@ -105,5 +109,24 @@ public class SearchServiceTest {
 		Map<String, Object> first = results.get(0);
 		Map<String, Object> firstMetadata = (Map<String, Object>) first.get("metadata");
 		assertThat(firstMetadata).containsOnly(MapEntry.entry("Field 1", "value"), MapEntry.entry("Field 2", ":empty"));
+	}
+
+	@Test
+	public void testDeserializingRangeFieldListWorks() throws JsonParseException, JsonMappingException, IOException {
+		String json = "{\"rangeFields\": ["//
+				+ "{"//
+				+ " \"name\": \"metadata_datum\","//
+				+ " \"lowerField\": \"metadata_datum_lower\","//
+				+ " \"upperField\": \"metadata_datum_upper\""//
+				+ "}]}";
+		InputStream reader = new ByteArrayInputStream(json.getBytes());
+		Map<String, Object> configMap = SearchService.readConfigMap(reader);
+		List<RangeField> rangeFieldList = SearchService.toRangeFieldList(configMap.get("rangeFields"));
+		assertThat(rangeFieldList).hasSize(1);
+		RangeField rangeField = rangeFieldList.get(0);
+		assertThat(rangeField.getName()).isEqualTo("metadata_datum");
+		assertThat(rangeField.getLowerField()).isEqualTo("metadata_datum_lower");
+		assertThat(rangeField.getUpperField()).isEqualTo("metadata_datum_upper");
+
 	}
 }

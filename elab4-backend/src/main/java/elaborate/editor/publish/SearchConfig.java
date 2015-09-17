@@ -35,8 +35,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import elaborate.editor.model.orm.Project;
-import nl.knaw.huygens.facetedsearch.FacetInfo;
-import nl.knaw.huygens.facetedsearch.FacetType;
+import nl.knaw.huygens.facetedsearch.RangeField;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
 
 public class SearchConfig {
 	private static final String MULTIVALUED_PREFIX = "mv_";
@@ -44,8 +45,13 @@ public class SearchConfig {
 	Map<String, FacetInfo> facetInfoMap = Maps.newLinkedHashMap();
 	List<String> defaultSortOrder = Lists.newArrayList();
 	String baseURL;
+	private final List<RangeField> rangeFields = Lists.newArrayList();
 
 	public SearchConfig(Project project, List<String> metadataFieldsForFacets, Collection<String> multivaluedFacetNames) {
+		// TODO: refactor CNW Kludge
+		if (44 == project.getId()) {
+			getRangeFields().add(new RangeField("metadata_datum", "metadata_datum_lower", "metadata_datum_upper"));
+		}
 		for (Entry<String, FacetInfo> entry : project.getFacetInfoMap().entrySet()) {
 			String facetName = entry.getKey();
 			FacetInfo facetInfo = entry.getValue();
@@ -80,14 +86,18 @@ public class SearchConfig {
 						.setType(FacetType.LIST);
 				facetInfoMap.put(MULTIVALUED_PREFIX + "metadata_correspondents", facetInfo);
 			}
-			if (key.equals("metadata_datum")) {
-				facetInfoMap.get(key).setType(FacetType.RANGE);
-			}
+			//			if (key.equals("metadata_datum")) {
+			//				facetInfoMap.get(key).setType(FacetType.RANGE);
+			//			}
 		}
 	}
 
 	private String fieldOf(String level) {
 		return StringUtils.defaultIfEmpty(level, "");
+	}
+
+	public List<RangeField> getRangeFields() {
+		return rangeFields;
 	}
 
 	public List<String> getFacetFields() {

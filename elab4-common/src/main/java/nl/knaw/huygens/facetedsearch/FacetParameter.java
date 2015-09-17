@@ -75,4 +75,30 @@ public class FacetParameter {
 	public boolean combineValuesWithAnd() {
 		return combineValuesWith.equals(AndOr.and);
 	}
+
+	private long lowerLimit = -1;
+	private long upperLimit = -1;
+
+	public FacetParameter setLowerLimit(long lowerLimit) {
+		this.lowerLimit = lowerLimit;
+		return this;
+	}
+
+	public long getLowerLimit() {
+		return lowerLimit;
+	}
+
+	public FacetParameter setUpperLimit(long upperLimit) {
+		this.upperLimit = upperLimit;
+		return this;
+	}
+
+	public long getUpperLimit() {
+		return upperLimit;
+	}
+
+	public boolean isRangeFacetParameter() {
+		return lowerLimit != -1 && upperLimit != -1;
+	}
+
 }

@@ -34,7 +34,7 @@ public class ElaborateQueryComposerTest {
 	@Test
 	public void testcomposeQueryString1() throws Exception {
 		ElaborateSearchParameters sp = new ElaborateSearchParameters();
-		sp.setTextLayers(ImmutableList.of("diplomatic"));
+		sp.setTextLayers(ImmutableList.of("Diplomatic"));
 		String expected = "*:*";
 
 		queryComposer.compose(sp);
@@ -119,6 +119,28 @@ public class ElaborateQueryComposerTest {
 				.setSearchInAnnotations(false)//
 				.setSearchInTranscriptions(false);
 		String expected = "+(name:a*~0.75) +metadata_folio_number:(199)";
+
+		queryComposer.compose(sp);
+		String query = queryComposer.getSearchQuery();
+		assertThat(query).isEqualTo(expected);
+		assertThat(queryComposer.mustHighlight()).isTrue();
+	}
+
+	@Test
+	public void testcomposeQueryStringWithRange() throws Exception {
+		ElaborateSearchParameters sp = new ElaborateSearchParameters();
+		sp.setTerm("iets vaags")//
+				.setFuzzy(true)//
+				.setTextLayers(ImmutableList.of("Diplomatic"))//
+				.setCaseSensitive(false)//
+				.setFacetValues(ImmutableList.of(//
+						new FacetParameter().setName("metadata_folio_number").setValues(ImmutableList.of("199")), //
+						new FacetParameter().setName("metadata_date").setLowerLimit(16000101).setUpperLimit(20201231)))//
+				.setSearchInAnnotations(true);
+		String expected = "+(name:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75))"//
+				+ " +metadata_folio_number:(199)"//
+				+ " +metadata_date_lower:[16000101 TO 20201231]"//
+				+ " +metadata_date_upper:[16000101 TO 20201231]";
 
 		queryComposer.compose(sp);
 		String query = queryComposer.getSearchQuery();

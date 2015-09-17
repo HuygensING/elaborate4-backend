@@ -43,6 +43,7 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 	private String level1Field = SolrFields.NAME;
 	private String level2Field = SolrFields.NAME;
 	private String level3Field = SolrFields.NAME;
+	private List<RangeField> ranges = Lists.newArrayList();
 
 	public ElaborateSearchParameters setTextLayers(final List<String> textLayers) {
 		this.textLayers = textLayers;
@@ -102,6 +103,15 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 		}
 
 		return map;
+	}
+
+	public ElaborateSearchParameters setRanges(List<RangeField> ranges) {
+		this.ranges = ranges;
+		return this;
+	}
+
+	public List<RangeField> getRanges() {
+		return ranges;
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------ */

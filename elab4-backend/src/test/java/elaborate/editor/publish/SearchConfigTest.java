@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import elaborate.editor.model.orm.Project;
 import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.FacetInfo;
+import nl.knaw.huygens.solr.FacetInfo;
 
 public class SearchConfigTest {
 

@@ -33,6 +33,8 @@ import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import nl.knaw.huygens.solr.FacetInfo;
+
 @SuppressWarnings("unchecked")
 public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
 	private String term = "*";
