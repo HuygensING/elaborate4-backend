@@ -71,11 +71,13 @@ public class FacetCount {
 		return options;
 	}
 
-	public static class Option {
+	public static interface Option {}
+
+	public static class ListOption implements Option {
 		private String name = "";
 		private long count = 0;
 
-		public Option setName(String name) {
+		public ListOption setName(String name) {
 			this.name = name;
 			return this;
 		}
@@ -84,7 +86,7 @@ public class FacetCount {
 			return name;
 		}
 
-		public Option setCount(long l) {
+		public ListOption setCount(long l) {
 			this.count = l;
 			return this;
 		}
@@ -92,6 +94,30 @@ public class FacetCount {
 		public long getCount() {
 			return count;
 		}
+	}
+
+	public static class RangeOption implements Option {
+		private long lowerLimit = 0;
+		private long upperLimit = 10;
+
+		public long getLowerLimit() {
+			return lowerLimit;
+		}
+
+		public RangeOption setLowerLimit(long lowerLimit) {
+			this.lowerLimit = lowerLimit;
+			return this;
+		}
+
+		public long getUpperLimit() {
+			return upperLimit;
+		}
+
+		public RangeOption setUpperLimit(long upperLimit) {
+			this.upperLimit = upperLimit;
+			return this;
+		}
+
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------ */

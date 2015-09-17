@@ -149,11 +149,15 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			}
 		} else if ("metadata_datum".equals(facetName)) {
 			Datable datable = new Datable(CNW_UTIL.convertDate(value));
-			//			doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
-			//			doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
-			DateFormat dateFormat = new SimpleDateFormat("YYYYMMdd");
-			doc.addField("metadata_datum_lower", dateFormat.format(datable.getFromDate()), 1.0f);
-			doc.addField("metadata_datum_upper", dateFormat.format(datable.getToDate()), 1.0f);
+			if (datable.isValid()) {
+				//			doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
+				//			doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
+				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+				doc.addField("metadata_datum_lower", dateFormat.format(datable.getFromDate()), 1.0f);
+				doc.addField("metadata_datum_upper", dateFormat.format(datable.getToDate()), 1.0f);
+			} else {
+				Log.error("invalid datable: {}", value);
+			}
 		}
 	}
 

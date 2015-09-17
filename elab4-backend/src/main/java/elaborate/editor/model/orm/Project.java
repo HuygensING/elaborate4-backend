@@ -101,7 +101,7 @@ public class Project extends AbstractDocument<Project> {
 	private Set<User> users;
 
 	@Column(columnDefinition = "text")
-	private String text_layers = "Diplomatic";
+	private String text_layers = TranscriptionType.DIPLOMATIC;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
 	private List<LogEntry> logEntries;

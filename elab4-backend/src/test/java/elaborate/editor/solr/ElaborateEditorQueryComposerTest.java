@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import elaborate.editor.model.orm.TranscriptionType;
 import nl.knaw.huygens.facetedsearch.FacetParameter;
 import nl.knaw.huygens.facetedsearch.QueryComposer;
 
@@ -37,7 +38,7 @@ public class ElaborateEditorQueryComposerTest {
 	@Test
 	public void testComposeQuery1() throws Exception {
 		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters();
-		sp.setTextLayers(ImmutableList.of("diplomatic"));
+		sp.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC));
 		String expected = "(*:*) AND project_id:0";
 
 		queryComposer.compose(sp);
@@ -50,7 +51,7 @@ public class ElaborateEditorQueryComposerTest {
 		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
 				.setProjectId(1);
 		sp.setTerm("iets")//
-				.setTextLayers(ImmutableList.of("Diplomatic"))//
+				.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
 				.setCaseSensitive(true);
 		String expected = "(name:iets textlayercs_diplomatic:iets) AND project_id:1";
 		String expectedh = "name:iets textlayercs_diplomatic:iets";
@@ -66,7 +67,7 @@ public class ElaborateEditorQueryComposerTest {
 		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
 				.setProjectId(1);
 		sp.setTerm("iets anders")//
-				.setTextLayers(ImmutableList.of("Diplomatic"))//
+				.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
 				.setCaseSensitive(true);
 		String expected = "(name:(iets anders) textlayercs_diplomatic:(iets anders)) AND project_id:1";
 		String expectedh = "name:(iets anders) textlayercs_diplomatic:(iets anders)";
@@ -83,7 +84,7 @@ public class ElaborateEditorQueryComposerTest {
 				.setProjectId(1);
 		sp.setTerm("iets vaags")//
 				.setFuzzy(true)//
-				.setTextLayers(ImmutableList.of("Diplomatic", "Comments"))//
+				.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC, TranscriptionType.COMMENTS))//
 				.setCaseSensitive(false)//
 				.setSearchInAnnotations(true);
 		String expected = "(name:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)) AND project_id:1";
@@ -118,7 +119,7 @@ public class ElaborateEditorQueryComposerTest {
 		sp.setTerm("a*")//
 				.setFuzzy(true)//
 				.setCaseSensitive(false)//
-				.setTextLayers(ImmutableList.of("Diplomatic"))//
+				.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
 				.setFacetValues(ImmutableList.of(new FacetParameter().setName("metadata_folio_number").setValues(ImmutableList.of("199"))))//
 				.setSearchInAnnotations(false)//
 				.setSearchInTranscriptions(false);

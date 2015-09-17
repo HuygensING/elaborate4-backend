@@ -31,8 +31,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import nl.knaw.huygens.Log;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -53,6 +51,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
+
+import nl.knaw.huygens.Log;
 
 public abstract class AbstractSolrServer implements SolrServerWrapper {
 	public static final String KEY_NUMFOUND = "numFound";
@@ -325,18 +325,36 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 	 * @param type 
 	 */
 	protected FacetCount convertFacet(FacetField field, String title, FacetType type) {
+		Log.warn("convertFacet({}, {}, {})", field, title, type);
 		if (field != null) {
 			FacetCount facetCount = new FacetCount()//
 					.setName(field.getName())//
 					.setTitle(title)//
 					.setType(type);
 			List<Count> counts = field.getValues();
+
 			if (counts != null) {
-				for (Count count : counts) {
-					FacetCount.Option option = new FacetCount.Option()//
-							.setName(count.getName())//
-							.setCount(count.getCount());
-					facetCount.addOption(option);
+				if (FacetType.LIST.equals(type)) {
+					for (Count count : counts) {
+						FacetCount.ListOption option = new FacetCount.ListOption()//
+								.setName(count.getName())//
+								.setCount(count.getCount());
+						facetCount.addOption(option);
+					}
+
+				} else if (FacetType.RANGE.equals(type)) {
+					long lowerLimit = 99999999;
+					long upperLimit = 0;
+					for (Count count : counts) {
+						String rangeValueString = count.getName();
+						long longValue = Long.valueOf(rangeValueString);
+						lowerLimit = Math.min(lowerLimit, longValue);
+						upperLimit = Math.max(upperLimit, longValue);
+					}
+					facetCount.addOption(new FacetCount.RangeOption()//
+							.setLowerLimit(lowerLimit)//
+							.setUpperLimit(upperLimit)//
+					);
 				}
 			}
 			return facetCount;

@@ -34,6 +34,15 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
+import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
 import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
@@ -44,15 +53,6 @@ import nl.knaw.huygens.facetedsearch.SearchData;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
-
-import org.joda.time.DateTime;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 @Singleton
 public class SearchService {
@@ -82,9 +82,9 @@ public class SearchService {
 				.setFacetInfoMap(getFacetInfoMap())//
 				.setLevelFields(defaultSortOrder[0], defaultSortOrder[1], defaultSortOrder[2]);
 		try {
-			Log.info("searchParameters={}", elaborateSearchParameters);
+			Log.debug("searchParameters={}", elaborateSearchParameters);
 			Map<String, Object> result = getSolrServer().search(elaborateSearchParameters);
-			Log.info("result={}", result);
+			Log.debug("result={}", result);
 			SearchData searchData = new SearchData().setResults(result);
 			searchDataIndex.put(searchData.getId(), searchData);
 			return searchData;
@@ -226,7 +226,12 @@ public class SearchService {
 		for (Entry<String, Map<String, String>> entry : inMap.entrySet()) {
 			String key = entry.getKey();
 			Map<String, String> value = entry.getValue();
-			outMap.put(key, new FacetInfo().setName(value.get("name")).setTitle(value.get("title")).setType(FacetType.valueOf(value.get("type"))));
+			outMap.put(key,
+					new FacetInfo()//
+							.setName(value.get("name"))//
+							.setTitle(value.get("title"))//
+							.setType(FacetType.valueOf(value.get("type")))//
+			);
 		}
 		return outMap;
 	}

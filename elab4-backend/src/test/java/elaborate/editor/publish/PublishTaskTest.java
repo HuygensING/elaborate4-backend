@@ -45,6 +45,7 @@ import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.publish.Publication.Settings;
 import elaborate.editor.publish.PublishTask.AnnotationData;
 import elaborate.editor.publish.PublishTask.AnnotationTypeData;
@@ -150,7 +151,7 @@ public class PublishTaskTest extends AbstractTest {
 		String entryName = "entryname";
 		when(entry.getName()).thenReturn(entryName);
 		when(entry.getProject()).thenReturn(project);
-		String[] textLayers = new String[] { "Diplomatic", "Comments" };
+		String[] textLayers = new String[] { TranscriptionType.DIPLOMATIC, TranscriptionType.COMMENTS };
 		when(project.getTextLayers()).thenReturn(textLayers);
 
 		List<String> projectEntryMetadataFields = Lists.newArrayList("Meta1", "Meta2");

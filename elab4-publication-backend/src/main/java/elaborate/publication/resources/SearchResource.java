@@ -42,18 +42,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.google.common.collect.ImmutableList;
+
+import elaborate.publication.solr.SearchService;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
 import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.SearchData;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.google.common.collect.ImmutableList;
-
-import elaborate.publication.solr.SearchService;
 
 @Path("search")
 public class SearchResource {
@@ -69,7 +68,9 @@ public class SearchResource {
 	@GET
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	public Object doSimpleSearch(@QueryParam("q") @DefaultValue("") String term) {
-		ElaborateSearchParameters elaborateSearchParameters = new ElaborateSearchParameters().setTerm(term).setTextLayers(ImmutableList.of("Diplomatic"));
+		ElaborateSearchParameters elaborateSearchParameters = new ElaborateSearchParameters()//
+				.setTerm(term)//
+				.setTextLayers(ImmutableList.of("Diplomatic"));
 		searchService.setSolrDir(getSolrDir());
 		SearchData search = searchService.createSearch(elaborateSearchParameters);
 		Map<String, Object> searchResult = searchService.getSearchResult(search.getId(), 0, 1000);
@@ -86,7 +87,7 @@ public class SearchResource {
 	public Response createSearch(//
 			ElaborateSearchParameters elaborateSearchParameters//
 	) {
-		Log.info("elaborateSearchParameters:{}", elaborateSearchParameters);
+		Log.debug("elaborateSearchParameters:{}", elaborateSearchParameters);
 		searchService.setSolrDir(getSolrDir());
 		SearchData search = searchService.createSearch(elaborateSearchParameters);
 		return Response.created(createURI(search)).build();
@@ -96,8 +97,8 @@ public class SearchResource {
 	@Path("{search_id:[0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	public Response getSearchResults(//
-			@PathParam("search_id") long searchId,//
-			@QueryParam("start") @DefaultValue("0") String startString,//
+			@PathParam("search_id") long searchId, //
+			@QueryParam("start") @DefaultValue("0") String startString, //
 			@QueryParam("rows") @DefaultValue("100") String rowsString//
 	) {
 		if (!StringUtils.isNumeric(startString) || !StringUtils.isNumeric(rowsString)) {
