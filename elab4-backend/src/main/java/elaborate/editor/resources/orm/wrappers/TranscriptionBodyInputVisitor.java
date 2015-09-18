@@ -47,8 +47,10 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 		addElementHandler(new SpanHandler(), TAG_SPAN);
 		addElementHandler(new SupHandler(), TAG_SUP);
 		addElementHandler(new BrHandler(), "br");
-		addElementHandler(new IgnoreElementHandler(), "p");
+		addElementHandler(new IgnoreElementHandler(), "a", "div", "font", "h1", "h2", "h3", "h4", "h5", "h6", "p");
 		addElementHandler(new IgnoreElementAttributesHandler(), "i", "b");
+		addElementHandler(new StrongHandler(), "strong");
+		addElementHandler(new EmHandler(), "em");
 	}
 
 	private static class SpanHandler implements ElementHandler<XmlContext> {
@@ -143,6 +145,34 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 		@Override
 		public Traversal leaveElement(Element e, XmlContext c) {
 			c.addCloseTag(e);
+			return NEXT;
+		}
+	}
+
+	private static class StrongHandler implements ElementHandler<XmlContext> {
+		@Override
+		public Traversal enterElement(Element e, XmlContext c) {
+			c.addOpenTag("b");
+			return NEXT;
+		}
+
+		@Override
+		public Traversal leaveElement(Element e, XmlContext c) {
+			c.addCloseTag("b");
+			return NEXT;
+		}
+	}
+
+	private static class EmHandler implements ElementHandler<XmlContext> {
+		@Override
+		public Traversal enterElement(Element e, XmlContext c) {
+			c.addOpenTag("i");
+			return NEXT;
+		}
+
+		@Override
+		public Traversal leaveElement(Element e, XmlContext c) {
+			c.addCloseTag("i");
 			return NEXT;
 		}
 	}

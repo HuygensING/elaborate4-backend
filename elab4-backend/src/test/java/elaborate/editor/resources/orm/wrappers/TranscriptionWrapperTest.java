@@ -158,6 +158,20 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
+	public void testConvertFromInputConvertsEmToI() throws Exception {
+		String in = "<em style=\"white-space: normal;\">Casteleijn</em>";
+		String expected = "<body><i>Casteleijn</i></body>";
+		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
+	}
+
+	@Test
+	public void testConvertFromInputConvertsStrongToB() throws Exception {
+		String in = "<strong style=\"white-space: normal;\">TGIF</strong>";
+		String expected = "<body><b>TGIF</b></body>";
+		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
+	}
+
+	@Test
 	public void testConvertFromInputRemovesMostWordTags() throws Exception {
 		String in = "<p class=\"MsoNormal\" style=\"margin-right:29.9pt;text-align:justify\">"//
 				+ "I <i style=\"mso-bidi-font-style:normal\">HEART</i>"//
