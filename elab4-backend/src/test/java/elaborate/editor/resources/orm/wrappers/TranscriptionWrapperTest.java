@@ -144,6 +144,44 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
+	public void testConvertFromInputWithBreaks() throws Exception {
+		String in = "hop<br>on<br>pop";
+		String expected = "<body>hop\non\npop</body>";
+		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
+	}
+
+	@Test
+	public void testConvertFromInputRemovesXMLComments() throws Exception {
+		String in = "bla <!-- ignore comments --> bla";
+		String expected = "<body>bla  bla</body>";
+		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
+	}
+
+	@Test
+	public void testConvertFromInputRemovesMostWordTags() throws Exception {
+		String in = "<p class=\"MsoNormal\" style=\"margin-right:29.9pt;text-align:justify\">"//
+				+ "I <i style=\"mso-bidi-font-style:normal\">HEART</i>"//
+				+ " <b style=\"mso-bidi-font-weight:normal\">WORD!!</b>"//
+				+ "</p>";
+		String expected = "<body>I <i>HEART</i> <b>WORD!!</b></body>";
+		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
+	}
+
+	//	@Test
+	//	public void testConvertFromInputRemovesMostWordTags1() throws Exception {
+	//		String in = "<br>(zie ook 253r (regel 7) hier staat voluit geschreven onse Raitsvrend<i>en</i> (misschien hier ook Raitsvrend<i>e</i> ?,"//
+	//				+ "maar vrint zou tot de sterke flextie moeten behoren dus moeten eindigen op -en?))<br>KG:&nbsp; Samen graag nog even hebben over de"//
+	//				+ " meervoudvorm.<br><br><br>34: oirer -&gt; oiren [?]<br>sendebode: m. acc. pl. (Zwakke flextie?) het zou dan oire moeten worden. Is"//
+	//				+ " hier misschien de letter 'r' afgekort?<br>KG: als boven. <br><br><p class=\"MsoNormal\">‘raitsvrenden’: volgens Van Loey,"//
+	//				+ " <i style=\"mso-bidi-font-style: normal\">Mndld Spraakkunst </i>I § 19.2 kan het bij ‘vrient’ (en ‘viant’)<br>allebei -&gt; dan"//
+	//				+ " beslist de paleografie</p><p class=\"MsoNormal\"><br></p><p class=\"MsoNormal\">260v \"onse vrende\" voluit geschreven<br></p><br>"//
+	//				+ "<br><br><br><br>-------------------------------------------------------------------------<br>Translation<br>- Wijk ( bij Duurstede)?"//
+	//				+ "<br><br>";
+	//		String expected = "<body></body>";
+	//		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
+	//	}
+
+	@Test
 	public void testSuperscriptIsHandledWell() throws Exception {
 		TranscriptionWrapper tw = new TranscriptionWrapper();
 		tw.setBody("<sup>super</sup> normaal <sub>sub</sub><br><sup>super</sup> normaal <sub>sub<br></sub><sup>super</sup> normaal <sub>sub</sub><br>");

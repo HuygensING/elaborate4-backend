@@ -24,6 +24,8 @@ package elaborate.editor.resources.orm.wrappers;
 
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
+
+import elaborate.editor.model.orm.Transcription;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.ElementHandler;
@@ -31,7 +33,6 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
-import elaborate.editor.model.orm.Transcription;
 
 public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext> {
 	private static final String TAG_SUP = "sup";
@@ -46,6 +47,8 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 		addElementHandler(new SpanHandler(), TAG_SPAN);
 		addElementHandler(new SupHandler(), TAG_SUP);
 		addElementHandler(new BrHandler(), "br");
+		addElementHandler(new IgnoreElementHandler(), "p");
+		addElementHandler(new IgnoreElementAttributesHandler(), "i", "b");
 	}
 
 	private static class SpanHandler implements ElementHandler<XmlContext> {
@@ -57,16 +60,17 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 				ab.setAttribute("id", id);
 				c.addEmptyElementTag(ab);
 			} else {
-				c.addOpenTag(e);
+				// all other spans should be ignored
+				//				c.addOpenTag(e);
 			}
 			return NEXT;
 		}
 
 		@Override
 		public Traversal leaveElement(Element e, XmlContext c) {
-			if (!isBeginMarker(e)) {
-				c.addCloseTag(TAG_SPAN);
-			}
+			//			if (!isBeginMarker(e)) {
+			//				c.addCloseTag(TAG_SPAN);
+			//			}
 			return NEXT;
 		}
 
@@ -115,6 +119,32 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 			return NEXT;
 		}
 
+	}
+
+	private static class IgnoreElementHandler implements ElementHandler<XmlContext> {
+		@Override
+		public Traversal enterElement(Element e, XmlContext c) {
+			return NEXT;
+		}
+
+		@Override
+		public Traversal leaveElement(Element arg0, XmlContext arg1) {
+			return NEXT;
+		}
+	}
+
+	private static class IgnoreElementAttributesHandler implements ElementHandler<XmlContext> {
+		@Override
+		public Traversal enterElement(Element e, XmlContext c) {
+			c.addOpenTag(e.getName());
+			return NEXT;
+		}
+
+		@Override
+		public Traversal leaveElement(Element e, XmlContext c) {
+			c.addCloseTag(e);
+			return NEXT;
+		}
 	}
 
 }
