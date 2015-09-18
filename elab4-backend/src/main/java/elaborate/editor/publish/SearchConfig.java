@@ -79,16 +79,14 @@ public class SearchConfig {
 
 	private void insertFacetsForCNW(Project project, String key) {
 		if (project.getId() == 44) {
-			if (key.equals("metadata_ontvanger_s")) {
+			if (key.equals("metadata_ontvanger")) {
+				String name = MULTIVALUED_PREFIX + "metadata_correspondents";
 				FacetInfo facetInfo = new FacetInfo()//
-						.setName(MULTIVALUED_PREFIX + "metadata_correspondents")//
+						.setName(name)//
 						.setTitle("Correspondent")//
 						.setType(FacetType.LIST);
-				facetInfoMap.put(MULTIVALUED_PREFIX + "metadata_correspondents", facetInfo);
+				facetInfoMap.put(name, facetInfo);
 			}
-			//			if (key.equals("metadata_datum")) {
-			//				facetInfoMap.get(key).setType(FacetType.RANGE);
-			//			}
 		}
 	}
 

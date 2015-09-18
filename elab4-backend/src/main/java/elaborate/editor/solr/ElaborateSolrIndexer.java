@@ -144,7 +144,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 	}
 
 	private static void handleCNWFacets(String facetName, String value, SolrInputDocument doc) {
-		if ("metadata_afzender_s".equals(facetName) || "metadata_ontvanger_s".equals(facetName)) {
+		if ("metadata_afzender".equals(facetName) || "metadata_ontvanger".equals(facetName)) {
 			for (String correspondent : extractCorrespondents(value)) {
 				doc.addField("mv_metadata_correspondents", correspondent, 1.0f);
 			}
@@ -154,7 +154,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 				// ignore dates where year is not known
 				//			doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
 				//			doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
-				DateFormat dateFormat = new SimpleDateFormat("YYYYMMdd");
+				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 				doc.addField("metadata_datum_lower", dateFormat.format(datable.getFromDate()), 1.0f);
 				doc.addField("metadata_datum_upper", dateFormat.format(datable.getToDate()), 1.0f);
 			} else {
