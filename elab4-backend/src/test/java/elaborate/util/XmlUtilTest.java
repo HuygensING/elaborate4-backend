@@ -26,13 +26,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-public class XmlUtilTest   {
+public class XmlUtilTest {
 
 	@Test
 	public void testFixXhtml() {
 		String badxml = "<interpGrp>not really bad</interpGrp>";
 		String fixedXml = XmlUtil.fixXhtml(badxml);
 		assertThat(fixedXml).isEqualTo(badxml.toLowerCase());
+	}
+
+	@Test
+	public void testFixXhtmlPreserved160() {
+		String xml = "<i>&nbsp;&#160;&nbsp;</i>";
+		String fixedXml = XmlUtil.fixXhtml(xml);
+		assertThat(fixedXml).isEqualTo("<i>&#160;&#160;&#160;</i>");
 	}
 
 	@Test

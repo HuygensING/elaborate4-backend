@@ -31,14 +31,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import nl.knaw.huygens.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Entities;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import nl.knaw.huygens.Log;
 
 public class XmlUtil {
 	private static final String XML_CLOSE_TAG = "</xml>";
@@ -75,7 +75,7 @@ public class XmlUtil {
 	public static String fixXhtml(String badxml) {
 		Document doc = Jsoup.parse(badxml);
 		doc.outputSettings().indentAmount(0).prettyPrint(false).escapeMode(Entities.EscapeMode.xhtml).charset("UTF-8");
-		return doc.body().html().replaceAll(" />", "/>");
+		return doc.body().html().replaceAll(" />", "/>").replace("\u00A0", "&#160;");
 		//    return Jsoup.clean(badxml, Whitelist.relaxed());
 	}
 
