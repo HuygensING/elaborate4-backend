@@ -150,10 +150,11 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			}
 		} else if ("metadata_datum".equals(facetName)) {
 			Datable datable = new Datable(CNW_UTIL.convertDate(value));
-			if (datable.isValid()) {
+			if (datable.isValid() && !value.startsWith("XXXX")) {
+				// ignore dates where year is not known
 				//			doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
 				//			doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
-				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+				DateFormat dateFormat = new SimpleDateFormat("YYYYMMdd");
 				doc.addField("metadata_datum_lower", dateFormat.format(datable.getFromDate()), 1.0f);
 				doc.addField("metadata_datum_upper", dateFormat.format(datable.getToDate()), 1.0f);
 			} else {
