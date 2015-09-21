@@ -48,8 +48,8 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 		addElementHandler(new SupHandler(), TAG_SUP);
 		addElementHandler(new BrHandler(), "br");
 		addElementHandler(new IgnoreElementHandler(), "a", "div", "font", "h1", "h2", "h3", "h4", "h5", "h6", "p", "pre", //
-				"s", "style", "table", "tbody", "td", "tr");
-		addElementHandler(new IgnoreElementAttributesHandler(), "i", "b", "strike", "sub", "u");
+				"style", "table", "tbody", "td", "tr");
+		addElementHandler(new IgnoreElementAttributesHandler(), "i", "b", "strike", "del", "s", "sub", "u");
 		addElementHandler(new ConvertToHandler("b"), "strong");
 		addElementHandler(new ConvertToHandler("i"), "em");
 	}
