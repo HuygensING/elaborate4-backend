@@ -54,7 +54,7 @@
 		<jtidy.version>r938</jtidy.version>
 		<jetty-maven.version>9.3.1.v20150714</jetty-maven.version>
 		<junit.version>4.12</junit.version>
-		<log.version>1.0.1</log.version>
+		<log.version>1.1.0</log.version>
 		<maven-assembly.version>2.4</maven-assembly.version>
 		<maven-compiler.version>3.3</maven-compiler.version>
 		<maven-license.version>1.8</maven-license.version>
