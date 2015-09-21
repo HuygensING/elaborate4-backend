@@ -101,8 +101,9 @@ public class PublishTask implements Runnable {
 
 	Configuration config = Configuration.instance();
 	private EntityManager entityManager;
-	private Map<Integer, String> annotationTypes;
-	private Map<Integer, Map<String, String>> annotationParameters;
+	//	private Map<Integer, String> publishableAnnotationTypes;
+	//	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
+	private Map<Integer, elaborate.editor.model.orm.service.ProjectService.AnnotationData> annotationDataMap;
 
 	public PublishTask(Publication.Settings settings) {
 		this.settings = settings;
@@ -121,8 +122,9 @@ public class PublishTask implements Runnable {
 		ps.setEntityManager(entityManager);
 		List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
 		List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
-		annotationTypes = ps.getAnnotationTypesForProject(projectId);
-		annotationParameters = ps.getAnnotationParametersForProject(projectId);
+		//		publishableAnnotationTypes = ps.getAnnotationTypesForProject(projectId);
+		//		publishableAnnotationParameters = ps.getAnnotationParametersForProject(projectId);
+		annotationDataMap = ps.getAnnotationDataForProject(projectId);
 		int entryNum = 1;
 		List<EntryData> entryData = Lists.newArrayList();
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -376,7 +378,7 @@ public class PublishTask implements Runnable {
 	}
 
 	private TextlayerData getTextlayerData(Transcription transcription) {
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationTypes, annotationParameters);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
 		TextlayerData textlayerData = new TextlayerData()//
 				.setText(tw.getBody())//
 				.setAnnotations(getAnnotationData(tw.annotationNumbers));

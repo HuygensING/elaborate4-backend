@@ -51,6 +51,7 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.PrevNext;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 import elaborate.editor.model.orm.service.ProjectService;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import elaborate.editor.model.orm.service.TranscriptionService;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
@@ -67,10 +68,12 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	private final ProjectEntryService projectEntryService = ProjectEntryService.instance();
 	private final TranscriptionService transcriptionService = TranscriptionService.instance();
 	private final User user;
+	private final Long projectId;
 
-	public ProjectEntriesResource(User user, ProjectService projectService) {
+	public ProjectEntriesResource(User user, ProjectService projectService, Long projectId) {
 		this.user = user;
 		this.projectService = projectService;
+		this.projectId = projectId;
 	}
 
 	@GET
@@ -196,10 +199,11 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the transcriptions of the project entry with the given entry_id")
 	public Collection<TranscriptionWrapper> getTranscriptions(@PathParam("entry_id") long entry_id) {
+		Map<Integer, AnnotationData> annotationDataMap = projectService.getAnnotationDataForProject(projectId);
 		Collection<Transcription> transcriptions = projectEntryService.getTranscriptions(entry_id, user);
 		List<TranscriptionWrapper> wrappers = Lists.newArrayListWithCapacity(transcriptions.size());
 		for (Transcription transcription : transcriptions) {
-			wrappers.add(new TranscriptionWrapper(transcription));
+			wrappers.add(new TranscriptionWrapper(transcription, annotationDataMap));
 		}
 		return wrappers;
 	}
@@ -221,8 +225,9 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Returns the transcription with the given transcription_id of the project entry with the given entry_id of the project with the given project_id")
 	public TranscriptionWrapper getTranscription(@PathParam("project_id") long project_id, @PathParam("transcription_id") long transcription_id) {
+		Map<Integer, AnnotationData> annotationDataMap = projectService.getAnnotationDataForProject(projectId);
 		Transcription transcription = transcriptionService.read(transcription_id, user);
-		return new TranscriptionWrapper(transcription);
+		return new TranscriptionWrapper(transcription, annotationDataMap);
 	}
 
 	@PUT

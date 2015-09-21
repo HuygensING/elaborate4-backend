@@ -36,6 +36,7 @@ import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
@@ -95,10 +96,10 @@ public class ProjectServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testGetAnnotationTypesForProject() throws Exception {
-		Map<Integer, String> annotationTypesForProject = projectService.getAnnotationTypesForProject(44l);
-		assertThat(annotationTypesForProject).isNotEmpty();
-		Log.info("annotationTypesForProject={}", annotationTypesForProject);
+	public void testGetAnnotationDataForProject() throws Exception {
+		Map<Integer, AnnotationData> annotationDataForProject = projectService.getAnnotationDataForProject(44l);
+		assertThat(annotationDataForProject).isNotEmpty();
+		Log.info("annotationTypesForProject={}", annotationDataForProject);
 	}
 
 	// @Test

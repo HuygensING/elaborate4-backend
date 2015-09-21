@@ -32,38 +32,31 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
 import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
 
 public class TranscriptionWrapper {
+	// TODO: split into input/output object
 	private long id = 0l;
 	private String textLayer = "";
 	private String body = "";
 	private static final String NBSP = "\\u00A0";
 
 	@JsonIgnore
-	private final Map<Integer, String> annotationTypes;
+	private Map<Integer, AnnotationData> annotationDataMap = null;
 
-	@JsonIgnore
-	private final Map<Integer, Map<String, String>> annotationParameters;
+	// For input
+	public TranscriptionWrapper() {}
 
-	public TranscriptionWrapper() {
-		this.annotationTypes = null;
-		this.annotationParameters = null;
-	}
-
-	public TranscriptionWrapper(Transcription transcription, Map<Integer, String> annotationTypes, Map<Integer, Map<String, String>> annotationParameters) {
-		this.annotationTypes = annotationTypes;
-		this.annotationParameters = annotationParameters;
+	// for output
+	public TranscriptionWrapper(Transcription transcription, Map<Integer, AnnotationData> annotationDataMap) {
+		this.annotationDataMap = annotationDataMap;
 		setId(transcription.getId());
 		setTextLayer(transcription.getTextLayer());
 		String tBody = transcription.getBody();
 		convertBodyForOutput(tBody);
-	}
-
-	public TranscriptionWrapper(Transcription transcription) {
-		this(transcription, null, null);
 	}
 
 	public long getId() {
@@ -113,7 +106,7 @@ public class TranscriptionWrapper {
 			document = Document.createFromXml(fixed, true);
 		}
 
-		TranscriptionBodyVisitor visitor = new TranscriptionBodyVisitor(annotationTypes, annotationParameters);
+		TranscriptionBodyVisitor visitor = new TranscriptionBodyVisitor(annotationDataMap);
 		document.accept(visitor);
 
 		setBody(visitor.getContext().getResult()//

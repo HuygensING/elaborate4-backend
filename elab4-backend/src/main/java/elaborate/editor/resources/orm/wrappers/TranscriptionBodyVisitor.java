@@ -34,6 +34,7 @@ import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.Lists;
 
 import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
@@ -46,13 +47,11 @@ import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 	private static int notenum;
 	private static List<Integer> annotationIds;
-	private static Map<Integer, String> annotationTypes;
-	private static Map<Integer, Map<String, String>> annotationParameters;
+	private static Map<Integer, AnnotationData> annotationDataMap;
 
-	public TranscriptionBodyVisitor(Map<Integer, String> _annotationTypes, Map<Integer, Map<String, String>> _annotationParameters) {
+	public TranscriptionBodyVisitor(Map<Integer, AnnotationData> _annotationDataMap) {
 		super(new XmlContext());
-		annotationTypes = _annotationTypes;
-		annotationParameters = _annotationParameters;
+		annotationDataMap = _annotationDataMap;
 		notenum = 1;
 		annotationIds = Lists.newArrayList();
 		setTextHandler(new XmlTextHandler<XmlContext>());
@@ -60,6 +59,10 @@ public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 		addElementHandler(new IgnoreHandler(), Transcription.BodyTags.BODY);
 		addElementHandler(new AnnotationBeginHandler(), Transcription.BodyTags.ANNOTATION_BEGIN);
 		addElementHandler(new AnnotationEndHandler(), Transcription.BodyTags.ANNOTATION_END);
+	}
+
+	public List<Integer> getAnnotationIds() {
+		return annotationIds;
 	}
 
 	private static class IgnoreHandler implements ElementHandler<XmlContext> {
@@ -82,31 +85,30 @@ public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 			String idString = e.getAttribute("id");
 			if (StringUtils.isNotBlank(idString)) {
 				Integer id = Integer.valueOf(idString);
-				Element span = new Element(TAG_SPAN);
-				span.setAttribute("data-marker", "begin");
-				span.setAttribute("data-id", idString);
-				if (annotationTypes != null) {
-					span.setAttribute("data-type", annotationTypes.get(id));
-					if (annotationParameters != null) {
-						Map<String, String> parameters = annotationParameters.get(id);
-						if (parameters != null) {
-							for (Entry<String, String> entry : parameters.entrySet()) {
-								String key = SolrUtils.normalize(entry.getKey());
-								String value = entry.getValue();
-								span.setAttribute("data-param-" + key, value);
-							}
+				if (tagAnnotationWithId(id)) {
+					AnnotationData annotationData = annotationDataMap.get(id);
+					Element span = new Element(TAG_SPAN);
+					span.setAttribute("data-marker", "begin");
+					span.setAttribute("data-id", idString);
+					span.setAttribute("data-type", annotationData.getType());
+					Map<String, String> parameters = annotationData.getParameters();
+					if (parameters != null) {
+						for (Entry<String, String> entry : parameters.entrySet()) {
+							String key = SolrUtils.normalize(entry.getKey());
+							String value = entry.getValue();
+							span.setAttribute("data-param-" + key, value);
 						}
 					}
+					c.addOpenTag(span);
 				}
-				c.addOpenTag(span);
 			}
 			return STOP;
 		}
 
 		@Override
 		public Traversal leaveElement(Element e, XmlContext c) {
-			String id = e.getAttribute("id");
-			if (StringUtils.isNotBlank(id)) {
+			String idAttribute = e.getAttribute("id");
+			if (tagAnnotationWithId(idAttribute)) {
 				c.addCloseTag(TAG_SPAN);
 			}
 			return NEXT;
@@ -119,7 +121,7 @@ public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 		@Override
 		public Traversal enterElement(Element e, XmlContext c) {
 			String id = e.getAttribute("id");
-			if (StringUtils.isNotBlank(id)) {
+			if (tagAnnotationWithId(id)) {
 				Element sup = new Element(TAG_SUP);
 				sup.setAttribute("data-marker", "end");
 				sup.setAttribute("data-id", id);
@@ -131,7 +133,7 @@ public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 		@Override
 		public Traversal leaveElement(Element e, XmlContext c) {
 			String id = e.getAttribute("id");
-			if (StringUtils.isNotBlank(id)) {
+			if (tagAnnotationWithId(id)) {
 				annotationIds.add(Integer.valueOf(id));
 				c.addLiteral(notenum++);
 				c.addCloseTag(TAG_SUP);
@@ -140,8 +142,12 @@ public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 		}
 	}
 
-	public List<Integer> getAnnotationIds() {
-		return annotationIds;
+	private static boolean tagAnnotationWithId(String id) {
+		return StringUtils.isNotBlank(id) && tagAnnotationWithId(Integer.valueOf(id));
+	}
+
+	private static boolean tagAnnotationWithId(Integer id) {
+		return annotationDataMap != null && annotationDataMap.containsKey(id);
 	}
 
 }

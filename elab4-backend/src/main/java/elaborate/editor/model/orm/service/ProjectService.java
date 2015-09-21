@@ -378,7 +378,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		}
 		if (project == null) {
 			closeEntityManager();
-			throw new UnauthorizedException("user " + user.getUsername() + " has no read permission for project " + project.getName());
+			throw new UnauthorizedException("user " + user.getUsername() + " has no read permission for project with id " + project_id);
 		}
 		return project;
 	}
@@ -661,7 +661,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 			if (!deletedTextLayers.isEmpty()) {
 				persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(deletedTextLayers), user));
 				for (String textlayer : deletedTextLayers) {
-					List resultList = getEntityManager()//
+					List<?> resultList = getEntityManager()//
 							.createQuery("select e.id, t.id from ProjectEntry e join e.transcriptions as t with t.text_layer=:textlayer where e.project=:project")//
 							.setParameter("project", project)//
 							.setParameter("textlayer", textlayer)//
@@ -887,6 +887,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		return deserialize(projectMetadata, ProjectMetadataFields.FACETABLE_PROJECT_ENTRY_METADATA_FIELDS);
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<String> deserialize(Map<String, String> projectMetadata, String key) {
 		String metadataString = projectMetadata.get(key);
 		List<String> list = Lists.newArrayList();
@@ -1090,39 +1091,101 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		commitTransaction();
 	}
 
-	public Map<Integer, String> getAnnotationTypesForProject(Long projectId) {
-		Map<Integer, String> annotationTypes = Maps.newHashMap();
+	//	public Map<Integer, String> getAnnotationTypesForProject(Long projectId) {
+	//		Map<Integer, String> annotationTypes = Maps.newHashMap();
+	//		Project project = read(projectId);
+	//		List<?> resultList = getEntityManager()//
+	//				.createQuery("select a.annotationNo, at.name from Annotation as a inner join a.annotationType as at where a.transcription.projectEntry.project=:project")//
+	//				.setParameter("project", project)//
+	//				.getResultList();
+	//		for (Object result : resultList) {
+	//			Object[] objects = (Object[]) result;
+	//			annotationTypes.put((Integer) objects[0], (String) objects[1]);
+	//		}
+	//
+	//		return annotationTypes;
+	//	}
+	//
+	//	public Map<Integer, Map<String, String>> getAnnotationParametersForProject(Long projectId) {
+	//		Map<Integer, Map<String, String>> annotationParameters = Maps.newHashMap();
+	//		Project project = read(projectId);
+	//		List<?> resultList = getEntityManager()//
+	//				.createQuery("select a.annotationNo, am.annotationTypeMetadataItem.name, am.data from Annotation as a join a.annotationMetadataItems as am where a.transcription.projectEntry.project=:project")//
+	//				.setParameter("project", project)//
+	//				.getResultList();
+	//		for (Object result : resultList) {
+	//			Object[] objects = (Object[]) result;
+	//			Integer annotationNo = (Integer) objects[0];
+	//			Map<String, String> map = annotationParameters.get(annotationNo);
+	//			if (map == null) {
+	//				map = Maps.newHashMap();
+	//				annotationParameters.put(annotationNo, map);
+	//			}
+	//			map.put((String) objects[1], (String) objects[2]);
+	//		}
+	//		return annotationParameters;
+	//	}
+
+	public Map<Integer, AnnotationData> getAnnotationDataForProject(Long projectId) {
 		Project project = read(projectId);
-		List resultList = getEntityManager()//
-				.createQuery("select a.annotationNo, at.name from Annotation as a inner join a.annotationType as at where a.transcription.projectEntry.project=:project")//
+		Map<Integer, AnnotationData> annotationDataMap = Maps.newHashMap();
+		List<?> resultList = getEntityManager()//
+				.createQuery("select a.annotationNo, at.id, at.name from Annotation as a inner join a.annotationType as at where a.transcription.projectEntry.project=:project")//
 				.setParameter("project", project)//
 				.getResultList();
 		for (Object result : resultList) {
 			Object[] objects = (Object[]) result;
-			annotationTypes.put((Integer) objects[0], (String) objects[1]);
+			Integer annotationId = (Integer) objects[0];
+			Integer annotationTypeId = (Integer) objects[1];
+			String annotationType = (String) objects[2];
+			annotationDataMap.put(annotationId, new AnnotationData().setType(annotationType).setTypeId(annotationTypeId));
 		}
 
-		return annotationTypes;
-	}
-
-	public Map<Integer, Map<String, String>> getAnnotationParametersForProject(Long projectId) {
-		Map<Integer, Map<String, String>> annotationParameters = Maps.newHashMap();
-		Project project = read(projectId);
-		List resultList = getEntityManager()//
-				.createQuery("select a.annotationNo, am.annotationTypeMetadataItem.name, am.data  from Annotation as a    join a.annotationMetadataItems as am  where a.transcription.projectEntry.project=:project")//
+		resultList = getEntityManager()//
+				.createQuery("select a.annotationNo, am.annotationTypeMetadataItem.name, am.data from Annotation as a join a.annotationMetadataItems as am where a.transcription.projectEntry.project=:project")//
 				.setParameter("project", project)//
 				.getResultList();
 		for (Object result : resultList) {
 			Object[] objects = (Object[]) result;
 			Integer annotationNo = (Integer) objects[0];
-			Map<String, String> map = annotationParameters.get(annotationNo);
-			if (map == null) {
-				map = Maps.newHashMap();
-				annotationParameters.put(annotationNo, map);
-			}
-			map.put((String) objects[1], (String) objects[2]);
+			String parameterKey = (String) objects[1];
+			String parameterValue = (String) objects[2];
+			annotationDataMap.get(annotationNo).getParameters().put(parameterKey, parameterValue);
 		}
-		return annotationParameters;
+		return annotationDataMap;
+	}
+
+	public static class AnnotationData {
+		Integer typeId;
+		String type;
+		Map<String, String> parameters = Maps.newHashMap();
+
+		public Integer getTypeId() {
+			return typeId;
+		}
+
+		public AnnotationData setTypeId(Integer typeId) {
+			this.typeId = typeId;
+			return this;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public AnnotationData setType(String type) {
+			this.type = type;
+			return this;
+		}
+
+		public Map<String, String> getParameters() {
+			return parameters;
+		}
+
+		public AnnotationData setParameters(Map<String, String> parameters) {
+			this.parameters = parameters;
+			return this;
+		}
 	}
 
 }

@@ -27,12 +27,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableMap;
+
 import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.ProjectService;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 
 public class TranscriptionWrapperTest {
 
@@ -50,10 +55,11 @@ public class TranscriptionWrapperTest {
 
 		Transcription transcription = mockTranscription(textLayer, title, body);
 
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		Map<Integer, AnnotationData> annotationDataMap = ImmutableMap.of(9085822, new AnnotationData().setType("type"));
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
 		// assertThat( tw.title).isEqualTo(title);
 		assertThat(tw.getTextLayer()).isEqualTo(textLayer);
-		String expected = "<span data-id=\"9085822\" data-marker=\"begin\"></span>sdgdgdgsdgsdfg<sup data-id=\"9085822\" data-marker=\"end\">1</sup>";
+		String expected = "<span data-id=\"9085822\" data-marker=\"begin\" data-type=\"type\"></span>sdgdgdgsdgsdfg<sup data-id=\"9085822\" data-marker=\"end\">1</sup>";
 		assertThat(tw.getBody()).isEqualTo(expected);
 	}
 
@@ -65,7 +71,7 @@ public class TranscriptionWrapperTest {
 
 		Transcription transcription = mockTranscription(textLayer, title, body);
 
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, null);
 		// assertThat( tw.title).isEqualTo(title);
 		assertThat(tw.getTextLayer()).isEqualTo(textLayer);
 		String expected = "Hoezo mag ik niet copy-pasten vanuit Word? Maar ik wil het!";
@@ -85,16 +91,37 @@ public class TranscriptionWrapperTest {
 		String in = "<body>bla <i></i> bla <strong></strong> bla</body>";
 		String expected = "bla  bla  bla";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, null);
 		assertThat(tw.getBody()).isEqualTo(expected);
 	}
 
 	@Test
 	public void testConvertBodyForOutput() throws Exception {
-		String in = "<body>  <ab id=\"9085822\"/>bla <ab id=\"9085821\"/>die<ae id=\"9085822\"/> bla<ae id=\"9085821\"/>\nhello world  </body>";
-		String expected = "<span data-id=\"9085822\" data-marker=\"begin\"></span>bla <span data-id=\"9085821\" data-marker=\"begin\"></span>die<sup data-id=\"9085822\" data-marker=\"end\">1</sup> bla<sup data-id=\"9085821\" data-marker=\"end\">2</sup><br>hello world";
+		String in = "<body>"//
+				+ "  "//
+				+ "<ab id=\"9085822\"/>"//
+				+ "bla "//
+				+ "<ab id=\"9085821\"/>"//
+				+ "die"//
+				+ "<ae id=\"9085822\"/>"//
+				+ " bla"//
+				+ "<ae id=\"9085821\"/>"//
+				+ "\nhello world  "//
+				+ "</body>";
+		String expected = "<span data-id=\"9085822\" data-marker=\"begin\" data-type=\"type2\"></span>"//
+				+ "bla "//
+				+ "<span data-id=\"9085821\" data-marker=\"begin\" data-type=\"type1\"></span>"//
+				+ "die"//
+				+ "<sup data-id=\"9085822\" data-marker=\"end\">1</sup>"//
+				+ " bla"//
+				+ "<sup data-id=\"9085821\" data-marker=\"end\">2</sup>"//
+				+ "<br>hello world";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		Map<Integer, AnnotationData> annotationDataMap = ImmutableMap.<Integer, ProjectService.AnnotationData> builder()//
+				.put(9085821, new AnnotationData().setType("type1"))//
+				.put(9085822, new AnnotationData().setType("type2"))//
+				.build();
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
 		assertThat(tw.getBody()).isEqualTo(expected);
 		List<Integer> annotationNumbers = tw.annotationNumbers;
 		assertThat(annotationNumbers.size()).isEqualTo(2);
@@ -107,7 +134,7 @@ public class TranscriptionWrapperTest {
 		String in = "<body>lorem epsum doleres whatever\n \n\n\n</body>";
 		String expected = "lorem epsum doleres whatever";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, null);
 		assertThat(tw.getBody()).isEqualTo(expected);
 	}
 
@@ -116,7 +143,7 @@ public class TranscriptionWrapperTest {
 		String in = "<body>body\n \n </body>";
 		String expected = "body";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, null);
 		assertThat(tw.getBody()).isEqualTo(expected);
 	}
 
@@ -125,7 +152,7 @@ public class TranscriptionWrapperTest {
 		String in = "<body>header\n  paragraph 1\n  paragraph 2   \n paragraph 3</body>";
 		String expected = "header<br>&nbsp;&nbsp;paragraph 1<br>&nbsp;&nbsp;paragraph 2&nbsp;&nbsp;&nbsp;<br> paragraph 3";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
-		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
+		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, null);
 		assertThat(tw.getBody()).isEqualTo(expected);
 	}
 
@@ -206,8 +233,16 @@ public class TranscriptionWrapperTest {
 	@Test
 	public void testAnnotationMarkerIsHandledWell() throws Exception {
 		TranscriptionWrapper tw = new TranscriptionWrapper();
-		tw.setBody("<sup>super</sup> <span data-id=\"9075405\" data-marker=\"begin\"></span>normaal <sub><sup data-id=\"9075405\" data-marker=\"end\">1</sup>sub</sub><br><sup>super</sup> normaal <sub>sub<br></sub><sup>super</sup> normaal <sub>sub</sub><br>");
-		String expected = "<body><sup>super</sup> <ab id=\"9075405\"/>normaal <sub><ae id=\"9075405\"/>sub</sub>\n<sup>super</sup> normaal <sub>sub\n</sub><sup>super</sup> normaal <sub>sub</sub>\n</body>";
+		tw.setBody("<sup>super</sup> "//
+				+ "<span data-id=\"9075405\" data-marker=\"begin\"></span>"//
+				+ "normaal <sub>"//
+				+ "<sup data-id=\"9075405\" data-marker=\"end\">1</sup>"//
+				+ "sub</sub><br><sup>super</sup> normaal <sub>sub<br></sub><sup>super</sup> normaal <sub>sub</sub><br>");
+		String expected = "<body><sup>super</sup> "//
+				+ "<ab id=\"9075405\"/>"//
+				+ "normaal <sub>"//
+				+ "<ae id=\"9075405\"/>"//
+				+ "sub</sub>\n<sup>super</sup> normaal <sub>sub\n</sub><sup>super</sup> normaal <sub>sub</sub>\n</body>";
 		assertThat(tw.getBodyForDb()).isEqualTo(expected);
 	}
 

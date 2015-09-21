@@ -273,8 +273,8 @@ public class ProjectResource extends AbstractElaborateResource {
 	/* project entries */
 
 	@Path("{project_id: [0-9]+}/entries")
-	public ProjectEntriesResource getProjectEntriesResource() {
-		return new ProjectEntriesResource(getUser(), projectService);
+	public ProjectEntriesResource getProjectEntriesResource(@PathParam("project_id") long project_id) {
+		return new ProjectEntriesResource(getUser(), projectService, project_id);
 	}
 
 	/* update multiple entry settings */
