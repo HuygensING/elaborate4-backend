@@ -47,10 +47,11 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 		addElementHandler(new SpanHandler(), TAG_SPAN);
 		addElementHandler(new SupHandler(), TAG_SUP);
 		addElementHandler(new BrHandler(), "br");
-		addElementHandler(new IgnoreElementHandler(), "a", "div", "font", "h1", "h2", "h3", "h4", "h5", "h6", "p");
-		addElementHandler(new IgnoreElementAttributesHandler(), "i", "b");
-		addElementHandler(new StrongHandler(), "strong");
-		addElementHandler(new EmHandler(), "em");
+		addElementHandler(new IgnoreElementHandler(), "a", "div", "font", "h1", "h2", "h3", "h4", "h5", "h6", "p", "pre", //
+				"s", "style", "table", "tbody", "td", "tr");
+		addElementHandler(new IgnoreElementAttributesHandler(), "i", "b", "strike", "sub", "u");
+		addElementHandler(new ConvertToHandler("b"), "strong");
+		addElementHandler(new ConvertToHandler("i"), "em");
 	}
 
 	private static class SpanHandler implements ElementHandler<XmlContext> {
@@ -91,7 +92,7 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 				c.addEmptyElementTag(ae);
 				return STOP;
 			} else {
-				c.addOpenTag(e);
+				c.addOpenTag(e.getName());
 				return NEXT;
 			}
 		}
@@ -149,30 +150,22 @@ public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
 		}
 	}
 
-	private static class StrongHandler implements ElementHandler<XmlContext> {
+	private static class ConvertToHandler implements ElementHandler<XmlContext> {
+		private final String newTag;
+
+		public ConvertToHandler(String newTag) {
+			this.newTag = newTag;
+		}
+
 		@Override
 		public Traversal enterElement(Element e, XmlContext c) {
-			c.addOpenTag("b");
+			c.addOpenTag(newTag);
 			return NEXT;
 		}
 
 		@Override
 		public Traversal leaveElement(Element e, XmlContext c) {
-			c.addCloseTag("b");
-			return NEXT;
-		}
-	}
-
-	private static class EmHandler implements ElementHandler<XmlContext> {
-		@Override
-		public Traversal enterElement(Element e, XmlContext c) {
-			c.addOpenTag("i");
-			return NEXT;
-		}
-
-		@Override
-		public Traversal leaveElement(Element e, XmlContext c) {
-			c.addCloseTag("i");
+			c.addCloseTag(newTag);
 			return NEXT;
 		}
 	}
