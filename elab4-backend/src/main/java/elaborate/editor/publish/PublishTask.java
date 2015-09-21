@@ -115,25 +115,28 @@ public class PublishTask implements Runnable {
 
 	@Override
 	public void run() {
+		// TODO: refactor entityManager/projectService interaction
 		status.addLogline("started");
 		prepareDirectories();
+
 		status.addLogline("setting up new solr index");
 		prepareSolr();
+
 		entityManager = HibernateUtil.getEntityManager();
+		Project project = entityManager.find(Project.class, projectId);
+
 		ProjectService ps = ProjectService.instance();
-		ps.setEntityManager(entityManager);
 		List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
-		List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
-		//		publishableAnnotationTypes = ps.getAnnotationTypesForProject(projectId);
-		//		publishableAnnotationParameters = ps.getAnnotationParametersForProject(projectId);
+		ps.setEntityManager(entityManager);
 		annotationDataMap = filterOnPublishableAnnotationTypes(ps.getAnnotationDataForProject(projectId), settings.getAnnotationTypeIds());
+		Map<String, String> typographicalAnnotationMap = getTypographicalAnnotationMap(project);
+		Collection<String> multivaluedFacetNames = getFacetsToSplit(project);
+		List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
+
 		int entryNum = 1;
 		List<EntryData> entryData = Lists.newArrayList();
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
 		Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
-		Project project = entityManager.find(Project.class, projectId);
-		Map<String, String> typographicalAnnotationMap = getTypographicalAnnotationMap(project);
-		Collection<String> multivaluedFacetNames = getFacetsToSplit(project);
 		for (ProjectEntry projectEntry : projectEntriesInOrder) {
 			if (projectEntry.isPublishable()) {
 				status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
@@ -150,7 +153,8 @@ public class PublishTask implements Runnable {
 
 		String basename = getBasename(project);
 		String url = getBaseURL(project.getName());
-		exportSearchConfig(project, getFacetableProjectEntryMetadataFields(ps), multivaluedFacetNames, url);
+		List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(ps);
+		exportSearchConfig(project, facetableProjectEntryMetadataFields, multivaluedFacetNames, url);
 		exportBuildDate();
 		// FIXME: fix, error bij de ystroom
 		if (entityManager.isOpen()) {
