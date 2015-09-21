@@ -1136,7 +1136,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		for (Object result : resultList) {
 			Object[] objects = (Object[]) result;
 			Integer annotationId = (Integer) objects[0];
-			Integer annotationTypeId = (Integer) objects[1];
+			Long annotationTypeId = (Long) objects[1];
 			String annotationType = (String) objects[2];
 			annotationDataMap.put(annotationId, new AnnotationData().setType(annotationType).setTypeId(annotationTypeId));
 		}
@@ -1156,15 +1156,15 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	}
 
 	public static class AnnotationData {
-		Integer typeId;
+		Long typeId;
 		String type;
 		Map<String, String> parameters = Maps.newHashMap();
 
-		public Integer getTypeId() {
+		public Long getTypeId() {
 			return typeId;
 		}
 
-		public AnnotationData setTypeId(Integer typeId) {
+		public AnnotationData setTypeId(Long typeId) {
 			this.typeId = typeId;
 			return this;
 		}
