@@ -10,12 +10,12 @@ package elaborate.editor.resources.orm.wrappers;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -51,7 +51,7 @@ public class TranscriptionWrapperTest {
 		Transcription transcription = mockTranscription(textLayer, title, body);
 
 		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
-		//    assertThat( tw.title).isEqualTo(title);
+		// assertThat( tw.title).isEqualTo(title);
 		assertThat(tw.getTextLayer()).isEqualTo(textLayer);
 		String expected = "<span data-id=\"9085822\" data-marker=\"begin\"></span>sdgdgdgsdgsdfg<sup data-id=\"9085822\" data-marker=\"end\">1</sup>";
 		assertThat(tw.getBody()).isEqualTo(expected);
@@ -66,7 +66,7 @@ public class TranscriptionWrapperTest {
 		Transcription transcription = mockTranscription(textLayer, title, body);
 
 		TranscriptionWrapper tw = new TranscriptionWrapper(transcription);
-		//    assertThat( tw.title).isEqualTo(title);
+		// assertThat( tw.title).isEqualTo(title);
 		assertThat(tw.getTextLayer()).isEqualTo(textLayer);
 		String expected = "Hoezo mag ik niet copy-pasten vanuit Word? Maar ik wil het!";
 		assertThat(tw.getBody()).isEqualTo(expected);
@@ -181,19 +181,19 @@ public class TranscriptionWrapperTest {
 		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
 	}
 
-	//	@Test
-	//	public void testConvertFromInputRemovesMostWordTags1() throws Exception {
-	//		String in = "<br>(zie ook 253r (regel 7) hier staat voluit geschreven onse Raitsvrend<i>en</i> (misschien hier ook Raitsvrend<i>e</i> ?,"//
-	//				+ "maar vrint zou tot de sterke flextie moeten behoren dus moeten eindigen op -en?))<br>KG:&nbsp; Samen graag nog even hebben over de"//
-	//				+ " meervoudvorm.<br><br><br>34: oirer -&gt; oiren [?]<br>sendebode: m. acc. pl. (Zwakke flextie?) het zou dan oire moeten worden. Is"//
-	//				+ " hier misschien de letter 'r' afgekort?<br>KG: als boven. <br><br><p class=\"MsoNormal\">‘raitsvrenden’: volgens Van Loey,"//
-	//				+ " <i style=\"mso-bidi-font-style: normal\">Mndld Spraakkunst </i>I § 19.2 kan het bij ‘vrient’ (en ‘viant’)<br>allebei -&gt; dan"//
-	//				+ " beslist de paleografie</p><p class=\"MsoNormal\"><br></p><p class=\"MsoNormal\">260v \"onse vrende\" voluit geschreven<br></p><br>"//
-	//				+ "<br><br><br><br>-------------------------------------------------------------------------<br>Translation<br>- Wijk ( bij Duurstede)?"//
-	//				+ "<br><br>";
-	//		String expected = "<body></body>";
-	//		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
-	//	}
+	// @Test
+	// public void testConvertFromInputRemovesMostWordTags1() throws Exception {
+	// String in = "<br>(zie ook 253r (regel 7) hier staat voluit geschreven onse Raitsvrend<i>en</i> (misschien hier ook Raitsvrend<i>e</i> ?,"//
+	// + "maar vrint zou tot de sterke flextie moeten behoren dus moeten eindigen op -en?))<br>KG:&nbsp; Samen graag nog even hebben over de"//
+	// + " meervoudvorm.<br><br><br>34: oirer -&gt; oiren [?]<br>sendebode: m. acc. pl. (Zwakke flextie?) het zou dan oire moeten worden. Is"//
+	// + " hier misschien de letter 'r' afgekort?<br>KG: als boven. <br><br><p class=\"MsoNormal\">‘raitsvrenden’: volgens Van Loey,"//
+	// + " <i style=\"mso-bidi-font-style: normal\">Mndld Spraakkunst </i>I § 19.2 kan het bij ‘vrient’ (en ‘viant’)<br>allebei -&gt; dan"//
+	// + " beslist de paleografie</p><p class=\"MsoNormal\"><br></p><p class=\"MsoNormal\">260v \"onse vrende\" voluit geschreven<br></p><br>"//
+	// + "<br><br><br><br>-------------------------------------------------------------------------<br>Translation<br>- Wijk ( bij Duurstede)?"//
+	// + "<br><br>";
+	// String expected = "<body></body>";
+	// assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
+	// }
 
 	@Test
 	public void testSuperscriptIsHandledWell() throws Exception {
@@ -211,5 +211,5 @@ public class TranscriptionWrapperTest {
 		assertThat(tw.getBodyForDb()).isEqualTo(expected);
 	}
 
-	//	
+	//
 }

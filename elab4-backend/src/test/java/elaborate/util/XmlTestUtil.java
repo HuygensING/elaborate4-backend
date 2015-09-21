@@ -10,12 +10,12 @@ package elaborate.util;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -31,12 +31,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import nl.knaw.huygens.Log;
-
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import nl.knaw.huygens.Log;
 
 public class XmlTestUtil {
 
@@ -65,11 +65,12 @@ public class XmlTestUtil {
 		assertThat(XmlUtil.fixXhtml(in)).isEqualTo(expected);
 	}
 
-	//  @Test
-	//  public void test() {
-	//    String in = "<body>01 En<i>de</i> hine w@d sond<i>er</i> sage\n 02 Noit moede in dien dage\n 03 M@ sijn wesen gedurde tier vre\n 04 <ab id=\"81467\"/>Tot<i>er</i><ae id=\"81467\"/> vesp<i>er</i>tijt alde<i>n</i> dach dure\n 05 En<i>de</i> soude hebben geduert alsoe</body>";
-	//    String expected = in;
-	//    assertThat( "\n")).isEqualTo(expected, in.replaceAll("\\n\\s+[0-9][0-9]\\s+");
-	//  }
+	// @Test
+	// public void test() {
+	// String in = "<body>01 En<i>de</i> hine w@d sond<i>er</i> sage\n 02 Noit moede in dien dage\n 03 M@ sijn wesen gedurde tier vre\n 04 <ab id=\"81467\"/>Tot<i>er</i><ae id=\"81467\"/>
+	// vesp<i>er</i>tijt alde<i>n</i> dach dure\n 05 En<i>de</i> soude hebben geduert alsoe</body>";
+	// String expected = in;
+	// assertThat( "\n")).isEqualTo(expected, in.replaceAll("\\n\\s+[0-9][0-9]\\s+");
+	// }
 
 }

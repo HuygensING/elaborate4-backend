@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,7 +35,9 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Creates a new </code>{@link TranscriptionAssert}</code> to make assertions on actual Transcription.
-	 * @param actual the Transcription we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the Transcription we want to make assertions on.
 	 */
 	public TranscriptionAssert(Transcription actual) {
 		super(actual, TranscriptionAssert.class);
@@ -44,7 +46,9 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 	/**
 	 * An entry point for TranscriptionAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
 	 * With a static import, one's can write directly : <code>assertThat(myTranscription)</code> and get specific assertion with code completion.
-	 * @param actual the Transcription we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the Transcription we want to make assertions on.
 	 * @return a new </code>{@link TranscriptionAssert}</code>
 	 */
 	public static TranscriptionAssert assertThat(Transcription actual) {
@@ -53,9 +57,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's annotations contains the given Annotation elements.
-	 * @param annotations the given elements that should be contained in actual Transcription's annotations.
+	 * 
+	 * @param annotations
+	 *          the given elements that should be contained in actual Transcription's annotations.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Transcription's annotations does not contain all given Annotation elements.
+	 * @throws AssertionError
+	 *           if the actual Transcription's annotations does not contain all given Annotation elements.
 	 */
 	public TranscriptionAssert hasAnnotations(Annotation... annotations) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -78,8 +85,10 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription has no annotations.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Transcription's annotations is not empty.
+	 * @throws AssertionError
+	 *           if the actual Transcription's annotations is not empty.
 	 */
 	public TranscriptionAssert hasNoAnnotations() {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -99,9 +108,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's body is equal to the given one.
-	 * @param body the given body to compare the actual Transcription's body to.
+	 * 
+	 * @param body
+	 *          the given body to compare the actual Transcription's body to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's body is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's body is not equal to the given one.
 	 */
 	public TranscriptionAssert hasBody(String body) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -122,9 +134,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's createdOn is equal to the given one.
-	 * @param createdOn the given createdOn to compare the actual Transcription's createdOn to.
+	 * 
+	 * @param createdOn
+	 *          the given createdOn to compare the actual Transcription's createdOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's createdOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's createdOn is not equal to the given one.
 	 */
 	public TranscriptionAssert hasCreatedOn(Date createdOn) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -145,9 +160,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's creator is equal to the given one.
-	 * @param creator the given creator to compare the actual Transcription's creator to.
+	 * 
+	 * @param creator
+	 *          the given creator to compare the actual Transcription's creator to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's creator is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's creator is not equal to the given one.
 	 */
 	public TranscriptionAssert hasCreator(User creator) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -168,9 +186,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's id is equal to the given one.
-	 * @param id the given id to compare the actual Transcription's id to.
+	 * 
+	 * @param id
+	 *          the given id to compare the actual Transcription's id to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's id is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's id is not equal to the given one.
 	 */
 	public TranscriptionAssert hasId(long id) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -191,9 +212,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's modifiedOn is equal to the given one.
-	 * @param modifiedOn the given modifiedOn to compare the actual Transcription's modifiedOn to.
+	 * 
+	 * @param modifiedOn
+	 *          the given modifiedOn to compare the actual Transcription's modifiedOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's modifiedOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's modifiedOn is not equal to the given one.
 	 */
 	public TranscriptionAssert hasModifiedOn(Date modifiedOn) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -214,9 +238,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's modifier is equal to the given one.
-	 * @param modifier the given modifier to compare the actual Transcription's modifier to.
+	 * 
+	 * @param modifier
+	 *          the given modifier to compare the actual Transcription's modifier to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's modifier is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's modifier is not equal to the given one.
 	 */
 	public TranscriptionAssert hasModifier(User modifier) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -237,9 +264,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's projectEntry is equal to the given one.
-	 * @param projectEntry the given projectEntry to compare the actual Transcription's projectEntry to.
+	 * 
+	 * @param projectEntry
+	 *          the given projectEntry to compare the actual Transcription's projectEntry to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's projectEntry is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's projectEntry is not equal to the given one.
 	 */
 	public TranscriptionAssert hasProjectEntry(ProjectEntry projectEntry) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -260,9 +290,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's rev is equal to the given one.
-	 * @param rev the given rev to compare the actual Transcription's rev to.
+	 * 
+	 * @param rev
+	 *          the given rev to compare the actual Transcription's rev to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's rev is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's rev is not equal to the given one.
 	 */
 	public TranscriptionAssert hasRev(long rev) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -283,9 +316,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's textLayer is equal to the given one.
-	 * @param textLayer the given textLayer to compare the actual Transcription's textLayer to.
+	 * 
+	 * @param textLayer
+	 *          the given textLayer to compare the actual Transcription's textLayer to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's textLayer is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's textLayer is not equal to the given one.
 	 */
 	public TranscriptionAssert hasTextLayer(String textLayer) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -306,9 +342,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's title is equal to the given one.
-	 * @param title the given title to compare the actual Transcription's title to.
+	 * 
+	 * @param title
+	 *          the given title to compare the actual Transcription's title to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's title is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's title is not equal to the given one.
 	 */
 	public TranscriptionAssert hasTitle(String title) {
 		// check that actual Transcription we want to make assertions on is not null.
@@ -329,9 +368,12 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 
 	/**
 	 * Verifies that the actual Transcription's transcriptionType is equal to the given one.
-	 * @param transcriptionType the given transcriptionType to compare the actual Transcription's transcriptionType to.
+	 * 
+	 * @param transcriptionType
+	 *          the given transcriptionType to compare the actual Transcription's transcriptionType to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Transcription's transcriptionType is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Transcription's transcriptionType is not equal to the given one.
 	 */
 	public TranscriptionAssert hasTranscriptionType(TranscriptionType transcriptionType) {
 		// check that actual Transcription we want to make assertions on is not null.

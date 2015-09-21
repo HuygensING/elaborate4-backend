@@ -10,12 +10,12 @@ package elaborate.editor.resources.orm.wrappers;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,15 +35,15 @@ import elaborate.util.PasswordUtil;
 
 @XmlRootElement
 public class UserInput {
-	//  {
-	//    "id": 123, // only for PUT/update
-	//    "username": "marijke_boter",
-	//    "email": "marijke.boter@huygens.knaw.nl",
-	//    "firstName": "Marijke",
-	//    "lastName": "Boter",
-	//    "password": "whatever",
-	//    "role": "USER"
-	//  },
+	// {
+	// "id": 123, // only for PUT/update
+	// "username": "marijke_boter",
+	// "email": "marijke.boter@huygens.knaw.nl",
+	// "firstName": "Marijke",
+	// "lastName": "Boter",
+	// "password": "whatever",
+	// "role": "USER"
+	// },
 
 	private static final long NULL_ID = -1l;
 	public long id = NULL_ID;

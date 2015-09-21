@@ -10,12 +10,12 @@ package elaborate.util;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -40,9 +40,10 @@ import org.w3c.tidy.Tidy;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
-public class StringUtil   {
+public class StringUtil {
 	private static final String UTF8 = "UTF8";
 	static Tidy TIDY = new Tidy();
+
 	static {
 		TIDY.setAltText("");
 		TIDY.setAsciiChars(true);
@@ -95,6 +96,7 @@ public class StringUtil   {
 		TIDY.setXmlSpace(false);
 		TIDY.setXmlTags(false);
 	}
+
 	private static final String PAGETITLESEPARATOR = " :: ";
 	private static final String APPNAME = "eLaborate3";
 	static final String DELIM = "+-*/(),.;'`\"<> ";
@@ -103,7 +105,7 @@ public class StringUtil   {
 	public static String replace(String originalTerm, String replacementTerm, String body, List<Integer> occurrencesToReplace, boolean preserveCase) {
 		StringTokenizer tokenizer = new StringTokenizer(body, DELIM, true);
 
-		//    Log.info("body:[{}]", body);
+		// Log.info("body:[{}]", body);
 		StringBuilder replaced = new StringBuilder(body.length());
 		int occurrence = 1;
 		while (tokenizer.hasMoreTokens()) {
@@ -118,7 +120,7 @@ public class StringUtil   {
 				replaced.append(token);
 			}
 		}
-		//    Log.info("replaced:[{}]", replaced);
+		// Log.info("replaced:[{}]", replaced);
 		return replaced.toString();
 	}
 
@@ -126,7 +128,9 @@ public class StringUtil   {
 
 	/**
 	 * change ULRs in <code>textWithURLs</code> to links
-	 * @param textWithURLs text with URLs
+	 * 
+	 * @param textWithURLs
+	 *          text with URLs
 	 * @return text with links
 	 */
 	public static String activateURLs(String textWithURLs) {
@@ -134,7 +138,7 @@ public class StringUtil   {
 		StringBuilder replaced = new StringBuilder(textWithURLs.length());
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
-			//      Log.info("token={}", token);
+			// Log.info("token={}", token);
 			try {
 				URL url = new URL(token);
 				// If possible then replace with anchor...
@@ -156,30 +160,30 @@ public class StringUtil   {
 		return replaced.toString();
 	}
 
-	//  public static String activateURLs(String textWithURLs) {
-	//    StringTokenizer tokenizer = new StringTokenizer(textWithURLs, DELIM, true);
+	// public static String activateURLs(String textWithURLs) {
+	// StringTokenizer tokenizer = new StringTokenizer(textWithURLs, DELIM, true);
 	//
-	//    List<String> htmlParts = Lists.newArrayList();
-	//    for (String part : textWithURLs.split("\\s")) {
-	//      try {
-	//        URL url = new URL(part);
-	//        // If possible then replace with anchor...
-	//        String linktext = part;
-	//        String file = url.getFile();
-	//        if (StringUtils.isNotBlank(file)) {
-	//          linktext = file;
-	//        }
-	//        String protocol = url.getProtocol();
-	//        if (hostProtocols.contains(protocol)) {
-	//          linktext = url.getHost() + linktext;
-	//        }
-	//        htmlParts.add("<a target=\"_blank\" href=\"" + url + "\">" + linktext + "</a>");
-	//      } catch (MalformedURLException e) {
-	//        htmlParts.add(part);
-	//      }
-	//    }
-	//    return Joiner.on(" ").join(htmlParts);
-	//  }
+	// List<String> htmlParts = Lists.newArrayList();
+	// for (String part : textWithURLs.split("\\s")) {
+	// try {
+	// URL url = new URL(part);
+	// // If possible then replace with anchor...
+	// String linktext = part;
+	// String file = url.getFile();
+	// if (StringUtils.isNotBlank(file)) {
+	// linktext = file;
+	// }
+	// String protocol = url.getProtocol();
+	// if (hostProtocols.contains(protocol)) {
+	// linktext = url.getHost() + linktext;
+	// }
+	// htmlParts.add("<a target=\"_blank\" href=\"" + url + "\">" + linktext + "</a>");
+	// } catch (MalformedURLException e) {
+	// htmlParts.add(part);
+	// }
+	// }
+	// return Joiner.on(" ").join(htmlParts);
+	// }
 
 	public static String pageTitle(String... subtitles) {
 		List<String> parts = Lists.newArrayList(APPNAME);

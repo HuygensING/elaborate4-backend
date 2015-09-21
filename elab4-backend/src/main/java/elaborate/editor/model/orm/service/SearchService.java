@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,15 +24,9 @@ package elaborate.editor.model.orm.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Singleton;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
-
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 import com.google.common.collect.ImmutableList;
@@ -45,6 +39,9 @@ import elaborate.editor.model.orm.StorableSearchData;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.solr.ElaborateEditorSearchParameters;
 import elaborate.util.ResourceUtil;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
 
 @Singleton
 public class SearchService extends AbstractStoredEntityService<StorableSearchData> {
@@ -71,13 +68,13 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 			if (elaborateSearchParameters.getSearchInTranscriptions() && elaborateSearchParameters.getTextLayers().isEmpty()) {
 				elaborateSearchParameters.setTextLayers(ImmutableList.copyOf(project.getTextLayers()));
 			}
-			//		Set<String> resultFields = Sets.newHashSet(elaborateSearchParameters.getResultFields());
-			//		addIfNotEmpty(resultFields, level1);
-			//		addIfNotEmpty(resultFields, level2);
-			//		addIfNotEmpty(resultFields, level3);
+			// Set<String> resultFields = Sets.newHashSet(elaborateSearchParameters.getResultFields());
+			// addIfNotEmpty(resultFields, level1);
+			// addIfNotEmpty(resultFields, level2);
+			// addIfNotEmpty(resultFields, level3);
 			elaborateSearchParameters//
 					.setFacetFields(project.getFacetFields())//
-					//				.setResultFields(resultFields)//
+					// .setResultFields(resultFields)//
 					.setFacetInfoMap(project.getFacetInfoMap());
 			StorableSearchData storableSearchData;
 			try {
@@ -97,12 +94,6 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 			Log.error(e.getMessage());
 			Log.error("e={}", e);
 			throw new InternalServerErrorException(e.getMessage());
-		}
-	}
-
-	private void addIfNotEmpty(Set<String> resultFields, String level1) {
-		if (StringUtils.isNotEmpty(level1)) {
-			resultFields.add(level1);
 		}
 	}
 
@@ -176,7 +167,7 @@ public class SearchService extends AbstractStoredEntityService<StorableSearchDat
 					}
 				}
 			}
-			//			Log.info("metadata:{}", metadata);
+			// Log.info("metadata:{}", metadata);
 			resultmap.put("metadata", metadata);
 		}
 	}

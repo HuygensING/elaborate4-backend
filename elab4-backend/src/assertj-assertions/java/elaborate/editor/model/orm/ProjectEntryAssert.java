@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,7 +35,9 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Creates a new </code>{@link ProjectEntryAssert}</code> to make assertions on actual ProjectEntry.
-	 * @param actual the ProjectEntry we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the ProjectEntry we want to make assertions on.
 	 */
 	public ProjectEntryAssert(ProjectEntry actual) {
 		super(actual, ProjectEntryAssert.class);
@@ -44,7 +46,9 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 	/**
 	 * An entry point for ProjectEntryAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
 	 * With a static import, one's can write directly : <code>assertThat(myProjectEntry)</code> and get specific assertion with code completion.
-	 * @param actual the ProjectEntry we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the ProjectEntry we want to make assertions on.
 	 * @return a new </code>{@link ProjectEntryAssert}</code>
 	 */
 	public static ProjectEntryAssert assertThat(ProjectEntry actual) {
@@ -53,9 +57,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's createdOn is equal to the given one.
-	 * @param createdOn the given createdOn to compare the actual ProjectEntry's createdOn to.
+	 * 
+	 * @param createdOn
+	 *          the given createdOn to compare the actual ProjectEntry's createdOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry's createdOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry's createdOn is not equal to the given one.
 	 */
 	public ProjectEntryAssert hasCreatedOn(Date createdOn) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -76,9 +83,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's creator is equal to the given one.
-	 * @param creator the given creator to compare the actual ProjectEntry's creator to.
+	 * 
+	 * @param creator
+	 *          the given creator to compare the actual ProjectEntry's creator to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry's creator is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry's creator is not equal to the given one.
 	 */
 	public ProjectEntryAssert hasCreator(User creator) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -99,9 +109,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's facsimiles contains the given Facsimile elements.
-	 * @param facsimiles the given elements that should be contained in actual ProjectEntry's facsimiles.
+	 * 
+	 * @param facsimiles
+	 *          the given elements that should be contained in actual ProjectEntry's facsimiles.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual ProjectEntry's facsimiles does not contain all given Facsimile elements.
+	 * @throws AssertionError
+	 *           if the actual ProjectEntry's facsimiles does not contain all given Facsimile elements.
 	 */
 	public ProjectEntryAssert hasFacsimiles(Facsimile... facsimiles) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -124,8 +137,10 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry has no facsimiles.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual ProjectEntry's facsimiles is not empty.
+	 * @throws AssertionError
+	 *           if the actual ProjectEntry's facsimiles is not empty.
 	 */
 	public ProjectEntryAssert hasNoFacsimiles() {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -145,9 +160,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's id is equal to the given one.
-	 * @param id the given id to compare the actual ProjectEntry's id to.
+	 * 
+	 * @param id
+	 *          the given id to compare the actual ProjectEntry's id to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry's id is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry's id is not equal to the given one.
 	 */
 	public ProjectEntryAssert hasId(long id) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -168,9 +186,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's modifiedOn is equal to the given one.
-	 * @param modifiedOn the given modifiedOn to compare the actual ProjectEntry's modifiedOn to.
+	 * 
+	 * @param modifiedOn
+	 *          the given modifiedOn to compare the actual ProjectEntry's modifiedOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry's modifiedOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry's modifiedOn is not equal to the given one.
 	 */
 	public ProjectEntryAssert hasModifiedOn(Date modifiedOn) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -191,9 +212,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's modifier is equal to the given one.
-	 * @param modifier the given modifier to compare the actual ProjectEntry's modifier to.
+	 * 
+	 * @param modifier
+	 *          the given modifier to compare the actual ProjectEntry's modifier to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry's modifier is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry's modifier is not equal to the given one.
 	 */
 	public ProjectEntryAssert hasModifier(User modifier) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -214,9 +238,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's name is equal to the given one.
-	 * @param name the given name to compare the actual ProjectEntry's name to.
+	 * 
+	 * @param name
+	 *          the given name to compare the actual ProjectEntry's name to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry's name is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry's name is not equal to the given one.
 	 */
 	public ProjectEntryAssert hasName(String name) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -237,9 +264,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's project is equal to the given one.
-	 * @param project the given project to compare the actual ProjectEntry's project to.
+	 * 
+	 * @param project
+	 *          the given project to compare the actual ProjectEntry's project to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry's project is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry's project is not equal to the given one.
 	 */
 	public ProjectEntryAssert hasProject(Project project) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -260,9 +290,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's projectEntryMetadataItems contains the given ProjectEntryMetadataItem elements.
-	 * @param projectEntryMetadataItems the given elements that should be contained in actual ProjectEntry's projectEntryMetadataItems.
+	 * 
+	 * @param projectEntryMetadataItems
+	 *          the given elements that should be contained in actual ProjectEntry's projectEntryMetadataItems.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual ProjectEntry's projectEntryMetadataItems does not contain all given ProjectEntryMetadataItem elements.
+	 * @throws AssertionError
+	 *           if the actual ProjectEntry's projectEntryMetadataItems does not contain all given ProjectEntryMetadataItem elements.
 	 */
 	public ProjectEntryAssert hasProjectEntryMetadataItems(ProjectEntryMetadataItem... projectEntryMetadataItems) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -285,8 +318,10 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry has no projectEntryMetadataItems.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual ProjectEntry's projectEntryMetadataItems is not empty.
+	 * @throws AssertionError
+	 *           if the actual ProjectEntry's projectEntryMetadataItems is not empty.
 	 */
 	public ProjectEntryAssert hasNoProjectEntryMetadataItems() {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -306,8 +341,10 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry is publishable.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry is not publishable.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry is not publishable.
 	 */
 	public ProjectEntryAssert isPublishable() {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -324,8 +361,10 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry is not publishable.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry is publishable.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry is publishable.
 	 */
 	public ProjectEntryAssert isNotPublishable() {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -342,9 +381,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's rev is equal to the given one.
-	 * @param rev the given rev to compare the actual ProjectEntry's rev to.
+	 * 
+	 * @param rev
+	 *          the given rev to compare the actual ProjectEntry's rev to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual ProjectEntry's rev is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual ProjectEntry's rev is not equal to the given one.
 	 */
 	public ProjectEntryAssert hasRev(long rev) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -365,9 +407,12 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry's transcriptions contains the given Transcription elements.
-	 * @param transcriptions the given elements that should be contained in actual ProjectEntry's transcriptions.
+	 * 
+	 * @param transcriptions
+	 *          the given elements that should be contained in actual ProjectEntry's transcriptions.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual ProjectEntry's transcriptions does not contain all given Transcription elements.
+	 * @throws AssertionError
+	 *           if the actual ProjectEntry's transcriptions does not contain all given Transcription elements.
 	 */
 	public ProjectEntryAssert hasTranscriptions(Transcription... transcriptions) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
@@ -390,8 +435,10 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 
 	/**
 	 * Verifies that the actual ProjectEntry has no transcriptions.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual ProjectEntry's transcriptions is not empty.
+	 * @throws AssertionError
+	 *           if the actual ProjectEntry's transcriptions is not empty.
 	 */
 	public ProjectEntryAssert hasNoTranscriptions() {
 		// check that actual ProjectEntry we want to make assertions on is not null.

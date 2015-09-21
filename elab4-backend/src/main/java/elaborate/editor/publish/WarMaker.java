@@ -10,12 +10,12 @@ package elaborate.editor.publish;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import nl.knaw.huygens.Log;
-
 import com.google.common.collect.Lists;
+
+import nl.knaw.huygens.Log;
 
 public class WarMaker {
 	private final String basename;
@@ -82,8 +82,10 @@ public class WarMaker {
 
 	/**
 	 * Traverse a directory and get all files,
-	 * and add the file into fileList  
-	 * @param node file or directory
+	 * and add the file into fileList
+	 * 
+	 * @param node
+	 *          file or directory
 	 */
 	public void addToFileList(File node) {
 		if (node.isFile()) {
@@ -99,7 +101,9 @@ public class WarMaker {
 
 	/**
 	 * Format the file path for zip
-	 * @param file file path
+	 * 
+	 * @param file
+	 *          file path
 	 * @return Formatted file path
 	 */
 	private String generateZipEntry(String file) {

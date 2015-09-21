@@ -10,12 +10,12 @@ package elaborate.editor.resources.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -39,10 +39,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableList;
 
@@ -57,6 +53,9 @@ import elaborate.editor.model.orm.service.TranscriptionService;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 @Path("projects")
 @AuthorizationRequired
@@ -96,14 +95,14 @@ public class ProjectResource extends AbstractElaborateResource {
 		return Response.created(createURI(project)).build();
 	}
 
-	//	@PUT
-	//	@Path("{project_id: [0-9]+}")
-	//	@RolesAllowed("ADMIN")
-	//	@Consumes(UTF8MediaType.APPLICATION_JSON)
-	//	@APIDesc("Updates the project with the given project_id")
-	//	public void updateProject(Project project) {
-	//		projectService.update(project, getUser());
-	//	}
+	// @PUT
+	// @Path("{project_id: [0-9]+}")
+	// @RolesAllowed("ADMIN")
+	// @Consumes(UTF8MediaType.APPLICATION_JSON)
+	// @APIDesc("Updates the project with the given project_id")
+	// public void updateProject(Project project) {
+	// projectService.update(project, getUser());
+	// }
 
 	@DELETE
 	@Path("{project_id: [0-9]+}")
@@ -158,14 +157,14 @@ public class ProjectResource extends AbstractElaborateResource {
 		projectService.setTextlayers(project_id, textLayers, getUser());
 	}
 
-	//  /* project facets */
-	//  @GET
-	//  @Path("{project_id: [0-9]+}/facets")
-	//  @Produces(UTF8MediaType.APPLICATION_JSON)
-	//  @APIDesc("Returns facet info of the project with the given project_id")
-	//  public List<FacetInfo> getFacetInfo(@PathParam("project_id") long project_id) {
-	//    return projectService.getFacetInfo(project_id, getUser());
-	//  }
+	// /* project facets */
+	// @GET
+	// @Path("{project_id: [0-9]+}/facets")
+	// @Produces(UTF8MediaType.APPLICATION_JSON)
+	// @APIDesc("Returns facet info of the project with the given project_id")
+	// public List<FacetInfo> getFacetInfo(@PathParam("project_id") long project_id) {
+	// return projectService.getFacetInfo(project_id, getUser());
+	// }
 
 	@GET
 	@Path("{project_id: [0-9]+}/entrymetadata")
@@ -243,24 +242,24 @@ public class ProjectResource extends AbstractElaborateResource {
 		projectService.updateProjectUserIds(project_id, userIds, getUser());
 	}
 
-	//  @PUT
-	//  @Path("{project_id: [0-9]+}/projectusers/{user_id}")
-	//  @Consumes(UTF8MediaType.APPLICATION_JSON)
-	//  @RolesAllowed("ADMIN")
-	//  @APIDesc("Adds an existing user to the project with the given project_id")
-	//  public Response addProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
-	//    User created = projectService.addProjectUser(project_id, user_id, getUser());
-	//    return Response.created(createURI(created)).build();
-	//  }
+	// @PUT
+	// @Path("{project_id: [0-9]+}/projectusers/{user_id}")
+	// @Consumes(UTF8MediaType.APPLICATION_JSON)
+	// @RolesAllowed("ADMIN")
+	// @APIDesc("Adds an existing user to the project with the given project_id")
+	// public Response addProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
+	// User created = projectService.addProjectUser(project_id, user_id, getUser());
+	// return Response.created(createURI(created)).build();
+	// }
 
-	//  @DELETE
-	//  @Path("{project_id: [0-9]+}/projectusers/{user_id}")
-	//  @Consumes(UTF8MediaType.APPLICATION_JSON)
-	//  @RolesAllowed("ADMIN")
-	//  @APIDesc("Removes the user with the given user_id from the project with the given project_id")
-	//  public void deleteProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
-	//    projectService.deleteProjectUser(project_id, user_id, getUser());
-	//  }
+	// @DELETE
+	// @Path("{project_id: [0-9]+}/projectusers/{user_id}")
+	// @Consumes(UTF8MediaType.APPLICATION_JSON)
+	// @RolesAllowed("ADMIN")
+	// @APIDesc("Removes the user with the given user_id from the project with the given project_id")
+	// public void deleteProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
+	// projectService.deleteProjectUser(project_id, user_id, getUser());
+	// }
 
 	/* project statistics */
 	@GET
@@ -314,10 +313,10 @@ public class ProjectResource extends AbstractElaborateResource {
 		return new DraftPublicationResource(getUser(), projectService);
 	}
 
-	//  @Path("{project_id: [0-9]+}/publicationrequest")
-	//  public void requestPublication() {
-	//    ;
-	//  }
+	// @Path("{project_id: [0-9]+}/publicationrequest")
+	// public void requestPublication() {
+	// ;
+	// }
 
 	/* search */
 

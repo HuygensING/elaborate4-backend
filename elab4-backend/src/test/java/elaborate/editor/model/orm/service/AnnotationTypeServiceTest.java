@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,8 +25,6 @@ package elaborate.editor.model.orm.service;
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -40,6 +38,8 @@ import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.User;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Ignore
 public class AnnotationTypeServiceTest extends AbstractTest {
@@ -61,7 +61,7 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 		admin = new User().setRoleString(ElaborateRoles.ADMIN);
 		root = new User().setRoot(true);
 
-		//    testdb();
+		// testdb();
 
 		service.beginTransaction();
 		service.persist(root);
@@ -76,36 +76,36 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 		Log.info("setupClass - end");
 	}
 
-	//  private static void testdb() {
-	//    try {
-	//      Class.forName("org.hsqldb.jdbcDriver");
-	//      Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:testdb", "sa", "");
-	//      Statement s = conn.createStatement();
-	//      s.execute("SELECT * FROM *");
-	//      ResultSet rs = s.getResultSet();
-	//      ResultSetMetaData metaData = rs.getMetaData();
-	//      int columnCount = metaData.getColumnCount();
-	//      for (int i = 1; i < columnCount; i++) {
-	//        System.out.print(metaData.getColumnName(i) + " | ");
-	//      }
-	//      Log.info("");
+	// private static void testdb() {
+	// try {
+	// Class.forName("org.hsqldb.jdbcDriver");
+	// Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:testdb", "sa", "");
+	// Statement s = conn.createStatement();
+	// s.execute("SELECT * FROM *");
+	// ResultSet rs = s.getResultSet();
+	// ResultSetMetaData metaData = rs.getMetaData();
+	// int columnCount = metaData.getColumnCount();
+	// for (int i = 1; i < columnCount; i++) {
+	// System.out.print(metaData.getColumnName(i) + " | ");
+	// }
+	// Log.info("");
 	//
-	//      while (rs.next()) {
-	//        for (int i = 1; i < columnCount; i++) {
-	//          System.out.print(rs.getString(i) + " | ");
-	//        }
-	//        Log.info("");
-	//      }
-	//      conn.close();
-	//    } catch (ClassNotFoundException e) {
-	//      // TODO Auto-generated catch block
-	//      e.printStackTrace();
-	//    } catch (SQLException e) {
-	//      // TODO Auto-generated catch block
-	//      e.printStackTrace();
-	//    }
+	// while (rs.next()) {
+	// for (int i = 1; i < columnCount; i++) {
+	// System.out.print(rs.getString(i) + " | ");
+	// }
+	// Log.info("");
+	// }
+	// conn.close();
+	// } catch (ClassNotFoundException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (SQLException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
 	//
-	//  }
+	// }
 
 	@AfterClass
 	public static void teardownClass() {

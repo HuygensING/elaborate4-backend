@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -45,7 +45,7 @@ import elaborate.editor.model.Views;
 @XmlRootElement(name = "project_entry")
 public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 	private static final long serialVersionUID = 1L;
-	/* 
+	/*
 	 * default metadatafields for projectentries
 	 */
 	public static final String LOCATION = "Location";
@@ -60,8 +60,8 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 
 	public static final String PUBLISHABLE = "Publishable";
 
-	/* 
-	 * properties to persist 
+	/*
+	 * properties to persist
 	 */
 	private String name;
 	private String shortName;
@@ -184,122 +184,122 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 	}
 
 	//
-	//  public int getFacsimileCount() {
-	//    return ModelFactory.getEntityCount(ProjectFacsimile.class, getCurrentProjectEntryQuery());
-	//  }
+	// public int getFacsimileCount() {
+	// return ModelFactory.getEntityCount(ProjectFacsimile.class, getCurrentProjectEntryQuery());
+	// }
 	//
-	//  private Query getCurrentProjectEntryQuery() {
-	//    Query currentProjectEntryQuery = new Query("project_entry_id", entry.getId());
-	//    return currentProjectEntryQuery;
-	//  }
+	// private Query getCurrentProjectEntryQuery() {
+	// Query currentProjectEntryQuery = new Query("project_entry_id", entry.getId());
+	// return currentProjectEntryQuery;
+	// }
 	//
-	//  public int getTranscriptionCount() {
-	//    return ModelFactory.getEntityCount(ProjectTranscription.class, getCurrentProjectEntryQuery());
-	//  }
+	// public int getTranscriptionCount() {
+	// return ModelFactory.getEntityCount(ProjectTranscription.class, getCurrentProjectEntryQuery());
+	// }
 	//
-	//  public boolean hasFacsimiles() {
-	//    return entry.getFacsimileCount() > 0;
-	//  }
+	// public boolean hasFacsimiles() {
+	// return entry.getFacsimileCount() > 0;
+	// }
 	//
-	//  public boolean hasTranscriptions() {
-	//    return entry.getTranscriptionCount() > 0;
-	//  }
+	// public boolean hasTranscriptions() {
+	// return entry.getTranscriptionCount() > 0;
+	// }
 	//
-	//  public String getMetadata(String field) {
-	//    ProjectEntryMetadataItem[] projectEntryMetadataItems = entry.getProjectEntryMetadataItems();
-	//    for (ProjectEntryMetadataItem projectEntryMetadataItem : projectEntryMetadataItems) {
-	//      if (field.equals(projectEntryMetadataItem.getField())) {
-	//        return projectEntryMetadataItem.getData();
-	//      }
-	//    }
-	//    return "";
-	//  }
+	// public String getMetadata(String field) {
+	// ProjectEntryMetadataItem[] projectEntryMetadataItems = entry.getProjectEntryMetadataItems();
+	// for (ProjectEntryMetadataItem projectEntryMetadataItem : projectEntryMetadataItems) {
+	// if (field.equals(projectEntryMetadataItem.getField())) {
+	// return projectEntryMetadataItem.getData();
+	// }
+	// }
+	// return "";
+	// }
 	//
 	//
-	//  public ProjectEntryMetadataItem getProjectEntryMetadataItem(String field) {
-	//    Term entryTerm = new Term("project_entry_id", Integer.valueOf(entry.getId().toString()));
-	//    Term fieldTerm = new Term("field", field);
-	//    Query query = new Query(entryTerm, fieldTerm);
-	//    ProjectEntryMetadataItem[] entities = ModelFactory.getEntities(ProjectEntryMetadataItem.class, query);
-	//    if (entities.length > 1) {
-	//      Log.error("query {} gave too many ProjectMetadataItems: {}", query, entities);
-	//    }
-	//    return entities.length == 0 ? null : entities[0];
-	//  }
+	// public ProjectEntryMetadataItem getProjectEntryMetadataItem(String field) {
+	// Term entryTerm = new Term("project_entry_id", Integer.valueOf(entry.getId().toString()));
+	// Term fieldTerm = new Term("field", field);
+	// Query query = new Query(entryTerm, fieldTerm);
+	// ProjectEntryMetadataItem[] entities = ModelFactory.getEntities(ProjectEntryMetadataItem.class, query);
+	// if (entities.length > 1) {
+	// Log.error("query {} gave too many ProjectMetadataItems: {}", query, entities);
+	// }
+	// return entities.length == 0 ? null : entities[0];
+	// }
 	//
-	//  void removeAllMetadata() {
-	//    for (ProjectEntryMetadataItem projectEntryMetadataItem : entry.getProjectEntryMetadataItems()) {
-	//      try {
-	//        projectEntryMetadataItem.delete();
-	//      } catch (StorageException e) {
-	//        throw new RuntimeException(e);
-	//      }
-	//    }
-	//  }
+	// void removeAllMetadata() {
+	// for (ProjectEntryMetadataItem projectEntryMetadataItem : entry.getProjectEntryMetadataItems()) {
+	// try {
+	// projectEntryMetadataItem.delete();
+	// } catch (StorageException e) {
+	// throw new RuntimeException(e);
+	// }
+	// }
+	// }
 	//
-	//  public void setMetadata(Map<String, String> metadata, User creator) {
-	//    removeAllMetadata();
-	//    for (Entry<String, String> metadataEntry : metadata.entrySet()) {
-	//      setMetadata(metadataEntry.getKey(), metadataEntry.getValue().trim(), creator);
-	//    }
-	//  }
+	// public void setMetadata(Map<String, String> metadata, User creator) {
+	// removeAllMetadata();
+	// for (Entry<String, String> metadataEntry : metadata.entrySet()) {
+	// setMetadata(metadataEntry.getKey(), metadataEntry.getValue().trim(), creator);
+	// }
+	// }
 	//
-	//  public String getLabel() {
-	//    String label = "";
-	//    String page = StringUtils.stripToNull(entry.getMetadata("Page number"));
-	//    String title = StringUtils.stripToNull(entry.getMetadata("Title of text"));
-	//    String author = StringUtils.stripToNull(entry.getMetadata("Name of author"));
-	//    String folio = StringUtils.stripToNull(entry.getMetadata("Folio number"));
-	//    String side = StringUtils.stripToNull(entry.getMetadata("Folio side"));
-	//    String column = StringUtils.stripToNull(entry.getMetadata("Column on page"));
+	// public String getLabel() {
+	// String label = "";
+	// String page = StringUtils.stripToNull(entry.getMetadata("Page number"));
+	// String title = StringUtils.stripToNull(entry.getMetadata("Title of text"));
+	// String author = StringUtils.stripToNull(entry.getMetadata("Name of author"));
+	// String folio = StringUtils.stripToNull(entry.getMetadata("Folio number"));
+	// String side = StringUtils.stripToNull(entry.getMetadata("Folio side"));
+	// String column = StringUtils.stripToNull(entry.getMetadata("Column on page"));
 	//
-	//    List<String> positionParts = Lists.newArrayList();
-	//    if (page != null) {
-	//      positionParts.add(String.format("page %s", page));
-	//    }
-	//    if (folio != null) {
-	//      positionParts.add(String.format("folio %s", folio));
-	//    }
-	//    if (side != null) {
-	//      positionParts.add(String.format("side %s", side));
-	//    }
-	//    if (column != null) {
-	//      positionParts.add(String.format("column %s", column));
-	//    }
-	//    String position = Joiner.on(", ").join(positionParts);
+	// List<String> positionParts = Lists.newArrayList();
+	// if (page != null) {
+	// positionParts.add(String.format("page %s", page));
+	// }
+	// if (folio != null) {
+	// positionParts.add(String.format("folio %s", folio));
+	// }
+	// if (side != null) {
+	// positionParts.add(String.format("side %s", side));
+	// }
+	// if (column != null) {
+	// positionParts.add(String.format("column %s", column));
+	// }
+	// String position = Joiner.on(", ").join(positionParts);
 	//
-	//    if (title != null && author != null) {
-	//      label = String.format("%s of '%s' by %s", position, title, author);
-	//    } else if (title != null) {
-	//      label = String.format("%s of '%s'", position, title);
-	//    } else {
-	//      label = position;
-	//    }
-	//    return label;
-	//  }
+	// if (title != null && author != null) {
+	// label = String.format("%s of '%s' by %s", position, title, author);
+	// } else if (title != null) {
+	// label = String.format("%s of '%s'", position, title);
+	// } else {
+	// label = position;
+	// }
+	// return label;
+	// }
 	//
-	//  public LastModified getLastModified() {
-	//    Date modificationDate = entry.getProject().getCreatedOn();
-	//    User modifiedBy = entry.getProject().getCreator();
-	//    User modifiedBy2 = modifiedBy;
-	//    LastModified lastModified = new LastModified(modificationDate, modifiedBy2);
+	// public LastModified getLastModified() {
+	// Date modificationDate = entry.getProject().getCreatedOn();
+	// User modifiedBy = entry.getProject().getCreator();
+	// User modifiedBy2 = modifiedBy;
+	// LastModified lastModified = new LastModified(modificationDate, modifiedBy2);
 	//
-	//    updateLastModified(lastModified, entry.getProjectEntryMetadataItems());
-	//    updateLastModified(lastModified, entry.getFacsimiles());
-	//    updateLastModified(lastModified, entry.getTranscriptions());
+	// updateLastModified(lastModified, entry.getProjectEntryMetadataItems());
+	// updateLastModified(lastModified, entry.getFacsimiles());
+	// updateLastModified(lastModified, entry.getTranscriptions());
 	//
-	//    return lastModified;
-	//  }
+	// return lastModified;
+	// }
 	//
-	//  private void updateLastModified(LastModified lastModified, AbstractTrackedEntity[] trackedEntryChildren) {
-	//    for (AbstractTrackedEntity entity : trackedEntryChildren) {
-	//      Date modifiedOn = entity.getModifiedOn();
-	//      if (modifiedOn.after(lastModified.getDate())) {
-	//        lastModified.setDate(modifiedOn);
-	//        lastModified.setUser(entity.getModifier());
-	//      }
-	//    }
-	//  }
+	// private void updateLastModified(LastModified lastModified, AbstractTrackedEntity[] trackedEntryChildren) {
+	// for (AbstractTrackedEntity entity : trackedEntryChildren) {
+	// Date modifiedOn = entity.getModifiedOn();
+	// if (modifiedOn.after(lastModified.getDate())) {
+	// lastModified.setDate(modifiedOn);
+	// lastModified.setUser(entity.getModifier());
+	// }
+	// }
+	// }
 	//
 
 }

@@ -10,12 +10,12 @@ package elaborate.editor.backend;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -30,18 +30,15 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import nl.knaw.huygens.Log;
-
 import org.apache.commons.lang.time.StopWatch;
 
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.TranscriptionService;
 import elaborate.util.HibernateUtil;
+import nl.knaw.huygens.Log;
 
 public class AnnotationMarkerScrubber {
-	private static final int COMMIT_EVERY_N_RECORDS = 100;
-
 	@SuppressWarnings("boxing")
 	public static void main(String[] args) {
 		StopWatch sw = new StopWatch();
@@ -50,7 +47,7 @@ public class AnnotationMarkerScrubber {
 		TranscriptionService ts = TranscriptionService.instance();
 		ts.setEntityManager(entityManager);
 		try {
-			List<Transcription> resultList = entityManager//.
+			List<Transcription> resultList = entityManager// .
 					.createQuery("select t from Transcription t", Transcription.class)//
 					.getResultList();
 			int size = resultList.size();
@@ -78,10 +75,6 @@ public class AnnotationMarkerScrubber {
 
 	private static String percentage(int part, int total) {
 		return new DecimalFormat("0.00").format((double) (100 * part) / (double) total);
-	}
-
-	private static boolean autoCommit(int n) {
-		return (n % COMMIT_EVERY_N_RECORDS) == 0;
 	}
 
 	public static String convert(long ms) {

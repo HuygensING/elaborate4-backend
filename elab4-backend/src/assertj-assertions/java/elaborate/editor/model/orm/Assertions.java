@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -31,7 +31,8 @@ public class Assertions {
 	/**
 	 * Creates a new instance of <code>{@link AnnotationAssert}</code>.
 	 *
-	 * @param actual the actual value.
+	 * @param actual
+	 *          the actual value.
 	 * @return the created assertion object.
 	 */
 	public static AnnotationAssert assertThat(Annotation actual) {
@@ -41,7 +42,8 @@ public class Assertions {
 	/**
 	 * Creates a new instance of <code>{@link AnnotationTypeAssert}</code>.
 	 *
-	 * @param actual the actual value.
+	 * @param actual
+	 *          the actual value.
 	 * @return the created assertion object.
 	 */
 	public static AnnotationTypeAssert assertThat(AnnotationType actual) {
@@ -51,7 +53,8 @@ public class Assertions {
 	/**
 	 * Creates a new instance of <code>{@link FacsimileAssert}</code>.
 	 *
-	 * @param actual the actual value.
+	 * @param actual
+	 *          the actual value.
 	 * @return the created assertion object.
 	 */
 	public static FacsimileAssert assertThat(Facsimile actual) {
@@ -61,7 +64,8 @@ public class Assertions {
 	/**
 	 * Creates a new instance of <code>{@link ProjectAssert}</code>.
 	 *
-	 * @param actual the actual value.
+	 * @param actual
+	 *          the actual value.
 	 * @return the created assertion object.
 	 */
 	public static ProjectAssert assertThat(Project actual) {
@@ -71,7 +75,8 @@ public class Assertions {
 	/**
 	 * Creates a new instance of <code>{@link ProjectEntryAssert}</code>.
 	 *
-	 * @param actual the actual value.
+	 * @param actual
+	 *          the actual value.
 	 * @return the created assertion object.
 	 */
 	public static ProjectEntryAssert assertThat(ProjectEntry actual) {
@@ -81,7 +86,8 @@ public class Assertions {
 	/**
 	 * Creates a new instance of <code>{@link TranscriptionAssert}</code>.
 	 *
-	 * @param actual the actual value.
+	 * @param actual
+	 *          the actual value.
 	 * @return the created assertion object.
 	 */
 	public static TranscriptionAssert assertThat(Transcription actual) {
@@ -91,7 +97,8 @@ public class Assertions {
 	/**
 	 * Creates a new instance of <code>{@link UserAssert}</code>.
 	 *
-	 * @param actual the actual value.
+	 * @param actual
+	 *          the actual value.
 	 * @return the created assertion object.
 	 */
 	public static UserAssert assertThat(User actual) {

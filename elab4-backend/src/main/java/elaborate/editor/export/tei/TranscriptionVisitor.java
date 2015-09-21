@@ -10,12 +10,12 @@ package elaborate.editor.export.tei;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -31,13 +31,6 @@ import java.util.Stack;
 
 import javax.persistence.EntityManager;
 
-import nl.knaw.huygens.tei.DelegatingVisitor;
-import nl.knaw.huygens.tei.Element;
-import nl.knaw.huygens.tei.ElementHandler;
-import nl.knaw.huygens.tei.Traversal;
-import nl.knaw.huygens.tei.XmlContext;
-import nl.knaw.huygens.tei.handlers.XmlTextHandler;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -48,6 +41,12 @@ import elaborate.editor.model.orm.AnnotationMetadataItem;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.AnnotationService;
+import nl.knaw.huygens.tei.DelegatingVisitor;
+import nl.knaw.huygens.tei.Element;
+import nl.knaw.huygens.tei.ElementHandler;
+import nl.knaw.huygens.tei.Traversal;
+import nl.knaw.huygens.tei.XmlContext;
+import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
 public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
 	static final Stack<Element> openElements = new Stack<Element>();
@@ -224,7 +223,7 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
 						context.addOpenTag(new Element(taginfo.getName(), taginfo.getAttributes()));
 
 					} else {
-						//            addPtr(context, id, "annotation_begin");
+						// addPtr(context, id, "annotation_begin");
 					}
 
 				} else if (name.equals(Transcription.BodyTags.ANNOTATION_END)) {
@@ -234,7 +233,7 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
 						skipNextNewline = taginfo.skipNewlineAfter();
 
 					} else {
-						//            addPtr(context, id, "annotation_end");
+						// addPtr(context, id, "annotation_end");
 						addNote(context, annotation);
 					}
 				}

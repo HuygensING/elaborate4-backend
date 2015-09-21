@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,7 +35,9 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Creates a new </code>{@link AnnotationTypeAssert}</code> to make assertions on actual AnnotationType.
-	 * @param actual the AnnotationType we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the AnnotationType we want to make assertions on.
 	 */
 	public AnnotationTypeAssert(AnnotationType actual) {
 		super(actual, AnnotationTypeAssert.class);
@@ -44,7 +46,9 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 	/**
 	 * An entry point for AnnotationTypeAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
 	 * With a static import, one's can write directly : <code>assertThat(myAnnotationType)</code> and get specific assertion with code completion.
-	 * @param actual the AnnotationType we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the AnnotationType we want to make assertions on.
 	 * @return a new </code>{@link AnnotationTypeAssert}</code>
 	 */
 	public static AnnotationTypeAssert assertThat(AnnotationType actual) {
@@ -53,9 +57,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's createdOn is equal to the given one.
-	 * @param createdOn the given createdOn to compare the actual AnnotationType's createdOn to.
+	 * 
+	 * @param createdOn
+	 *          the given createdOn to compare the actual AnnotationType's createdOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual AnnotationType's createdOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual AnnotationType's createdOn is not equal to the given one.
 	 */
 	public AnnotationTypeAssert hasCreatedOn(Date createdOn) {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -76,9 +83,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's creator is equal to the given one.
-	 * @param creator the given creator to compare the actual AnnotationType's creator to.
+	 * 
+	 * @param creator
+	 *          the given creator to compare the actual AnnotationType's creator to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual AnnotationType's creator is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual AnnotationType's creator is not equal to the given one.
 	 */
 	public AnnotationTypeAssert hasCreator(User creator) {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -99,9 +109,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's description is equal to the given one.
-	 * @param description the given description to compare the actual AnnotationType's description to.
+	 * 
+	 * @param description
+	 *          the given description to compare the actual AnnotationType's description to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual AnnotationType's description is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual AnnotationType's description is not equal to the given one.
 	 */
 	public AnnotationTypeAssert hasDescription(String description) {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -122,9 +135,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's id is equal to the given one.
-	 * @param id the given id to compare the actual AnnotationType's id to.
+	 * 
+	 * @param id
+	 *          the given id to compare the actual AnnotationType's id to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual AnnotationType's id is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual AnnotationType's id is not equal to the given one.
 	 */
 	public AnnotationTypeAssert hasId(long id) {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -145,9 +161,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's metadataItems contains the given AnnotationTypeMetadataItem elements.
-	 * @param metadataItems the given elements that should be contained in actual AnnotationType's metadataItems.
+	 * 
+	 * @param metadataItems
+	 *          the given elements that should be contained in actual AnnotationType's metadataItems.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual AnnotationType's metadataItems does not contain all given AnnotationTypeMetadataItem elements.
+	 * @throws AssertionError
+	 *           if the actual AnnotationType's metadataItems does not contain all given AnnotationTypeMetadataItem elements.
 	 */
 	public AnnotationTypeAssert hasMetadataItems(AnnotationTypeMetadataItem... metadataItems) {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -170,8 +189,10 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType has no metadataItems.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual AnnotationType's metadataItems is not empty.
+	 * @throws AssertionError
+	 *           if the actual AnnotationType's metadataItems is not empty.
 	 */
 	public AnnotationTypeAssert hasNoMetadataItems() {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -191,9 +212,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's modifiedOn is equal to the given one.
-	 * @param modifiedOn the given modifiedOn to compare the actual AnnotationType's modifiedOn to.
+	 * 
+	 * @param modifiedOn
+	 *          the given modifiedOn to compare the actual AnnotationType's modifiedOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual AnnotationType's modifiedOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual AnnotationType's modifiedOn is not equal to the given one.
 	 */
 	public AnnotationTypeAssert hasModifiedOn(Date modifiedOn) {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -214,9 +238,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's modifier is equal to the given one.
-	 * @param modifier the given modifier to compare the actual AnnotationType's modifier to.
+	 * 
+	 * @param modifier
+	 *          the given modifier to compare the actual AnnotationType's modifier to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual AnnotationType's modifier is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual AnnotationType's modifier is not equal to the given one.
 	 */
 	public AnnotationTypeAssert hasModifier(User modifier) {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -237,9 +264,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's name is equal to the given one.
-	 * @param name the given name to compare the actual AnnotationType's name to.
+	 * 
+	 * @param name
+	 *          the given name to compare the actual AnnotationType's name to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual AnnotationType's name is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual AnnotationType's name is not equal to the given one.
 	 */
 	public AnnotationTypeAssert hasName(String name) {
 		// check that actual AnnotationType we want to make assertions on is not null.
@@ -260,9 +290,12 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 
 	/**
 	 * Verifies that the actual AnnotationType's rev is equal to the given one.
-	 * @param rev the given rev to compare the actual AnnotationType's rev to.
+	 * 
+	 * @param rev
+	 *          the given rev to compare the actual AnnotationType's rev to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual AnnotationType's rev is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual AnnotationType's rev is not equal to the given one.
 	 */
 	public AnnotationTypeAssert hasRev(long rev) {
 		// check that actual AnnotationType we want to make assertions on is not null.

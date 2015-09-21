@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -34,9 +34,6 @@ import java.util.regex.Pattern;
 
 import javax.inject.Singleton;
 import javax.persistence.TypedQuery;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -57,6 +54,8 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 
 @Singleton
 public class TranscriptionService extends AbstractStoredEntityService<Transcription> {
@@ -78,7 +77,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 		return "Transcription";
 	}
 
-	//  AnnotationService annotationService = AnnotationService.instance();
+	// AnnotationService annotationService = AnnotationService.instance();
 
 	public Transcription read(long transcription_id, User user) {
 		openEntityManager();
@@ -279,13 +278,13 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 					annotation.getAnnotatedText(), //
 					transcription.getTextLayer(), //
 					projectEntry.getName()//
-					);
+			);
 			updateParents(projectEntry, user, logLine);
 
-			//    String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
-			//      annotationMetadataItem.setData(update.metadata.get(name));
-			//      persist(annotationMetadataItem);
-			//    }
+			// String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
+			// annotationMetadataItem.setData(update.metadata.get(name));
+			// persist(annotationMetadataItem);
+			// }
 
 		} finally {
 			commitTransaction();

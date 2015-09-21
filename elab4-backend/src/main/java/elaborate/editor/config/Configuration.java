@@ -10,12 +10,12 @@ package elaborate.editor.config;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -40,7 +40,7 @@ import org.apache.commons.io.FileUtils;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 
-public class Configuration   {
+public class Configuration {
 	private static final String SOLR_SORT_FIELDS = "solr.sort_fields";
 
 	private static final String CLASS_NAME = Configuration.class.getName();
@@ -62,7 +62,7 @@ public class Configuration   {
 
 	public static void fatalError(String message) {
 		System.err.printf("## %s\n", message);
-		//    System.exit(-1);
+		// System.exit(-1);
 		throw new RuntimeException(message);
 	}
 
@@ -168,8 +168,8 @@ public class Configuration   {
 	}
 
 	public String[] getSettings(String key) {
-		//    Log.info("'{}'", xmlConfig.getListDelimiter());
-		//    Log.info("'{}'", AbstractConfiguration.getDefaultListDelimiter());
+		// Log.info("'{}'", xmlConfig.getListDelimiter());
+		// Log.info("'{}'", AbstractConfiguration.getDefaultListDelimiter());
 		return xmlConfig.getStringArray(SETTINGS_PREFIX + key);
 	}
 
@@ -223,7 +223,7 @@ public class Configuration   {
 	public static final String FROM_NAME = "email.from_name";
 	public static final String WORK_URL = "work.url";
 
-	//  public static final String CONCORDANCEKEY = "GLP";
+	// public static final String CONCORDANCEKEY = "GLP";
 
 	public boolean useInMemoryDatabase() {
 		return "test".equals(System.getProperty(APPLICATION_MODE_KEY));

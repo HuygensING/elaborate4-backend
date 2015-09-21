@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.knaw.huygens.Log;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+
+import nl.knaw.huygens.Log;
 
 public class CNWUtil {
 
@@ -61,8 +61,8 @@ public class CNWUtil {
 			int length1 = parts[1].replaceAll(" .*", "").length();
 			if (length0 > length1) {
 				parts[1] = parts[0].substring(0, length0 - length1) + parts[1];
-				//      } else if (length1 > length0) {
-				//        parts[0] = parts[0] + parts[1].substring(length0);
+				// } else if (length1 > length0) {
+				// parts[0] = parts[0] + parts[1].substring(length0);
 			}
 			String first = convertDate(parts[0]);
 			if (first.contains("/")) {
@@ -185,7 +185,7 @@ public class CNWUtil {
 
 		if (edtf.contains("+")) {
 			String[] options = edtf.split("\\+");
-			//      edtf = "{" + options[0] + "," + options[0].substring(0, 8) + options[1] + "}";
+			// edtf = "{" + options[0] + "," + options[0].substring(0, 8) + options[1] + "}";
 			if (options[1].length() == 2) {
 				edtf = fixDate(options[0]) + "/" + fixDate(options[0].substring(0, 8) + options[1]);
 			} else if (options[1].length() == 7) {
@@ -197,9 +197,9 @@ public class CNWUtil {
 
 		edtf = edtf.replace(" ", "");
 		if (edtf.contains("/")) {
-			//      String extra = "";
+			// String extra = "";
 			if (edtf.endsWith("?") || edtf.endsWith("~")) {
-				//        extra = edtf.substring(edtf.length() - 1);
+				// extra = edtf.substring(edtf.length() - 1);
 				edtf = edtf.substring(0, edtf.length() - 1);
 			}
 			Iterable<String> parts = Splitter.on("/").split(edtf);
@@ -235,13 +235,13 @@ public class CNWUtil {
 		}
 
 		if (!dateString.equals(edtf)) {
-			//			Log.info("'{}'->'{}'", dateString, edtf);
+			// Log.info("'{}'->'{}'", dateString, edtf);
 		}
 		return edtf.replaceAll(" ", "");
 	}
 
 	private int lastDayOfTheMonth(List<String> dmy) {
-		//		Log.info("dmy={}", dmy);
+		// Log.info("dmy={}", dmy);
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.valueOf(dmy.get(0)));
 		cal.set(Calendar.MONTH, Integer.valueOf(dmy.get(1)));

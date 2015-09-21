@@ -10,12 +10,12 @@ package elaborate.editor.backend;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -30,14 +30,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import nl.knaw.huygens.Log;
-
 import org.apache.commons.lang.time.StopWatch;
 
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 import elaborate.editor.solr.ElaborateSolrIndexer;
 import elaborate.util.HibernateUtil;
+import nl.knaw.huygens.Log;
 
 public class Indexer {
 	private static final int COMMIT_EVERY_N_RECORDS = 100;
@@ -63,10 +62,10 @@ public class Indexer {
 			for (ProjectEntry projectEntry : projectentries) {
 				Log.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
 						new Object[] { //
-						projectEntry.getId(), n, size, //
+								projectEntry.getId(), n, size, //
 								percentage(n, size), //
 								time_remaining(n, size, sw.getTime()) //
-						} //
+				} //
 				);
 				solr.index(projectEntry, autoCommit(n));
 				n++;

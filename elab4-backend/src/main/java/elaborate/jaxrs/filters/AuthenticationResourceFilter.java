@@ -10,12 +10,12 @@ package elaborate.jaxrs.filters;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,8 +27,6 @@ import java.util.List;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.SecurityContext;
 
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Splitter;
@@ -39,8 +37,9 @@ import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
 import elaborate.editor.model.SessionService;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
-public class AuthenticationResourceFilter   implements ResourceFilter, ContainerRequestFilter {
+public class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {
 	public static final String HEADER = "Authorization";
 
 	SessionService sessionService = SessionService.instance();
@@ -60,7 +59,7 @@ public class AuthenticationResourceFilter   implements ResourceFilter, Container
 				authentication = cookie.getValue();
 			}
 		}
-		//    Log.info("authentication={}", authentication);
+		// Log.info("authentication={}", authentication);
 		if (StringUtils.isNotBlank(authentication)) {
 			List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
 			if (parts.size() == 2) {

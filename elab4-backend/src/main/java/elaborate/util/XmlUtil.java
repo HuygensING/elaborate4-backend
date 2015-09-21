@@ -10,12 +10,12 @@ package elaborate.util;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -76,7 +76,7 @@ public class XmlUtil {
 		Document doc = Jsoup.parse(badxml);
 		doc.outputSettings().indentAmount(0).prettyPrint(false).escapeMode(Entities.EscapeMode.xhtml).charset("UTF-8");
 		return doc.body().html().replaceAll(" />", "/>").replace("\u00A0", "&#160;");
-		//    return Jsoup.clean(badxml, Whitelist.relaxed());
+		// return Jsoup.clean(badxml, Whitelist.relaxed());
 	}
 
 	static final Pattern ENDTAG_AFTER_NEWLINE_PATTERN = Pattern.compile("\n(</.*?>)"); // endtag at the beginning of line, should be at end of previouse line

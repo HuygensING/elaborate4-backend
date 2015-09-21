@@ -10,12 +10,12 @@ package elaborate.backend.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,12 +27,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Map;
 
-import nl.knaw.huygens.Log;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import nl.knaw.huygens.Log;
 
 @Ignore
 public class Elab4RestClientTest {
@@ -69,7 +69,7 @@ public class Elab4RestClientTest {
 	@Test
 	public void testGetProjectEntries() throws Exception {
 		loginAsRoot();
-		List<Map<String, Object>> entries = e4.getProjectEntries(1);
+		e4.getProjectEntries(1);
 	}
 
 	private void loginAsRoot() {

@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,11 +32,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.LockModeType;
 import javax.persistence.TypedQuery;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
-import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
 
@@ -50,6 +45,10 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.solr.ElaborateEditorQueryComposer;
 import elaborate.editor.solr.ElaborateSolrIndexer;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Singleton
 public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> {
@@ -57,7 +56,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	private ElaborateSolrIndexer solrindexer = null;
 	private ProjectService projectService = null;
 
-	//  private ProjectEntryService projectEntryService = null;
+	// private ProjectEntryService projectEntryService = null;
 
 	abstract Class<? extends AbstractStoredEntity<?>> getEntityClass();
 
@@ -111,11 +110,14 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	}
 
 	/* private */
-	/**	
-	 * @param entity the StoredEntity to check for null
-	 * @param id the id of the StoredEntity that was searched for
+	/**
+	 * @param entity
+	 *          the StoredEntity to check for null
+	 * @param id
+	 *          the id of the StoredEntity that was searched for
 	 * 
-	 * @throws NotFoundException when there was no entity found with the given id 
+	 * @throws NotFoundException
+	 *           when there was no entity found with the given id
 	 */
 	protected void checkEntityFound(T entity, long id) {
 		if (entity == null) {
@@ -157,7 +159,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 
 	/* entitymanager methods */
 	final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
-	//  EntityManager entityManager;
+	// EntityManager entityManager;
 	protected static final ThreadLocal<EntityManager> tlem = new ThreadLocal<EntityManager>() {};
 
 	public EntityManager getEntityManager() {
@@ -238,7 +240,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	void initServices() {
 		if (projectService == null) {
 			projectService = ProjectService.instance();
-			//      projectEntryService = ProjectEntryService.instance();
+			// projectEntryService = ProjectEntryService.instance();
 		}
 	}
 
@@ -260,7 +262,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		if (user.getPermissionFor(project).canWrite()) {
 			return project;
 		} else {
-			//			closeEntityManager();
+			// closeEntityManager();
 			throw new UnauthorizedException("user " + user.getUsername() + " has no write permission for project " + project.getName());
 		}
 	}

@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -34,7 +34,9 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Creates a new </code>{@link FacsimileAssert}</code> to make assertions on actual Facsimile.
-	 * @param actual the Facsimile we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the Facsimile we want to make assertions on.
 	 */
 	public FacsimileAssert(Facsimile actual) {
 		super(actual, FacsimileAssert.class);
@@ -43,7 +45,9 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 	/**
 	 * An entry point for FacsimileAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
 	 * With a static import, one's can write directly : <code>assertThat(myFacsimile)</code> and get specific assertion with code completion.
-	 * @param actual the Facsimile we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the Facsimile we want to make assertions on.
 	 * @return a new </code>{@link FacsimileAssert}</code>
 	 */
 	public static FacsimileAssert assertThat(Facsimile actual) {
@@ -52,9 +56,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's createdOn is equal to the given one.
-	 * @param createdOn the given createdOn to compare the actual Facsimile's createdOn to.
+	 * 
+	 * @param createdOn
+	 *          the given createdOn to compare the actual Facsimile's createdOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's createdOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's createdOn is not equal to the given one.
 	 */
 	public FacsimileAssert hasCreatedOn(Date createdOn) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -75,9 +82,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's creator is equal to the given one.
-	 * @param creator the given creator to compare the actual Facsimile's creator to.
+	 * 
+	 * @param creator
+	 *          the given creator to compare the actual Facsimile's creator to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's creator is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's creator is not equal to the given one.
 	 */
 	public FacsimileAssert hasCreator(User creator) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -98,9 +108,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's filename is equal to the given one.
-	 * @param filename the given filename to compare the actual Facsimile's filename to.
+	 * 
+	 * @param filename
+	 *          the given filename to compare the actual Facsimile's filename to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's filename is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's filename is not equal to the given one.
 	 */
 	public FacsimileAssert hasFilename(String filename) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -121,9 +134,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's id is equal to the given one.
-	 * @param id the given id to compare the actual Facsimile's id to.
+	 * 
+	 * @param id
+	 *          the given id to compare the actual Facsimile's id to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's id is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's id is not equal to the given one.
 	 */
 	public FacsimileAssert hasId(long id) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -144,9 +160,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's modifiedOn is equal to the given one.
-	 * @param modifiedOn the given modifiedOn to compare the actual Facsimile's modifiedOn to.
+	 * 
+	 * @param modifiedOn
+	 *          the given modifiedOn to compare the actual Facsimile's modifiedOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's modifiedOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's modifiedOn is not equal to the given one.
 	 */
 	public FacsimileAssert hasModifiedOn(Date modifiedOn) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -167,9 +186,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's modifier is equal to the given one.
-	 * @param modifier the given modifier to compare the actual Facsimile's modifier to.
+	 * 
+	 * @param modifier
+	 *          the given modifier to compare the actual Facsimile's modifier to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's modifier is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's modifier is not equal to the given one.
 	 */
 	public FacsimileAssert hasModifier(User modifier) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -190,9 +212,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's name is equal to the given one.
-	 * @param name the given name to compare the actual Facsimile's name to.
+	 * 
+	 * @param name
+	 *          the given name to compare the actual Facsimile's name to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's name is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's name is not equal to the given one.
 	 */
 	public FacsimileAssert hasName(String name) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -213,9 +238,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's projectEntry is equal to the given one.
-	 * @param projectEntry the given projectEntry to compare the actual Facsimile's projectEntry to.
+	 * 
+	 * @param projectEntry
+	 *          the given projectEntry to compare the actual Facsimile's projectEntry to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's projectEntry is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's projectEntry is not equal to the given one.
 	 */
 	public FacsimileAssert hasProjectEntry(ProjectEntry projectEntry) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -236,9 +264,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's rev is equal to the given one.
-	 * @param rev the given rev to compare the actual Facsimile's rev to.
+	 * 
+	 * @param rev
+	 *          the given rev to compare the actual Facsimile's rev to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's rev is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's rev is not equal to the given one.
 	 */
 	public FacsimileAssert hasRev(long rev) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -259,9 +290,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's thumbnailUrl is equal to the given one.
-	 * @param thumbnailUrl the given thumbnailUrl to compare the actual Facsimile's thumbnailUrl to.
+	 * 
+	 * @param thumbnailUrl
+	 *          the given thumbnailUrl to compare the actual Facsimile's thumbnailUrl to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's thumbnailUrl is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's thumbnailUrl is not equal to the given one.
 	 */
 	public FacsimileAssert hasThumbnailUrl(String thumbnailUrl) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -282,9 +316,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's title is equal to the given one.
-	 * @param title the given title to compare the actual Facsimile's title to.
+	 * 
+	 * @param title
+	 *          the given title to compare the actual Facsimile's title to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's title is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's title is not equal to the given one.
 	 */
 	public FacsimileAssert hasTitle(String title) {
 		// check that actual Facsimile we want to make assertions on is not null.
@@ -305,9 +342,12 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 
 	/**
 	 * Verifies that the actual Facsimile's zoomableUrl is equal to the given one.
-	 * @param zoomableUrl the given zoomableUrl to compare the actual Facsimile's zoomableUrl to.
+	 * 
+	 * @param zoomableUrl
+	 *          the given zoomableUrl to compare the actual Facsimile's zoomableUrl to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Facsimile's zoomableUrl is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Facsimile's zoomableUrl is not equal to the given one.
 	 */
 	public FacsimileAssert hasZoomableUrl(String zoomableUrl) {
 		// check that actual Facsimile we want to make assertions on is not null.

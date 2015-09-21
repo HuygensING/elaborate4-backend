@@ -10,12 +10,12 @@ package elaborate.editor.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,8 +32,6 @@ import java.util.Map.Entry;
 
 import javax.inject.Singleton;
 
-import nl.knaw.huygens.security.client.UnauthorizedException;
-
 import org.apache.commons.lang.RandomStringUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -44,9 +42,10 @@ import com.google.common.collect.Maps;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;
 import elaborate.editor.security.ElaborateSecurityContext;
+import nl.knaw.huygens.security.client.UnauthorizedException;
 
 @Singleton
-public class SessionService   {
+public class SessionService {
 	private static SessionService instance;
 	private static final int MINUTES = 1000 * 60;
 	static final int SESSION_TIMEOUT = 8 * 60 * MINUTES;
@@ -66,7 +65,7 @@ public class SessionService   {
 	public String startSession(User user) {
 		String sessionId = RandomStringUtils.randomAlphanumeric(SESSIONID_SIZE);
 		sessionMap.put(sessionId, new Session(user.getId()));
-		//    Log.info("sessionMap={}", sessionMap);
+		// Log.info("sessionMap={}", sessionMap);
 		return sessionId;
 	}
 
@@ -75,7 +74,7 @@ public class SessionService   {
 		if (session != null && session.isFederated()) {
 			SecurityWrapper.delete(sessionId);
 		}
-		//    Log.info("sessionMap={}", sessionMap);
+		// Log.info("sessionMap={}", sessionMap);
 	}
 
 	public boolean isSessionActive(String sessionId) {

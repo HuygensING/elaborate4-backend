@@ -10,12 +10,12 @@ package elaborate.editor.export.tei;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -38,9 +38,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import nl.knaw.huygens.tei.DelegatingVisitor;
-import nl.knaw.huygens.tei.XmlContext;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,8 +46,10 @@ import org.xml.sax.SAXException;
 import com.google.common.base.Charsets;
 
 import elaborate.util.XmlUtil;
+import nl.knaw.huygens.tei.DelegatingVisitor;
+import nl.knaw.huygens.tei.XmlContext;
 
-public class HtmlTeiConverter   {
+public class HtmlTeiConverter {
 	private Document teiDocument;
 	private final TeiConversionConfig config;
 	private final EntityManager entityManager;
@@ -62,11 +61,11 @@ public class HtmlTeiConverter   {
 		if (_html == null) {
 			html = "";
 		}
-		//    Log.info("html in = ''{}''", html);
+		// Log.info("html in = ''{}''", html);
 		String xml = toXml(html);
 		String teiSource = convert2TEI(xml, transcriptionType);
 		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-		//    System.out.println(teiSource);
+		// System.out.println(teiSource);
 		try {
 			DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
 			teiDocument = docBuilder.parse(new ByteArrayInputStream(teiSource.getBytes(Charsets.UTF_8)));

@@ -10,12 +10,12 @@ package elaborate.editor.solr;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -43,21 +43,21 @@ import nl.knaw.huygens.facetedsearch.SolrFields;
 
 public class ElaborateSolrIndexerTest extends AbstractTest {
 
-	//	private ProjectEntry entry;
+	// private ProjectEntry entry;
 
-	//	//	@Before
-	//	public void setUp() throws Exception {
-	//		Project project = new Project();
-	//		List<ProjectEntryMetadataItem> projectEntryMetadataItems = ImmutableList.<ProjectEntryMetadataItem> of();
-	//		User creator = new User();
-	//		entry = project.addEntry("brief 1", creator).setProjectEntryMetadataItems(projectEntryMetadataItems);
-	//		entry.addTranscription(creator)//
-	//				.setBody("<body><ab id=\"9085822\"/>sdgdgdgsdgsdfg<ae id=\"9085822\"/></body>")//
-	//				.setTextLayer("layer1");
-	//		entry.addTranscription(creator)//
-	//				.setBody("<body>aap <i>noot</i> mies</body>")//
-	//				.setTextLayer("layer2");
-	//	}
+	// // @Before
+	// public void setUp() throws Exception {
+	// Project project = new Project();
+	// List<ProjectEntryMetadataItem> projectEntryMetadataItems = ImmutableList.<ProjectEntryMetadataItem> of();
+	// User creator = new User();
+	// entry = project.addEntry("brief 1", creator).setProjectEntryMetadataItems(projectEntryMetadataItems);
+	// entry.addTranscription(creator)//
+	// .setBody("<body><ab id=\"9085822\"/>sdgdgdgsdgsdfg<ae id=\"9085822\"/></body>")//
+	// .setTextLayer("layer1");
+	// entry.addTranscription(creator)//
+	// .setBody("<body>aap <i>noot</i> mies</body>")//
+	// .setTextLayer("layer2");
+	// }
 
 	@Test
 	public void test_newlines_in_entry_metadata_are_replaced() throws Exception {

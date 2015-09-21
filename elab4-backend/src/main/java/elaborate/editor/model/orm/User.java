@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -79,8 +79,8 @@ public class User extends AbstractStoredEntity<User> {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(//
-	name = "project_users",//
-	joinColumns = { @JoinColumn(name = "user_id", columnDefinition = "int4", nullable = false, updatable = false) },//
+	name = "project_users", //
+	joinColumns = { @JoinColumn(name = "user_id", columnDefinition = "int4", nullable = false, updatable = false) }, //
 	inverseJoinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) }//
 	)
 	private List<Project> projects;
@@ -145,7 +145,7 @@ public class User extends AbstractStoredEntity<User> {
 		return rolestring;
 	}
 
-	//comma-seperated list of roles (Roles.USER,Roles.ADMIN)
+	// comma-seperated list of roles (Roles.USER,Roles.ADMIN)
 	public User setRoleString(String roleString) {
 		this.rolestring = roleString;
 		return this;
@@ -193,7 +193,8 @@ public class User extends AbstractStoredEntity<User> {
 	}
 
 	/**
-	 * @param role The string representation of the role to check for
+	 * @param role
+	 *          The string representation of the role to check for
 	 * @return true if this User has the given role, false otherwise
 	 */
 	public boolean hasRole(String role) {

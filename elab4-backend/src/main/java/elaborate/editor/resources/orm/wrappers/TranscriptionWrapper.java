@@ -10,12 +10,12 @@ package elaborate.editor.resources.orm.wrappers;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -97,7 +97,7 @@ public class TranscriptionWrapper {
 	public List<Integer> annotationNumbers = Lists.newArrayList();
 
 	void convertBodyForOutput(String bodyIn) {
-		//		Log.info("body from db={}", bodyIn);
+		// Log.info("body from db={}", bodyIn);
 		String xml = bodyIn;
 		if (!XmlUtil.isWellFormed(bodyIn)) {
 			Log.error("body not well-formed:\n({})", bodyIn);
@@ -139,7 +139,7 @@ public class TranscriptionWrapper {
 	static String convertFromInput(String bodyIn) {
 		bodyIn = bodyIn//
 				.replaceAll("<br>", "<br/>")//
-				.replace("\u001A", " ")//		0x1a
+				.replace("\u001A", " ")// 0x1a
 				.replace("", " ")//
 				.replace("&nbsp;", "&#160;")//
 				;

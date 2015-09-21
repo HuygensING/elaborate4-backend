@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -185,7 +185,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		List<ProjectEntry> projectEntriesInOrder;
 		openEntityManager();
 		try {
-			Project project = getProjectIfUserCanRead(id, user);
+			getProjectIfUserCanRead(id, user);
 			projectEntriesInOrder = getProjectEntriesInOrder(id);
 		} finally {
 			closeEntityManager();
@@ -198,31 +198,31 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		openEntityManager();
 		try {
 			Project project = getProjectIfUserCanRead(id, user);
-			Iterable<String> projectEntryMetadataFieldnames = project.getProjectEntryMetadataFieldnames();
+			project.getProjectEntryMetadataFieldnames();
 
-			//		select l1.data as bewaarplaats,
-			//    l2.data as collectie,
-			//    l3.data as signatuur,
-			//    l4.data as afzenders,
-			//    l5.data as ontvangers,
-			//    l6.data as datum
-			//from project_entries e
-			//left outer join project_entry_metadata_items l0
+			// select l1.data as bewaarplaats,
+			// l2.data as collectie,
+			// l3.data as signatuur,
+			// l4.data as afzenders,
+			// l5.data as ontvangers,
+			// l6.data as datum
+			// from project_entries e
+			// left outer join project_entry_metadata_items l0
 			// on (l0.project_entry_id = e.id and l0.field='Scan(s)')
-			//left outer join project_entry_metadata_items l1
+			// left outer join project_entry_metadata_items l1
 			// on (l1.project_entry_id = e.id and l1.field='Bewaarplaats')
-			//left outer join project_entry_metadata_items l2
+			// left outer join project_entry_metadata_items l2
 			// on (l2.project_entry_id = e.id and l2.field='Collectie')
-			//left outer join project_entry_metadata_items l3
+			// left outer join project_entry_metadata_items l3
 			// on (l3.project_entry_id = e.id and l3.field='Signatuur')
-			//left outer join project_entry_metadata_items l4
+			// left outer join project_entry_metadata_items l4
 			// on (l4.project_entry_id = e.id and l4.field='Afzender(s)')
-			//left outer join project_entry_metadata_items l5
+			// left outer join project_entry_metadata_items l5
 			// on (l5.project_entry_id = e.id and l5.field='Ontvanger(s)')
-			//left outer join project_entry_metadata_items l6
+			// left outer join project_entry_metadata_items l6
 			// on (l6.project_entry_id = e.id and l6.field='Datum')
-			//where e.project_id = 44 and l0.data=''
-			//order by l0.data,l1.data, l2.data, l3.data ,l4.data, l5.data, l6.data;
+			// where e.project_id = 44 and l0.data=''
+			// order by l0.data,l1.data, l2.data, l3.data ,l4.data, l5.data, l6.data;
 
 			List<ProjectEntry> projectEntriesInOrder = getProjectEntriesInOrder(id);
 			for (ProjectEntry projectEntry : projectEntriesInOrder) {
@@ -242,7 +242,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public List<ProjectEntry> getProjectEntriesInOrder0(long id) {
 		find(getEntityClass(), id);
-		List<ProjectEntry> resultList = getEntityManager()//.
+		List<ProjectEntry> resultList = getEntityManager()// .
 				.createQuery(
 						"from ProjectEntry pe" + //
 								" where project_id=:projectId" + //
@@ -271,7 +271,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	public List<Long> getProjectEntryIdsInOrder(long id) {
 		Project project = find(getEntityClass(), id);
-		List<Long> resultList = getEntityManager()//.
+		List<Long> resultList = getEntityManager()// .
 				.createQuery(
 						"select pe.id from ProjectEntry pe" + //
 								" left join pe.projectEntryMetadataItems l1 with l1.field=:level1" + //
@@ -358,7 +358,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		return map;
 	}
 
-	/* private methods*/
+	/* private methods */
 	// Throws Unauthorized acception when user has no read access rights to the project with id project_id
 	Project getProjectIfUserCanRead(long project_id, User user) {
 		if (rootOrAdmin(user)) {
@@ -371,7 +371,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 				.setParameter("userId", user.getId())//
 				.setParameter("projectId", project_id)//
 				.getResultList();
-		//		logMemory();
+		// logMemory();
 		if (!resultList.isEmpty()) {
 			project = resultList.get(0).getProject();
 			Hibernate.initialize(project);
@@ -400,20 +400,20 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	void logMemory() {
 		int mb = 1024 * 1024;
 		System.gc();
-		//Getting the runtime reference from system
+		// Getting the runtime reference from system
 		Runtime runtime = Runtime.getRuntime();
 		Log.info("##### Heap utilization statistics [MB] #####");
 
-		//Print used memory
+		// Print used memory
 		Log.info("Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
-		//Print free memory
+		// Print free memory
 		Log.info("Free Memory:" + runtime.freeMemory() / mb);
 
-		//Print total available memory
+		// Print total available memory
 		Log.info("Total Memory:" + runtime.totalMemory() / mb);
 
-		//Print Maximum available memory
+		// Print Maximum available memory
 		Log.info("Max Memory:" + runtime.maxMemory() / mb);
 	}
 
@@ -522,7 +522,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	private Map<String, Object> getProjectEntriesStatistics(long project_id, EntityManager entityManager, Project project) {
 		Long transcriptionCount = getTranscriptionCount(project_id, entityManager);
-		//		Long annotationCount = getAnnotationCount(project_id, entityManager);
+		// Long annotationCount = getAnnotationCount(project_id, entityManager);
 		Long facsimileCount = getFacsimileCount(project_id, entityManager);
 
 		Map<String, Object> textLayerCountMap = getTextLayerCountMap(project_id, entityManager, project);
@@ -562,18 +562,18 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		return transcriptionCount;
 	}
 
-	//	private Long getAnnotationCount(long project_id, EntityManager entityManager) {
-	//		Long annotationCount = (Long) entityManager//
-	//				.createQuery("select count(*) from Annotation"//
-	//						+ " where transcription_id in"//
-	//						+ "   (select id from Transcription"//
-	//						+ "     where project_entry_id in"//
-	//						+ "      (select id from ProjectEntry where project_id=:project_id))"//
-	//				)//
-	//				.setParameter("project_id", project_id)//
-	//				.getSingleResult();
-	//		return annotationCount;
-	//	}
+	// private Long getAnnotationCount(long project_id, EntityManager entityManager) {
+	// Long annotationCount = (Long) entityManager//
+	// .createQuery("select count(*) from Annotation"//
+	// + " where transcription_id in"//
+	// + " (select id from Transcription"//
+	// + " where project_entry_id in"//
+	// + " (select id from ProjectEntry where project_id=:project_id))"//
+	// )//
+	// .setParameter("project_id", project_id)//
+	// .getSingleResult();
+	// return annotationCount;
+	// }
 
 	private Long getFacsimileCount(long project_id, EntityManager entityManager) {
 		Long facsimileCount = (Long) entityManager//
@@ -931,7 +931,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 		Function<Annotation, TagInfo> mapToL = new Function<Annotation, TagInfo>() {
 			@Override
 			public TagInfo apply(Annotation annotation) {
-				TagInfo tagInfo = new TagInfo().setName("l")/*.setSkipNewlineAfter(true)*/;
+				TagInfo tagInfo = new TagInfo().setName("l")/* .setSkipNewlineAfter(true) */;
 				for (AnnotationMetadataItem annotationMetadataItem : annotation.getAnnotationMetadataItems()) {
 					String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
 					String value = annotationMetadataItem.getData();
@@ -1062,7 +1062,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	public ReindexStatus createReindexStatus(long project_id) {
 		openEntityManager();
 		try {
-			Project project = read(project_id);
+			read(project_id);
 		} finally {
 			closeEntityManager();
 		}
@@ -1073,7 +1073,9 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
 	/**
 	 * Remove annotations that have no corresponding annotationmarkers (begin and end) in the Transcription Body
-	 * @param modifier The User credited with the removal
+	 * 
+	 * @param modifier
+	 *          The User credited with the removal
 	 */
 	public void removeOrphanedAnnotations(long project_id) {
 		beginTransaction();

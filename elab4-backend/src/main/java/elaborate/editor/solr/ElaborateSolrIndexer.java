@@ -10,12 +10,12 @@ package elaborate.editor.solr;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -152,8 +152,8 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			Datable datable = new Datable(CNW_UTIL.convertDate(value));
 			if (datable.isValid() && !value.startsWith("XXXX")) {
 				// ignore dates where year is not known
-				//			doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
-				//			doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
+				// doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
+				// doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
 				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 				doc.addField("metadata_datum_lower", dateFormat.format(datable.getFromDate()), 1.0f);
 				doc.addField("metadata_datum_upper", dateFormat.format(datable.getToDate()), 1.0f);

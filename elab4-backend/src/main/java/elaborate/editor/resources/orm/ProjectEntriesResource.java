@@ -10,12 +10,12 @@ package elaborate.editor.resources.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -37,9 +37,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import com.sun.jersey.spi.resource.Singleton;
@@ -60,6 +57,8 @@ import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
 import elaborate.util.XmlUtil;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 @AuthorizationRequired
 @Singleton
@@ -191,7 +190,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 		projectEntryService.deleteFacsimile(facsimile_id, user);
 	}
 
-	/* transcriptions*/
+	/* transcriptions */
 	@GET
 	@Path("{entry_id: [0-9]+}/transcriptions")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
@@ -216,7 +215,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 		return Response.created(createURI(transcription)).build();
 	}
 
-	//GET /elab4testBE/projects/28/entries/13553/transcriptions
+	// GET /elab4testBE/projects/28/entries/13553/transcriptions
 	@GET
 	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}")
 	@Produces(UTF8MediaType.APPLICATION_JSON)
@@ -239,7 +238,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 
 	private void checkForWellFormedBody(TranscriptionWrapper transcriptionWrapper) {
 		if (!XmlUtil.isWellFormed(XmlUtil.wrapInXml(transcriptionWrapper.getBody().replace("<br>", "<br/>".replace("&nbsp;", "&#160;"))))) {
-			//			throw new BadRequestException("xml in body not well-formed");
+			// throw new BadRequestException("xml in body not well-formed");
 		}
 	}
 
@@ -251,7 +250,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
 		transcriptionService.delete(transcription_id, user);
 	}
 
-	/* annotations*/
+	/* annotations */
 	@GET
 	@Path("{entry_id: [0-9]+}/transcriptions/{transcription_id: [0-9]+}/annotations")
 	@Produces(UTF8MediaType.APPLICATION_JSON)

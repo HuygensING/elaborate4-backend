@@ -10,12 +10,12 @@ package elaborate.util;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -59,8 +59,10 @@ public final class PasswordUtil {
 
 	/**
 	 *
-	 * @param plainPassword a plain text password
-	 * @param encodedPassword Base64 encoded MD5 hash
+	 * @param plainPassword
+	 *          a plain text password
+	 * @param encodedPassword
+	 *          Base64 encoded MD5 hash
 	 * @return
 	 */
 	public static synchronized boolean matches(String plainPassword, String encodedPassword) {
@@ -71,10 +73,9 @@ public final class PasswordUtil {
 		String md5PasswordString = new String(md5Password);
 
 		/*
-		 *  // return MessageDigest.isEqual(md5Password, base64DecodedMd5Password);
-		 *  Fix authentication by doing a string comparison instead of a byte comparison.
-		 *  We can't change eLaborate Classic for now.
-		 *
+		 * // return MessageDigest.isEqual(md5Password, base64DecodedMd5Password);
+		 * Fix authentication by doing a string comparison instead of a byte comparison.
+		 * We can't change eLaborate Classic for now.
 		 */
 
 		return (StringUtils.equals(md5PasswordString, base64DecodedPasswordAsString));

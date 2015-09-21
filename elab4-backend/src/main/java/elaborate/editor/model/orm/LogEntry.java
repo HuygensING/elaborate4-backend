@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -40,19 +40,19 @@ import elaborate.editor.model.AbstractStoredEntity;
 @Entity
 @Table(name = "log_entries")
 @XmlRootElement
-public class LogEntry extends AbstractStoredEntity<LogEntry> implements Comparable<LogEntry> {
+public class LogEntry extends AbstractStoredEntity<LogEntry>implements Comparable<LogEntry> {
 	private static final long serialVersionUID = 1L;
 
 	String comment;
 
-	//  @Column(name = "project_title")
+	// @Column(name = "project_title")
 	String projectTitle;
 
-	//  @Column(name = "user_name")
+	// @Column(name = "user_name")
 	String userName;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	//  @Column(name = "created_on")
+	// @Column(name = "created_on")
 	Date createdOn;
 
 	@ManyToOne(fetch = FetchType.LAZY)

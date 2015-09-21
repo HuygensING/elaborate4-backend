@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,7 +35,9 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Creates a new </code>{@link AnnotationAssert}</code> to make assertions on actual Annotation.
-	 * @param actual the Annotation we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the Annotation we want to make assertions on.
 	 */
 	public AnnotationAssert(Annotation actual) {
 		super(actual, AnnotationAssert.class);
@@ -44,7 +46,9 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 	/**
 	 * An entry point for AnnotationAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
 	 * With a static import, one's can write directly : <code>assertThat(myAnnotation)</code> and get specific assertion with code completion.
-	 * @param actual the Annotation we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the Annotation we want to make assertions on.
 	 * @return a new </code>{@link AnnotationAssert}</code>
 	 */
 	public static AnnotationAssert assertThat(Annotation actual) {
@@ -53,9 +57,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's annotatedText is equal to the given one.
-	 * @param annotatedText the given annotatedText to compare the actual Annotation's annotatedText to.
+	 * 
+	 * @param annotatedText
+	 *          the given annotatedText to compare the actual Annotation's annotatedText to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's annotatedText is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's annotatedText is not equal to the given one.
 	 */
 	public AnnotationAssert hasAnnotatedText(String annotatedText) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -76,9 +83,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's annotationMetadataItems contains the given AnnotationMetadataItem elements.
-	 * @param annotationMetadataItems the given elements that should be contained in actual Annotation's annotationMetadataItems.
+	 * 
+	 * @param annotationMetadataItems
+	 *          the given elements that should be contained in actual Annotation's annotationMetadataItems.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Annotation's annotationMetadataItems does not contain all given AnnotationMetadataItem elements.
+	 * @throws AssertionError
+	 *           if the actual Annotation's annotationMetadataItems does not contain all given AnnotationMetadataItem elements.
 	 */
 	public AnnotationAssert hasAnnotationMetadataItems(AnnotationMetadataItem... annotationMetadataItems) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -101,8 +111,10 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation has no annotationMetadataItems.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Annotation's annotationMetadataItems is not empty.
+	 * @throws AssertionError
+	 *           if the actual Annotation's annotationMetadataItems is not empty.
 	 */
 	public AnnotationAssert hasNoAnnotationMetadataItems() {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -122,9 +134,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's annotationNo is equal to the given one.
-	 * @param annotationNo the given annotationNo to compare the actual Annotation's annotationNo to.
+	 * 
+	 * @param annotationNo
+	 *          the given annotationNo to compare the actual Annotation's annotationNo to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's annotationNo is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's annotationNo is not equal to the given one.
 	 */
 	public AnnotationAssert hasAnnotationNo(int annotationNo) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -145,9 +160,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's annotationType is equal to the given one.
-	 * @param annotationType the given annotationType to compare the actual Annotation's annotationType to.
+	 * 
+	 * @param annotationType
+	 *          the given annotationType to compare the actual Annotation's annotationType to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's annotationType is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's annotationType is not equal to the given one.
 	 */
 	public AnnotationAssert hasAnnotationType(AnnotationType annotationType) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -168,9 +186,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's body is equal to the given one.
-	 * @param body the given body to compare the actual Annotation's body to.
+	 * 
+	 * @param body
+	 *          the given body to compare the actual Annotation's body to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's body is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's body is not equal to the given one.
 	 */
 	public AnnotationAssert hasBody(String body) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -191,9 +212,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's createdOn is equal to the given one.
-	 * @param createdOn the given createdOn to compare the actual Annotation's createdOn to.
+	 * 
+	 * @param createdOn
+	 *          the given createdOn to compare the actual Annotation's createdOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's createdOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's createdOn is not equal to the given one.
 	 */
 	public AnnotationAssert hasCreatedOn(Date createdOn) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -214,9 +238,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's creator is equal to the given one.
-	 * @param creator the given creator to compare the actual Annotation's creator to.
+	 * 
+	 * @param creator
+	 *          the given creator to compare the actual Annotation's creator to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's creator is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's creator is not equal to the given one.
 	 */
 	public AnnotationAssert hasCreator(User creator) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -237,9 +264,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's id is equal to the given one.
-	 * @param id the given id to compare the actual Annotation's id to.
+	 * 
+	 * @param id
+	 *          the given id to compare the actual Annotation's id to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's id is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's id is not equal to the given one.
 	 */
 	public AnnotationAssert hasId(long id) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -260,9 +290,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's modifiedOn is equal to the given one.
-	 * @param modifiedOn the given modifiedOn to compare the actual Annotation's modifiedOn to.
+	 * 
+	 * @param modifiedOn
+	 *          the given modifiedOn to compare the actual Annotation's modifiedOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's modifiedOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's modifiedOn is not equal to the given one.
 	 */
 	public AnnotationAssert hasModifiedOn(Date modifiedOn) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -283,9 +316,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's modifier is equal to the given one.
-	 * @param modifier the given modifier to compare the actual Annotation's modifier to.
+	 * 
+	 * @param modifier
+	 *          the given modifier to compare the actual Annotation's modifier to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's modifier is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's modifier is not equal to the given one.
 	 */
 	public AnnotationAssert hasModifier(User modifier) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -306,9 +342,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's rev is equal to the given one.
-	 * @param rev the given rev to compare the actual Annotation's rev to.
+	 * 
+	 * @param rev
+	 *          the given rev to compare the actual Annotation's rev to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's rev is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's rev is not equal to the given one.
 	 */
 	public AnnotationAssert hasRev(long rev) {
 		// check that actual Annotation we want to make assertions on is not null.
@@ -329,9 +368,12 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 
 	/**
 	 * Verifies that the actual Annotation's transcription is equal to the given one.
-	 * @param transcription the given transcription to compare the actual Annotation's transcription to.
+	 * 
+	 * @param transcription
+	 *          the given transcription to compare the actual Annotation's transcription to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Annotation's transcription is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Annotation's transcription is not equal to the given one.
 	 */
 	public AnnotationAssert hasTranscription(Transcription transcription) {
 		// check that actual Annotation we want to make assertions on is not null.

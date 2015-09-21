@@ -10,12 +10,12 @@ package elaborate.editor.publish;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -118,9 +118,8 @@ public class PublishTask implements Runnable {
 		prepareSolr();
 		entityManager = HibernateUtil.getEntityManager();
 		ProjectService ps = ProjectService.instance();
-		List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
 		ps.setEntityManager(entityManager);
-		//    annotationService.setEntityManager(entityManager);
+		List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
 		List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
 		annotationTypes = ps.getAnnotationTypesForProject(projectId);
 		annotationParameters = ps.getAnnotationParametersForProject(projectId);
@@ -276,8 +275,8 @@ public class PublishTask implements Runnable {
 		map.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
 
 		map.put("thumbnails", thumbnails);
-		//		map.put("entryMetadataFields", project.getProjectEntryMetadataFieldnames());
-		//		map.put("baseURL", getBaseURL(getBasename(project)));
+		// map.put("entryMetadataFields", project.getProjectEntryMetadataFieldnames());
+		// map.put("baseURL", getBaseURL(getBasename(project)));
 		map.put("baseURL", getBaseURL(project.getName()));
 		map.put("annotationIndex", ANNOTATION_INDEX_JSON);
 
@@ -286,15 +285,15 @@ public class PublishTask implements Runnable {
 		addIfNotNull(map, "entryTermPlural", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_PLURAL));
 		map.put("metadata", metadataMap);
 
-		//		Map<String, String> settingsMap = ProjectService.instance().getProjectSettings(project.getId(), project.getModifier());
-		//		Map<String, Object> projectSettings = Maps.newHashMap();
-		//		projectSettings.putAll(settingsMap);
-		//		projectSettings.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
+		// Map<String, String> settingsMap = ProjectService.instance().getProjectSettings(project.getId(), project.getModifier());
+		// Map<String, Object> projectSettings = Maps.newHashMap();
+		// projectSettings.putAll(settingsMap);
+		// projectSettings.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
 		//
-		//		List<String> publishableTextLayers = settings.getTextLayers();
-		//		projectSettings.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
+		// List<String> publishableTextLayers = settings.getTextLayers();
+		// projectSettings.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
 		//
-		//		map.put("settings", projectSettings);
+		// map.put("settings", projectSettings);
 		return map;
 	}
 
@@ -304,13 +303,13 @@ public class PublishTask implements Runnable {
 		};
 	}
 
-	//  private Map<String, Object> getMetadata(Project project) {
-	//    Map<String, Object> metamap = Maps.newHashMap();
-	//    for (ProjectMetadataItem projectMetadataItem : project.getProjectMetadataItems()) {
-	//      metamap.put(projectMetadataItem.getField(), projectMetadataItem.getData());
-	//    }
-	//    return metamap;
-	//  }
+	// private Map<String, Object> getMetadata(Project project) {
+	// Map<String, Object> metamap = Maps.newHashMap();
+	// for (ProjectMetadataItem projectMetadataItem : project.getProjectMetadataItems()) {
+	// metamap.put(projectMetadataItem.getField(), projectMetadataItem.getData());
+	// }
+	// return metamap;
+	// }
 
 	private static final Comparator<Facsimile> SORT_ON_NAME = new Comparator<Facsimile>() {
 		@Override
@@ -403,21 +402,21 @@ public class PublishTask implements Runnable {
 		return list;
 	}
 
-	//  private List<Map<String, Object>> getAnnotationData(Transcription transcription) {
-	//    List<Map<String, Object>> list = Lists.newArrayList();
-	//    List<Annotation> annotations = transcription.getAnnotations();
-	//    for (Annotation annotation : annotations) {
-	//      AnnotationType annotationType = annotation.getAnnotationType();
-	//      if (settings.includeAnnotationType(annotationType)) {
-	//        Map<String, Object> map = Maps.newHashMap();
-	//        map.put("n", annotation.getAnnotationNo());
-	//        map.put("text", annotation.getBody());
-	//        map.put("type", getAnnotationTypeData(annotationType, annotation.getAnnotationMetadataItems()));
-	//        list.add(map);
-	//      }
-	//    }
-	//    return list;
-	//  }
+	// private List<Map<String, Object>> getAnnotationData(Transcription transcription) {
+	// List<Map<String, Object>> list = Lists.newArrayList();
+	// List<Annotation> annotations = transcription.getAnnotations();
+	// for (Annotation annotation : annotations) {
+	// AnnotationType annotationType = annotation.getAnnotationType();
+	// if (settings.includeAnnotationType(annotationType)) {
+	// Map<String, Object> map = Maps.newHashMap();
+	// map.put("n", annotation.getAnnotationNo());
+	// map.put("text", annotation.getBody());
+	// map.put("type", getAnnotationTypeData(annotationType, annotation.getAnnotationMetadataItems()));
+	// list.add(map);
+	// }
+	// }
+	// return list;
+	// }
 
 	private AnnotationTypeData getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
 		Map<String, Object> metadata = getMetadataMap(meta);
@@ -521,7 +520,7 @@ public class PublishTask implements Runnable {
 		json = new File(jsonDir, ANNOTATION_INDEX_JSON);
 		exportJson(json, annotationIndex.asMap());
 
-		//    String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
+		// String indexfilename = "index-" + settings.getProjectType() + ".html.ftl";
 		String indexfilename = "index.html.ftl";
 		File destIndex = new File(distDir, "index.html");
 		String projectType = settings.getProjectType();
@@ -566,7 +565,7 @@ public class PublishTask implements Runnable {
 	}
 
 	private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields, Map<String, String> typographicalAnnotationMap) {
-		//    String entryFilename = entryFilename(entryNum);
+		// String entryFilename = entryFilename(entryNum);
 		String entryFilename = projectEntry.getId() + ".json";
 		File json = new File(jsonDir, entryFilename);
 		EntityManager entityManager = HibernateUtil.getEntityManager();
@@ -731,7 +730,7 @@ public class PublishTask implements Runnable {
 		}
 
 		public AnnotationData setText(String body) {
-			//			this.body = XmlUtil.removeXMLtags(body.replaceAll("<span class=\"annotationStub\">.*?</span>", "")).trim();
+			// this.body = XmlUtil.removeXMLtags(body.replaceAll("<span class=\"annotationStub\">.*?</span>", "")).trim();
 			this.body = body.trim();
 			return this;
 		}

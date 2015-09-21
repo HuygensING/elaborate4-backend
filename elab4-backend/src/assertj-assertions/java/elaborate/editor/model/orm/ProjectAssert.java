@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -38,7 +38,9 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Creates a new </code>{@link ProjectAssert}</code> to make assertions on actual Project.
-	 * @param actual the Project we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the Project we want to make assertions on.
 	 */
 	public ProjectAssert(Project actual) {
 		super(actual, ProjectAssert.class);
@@ -47,7 +49,9 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 	/**
 	 * An entry point for ProjectAssert to follow AssertJ standard <code>assertThat()</code> statements.<br>
 	 * With a static import, one's can write directly : <code>assertThat(myProject)</code> and get specific assertion with code completion.
-	 * @param actual the Project we want to make assertions on.
+	 * 
+	 * @param actual
+	 *          the Project we want to make assertions on.
 	 * @return a new </code>{@link ProjectAssert}</code>
 	 */
 	public static ProjectAssert assertThat(Project actual) {
@@ -56,9 +60,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's annotationTypes contains the given AnnotationType elements.
-	 * @param annotationTypes the given elements that should be contained in actual Project's annotationTypes.
+	 * 
+	 * @param annotationTypes
+	 *          the given elements that should be contained in actual Project's annotationTypes.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's annotationTypes does not contain all given AnnotationType elements.
+	 * @throws AssertionError
+	 *           if the actual Project's annotationTypes does not contain all given AnnotationType elements.
 	 */
 	public ProjectAssert hasAnnotationTypes(AnnotationType... annotationTypes) {
 		// check that actual Project we want to make assertions on is not null.
@@ -81,8 +88,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no annotationTypes.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's annotationTypes is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's annotationTypes is not empty.
 	 */
 	public ProjectAssert hasNoAnnotationTypes() {
 		// check that actual Project we want to make assertions on is not null.
@@ -102,9 +111,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's createdOn is equal to the given one.
-	 * @param createdOn the given createdOn to compare the actual Project's createdOn to.
+	 * 
+	 * @param createdOn
+	 *          the given createdOn to compare the actual Project's createdOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's createdOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's createdOn is not equal to the given one.
 	 */
 	public ProjectAssert hasCreatedOn(Date createdOn) {
 		// check that actual Project we want to make assertions on is not null.
@@ -125,9 +137,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's creator is equal to the given one.
-	 * @param creator the given creator to compare the actual Project's creator to.
+	 * 
+	 * @param creator
+	 *          the given creator to compare the actual Project's creator to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's creator is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's creator is not equal to the given one.
 	 */
 	public ProjectAssert hasCreator(User creator) {
 		// check that actual Project we want to make assertions on is not null.
@@ -148,9 +163,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's facetFields contains the given String elements.
-	 * @param facetFields the given elements that should be contained in actual Project's facetFields.
+	 * 
+	 * @param facetFields
+	 *          the given elements that should be contained in actual Project's facetFields.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's facetFields does not contain all given String elements.
+	 * @throws AssertionError
+	 *           if the actual Project's facetFields does not contain all given String elements.
 	 */
 	public ProjectAssert hasFacetFields(String... facetFields) {
 		// check that actual Project we want to make assertions on is not null.
@@ -173,8 +191,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no facetFields.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's facetFields is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's facetFields is not empty.
 	 */
 	public ProjectAssert hasNoFacetFields() {
 		// check that actual Project we want to make assertions on is not null.
@@ -194,9 +214,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's facetInfo contains the given FacetInfo elements.
-	 * @param facetInfo the given elements that should be contained in actual Project's facetInfo.
+	 * 
+	 * @param facetInfo
+	 *          the given elements that should be contained in actual Project's facetInfo.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's facetInfo does not contain all given FacetInfo elements.
+	 * @throws AssertionError
+	 *           if the actual Project's facetInfo does not contain all given FacetInfo elements.
 	 */
 	public ProjectAssert hasFacetInfo(FacetInfo... facetInfo) {
 		// check that actual Project we want to make assertions on is not null.
@@ -219,8 +242,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no facetInfo.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's facetInfo is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's facetInfo is not empty.
 	 */
 	public ProjectAssert hasNoFacetInfo() {
 		// check that actual Project we want to make assertions on is not null.
@@ -240,9 +265,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's facetInfoMap is equal to the given one.
-	 * @param facetInfoMap the given facetInfoMap to compare the actual Project's facetInfoMap to.
+	 * 
+	 * @param facetInfoMap
+	 *          the given facetInfoMap to compare the actual Project's facetInfoMap to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's facetInfoMap is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's facetInfoMap is not equal to the given one.
 	 */
 	public ProjectAssert hasFacetInfoMap(Map facetInfoMap) {
 		// check that actual Project we want to make assertions on is not null.
@@ -263,9 +291,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's id is equal to the given one.
-	 * @param id the given id to compare the actual Project's id to.
+	 * 
+	 * @param id
+	 *          the given id to compare the actual Project's id to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's id is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's id is not equal to the given one.
 	 */
 	public ProjectAssert hasId(long id) {
 		// check that actual Project we want to make assertions on is not null.
@@ -286,9 +317,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's level1 is equal to the given one.
-	 * @param level1 the given level1 to compare the actual Project's level1 to.
+	 * 
+	 * @param level1
+	 *          the given level1 to compare the actual Project's level1 to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's level1 is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's level1 is not equal to the given one.
 	 */
 	public ProjectAssert hasLevel1(String level1) {
 		// check that actual Project we want to make assertions on is not null.
@@ -309,9 +343,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's level2 is equal to the given one.
-	 * @param level2 the given level2 to compare the actual Project's level2 to.
+	 * 
+	 * @param level2
+	 *          the given level2 to compare the actual Project's level2 to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's level2 is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's level2 is not equal to the given one.
 	 */
 	public ProjectAssert hasLevel2(String level2) {
 		// check that actual Project we want to make assertions on is not null.
@@ -332,9 +369,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's level3 is equal to the given one.
-	 * @param level3 the given level3 to compare the actual Project's level3 to.
+	 * 
+	 * @param level3
+	 *          the given level3 to compare the actual Project's level3 to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's level3 is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's level3 is not equal to the given one.
 	 */
 	public ProjectAssert hasLevel3(String level3) {
 		// check that actual Project we want to make assertions on is not null.
@@ -355,9 +395,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's logEntries contains the given LogEntry elements.
-	 * @param logEntries the given elements that should be contained in actual Project's logEntries.
+	 * 
+	 * @param logEntries
+	 *          the given elements that should be contained in actual Project's logEntries.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's logEntries does not contain all given LogEntry elements.
+	 * @throws AssertionError
+	 *           if the actual Project's logEntries does not contain all given LogEntry elements.
 	 */
 	public ProjectAssert hasLogEntries(LogEntry... logEntries) {
 		// check that actual Project we want to make assertions on is not null.
@@ -380,8 +423,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no logEntries.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's logEntries is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's logEntries is not empty.
 	 */
 	public ProjectAssert hasNoLogEntries() {
 		// check that actual Project we want to make assertions on is not null.
@@ -401,9 +446,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's metadataMap is equal to the given one.
-	 * @param metadataMap the given metadataMap to compare the actual Project's metadataMap to.
+	 * 
+	 * @param metadataMap
+	 *          the given metadataMap to compare the actual Project's metadataMap to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's metadataMap is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's metadataMap is not equal to the given one.
 	 */
 	public ProjectAssert hasMetadataMap(Map metadataMap) {
 		// check that actual Project we want to make assertions on is not null.
@@ -424,9 +472,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's modifiedOn is equal to the given one.
-	 * @param modifiedOn the given modifiedOn to compare the actual Project's modifiedOn to.
+	 * 
+	 * @param modifiedOn
+	 *          the given modifiedOn to compare the actual Project's modifiedOn to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's modifiedOn is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's modifiedOn is not equal to the given one.
 	 */
 	public ProjectAssert hasModifiedOn(Date modifiedOn) {
 		// check that actual Project we want to make assertions on is not null.
@@ -447,9 +498,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's modifier is equal to the given one.
-	 * @param modifier the given modifier to compare the actual Project's modifier to.
+	 * 
+	 * @param modifier
+	 *          the given modifier to compare the actual Project's modifier to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's modifier is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's modifier is not equal to the given one.
 	 */
 	public ProjectAssert hasModifier(User modifier) {
 		// check that actual Project we want to make assertions on is not null.
@@ -470,9 +524,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's name is equal to the given one.
-	 * @param name the given name to compare the actual Project's name to.
+	 * 
+	 * @param name
+	 *          the given name to compare the actual Project's name to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's name is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's name is not equal to the given one.
 	 */
 	public ProjectAssert hasName(String name) {
 		// check that actual Project we want to make assertions on is not null.
@@ -493,9 +550,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's projectEntries contains the given ProjectEntry elements.
-	 * @param projectEntries the given elements that should be contained in actual Project's projectEntries.
+	 * 
+	 * @param projectEntries
+	 *          the given elements that should be contained in actual Project's projectEntries.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's projectEntries does not contain all given ProjectEntry elements.
+	 * @throws AssertionError
+	 *           if the actual Project's projectEntries does not contain all given ProjectEntry elements.
 	 */
 	public ProjectAssert hasProjectEntries(ProjectEntry... projectEntries) {
 		// check that actual Project we want to make assertions on is not null.
@@ -518,8 +578,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no projectEntries.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's projectEntries is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's projectEntries is not empty.
 	 */
 	public ProjectAssert hasNoProjectEntries() {
 		// check that actual Project we want to make assertions on is not null.
@@ -539,9 +601,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's projectEntryMetadataFieldnames contains the given String elements.
-	 * @param projectEntryMetadataFieldnames the given elements that should be contained in actual Project's projectEntryMetadataFieldnames.
+	 * 
+	 * @param projectEntryMetadataFieldnames
+	 *          the given elements that should be contained in actual Project's projectEntryMetadataFieldnames.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's projectEntryMetadataFieldnames does not contain all given String elements.
+	 * @throws AssertionError
+	 *           if the actual Project's projectEntryMetadataFieldnames does not contain all given String elements.
 	 */
 	public ProjectAssert hasProjectEntryMetadataFieldnames(String... projectEntryMetadataFieldnames) {
 		// check that actual Project we want to make assertions on is not null.
@@ -564,8 +629,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no projectEntryMetadataFieldnames.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's projectEntryMetadataFieldnames is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's projectEntryMetadataFieldnames is not empty.
 	 */
 	public ProjectAssert hasNoProjectEntryMetadataFieldnames() {
 		// check that actual Project we want to make assertions on is not null.
@@ -585,9 +652,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's projectLeaderId is equal to the given one.
-	 * @param projectLeaderId the given projectLeaderId to compare the actual Project's projectLeaderId to.
+	 * 
+	 * @param projectLeaderId
+	 *          the given projectLeaderId to compare the actual Project's projectLeaderId to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's projectLeaderId is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's projectLeaderId is not equal to the given one.
 	 */
 	public ProjectAssert hasProjectLeaderId(long projectLeaderId) {
 		// check that actual Project we want to make assertions on is not null.
@@ -608,9 +678,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's projectMetadataItems contains the given ProjectMetadataItem elements.
-	 * @param projectMetadataItems the given elements that should be contained in actual Project's projectMetadataItems.
+	 * 
+	 * @param projectMetadataItems
+	 *          the given elements that should be contained in actual Project's projectMetadataItems.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's projectMetadataItems does not contain all given ProjectMetadataItem elements.
+	 * @throws AssertionError
+	 *           if the actual Project's projectMetadataItems does not contain all given ProjectMetadataItem elements.
 	 */
 	public ProjectAssert hasProjectMetadataItems(ProjectMetadataItem... projectMetadataItems) {
 		// check that actual Project we want to make assertions on is not null.
@@ -633,8 +706,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no projectMetadataItems.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's projectMetadataItems is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's projectMetadataItems is not empty.
 	 */
 	public ProjectAssert hasNoProjectMetadataItems() {
 		// check that actual Project we want to make assertions on is not null.
@@ -654,9 +729,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's rev is equal to the given one.
-	 * @param rev the given rev to compare the actual Project's rev to.
+	 * 
+	 * @param rev
+	 *          the given rev to compare the actual Project's rev to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's rev is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's rev is not equal to the given one.
 	 */
 	public ProjectAssert hasRev(long rev) {
 		// check that actual Project we want to make assertions on is not null.
@@ -677,9 +755,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's textLayers contains the given String elements.
-	 * @param textLayers the given elements that should be contained in actual Project's textLayers.
+	 * 
+	 * @param textLayers
+	 *          the given elements that should be contained in actual Project's textLayers.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's textLayers does not contain all given String elements.
+	 * @throws AssertionError
+	 *           if the actual Project's textLayers does not contain all given String elements.
 	 */
 	public ProjectAssert hasTextLayers(String... textLayers) {
 		// check that actual Project we want to make assertions on is not null.
@@ -702,8 +783,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no textLayers.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's textLayers is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's textLayers is not empty.
 	 */
 	public ProjectAssert hasNoTextLayers() {
 		// check that actual Project we want to make assertions on is not null.
@@ -723,9 +806,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's title is equal to the given one.
-	 * @param title the given title to compare the actual Project's title to.
+	 * 
+	 * @param title
+	 *          the given title to compare the actual Project's title to.
 	 * @return this assertion object.
-	 * @throws AssertionError - if the actual Project's title is not equal to the given one.
+	 * @throws AssertionError
+	 *           - if the actual Project's title is not equal to the given one.
 	 */
 	public ProjectAssert hasTitle(String title) {
 		// check that actual Project we want to make assertions on is not null.
@@ -746,9 +832,12 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project's users contains the given User elements.
-	 * @param users the given elements that should be contained in actual Project's users.
+	 * 
+	 * @param users
+	 *          the given elements that should be contained in actual Project's users.
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's users does not contain all given User elements.
+	 * @throws AssertionError
+	 *           if the actual Project's users does not contain all given User elements.
 	 */
 	public ProjectAssert hasUsers(User... users) {
 		// check that actual Project we want to make assertions on is not null.
@@ -771,8 +860,10 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 
 	/**
 	 * Verifies that the actual Project has no users.
+	 * 
 	 * @return this assertion object.
-	 * @throws AssertionError if the actual Project's users is not empty.
+	 * @throws AssertionError
+	 *           if the actual Project's users is not empty.
 	 */
 	public ProjectAssert hasNoUsers() {
 		// check that actual Project we want to make assertions on is not null.

@@ -10,12 +10,12 @@ package elaborate.editor.resources.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,15 +27,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.text.MessageFormat;
 import java.util.Map;
 
-import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Maps;
 
-public class SearchResourceTest   {
+import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
+
+public class SearchResourceTest {
 
 	@Before
 	public void setUp() throws Exception {}
@@ -69,7 +69,7 @@ public class SearchResourceTest   {
 		assertThat(path).isEqualTo("/projects/31415/search/1000000");
 	}
 
-	//TODO: add test:
+	// TODO: add test:
 	// show that terms from the facetvalues in the query aren't highlighted.
 
 }

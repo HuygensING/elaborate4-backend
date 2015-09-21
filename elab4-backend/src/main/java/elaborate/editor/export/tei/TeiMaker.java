@@ -10,12 +10,12 @@ package elaborate.editor.export.tei;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -42,8 +42,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Comment;
@@ -64,6 +62,7 @@ import elaborate.editor.model.orm.ProjectEntryMetadataItem;
 import elaborate.editor.model.orm.ProjectMetadataItem;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.ProjectService;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 public class TeiMaker {
 	public static final Map<String, String> HI_TAGS = ImmutableMap.<String, String> builder()//
@@ -160,7 +159,7 @@ public class TeiMaker {
 		if (config.getGroupTextsByMetadata() != null) {
 			Element group = tei.createElement("group");
 			text.appendChild(group);
-			//TODO implement grouping
+			// TODO implement grouping
 
 		} else {
 			Element body = tei.createElement("body");
@@ -168,9 +167,9 @@ public class TeiMaker {
 
 			String currentFolio = "";
 			for (ProjectEntry entry : entries) {
-				//        if (entry.hasTranscriptions()) {
+				// if (entry.hasTranscriptions()) {
 				pageno = processEntry(pageno, body, currentFolio, entry);
-				//        }
+				// }
 			}
 		}
 		return text;
@@ -211,7 +210,7 @@ public class TeiMaker {
 		if (!currentFolio.equals(folio)) {
 			pageno = addPb(body, pageno, projectEntry, folio);
 		}
-		//    addCb(body, projectEntry);
+		// addCb(body, projectEntry);
 		currentFolio = folio;
 
 		Element entryDiv = tei.createElement("div");
