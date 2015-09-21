@@ -34,6 +34,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -70,6 +71,7 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.AnnotationService;
 import elaborate.editor.model.orm.service.ProjectService;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 import elaborate.editor.solr.ElaborateSolrIndexer;
 import elaborate.freemarker.FreeMarker;
@@ -103,7 +105,7 @@ public class PublishTask implements Runnable {
 	private EntityManager entityManager;
 	//	private Map<Integer, String> publishableAnnotationTypes;
 	//	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
-	private Map<Integer, elaborate.editor.model.orm.service.ProjectService.AnnotationData> annotationDataMap;
+	private Map<Integer, AnnotationData> annotationDataMap;
 
 	public PublishTask(Publication.Settings settings) {
 		this.settings = settings;
@@ -124,7 +126,7 @@ public class PublishTask implements Runnable {
 		List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
 		//		publishableAnnotationTypes = ps.getAnnotationTypesForProject(projectId);
 		//		publishableAnnotationParameters = ps.getAnnotationParametersForProject(projectId);
-		annotationDataMap = ps.getAnnotationDataForProject(projectId);
+		annotationDataMap = filterOnPublishableAnnotationTypes(ps.getAnnotationDataForProject(projectId), settings.getAnnotationTypeIds());
 		int entryNum = 1;
 		List<EntryData> entryData = Lists.newArrayList();
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -168,6 +170,19 @@ public class PublishTask implements Runnable {
 		entityManager = HibernateUtil.getEntityManager();
 		ps.setEntityManager(entityManager);
 		ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
+	}
+
+	private Map<Integer, AnnotationData> filterOnPublishableAnnotationTypes(Map<Integer, AnnotationData> annotationDataMap, List<Long> publishableAnnotationTypeIds) {
+		Map<Integer, AnnotationData> filteredAnnotationDataMap = Maps.newHashMap();
+		Set<Entry<Integer, AnnotationData>> entrySet = annotationDataMap.entrySet();
+		for (Entry<Integer, AnnotationData> entry : entrySet) {
+			Integer annotationId = entry.getKey();
+			AnnotationData annotationData = entry.getValue();
+			if (publishableAnnotationTypeIds.contains(annotationData.getTypeId())) {
+				filteredAnnotationDataMap.put(annotationId, annotationData);
+			}
+		}
+		return filteredAnnotationDataMap;
 	}
 
 	Collection<String> getFacetsToSplit(Project project) {
@@ -327,7 +342,7 @@ public class PublishTask implements Runnable {
 			int order = 1;
 			TextlayerData textlayerData = texts.get(textLayer);
 			if (textlayerData != null) {
-				for (AnnotationData ad : textlayerData.getAnnotationData()) {
+				for (AnnotationPublishData ad : textlayerData.getAnnotationData()) {
 					AnnotationIndexData annotationIndexData = new AnnotationIndexData()//
 							.setEntryId(projectEntry.getId())//
 							.setEntryName(projectEntry.getName())//
@@ -385,14 +400,14 @@ public class PublishTask implements Runnable {
 		return textlayerData;
 	}
 
-	private List<AnnotationData> getAnnotationData(List<Integer> annotationNumbers) {
-		List<AnnotationData> list = Lists.newArrayList();
+	private List<AnnotationPublishData> getAnnotationData(List<Integer> annotationNumbers) {
+		List<AnnotationPublishData> list = Lists.newArrayList();
 		for (Integer integer : annotationNumbers) {
 			Annotation annotation = annotationService.getAnnotationByAnnotationNo(integer, entityManager);
 			if (annotation != null) {
 				AnnotationType annotationType = annotation.getAnnotationType();
 				if (settings.includeAnnotationType(annotationType)) {
-					AnnotationData ad2 = new AnnotationData()//
+					AnnotationPublishData ad2 = new AnnotationPublishData()//
 							.setN(annotation.getAnnotationNo())//
 							.setText(annotation.getBody())//
 							.setAnnotatedText(annotation.getAnnotatedText())//
@@ -707,13 +722,13 @@ public class PublishTask implements Runnable {
 
 	}
 
-	public static class AnnotationData {
+	public static class AnnotationPublishData {
 		private int annotationNo = 0;
 		private String body = "";
 		private AnnotationTypeData annotationTypeData = null;
 		private String annotatedText = "";
 
-		public AnnotationData setN(int annotationNo) {
+		public AnnotationPublishData setN(int annotationNo) {
 			this.annotationNo = annotationNo;
 			return this;
 		}
@@ -726,12 +741,12 @@ public class PublishTask implements Runnable {
 			return annotatedText;
 		}
 
-		public AnnotationData setAnnotatedText(String annotatedText) {
+		public AnnotationPublishData setAnnotatedText(String annotatedText) {
 			this.annotatedText = XmlUtil.removeXMLtags(annotatedText).trim();
 			return this;
 		}
 
-		public AnnotationData setText(String body) {
+		public AnnotationPublishData setText(String body) {
 			// this.body = XmlUtil.removeXMLtags(body.replaceAll("<span class=\"annotationStub\">.*?</span>", "")).trim();
 			this.body = body.trim();
 			return this;
@@ -741,7 +756,7 @@ public class PublishTask implements Runnable {
 			return body;
 		}
 
-		public AnnotationData setType(AnnotationTypeData annotationTypeData) {
+		public AnnotationPublishData setType(AnnotationTypeData annotationTypeData) {
 			this.annotationTypeData = annotationTypeData;
 			return this;
 		}
@@ -830,7 +845,7 @@ public class PublishTask implements Runnable {
 
 	public static class TextlayerData {
 		String text = "";
-		List<AnnotationData> annotations = Lists.newArrayList();
+		List<AnnotationPublishData> annotations = Lists.newArrayList();
 
 		public String getText() {
 			return text;
@@ -841,11 +856,11 @@ public class PublishTask implements Runnable {
 			return this;
 		}
 
-		public List<AnnotationData> getAnnotationData() {
+		public List<AnnotationPublishData> getAnnotationData() {
 			return annotations;
 		}
 
-		public TextlayerData setAnnotations(List<AnnotationData> annotations) {
+		public TextlayerData setAnnotations(List<AnnotationPublishData> annotations) {
 			this.annotations = annotations;
 			return this;
 		}

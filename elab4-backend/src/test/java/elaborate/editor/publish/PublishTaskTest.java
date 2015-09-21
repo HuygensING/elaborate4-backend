@@ -47,7 +47,7 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.publish.Publication.Settings;
-import elaborate.editor.publish.PublishTask.AnnotationData;
+import elaborate.editor.publish.PublishTask.AnnotationPublishData;
 import elaborate.editor.publish.PublishTask.AnnotationTypeData;
 import elaborate.editor.publish.PublishTask.EntryData;
 import nl.knaw.huygens.Log;
@@ -189,7 +189,7 @@ public class PublishTaskTest extends AbstractTest {
 
 	@Test
 	public void testSetText() throws Exception {
-		AnnotationData ad = new AnnotationData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
+		AnnotationPublishData ad = new AnnotationPublishData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
 		// assertThat(ad.getText()).isEqualTo("dit is de annotatietekst");
 		assertThat(ad.getText()).isEqualTo("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
 	}
