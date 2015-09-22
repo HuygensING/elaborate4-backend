@@ -132,6 +132,7 @@ public class TranscriptionWrapper {
 	static String convertFromInput(String bodyIn) {
 		bodyIn = bodyIn//
 				.replaceAll("<br>", "<br/>")//
+				.replaceAll("<[a-zA-Z]+:", "<")// remove xml namespacing ( 
 				.replace("\u001A", " ")// 0x1a
 				.replace("", " ")//
 				.replace("&nbsp;", "&#160;")//
