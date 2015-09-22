@@ -126,9 +126,12 @@ public class PublishTask implements Runnable {
 		Project project = entityManager.find(Project.class, projectId);
 
 		ProjectService ps = ProjectService.instance();
+		// these 2 use transaction explicitly
 		List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
-		ps.setEntityManager(entityManager);
 		annotationDataMap = filterOnPublishableAnnotationTypes(ps.getAnnotationDataForProject(projectId), settings.getAnnotationTypeIds());
+
+		// the rest don't (see TODO)
+		ps.setEntityManager(entityManager);
 		Map<String, String> typographicalAnnotationMap = getTypographicalAnnotationMap(project);
 		Collection<String> multivaluedFacetNames = getFacetsToSplit(project);
 		List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);

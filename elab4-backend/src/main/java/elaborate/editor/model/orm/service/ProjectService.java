@@ -1127,6 +1127,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 	//	}
 
 	public Map<Integer, AnnotationData> getAnnotationDataForProject(Long projectId) {
+		beginTransaction();
 		Project project = read(projectId);
 		Map<Integer, AnnotationData> annotationDataMap = Maps.newHashMap();
 		List<?> resultList = getEntityManager()//
@@ -1152,6 +1153,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 			String parameterValue = (String) objects[2];
 			annotationDataMap.get(annotationNo).getParameters().put(parameterKey, parameterValue);
 		}
+		rollbackTransaction(); // since it's read-only
 		return annotationDataMap;
 	}
 
