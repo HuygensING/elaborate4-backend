@@ -180,9 +180,14 @@ public class PublishTask implements Runnable {
 	}
 
 	private Map<Integer, AnnotationData> filterOnPublishableAnnotationTypes(Map<Integer, AnnotationData> annotationDataMap, List<Long> publishableAnnotationTypeIds) {
+		if (publishableAnnotationTypeIds == null || publishableAnnotationTypeIds.isEmpty()) {
+			// default action: use all annotations
+			return annotationDataMap;
+		}
+
+		// publishableAnnotationTypeIds set in project_metadata_items
 		Map<Integer, AnnotationData> filteredAnnotationDataMap = Maps.newHashMap();
-		Set<Entry<Integer, AnnotationData>> entrySet = annotationDataMap.entrySet();
-		for (Entry<Integer, AnnotationData> entry : entrySet) {
+		for (Entry<Integer, AnnotationData> entry : annotationDataMap.entrySet()) {
 			Integer annotationId = entry.getKey();
 			AnnotationData annotationData = entry.getValue();
 			if (publishableAnnotationTypeIds.contains(annotationData.getTypeId())) {
