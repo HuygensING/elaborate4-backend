@@ -29,7 +29,7 @@
 		<assertj-assertions-generator>1.6.0</assertj-assertions-generator>
 		<build-helper-maven.version>1.9.1</build-helper-maven.version>
 		<c3p0.version>0.9.1.2</c3p0.version>
-		<classloader-leak-prevention.version>1.13.0</classloader-leak-prevention.version>
+		<classloader-leak-prevention.version>1.15.1</classloader-leak-prevention.version>
 		<commons-configuration.version>1.10</commons-configuration.version><!-- because of hadoop-common dependency in solr-core -->
 		<commons-email.version>1.4</commons-email.version>
 		<commons-lang.version>2.6</commons-lang.version>
