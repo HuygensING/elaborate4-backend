@@ -23,9 +23,6 @@
 
 <config version="0.1">
 	<settings>
-		<!-- version number, will be returned by the /about resource -->
-		<version>4.0</version>
-
 		<!-- scheme, name and port of the backend server -->
 		<server>
 			<scheme>http</scheme>
