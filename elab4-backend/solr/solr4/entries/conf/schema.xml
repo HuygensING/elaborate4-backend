@@ -114,7 +114,8 @@
     <field name="project_id" type="long" indexed="true" stored="true" required="true"/>
     <field name="publishable" type="boolean" indexed="true" stored="true" required="true"/>
 
-    <dynamicField name="metadata_*" type="string" indexed="true" stored="true" multiValued="truee"/>
+    <dynamicField name="metadata_*" type="string" indexed="true" stored="true" multiValued="false"/>
+    <dynamicField name="mv_metadata_*" type="string" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="textlayer_*" type="text_general_rev" indexed="true" stored="true" multiValued="false"/>
     <dynamicField name="textlayercs_*" type="text_general_rev_cs" indexed="true" stored="true" multiValued="false"/>
     <dynamicField name="annotations_*" type="text_general_rev" indexed="true" stored="true" multiValued="true"/>
