@@ -31,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Entities;
@@ -98,6 +99,13 @@ public class XmlUtil {
 
 	private XmlUtil() {
 		throw new AssertionError("Non-instantiable class");
+	}
+
+	public static String toPlainText(String body) {
+		String breaksToNewlines = body.replace("<br>", "\n");
+		String noTags = removeXMLtags(breaksToNewlines);
+		return StringEscapeUtils.unescapeXml(noTags)//
+				.replace("&nbsp;", " ").trim();
 	}
 
 }

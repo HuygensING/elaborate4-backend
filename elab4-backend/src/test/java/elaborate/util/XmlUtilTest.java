@@ -68,6 +68,10 @@ public class XmlUtilTest {
 		assertThat(XmlUtil.removeXMLtags("<1>aap\n <2>noot\n mies</2></1>")).isEqualTo("aap\n noot\n mies");
 	}
 
+	@Test
+	public void testToPlainTextReplacesXmlStuff() {
+		assertThat(XmlUtil.toPlainText("<b>bold</b> &apos;t <i>kofschip</i><br>&nbsp;&quot;blabla&quot;")).isEqualTo("bold 't kofschip\n \"blabla\"");
+	}
 	// @Test
 	// public void testSelect() {
 	// ProjectService ps = ProjectService.instance();

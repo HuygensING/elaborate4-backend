@@ -749,18 +749,18 @@ public class PublishTask implements Runnable {
 			return annotationNo;
 		}
 
+		public AnnotationPublishData setAnnotatedText(String annotatedText) {
+			this.annotatedText = XmlUtil.toPlainText(annotatedText);
+			return this;
+		}
+
 		public String getAnnotatedText() {
 			return annotatedText;
 		}
 
-		public AnnotationPublishData setAnnotatedText(String annotatedText) {
-			this.annotatedText = XmlUtil.removeXMLtags(annotatedText).trim();
-			return this;
-		}
-
 		public AnnotationPublishData setText(String body) {
 			// this.body = XmlUtil.removeXMLtags(body.replaceAll("<span class=\"annotationStub\">.*?</span>", "")).trim();
-			this.body = body.trim();
+			this.body = XmlUtil.toPlainText(body);
 			return this;
 		}
 
