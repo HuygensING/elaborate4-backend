@@ -48,7 +48,7 @@
 		<jaxrstools.version>0.0.7</jaxrstools.version>
 		<jersey.version>1.19</jersey.version>
 		<jersey-client.version>2.6</jersey-client.version><!-- 2.7 = jdk7 -->
-		<joda-time.version>2.8.2</joda-time.version>
+		<joda-time.version>2.9</joda-time.version>
 		<jsoup.version>1.7.3</jsoup.version><!-- 1.8.1 throws an error -->
 		<jsr250-api.version>1.0</jsr250-api.version>
 		<jtidy.version>r938</jtidy.version>
