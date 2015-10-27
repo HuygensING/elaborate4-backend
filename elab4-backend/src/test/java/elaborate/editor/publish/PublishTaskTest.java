@@ -191,7 +191,7 @@ public class PublishTaskTest extends AbstractTest {
 	public void testSetText() throws Exception {
 		AnnotationPublishData ad = new AnnotationPublishData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
 		// assertThat(ad.getText()).isEqualTo("dit is de annotatietekst");
-		assertThat(ad.getText()).isEqualTo("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
+		assertThat(ad.getText()).isEqualTo("dit is de geannoteerde tekst dit is de annotatietekst");
 	}
 
 	@Test
