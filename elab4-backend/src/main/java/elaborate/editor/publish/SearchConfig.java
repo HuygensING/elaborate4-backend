@@ -50,7 +50,7 @@ public class SearchConfig {
 	public SearchConfig(Project project, List<String> metadataFieldsForFacets, Collection<String> multivaluedFacetNames) {
 		// TODO: refactor CNW Kludge
 		if (44 == project.getId()) {
-			getRangeFields().add(new RangeField("metadata_period", "metadata_datum_lower", "metadata_datum_upper"));
+			getRangeFields().add(new RangeField("metadata_datum", "metadata_datum_lower", "metadata_datum_upper"));
 		}
 		for (Entry<String, FacetInfo> entry : project.getFacetInfoMap().entrySet()) {
 			String facetName = entry.getKey();
