@@ -38,6 +38,7 @@ import org.apache.commons.lang.StringUtils;
 import org.w3c.tidy.Tidy;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 public class StringUtil {
@@ -229,4 +230,11 @@ public class StringUtil {
 	private StringUtil() {
 		throw new AssertionError("Non-instantiable class");
 	}
+
+	private static final String MULTIVALUED_DIVIDER = " | ";
+
+	public static Iterable<String> getValues(String multiValue) {
+		return Splitter.on(MULTIVALUED_DIVIDER).trimResults().split(multiValue);
+	}
+
 }

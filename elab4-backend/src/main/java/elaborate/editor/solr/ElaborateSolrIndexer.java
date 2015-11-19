@@ -45,7 +45,6 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -55,6 +54,7 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.CNWUtil;
+import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.datable.Datable;
@@ -64,7 +64,6 @@ import nl.knaw.huygens.tei.XmlContext;
 
 public class ElaborateSolrIndexer extends SolrIndexer {
 	private static final CNWUtil CNW_UTIL = new CNWUtil();
-	private static final String MULTIVALUED_DIVIDER = " | ";
 
 	public ElaborateSolrIndexer() {
 		super(getServer(), ID);
@@ -138,7 +137,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 	private static void handleMultiValuedFields(String facetName, String multiValue, SolrInputDocument doc) {
 		Log.info("facetName={}", facetName);
 		doc.removeField(facetName);
-		for (String value : Splitter.on(MULTIVALUED_DIVIDER).trimResults().split(multiValue)) {
+		for (String value : StringUtil.getValues(multiValue)) {
 			doc.addField("mv_" + facetName, value, 1.0f);
 		}
 	}
@@ -152,8 +151,6 @@ public class ElaborateSolrIndexer extends SolrIndexer {
 			Datable datable = new Datable(CNW_UTIL.convertDate(value));
 			if (datable.isValid() && !value.startsWith("XXXX")) {
 				// ignore dates where year is not known
-				// doc.addField("metadata_datum_lower", datable.getFromYear(), 1.0f);
-				// doc.addField("metadata_datum_upper", datable.getToYear(), 1.0f);
 				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 				doc.addField("metadata_datum_lower", dateFormat.format(datable.getFromDate()), 1.0f);
 				doc.addField("metadata_datum_upper", dateFormat.format(datable.getToDate()), 1.0f);
