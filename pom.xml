@@ -29,17 +29,17 @@
 		<assertj-assertions-generator>1.6.0</assertj-assertions-generator>
 		<build-helper-maven.version>1.9.1</build-helper-maven.version>
 		<c3p0.version>0.9.1.2</c3p0.version>
-		<classloader-leak-prevention.version>1.15.1</classloader-leak-prevention.version>
+		<classloader-leak-prevention.version>1.15.2</classloader-leak-prevention.version>
 		<commons-configuration.version>1.10</commons-configuration.version><!-- because of hadoop-common dependency in solr-core -->
 		<commons-email.version>1.4</commons-email.version>
 		<commons-lang.version>2.6</commons-lang.version>
 		<commons-logging.version>1.2</commons-logging.version>
-		<datables.version>1.0.2</datables.version>
+		<datables.version>1.0.3</datables.version>
 		<facetedsearchtools.version>0.3.0</facetedsearchtools.version>
 		<fest.version>1.0.16</fest.version>
 		<flexjson.version>3.3</flexjson.version>
 		<freemarker.version>2.3.23</freemarker.version>
-		<guava.version>19.0-rc1</guava.version>
+		<guava.version>19.0-rc2</guava.version>
 		<guice.version>4.0</guice.version>
 		<hibernate.version>4.3.8.Final</hibernate.version>
 		<hsqldb.version>2.3.3</hsqldb.version>
@@ -48,7 +48,7 @@
 		<jaxrstools.version>0.0.7</jaxrstools.version>
 		<jersey.version>1.19</jersey.version>
 		<jersey-client.version>2.6</jersey-client.version><!-- 2.7 = jdk7 -->
-		<joda-time.version>2.9</joda-time.version>
+		<joda-time.version>2.9.1</joda-time.version>
 		<jsoup.version>1.7.3</jsoup.version><!-- 1.8.1 throws an error -->
 		<jsr250-api.version>1.0</jsr250-api.version>
 		<jtidy.version>r938</jtidy.version>
