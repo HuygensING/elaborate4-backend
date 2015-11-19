@@ -24,6 +24,7 @@ package elaborate.editor.publish;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
+import static org.assertj.guava.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,10 +37,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ProjectMetadataFields;
@@ -73,8 +76,8 @@ public class PublishTaskTest extends AbstractTest {
 		when(mockProject.getLevel3()).thenReturn("level3");
 
 		PublishTask publishTask = new PublishTask(settings);
-		EntryData entry1 = new EntryData("uno", "uno", "entry1.json");
-		EntryData entry2 = new EntryData("due", "due", "entry2.json");
+		EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String> create());
+		EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String> create());
 		List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -108,8 +111,8 @@ public class PublishTaskTest extends AbstractTest {
 		when(mockProject.getMetadataMap()).thenReturn(metadataMap);
 
 		PublishTask publishTask = new PublishTask(settings);
-		EntryData entry1 = new EntryData("uno", "uno", "entry1.json");
-		EntryData entry2 = new EntryData("due", "due", "entry2.json");
+		EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String> create());
+		EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String> create());
 		List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -239,5 +242,18 @@ public class PublishTaskTest extends AbstractTest {
 		Collection<String> facetsToSplit = publishTask.getFacetsToSplit(project);
 
 		assertThat(facetsToSplit).containsOnly("metadata_multivaluedfield_1", "metadata_multivaluedfield_2");
+	}
+
+	@Test
+	public void testMultivalueFacetValueIndex() {
+		ProjectEntry projectEntry = mock(ProjectEntry.class);
+		when(projectEntry.getMetadataValue("multi")).thenReturn("a | b | c");
+		when(projectEntry.getMetadataValue("single")).thenReturn("d | e | f");
+		String[] multivaluedFacetNames = new String[] { "multi" };
+		Multimap<String, String> multivaluedFacetValues = PublishTask.getMultivaluedFacetValues(multivaluedFacetNames, projectEntry);
+		assertThat(multivaluedFacetValues).containsValues("a", "b", "c");
+		assertThat(multivaluedFacetValues).containsKeys("multi");
+		assertThat(multivaluedFacetValues).hasSize(3);
+
 	}
 }

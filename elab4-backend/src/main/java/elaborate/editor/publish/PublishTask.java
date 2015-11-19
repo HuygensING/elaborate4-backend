@@ -45,6 +45,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrInputDocument;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
@@ -52,9 +53,11 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
@@ -76,6 +79,7 @@ import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
 import elaborate.editor.solr.ElaborateSolrIndexer;
 import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
+import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
@@ -140,12 +144,16 @@ public class PublishTask implements Runnable {
 		List<EntryData> entryData = Lists.newArrayList();
 		Map<Long, List<String>> thumbnails = Maps.newHashMap();
 		Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
+		String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
+		String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[] {};
 		for (ProjectEntry projectEntry : projectEntriesInOrder) {
 			if (projectEntry.isPublishable()) {
 				status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
 				ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields, typographicalAnnotationMap);
 				long id = projectEntry.getId();
-				entryData.add(new EntryData(projectEntry.getName(), projectEntry.getShortName(), id + ".json"));
+				Multimap<String, String> multivaluedFacetValues = getMultivaluedFacetValues(multivaluedMetadataFields, projectEntry);
+				String datafile = id + ".json";
+				entryData.add(new EntryData(id, projectEntry.getName(), projectEntry.getShortName(), datafile, multivaluedFacetValues));
 				thumbnails.put(id, eed.thumbnailUrls);
 				annotationIndex.putAll(eed.annotationDataMap);
 				indexEntry(projectEntry, multivaluedFacetNames);
@@ -177,6 +185,17 @@ public class PublishTask implements Runnable {
 		entityManager = HibernateUtil.getEntityManager();
 		ps.setEntityManager(entityManager);
 		ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
+	}
+
+	static Multimap<String, String> getMultivaluedFacetValues(String[] multivaluedFacetNames, ProjectEntry projectEntry) {
+		Multimap<String, String> multivaluedFacetValues = ArrayListMultimap.create();
+		for (String multivaluedFacet : multivaluedFacetNames) {
+			String multivalue = projectEntry.getMetadataValue(multivaluedFacet);
+			if (StringUtils.isNotEmpty(multivalue)) {
+				multivaluedFacetValues.putAll(multivaluedFacet, StringUtil.getValues(multivalue));
+			}
+		}
+		return multivaluedFacetValues;
 	}
 
 	private Map<Integer, AnnotationData> filterOnPublishableAnnotationTypes(Map<Integer, AnnotationData> annotationDataMap, List<Long> publishableAnnotationTypeIds) {
@@ -308,6 +327,7 @@ public class PublishTask implements Runnable {
 		// map.put("baseURL", getBaseURL(getBasename(project)));
 		map.put("baseURL", getBaseURL(project.getName()));
 		map.put("annotationIndex", ANNOTATION_INDEX_JSON);
+		map.put("multivaluedFacetIndex", calculateMultivaluedFacetIndex(entries));
 
 		addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
 		addIfNotNull(map, "entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
@@ -324,6 +344,25 @@ public class PublishTask implements Runnable {
 		//
 		// map.put("settings", projectSettings);
 		return map;
+	}
+
+	private Map<String, Map<String, List<Long>>> calculateMultivaluedFacetIndex(List<EntryData> entries) {
+		Map<String, ListMultimap<String, Long>> tmpindex = Maps.newHashMap();
+		for (EntryData entryData : entries) {
+			for (Entry<String, String> entry : entryData.multivaluedFacetValues.entries()) {
+				String facetName = entry.getKey();
+				String facetValue = entry.getValue();
+				if (!tmpindex.containsKey(facetName)) {
+					tmpindex.put(facetName, ArrayListMultimap.<String, Long> create());
+				}
+				tmpindex.get(facetName).put(facetValue, entryData.entryId);
+			}
+		}
+		Map<String, Map<String, List<Long>>> index = Maps.newHashMap();
+		for (String metadataField : tmpindex.keySet()) {
+			index.put(metadataField, Multimaps.asMap(tmpindex.get(metadataField)));
+		}
+		return index;
 	}
 
 	private void addIfNotNull(Map<String, Object> map, String key, String value) {
@@ -844,14 +883,20 @@ public class PublishTask implements Runnable {
 	}
 
 	public static class EntryData {
+		@JsonIgnore
+		public final Long entryId;
+		@JsonIgnore
+		public final Multimap<String, String> multivaluedFacetValues;
 		public final String datafile;
 		public final String name;
 		public final String shortName;
 
-		public EntryData(String _name, String _shortName, String _datafile) {
+		public EntryData(Long entryId, String _name, String _shortName, String _datafile, Multimap<String, String> _multivaluedFacetValues) {
+			this.entryId = entryId;
 			this.name = _name;
 			this.shortName = _shortName;
 			this.datafile = _datafile;
+			multivaluedFacetValues = _multivaluedFacetValues;
 		}
 	}
 

@@ -129,6 +129,16 @@ public class TranscriptionWrapper {
 		return transcription;
 	}
 
+	@JsonIgnore
+	public String getBodyForDb() {
+		return convertFromInput(getBody());
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+	}
+
 	static String convertFromInput(String bodyIn) {
 		bodyIn = bodyIn//
 				.replaceAll("<br>", "<br/>")//
@@ -145,16 +155,6 @@ public class TranscriptionWrapper {
 
 		String bodyOut = visitor.getContext().getResult().replace("<span class=\"hilite\" data-highlight=\"\"></span>", "").trim();
 		return bodyOut;
-	}
-
-	@JsonIgnore
-	public String getBodyForDb() {
-		return convertFromInput(getBody());
-	}
-
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 
 }

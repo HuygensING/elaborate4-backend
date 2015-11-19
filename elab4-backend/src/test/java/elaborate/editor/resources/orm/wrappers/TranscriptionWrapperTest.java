@@ -59,7 +59,7 @@ public class TranscriptionWrapperTest {
 		TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
 		// assertThat( tw.title).isEqualTo(title);
 		assertThat(tw.getTextLayer()).isEqualTo(textLayer);
-		String expected = "<span data-id=\"9085822\" data-marker=\"begin\" data-type=\"type\"></span>sdgdgdgsdgsdfg<sup data-id=\"9085822\" data-marker=\"end\">1</sup>";
+		String expected = "<span data-marker=\"begin\" data-id=\"9085822\" data-type=\"type\"></span>sdgdgdgsdgsdfg<sup data-marker=\"end\" data-id=\"9085822\">1</sup>";
 		assertThat(tw.getBody()).isEqualTo(expected);
 	}
 
@@ -108,13 +108,13 @@ public class TranscriptionWrapperTest {
 				+ "<ae id=\"9085821\"/>"//
 				+ "\nhello world  "//
 				+ "</body>";
-		String expected = "<span data-id=\"9085822\" data-marker=\"begin\" data-type=\"type2\"></span>"//
+		String expected = "<span data-marker=\"begin\" data-id=\"9085822\" data-type=\"type2\"></span>"//
 				+ "bla "//
-				+ "<span data-id=\"9085821\" data-marker=\"begin\" data-type=\"type1\"></span>"//
+				+ "<span data-marker=\"begin\" data-id=\"9085821\" data-type=\"type1\"></span>"//
 				+ "die"//
-				+ "<sup data-id=\"9085822\" data-marker=\"end\">1</sup>"//
+				+ "<sup data-marker=\"end\" data-id=\"9085822\">1</sup>"//
 				+ " bla"//
-				+ "<sup data-id=\"9085821\" data-marker=\"end\">2</sup>"//
+				+ "<sup data-marker=\"end\" data-id=\"9085821\">2</sup>"//
 				+ "<br>hello world";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
 		Map<Integer, AnnotationData> annotationDataMap = ImmutableMap.<Integer, ProjectService.AnnotationData> builder()//

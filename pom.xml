@@ -71,7 +71,7 @@
 		<tomcat-maven.version>1.1</tomcat-maven.version>
 		<tomcatservlet-api.version>6.0.36</tomcatservlet-api.version>
 		<urlrewritefilter.version>4.0.4</urlrewritefilter.version>
-		<visitei.version>0.4.5-SNAPSHOT</visitei.version>
+		<visitei.version>0.4.5</visitei.version>
 		<wagon-ssh.version>2.2</wagon-ssh.version>
 		<xmlunit.version>1.5</xmlunit.version>
 		<yoga.version>1.0.0</yoga.version>
