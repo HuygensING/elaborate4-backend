@@ -29,12 +29,9 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 import nl.knaw.huygens.Log;
 
-@Ignore
 public class Elab4RestClientTest {
 	private static Elab4RestClient e4;
 
@@ -48,36 +45,31 @@ public class Elab4RestClientTest {
 		e4 = null;
 	}
 
-	@Test
+	//	@Test
 	public void testLoginFaila() throws Exception {
 		boolean success = e4.login("bla", "boe");
 		assertThat(success).isFalse();
 	}
 
-	@Test
+	//	@Test
 	public void testLoginSucceeds() throws Exception {
 		loginAsRoot();
 	}
 
-	@Test
+	//	@Test
 	public void testVersion() throws Exception {
 		Map<String, String> versionMap = e4.getAbout();
 		Log.info("{}", versionMap);
 		assertThat(versionMap).containsKey("version");
 	}
 
-	@Test
+	//	@Test
 	public void testGetProjectEntries() throws Exception {
 		loginAsRoot();
 		e4.getProjectEntries(1);
 	}
 
-	private void loginAsRoot() {
-		boolean success = e4.login("root", "d3gelijk");
-		assertThat(success).isTrue();
-	}
-
-	@Test
+	//	@Test
 	public void testCNWPagebreakFix() throws Exception {
 		loginAsRoot();
 		int projectId = 44; // CNW
@@ -87,5 +79,10 @@ public class Elab4RestClientTest {
 			String body = (String) transcriptionMap.get("body");
 			Log.info("{}: {}", id, body);
 		}
+	}
+
+	private void loginAsRoot() {
+		boolean success = e4.login("root", "d3gelijk");
+		assertThat(success).isTrue();
 	}
 }
