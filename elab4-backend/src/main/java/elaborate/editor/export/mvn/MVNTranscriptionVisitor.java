@@ -7,12 +7,12 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.AnnotationService;
-import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.ElementHandler;
@@ -29,6 +29,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   static List<String> errors = Lists.newArrayList();
   private static String sigle;
   private static boolean ignoreText = false;
+  public static boolean inParagraph = false;
 
   public MVNTranscriptionVisitor(String sigle) {
     super(new XmlContext());
@@ -45,7 +46,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   @Override
   public Traversal enterElement(Element element, XmlContext context) {
-    Log.warn("ignoring {}", element);
+    //    Log.warn("ignoring {}", elemen  t);
     return Traversal.NEXT;
   }
 
@@ -88,6 +89,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       firstText = true;
       errors.clear();
       ignoreText = false;
+      inParagraph = false;
       return Traversal.NEXT;
     }
 
@@ -116,9 +118,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     private void handleOpenAnnotation(Annotation annotation, XmlContext context) {
-      String type = annotation.getAnnotationType().getName();
+      MVNAnnotationType type = getVerifiedType(annotation);
       if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
-        ignoreText = true;
         String body = annotation.getBody();
         if (StringUtils.isNumeric(body)) {
           lb = Integer.valueOf(body);
@@ -137,23 +138,165 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
           context.addLiteral(annotation.getBody());
           context.addCloseTag("expan");
           context.addCloseTag("choice");
-          ignoreText = true;
+
+        } else if (MVNAnnotationType.ALINEA.equals(type)) {
+          closeOpenParagraph(context);
+          context.addOpenTag("p");
+          inParagraph = true;
+
+        } else if (MVNAnnotationType.CIJFERS.equals(type)) {
+          context.addOpenTag(new Element("num", "type", "roman"));
+
+        } else if (MVNAnnotationType.DEFECT.equals(type)) {
+
+        } else if (MVNAnnotationType.DOORHALING.equals(type)) {
+          context.addOpenTag("del");
+
+        } else if (MVNAnnotationType.GEBRUIKERSNOTITIE.equals(type)) {
+
+        } else if (MVNAnnotationType.INCIPIT.equals(type)) {
+
+        } else if (MVNAnnotationType.INITIAAL.equals(type)) {
+
+        } else if (MVNAnnotationType.INSPRINGEN.equals(type)) {
+
+        } else if (MVNAnnotationType.KOLOM.equals(type)) {
+
+        } else if (MVNAnnotationType.LETTERS.equals(type)) {
+
+        } else if (MVNAnnotationType.LINKERMARGEKOLOM.equals(type)) {
+
+        } else if (MVNAnnotationType.METAMARK.equals(type)) {
+
+        } else if (MVNAnnotationType.ONDERSCHRIFT.equals(type)) {
+          closeOpenParagraph(context);
+
+        } else if (MVNAnnotationType.ONDUIDELIJK.equals(type)) {
+
+        } else if (MVNAnnotationType.ONLEESBAAR.equals(type)) {
+
+        } else if (MVNAnnotationType.OPHOGING_ROOD.equals(type)) {
+
+        } else if (MVNAnnotationType.OPSCHRIFT.equals(type)) {
+          closeOpenParagraph(context);
+
+        } else if (MVNAnnotationType.PALEOGRAFISCH.equals(type)) {
+
+        } else if (MVNAnnotationType.POEZIE.equals(type)) {
+          closeOpenParagraph(context);
+
+        } else if (MVNAnnotationType.RECHTERMARGEKOLOM.equals(type)) {
+
+        } else if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
+
+        } else if (MVNAnnotationType.REGELNUMMERING_TEKST.equals(type)) {
+
+        } else if (MVNAnnotationType.TEKSTBEGIN.equals(type)) {
+
+        } else if (MVNAnnotationType.TEKSTEINDE.equals(type)) {
+
+        } else if (MVNAnnotationType.TEKSTKLEUR_ROOD.equals(type)) {
+
+        } else if (MVNAnnotationType.VERSREGEL.equals(type)) {
+
+        } else if (MVNAnnotationType.VREEMDTEKEN.equals(type)) {
+
+        } else if (MVNAnnotationType.WITREGEL.equals(type)) {
+
         } else {
-          context.addOpenTag(new Element("annotation", "type", type));
+          throw new RuntimeException("uncaught MVNAnnotationType: " + type.getName());
         }
       }
     }
 
-    private void handleCloseAnnotation(Annotation annotation, XmlContext context) {
-      String type = annotation.getAnnotationType().getName();
-      if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
-        ignoreText = false;
+    private void closeOpenParagraph(XmlContext context) {
+      if (inParagraph) {
+        context.addCloseTag("p");
+        inParagraph = false;
+      }
+    }
 
-      } else if (MVNAnnotationType.AFKORTING.equals(type)) {
-        ignoreText = false;
+    private MVNAnnotationType getVerifiedType(Annotation annotation) {
+      String typeName = annotation.getAnnotationType().getName();
+      verifyAnnotationTypeIsAllowed(typeName);
+      MVNAnnotationType type = MVNAnnotationType.valueOf(typeName);
+      ignoreText = type.ignoreText();
+      return type;
+    }
+
+    private void handleCloseAnnotation(Annotation annotation, XmlContext context) {
+      MVNAnnotationType type = getVerifiedType(annotation);
+      if (MVNAnnotationType.AFKORTING.equals(type)) {
+        // no action on closeAnnotation
+
+      } else if (MVNAnnotationType.ALINEA.equals(type)) {
+        // no action on closeAnnotation
+
+      } else if (MVNAnnotationType.CIJFERS.equals(type)) {
+        context.addCloseTag("num");
+
+      } else if (MVNAnnotationType.DEFECT.equals(type)) {
+
+      } else if (MVNAnnotationType.DOORHALING.equals(type)) {
+        context.addCloseTag("del");
+
+      } else if (MVNAnnotationType.GEBRUIKERSNOTITIE.equals(type)) {
+
+      } else if (MVNAnnotationType.INCIPIT.equals(type)) {
+
+      } else if (MVNAnnotationType.INITIAAL.equals(type)) {
+
+      } else if (MVNAnnotationType.INSPRINGEN.equals(type)) {
+
+      } else if (MVNAnnotationType.KOLOM.equals(type)) {
+
+      } else if (MVNAnnotationType.LETTERS.equals(type)) {
+
+      } else if (MVNAnnotationType.LINKERMARGEKOLOM.equals(type)) {
+
+      } else if (MVNAnnotationType.METAMARK.equals(type)) {
+
+      } else if (MVNAnnotationType.ONDERSCHRIFT.equals(type)) {
+
+      } else if (MVNAnnotationType.ONDUIDELIJK.equals(type)) {
+
+      } else if (MVNAnnotationType.ONLEESBAAR.equals(type)) {
+
+      } else if (MVNAnnotationType.OPHOGING_ROOD.equals(type)) {
+
+      } else if (MVNAnnotationType.OPSCHRIFT.equals(type)) {
+
+      } else if (MVNAnnotationType.PALEOGRAFISCH.equals(type)) {
+
+      } else if (MVNAnnotationType.POEZIE.equals(type)) {
+
+      } else if (MVNAnnotationType.RECHTERMARGEKOLOM.equals(type)) {
+
+      } else if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
+
+      } else if (MVNAnnotationType.REGELNUMMERING_TEKST.equals(type)) {
+
+      } else if (MVNAnnotationType.TEKSTBEGIN.equals(type)) {
+
+      } else if (MVNAnnotationType.TEKSTEINDE.equals(type)) {
+
+      } else if (MVNAnnotationType.TEKSTKLEUR_ROOD.equals(type)) {
+
+      } else if (MVNAnnotationType.VERSREGEL.equals(type)) {
+
+      } else if (MVNAnnotationType.VREEMDTEKEN.equals(type)) {
+
+      } else if (MVNAnnotationType.WITREGEL.equals(type)) {
 
       } else {
-        context.addCloseTag("annotation");
+        throw new RuntimeException("uncaught MVNAnnotationType: " + type.getName());
+      }
+    }
+
+    private void verifyAnnotationTypeIsAllowed(String type) {
+      if (!MVNAnnotationType.getAllNames().contains(type)) {
+        errors.add("onbekend annotatietype: " + type);
+        throw new RuntimeException(Joiner.on("\n").join(errors));
       }
     }
 

@@ -5,53 +5,63 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 public enum MVNAnnotationType {
-  AFKORTING("mvn:afkorting"), //
-  ALINEA("mvn:alinea"), //
-  CIJFERS("mvn:cijfers (romeins)"), //
-  DEFECT("mvn:defect"), //
-  DOORHALING("mvn:doorhaling"), //
-  GEBRUIKERSNOTITIE("mvn:gebruikersnotitie"), //
-  INCIPIT("mvn:incipit"), //
-  INITIAAL("mvn:initiaal"), //
-  INSPRINGEN("mvn:inspringen"), //
-  KOLOM("mvn:kolom"), //
-  LETTERS("mvn:letters (zelfnoemfunctie)"), //
-  LINKERMARGEKOLOM("mvn:linkermargekolom"), //
-  METAMARK("mvn:metamark"), //
-  ONDERSCHRIFT("mvn:onderschrift"), //
-  ONDUIDELIJK("mvn:onduidelijk"), //
-  ONLEESBAAR("mvn:onleesbaar"), //
-  OPHOGING_ROOD("mvn:ophoging (rood)"), //
-  OPSCHRIFT("mvn:opschrift"), //
-  PALEOGRAFISCH("mvn:paleografisch"), //
-  POEZIE("mvn:poëzie"), //
-  RECHTERMARGEKOLOM("mvn:rechtermargekolom"), //
-  REGELNUMMERING_BLAD("mvn:regelnummering (blad)"), //
-  REGELNUMMERING_TEKST("mvn:regelnummering (tekst)"), //
-  TEKSTBEGIN("mvn:tekstbegin"), //
-  TEKSTEINDE("mvn:teksteinde"), //
-  TEKSTKLEUR_ROOD("mvn:tekstkleur (rood)"), //
-  VREEMDTEKEN("mvn:vreemdteken"), //
-  VERSREGEL("mvn:versregel"), //
-  WITREGEL("mvn:witregel");
+  AFKORTING("mvn:afkorting", AnnotatedTextUsage.ignore), //
+  ALINEA("mvn:alinea", AnnotatedTextUsage.ignore), //
+  CIJFERS("mvn:cijfers (romeins)", AnnotatedTextUsage.use), //
+  DEFECT("mvn:defect", AnnotatedTextUsage.ignore), //
+  DOORHALING("mvn:doorhaling", AnnotatedTextUsage.use), //
+  GEBRUIKERSNOTITIE("mvn:gebruikersnotitie", AnnotatedTextUsage.use), //
+  INCIPIT("mvn:incipit", AnnotatedTextUsage.use), //
+  INITIAAL("mvn:initiaal", AnnotatedTextUsage.use), //
+  INSPRINGEN("mvn:inspringen", AnnotatedTextUsage.ignore), //
+  KOLOM("mvn:kolom", AnnotatedTextUsage.ignore), //
+  LETTERS("mvn:letters (zelfnoemfunctie)", AnnotatedTextUsage.use), //
+  LINKERMARGEKOLOM("mvn:linkermargekolom", AnnotatedTextUsage.use), //
+  METAMARK("mvn:metamark", AnnotatedTextUsage.use), //
+  ONDERSCHRIFT("mvn:onderschrift", AnnotatedTextUsage.use), //
+  ONDUIDELIJK("mvn:onduidelijk", AnnotatedTextUsage.use), //
+  ONLEESBAAR("mvn:onleesbaar", AnnotatedTextUsage.ignore), //
+  OPHOGING_ROOD("mvn:ophoging (rood)", AnnotatedTextUsage.use), //
+  OPSCHRIFT("mvn:opschrift", AnnotatedTextUsage.use), //
+  PALEOGRAFISCH("mvn:paleografisch", AnnotatedTextUsage.use), //
+  POEZIE("mvn:poëzie", AnnotatedTextUsage.ignore), //
+  RECHTERMARGEKOLOM("mvn:rechtermargekolom", AnnotatedTextUsage.use), //
+  REGELNUMMERING_BLAD("mvn:regelnummering (blad)", AnnotatedTextUsage.ignore), //
+  REGELNUMMERING_TEKST("mvn:regelnummering (tekst)", AnnotatedTextUsage.ignore), //
+  TEKSTBEGIN("mvn:tekstbegin", AnnotatedTextUsage.ignore), //
+  TEKSTEINDE("mvn:teksteinde", AnnotatedTextUsage.ignore), //
+  TEKSTKLEUR_ROOD("mvn:tekstkleur (rood)", AnnotatedTextUsage.use), //
+  VREEMDTEKEN("mvn:vreemdteken", AnnotatedTextUsage.use), //
+  VERSREGEL("mvn:versregel", AnnotatedTextUsage.ignore), //
+  WITREGEL("mvn:witregel", AnnotatedTextUsage.ignore);
+
+  private enum AnnotatedTextUsage {
+    use, ignore
+  };
 
   private final String name;
-  private final Set<String> allNames = Sets.newHashSet();
+  private final AnnotatedTextUsage ignoreText;
+  private final static Set<String> allNames = Sets.newHashSet();
 
-  private MVNAnnotationType(String name) {
+  private MVNAnnotationType(String name, AnnotatedTextUsage ignoreText) {
     this.name = name;
+    this.ignoreText = ignoreText;
   }
 
   public String getName() {
     return name;
   }
 
-  public Set<String> getAllNames() {
+  public static Set<String> getAllNames() {
     if (allNames.isEmpty()) {
       for (MVNAnnotationType mvnAnnotationType : MVNAnnotationType.values()) {
         allNames.add(mvnAnnotationType.getName());
       }
     }
     return allNames;
+  }
+
+  public boolean ignoreText() {
+    return ignoreText.equals(AnnotatedTextUsage.ignore);
   }
 }
