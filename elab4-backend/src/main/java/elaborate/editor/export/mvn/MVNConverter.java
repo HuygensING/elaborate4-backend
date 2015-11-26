@@ -26,7 +26,7 @@ public class MVNConverter {
       MVNFolium page = new MVNFolium();
       String n = entry.getName();
       page.setN(n);
-      page.setId(result.getSigle() + "pb" + n);
+      page.setId(result.getSigle() + "-pb-" + n);
       setFacs(entry, page, result);
       setOrder(page, entry);
       setBody(page, entry, result);

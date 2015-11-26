@@ -22,8 +22,6 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext> {
-  private static final String MVN_AFKORTING = "mvn:afkorting";
-  private static final String MVN_REGELNUMMERING_BLAD = "mvn:regelnummering (blad)";
 
   static AnnotationService annotationService = AnnotationService.instance();
   static int lb = 1;
@@ -70,7 +68,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static String newLB() {
-    String lbTag = "<lb n=\"" + lb + "\" xml:id=\"" + sigle + "lb" + lb + "\"/>";
+    String lbTag = "<lb n=\"" + lb + "\" xml:id=\"" + sigle + "-lb-" + lb + "\"/>";
     lb++;
     return lbTag;
   }
@@ -119,7 +117,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     private void handleOpenAnnotation(Annotation annotation, XmlContext context) {
       String type = annotation.getAnnotationType().getName();
-      if (MVN_REGELNUMMERING_BLAD.equals(type)) {
+      if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
         ignoreText = true;
         String body = annotation.getBody();
         if (StringUtils.isNumeric(body)) {
@@ -130,7 +128,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
       } else {
         handleFirstLB(context);
-        if (MVN_AFKORTING.equals(type)) {
+        if (MVNAnnotationType.AFKORTING.equals(type)) {
           context.addOpenTag("choice");
           context.addOpenTag("abbr");
           context.addLiteral(annotation.getAnnotatedText().replace("i>", "ex>"));
@@ -148,10 +146,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     private void handleCloseAnnotation(Annotation annotation, XmlContext context) {
       String type = annotation.getAnnotationType().getName();
-      if (MVN_REGELNUMMERING_BLAD.equals(type)) {
+      if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
         ignoreText = false;
 
-      } else if (MVN_AFKORTING.equals(type)) {
+      } else if (MVNAnnotationType.AFKORTING.equals(type)) {
         ignoreText = false;
 
       } else {
