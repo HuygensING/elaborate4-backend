@@ -721,7 +721,7 @@ public class MVNConverterTest {
     Project project = mock(Project.class);
     when(project.getName()).thenReturn("projectName");
     when(project.getTitle()).thenReturn("Title");
-    when(project.getMetadataMap()).thenReturn(ImmutableMap.of("publication.title", "Publication Title"));
+    when(project.getMetadataMap()).thenReturn(ImmutableMap.of(ProjectMetadataFields.PUBLICATION_TITLE, "Publication Title"));
     return project;
   }
 }

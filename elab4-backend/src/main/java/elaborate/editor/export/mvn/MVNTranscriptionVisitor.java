@@ -150,7 +150,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         if (StringUtils.isNumeric(body)) {
           lb = Integer.valueOf(body);
         } else {
-          errors.add("");
+          errors.add(MVNAnnotationType.REGELNUMMERING_BLAD.getName() + " body: '" + body + "' is not numeric");
         }
 
       } else {
@@ -340,7 +340,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {
+      context.addEmptyElementTag("cb");
+    }
   }
 
   private static class MetamarkHandler implements MVNAnnotationHandler {
