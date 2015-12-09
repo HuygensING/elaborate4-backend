@@ -4,10 +4,12 @@ import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import elaborate.editor.model.orm.Annotation;
@@ -23,17 +25,21 @@ import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext> {
 
-  static AnnotationService annotationService = AnnotationService.instance();
+  private static final String HI = "hi";
   static int lb = 1;
   static boolean firstText = true;
   static List<String> errors = Lists.newArrayList();
-  private static String sigle;
+  //  private static String sigle;
   private static boolean ignoreText = false;
   public static boolean inParagraph = false;
+  private static boolean inLineGroup = false;
+  private static String pageId = "1";
+  private static AnnotationService annotationService;
 
-  public MVNTranscriptionVisitor(String sigle) {
+  public MVNTranscriptionVisitor(String sigle, AnnotationService _annotationService) {
     super(new XmlContext());
-    MVNTranscriptionVisitor.sigle = sigle;
+    annotationService = _annotationService;
+    //    MVNTranscriptionVisitor.sigle = sigle;
     setTextHandler(this);
     setDefaultElementHandler(this);
     addElementHandler(new BodyHandler(), "body");
@@ -69,7 +75,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static String newLB() {
-    String lbTag = "<lb n=\"" + lb + "\" xml:id=\"" + sigle + "-lb-" + lb + "\"/>";
+    String lbTag = "<lb n=\"" + lb + "\" xml:id=\"" + pageId + "-lb-" + lb + "\"/>";
     lb++;
     return lbTag;
   }
@@ -78,6 +84,22 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     if (firstText) {
       context.addLiteral(newLB());
       firstText = false;
+    }
+  }
+
+  private static void closeOpenParagraph(XmlContext context) {
+    if (inParagraph) {
+      context.addCloseTag("p");
+      context.addLiteral("\n");
+      inParagraph = false;
+    }
+  }
+
+  private static void closeOpenLineGroup(XmlContext context) {
+    if (inLineGroup) {
+      context.addCloseTag("lg");
+      context.addLiteral("\n");
+      inLineGroup = false;
     }
   }
 
@@ -90,11 +112,14 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       errors.clear();
       ignoreText = false;
       inParagraph = false;
+      inLineGroup = false;
       return Traversal.NEXT;
     }
 
     @Override
-    public Traversal leaveElement(Element arg0, XmlContext arg1) {
+    public Traversal leaveElement(Element e, XmlContext c) {
+      closeOpenParagraph(c);
+      closeOpenLineGroup(c);
       return Traversal.NEXT;
     }
 
@@ -119,6 +144,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     private void handleOpenAnnotation(Annotation annotation, XmlContext context) {
       MVNAnnotationType type = getVerifiedType(annotation);
+      ignoreText = type.ignoreText();
       if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
         String body = annotation.getBody();
         if (StringUtils.isNumeric(body)) {
@@ -129,79 +155,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
       } else {
         handleFirstLB(context);
-        if (MVNAnnotationType.AFKORTING.equals(type)) {
-          context.addOpenTag("choice");
-          context.addOpenTag("abbr");
-          context.addLiteral(annotation.getAnnotatedText().replace("i>", "ex>"));
-          context.addCloseTag("abbr");
-          context.addOpenTag("expan");
-          context.addLiteral(annotation.getBody());
-          context.addCloseTag("expan");
-          context.addCloseTag("choice");
-
-        } else if (MVNAnnotationType.ALINEA.equals(type)) {
-          closeOpenParagraph(context);
-          context.addOpenTag("p");
-          inParagraph = true;
-
-        } else if (MVNAnnotationType.CIJFERS.equals(type)) {
-          context.addOpenTag(new Element("num", "type", "roman"));
-
-        } else if (MVNAnnotationType.DEFECT.equals(type)) {
-
-        } else if (MVNAnnotationType.DOORHALING.equals(type)) {
-          context.addOpenTag("del");
-
-        } else if (MVNAnnotationType.GEBRUIKERSNOTITIE.equals(type)) {
-
-        } else if (MVNAnnotationType.INCIPIT.equals(type)) {
-
-        } else if (MVNAnnotationType.INITIAAL.equals(type)) {
-
-        } else if (MVNAnnotationType.INSPRINGEN.equals(type)) {
-
-        } else if (MVNAnnotationType.KOLOM.equals(type)) {
-
-        } else if (MVNAnnotationType.LETTERS.equals(type)) {
-
-        } else if (MVNAnnotationType.LINKERMARGEKOLOM.equals(type)) {
-
-        } else if (MVNAnnotationType.METAMARK.equals(type)) {
-
-        } else if (MVNAnnotationType.ONDERSCHRIFT.equals(type)) {
-          closeOpenParagraph(context);
-
-        } else if (MVNAnnotationType.ONDUIDELIJK.equals(type)) {
-
-        } else if (MVNAnnotationType.ONLEESBAAR.equals(type)) {
-
-        } else if (MVNAnnotationType.OPHOGING_ROOD.equals(type)) {
-
-        } else if (MVNAnnotationType.OPSCHRIFT.equals(type)) {
-          closeOpenParagraph(context);
-
-        } else if (MVNAnnotationType.PALEOGRAFISCH.equals(type)) {
-
-        } else if (MVNAnnotationType.POEZIE.equals(type)) {
-          closeOpenParagraph(context);
-
-        } else if (MVNAnnotationType.RECHTERMARGEKOLOM.equals(type)) {
-
-        } else if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
-
-        } else if (MVNAnnotationType.REGELNUMMERING_TEKST.equals(type)) {
-
-        } else if (MVNAnnotationType.TEKSTBEGIN.equals(type)) {
-
-        } else if (MVNAnnotationType.TEKSTEINDE.equals(type)) {
-
-        } else if (MVNAnnotationType.TEKSTKLEUR_ROOD.equals(type)) {
-
-        } else if (MVNAnnotationType.VERSREGEL.equals(type)) {
-
-        } else if (MVNAnnotationType.VREEMDTEKEN.equals(type)) {
-
-        } else if (MVNAnnotationType.WITREGEL.equals(type)) {
+        if (handlers.containsKey(type)) {
+          handlers.get(type).handleOpenAnnotation(annotation, context);
 
         } else {
           throw new RuntimeException("uncaught MVNAnnotationType: " + type.getName());
@@ -209,88 +164,22 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       }
     }
 
-    private void closeOpenParagraph(XmlContext context) {
-      if (inParagraph) {
-        context.addCloseTag("p");
-        inParagraph = false;
+    private void handleCloseAnnotation(Annotation annotation, XmlContext context) {
+      MVNAnnotationType type = getVerifiedType(annotation);
+      ignoreText = false; // but what if it's inside another mvnannotation that should ignore text?
+      if (handlers.containsKey(type)) {
+        handlers.get(type).handleCloseAnnotation(annotation, context);
+
+      } else {
+        throw new RuntimeException("uncaught MVNAnnotationType: " + type.getName());
       }
     }
 
     private MVNAnnotationType getVerifiedType(Annotation annotation) {
       String typeName = annotation.getAnnotationType().getName();
       verifyAnnotationTypeIsAllowed(typeName);
-      MVNAnnotationType type = MVNAnnotationType.valueOf(typeName);
-      ignoreText = type.ignoreText();
+      MVNAnnotationType type = MVNAnnotationType.fromName(typeName);
       return type;
-    }
-
-    private void handleCloseAnnotation(Annotation annotation, XmlContext context) {
-      MVNAnnotationType type = getVerifiedType(annotation);
-      if (MVNAnnotationType.AFKORTING.equals(type)) {
-        // no action on closeAnnotation
-
-      } else if (MVNAnnotationType.ALINEA.equals(type)) {
-        // no action on closeAnnotation
-
-      } else if (MVNAnnotationType.CIJFERS.equals(type)) {
-        context.addCloseTag("num");
-
-      } else if (MVNAnnotationType.DEFECT.equals(type)) {
-
-      } else if (MVNAnnotationType.DOORHALING.equals(type)) {
-        context.addCloseTag("del");
-
-      } else if (MVNAnnotationType.GEBRUIKERSNOTITIE.equals(type)) {
-
-      } else if (MVNAnnotationType.INCIPIT.equals(type)) {
-
-      } else if (MVNAnnotationType.INITIAAL.equals(type)) {
-
-      } else if (MVNAnnotationType.INSPRINGEN.equals(type)) {
-
-      } else if (MVNAnnotationType.KOLOM.equals(type)) {
-
-      } else if (MVNAnnotationType.LETTERS.equals(type)) {
-
-      } else if (MVNAnnotationType.LINKERMARGEKOLOM.equals(type)) {
-
-      } else if (MVNAnnotationType.METAMARK.equals(type)) {
-
-      } else if (MVNAnnotationType.ONDERSCHRIFT.equals(type)) {
-
-      } else if (MVNAnnotationType.ONDUIDELIJK.equals(type)) {
-
-      } else if (MVNAnnotationType.ONLEESBAAR.equals(type)) {
-
-      } else if (MVNAnnotationType.OPHOGING_ROOD.equals(type)) {
-
-      } else if (MVNAnnotationType.OPSCHRIFT.equals(type)) {
-
-      } else if (MVNAnnotationType.PALEOGRAFISCH.equals(type)) {
-
-      } else if (MVNAnnotationType.POEZIE.equals(type)) {
-
-      } else if (MVNAnnotationType.RECHTERMARGEKOLOM.equals(type)) {
-
-      } else if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
-
-      } else if (MVNAnnotationType.REGELNUMMERING_TEKST.equals(type)) {
-
-      } else if (MVNAnnotationType.TEKSTBEGIN.equals(type)) {
-
-      } else if (MVNAnnotationType.TEKSTEINDE.equals(type)) {
-
-      } else if (MVNAnnotationType.TEKSTKLEUR_ROOD.equals(type)) {
-
-      } else if (MVNAnnotationType.VERSREGEL.equals(type)) {
-
-      } else if (MVNAnnotationType.VREEMDTEKEN.equals(type)) {
-
-      } else if (MVNAnnotationType.WITREGEL.equals(type)) {
-
-      } else {
-        throw new RuntimeException("uncaught MVNAnnotationType: " + type.getName());
-      }
     }
 
     private void verifyAnnotationTypeIsAllowed(String type) {
@@ -309,6 +198,279 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       return annotationService.getAnnotationByAnnotationNo(Integer.valueOf(annotationId));
     }
 
+  }
+
+  static Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
+      .put(MVNAnnotationType.AFKORTING, new AfkortingHandler())//
+      .put(MVNAnnotationType.ALINEA, new AlineaHandler())//
+      .put(MVNAnnotationType.CIJFERS, new WrapInElementHandler(new Element("num", "type", "roman")))//
+      .put(MVNAnnotationType.DEFECT, new DefectHandler())//
+      .put(MVNAnnotationType.DOORHALING, new WrapInElementHandler("del"))//
+      .put(MVNAnnotationType.GEBRUIKERSNOTITIE, new GebruikersnotitieHandler())//
+      .put(MVNAnnotationType.INCIPIT, new IncipitHandler())//
+      .put(MVNAnnotationType.INITIAAL, new InitiaalHandler())//
+      .put(MVNAnnotationType.INSPRINGEN, new InspringenHandler())//
+      .put(MVNAnnotationType.KOLOM, new KolomHandler())//
+      .put(MVNAnnotationType.LETTERS, new WrapInElementHandler("mentioned"))//
+      .put(MVNAnnotationType.LINKERMARGEKOLOM, new WrapInElementHandler(new Element("note", ImmutableMap.of("place", "margin-left", "type", "ms"))))//
+      .put(MVNAnnotationType.RECHTERMARGEKOLOM, new WrapInElementHandler(new Element("note", ImmutableMap.of("place", "margin-right", "type", "ms"))))//
+      .put(MVNAnnotationType.METAMARK, new MetamarkHandler())//
+      .put(MVNAnnotationType.ONDERSCHRIFT, new OnderschriftHandler())//
+      .put(MVNAnnotationType.ONDUIDELIJK, new WrapInElementHandler("unclear"))//
+      .put(MVNAnnotationType.ONLEESBAAR, new WrapInElementHandler("gap"))//
+      .put(MVNAnnotationType.OPHOGING_ROOD, new WrapInElementHandler(new Element(HI, "rend", "rubricated")))//
+      .put(MVNAnnotationType.OPSCHRIFT, new OpschriftHandler())//
+      .put(MVNAnnotationType.PALEOGRAFISCH, new PaleografischHandler())//
+      .put(MVNAnnotationType.POEZIE, new PoezieHandler())//
+      .put(MVNAnnotationType.REGELNUMMERING_BLAD, new RegelnummeringBladHandler())//
+      .put(MVNAnnotationType.REGELNUMMERING_TEKST, new RegelnummeringTekstHandler())//
+      .put(MVNAnnotationType.TEKSTBEGIN, new TekstbeginHandler())//
+      .put(MVNAnnotationType.TEKSTEINDE, new TeksteindeHandler())//
+      .put(MVNAnnotationType.TEKSTKLEUR_ROOD, new WrapInElementHandler(new Element(HI, "rend", "rubric")))//
+      .put(MVNAnnotationType.VERSREGEL, new VersregelHandler())//
+      .put(MVNAnnotationType.VREEMDTEKEN, new VreemdtekenHandler())//
+      .put(MVNAnnotationType.WITREGEL, new WitregelHandler())//
+      .build();
+
+  public static interface MVNAnnotationHandler {
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context);
+
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context);
+  }
+
+  private static class WrapInElementHandler implements MVNAnnotationHandler {
+    Element element;
+
+    public WrapInElementHandler(Element element) {
+      this.element = element;
+    }
+
+    public WrapInElementHandler(String elementName) {
+      this.element = new Element(elementName);
+    }
+
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {
+      context.addOpenTag(element);
+    }
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {
+      context.addCloseTag(element);
+    }
+  }
+
+  private static class AfkortingHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {
+      context.addOpenTag("choice");
+      context.addOpenTag("abbr");
+      context.addLiteral(annotation.getAnnotatedText());
+      context.addCloseTag("abbr");
+      context.addOpenTag("expan");
+      context.addLiteral(normalized(annotation.getBody()).replace("i>", "ex>"));
+      context.addCloseTag("expan");
+      context.addCloseTag("choice");
+    }
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {
+      // no action on closeAnnotation
+    }
+  }
+
+  private static class AlineaHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {
+      closeOpenParagraph(context);
+      closeOpenLineGroup(context);
+      context.addOpenTag("p");
+      inParagraph = true;
+    }
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) { // no action on closeAnnotation
+    }
+  }
+
+  private static class DefectHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {
+      context.addEmptyElementTag("gap");
+    }
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class GebruikersnotitieHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class IncipitHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class InitiaalHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class InspringenHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class KolomHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class MetamarkHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class OnderschriftHandler extends WrapInElementHandler {
+
+    public OnderschriftHandler() {
+      super("closer");
+    }
+
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {
+      closeOpenParagraph(context);
+      closeOpenLineGroup(context);
+      super.handleOpenAnnotation(annotation, context);
+    }
+  }
+
+  private static class OpschriftHandler extends WrapInElementHandler {
+    public OpschriftHandler() {
+      super("head");
+    }
+
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {
+      closeOpenParagraph(context);
+      closeOpenLineGroup(context);
+      super.handleOpenAnnotation(annotation, context);
+    }
+  }
+
+  private static class PaleografischHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {
+      Element note = new Element("note", "type", "c");
+      context.addOpenTag(note);
+      context.addLiteral(normalized(annotation.getBody()).replaceAll("<i>", "<mentioned>").replaceAll("</i>", "</mentioned>"));
+      context.addCloseTag(note);
+    }
+  }
+
+  private static String normalized(String rawXml) {
+    String normalized = rawXml//
+        .replaceAll("<i .*?>", "<i>")//
+        .replaceAll("<div>", "")//
+        .replaceAll("</div>", "")//
+        .replaceAll("<br>", "")//
+        .replace("&nbsp;", " ");
+    return normalized;
+  }
+
+  private static class PoezieHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {
+      closeOpenParagraph(context);
+    }
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {
+      context.addLiteral("\n");
+      context.addOpenTag("lg");
+      inLineGroup = true;
+    }
+  }
+
+  private static class RegelnummeringBladHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class RegelnummeringTekstHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class TekstbeginHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class TeksteindeHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class VersregelHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class VreemdtekenHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {}
+  }
+
+  private static class WitregelHandler implements MVNAnnotationHandler {
+    @Override
+    public void handleOpenAnnotation(Annotation annotation, XmlContext context) {}
+
+    @Override
+    public void handleCloseAnnotation(Annotation annotation, XmlContext context) {
+      context.addEmptyElementTag("lb");
+    }
   }
 
 }

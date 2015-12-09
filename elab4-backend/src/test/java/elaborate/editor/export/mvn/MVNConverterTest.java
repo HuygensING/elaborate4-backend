@@ -42,6 +42,8 @@ import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.service.AnnotationService;
 import nl.knaw.huygens.Log;
 
 public class MVNConverterTest {
@@ -53,7 +55,8 @@ public class MVNConverterTest {
     when(project.getTitle()).thenReturn("MVN Project");
     when(project.getMetadataMap()).thenReturn(ImmutableMap.of(ProjectMetadataFields.PUBLICATION_TITLE, "MVN Project Publication"));
 
-    MVNConverter converter = new MVNConverter(project);
+    AnnotationService annotationService = mock(AnnotationService.class);
+    MVNConverter converter = new MVNConverter(project, annotationService);
     MVNConversionResult report = converter.validate();
     Log.info("report={}", report);
     assertThat(report).isNotNull();
@@ -86,16 +89,18 @@ public class MVNConverterTest {
 
   //    Toelichting: Elke entry komt overeen met een bladzijde in het manuscript
   //    Validatie:   Indien aanwezig bevat het metadataveld ‘order’ een integer waarde 
+  //                 wanneer het veld ‘order’ aanwezig en voor één entry gevuld is (met niet-whitespace),
+  //                 moet het voor alle entries gevuld zijn (met niet-whitespace)
   //    Conversie:   <pb/>
-  //      De <pb/> wordt geplaatst voorafgaande aan alles wat betrekking heeft op de inhoud van de betreffende pagina,
-  //      dus in het bijzonder voorafgaand aan de tekst die op die pagina begint. 
-  //      Elke pb krijgt een n-attribuut (veld Name).
-  //      Elke pb krijgt een xml:id attribuut (concatenatie sigle, ’pb’, n-attribuut)
-  //      De pb krijgt een facs-attibuut waarin de naam van de bijbehorende afbeelding komt te staan.
-  //      De volgorde van de entries wordt bepaald door
-  //      - indien aanwezig, het metadataveld ‘order’
-  //      - anders op entry Name (sorteren als string) 
-  //      Elke <pb> wordt geplaatst op een nieuwe regel. 
+  //                 De <pb/> wordt geplaatst voorafgaande aan alles wat betrekking heeft op de inhoud van de betreffende pagina,
+  //                 dus in het bijzonder voorafgaand aan de tekst die op die pagina begint. 
+  //                 Elke pb krijgt een n-attribuut (veld Name).
+  //                 Elke pb krijgt een xml:id attribuut (concatenatie sigle, ’pb’, n-attribuut)
+  //                 De pb krijgt een facs-attibuut waarin de naam van de bijbehorende afbeelding komt te staan.
+  //                 De volgorde van de entries wordt bepaald door
+  //                  - indien aanwezig, het metadataveld ‘order’
+  //                  - anders op entry Name (sorteren als string) 
+  //                 Elke <pb> wordt geplaatst op een nieuwe regel. 
   @Test
   public void testEveryProjectEntryLeadsToPagebreakInGeneratedTEI() {
     // TODO: make test
@@ -151,7 +156,15 @@ public class MVNConverterTest {
   @Test
   public void testAfkortingConversie() {
     Annotation annotation = mockAnnotationOfType(AFKORTING);
-    when(annotation.getBody()).thenReturn("<i>expanded</i>");
+    when(annotation.getBody()).thenReturn("<i>inhoud annotatie</i>");
+    when(annotation.getAnnotatedText()).thenReturn("geannoteerde tekst");
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<choice><abbr>geannoteerde tekst</abbr><expan><ex>inhoud annotatie</ex></expan></choice>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:alinea
@@ -165,7 +178,13 @@ public class MVNConverterTest {
   @Test
   public void testAlineaConversie() {
     Annotation annotation = mockAnnotationOfType(ALINEA);
-    //
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<p>"//
+        + " post</p>\n";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:cijfers (romeins)
@@ -175,7 +194,13 @@ public class MVNConverterTest {
   @Test
   public void testCijfersConversie() {
     Annotation annotation = mockAnnotationOfType(CIJFERS);
-    //
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<num type=\"roman\">geannoteerde tekst</num>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:defect
@@ -186,7 +211,29 @@ public class MVNConverterTest {
   @Test
   public void testDefectConversie() {
     Annotation annotation = mockAnnotationOfType(DEFECT);
-    //
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<gap/>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
+  }
+
+  //  mvn:onleesbaar
+  //  Toelichting: De geannoteerde tekst is onleesbaar
+  //  Validatie:   Geen
+  //  Conversie:   <gap></gap>
+  @Test
+  public void testOnleesbaarConversie() {
+    Annotation annotation = mockAnnotationOfType(ONLEESBAAR);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<gap></gap>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:doorhaling
@@ -196,27 +243,13 @@ public class MVNConverterTest {
   @Test
   public void testDoorhalingConversie() {
     Annotation annotation = mockAnnotationOfType(DOORHALING);
-    //
-  }
-
-  //  mvn:gebruikersnotitie
-  //  Toelichting: Notitie van een gebruiker van het manuscript (komt te vervallen)
-  //  Validatie:   Geen
-  //  Conversie:   Geen
-  @Test
-  public void testGebruikersNotitieConversie() {
-    Annotation annotation = mockAnnotationOfType(GEBRUIKERSNOTITIE);
-    //
-  }
-
-  //  mvn:incipit
-  //  Toelichting: Geeft de eerste regel van een tekst (komt te vervallen)
-  //  Validatie:   Geen
-  //  Conversie:   Geen
-  @Test
-  public void testIncipitConversie() {
-    Annotation annotation = mockAnnotationOfType(INCIPIT);
-    //
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<del>geannoteerde tekst</del>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:initiaal
@@ -227,29 +260,48 @@ public class MVNConverterTest {
   @Test
   public void testInitiaalConversie() {
     Annotation annotation = mockAnnotationOfType(INITIAAL);
+    when(annotation.getBody()).thenReturn("2");
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<hi rend=\"capitalsize2\">geannoteerde tekst</hi>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
     //
   }
 
-  //  mvn:inspringen
-  //  Toelichting: De tekst is niet links uitgelijnd. De puntannotatie heeft betrekking op de erop volgende tekst.  
-  //  Validatie:   Het geannoteerde teken is ‘¤’
-  //  Conversie:   Rend-attribuut op voorafgaande <lb> met waarde "indent"
-  //               PS: vooralsnog onderscheiden we geen verschillende niveaus van inspringing.
   @Test
-  public void testInspringenConversie() {
-    Annotation annotation = mockAnnotationOfType(INSPRINGEN);
-    //
+  public void testInitiaalConversie_AnnotationBodyOfZeroFailsValidation() {
+    Annotation annotation = mockAnnotationOfType(INITIAAL);
+    when(annotation.getBody()).thenReturn("0");
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String validationError = "De inhoud van de annotatie ('0') is geen natuurlijk getal > 0 en < 20.";
+    assertConversionFailsValidation(mockAnnotationService(1, annotation), body, validationError);
   }
 
-  //  mvn:kolom
-  //  Toelichting: Het begin van een kolom op een foliumzijde. Een puntannotatie.
-  //  Validatie:   Het geannoteerde teken is ‘¤’
-  //  Conversie:   <cb/>
-  //  Prioriteit:  Laag
   @Test
-  public void testKolomConversie() {
-    Annotation annotation = mockAnnotationOfType(KOLOM);
-    //
+  public void testInitiaalConversie_AnnotationBodyOfTwentyFailsValidation() {
+    Annotation annotation = mockAnnotationOfType(INITIAAL);
+    when(annotation.getBody()).thenReturn("20");
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String validationError = "De inhoud van de annotatie ('20') is geen natuurlijk getal > 0 en < 20.";
+    assertConversionFailsValidation(mockAnnotationService(1, annotation), body, validationError);
+  }
+
+  @Test
+  public void testInitiaalConversie_AnnotationBodyOfNotAnIntegerFailsValidation() {
+    Annotation annotation = mockAnnotationOfType(INITIAAL);
+    when(annotation.getBody()).thenReturn("whatever");
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String validationError = "De inhoud van de annotatie ('whatever') is geen natuurlijk getal > 0 en < 20.";
+    assertConversionFailsValidation(mockAnnotationService(1, annotation), body, validationError);
   }
 
   //  mvn:letters (zelfnoemfunctie)
@@ -259,7 +311,13 @@ public class MVNConverterTest {
   @Test
   public void testLettersConversie() {
     Annotation annotation = mockAnnotationOfType(LETTERS);
-    //
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<mentioned>geannoteerde tekst</mentioned>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:linkermargekolom
@@ -269,17 +327,13 @@ public class MVNConverterTest {
   @Test
   public void testLinkermargekolomConversie() {
     Annotation annotation = mockAnnotationOfType(LINKERMARGEKOLOM);
-    //
-  }
-
-  //  mvn:metamark
-  //  Toelichting: Geannoteerde tekst bevat instructie over hoe de tekst moet worden gelezen. Komt te vervallen
-  //  Validatie:   Geen
-  //  Conversie:   Geen
-  @Test
-  public void testMetamarkConversie() {
-    Annotation annotation = mockAnnotationOfType(METAMARK);
-    //
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<note place=\"margin-left\" type=\"ms\">geannoteerde tekst</note>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:onderschrift
@@ -287,11 +341,16 @@ public class MVNConverterTest {
   //  Validatie:   Geen
   //  Conversie:   <closer>[geannoteerde tekst]</closer>
   //               Onderschriften worden niet meegenomen in de tekstregelnummering, wel in de bladregelnumering.
-
   @Test
   public void testOnderschriftConversie() {
     Annotation annotation = mockAnnotationOfType(ONDERSCHRIFT);
-    //
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<closer>geannoteerde tekst</closer>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:onduidelijk
@@ -301,16 +360,13 @@ public class MVNConverterTest {
   @Test
   public void testOnduidelijkConversie() {
     Annotation annotation = mockAnnotationOfType(ONDUIDELIJK);
-    //
-  }
-
-  //  mvn:onleesbaar
-  //  Toelichting: De geannoteerde tekst is onleesbaar
-  //  Validatie:   Geen
-  //  Conversie:   <gap></gap>
-  @Test
-  public void testOnleesbaarConversie() {
-    Annotation annotation = mockAnnotationOfType(ONLEESBAAR);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<unclear>geannoteerde tekst</unclear>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:ophoging (rood)
@@ -322,9 +378,13 @@ public class MVNConverterTest {
   @Test
   public void testOphogingConversie() {
     Annotation annotation = mockAnnotationOfType(OPHOGING_ROOD);
-    String body = "<body>pre <ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/> post</body>";
-    String expected = "pre <hi rend=\"rubricated\">[geannoteerde tekst]</hi> post";
-    assertConversion(body, expected);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<hi rend=\"rubricated\">geannoteerde tekst</hi>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:opschrift
@@ -335,6 +395,13 @@ public class MVNConverterTest {
   @Test
   public void testOpschriftConversie() {
     Annotation annotation = mockAnnotationOfType(OPSCHRIFT);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<head>geannoteerde tekst</head>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:paleografisch
@@ -345,18 +412,112 @@ public class MVNConverterTest {
   @Test
   public void testPaleografishConversie() {
     Annotation annotation = mockAnnotationOfType(PALEOGRAFISCH);
+    when(annotation.getBody()).thenReturn("inhoud <i>annotatie</i>");
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "geannoteerde tekst<note type=\"c\">inhoud <mentioned>annotatie</mentioned></note>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
+  }
+
+  //  mvn:tekstkleur (rood)
+  //  Toelichting: De geannoteerde tekst is in rood
+  //  Validatie:   Geen
+  //  Conversie:   <hi rend="rubric">[geannoteerde tekst]</hi>
+  //               Wanneer een ander element aanwezig is waarop het rend-attribuut kan worden aangebracht,
+  //               is het <hi>- element niet noodzakelijk.
+  @Test
+  public void testTekstkleurConversie() {
+    Annotation annotation = mockAnnotationOfType(TEKSTKLEUR_ROOD);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<hi rend=\"rubric\">geannoteerde tekst</hi>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
+  }
+
+  //  mvn:witregel
+  //  Toelichting: Geeft een witregel in de tekst aan
+  //  Validatie:   Het geannoteerde teken is ‘¤’
+  //  Conversie:   Genereer een extra <lb/>. 
+  //               Deze lb krijgt geen n, np of xml:id attribuut en telt ook niet mee in de nummering. 
+  @Test
+  public void testWitregelConversie() {
+    Annotation annotation = mockAnnotationOfType(WITREGEL);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>¤<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<lb/>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:poëzie
   //  Toelichting: Er volgt een verstekst. Een puntannotatie.
   //  Validatie:   Geen
-  //  Conversie:   Er beging een <lg>-element (linegroup). De linegroup wordt afgesloten bij
+  //  Conversie:   Er begint een <lg>-element (linegroup). De linegroup wordt afgesloten bij
   //               - een mvn:alinea-element
   //               - een mvn:onderschrift, mvn:opschrift
   //               - het einde van de tekst
   @Test
-  public void testPoezieConversie() {
+  public void testPoezieConversie_LineGroupEndsAtEndOfText() {
     Annotation annotation = mockAnnotationOfType(POEZIE);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<lg> post</lg>";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
+  }
+
+  @Test
+  public void testPoezieConversie_LineGroupEndsAtAlinea() {
+    Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
+    Annotation alineaAnnotation = mockAnnotationOfType(ALINEA);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
+        + " line 1\n"//
+        + " line 2\n"//
+        + "<ab id=\"2\"/>alinea<ae id=\"2\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<lg>line 1 line 2</lg> post";
+    assertConversion(mockAnnotationService(1, poezieAnnotation, 2, alineaAnnotation), body, expected);
+  }
+
+  @Test
+  public void testPoezieConversie_LineGroupEndsAtOnderschrift() {
+    Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
+    Annotation onderschriftAnnotation = mockAnnotationOfType(ONDERSCHRIFT);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
+        + " line 1\n"//
+        + " line 2\n"//
+        + "<ab id=\"2\"/>onderschrift<ae id=\"2\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<lg>line 1 line 2</lg> onderschrift post";
+    assertConversion(mockAnnotationService(1, poezieAnnotation, 2, onderschriftAnnotation), body, expected);
+  }
+
+  @Test
+  public void testPoezieConversie_LineGroupEndsAtOpchrift() {
+    Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
+    Annotation opAnnotation = mockAnnotationOfType(OPSCHRIFT);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
+        + " line 1\n"//
+        + " line 2\n"//
+        + "<ab id=\"2\"/>opschrift<ae id=\"2\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<lg>line 1 line 2</lg> post";
+    assertConversion(mockAnnotationService(1, poezieAnnotation, 2, opAnnotation), body, expected);
   }
 
   //  mvn:rechtermargekolom
@@ -368,6 +529,13 @@ public class MVNConverterTest {
   @Test
   public void testRechtermargeKolomConversie() {
     Annotation annotation = mockAnnotationOfType(RECHTERMARGEKOLOM);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
+        + " post</body>";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+        + "<note place=\"margin-right\" type=\"ms\">geannoteerde tekst</note>"//
+        + " post";
+    assertConversion(mockAnnotationService(1, annotation), body, expected);
   }
 
   //  mvn:regelnummering (blad)
@@ -379,16 +547,17 @@ public class MVNConverterTest {
   @Test
   public void testRegelnummeringBladConversie() {
     Annotation annotation = mockAnnotationOfType(REGELNUMMERING_BLAD);
-
   }
 
-  //  mvn:regelnummering (tekst)
-  //  Toelichting: Geeft afwijkingen aan in de tekstregelnummering. Een puntannotatie. Komt te vervallen.
-  //  Validatie:   Geen
-  //  Conversie:   Geen
+  //  mvn:inspringen
+  //  Toelichting: De tekst is niet links uitgelijnd. De puntannotatie heeft betrekking op de erop volgende tekst.  
+  //  Validatie:   Het geannoteerde teken is ‘¤’
+  //  Conversie:   Rend-attribuut op voorafgaande <lb> met waarde "indent"
+  //               PS: vooralsnog onderscheiden we geen verschillende niveaus van inspringing.
   @Test
-  public void testRegelnummeringTekstConversie() {
-    Annotation annotation = mockAnnotationOfType(REGELNUMMERING_TEKST);
+  public void testInspringenConversie() {
+    Annotation annotation = mockAnnotationOfType(INSPRINGEN);
+    //
   }
 
   //  mvn:tekstbegin, mvn:teksteinde
@@ -425,16 +594,7 @@ public class MVNConverterTest {
     Annotation eindeAnnotation = mockAnnotationOfType(TEKSTEINDE);
   }
 
-  //  mvn:tekstkleur (rood)
-  //  Toelichting: De geannoteerde tekst is in rood
-  //  Validatie:   Geen
-  //  Conversie:   <hi rend="rubric">[geannoteerde tekst]</hi>
-  //               Wanneer een ander element aanwezig is waarop het rend-attribuut kan worden aangebracht,
-  //               is het <hi>- element niet noodzakelijk.
-  @Test
-  public void testTekstkleurConversie() {
-    Annotation annotation = mockAnnotationOfType(TEKSTKLEUR_ROOD);
-  }
+  /* low-priority or cancelled requirements */
 
   //  mvn:vreemdteken
   //  Toelichting: Geeft korte omschrijving van teken (Nog niet in gebruik)
@@ -457,15 +617,56 @@ public class MVNConverterTest {
     Annotation annotation = mockAnnotationOfType(VERSREGEL);
   }
 
-  //  mvn:witregel
-  //  Toelichting: Geeft een witregel in de tekst aan
+  //  mvn:kolom
+  //  Toelichting: Het begin van een kolom op een foliumzijde. Een puntannotatie.
   //  Validatie:   Het geannoteerde teken is ‘¤’
-  //  Conversie:   Genereer een extra <lb/>. 
-  //               Deze lb krijgt geen n, np of xml:id attribuut en telt ook niet mee in de nummering. 
+  //  Conversie:   <cb/>
+  //  Prioriteit:  Laag
   @Test
-  public void testWitregelConversie() {
-    Annotation annotation = mockAnnotationOfType(WITREGEL);
+  public void testKolomConversie() {
+    Annotation annotation = mockAnnotationOfType(KOLOM);
+    //
+  }
 
+  //  mvn:regelnummering (tekst)
+  //  Toelichting: Geeft afwijkingen aan in de tekstregelnummering. Een puntannotatie.
+  //  Validatie:   Geen
+  //  Conversie:   Geen
+  //  Prioriteit:  Komt te vervallen.
+  @Test
+  public void testRegelnummeringTekstConversie() {
+    Annotation annotation = mockAnnotationOfType(REGELNUMMERING_TEKST);
+  }
+
+  //  mvn:gebruikersnotitie
+  //  Toelichting: Notitie van een gebruiker van het manuscript
+  //  Validatie:   Geen
+  //  Conversie:   Geen
+  //  Prioriteit:  komt te vervallen
+  @Test
+  public void testGebruikersNotitieConversie() {
+    Annotation annotation = mockAnnotationOfType(GEBRUIKERSNOTITIE);
+    //
+  }
+
+  //  mvn:incipit
+  //  Toelichting: Geeft de eerste regel van een tekst
+  //  Validatie:   Geen
+  //  Conversie:   Geen
+  //  Prioriteut:  komt te vervallen
+  @Test
+  public void testIncipitConversie() {
+    Annotation annotation = mockAnnotationOfType(INCIPIT);
+  }
+
+  //  mvn:metamark
+  //  Toelichting: Geannoteerde tekst bevat instructie over hoe de tekst moet worden gelezen.
+  //  Validatie:   Geen
+  //  Conversie:   Geen
+  //  Prioriteit:  Komt te vervallen
+  @Test
+  public void testMetamarkConversie() {
+    Annotation annotation = mockAnnotationOfType(METAMARK);
   }
 
   /* private methods */
@@ -482,12 +683,45 @@ public class MVNConverterTest {
     return witregel;
   }
 
-  private void assertConversion(String body, String expected) {
-    String converted = convert(body);
+  private AnnotationService mockAnnotationService(int annotationNo, Annotation annotation) {
+    AnnotationService annotationService = mock(AnnotationService.class);
+    when(annotationService.getAnnotationByAnnotationNo(annotationNo)).thenReturn(annotation);
+    return annotationService;
+  }
+
+  private AnnotationService mockAnnotationService(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2) {
+    AnnotationService annotationService = mockAnnotationService(annotationNo1, annotation1);
+    when(annotationService.getAnnotationByAnnotationNo(annotationNo2)).thenReturn(annotation2);
+    return annotationService;
+  }
+
+  private void assertConversion(AnnotationService annotationService, String body, String expected) {
+    String converted = convert(annotationService, body);
     assertThat(converted).isEqualTo(expected);
   }
 
-  private String convert(String body) {
-    return body;
+  private String convert(AnnotationService annotationService, String body) {
+    Project project = mockProject();
+    MVNConversionResult result = new MVNConversionResult(project);
+    assertThat(result.isOK()).overridingErrorMessage("validation error: %s", result.getErrors()).isTrue();
+
+    ProjectEntry entry = mock(ProjectEntry.class);
+    String tei = new MVNConverter(project, annotationService).toTei(body, entry, result);
+    return tei;
+  }
+
+  private void assertConversionFailsValidation(AnnotationService mockAnnotationService, String body, String validationError) {
+    Project project = mockProject();
+    MVNConversionResult result = new MVNConversionResult(project);
+    assertThat(result.isOK()).isFalse();
+    assertThat(result.getErrors()).contains(validationError);
+  }
+
+  private Project mockProject() {
+    Project project = mock(Project.class);
+    when(project.getName()).thenReturn("projectName");
+    when(project.getTitle()).thenReturn("Title");
+    when(project.getMetadataMap()).thenReturn(ImmutableMap.of("publication.title", "Publication Title"));
+    return project;
   }
 }

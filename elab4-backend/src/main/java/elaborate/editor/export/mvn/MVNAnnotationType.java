@@ -64,4 +64,13 @@ public enum MVNAnnotationType {
   public boolean ignoreText() {
     return ignoreText.equals(AnnotatedTextUsage.ignore);
   }
+
+  public static MVNAnnotationType fromName(String name) {
+    for (MVNAnnotationType type : values()) {
+      if (type.getName().equals(name)) {
+        return type;
+      }
+    }
+    throw new RuntimeException("name not recognized: " + name);
+  }
 }
