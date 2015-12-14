@@ -20,14 +20,7 @@
   <text xml:id="${sigle}">
     <group>
       <text>
-        <body>
-
-<#list pages as page>
-<pb n="${page.n}" xml:id="${page.id}" facs="${page.facs}"/>
-${page.body}
-
-</#list>
-
+        <body>${body}
         </body>
       </text>
     </group>

@@ -1,7 +1,5 @@
 package elaborate.editor.export.mvn;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,7 +8,6 @@ import com.google.common.collect.Lists;
 
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.freemarker.FreeMarker;
 
 public class MVNConversionResult {
@@ -18,9 +15,10 @@ public class MVNConversionResult {
   private final String title;
   private final String idno;
   private final String sigle;
+  private String body = "";
   private final String baseURL;
   private final List<String> errors = Lists.newArrayList();
-  private final List<MVNFolium> pages = Lists.newArrayList();
+  //  private final List<MVNFolium> pages = Lists.newArrayList();
 
   public MVNConversionResult(Project project) {
     this.baseURL = "https://www.elaborate.huygens.knaw.nl/projects/" + project.getName();
@@ -50,29 +48,37 @@ public class MVNConversionResult {
     return sigle;
   }
 
+  public void setBody(String teibody) {
+    body = teibody;
+  }
+
+  public String getBody() {
+    return body;
+  }
+
   public List<String> getErrors() {
     return errors;
   }
 
-  private static final Comparator<MVNFolium> PAGE_ORDER = new Comparator<MVNFolium>() {
+  //  private static final Comparator<MVNFolium> PAGE_ORDER = new Comparator<MVNFolium>() {
+  //
+  //    @Override
+  //    public int compare(MVNFolium t1, MVNFolium t2) {
+  //      return t1.getOrder().compareTo(t2.getOrder());
+  //    }
+  //  };
 
-    @Override
-    public int compare(MVNFolium t1, MVNFolium t2) {
-      return t1.getOrder().compareTo(t2.getOrder());
-    }
-  };
+  //  public List<MVNFolium> getPages() {
+  //    Collections.sort(pages, PAGE_ORDER);
+  //    return pages;
+  //  }
 
-  public List<MVNFolium> getPages() {
-    Collections.sort(pages, PAGE_ORDER);
-    return pages;
-  }
+  //  public void addPages(MVNFolium page) {
+  //    pages.add(page);
+  //  }
 
-  public void addPages(MVNFolium page) {
-    pages.add(page);
-  }
-
-  public void addError(ProjectEntry projectEntry, String error) {
-    errors.add(url(projectEntry) + " : " + error);
+  public void addError(String entryId, String error) {
+    errors.add(url(entryId) + " : " + error);
   }
 
   public String getTEI() {
@@ -85,8 +91,8 @@ public class MVNConversionResult {
 
   /* private methods */
 
-  private String url(ProjectEntry projectEntry) {
-    return baseURL + "/entries/" + projectEntry.getId() + "/transcriptions/diplomatic";
+  private String url(String entryId) {
+    return baseURL + "/entries/" + entryId + "/transcriptions/diplomatic";
   }
 
 }

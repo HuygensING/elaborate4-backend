@@ -38,12 +38,11 @@ import org.junit.Test;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.service.AnnotationService;
 import nl.knaw.huygens.Log;
 
 public class MVNConverterTest {
@@ -55,9 +54,10 @@ public class MVNConverterTest {
     when(project.getTitle()).thenReturn("MVN Project");
     when(project.getMetadataMap()).thenReturn(ImmutableMap.of(ProjectMetadataFields.PUBLICATION_TITLE, "MVN Project Publication"));
 
-    AnnotationService annotationService = mock(AnnotationService.class);
-    MVNConverter converter = new MVNConverter(project, annotationService);
-    MVNConversionResult report = converter.validate();
+    //    AnnotationService annotationService = mock(AnnotationService.class);
+    MVNConversionData data = new MVNConversionData();
+    MVNConverter converter = new MVNConverter(project, data);
+    MVNConversionResult report = converter.convert();
     Log.info("report={}", report);
     assertThat(report).isNotNull();
     Log.info("errors={}", Joiner.on("\n").join(report.getErrors()));
@@ -164,7 +164,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<choice><abbr>geannoteerde tekst</abbr><expan><ex>inhoud annotatie</ex></expan></choice>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:alinea
@@ -184,7 +184,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<p>"//
         + " post</p>\n";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:cijfers (romeins)
@@ -200,7 +200,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<num type=\"roman\">geannoteerde tekst</num>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:defect
@@ -217,7 +217,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<gap/>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:onleesbaar
@@ -233,7 +233,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<gap></gap>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:doorhaling
@@ -249,7 +249,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<del>geannoteerde tekst</del>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:initiaal
@@ -267,7 +267,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<hi rend=\"capitalsize2\">geannoteerde tekst</hi>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
     //
   }
 
@@ -279,7 +279,7 @@ public class MVNConverterTest {
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
     String validationError = "De inhoud van de annotatie ('0') is geen natuurlijk getal > 0 en < 20.";
-    assertConversionFailsValidation(mockAnnotationService(1, annotation), body, validationError);
+    assertConversionFailsValidation(body, mockData(1, annotation), validationError);
   }
 
   @Test
@@ -290,7 +290,7 @@ public class MVNConverterTest {
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
     String validationError = "De inhoud van de annotatie ('20') is geen natuurlijk getal > 0 en < 20.";
-    assertConversionFailsValidation(mockAnnotationService(1, annotation), body, validationError);
+    assertConversionFailsValidation(body, mockData(1, annotation), validationError);
   }
 
   @Test
@@ -301,7 +301,7 @@ public class MVNConverterTest {
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
     String validationError = "De inhoud van de annotatie ('whatever') is geen natuurlijk getal > 0 en < 20.";
-    assertConversionFailsValidation(mockAnnotationService(1, annotation), body, validationError);
+    assertConversionFailsValidation(body, mockData(1, annotation), validationError);
   }
 
   //  mvn:letters (zelfnoemfunctie)
@@ -317,7 +317,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<mentioned>geannoteerde tekst</mentioned>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:linkermargekolom
@@ -333,7 +333,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<note place=\"margin-left\" type=\"ms\">geannoteerde tekst</note>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:onderschrift
@@ -350,7 +350,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<closer>geannoteerde tekst</closer>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:onduidelijk
@@ -366,7 +366,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<unclear>geannoteerde tekst</unclear>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:ophoging (rood)
@@ -384,7 +384,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<hi rend=\"rubricated\">geannoteerde tekst</hi>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:opschrift
@@ -401,7 +401,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<head>geannoteerde tekst</head>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:paleografisch
@@ -419,7 +419,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "geannoteerde tekst<note type=\"c\">inhoud <mentioned>annotatie</mentioned></note>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:tekstkleur (rood)
@@ -437,7 +437,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<hi rend=\"rubric\">geannoteerde tekst</hi>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:witregel
@@ -454,7 +454,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<lb/>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:poëzie
@@ -472,7 +472,7 @@ public class MVNConverterTest {
         + " post</body>";
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<lg> post</lg>";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   @Test
@@ -487,7 +487,7 @@ public class MVNConverterTest {
         + " post</body>";
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<lg>line 1 line 2</lg> post";
-    assertConversion(mockAnnotationService(1, poezieAnnotation, 2, alineaAnnotation), body, expected);
+    assertConversion(body, mockData(1, poezieAnnotation, 2, alineaAnnotation), expected);
   }
 
   @Test
@@ -502,7 +502,7 @@ public class MVNConverterTest {
         + " post</body>";
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<lg>line 1 line 2</lg> onderschrift post";
-    assertConversion(mockAnnotationService(1, poezieAnnotation, 2, onderschriftAnnotation), body, expected);
+    assertConversion(body, mockData(1, poezieAnnotation, 2, onderschriftAnnotation), expected);
   }
 
   @Test
@@ -517,7 +517,7 @@ public class MVNConverterTest {
         + " post</body>";
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<lg>line 1 line 2</lg> post";
-    assertConversion(mockAnnotationService(1, poezieAnnotation, 2, opAnnotation), body, expected);
+    assertConversion(body, mockData(1, poezieAnnotation, 2, opAnnotation), expected);
   }
 
   //  mvn:rechtermargekolom
@@ -535,7 +535,7 @@ public class MVNConverterTest {
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
         + "<note place=\"margin-right\" type=\"ms\">geannoteerde tekst</note>"//
         + " post";
-    assertConversion(mockAnnotationService(1, annotation), body, expected);
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:regelnummering (blad)
@@ -683,34 +683,41 @@ public class MVNConverterTest {
     return witregel;
   }
 
-  private AnnotationService mockAnnotationService(int annotationNo, Annotation annotation) {
-    AnnotationService annotationService = mock(AnnotationService.class);
-    when(annotationService.getAnnotationByAnnotationNo(annotationNo)).thenReturn(annotation);
+  private MVNConversionData mockData(int annotationNo, Annotation annotation) {
+    MVNConversionData annotationService = new MVNConversionData();
+    AnnotationData annotationData = new AnnotationData();
+    annotationData.body = annotation.getBody();
+    annotationData.type = annotation.getAnnotationType().getName();
+    annotationService.getAnnotationIndex().put(annotationNo, annotationData);
+    //    when(annotationService.getAnnotationByAnnotationNo(annotationNo)).thenReturn(annotation);
     return annotationService;
   }
 
-  private AnnotationService mockAnnotationService(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2) {
-    AnnotationService annotationService = mockAnnotationService(annotationNo1, annotation1);
-    when(annotationService.getAnnotationByAnnotationNo(annotationNo2)).thenReturn(annotation2);
+  private MVNConversionData mockData(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2) {
+    MVNConversionData annotationService = mockData(annotationNo1, annotation1);
+    AnnotationData annotationData = new AnnotationData();
+    annotationData.body = annotation2.getBody();
+    annotationData.type = annotation2.getAnnotationType().getName();
+    annotationService.getAnnotationIndex().put(annotationNo2, annotationData);
+    //    when(annotationService.getAnnotationByAnnotationNo(annotationNo2)).thenReturn(annotation2);
     return annotationService;
   }
 
-  private void assertConversion(AnnotationService annotationService, String body, String expected) {
-    String converted = convert(annotationService, body);
+  private void assertConversion(String body, MVNConversionData data, String expected) {
+    String converted = convert(body, data);
     assertThat(converted).isEqualTo(expected);
   }
 
-  private String convert(AnnotationService annotationService, String body) {
+  private String convert(String body, MVNConversionData data) {
     Project project = mockProject();
     MVNConversionResult result = new MVNConversionResult(project);
     assertThat(result.isOK()).overridingErrorMessage("validation error: %s", result.getErrors()).isTrue();
 
-    ProjectEntry entry = mock(ProjectEntry.class);
-    String tei = new MVNConverter(project, annotationService).toTei(body, entry, result);
+    String tei = new MVNConverter(project, data).toTei(body, result);
     return tei;
   }
 
-  private void assertConversionFailsValidation(AnnotationService mockAnnotationService, String body, String validationError) {
+  private void assertConversionFailsValidation(String body, MVNConversionData mockData, String validationError) {
     Project project = mockProject();
     MVNConversionResult result = new MVNConversionResult(project);
     assertThat(result.isOK()).isFalse();
