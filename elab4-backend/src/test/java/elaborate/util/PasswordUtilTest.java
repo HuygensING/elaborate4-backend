@@ -33,7 +33,7 @@ import com.google.common.base.Charsets;
 
 public class PasswordUtilTest {
 
-  @Test
+  @Ignore @Test
   public void testPassword() throws UnsupportedEncodingException {
     final String password = "aap-noot-mies";
     final byte[] passwordDigest2 = PasswordUtil.encode(password);
