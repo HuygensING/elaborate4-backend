@@ -273,39 +273,30 @@ public class MVNConverterTest {
     //
   }
 
-  @Ignore
   @Test
   public void testInitiaalConversie_AnnotationBodyOfZeroFailsValidation() {
-    Annotation annotation = mockAnnotationOfType(INITIAAL);
-    when(annotation.getBody()).thenReturn("0");
-    String body = "<body>pre "//
-        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
-        + " post</body>";
-    String validationError = "De inhoud van de annotatie ('0') is geen natuurlijk getal > 0 en < 20.";
-    assertConversionFailsValidation(body, mockData(1, annotation), validationError);
+    assertAnnotationBodyIsInvalidForInitiaal("0");
   }
 
-  @Ignore
   @Test
   public void testInitiaalConversie_AnnotationBodyOfTwentyFailsValidation() {
-    Annotation annotation = mockAnnotationOfType(INITIAAL);
-    when(annotation.getBody()).thenReturn("20");
-    String body = "<body>pre "//
-        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
-        + " post</body>";
-    String validationError = "De inhoud van de annotatie ('20') is geen natuurlijk getal > 0 en < 20.";
-    assertConversionFailsValidation(body, mockData(1, annotation), validationError);
+    assertAnnotationBodyIsInvalidForInitiaal("20");
   }
 
-  @Ignore
   @Test
   public void testInitiaalConversie_AnnotationBodyOfNotAnIntegerFailsValidation() {
+    assertAnnotationBodyIsInvalidForInitiaal("whatever");
+  }
+
+  private void assertAnnotationBodyIsInvalidForInitiaal(String annotationBody) {
     Annotation annotation = mockAnnotationOfType(INITIAAL);
-    when(annotation.getBody()).thenReturn("whatever");
-    String body = "<body>pre "//
+    when(annotation.getBody()).thenReturn(annotationBody);
+    Long entryId = 1l;
+    String body = "<body><pb n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\"/> pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String validationError = "De inhoud van de annotatie ('whatever') is geen natuurlijk getal > 0 en < 20.";
+    String entryPrefix = "https://www.elaborate.huygens.knaw.nl/projects/projectName/entries/" + entryId + "/transcriptions/diplomatic : ";
+    String validationError = entryPrefix + "De inhoud van de annotatie ('" + annotationBody + "') is geen natuurlijk getal > 0 en < 20.";
     assertConversionFailsValidation(body, mockData(1, annotation), validationError);
   }
 
@@ -694,23 +685,21 @@ public class MVNConverterTest {
   }
 
   private MVNConversionData mockData(int annotationNo, Annotation annotation) {
-    MVNConversionData annotationService = new MVNConversionData();
+    MVNConversionData conversionData = new MVNConversionData();
     AnnotationData annotationData = new AnnotationData();
     annotationData.body = annotation.getBody();
     annotationData.type = annotation.getAnnotationType().getName();
-    annotationService.getAnnotationIndex().put(annotationNo, annotationData);
-    //    when(annotationService.getAnnotationByAnnotationNo(annotationNo)).thenReturn(annotation);
-    return annotationService;
+    conversionData.getAnnotationIndex().put(annotationNo, annotationData);
+    return conversionData;
   }
 
   private MVNConversionData mockData(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2) {
-    MVNConversionData annotationService = mockData(annotationNo1, annotation1);
+    MVNConversionData conversionData = mockData(annotationNo1, annotation1);
     AnnotationData annotationData = new AnnotationData();
     annotationData.body = annotation2.getBody();
     annotationData.type = annotation2.getAnnotationType().getName();
-    annotationService.getAnnotationIndex().put(annotationNo2, annotationData);
-    //    when(annotationService.getAnnotationByAnnotationNo(annotationNo2)).thenReturn(annotation2);
-    return annotationService;
+    conversionData.getAnnotationIndex().put(annotationNo2, annotationData);
+    return conversionData;
   }
 
   private void assertConversion(String body, MVNConversionData data, String expected) {
@@ -721,15 +710,16 @@ public class MVNConverterTest {
   private String convert(String body, MVNConversionData data) {
     Project project = mockProject();
     MVNConversionResult result = new MVNConversionResult(project);
-    assertThat(result.isOK()).overridingErrorMessage("validation error: %s", result.getErrors()).isTrue();
 
     String tei = new MVNConverter(project, data).toTei(body, result);
+    assertThat(result.isOK()).overridingErrorMessage("validation error: %s", result.getErrors()).isTrue();
     return tei;
   }
 
   private void assertConversionFailsValidation(String body, MVNConversionData mockData, String validationError) {
     Project project = mockProject();
     MVNConversionResult result = new MVNConversionResult(project);
+    String tei = new MVNConverter(project, mockData).toTei(body, result);
     assertThat(result.isOK()).isFalse();
     assertThat(result.getErrors()).contains(validationError);
   }

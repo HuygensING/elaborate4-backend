@@ -31,13 +31,14 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   private static boolean ignoreText = false;
   public static boolean inParagraph = false;
   private static boolean inLineGroup = false;
-  private static String pageId = "1";
+  private static String pageId;
   private static Map<Integer, AnnotationData> annotationIndex;
   private static MVNConversionResult result;
   private static String currentEntryId;
 
   public MVNTranscriptionVisitor(MVNConversionResult result, Map<Integer, AnnotationData> annotationIndex) {
     super(new XmlContext());
+    MVNTranscriptionVisitor.pageId = "1";
     MVNTranscriptionVisitor.result = result;
     MVNTranscriptionVisitor.annotationIndex = annotationIndex;
     //    MVNTranscriptionVisitor.sigle = sigle;
@@ -384,7 +385,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     private void addValidationError(String body) {
-      result.addError(currentEntryId, MVNAnnotationType.INITIAAL.getName() + " :  De inhoud van de annotatie (nu: '" + body + "') moet een natuurlijk getal > 0 en < 20 zijn");
+      result.addError(currentEntryId, "De inhoud van de annotatie ('" + body + "') is geen natuurlijk getal > 0 en < 20.");
     }
 
     @Override
