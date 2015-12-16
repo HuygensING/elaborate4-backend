@@ -27,13 +27,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.base.Charsets;
 
 public class PasswordUtilTest {
 
-  @Ignore @Test
+  @Ignore
+  @Test
   public void testPassword() throws UnsupportedEncodingException {
     final String password = "aap-noot-mies";
     final byte[] passwordDigest2 = PasswordUtil.encode(password);
