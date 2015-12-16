@@ -12,6 +12,8 @@ import com.google.common.collect.ImmutableMap;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.model.orm.Transcription;
+import nl.knaw.huygens.tei.Comment;
+import nl.knaw.huygens.tei.CommentHandler;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.ElementHandler;
@@ -20,7 +22,7 @@ import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext> {
+public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
 
   private static final String HI = "hi";
   static int lb = 1;
@@ -36,11 +38,12 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   public MVNTranscriptionVisitor(MVNConversionResult result, Map<Integer, AnnotationData> annotationIndex) {
     super(new XmlContext());
-    this.result = result;
+    MVNTranscriptionVisitor.result = result;
     MVNTranscriptionVisitor.annotationIndex = annotationIndex;
     //    MVNTranscriptionVisitor.sigle = sigle;
     setTextHandler(this);
     setDefaultElementHandler(this);
+    setCommentHandler(this);
     addElementHandler(new BodyHandler(), "body");
     addElementHandler(new PageBreakHandler(), "pb");
     addElementHandler(new AnnotationHandler(), "ab", "ae");
@@ -67,6 +70,11 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       }
       context.addLiteral(normalized);
     }
+    return Traversal.NEXT;
+  }
+
+  @Override
+  public Traversal visitComment(Comment comment, XmlContext context) {
     return Traversal.NEXT;
   }
 
@@ -239,7 +247,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   static Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
       .put(MVNAnnotationType.AFKORTING, new AfkortingHandler())//
       .put(MVNAnnotationType.ALINEA, new AlineaHandler())//
-      .put(MVNAnnotationType.CIJFERS, new WrapInElementHandler(new Element("num", "type", "roman")))//
+      .put(MVNAnnotationType.CIJFERS, new WrapInElementHandler(new Element("num").withAttribute("type", "roman")))//
       .put(MVNAnnotationType.DEFECT, new DefectHandler())//
       .put(MVNAnnotationType.DOORHALING, new WrapInElementHandler("del"))//
       .put(MVNAnnotationType.GEBRUIKERSNOTITIE, new GebruikersnotitieHandler())//
@@ -248,13 +256,13 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       .put(MVNAnnotationType.INSPRINGEN, new InspringenHandler())//
       .put(MVNAnnotationType.KOLOM, new KolomHandler())//
       .put(MVNAnnotationType.LETTERS, new WrapInElementHandler("mentioned"))//
-      .put(MVNAnnotationType.LINKERMARGEKOLOM, new WrapInElementHandler(new Element("note", ImmutableMap.of("place", "margin-left", "type", "ms"))))//
-      .put(MVNAnnotationType.RECHTERMARGEKOLOM, new WrapInElementHandler(new Element("note", ImmutableMap.of("place", "margin-right", "type", "ms"))))//
+      .put(MVNAnnotationType.LINKERMARGEKOLOM, new WrapInElementHandler(new Element("note").withAttribute("place", "margin-left").withAttribute("type", "ms")))//
+      .put(MVNAnnotationType.RECHTERMARGEKOLOM, new WrapInElementHandler(new Element("note").withAttribute("place", "margin-right").withAttribute("type", "ms")))//
       .put(MVNAnnotationType.METAMARK, new MetamarkHandler())//
       .put(MVNAnnotationType.ONDERSCHRIFT, new OnderschriftHandler())//
       .put(MVNAnnotationType.ONDUIDELIJK, new WrapInElementHandler("unclear"))//
       .put(MVNAnnotationType.ONLEESBAAR, new WrapInElementHandler("gap"))//
-      .put(MVNAnnotationType.OPHOGING_ROOD, new WrapInElementHandler(new Element(HI, "rend", "rubricated")))//
+      .put(MVNAnnotationType.OPHOGING_ROOD, new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubricated")))//
       .put(MVNAnnotationType.OPSCHRIFT, new OpschriftHandler())//
       .put(MVNAnnotationType.PALEOGRAFISCH, new PaleografischHandler())//
       .put(MVNAnnotationType.POEZIE, new PoezieHandler())//
@@ -262,7 +270,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       .put(MVNAnnotationType.REGELNUMMERING_TEKST, new RegelnummeringTekstHandler())//
       .put(MVNAnnotationType.TEKSTBEGIN, new TekstbeginHandler())//
       .put(MVNAnnotationType.TEKSTEINDE, new TeksteindeHandler())//
-      .put(MVNAnnotationType.TEKSTKLEUR_ROOD, new WrapInElementHandler(new Element(HI, "rend", "rubric")))//
+      .put(MVNAnnotationType.TEKSTKLEUR_ROOD, new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubric")))//
       .put(MVNAnnotationType.VERSREGEL, new VersregelHandler())//
       .put(MVNAnnotationType.VREEMDTEKEN, new VreemdtekenHandler())//
       .put(MVNAnnotationType.WITREGEL, new WitregelHandler())//
@@ -357,11 +365,33 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static class InitiaalHandler implements MVNAnnotationHandler {
-    @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    Element hi = new Element("hi");
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+      Integer size = 0;
+      if (StringUtils.isNumeric(annotation.body)) {
+        size = Integer.valueOf(annotation.body.trim());
+        if (size < 1 || size > 19) {
+          addValidationError(annotation.body);
+        }
+
+      } else {
+        addValidationError(annotation.body);
+      }
+      hi.setAttribute("rend", "capitalsize" + size);
+      context.addOpenTag(hi);
+    }
+
+    private void addValidationError(String body) {
+      result.addError(currentEntryId, MVNAnnotationType.INITIAAL.getName() + " :  De inhoud van de annotatie (nu: '" + body + "') moet een natuurlijk getal > 0 en < 20 zijn");
+    }
+
+    @Override
+    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
+      context.addCloseTag(hi);
+    }
+
   }
 
   private static class InspringenHandler implements MVNAnnotationHandler {
@@ -423,7 +453,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     @Override
     public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      Element note = new Element("note", "type", "c");
+      Element note = new Element("note").withAttribute("type", "c");
       context.addOpenTag(note);
       context.addLiteral(cleanUpAnnotationBody(annotation).replaceAll("<i>", "<mentioned>").replaceAll("</i>", "</mentioned>"));
       context.addCloseTag(note);
@@ -517,4 +547,5 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         .replace("&nbsp;", " ");
     return normalized;
   }
+
 }
