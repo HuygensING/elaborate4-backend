@@ -3,11 +3,13 @@ package elaborate.editor.export.mvn;
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
@@ -23,6 +25,10 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
+
+  static final String choiceTag = "choice";
+  static final String abbrTag = "abbr";
+  static final String expanTag = "expan";
 
   private static final String HI = "hi";
   static int lb = 1;
@@ -136,6 +142,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       pageId = element.getAttribute("id");
       currentEntryId = element.getAttribute("_entryId");
       element.removeAttribute("_entryId");
+      if (element.getAttribute("facs").equals("null")) {
+        element.removeAttribute("facs");
+      }
       lb = 1;
       return super.enterElement(element, context);
     }
@@ -269,8 +278,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       .put(MVNAnnotationType.POEZIE, new PoezieHandler())//
       .put(MVNAnnotationType.REGELNUMMERING_BLAD, new RegelnummeringBladHandler())//
       .put(MVNAnnotationType.REGELNUMMERING_TEKST, new RegelnummeringTekstHandler())//
-      .put(MVNAnnotationType.TEKSTBEGIN, new TekstbeginHandler())//
-      .put(MVNAnnotationType.TEKSTEINDE, new TeksteindeHandler())//
+      .put(MVNAnnotationType.TEKSTBEGIN, new TekstBeginHandler())//
+      .put(MVNAnnotationType.TEKSTEINDE, new TekstEindeHandler())//
       .put(MVNAnnotationType.TEKSTKLEUR_ROOD, new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubric")))//
       .put(MVNAnnotationType.VERSREGEL, new VersregelHandler())//
       .put(MVNAnnotationType.VREEMDTEKEN, new VreemdtekenHandler())//
@@ -314,13 +323,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     @Override
     public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
       String annotatedText = context.closeLayer();
-      String choiceTag = "choice";
       context.addOpenTag(choiceTag);
-      String abbrTag = "abbr";
       context.addOpenTag(abbrTag);
       context.addLiteral(annotatedText);
       context.addCloseTag(abbrTag);
-      String expanTag = "expan";
       context.addOpenTag(expanTag);
       context.addLiteral(cleanUpAnnotationBody(annotation).replace("i>", "ex>"));
       context.addCloseTag(expanTag);
@@ -459,7 +465,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     @Override
     public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      Element note = new Element("note").withAttribute("type", "c");
+      Element note = new Element("note").withAttribute("type", "pc");
       context.addOpenTag(note);
       context.addLiteral(cleanUpAnnotationBody(annotation).replaceAll("<i>", "<mentioned>").replaceAll("</i>", "</mentioned>"));
       context.addCloseTag(note);
@@ -496,20 +502,53 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
   }
 
-  private static class TekstbeginHandler implements MVNAnnotationHandler {
+  private static class TekstBeginHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+      context.openLayer();
+    }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
+      String annotatedText = context.closeLayer();
+      if (!"‡".equals(annotatedText)) {
+        result.addError(currentEntryId, "Het geannoteerde teken moet ‘‡’ zijn bij mvn:tekstbegin, is '" + annotatedText + "'");
+      }
+      List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
+      String textNum = parts.get(0);
+      Element element = new Element("group")//
+          .withAttribute("n", textNum)//
+          .withAttribute("xml:id", result.getSigle() + "-" + textNum);
+      context.addLiteral("\n");
+      context.addOpenTag(element);
+      context.addLiteral("\n");
+      if (parts.size() > 1) {
+        String title = parts.get(1);
+        Element head = new Element("head").withAttribute("type", "assigned");
+        context.addOpenTag(head);
+        context.addLiteral(title);
+        context.addCloseTag(head);
+      }
+    }
   }
 
-  private static class TeksteindeHandler implements MVNAnnotationHandler {
+  private static class TekstEindeHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+      context.openLayer();
+    }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
+      String annotatedText = context.closeLayer();
+      if (!"‡".equals(annotatedText)) {
+        result.addError(currentEntryId, "Het geannoteerde teken moet ‘‡’ zijn bij mvn:teksteinde, is '" + annotatedText + "'");
+      }
+      Element element = new Element("group");
+      context.addLiteral("\n");
+      context.addCloseTag(element);
+      context.addLiteral("\n");
+    }
   }
 
   private static class VersregelHandler implements MVNAnnotationHandler {

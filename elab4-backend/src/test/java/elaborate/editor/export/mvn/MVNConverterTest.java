@@ -412,7 +412,7 @@ public class MVNConverterTest {
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
-        + "geannoteerde tekst<note type=\"c\">inhoud <mentioned>annotatie</mentioned></note>"//
+        + "geannoteerde tekst<note type=\"pc\">inhoud <mentioned>annotatie</mentioned></note>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
   }
@@ -509,8 +509,8 @@ public class MVNConverterTest {
         + " line 2\n"//
         + "<ab id=\"2\"/>onderschrift<ae id=\"2\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
-        + "<lg>line 1 line 2</lg> onderschrift post";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre \n"//
+        + "<lg>line 1\n line 2\n</lg> onderschrift post";
     assertConversion(body, mockData(1, poezieAnnotation, 2, onderschriftAnnotation), expected);
   }
 
@@ -519,14 +519,18 @@ public class MVNConverterTest {
   public void testPoezieConversie_LineGroupEndsAtOpchrift() {
     Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
     Annotation opAnnotation = mockAnnotationOfType(OPSCHRIFT);
-    String body = "<body>pre "//
+    String body = "<body>pre\n"//
         + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
         + " line 1\n"//
         + " line 2\n"//
         + "<ab id=\"2\"/>opschrift<ae id=\"2\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
-        + "<lg>line 1 line 2</lg> post";
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre \n"//
+        + "<lg>\n" //
+        + "<lb n=\"2\" xml:id=\"1-lb-2\"/> line 1\n"//
+        + "<lb n=\"3\" xml:id=\"1-lb-3\"/> line 2\n"//
+        + "</lg>\n"//
+        + "<head>opschrift</head> post";
     assertConversion(body, mockData(1, poezieAnnotation, 2, opAnnotation), expected);
   }
 

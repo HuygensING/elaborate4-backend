@@ -17,6 +17,7 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.HibernateUtil;
+import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
@@ -59,6 +60,7 @@ public class MVNConverter {
     String xml = "<body>" + editionTextBuilder.toString() + "</body>";
     try {
       FileUtils.write(new File("out/rawbody.xml"), xml);
+      FileUtils.write(new File("out/smokedbody.xml"), smoke(xml));
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -76,6 +78,28 @@ public class MVNConverter {
     //      result.addPages(page);
     //    }
     return result;
+  }
+
+  private String smoke(String xml) {
+    String smoked = xml;
+    for (String annotationNoString : XmlUtil.extractAnnotationNos(xml)) {
+      Integer annotationNo = Integer.valueOf(annotationNoString);
+      if (data.getAnnotationIndex().containsKey(annotationNo)) {
+        String type = data.getAnnotationIndex().get(annotationNo).type.replaceAll("[ \\(\\)]+", "_");
+        smoked = smoked//
+            .replace(originalAnnotationBegin(annotationNoString), "<" + type + ">")//
+            .replace(originalAnnotationEnd(annotationNoString), "</" + type + ">");
+      }
+    }
+    return smoked;
+  }
+
+  private static String originalAnnotationEnd(String annotationNo) {
+    return "<ae id=\"" + annotationNo + "\"/>";
+  }
+
+  private static String originalAnnotationBegin(String annotationNo) {
+    return "<ab id=\"" + annotationNo + "\"/>";
   }
 
   private String transcriptionBody(MVNConversionData.EntryData entryData) {

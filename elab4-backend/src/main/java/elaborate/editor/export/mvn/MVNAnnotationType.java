@@ -24,8 +24,8 @@ public enum MVNAnnotationType {
   PALEOGRAFISCH("mvn:paleografisch", AnnotatedTextUsage.use), //
   POEZIE("mvn:poëzie", AnnotatedTextUsage.ignore), //
   REGELNUMMERING_BLAD("mvn:regelnummering (blad)", AnnotatedTextUsage.ignore), //
-  TEKSTBEGIN("mvn:tekstbegin", AnnotatedTextUsage.ignore), //
-  TEKSTEINDE("mvn:teksteinde", AnnotatedTextUsage.ignore), //
+  TEKSTBEGIN("mvn:tekstbegin", AnnotatedTextUsage.use), //
+  TEKSTEINDE("mvn:teksteinde", AnnotatedTextUsage.use), //
   TEKSTKLEUR_ROOD("mvn:tekstkleur (rood)", AnnotatedTextUsage.use), //
   VREEMDTEKEN("mvn:vreemdteken", AnnotatedTextUsage.use), //
   VERSREGEL("mvn:versregel", AnnotatedTextUsage.ignore), //
