@@ -371,14 +371,15 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     @Override
     public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
       Integer size = 0;
-      if (StringUtils.isNumeric(annotation.body)) {
-        size = Integer.valueOf(annotation.body.trim());
+      String body = annotation.body.trim();
+      if (StringUtils.isNumeric(body)) {
+        size = Integer.valueOf(body);
         if (size < 1 || size > 19) {
-          addValidationError(annotation.body);
+          addValidationError(body);
         }
 
       } else {
-        addValidationError(annotation.body);
+        addValidationError(body);
       }
       hi.setAttribute("rend", "capitalsize" + size);
       context.addOpenTag(hi);

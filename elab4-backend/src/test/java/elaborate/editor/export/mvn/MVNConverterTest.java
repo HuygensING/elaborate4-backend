@@ -260,9 +260,9 @@ public class MVNConverterTest {
   //  Validatie:   De inhoud van de annotatie is een natuurlijk getal > 0 en < 20. 
   //  Conversie:   <hi rend="capitalsize[inhoud annotatie]>[geannoteerde tekst]</hi>
   @Test
-  public void testInitiaalConversie() {
+  public void testInitiaalConversieWith_SpacesAreAllowedInTheAnnotationBody() {
     Annotation annotation = mockAnnotationOfType(INITIAAL);
-    when(annotation.getBody()).thenReturn("2");
+    when(annotation.getBody()).thenReturn("2 ");
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
