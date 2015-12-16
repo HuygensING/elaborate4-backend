@@ -39,9 +39,9 @@
 		<fest.version>1.0.16</fest.version>
 		<flexjson.version>3.3</flexjson.version>
 		<freemarker.version>2.3.23</freemarker.version>
-		<guava.version>19.0-rc2</guava.version>
+		<guava.version>19.0</guava.version>
 		<guice.version>4.0</guice.version>
-		<hibernate.version>4.3.8.Final</hibernate.version>
+		<hibernate.version>5.0.5.Final</hibernate.version>
 		<hsqldb.version>2.3.3</hsqldb.version>
 		<jackson.version>2.3.0</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
 		<javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
@@ -49,12 +49,12 @@
 		<jersey.version>1.19</jersey.version>
 		<jersey-client.version>2.6</jersey-client.version><!-- 2.7 = jdk7 -->
 		<joda-time.version>2.9.1</joda-time.version>
-		<jsoup.version>1.7.3</jsoup.version><!-- 1.8.1 throws an error -->
+		<jsoup.version>1.7.3</jsoup.version><!-- >= 1.8.1 throws an error -->
 		<jsr250-api.version>1.0</jsr250-api.version>
 		<jtidy.version>r938</jtidy.version>
-		<jetty-maven.version>9.3.1.v20150714</jetty-maven.version>
+		<jetty-maven.version>9.3.6.v20151106</jetty-maven.version>
 		<junit.version>4.12</junit.version>
-		<log.version>1.1.0</log.version>
+		<log.version>1.1.1</log.version>
 		<maven-assembly.version>2.4</maven-assembly.version>
 		<maven-compiler.version>3.3</maven-compiler.version>
 		<maven-license.version>1.8</maven-license.version>
@@ -62,7 +62,7 @@
 		<maven-deploy.version>2.8.2</maven-deploy.version>
 		<mockito.version>2.0.31-beta</mockito.version>
 		<pdfbox.version>1.8.8</pdfbox.version>
-		<postgresql.version>9.3-1100-jdbc4</postgresql.version>
+		<postgresql.version>9.4-1206-jdbc42</postgresql.version>
 		<security.version>2.1.4</security.version>
 		<!-- <security.version>2.2.1</security.version> --><!-- nog niet voldoende getest -->
 		<servlet-api.version>3.1.0</servlet-api.version>
