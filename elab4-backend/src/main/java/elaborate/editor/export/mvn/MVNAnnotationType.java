@@ -5,7 +5,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 public enum MVNAnnotationType {
-  AFKORTING("mvn:afkorting", AnnotatedTextUsage.ignore), //
+  AFKORTING("mvn:afkorting", AnnotatedTextUsage.use), //
   ALINEA("mvn:alinea", AnnotatedTextUsage.ignore), //
   CIJFERS("mvn:cijfers (romeins)", AnnotatedTextUsage.use), //
   DEFECT("mvn:defect", AnnotatedTextUsage.ignore), //
@@ -29,7 +29,7 @@ public enum MVNAnnotationType {
   TEKSTKLEUR_ROOD("mvn:tekstkleur (rood)", AnnotatedTextUsage.use), //
   VREEMDTEKEN("mvn:vreemdteken", AnnotatedTextUsage.use), //
   VERSREGEL("mvn:versregel", AnnotatedTextUsage.ignore), //
-  WITREGEL("mvn:witregel", AnnotatedTextUsage.ignore), //
+  WITREGEL("mvn:witregel", AnnotatedTextUsage.use), //
 
   // vervallen annotaties
   REGELNUMMERING_TEKST("mvn:regelnummering (tekst)", AnnotatedTextUsage.ignore), //

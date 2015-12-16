@@ -313,14 +313,18 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     @Override
     public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      context.addOpenTag("choice");
-      context.addOpenTag("abbr");
-      context.addLiteral(context.closeLayer());
-      context.addCloseTag("abbr");
-      context.addOpenTag("expan");
+      String annotatedText = context.closeLayer();
+      String choiceTag = "choice";
+      context.addOpenTag(choiceTag);
+      String abbrTag = "abbr";
+      context.addOpenTag(abbrTag);
+      context.addLiteral(annotatedText);
+      context.addCloseTag(abbrTag);
+      String expanTag = "expan";
+      context.addOpenTag(expanTag);
       context.addLiteral(cleanUpAnnotationBody(annotation).replace("i>", "ex>"));
-      context.addCloseTag("expan");
-      context.addCloseTag("choice");
+      context.addCloseTag(expanTag);
+      context.addCloseTag(choiceTag);
     }
 
   }
@@ -526,10 +530,16 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static class WitregelHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+      context.openLayer();
+    }
 
     @Override
     public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
+      String annotatedText = context.closeLayer();
+      if (!"¤".equals(annotatedText)) {
+        result.addError(currentEntryId, "Het geannoteerde teken moet ‘¤’ zijn, is '" + annotatedText + "'");
+      }
       context.addLiteral("\n");
       context.addEmptyElementTag("lb");
       context.addLiteral("\n");

@@ -154,7 +154,6 @@ public class MVNConverterTest {
   //               </choice>
   //               De inhoud van de annotatie bevat gecursiveerde tekst.
   //               Deze gecursiveerde tekst overnemen binnen <ex>-elementen.
-  @Ignore
   @Test
   public void testAfkortingConversie() {
     Annotation annotation = mockAnnotationOfType(AFKORTING);
@@ -441,17 +440,27 @@ public class MVNConverterTest {
   //  Validatie:   Het geannoteerde teken is ‘¤’
   //  Conversie:   Genereer een extra <lb/>. 
   //               Deze lb krijgt geen n, np of xml:id attribuut en telt ook niet mee in de nummering. 
-  @Ignore
   @Test
   public void testWitregelConversie() {
     Annotation annotation = mockAnnotationOfType(WITREGEL);
     String body = "<body>pre "//
         + "<ab id=\"1\"/>¤<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
-        + "<lb/>"//
+    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre \n"//
+        + "<lb/>\n"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
+  }
+
+  @Test
+  public void testWitregelConversieOfIllegalCharacterGivesValidationError() {
+    Annotation annotation = mockAnnotationOfType(WITREGEL);
+    Long entryId = 12234l;
+    String body = "<body><pb n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\"/> pre "//
+        + "<ab id=\"1\"/>somethingelse<ae id=\"1\"/>"//
+        + " post</body>";
+    String validationError = "https://www.elaborate.huygens.knaw.nl/projects/projectName/entries/" + entryId + "/transcriptions/diplomatic : Het geannoteerde teken moet ‘¤’ zijn, is 'somethingelse'";
+    assertConversionFailsValidation(body, mockData(1, annotation), validationError);
   }
 
   //  mvn:poëzie
