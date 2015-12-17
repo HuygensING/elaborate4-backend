@@ -20,7 +20,7 @@ public class MVNConversionResult {
   private final List<String> errors = Lists.newArrayList();
   //  private final List<MVNFolium> pages = Lists.newArrayList();
 
-  public MVNConversionResult(Project project) {
+  public MVNConversionResult(final Project project) {
     this.baseURL = "https://www.elaborate.huygens.knaw.nl/projects/" + project.getName();
     this.title = project.getMetadataMap().get(ProjectMetadataFields.PUBLICATION_TITLE);
     if (StringUtils.isEmpty(this.title)) {
@@ -48,7 +48,7 @@ public class MVNConversionResult {
     return sigle;
   }
 
-  public void setBody(String teibody) {
+  public void setBody(final String teibody) {
     body = teibody;
   }
 
@@ -77,7 +77,7 @@ public class MVNConversionResult {
   //    pages.add(page);
   //  }
 
-  public void addError(String entryId, String error) {
+  public void addError(final String entryId, final String error) {
     errors.add(url(entryId) + " : " + error);
   }
 
@@ -91,7 +91,7 @@ public class MVNConversionResult {
 
   /* private methods */
 
-  private String url(String entryId) {
+  private String url(final String entryId) {
     return baseURL + "/entries/" + entryId + "/transcriptions/diplomatic";
   }
 

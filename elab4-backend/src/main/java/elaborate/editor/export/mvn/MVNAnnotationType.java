@@ -45,7 +45,7 @@ public enum MVNAnnotationType {
   private final AnnotatedTextUsage ignoreText;
   private final static Set<String> allNames = Sets.newHashSet();
 
-  private MVNAnnotationType(String name, AnnotatedTextUsage ignoreText) {
+  private MVNAnnotationType(final String name, final AnnotatedTextUsage ignoreText) {
     this.name = name;
     this.ignoreText = ignoreText;
   }
@@ -56,7 +56,7 @@ public enum MVNAnnotationType {
 
   public static Set<String> getAllNames() {
     if (allNames.isEmpty()) {
-      for (MVNAnnotationType mvnAnnotationType : MVNAnnotationType.values()) {
+      for (final MVNAnnotationType mvnAnnotationType : MVNAnnotationType.values()) {
         allNames.add(mvnAnnotationType.getName());
       }
     }
@@ -67,8 +67,8 @@ public enum MVNAnnotationType {
     return ignoreText.equals(AnnotatedTextUsage.ignore);
   }
 
-  public static MVNAnnotationType fromName(String name) {
-    for (MVNAnnotationType type : values()) {
+  public static MVNAnnotationType fromName(final String name) {
+    for (final MVNAnnotationType type : values()) {
       if (type.getName().equals(name)) {
         return type;
       }

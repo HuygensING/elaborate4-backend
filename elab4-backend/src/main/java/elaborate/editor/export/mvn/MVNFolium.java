@@ -12,7 +12,7 @@ public class MVNFolium {
     return n;
   }
 
-  public void setN(String n) {
+  public void setN(final String n) {
     this.n = n;
   }
 
@@ -20,11 +20,11 @@ public class MVNFolium {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(final String id) {
     this.id = id;
   }
 
-  public void setOrder(String order) {
+  public void setOrder(final String order) {
     this.order = order;
   }
 
@@ -32,7 +32,7 @@ public class MVNFolium {
     return order;
   }
 
-  public void setBody(String body) {
+  public void setBody(final String body) {
     this.body = body;
   }
 
@@ -40,7 +40,7 @@ public class MVNFolium {
     return body;
   }
 
-  public void setFacs(String facs) {
+  public void setFacs(final String facs) {
     this.facs = facs;
   }
 

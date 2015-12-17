@@ -31,7 +31,7 @@ public class MVNConverter {
   private final Project project;
   private final MVNConversionData data;
 
-  public MVNConverter(Project project, MVNConversionData data) {
+  public MVNConverter(final Project project, final MVNConversionData data) {
     this.project = project;
     //    data = getConversionData(project.getId());
     this.data = data;
@@ -45,10 +45,10 @@ public class MVNConverter {
   // select 
 
   public MVNConversionResult convert() {
-    MVNConversionResult result = new MVNConversionResult(project);
-    StringBuilder editionTextBuilder = new StringBuilder();
-    for (MVNConversionData.EntryData entryData : data.getEntryDataList()) {
-      String pageId = result.getSigle() + "-pb-" + entryData.name;
+    final MVNConversionResult result = new MVNConversionResult(project);
+    final StringBuilder editionTextBuilder = new StringBuilder();
+    for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
+      final String pageId = result.getSigle() + "-pb-" + entryData.name;
       editionTextBuilder//
           .append("<pb n=\"")//
           .append(entryData.name)//
@@ -62,13 +62,13 @@ public class MVNConverter {
           .append(transcriptionBody(entryData));
     }
 
-    String xml = "<body>" + editionTextBuilder.toString() + "</body>";
-    String cooked = cook(xml);
+    final String xml = "<body>" + editionTextBuilder.toString() + "</body>";
+    final String cooked = cook(xml);
     validateTextNums(cooked, result);
     if (DEBUG) {
       outputFiles(xml, cooked);
     }
-    String tei = toTei(xml, result);
+    final String tei = toTei(xml, result);
     result.setBody(tei);
     Log.info("tei={}", tei);
     //    for (ProjectEntry entry : project.getProjectEntries()) {
@@ -84,19 +84,19 @@ public class MVNConverter {
     return result;
   }
 
-  private void validateTextNums(String cooked, MVNConversionResult result) {
-    Stack<String> textNumStack = new Stack<String>();
-    Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
+  private void validateTextNums(final String cooked, final MVNConversionResult result) {
+    final Stack<String> textNumStack = new Stack<String>();
+    final Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
     boolean lastTagWasBegin = false;
     while (matcher.find()) {
-      String beginOrEinde = matcher.group(1);
-      String textnum = matcher.group(2).trim().replaceFirst(";.*$", "");
+      final String beginOrEinde = matcher.group(1);
+      final String textnum = matcher.group(2).trim().replaceFirst(";.*$", "");
       if ("begin".equals(beginOrEinde)) {
         lastTagWasBegin = true;
         textNumStack.push(textnum);
 
       } else if ("einde".equals(beginOrEinde)) {
-        String peek = textNumStack.peek();
+        final String peek = textNumStack.peek();
         if (textnum.equals(peek)) {
           if (lastTagWasBegin) {
             data.getDeepestTextNums().add(textnum);
@@ -114,22 +114,22 @@ public class MVNConverter {
 
   }
 
-  private void outputFiles(String xml, String cooked) {
+  private void outputFiles(final String xml, final String cooked) {
     try {
       FileUtils.write(new File("out/rawbody.xml"), xml);
       FileUtils.write(new File("out/cookedbody.xml"), cooked);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
   }
 
-  private String cook(String xml) {
+  private String cook(final String xml) {
     String cooked = xml;
-    for (String annotationNoString : XmlUtil.extractAnnotationNos(xml)) {
-      Integer annotationNo = Integer.valueOf(annotationNoString);
+    for (final String annotationNoString : XmlUtil.extractAnnotationNos(xml)) {
+      final Integer annotationNo = Integer.valueOf(annotationNoString);
       if (data.getAnnotationIndex().containsKey(annotationNo)) {
-        AnnotationData annotationData = data.getAnnotationIndex().get(annotationNo);
-        String type = annotationData.type.replaceAll("[ \\(\\)]+", "_").replaceFirst("_$", "");
+        final AnnotationData annotationData = data.getAnnotationIndex().get(annotationNo);
+        final String type = annotationData.type.replaceAll("[ \\(\\)]+", "_").replaceFirst("_$", "");
         String attributes = "";
         if (StringUtils.isNotBlank(annotationData.body) && !"nvt".equals(annotationData.body)) {
           attributes = " body=\"" + annotationData.body.replace("\"", "&quot;") + "\"";
@@ -142,15 +142,15 @@ public class MVNConverter {
     return cooked;
   }
 
-  private static String originalAnnotationEnd(String annotationNo) {
+  private static String originalAnnotationEnd(final String annotationNo) {
     return "<ae id=\"" + annotationNo + "\"/>";
   }
 
-  private static String originalAnnotationBegin(String annotationNo) {
+  private static String originalAnnotationBegin(final String annotationNo) {
     return "<ab id=\"" + annotationNo + "\"/>";
   }
 
-  private String transcriptionBody(MVNConversionData.EntryData entryData) {
+  private String transcriptionBody(final MVNConversionData.EntryData entryData) {
     return entryData.body//
         .replace("<body>", "")//
         .replace("</body>", "")//
@@ -159,11 +159,11 @@ public class MVNConverter {
   }
 
   @SuppressWarnings("unchecked")
-  public static MVNConversionData getConversionData(long project_id) {
-    MVNConversionData conversionData = new MVNConversionData();
-    EntityManager entityManager = HibernateUtil.beginTransaction();
+  public static MVNConversionData getConversionData(final long project_id) {
+    final MVNConversionData conversionData = new MVNConversionData();
+    final EntityManager entityManager = HibernateUtil.beginTransaction();
 
-    String transcriptionSQL = "select"//
+    final String transcriptionSQL = "select"//
         + "  e.id as id,"//
         + "  e.name as name,"//
         + "  m.data as entry_order,"//
@@ -175,11 +175,11 @@ public class MVNConverter {
         + "   left outer join facsimiles f on (e.id = f.project_entry_id)"//
         + " where project_id=" + project_id//
         + " order by entry_order, name".replaceAll(" +", " ");
-    Query transcriptionQuery = entityManager.createNativeQuery(transcriptionSQL);
-    List<Object[]> transcriptions = transcriptionQuery.getResultList();
-    for (Object[] transcription : transcriptions) {
-      EntryData entryData = new MVNConversionData.EntryData();
-      Integer id = (Integer) transcription[0];
+    final Query transcriptionQuery = entityManager.createNativeQuery(transcriptionSQL);
+    final List<Object[]> transcriptions = transcriptionQuery.getResultList();
+    for (final Object[] transcription : transcriptions) {
+      final EntryData entryData = new MVNConversionData.EntryData();
+      final Integer id = (Integer) transcription[0];
       entryData.id = String.valueOf(id);
       entryData.name = (String) transcription[1];
       //      String order = (String) transcription[2];
@@ -188,7 +188,7 @@ public class MVNConverter {
       conversionData.getEntryDataList().add(entryData);
     }
 
-    String annotationSQL = "select"//
+    final String annotationSQL = "select"//
         + "   a.annotation_no as annotation_num,"//
         + "   at.name as annotation_type,"//
         + "   a.body as annotation_body"//
@@ -201,13 +201,13 @@ public class MVNConverter {
         + "   on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
         + " where project_id=" + project_id//
         + " order by annotation_num;".replaceAll(" +", " ");
-    Query annotationQuery = entityManager.createNativeQuery(annotationSQL);
-    List<Object[]> annotations = annotationQuery.getResultList();
+    final Query annotationQuery = entityManager.createNativeQuery(annotationSQL);
+    final List<Object[]> annotations = annotationQuery.getResultList();
     //    Log.info("SQL: {}", annotationSQL);
     //    Log.info("{} results:", annotations.size());
-    for (Object[] annotation : annotations) {
-      AnnotationData annotationData = new MVNConversionData.AnnotationData();
-      Integer annotationNum = (Integer) annotation[0];
+    for (final Object[] annotation : annotations) {
+      final AnnotationData annotationData = new MVNConversionData.AnnotationData();
+      final Integer annotationNum = (Integer) annotation[0];
       annotationData.type = (String) annotation[1];
       annotationData.body = (String) annotation[2];
       conversionData.getAnnotationIndex().put(annotationNum, annotationData);
@@ -217,8 +217,8 @@ public class MVNConverter {
     return conversionData;
   }
 
-  private void setFacs(ProjectEntry entry, MVNFolium page, MVNConversionResult result) {
-    List<Facsimile> facsimiles = entry.getFacsimiles();
+  private void setFacs(final ProjectEntry entry, final MVNFolium page, final MVNConversionResult result) {
+    final List<Facsimile> facsimiles = entry.getFacsimiles();
     if (facsimiles.isEmpty()) {
       result.addError("" + entry.getId(), "no facsimile");
     } else {
@@ -229,9 +229,9 @@ public class MVNConverter {
     }
   }
 
-  private void setBody(MVNFolium page, ProjectEntry entry, MVNConversionResult result, Map<Integer, AnnotationData> annotationIndex) {
+  private void setBody(final MVNFolium page, final ProjectEntry entry, final MVNConversionResult result, final Map<Integer, AnnotationData> annotationIndex) {
     String body = null;
-    for (Transcription transcription : entry.getTranscriptions()) {
+    for (final Transcription transcription : entry.getTranscriptions()) {
       if ("Diplomatic".equals(transcription.getTextLayer())) {
         body = transcription.getBody().replace("&nbsp;", " ");
       } else {
@@ -247,15 +247,15 @@ public class MVNConverter {
     Log.info("body=[\n{}\n]", page.getBody());
   }
 
-  String toTei(String xml, MVNConversionResult result) {
-    MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result, data.getAnnotationIndex(), data.getDeepestTextNums());
+  String toTei(final String xml, final MVNConversionResult result) {
+    final MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result, data.getAnnotationIndex(), data.getDeepestTextNums());
     Log.info("xml={}", xml);
 
     final Document document = Document.createFromXml(xml, false);
     document.accept(visitor);
 
     final XmlContext c = visitor.getContext();
-    String rawResult = c.getResult();
+    final String rawResult = c.getResult();
 
     return rawResult;
   }
