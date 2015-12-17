@@ -447,8 +447,8 @@ public class MVNConverterTest {
         + "<ab id=\"1\"/>¤<ae id=\"1\"/>"//
         + " post</body>";
     String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre \n"//
-        + "<lb/>\n"//
-        + " post";
+        + "      <lb/>\n"//
+        + "       post";
     assertConversion(body, mockData(1, annotation), expected);
   }
 

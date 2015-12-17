@@ -4,11 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
@@ -23,6 +27,7 @@ import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNConverter {
+  private static final boolean DEBUG = true; // false for release
   private final Project project;
   private final MVNConversionData data;
 
@@ -58,11 +63,10 @@ public class MVNConverter {
     }
 
     String xml = "<body>" + editionTextBuilder.toString() + "</body>";
-    try {
-      FileUtils.write(new File("out/rawbody.xml"), xml);
-      FileUtils.write(new File("out/smokedbody.xml"), smoke(xml));
-    } catch (IOException e) {
-      e.printStackTrace();
+    String cooked = cook(xml);
+    validateTextNums(cooked, result);
+    if (DEBUG) {
+      outputFiles(xml, cooked);
     }
     String tei = toTei(xml, result);
     result.setBody(tei);
@@ -80,18 +84,62 @@ public class MVNConverter {
     return result;
   }
 
-  private String smoke(String xml) {
-    String smoked = xml;
+  private void validateTextNums(String cooked, MVNConversionResult result) {
+    Stack<String> textNumStack = new Stack<String>();
+    Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
+    boolean lastTagWasBegin = false;
+    while (matcher.find()) {
+      String beginOrEinde = matcher.group(1);
+      String textnum = matcher.group(2).trim().replaceFirst(";.*$", "");
+      if ("begin".equals(beginOrEinde)) {
+        lastTagWasBegin = true;
+        textNumStack.push(textnum);
+
+      } else if ("einde".equals(beginOrEinde)) {
+        String peek = textNumStack.peek();
+        if (textnum.equals(peek)) {
+          if (lastTagWasBegin) {
+            data.getDeepestTextNums().add(textnum);
+          }
+          textNumStack.pop();
+        } else {
+          result.addError("", "mvn:regeleinde : tekstNum '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
+        }
+        lastTagWasBegin = false;
+
+      } else {
+        throw new RuntimeException("unexpected type mvn:tekst" + beginOrEinde);
+      }
+    }
+
+  }
+
+  private void outputFiles(String xml, String cooked) {
+    try {
+      FileUtils.write(new File("out/rawbody.xml"), xml);
+      FileUtils.write(new File("out/cookedbody.xml"), cooked);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private String cook(String xml) {
+    String cooked = xml;
     for (String annotationNoString : XmlUtil.extractAnnotationNos(xml)) {
       Integer annotationNo = Integer.valueOf(annotationNoString);
       if (data.getAnnotationIndex().containsKey(annotationNo)) {
-        String type = data.getAnnotationIndex().get(annotationNo).type.replaceAll("[ \\(\\)]+", "_");
-        smoked = smoked//
-            .replace(originalAnnotationBegin(annotationNoString), "<" + type + ">")//
+        AnnotationData annotationData = data.getAnnotationIndex().get(annotationNo);
+        String type = annotationData.type.replaceAll("[ \\(\\)]+", "_").replaceFirst("_$", "");
+        String attributes = "";
+        if (StringUtils.isNotBlank(annotationData.body) && !"nvt".equals(annotationData.body)) {
+          attributes = " body=\"" + annotationData.body.replace("\"", "&quot;") + "\"";
+        }
+        cooked = cooked//
+            .replace(originalAnnotationBegin(annotationNoString), "<" + type + attributes + ">")//
             .replace(originalAnnotationEnd(annotationNoString), "</" + type + ">");
       }
     }
-    return smoked;
+    return cooked;
   }
 
   private static String originalAnnotationEnd(String annotationNo) {
@@ -200,7 +248,7 @@ public class MVNConverter {
   }
 
   String toTei(String xml, MVNConversionResult result) {
-    MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result, data.getAnnotationIndex());
+    MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result, data.getAnnotationIndex(), data.getDeepestTextNums());
     Log.info("xml={}", xml);
 
     final Document document = Document.createFromXml(xml, false);

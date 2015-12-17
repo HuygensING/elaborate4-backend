@@ -2,9 +2,11 @@ package elaborate.editor.export.mvn;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 public class MVNConversionData {
 
@@ -22,6 +24,7 @@ public class MVNConversionData {
 
   private final Map<Integer, AnnotationData> annotationIndex = Maps.newHashMap();
   private final List<EntryData> entryDataList = Lists.newArrayList();
+  private final Set<String> deepestTextNums = Sets.newHashSet();
 
   public List<EntryData> getEntryDataList() {
     return entryDataList;
@@ -29,6 +32,10 @@ public class MVNConversionData {
 
   public Map<Integer, AnnotationData> getAnnotationIndex() {
     return annotationIndex;
+  }
+
+  public Set<String> getDeepestTextNums() {
+    return deepestTextNums;
   }
 
 }

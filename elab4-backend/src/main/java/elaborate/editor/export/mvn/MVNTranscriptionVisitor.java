@@ -5,6 +5,7 @@ import static nl.knaw.huygens.tei.Traversal.STOP;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -25,28 +26,32 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
-
   static final String choiceTag = "choice";
   static final String abbrTag = "abbr";
   static final String expanTag = "expan";
 
-  private static final String HI = "hi";
-  static int lb = 1;
-  static boolean firstText = true;
-  //  private static String sigle;
-  private static boolean ignoreText = false;
   public static boolean inParagraph = false;
+
+  private static final String HI = "hi";
+  private static int lb = 1;
+  private static boolean firstText = true;
+  private static boolean ignoreText = false;
   private static boolean inLineGroup = false;
   private static String pageId;
   private static Map<Integer, AnnotationData> annotationIndex;
   private static MVNConversionResult result;
   private static String currentEntryId;
+  private static Set<String> deepestTextNums;
+  private static int indent;
 
-  public MVNTranscriptionVisitor(MVNConversionResult result, Map<Integer, AnnotationData> annotationIndex) {
+  public MVNTranscriptionVisitor(final MVNConversionResult result, final Map<Integer, AnnotationData> annotationIndex, final Set<String> deepestTextNums) {
     super(new XmlContext());
+    MVNTranscriptionVisitor.deepestTextNums = deepestTextNums;
     MVNTranscriptionVisitor.pageId = "1";
     MVNTranscriptionVisitor.result = result;
     MVNTranscriptionVisitor.annotationIndex = annotationIndex;
+    MVNTranscriptionVisitor.indent = 3;
+
     //    MVNTranscriptionVisitor.sigle = sigle;
     setTextHandler(this);
     setDefaultElementHandler(this);
@@ -57,59 +62,65 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   @Override
-  public Traversal enterElement(Element element, XmlContext context) {
+  public Traversal enterElement(final Element element, final XmlContext context) {
     //    Log.warn("ignoring {}", elemen  t);
     return Traversal.NEXT;
   }
 
   @Override
-  public Traversal leaveElement(Element element, XmlContext context) {
+  public Traversal leaveElement(final Element element, final XmlContext context) {
     return Traversal.NEXT;
   }
 
   @Override
-  public Traversal visitText(Text text, XmlContext context) {
+  public Traversal visitText(final Text text, final XmlContext context) {
     if (!ignoreText) {
       handleFirstLB(context);
       String normalized = text.getText();
       if (normalized.contains("\n")) {
-        normalized = normalized.replace("\n", "\n" + newLB());
+        normalized = normalized.replace("\n", "\n" + indent() + newLB());
       }
       context.addLiteral(normalized);
     }
     return Traversal.NEXT;
   }
 
+  private static String indent() {
+    return StringUtils.repeat(" ", indent * 2);
+  }
+
   @Override
-  public Traversal visitComment(Comment comment, XmlContext context) {
+  public Traversal visitComment(final Comment comment, final XmlContext context) {
     return Traversal.NEXT;
   }
 
   private static String newLB() {
-    String lbTag = "<lb n=\"" + lb + "\" xml:id=\"" + pageId + "-lb-" + lb + "\"/>";
+    final String lbTag = "<lb n=\"" + lb + "\" xml:id=\"" + pageId + "-lb-" + lb + "\"/>";
     lb++;
     return lbTag;
   }
 
-  private static void handleFirstLB(XmlContext context) {
+  private static void handleFirstLB(final XmlContext context) {
     if (firstText) {
       context.addLiteral(newLB());
       firstText = false;
     }
   }
 
-  private static void closeOpenParagraph(XmlContext context) {
+  private static void closeOpenParagraph(final XmlContext context) {
     if (inParagraph) {
       context.addCloseTag("p");
       context.addLiteral("\n");
+      indent--;
       inParagraph = false;
     }
   }
 
-  private static void closeOpenLineGroup(XmlContext context) {
+  private static void closeOpenLineGroup(final XmlContext context) {
     if (inLineGroup) {
       context.addCloseTag("lg");
       context.addLiteral("\n");
+      indent--;
       inLineGroup = false;
     }
   }
@@ -117,7 +128,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   static class BodyHandler implements ElementHandler<XmlContext> {
 
     @Override
-    public Traversal enterElement(Element arg0, XmlContext arg1) {
+    public Traversal enterElement(final Element arg0, final XmlContext arg1) {
       lb = 1;
       firstText = true;
       ignoreText = false;
@@ -127,7 +138,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     @Override
-    public Traversal leaveElement(Element e, XmlContext c) {
+    public Traversal leaveElement(final Element e, final XmlContext c) {
       closeOpenParagraph(c);
       closeOpenLineGroup(c);
       return Traversal.NEXT;
@@ -137,8 +148,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   static class PageBreakHandler extends CopyElementHandler {
     @Override
-    public Traversal enterElement(Element element, XmlContext context) {
-      context.addLiteral("\n\n");
+    public Traversal enterElement(final Element element, final XmlContext context) {
+      context.addLiteral("\n\n" + indent());
       pageId = element.getAttribute("id");
       currentEntryId = element.getAttribute("_entryId");
       element.removeAttribute("_entryId");
@@ -150,9 +161,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     @Override
-    public Traversal leaveElement(Element element, XmlContext context) {
+    public Traversal leaveElement(final Element element, final XmlContext context) {
       super.leaveElement(element, context);
-      context.addLiteral("\n");
+      context.addLiteral("\n" + indent());
       context.addLiteral(newLB());
       return Traversal.NEXT;
     }
@@ -161,7 +172,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   static class CopyElementHandler implements ElementHandler<XmlContext> {
     @Override
-    public Traversal enterElement(Element element, XmlContext context) {
+    public Traversal enterElement(final Element element, final XmlContext context) {
       if (element.hasChildren()) {
         context.addOpenTag(element);
       } else {
@@ -171,7 +182,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     @Override
-    public Traversal leaveElement(Element element, XmlContext context) {
+    public Traversal leaveElement(final Element element, final XmlContext context) {
       if (element.hasChildren()) {
         context.addCloseTag(element);
       }
@@ -182,11 +193,11 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   static class AnnotationHandler implements ElementHandler<XmlContext> {
 
     @Override
-    public Traversal enterElement(Element element, XmlContext context) {
-      String id = element.getAttribute("id");
-      AnnotationData annotationData = getAnnotationData(id);
+    public Traversal enterElement(final Element element, final XmlContext context) {
+      final String id = element.getAttribute("id");
+      final AnnotationData annotationData = getAnnotationData(id);
       if (annotationData != null) {
-        String name = element.getName();
+        final String name = element.getName();
         if (Transcription.BodyTags.ANNOTATION_BEGIN.equals(name)) {
           handleOpenAnnotation(annotationData, context);
         } else if (Transcription.BodyTags.ANNOTATION_END.equals(name)) {
@@ -196,11 +207,11 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       return STOP;
     }
 
-    private void handleOpenAnnotation(AnnotationData annotationData, XmlContext context) {
-      MVNAnnotationType type = getVerifiedType(annotationData);
+    private void handleOpenAnnotation(final AnnotationData annotationData, final XmlContext context) {
+      final MVNAnnotationType type = getVerifiedType(annotationData);
       ignoreText = type.ignoreText();
       if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
-        String body = annotationData.body;
+        final String body = annotationData.body;
         if (StringUtils.isNumeric(body)) {
           lb = Integer.valueOf(body);
         } else {
@@ -218,8 +229,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       }
     }
 
-    private void handleCloseAnnotation(AnnotationData annotationData, XmlContext context) {
-      MVNAnnotationType type = getVerifiedType(annotationData);
+    private void handleCloseAnnotation(final AnnotationData annotationData, final XmlContext context) {
+      final MVNAnnotationType type = getVerifiedType(annotationData);
       ignoreText = false; // but what if it's inside another mvnannotation that should ignore text?
       if (handlers.containsKey(type)) {
         handlers.get(type).handleCloseAnnotation(annotationData, context);
@@ -229,14 +240,14 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       }
     }
 
-    private MVNAnnotationType getVerifiedType(AnnotationData annotationData) {
-      String typeName = annotationData.type;
+    private MVNAnnotationType getVerifiedType(final AnnotationData annotationData) {
+      final String typeName = annotationData.type;
       verifyAnnotationTypeIsAllowed(typeName);
-      MVNAnnotationType type = MVNAnnotationType.fromName(typeName);
+      final MVNAnnotationType type = MVNAnnotationType.fromName(typeName);
       return type;
     }
 
-    private void verifyAnnotationTypeIsAllowed(String type) {
+    private void verifyAnnotationTypeIsAllowed(final String type) {
       if (!MVNAnnotationType.getAllNames().contains(type)) {
         result.addError(currentEntryId, "onbekend annotatietype: " + type);
         throw new RuntimeException(Joiner.on("\n").join(result.getErrors()));
@@ -244,11 +255,11 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     @Override
-    public Traversal leaveElement(Element element, XmlContext context) {
+    public Traversal leaveElement(final Element element, final XmlContext context) {
       return NEXT;
     }
 
-    private AnnotationData getAnnotationData(String annotationId) {
+    private AnnotationData getAnnotationData(final String annotationId) {
       return annotationIndex.get(Integer.valueOf(annotationId));
     }
 
@@ -295,34 +306,34 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   private static class WrapInElementHandler implements MVNAnnotationHandler {
     Element element;
 
-    public WrapInElementHandler(Element element) {
+    public WrapInElementHandler(final Element element) {
       this.element = element;
     }
 
-    public WrapInElementHandler(String elementName) {
+    public WrapInElementHandler(final String elementName) {
       this.element = new Element(elementName);
     }
 
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.addOpenTag(element);
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.addCloseTag(element);
     }
   }
 
   private static class AfkortingHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.openLayer();
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      String annotatedText = context.closeLayer();
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
+      final String annotatedText = context.closeLayer();
       context.addOpenTag(choiceTag);
       context.addOpenTag(abbrTag);
       context.addLiteral(annotatedText);
@@ -337,7 +348,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static class AlineaHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       closeOpenParagraph(context);
       closeOpenLineGroup(context);
       context.addOpenTag("p");
@@ -345,43 +356,43 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) { // no action on closeAnnotation
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) { // no action on closeAnnotation
     }
   }
 
   private static class DefectHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.addEmptyElementTag("gap");
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class GebruikersnotitieHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class IncipitHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class InitiaalHandler implements MVNAnnotationHandler {
     Element hi = new Element("hi");
 
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       Integer size = 0;
-      String body = annotation.body.trim();
+      final String body = annotation.body.trim();
       if (StringUtils.isNumeric(body)) {
         size = Integer.valueOf(body);
         if (size < 1 || size > 19) {
@@ -395,12 +406,12 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       context.addOpenTag(hi);
     }
 
-    private void addValidationError(String body) {
+    private void addValidationError(final String body) {
       result.addError(currentEntryId, "De inhoud van de annotatie ('" + body + "') is geen natuurlijk getal > 0 en < 20.");
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.addCloseTag(hi);
     }
 
@@ -408,28 +419,28 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static class InspringenHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class KolomHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.addEmptyElementTag("cb");
     }
   }
 
   private static class MetamarkHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class OnderschriftHandler extends WrapInElementHandler {
@@ -439,7 +450,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       closeOpenParagraph(context);
       closeOpenLineGroup(context);
       super.handleOpenAnnotation(annotation, context);
@@ -452,7 +463,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       closeOpenParagraph(context);
       closeOpenLineGroup(context);
       super.handleOpenAnnotation(annotation, context);
@@ -461,11 +472,11 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static class PaleografischHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      Element note = new Element("note").withAttribute("type", "pc");
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
+      final Element note = new Element("note").withAttribute("type", "pc");
       context.addOpenTag(note);
       context.addLiteral(cleanUpAnnotationBody(annotation).replaceAll("<i>", "<mentioned>").replaceAll("</i>", "</mentioned>"));
       context.addCloseTag(note);
@@ -474,13 +485,13 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static class PoezieHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       closeOpenParagraph(context);
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      context.addLiteral("\n");
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
+      context.addLiteral("\n" + indent());
       context.addOpenTag("lg");
       inLineGroup = true;
     }
@@ -488,64 +499,85 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static class RegelnummeringBladHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class RegelnummeringTekstHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class TekstBeginHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.openLayer();
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      String annotatedText = context.closeLayer();
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
+      final String annotatedText = context.closeLayer();
       if (!"‡".equals(annotatedText)) {
         result.addError(currentEntryId, "Het geannoteerde teken moet ‘‡’ zijn bij mvn:tekstbegin, is '" + annotatedText + "'");
       }
-      List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
-      String textNum = parts.get(0);
-      Element element = new Element("group")//
+      final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
+      final String textNum = parts.get(0);
+      final boolean isText = isText(textNum);
+      final Element element = new Element(isText ? "text" : "group")//
           .withAttribute("n", textNum)//
           .withAttribute("xml:id", result.getSigle() + "-" + textNum);
-      context.addLiteral("\n");
+      context.addLiteral("\n" + indent());
       context.addOpenTag(element);
-      context.addLiteral("\n");
+      indent++;
+      context.addLiteral("\n" + indent());
+      if (isText) {
+        context.addOpenTag("body");
+        indent++;
+        context.addLiteral("\n" + indent());
+      }
       if (parts.size() > 1) {
-        String title = parts.get(1);
-        Element head = new Element("head").withAttribute("type", "assigned");
+        final String title = parts.get(1);
+        final Element head = new Element("head").withAttribute("type", "assigned");
         context.addOpenTag(head);
         context.addLiteral(title);
         context.addCloseTag(head);
       }
     }
+
+  }
+
+  private static boolean isText(final String textNum) {
+    return deepestTextNums.contains(textNum);
   }
 
   private static class TekstEindeHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.openLayer();
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      String annotatedText = context.closeLayer();
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
+      final String annotatedText = context.closeLayer();
       if (!"‡".equals(annotatedText)) {
         result.addError(currentEntryId, "Het geannoteerde teken moet ‘‡’ zijn bij mvn:teksteinde, is '" + annotatedText + "'");
       }
-      Element element = new Element("group");
-      context.addLiteral("\n");
+      final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
+      final String textNum = parts.get(0);
+      final boolean inTextBody = isText(textNum);
+      if (inTextBody) {
+        indent--;
+        context.addLiteral("\n" + indent());
+        context.addCloseTag("body");
+      }
+      indent--;
+      final Element element = new Element(inTextBody ? "text" : "group");
+      context.addLiteral("\n" + indent());
       context.addCloseTag(element);
       context.addLiteral("\n");
     }
@@ -553,44 +585,44 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static class VersregelHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class VreemdtekenHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
   private static class WitregelHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context) {
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.openLayer();
     }
 
     @Override
-    public void handleCloseAnnotation(AnnotationData annotation, XmlContext context) {
-      String annotatedText = context.closeLayer();
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
+      final String annotatedText = context.closeLayer();
       if (!"¤".equals(annotatedText)) {
         result.addError(currentEntryId, "Het geannoteerde teken moet ‘¤’ zijn, is '" + annotatedText + "'");
       }
-      context.addLiteral("\n");
+      context.addLiteral("\n" + indent());
       context.addEmptyElementTag("lb");
-      context.addLiteral("\n");
+      context.addLiteral("\n" + indent());
     }
   }
 
-  private static String cleanUpAnnotationBody(AnnotationData annotation) {
+  private static String cleanUpAnnotationBody(final AnnotationData annotation) {
     return normalized(annotation.body).replaceAll("<span.*?>", "").replaceAll("</span>", "");
   }
 
-  private static String normalized(String rawXml) {
-    String normalized = rawXml//
+  private static String normalized(final String rawXml) {
+    final String normalized = rawXml//
         .replaceAll("<i .*?>", "<i>")//
         .replaceAll("<div>", "")//
         .replaceAll("</div>", "")//
