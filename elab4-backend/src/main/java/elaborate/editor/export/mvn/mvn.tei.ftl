@@ -19,10 +19,7 @@
   </teiHeader>
   <text xml:id="${sigle}">
     <group>
-      <text>
-        <body>${body}
-        </body>
-      </text>
+      ${body}
     </group>
   </text>
 </MVN>
