@@ -33,9 +33,9 @@ public enum MVNAnnotationType {
 
   // vervallen annotaties
   REGELNUMMERING_TEKST("mvn:regelnummering (tekst)", AnnotatedTextUsage.ignore), //
-  GEBRUIKERSNOTITIE("mvn:gebruikersnotitie", AnnotatedTextUsage.ignore), //
-  INCIPIT("mvn:incipit", AnnotatedTextUsage.ignore), //
-  METAMARK("mvn:metamark", AnnotatedTextUsage.ignore);
+  GEBRUIKERSNOTITIE("mvn:gebruikersnotitie", AnnotatedTextUsage.use), //
+  INCIPIT("mvn:incipit", AnnotatedTextUsage.use), //
+  METAMARK("mvn:metamark", AnnotatedTextUsage.use);
 
   private enum AnnotatedTextUsage {
     use, ignore
