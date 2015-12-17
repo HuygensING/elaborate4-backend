@@ -294,7 +294,7 @@ public class MVNConverterTest {
     String body = "<body><pb n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\"/> pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String entryPrefix = "https://www.elaborate.huygens.knaw.nl/projects/projectName/entries/" + entryId + "/transcriptions/diplomatic : ";
+    String entryPrefix = "https://www.elaborate.huygens.knaw.nl/projects/projectName/entries/" + entryId + "/transcriptions/diplomatic : mvn:initiaal : ";
     String validationError = entryPrefix + "De inhoud van de annotatie ('" + annotationBody + "') is geen natuurlijk getal > 0 en < 20.";
     assertConversionFailsValidation(body, mockData(1, annotation), validationError);
   }
@@ -459,7 +459,7 @@ public class MVNConverterTest {
     String body = "<body><pb n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\"/> pre "//
         + "<ab id=\"1\"/>somethingelse<ae id=\"1\"/>"//
         + " post</body>";
-    String validationError = "https://www.elaborate.huygens.knaw.nl/projects/projectName/entries/" + entryId + "/transcriptions/diplomatic : Het geannoteerde teken moet ‘¤’ zijn, is 'somethingelse'";
+    String validationError = "https://www.elaborate.huygens.knaw.nl/projects/projectName/entries/" + entryId + "/transcriptions/diplomatic : mvn:witregel : Het geannoteerde teken moet ‘¤’ zijn, is 'somethingelse'";
     assertConversionFailsValidation(body, mockData(1, annotation), validationError);
   }
 

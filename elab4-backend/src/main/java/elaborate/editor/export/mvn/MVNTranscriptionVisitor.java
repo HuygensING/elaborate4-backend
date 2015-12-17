@@ -215,7 +215,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         if (StringUtils.isNumeric(body)) {
           lb = Integer.valueOf(body);
         } else {
-          result.addError(currentEntryId, MVNAnnotationType.REGELNUMMERING_BLAD.getName() + " body: '" + body + "' is not numeric");
+          addError(MVNAnnotationType.REGELNUMMERING_BLAD, "body: '" + body + "' is not numeric");
         }
 
       } else {
@@ -406,13 +406,13 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       context.addOpenTag(hi);
     }
 
-    private void addValidationError(final String body) {
-      result.addError(currentEntryId, "De inhoud van de annotatie ('" + body + "') is geen natuurlijk getal > 0 en < 20.");
-    }
-
     @Override
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.addCloseTag(hi);
+    }
+
+    private void addValidationError(final String body) {
+      addError(MVNAnnotationType.INITIAAL, "De inhoud van de annotatie ('" + body + "') is geen natuurlijk getal > 0 en < 20.");
     }
 
   }
@@ -523,7 +523,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       final String annotatedText = context.closeLayer();
       if (!"‡".equals(annotatedText)) {
-        result.addError(currentEntryId, "Het geannoteerde teken moet ‘‡’ zijn bij mvn:tekstbegin, is '" + annotatedText + "'");
+        addError(MVNAnnotationType.TEKSTBEGIN, "Het geannoteerde teken moet ‘‡’ zijn, is '" + annotatedText + "'");
       }
       final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
       final String textNum = parts.get(0);
@@ -565,7 +565,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       final String annotatedText = context.closeLayer();
       if (!"‡".equals(annotatedText)) {
-        result.addError(currentEntryId, "Het geannoteerde teken moet ‘‡’ zijn bij mvn:teksteinde, is '" + annotatedText + "'");
+        addError(MVNAnnotationType.TEKSTEINDE, "Het geannoteerde teken moet ‘‡’ zijn, is '" + annotatedText + "'");
       }
       final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
       final String textNum = parts.get(0);
@@ -609,7 +609,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       final String annotatedText = context.closeLayer();
       if (!"¤".equals(annotatedText)) {
-        result.addError(currentEntryId, "Het geannoteerde teken moet ‘¤’ zijn, is '" + annotatedText + "'");
+        addError(MVNAnnotationType.WITREGEL, "Het geannoteerde teken moet ‘¤’ zijn, is '" + annotatedText + "'");
       }
       context.addLiteral("\n" + indent());
       context.addEmptyElementTag("lb");
@@ -629,6 +629,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         .replaceAll("<br>", "")//
         .replace("&nbsp;", " ");
     return normalized;
+  }
+
+  private static void addError(MVNAnnotationType type, String error) {
+    result.addError(currentEntryId, type.getName() + " : " + error);
   }
 
 }

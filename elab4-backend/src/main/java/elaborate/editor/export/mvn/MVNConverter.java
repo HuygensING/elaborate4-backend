@@ -44,6 +44,65 @@ public class MVNConverter {
   // select id, name from project_entries where project_id=$projectId
   // select 
 
+  @SuppressWarnings("unchecked")
+  public static MVNConversionData getConversionData(final long project_id) {
+    final MVNConversionData conversionData = new MVNConversionData();
+    final EntityManager entityManager = HibernateUtil.beginTransaction();
+
+    final String transcriptionSQL = "select"//
+        + "  e.id as id,"//
+        + "  e.name as name,"//
+        + "  m.data as entry_order,"//
+        + "  t.body as transcription,"//
+        + "  f.zoomable_url"//
+        + " from project_entries e"//
+        + "   left outer join project_entry_metadata_items m on (e.id = m.project_entry_id and m.field='order')"//
+        + "   left outer join transcriptions t on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
+        + "   left outer join facsimiles f on (e.id = f.project_entry_id)"//
+        + " where project_id=" + project_id//
+        + " order by entry_order, name".replaceAll(" +", " ");
+    final Query transcriptionQuery = entityManager.createNativeQuery(transcriptionSQL);
+    final List<Object[]> transcriptions = transcriptionQuery.getResultList();
+    for (final Object[] transcription : transcriptions) {
+      final EntryData entryData = new MVNConversionData.EntryData();
+      final Integer id = (Integer) transcription[0];
+      entryData.id = String.valueOf(id);
+      entryData.name = (String) transcription[1];
+      //      String order = (String) transcription[2];
+      entryData.body = (String) transcription[3];
+      entryData.facs = (String) transcription[4];
+      conversionData.getEntryDataList().add(entryData);
+    }
+
+    final String annotationSQL = "select"//
+        + "   a.annotation_no as annotation_num,"//
+        + "   at.name as annotation_type,"//
+        + "   a.body as annotation_body"//
+        + " from project_entries e"//
+        + "   left outer join transcriptions t"//
+        + "     left outer join annotations a"//
+        + "       left outer join annotation_types at"//
+        + "       on (at.id=a.annotation_type_id)"//
+        + "     on (t.id = a.transcription_id)"//
+        + "   on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
+        + " where project_id=" + project_id//
+        + " order by annotation_num;".replaceAll(" +", " ");
+    final Query annotationQuery = entityManager.createNativeQuery(annotationSQL);
+    final List<Object[]> annotations = annotationQuery.getResultList();
+    //    Log.info("SQL: {}", annotationSQL);
+    //    Log.info("{} results:", annotations.size());
+    for (final Object[] annotation : annotations) {
+      final AnnotationData annotationData = new MVNConversionData.AnnotationData();
+      final Integer annotationNum = (Integer) annotation[0];
+      annotationData.type = (String) annotation[1];
+      annotationData.body = (String) annotation[2];
+      conversionData.getAnnotationIndex().put(annotationNum, annotationData);
+    }
+
+    HibernateUtil.rollbackTransaction(entityManager);
+    return conversionData;
+  }
+
   public MVNConversionResult convert() {
     final MVNConversionResult result = new MVNConversionResult(project);
     final StringBuilder editionTextBuilder = new StringBuilder();
@@ -89,6 +148,7 @@ public class MVNConverter {
     final Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
     boolean lastTagWasBegin = false;
     while (matcher.find()) {
+
       final String beginOrEinde = matcher.group(1);
       final String textnum = matcher.group(2).trim().replaceFirst(";.*$", "");
       if ("begin".equals(beginOrEinde)) {
@@ -156,65 +216,6 @@ public class MVNConverter {
         .replace("</body>", "")//
         .replace("&nbsp;", " ")//
         .trim();
-  }
-
-  @SuppressWarnings("unchecked")
-  public static MVNConversionData getConversionData(final long project_id) {
-    final MVNConversionData conversionData = new MVNConversionData();
-    final EntityManager entityManager = HibernateUtil.beginTransaction();
-
-    final String transcriptionSQL = "select"//
-        + "  e.id as id,"//
-        + "  e.name as name,"//
-        + "  m.data as entry_order,"//
-        + "  t.body as transcription,"//
-        + "  f.zoomable_url"//
-        + " from project_entries e"//
-        + "   left outer join project_entry_metadata_items m on (e.id = m.project_entry_id and m.field='order')"//
-        + "   left outer join transcriptions t on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
-        + "   left outer join facsimiles f on (e.id = f.project_entry_id)"//
-        + " where project_id=" + project_id//
-        + " order by entry_order, name".replaceAll(" +", " ");
-    final Query transcriptionQuery = entityManager.createNativeQuery(transcriptionSQL);
-    final List<Object[]> transcriptions = transcriptionQuery.getResultList();
-    for (final Object[] transcription : transcriptions) {
-      final EntryData entryData = new MVNConversionData.EntryData();
-      final Integer id = (Integer) transcription[0];
-      entryData.id = String.valueOf(id);
-      entryData.name = (String) transcription[1];
-      //      String order = (String) transcription[2];
-      entryData.body = (String) transcription[3];
-      entryData.facs = (String) transcription[4];
-      conversionData.getEntryDataList().add(entryData);
-    }
-
-    final String annotationSQL = "select"//
-        + "   a.annotation_no as annotation_num,"//
-        + "   at.name as annotation_type,"//
-        + "   a.body as annotation_body"//
-        + " from project_entries e"//
-        + "   left outer join transcriptions t"//
-        + "     left outer join annotations a"//
-        + "       left outer join annotation_types at"//
-        + "       on (at.id=a.annotation_type_id)"//
-        + "     on (t.id = a.transcription_id)"//
-        + "   on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
-        + " where project_id=" + project_id//
-        + " order by annotation_num;".replaceAll(" +", " ");
-    final Query annotationQuery = entityManager.createNativeQuery(annotationSQL);
-    final List<Object[]> annotations = annotationQuery.getResultList();
-    //    Log.info("SQL: {}", annotationSQL);
-    //    Log.info("{} results:", annotations.size());
-    for (final Object[] annotation : annotations) {
-      final AnnotationData annotationData = new MVNConversionData.AnnotationData();
-      final Integer annotationNum = (Integer) annotation[0];
-      annotationData.type = (String) annotation[1];
-      annotationData.body = (String) annotation[2];
-      conversionData.getAnnotationIndex().put(annotationNum, annotationData);
-    }
-
-    HibernateUtil.rollbackTransaction(entityManager);
-    return conversionData;
   }
 
   private void setFacs(final ProjectEntry entry, final MVNFolium page, final MVNConversionResult result) {
