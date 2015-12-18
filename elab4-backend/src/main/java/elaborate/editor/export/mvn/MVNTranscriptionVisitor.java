@@ -43,6 +43,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   private static String currentEntryId;
   private static Set<String> deepestTextNums;
   private static int indent;
+  private static LineInfo currentLineInfo;
 
   public MVNTranscriptionVisitor(final MVNConversionResult result, final Map<Integer, AnnotationData> annotationIndex, final Set<String> deepestTextNums) {
     super(new XmlContext());
@@ -59,6 +60,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     addElementHandler(new BodyHandler(), "body");
     addElementHandler(new PageBreakHandler(), "pb");
     addElementHandler(new AnnotationHandler(), "ab", "ae");
+    addElementHandler(new LineBeginHandler(), "lb");
+    addElementHandler(new LineEndHandler(), "le");
   }
 
   @Override
@@ -77,9 +80,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     if (!ignoreText) {
       handleFirstLB(context);
       String normalized = text.getText();
-      if (normalized.contains("\n")) {
-        normalized = normalized.replace("\n", "\n" + indent() + newLB());
-      }
+      //      if (normalized.contains("\n")) {
+      //        normalized = normalized.replace("\n", "\n" + indent() + newLB());
+      //      }
       context.addLiteral(normalized);
     }
     return Traversal.NEXT;
@@ -94,15 +97,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     return Traversal.NEXT;
   }
 
-  private static String newLB() {
-    final String lbTag = "<lb n=\"" + lb + "\" xml:id=\"" + pageId + "-lb-" + lb + "\"/>";
-    lb++;
-    return lbTag;
-  }
-
   private static void handleFirstLB(final XmlContext context) {
     if (firstText) {
-      context.addLiteral(newLB());
+      //      context.addLiteral(newLB());
       firstText = false;
     }
   }
@@ -149,7 +146,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   static class PageBreakHandler extends CopyElementHandler {
     @Override
     public Traversal enterElement(final Element element, final XmlContext context) {
-      context.addLiteral("\n\n" + indent());
+      context.addLiteral("\n" + indent());
       pageId = element.getAttribute("id");
       currentEntryId = element.getAttribute("_entryId");
       element.removeAttribute("_entryId");
@@ -163,8 +160,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     @Override
     public Traversal leaveElement(final Element element, final XmlContext context) {
       super.leaveElement(element, context);
-      context.addLiteral("\n" + indent());
-      context.addLiteral(newLB());
+      context.addLiteral("\n");
       return Traversal.NEXT;
     }
 
@@ -190,8 +186,56 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
   }
 
-  static class AnnotationHandler implements ElementHandler<XmlContext> {
+  static class LineBeginHandler implements ElementHandler<XmlContext> {
+    @Override
+    public Traversal enterElement(final Element element, final XmlContext context) {
+      currentLineInfo = new LineInfo();
+      return Traversal.NEXT;
+    }
 
+    @Override
+    public Traversal leaveElement(final Element element, final XmlContext context) {
+      context.openLayer();
+      return Traversal.NEXT;
+    }
+  }
+
+  static class LineEndHandler implements ElementHandler<XmlContext> {
+    @Override
+    public Traversal enterElement(final Element element, final XmlContext context) {
+      return Traversal.NEXT;
+    }
+
+    @Override
+    public Traversal leaveElement(final Element element, final XmlContext context) {
+      String line = context.closeLayer();
+      context.addLiteral(currentLineInfo.preTags);
+      if (currentLineInfo.witregel) {
+        context.addLiteral(indent());
+        context.addEmptyElementTag("lb");
+        context.addLiteral("\n");
+      }
+      context.addLiteral(indent());
+      String lineNo = String.valueOf(lb);
+      if (currentLineInfo.useCustomLineNo) {
+        lineNo = currentLineInfo.lineNo;
+      } else {
+        lb++;
+      }
+      Element e = new Element("lb")//
+          .withAttribute("n", String.valueOf(lineNo))//
+          .withAttribute("xml:id", pageId + "-lb-" + lineNo);
+      if (currentLineInfo.inspringen) {
+        e.setAttribute("rend", "indent");
+      }
+      context.addEmptyElementTag(e);
+      context.addLiteral(line);
+      context.addLiteral(currentLineInfo.postTags);
+      return Traversal.NEXT;
+    }
+  }
+
+  static class AnnotationHandler implements ElementHandler<XmlContext> {
     @Override
     public Traversal enterElement(final Element element, final XmlContext context) {
       final String id = element.getAttribute("id");
@@ -210,23 +254,23 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     private void handleOpenAnnotation(final AnnotationData annotationData, final XmlContext context) {
       final MVNAnnotationType type = getVerifiedType(annotationData);
       ignoreText = type.ignoreText();
-      if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
-        final String body = annotationData.body;
-        if (StringUtils.isNumeric(body)) {
-          lb = Integer.valueOf(body);
-        } else {
-          addError(MVNAnnotationType.REGELNUMMERING_BLAD, "body: '" + body + "' is not numeric");
-        }
+      //      if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
+      //        final String body = annotationData.body;
+      //        if (StringUtils.isNumeric(body)) {
+      //          lb = Integer.valueOf(body);
+      //        } else {
+      //          addError(MVNAnnotationType.REGELNUMMERING_BLAD, "body: '" + body + "' is not numeric");
+      //        }
+      //
+      //      } else {
+      //      handleFirstLB(context);
+      if (handlers.containsKey(type)) {
+        handlers.get(type).handleOpenAnnotation(annotationData, context);
 
       } else {
-        handleFirstLB(context);
-        if (handlers.containsKey(type)) {
-          handlers.get(type).handleOpenAnnotation(annotationData, context);
-
-        } else {
-          throw new RuntimeException("uncaught MVNAnnotationType: " + type.getName());
-        }
+        throw new RuntimeException("uncaught MVNAnnotationType: " + type.getName());
       }
+      //      }
     }
 
     private void handleCloseAnnotation(final AnnotationData annotationData, final XmlContext context) {
@@ -422,7 +466,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
 
     @Override
-    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
+    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
+      currentLineInfo.inspringen = true;
+    }
   }
 
   private static class KolomHandler implements MVNAnnotationHandler {
@@ -499,7 +545,15 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static class RegelnummeringBladHandler implements MVNAnnotationHandler {
     @Override
-    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {}
+    public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
+      String customLineNo = annotation.body;
+      if (StringUtils.isNumeric(customLineNo)) {
+        lb = Integer.valueOf(customLineNo);
+      } else {
+        currentLineInfo.lineNo = customLineNo;
+        currentLineInfo.useCustomLineNo = true;
+      }
+    }
 
     @Override
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
@@ -531,24 +585,29 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       final Element element = new Element(isText ? "text" : "group")//
           .withAttribute("n", textNum)//
           .withAttribute("xml:id", result.getSigle() + "-" + textNum);
+      context.openLayer();
       context.addLiteral("\n" + indent());
       context.addOpenTag(element);
+      context.addLiteral("\n");
       indent++;
-      context.addLiteral("\n" + indent());
       if (isText) {
+        context.addLiteral(indent());
         context.addOpenTag("body");
+        context.addLiteral("\n");
         indent++;
-        context.addLiteral("\n" + indent());
       }
+      currentLineInfo.preTags = currentLineInfo.preTags + context.closeLayer();
+
       if (parts.size() > 1) {
         final String title = parts.get(1);
         final Element head = new Element("head").withAttribute("type", "assigned");
+        context.openLayer();
         context.addOpenTag(head);
         context.addLiteral(title);
         context.addCloseTag(head);
+        currentLineInfo.postTags = currentLineInfo.postTags + context.closeLayer();
       }
     }
-
   }
 
   private static boolean isText(final String textNum) {
@@ -570,16 +629,19 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
       final String textNum = parts.get(0);
       final boolean inTextBody = isText(textNum);
+      context.openLayer();
       if (inTextBody) {
         indent--;
+        currentLineInfo.preTags = "  " + currentLineInfo.preTags;
         context.addLiteral("\n" + indent());
         context.addCloseTag("body");
       }
       indent--;
+      currentLineInfo.preTags = "  " + currentLineInfo.preTags;
       final Element element = new Element(inTextBody ? "text" : "group");
       context.addLiteral("\n" + indent());
       context.addCloseTag(element);
-      context.addLiteral("\n");
+      currentLineInfo.postTags = currentLineInfo.postTags + context.closeLayer();
     }
   }
 
@@ -611,9 +673,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       if (!"¤".equals(annotatedText)) {
         addError(MVNAnnotationType.WITREGEL, "Het geannoteerde teken moet ‘¤’ zijn, is '" + annotatedText + "'");
       }
-      context.addLiteral("\n" + indent());
-      context.addEmptyElementTag("lb");
-      context.addLiteral("\n" + indent());
+      currentLineInfo.witregel = true;
     }
   }
 

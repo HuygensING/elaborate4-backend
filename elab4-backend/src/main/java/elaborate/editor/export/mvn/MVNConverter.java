@@ -109,7 +109,7 @@ public class MVNConverter {
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
       final String pageId = result.getSigle() + "-pb-" + entryData.name;
       editionTextBuilder//
-          .append("<pb n=\"")//
+          .append("\n<pb n=\"")//
           .append(entryData.name)//
           .append("\" xml:id=\"")//
           .append(pageId)//
@@ -117,11 +117,13 @@ public class MVNConverter {
           .append(entryData.facs)//
           .append("\" _entryId=\"")//
           .append(entryData.id)//
-          .append("\"/>")//
-          .append(transcriptionBody(entryData));
+          .append("\"/>\n")//
+          .append("<lb/>")//
+          .append(transcriptionBody(entryData).replace("\n", "<le/>\n<lb/>"))//
+          .append("<le/>");
     }
 
-    final String xml = "<body>" + editionTextBuilder.toString() + "</body>";
+    final String xml = "<body>" + editionTextBuilder.toString().replace("<lb/><le/>", "").replace("\n\n", "\n") + "</body>";
     final String cooked = cook(xml);
     validateTextNums(cooked, result);
     if (DEBUG) {
@@ -148,7 +150,6 @@ public class MVNConverter {
     final Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
     boolean lastTagWasBegin = false;
     while (matcher.find()) {
-
       final String beginOrEinde = matcher.group(1);
       final String textnum = matcher.group(2).trim().replaceFirst(";.*$", "");
       if ("begin".equals(beginOrEinde)) {

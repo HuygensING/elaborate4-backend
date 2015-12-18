@@ -162,7 +162,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<choice><abbr>geannoteerde tekst</abbr><expan><ex>inhoud annotatie</ex></expan></choice>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -182,7 +182,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<p>"//
         + " post</p>\n";
     assertConversion(body, mockData(1, annotation), expected);
@@ -198,7 +198,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<num type=\"roman\">geannoteerde tekst</num>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -215,7 +215,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<gap/>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -231,7 +231,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<gap></gap>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -247,7 +247,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<del>geannoteerde tekst</del>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -265,7 +265,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<hi rend=\"capitalsize2\">geannoteerde tekst</hi>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -309,7 +309,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<mentioned>geannoteerde tekst</mentioned>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -325,7 +325,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<note place=\"margin-left\" type=\"ms\">geannoteerde tekst</note>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -342,7 +342,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<closer>geannoteerde tekst</closer>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -358,7 +358,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<unclear>geannoteerde tekst</unclear>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -376,7 +376,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<hi rend=\"rubricated\">geannoteerde tekst</hi>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -393,7 +393,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<head>geannoteerde tekst</head>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -411,7 +411,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "geannoteerde tekst<note type=\"pc\">inhoud <mentioned>annotatie</mentioned></note>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -429,7 +429,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<hi rend=\"rubric\">geannoteerde tekst</hi>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -443,12 +443,11 @@ public class MVNConverterTest {
   @Test
   public void testWitregelConversie() {
     Annotation annotation = mockAnnotationOfType(WITREGEL);
-    String body = "<body>pre "//
+    String body = "<body><lb/>pre "//
         + "<ab id=\"1\"/>¤<ae id=\"1\"/>"//
-        + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre \n"//
-        + "      <lb/>\n"//
-        + "       post";
+        + " post<le/></body>";
+    String expected = "      <lb/>\n"//
+        + "      <lb n=\"1\" xml:id=\"1-lb-1\"/>pre  post";
     assertConversion(body, mockData(1, annotation), expected);
   }
 
@@ -546,7 +545,7 @@ public class MVNConverterTest {
     String body = "<body>pre "//
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
+    String expected = "pre "//
         + "<note place=\"margin-right\" type=\"ms\">geannoteerde tekst</note>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
@@ -725,7 +724,7 @@ public class MVNConverterTest {
     MVNConversionResult result = new MVNConversionResult(project);
 
     String tei = new MVNConverter(project, data).toTei(body, result);
-    assertThat(result.isOK()).overridingErrorMessage("validation error: %s", result.getErrors()).isTrue();
+    assertThat(result.isOK()).overridingErrorMessage("validation error(s): %s", result.getErrors()).isTrue();
     return tei;
   }
 
