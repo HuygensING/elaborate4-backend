@@ -119,7 +119,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       try {
         created = super.create(project);
         String projectType = projectPrototype.getType();
-        project.addMetadata(ProjectMetadataFields.TYPE, projectType, user);
+        ProjectMetadataItem pmi = project.addMetadata(ProjectMetadataFields.TYPE, projectType, user);
+        persist(pmi);
         if (ProjectTypes.MVN.equals(projectType)) {
           project.setAnnotationTypes(mvnAnnotationTypes(getEntityManager()));
         }
