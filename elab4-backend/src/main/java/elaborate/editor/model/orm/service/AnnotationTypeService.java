@@ -36,121 +36,121 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Singleton
 public class AnnotationTypeService extends AbstractStoredEntityService<AnnotationType> {
-	private static final String DEFAULT_ANNOTATIONTYPE_NAME = "Uncategorized";
-	private static AnnotationTypeService instance = new AnnotationTypeService();
+  private static final String DEFAULT_ANNOTATIONTYPE_NAME = "Uncategorized";
+  private static AnnotationTypeService instance = new AnnotationTypeService();
 
-	private AnnotationTypeService() {}
+  private AnnotationTypeService() {}
 
-	public static AnnotationTypeService instance() {
-		return instance;
-	}
+  public static AnnotationTypeService instance() {
+    return instance;
+  }
 
-	@Override
-	Class<AnnotationType> getEntityClass() {
-		return AnnotationType.class;
-	}
+  @Override
+  Class<AnnotationType> getEntityClass() {
+    return AnnotationType.class;
+  }
 
-	@Override
-	String getEntityName() {
-		return "AnnotationType";
-	}
+  @Override
+  String getEntityName() {
+    return "AnnotationType";
+  }
 
-	/* CRUD methods */
+  /* CRUD methods */
 
-	public AnnotationType create(AnnotationType annotationType, User creator) {
-		beginTransaction();
-		if (creator.getPermissionFor(annotationType).canWrite()) {
-			annotationType.setCreatedBy(creator);
-			AnnotationType created = super.create(annotationType);
-			commitTransaction();
-			return created;
-		}
-		rollbackTransaction();
-		throw new UnauthorizedException(exception(creator, "create new annotation types"));
-	}
+  public AnnotationType create(AnnotationType annotationType, User creator) {
+    beginTransaction();
+    if (creator.getPermissionFor(annotationType).canWrite()) {
+      annotationType.setCreatedBy(creator);
+      AnnotationType created = super.create(annotationType);
+      commitTransaction();
+      return created;
+    }
+    rollbackTransaction();
+    throw new UnauthorizedException(exception(creator, "create new annotation types"));
+  }
 
-	private String exception(User creator, String string) {
-		return "user " + creator.getUsername() + " is not authorized to " + string;
-	}
+  private String exception(User creator, String string) {
+    return "user " + creator.getUsername() + " is not authorized to " + string;
+  }
 
-	public AnnotationType read(long id, User reader) {
-		openEntityManager();
-		AnnotationType annotationType;
-		try {
-			annotationType = super.read(id);
-		} finally {
-			closeEntityManager();
-		}
-		return annotationType;
-	}
+  public AnnotationType read(long id, User reader) {
+    openEntityManager();
+    AnnotationType annotationType;
+    try {
+      annotationType = super.read(id);
+    } finally {
+      closeEntityManager();
+    }
+    return annotationType;
+  }
 
-	public void update(AnnotationType annotationType, User modifier) {
-		beginTransaction();
-		if (modifier.getPermissionFor(annotationType).canWrite()) {
-			annotationType.setModifiedBy(modifier);
-			super.update(annotationType);
-			commitTransaction();
-		} else {
-			rollbackTransaction();
-			throw new UnauthorizedException(exception(modifier, "update annotation types"));
-		}
-	}
+  public void update(AnnotationType annotationType, User modifier) {
+    beginTransaction();
+    if (modifier.getPermissionFor(annotationType).canWrite()) {
+      annotationType.setModifiedBy(modifier);
+      super.update(annotationType);
+      commitTransaction();
+    } else {
+      rollbackTransaction();
+      throw new UnauthorizedException(exception(modifier, "update annotation types"));
+    }
+  }
 
-	public void delete(long id, User modifier) {
-		beginTransaction();
-		AnnotationType annotationType = super.read(id);
-		if (modifier.getPermissionFor(annotationType).canWrite()) {
-			super.delete(id);
-			commitTransaction();
-		} else {
-			rollbackTransaction();
-			throw new UnauthorizedException(exception(modifier, "delete annotation types"));
-		}
-	}
+  public void delete(long id, User modifier) {
+    beginTransaction();
+    AnnotationType annotationType = super.read(id);
+    if (modifier.getPermissionFor(annotationType).canWrite()) {
+      super.delete(id);
+      commitTransaction();
+    } else {
+      rollbackTransaction();
+      throw new UnauthorizedException(exception(modifier, "delete annotation types"));
+    }
+  }
 
-	/**/
-	@Override
-	public ImmutableList<AnnotationType> getAll() {
-		openEntityManager();
-		ImmutableList<AnnotationType> all;
-		try {
-			all = super.getAll();
-		} finally {
-			closeEntityManager();
-		}
-		return all;
-	}
+  /**/
+  @Override
+  public ImmutableList<AnnotationType> getAll() {
+    openEntityManager();
+    ImmutableList<AnnotationType> all;
+    try {
+      all = super.getAll();
+    } finally {
+      closeEntityManager();
+    }
+    return all;
+  }
 
-	public AnnotationType getDefaultAnnotationType() {
-		// ModelFactory.createAnnotationType("Uncategorized", "Any annotation", creator);
-		beginTransaction();
-		AnnotationType defaultAnnotationType;
-		try {
-			defaultAnnotationType = (AnnotationType) getEntityManager()//
-					.createQuery("from AnnotationType as at where at.name=?1")//
-					.setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME)//
-					.getSingleResult();
-			if (defaultAnnotationType == null) {
-				defaultAnnotationType = new AnnotationType().setName(DEFAULT_ANNOTATIONTYPE_NAME).setDescription("Any annotation");
-				User root = UserService.instance().getUser(1);
-				create(defaultAnnotationType, root);
-			}
-		} finally {
-			commitTransaction();
-		}
-		return defaultAnnotationType;
-	}
+  public AnnotationType getDefaultAnnotationType() {
+    // ModelFactory.createAnnotationType("Uncategorized", "Any annotation", creator);
+    beginTransaction();
+    AnnotationType defaultAnnotationType;
+    try {
+      defaultAnnotationType = (AnnotationType) getEntityManager()//
+          .createQuery("from AnnotationType as at where at.name=?1")//
+          .setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME)//
+          .getSingleResult();
+      if (defaultAnnotationType == null) {
+        defaultAnnotationType = new AnnotationType().setName(DEFAULT_ANNOTATIONTYPE_NAME).setDescription("Any annotation");
+        User root = UserService.instance().getUser(1);
+        create(defaultAnnotationType, root);
+      }
+    } finally {
+      commitTransaction();
+    }
+    return defaultAnnotationType;
+  }
 
-	public AnnotationType getAnnotationTypeByName(String name, EntityManager entityManager) {
-		try {
-			List<AnnotationType> resultList = entityManager.createQuery("from AnnotationType where name=:name", AnnotationType.class)//
-					.setParameter("name", name)//
-					.getResultList();
-			return resultList.isEmpty() ? null : resultList.get(0);
+  public AnnotationType getAnnotationTypeByName(String name, EntityManager entityManager) {
+    try {
+      List<AnnotationType> resultList = entityManager.createQuery("from AnnotationType where name=:name", AnnotationType.class)//
+          .setParameter("name", name)//
+          .getResultList();
+      return resultList.isEmpty() ? null : resultList.get(0);
 
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
+    } catch (NoResultException e) {
+      return null;
+    }
+  }
 
 }
