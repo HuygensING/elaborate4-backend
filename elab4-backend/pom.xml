@@ -246,9 +246,11 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
 			</resource>
 			<resource>
 				<directory>src/main/java</directory>
+				<filtering>true</filtering>
 				<includes>
 					<include>**/*.properties</include>
 					<include>**/*.ftl</include>
