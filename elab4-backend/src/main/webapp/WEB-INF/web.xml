@@ -21,7 +21,7 @@
 			<!-- ResourceConfig rc = new PackagesResourceConfig("nl.knaw.huygens.jaxrstools.resources", "nl.knaw.huygens.jaxrstools.providers", 
 				"elaborate.editor.resources", "elaborate.editor.providers"); -->
 			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers</param-value>
+			<param-value>elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources</param-value>
 		</init-param>
 
 		<init-param>

@@ -27,32 +27,31 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import com.sun.jersey.api.container.MappableContainerException;
-
 import nl.knaw.huygens.Log;
 
 @Provider
 public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
-	@Override
-	public Response toResponse(RuntimeException exception) {
-		Log.info("RuntimeExceptionMapper.toResonse()");
-		if (exception instanceof WebApplicationException) {
-			WebApplicationException internalException = (WebApplicationException) exception;
-			return internalException.getResponse();
-		}
-		throw new MappableContainerException(exception);
+  @Override
+  public Response toResponse(RuntimeException exception) {
+    Log.info("RuntimeExceptionMapper.toResponse()");
+    if (exception instanceof WebApplicationException) {
+      WebApplicationException internalException = (WebApplicationException) exception;
+      return internalException.getResponse();
+    }
+    exception.printStackTrace();
+    return Response.serverError().entity(exception.getMessage()).build();
 
-		// ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
-		// builder.type(MediaType.TEXT_PLAIN_TYPE);
-		// builder.entity(exception.getStackTrace());
-		// return builder.build();
+    // ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR);
+    // builder.type(MediaType.TEXT_PLAIN_TYPE);
+    // builder.entity(exception.getStackTrace());
+    // return builder.build();
 
-		// if (exception instanceof WebApplicationException) {
-		// throw exception;
-		// }
-		// Log.error("{}", exception.getMessage());
-		// exception.printStackTrace();
-		// throw new InternalServerErrorException(exception.getMessage());
-	}
+    // if (exception instanceof WebApplicationException) {
+    // throw exception;
+    // }
+    // Log.error("{}", exception.getMessage());
+    // exception.printStackTrace();
+    // throw new InternalServerErrorException(exception.getMessage());
+  }
 
 }
