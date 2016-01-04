@@ -10,12 +10,14 @@ public class ProjectPrototype {
     project = new Project();
   }
 
-  public void setTitle(String title) {
+  public ProjectPrototype setTitle(String title) {
     project.setTitle(title);
+    return this;
   }
 
-  public void setType(String type) {
+  public ProjectPrototype setType(String type) {
     this.type = type;
+    return this;
   }
 
   public Project getProject() {

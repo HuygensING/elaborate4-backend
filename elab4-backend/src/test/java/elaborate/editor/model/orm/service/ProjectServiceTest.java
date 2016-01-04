@@ -33,7 +33,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import elaborate.editor.AbstractTest;
-import elaborate.editor.model.ModelFactory;
+import elaborate.editor.model.ProjectPrototype;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
@@ -42,68 +42,68 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Ignore
 public class ProjectServiceTest extends AbstractTest {
-	private static UserService userService;
-	private static ProjectService projectService;
-	private static User root;
-	private static User notRoot;
+  private static UserService userService;
+  private static ProjectService projectService;
+  private static User root;
+  private static User notRoot;
 
-	@Before
-	public void setUp() throws Exception {
-		userService = UserService.instance();
-		projectService = ProjectService.instance();
-		root = new User().setRoot(true).setUsername("root");
-		userService.beginTransaction();
-		userService.create(root);
-		notRoot = new User().setUsername("notroot");
-		projectService.beginTransaction();
-	}
+  @Before
+  public void setUp() throws Exception {
+    userService = UserService.instance();
+    projectService = ProjectService.instance();
+    root = new User().setRoot(true).setUsername("root");
+    userService.beginTransaction();
+    userService.create(root);
+    notRoot = new User().setUsername("notroot");
+    projectService.beginTransaction();
+  }
 
-	@After
-	public void tearDown() throws Exception {
-		projectService.rollbackTransaction();
-		userService.delete(root.getId());
-		userService.rollbackTransaction();
-	}
+  @After
+  public void tearDown() throws Exception {
+    projectService.rollbackTransaction();
+    userService.delete(root.getId());
+    userService.rollbackTransaction();
+  }
 
-	@Test(expected = UnauthorizedException.class)
-	public void testCreateAsNotRoot() throws Exception {
-		Project project = ModelFactory.createTrackedEntity(Project.class, notRoot).setName("name");
-		Project created = projectService.create(project, notRoot);
-		assertThat(created).isNotNull();
-	}
+  @Test(expected = UnauthorizedException.class)
+  public void testCreateAsNotRoot() throws Exception {
+    ProjectPrototype prototype = new ProjectPrototype().setTitle("name");
+    Project created = projectService.create(prototype, notRoot);
+    assertThat(created).isNotNull();
+  }
 
-	@Test
-	public void testCreateAsRoot() throws Exception {
-		Project project = ModelFactory.createTrackedEntity(Project.class, root).setName("name");
-		Project created = projectService.create(project, root);
-		long project_id = created.getId();
-		Project read = projectService.read(project_id, root);
-		assertThat(read).hasName("name");
-	}
+  @Test
+  public void testCreateAsRoot() throws Exception {
+    ProjectPrototype prototype = new ProjectPrototype().setTitle("name");
+    Project created = projectService.create(prototype, root);
+    long project_id = created.getId();
+    Project read = projectService.read(project_id, root);
+    assertThat(read).hasName("name");
+  }
 
-	@Test
-	public void testGetAll() throws Exception {
-		List<Project> all = projectService.getAll(root);
-		assertThat(all).isNotEmpty();
-		Log.info("{}", all.size());
-	}
+  @Test
+  public void testGetAll() throws Exception {
+    List<Project> all = projectService.getAll(root);
+    assertThat(all).isNotEmpty();
+    Log.info("{}", all.size());
+  }
 
-	@Test
-	public void testGetProjectEntryIdsInOrder() throws Exception {
-		List<Long> idList = projectService.getProjectEntryIdsInOrder(1);
-		Log.info("ids:{}", idList);
-		assertThat(idList).isNotEmpty();
-	}
+  @Test
+  public void testGetProjectEntryIdsInOrder() throws Exception {
+    List<Long> idList = projectService.getProjectEntryIdsInOrder(1);
+    Log.info("ids:{}", idList);
+    assertThat(idList).isNotEmpty();
+  }
 
-	@Test
-	public void testGetAnnotationDataForProject() throws Exception {
-		Map<Integer, AnnotationData> annotationDataForProject = projectService.getAnnotationDataForProject(44l);
-		assertThat(annotationDataForProject).isNotEmpty();
-		Log.info("annotationTypesForProject={}", annotationDataForProject);
-	}
+  @Test
+  public void testGetAnnotationDataForProject() throws Exception {
+    Map<Integer, AnnotationData> annotationDataForProject = projectService.getAnnotationDataForProject(44l);
+    assertThat(annotationDataForProject).isNotEmpty();
+    Log.info("annotationTypesForProject={}", annotationDataForProject);
+  }
 
-	// @Test
-	// public void testExportPdf() throws Exception {
-	// projectService.exportPdf(1, root, "editie.pdf");
-	// }
+  // @Test
+  // public void testExportPdf() throws Exception {
+  // projectService.exportPdf(1, root, "editie.pdf");
+  // }
 }
