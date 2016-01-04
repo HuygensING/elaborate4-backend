@@ -19,6 +19,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
+		<timestamp>${maven.build.timestamp}</timestamp>
 
 		<elab4.version>${project.parent.version}</elab4.version>
 		<elab4-config.version>1.0</elab4-config.version>
