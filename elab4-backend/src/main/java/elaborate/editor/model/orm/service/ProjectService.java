@@ -123,6 +123,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         if (ProjectTypes.MVN.equals(projectType)) {
           project.setAnnotationTypes(mvnAnnotationTypes(getEntityManager()));
         }
+        persist(project);
         persist(created.addLogEntry("project created", user));
       } finally {
         commitTransaction();
