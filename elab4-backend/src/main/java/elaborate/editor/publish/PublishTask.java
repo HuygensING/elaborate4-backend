@@ -63,6 +63,7 @@ import com.google.common.io.Files;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.ProjectMetadataFields;
+import elaborate.editor.model.ProjectTypes;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationMetadataItem;
 import elaborate.editor.model.orm.AnnotationType;
@@ -121,38 +122,55 @@ public class PublishTask implements Runnable {
   public void run() {
     // TODO: refactor entityManager/projectService interaction
     status.addLogline("started");
+
+    entityManager = HibernateUtil.getEntityManager();
+    final Project project = entityManager.find(Project.class, projectId);
+    final ProjectService ps = ProjectService.instance();
+    boolean projectIsMVN = ProjectTypes.MVN.equals(project.getMetadataMap().get(ProjectMetadataFields.TYPE));
+    final String url = projectIsMVN ? createMVNDraft(project, ps) : createRegularDraft(project, ps);
+
+    status.addLogline("finished");
+    status.setDone();
+
+    entityManager = HibernateUtil.getEntityManager();
+    ps.setEntityManager(entityManager);
+    ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
+  }
+
+  private String createMVNDraft(Project project, ProjectService ps) {
+    status.addError("publishing of mvn project not implemented yet");
+    return "!not implemented yet!";
+  }
+
+  private String createRegularDraft(final Project project, final ProjectService ps) {
     prepareDirectories();
 
     status.addLogline("setting up new solr index");
     prepareSolr();
 
-    entityManager = HibernateUtil.getEntityManager();
-    Project project = entityManager.find(Project.class, projectId);
-
-    ProjectService ps = ProjectService.instance();
     // these 2 use transaction explicitly
-    List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
+    final List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
     annotationDataMap = filterOnPublishableAnnotationTypes(ps.getAnnotationDataForProject(projectId), settings.getAnnotationTypeIds());
 
     // the rest don't (see TODO)
     ps.setEntityManager(entityManager);
-    Map<String, String> typographicalAnnotationMap = getTypographicalAnnotationMap(project);
-    Collection<String> multivaluedFacetNames = getFacetsToSplit(project);
-    List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
+    final Map<String, String> typographicalAnnotationMap = getTypographicalAnnotationMap(project);
+    final Collection<String> multivaluedFacetNames = getFacetsToSplit(project);
+    final List<ProjectEntry> projectEntriesInOrder = ps.getProjectEntriesInOrder(projectId);
 
     int entryNum = 1;
-    List<EntryData> entryData = Lists.newArrayList();
-    Map<Long, List<String>> thumbnails = Maps.newHashMap();
-    Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
-    String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
-    String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[] {};
-    for (ProjectEntry projectEntry : projectEntriesInOrder) {
+    final List<EntryData> entryData = Lists.newArrayList();
+    final Map<Long, List<String>> thumbnails = Maps.newHashMap();
+    final Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
+    final String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
+    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[] {};
+    for (final ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
         status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
-        ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields, typographicalAnnotationMap);
-        long id = projectEntry.getId();
-        Multimap<String, String> multivaluedFacetValues = getMultivaluedFacetValues(multivaluedMetadataFields, projectEntry);
-        String datafile = id + ".json";
+        final ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields, typographicalAnnotationMap);
+        final long id = projectEntry.getId();
+        final Multimap<String, String> multivaluedFacetValues = getMultivaluedFacetValues(multivaluedMetadataFields, projectEntry);
+        final String datafile = id + ".json";
         entryData.add(new EntryData(id, projectEntry.getName(), projectEntry.getShortName(), datafile, multivaluedFacetValues));
         thumbnails.put(id, eed.thumbnailUrls);
         annotationIndex.putAll(eed.annotationDataMap);
@@ -162,9 +180,9 @@ public class PublishTask implements Runnable {
     commitAndCloseSolr();
     exportPojectData(entryData, thumbnails, annotationIndex);
 
-    String basename = getBasename(project);
-    String url = getBaseURL(project.getName());
-    List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(ps);
+    final String basename = getBasename(project);
+    final String url = getBaseURL(project.getName());
+    final List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(ps);
     exportSearchConfig(project, facetableProjectEntryMetadataFields, multivaluedFacetNames, url);
     exportBuildDate();
     // FIXME: fix, error bij de ystroom
@@ -173,18 +191,13 @@ public class PublishTask implements Runnable {
     }
 
     status.addLogline("generating war file " + basename + ".war");
-    File war = new WarMaker(basename, distDir, rootDir).make();
+    final File war = new WarMaker(basename, distDir, rootDir).make();
     status.addLogline("deploying war to " + url);
     deploy(war);
     status.setUrl(url);
     status.addLogline("cleaning up temporary directories");
     clearDirectories();
-    status.addLogline("finished");
-    status.setDone();
-
-    entityManager = HibernateUtil.getEntityManager();
-    ps.setEntityManager(entityManager);
-    ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
+    return url;
   }
 
   static Multimap<String, String> getMultivaluedFacetValues(String[] multivaluedFacetNames, ProjectEntry projectEntry) {
