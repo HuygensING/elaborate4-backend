@@ -43,7 +43,7 @@
 		<freemarker.version>2.3.23</freemarker.version>
 		<guava.version>19.0</guava.version>
 		<guice.version>4.0</guice.version>
-		<hibernate.version>4.2.7</hibernate.version><!-- > 4.2.7 uses javassist, leads to "org.hibernate.jpa.boot.archive.spi.ArchiveException: Could not build ClassFile", > 4.3.8.Final : java.lang.ClassNotFoundException: javax.transaction.SystemException -->
+		<hibernate.version>4.2.6.Final</hibernate.version><!-- > 4.2.7 uses javassist, leads to "org.hibernate.jpa.boot.archive.spi.ArchiveException: Could not build ClassFile", > 4.3.8.Final : java.lang.ClassNotFoundException: javax.transaction.SystemException -->
 		<hsqldb.version>2.3.3</hsqldb.version>
 		<jackson.version>2.3.0</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
 		<javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
