@@ -90,6 +90,7 @@ import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 public class PublishTask implements Runnable {
+  private static final String MVN_BASE_URL = "http://test.mvn.huygens.knaw.nl/";
   private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   private static final String THUMBNAIL_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=";
   private static final String ZOOM_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/viewer2.1.html?rft_id=";
@@ -139,7 +140,7 @@ public class PublishTask implements Runnable {
 
   private String createMVNDraft(Project project, ProjectService ps) {
     status.addError("publishing of mvn project not implemented yet");
-    return "!not implemented yet!";
+    return MVN_BASE_URL + project.getName().toUpperCase();
   }
 
   private String createRegularDraft(final Project project, final ProjectService ps) {
