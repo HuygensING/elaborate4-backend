@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
@@ -317,7 +316,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     private void verifyAnnotationTypeIsAllowed(final String type) {
       if (!MVNAnnotationType.getAllNames().contains(type)) {
         result.addError(currentEntryId, "onbekend annotatietype: " + type);
-        throw new RuntimeException(Joiner.on("\n").join(result.getErrors()));
+        throw new RuntimeException(Joiner.on("\n").join(result.getStatus().getErrors()));
       }
     }
 

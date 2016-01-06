@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import static elaborate.editor.export.mvn.MVNAnnotationType.AFKORTING;
 import static elaborate.editor.export.mvn.MVNAnnotationType.ALINEA;
 import static elaborate.editor.export.mvn.MVNAnnotationType.CIJFERS;
@@ -67,6 +66,7 @@ import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.Project;
+import elaborate.editor.publish.Publication.Status;
 import nl.knaw.huygens.Log;
 
 public class MVNConverterTest {
@@ -80,11 +80,12 @@ public class MVNConverterTest {
 
     //    AnnotationService annotationService = mock(AnnotationService.class);
     MVNConversionData data = new MVNConversionData();
-    MVNConverter converter = new MVNConverter(project, data);
+    Status logger = new Status(1);
+    MVNConverter converter = new MVNConverter(project, data, logger);
     MVNConversionResult report = converter.convert();
     Log.info("report={}", report);
     assertThat(report).isNotNull();
-    Log.info("errors={}", Joiner.on("\n").join(report.getErrors()));
+    Log.info("errors={}", Joiner.on("\n").join(logger.getErrors()));
     assertThat(report.isOK()).isTrue();
     Log.info("tei={}", report.getTEI());
   }
@@ -744,19 +745,21 @@ public class MVNConverterTest {
 
   private String convert(String body, MVNConversionData data) {
     Project project = mockProject();
-    MVNConversionResult result = new MVNConversionResult(project);
+    Status logger = new Status(1);
+    MVNConversionResult result = new MVNConversionResult(project, logger);
 
-    String tei = new MVNConverter(project, data).toTei(body, result);
-    assertThat(result.isOK()).overridingErrorMessage("validation error(s): %s", result.getErrors()).isTrue();
+    String tei = new MVNConverter(project, data, logger).toTei(body, result);
+    assertThat(result.isOK()).overridingErrorMessage("validation error(s): %s", logger.getErrors()).isTrue();
     return tei;
   }
 
   private void assertConversionFailsValidation(String body, MVNConversionData mockData, String validationError) {
     Project project = mockProject();
-    MVNConversionResult result = new MVNConversionResult(project);
-    String tei = new MVNConverter(project, mockData).toTei(body, result);
+    Status logger = new Status(1);
+    MVNConversionResult result = new MVNConversionResult(project, logger);
+    String tei = new MVNConverter(project, mockData, logger).toTei(body, result);
     assertThat(result.isOK()).isFalse();
-    assertThat(result.getErrors()).contains(validationError);
+    assertThat(logger.getErrors()).contains(validationError);
   }
 
   private Project mockProject() {

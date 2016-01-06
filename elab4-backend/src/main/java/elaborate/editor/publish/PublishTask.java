@@ -62,6 +62,9 @@ import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 import elaborate.editor.config.Configuration;
+import elaborate.editor.export.mvn.MVNConversionData;
+import elaborate.editor.export.mvn.MVNConversionResult;
+import elaborate.editor.export.mvn.MVNConverter;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.ProjectTypes;
 import elaborate.editor.model.orm.Annotation;
@@ -140,7 +143,11 @@ public class PublishTask implements Runnable {
   }
 
   private String createMVNDraft(Project project, ProjectService ps) {
-    status.addError("publishing of mvn project not implemented yet");
+    MVNConversionData data = MVNConverter.getConversionData(project.getId(), status);
+    MVNConverter mvnConverter = new MVNConverter(project, data, status);
+    MVNConversionResult report = mvnConverter.convert();
+
+    String tei = report.getTEI();
     return MVN_BASE_URL + project.getName().toUpperCase();
   }
 

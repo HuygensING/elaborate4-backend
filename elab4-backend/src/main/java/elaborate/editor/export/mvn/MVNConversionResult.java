@@ -1,36 +1,10 @@
 package elaborate.editor.export.mvn;
 
-/*
- * #%L
- * elab4-backend
- * =======
- * Copyright (C) 2011 - 2016 Huygens ING
- * =======
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
-
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
-
-import com.google.common.collect.Lists;
 
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
+import elaborate.editor.publish.Publication.Status;
 import elaborate.freemarker.FreeMarker;
 
 public class MVNConversionResult {
@@ -40,22 +14,22 @@ public class MVNConversionResult {
   private final String sigle;
   private String body = "";
   private final String baseURL;
-  private final List<String> errors = Lists.newArrayList();
-  //  private final List<MVNFolium> pages = Lists.newArrayList();
+  private final Status logger;
 
-  public MVNConversionResult(final Project project) {
+  public MVNConversionResult(final Project project, final Status logger) {
+    this.logger = logger;
     this.baseURL = "https://www.elaborate.huygens.knaw.nl/projects/" + project.getName();
     this.title = project.getMetadataMap().get(ProjectMetadataFields.PUBLICATION_TITLE);
     if (StringUtils.isEmpty(this.title)) {
-      errors.add("project has no title");
+      logger.addError("project has no publication title");
     }
     this.idno = project.getTitle();
     if (StringUtils.isEmpty(this.idno)) {
-      errors.add("project has no publication title");
+      logger.addError("project has no title");
     }
-    this.sigle = project.getName();
+    this.sigle = project.getName().toUpperCase();
     if (StringUtils.isEmpty(this.sigle)) {
-      errors.add("project has no publication name");
+      logger.addError("project has no name");
     }
   }
 
@@ -79,10 +53,6 @@ public class MVNConversionResult {
     return body;
   }
 
-  public List<String> getErrors() {
-    return errors;
-  }
-
   //  private static final Comparator<MVNFolium> PAGE_ORDER = new Comparator<MVNFolium>() {
   //
   //    @Override
@@ -101,7 +71,7 @@ public class MVNConversionResult {
   //  }
 
   public void addError(final String entryId, final String error) {
-    errors.add(url(entryId) + " : " + error);
+    logger.addError(url(entryId) + " : " + error);
   }
 
   public String getTEI() {
@@ -109,13 +79,20 @@ public class MVNConversionResult {
   }
 
   public boolean isOK() {
-    return errors.isEmpty();
+    return logger.getErrors().isEmpty();
+  }
+
+  public Status getStatus() {
+    return logger;
   }
 
   /* private methods */
 
   private String url(final String entryId) {
-    return baseURL + "/entries/" + entryId + "/transcriptions/diplomatic";
+    if (StringUtils.isNotBlank(entryId)) {
+      return baseURL + "/entries/" + entryId + "/transcriptions/diplomatic";
+    }
+    return baseURL;
   }
 
 }

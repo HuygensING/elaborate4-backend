@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -43,6 +42,7 @@ import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.publish.Publication.Status;
 import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
@@ -53,11 +53,13 @@ public class MVNConverter {
   private static final boolean DEBUG = true; // false for release
   private final Project project;
   private final MVNConversionData data;
+  private final Status status;
 
-  public MVNConverter(final Project project, final MVNConversionData data) {
+  public MVNConverter(final Project project, final MVNConversionData data, Status status) {
     this.project = project;
     //    data = getConversionData(project.getId());
     this.data = data;
+    this.status = status;
   }
 
   // fase 1: collect MVNFolium with raw transcription 
@@ -68,7 +70,7 @@ public class MVNConverter {
   // select 
 
   @SuppressWarnings("unchecked")
-  public static MVNConversionData getConversionData(final long project_id) {
+  public static MVNConversionData getConversionData(final long project_id, Status status) {
     final MVNConversionData conversionData = new MVNConversionData();
     final EntityManager entityManager = HibernateUtil.beginTransaction();
 
@@ -127,7 +129,7 @@ public class MVNConverter {
   }
 
   public MVNConversionResult convert() {
-    final MVNConversionResult result = new MVNConversionResult(project);
+    final MVNConversionResult result = new MVNConversionResult(project, status);
     final StringBuilder editionTextBuilder = new StringBuilder();
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
       final String pageId = result.getSigle() + "-pb-" + entryData.name;
