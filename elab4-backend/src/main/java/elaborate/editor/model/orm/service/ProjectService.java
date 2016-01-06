@@ -123,6 +123,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         persist(pmi);
         if (ProjectTypes.MVN.equals(projectType)) {
           project.setAnnotationTypes(mvnAnnotationTypes(getEntityManager()));
+          pmi = project.addMetadata(ProjectMetadataFields.TEXT_FONT, "junicode", user);
+          persist(pmi);
         }
         persist(project);
         persist(created.addLogEntry("project created", user));
