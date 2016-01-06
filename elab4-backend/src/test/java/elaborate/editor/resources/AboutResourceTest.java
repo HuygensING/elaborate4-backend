@@ -30,11 +30,11 @@ import org.junit.Test;
 
 public class AboutResourceTest {
 
-	@Test
-	public void testGetAbout() throws Exception {
-		AboutResource r = new AboutResource();
-		Map<String, String> about = r.getAbout();
-		assertThat(about).containsKey("publication_backend_build");
-	}
+  @Test
+  public void testGetAbout() throws Exception {
+    AboutResource r = new AboutResource();
+    Map<String, String> about = r.getAbout();
+    assertThat(about).containsKey("publicationBackendBuild");
+  }
 
 }

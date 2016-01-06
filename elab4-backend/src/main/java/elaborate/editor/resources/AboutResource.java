@@ -32,56 +32,56 @@ import javax.ws.rs.Produces;
 
 import com.google.common.collect.Maps;
 
-import elaborate.editor.config.Configuration;
 import elaborate.jaxrs.APIDesc;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 @Path("about")
 public class AboutResource extends AbstractElaborateResource {
-	private static PropertyResourceBundle propertyResourceBundle;
-	private static PropertyResourceBundle publicationPropertyResourceBundle;
+  private static PropertyResourceBundle propertyResourceBundle;
+  private static PropertyResourceBundle publicationPropertyResourceBundle;
 
-	@GET
-	@APIDesc("Get version info")
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	public Map<String, String> getAbout() {
-		Map<String, String> data = Maps.newLinkedHashMap();
-		//		data.put("version", Configuration.instance().getStringSetting("version", "[undefined]"));
-		data.put("version", getProperty("version"));
-		data.put("build", getProperty("build"));
-		data.put("builddate", getProperty("builddate"));
-		data.put("publication_backend_build", getPublicationProperty("build"));
-		data.put("publication_backend_builddate", getPublicationProperty("builddate"));
-		data.put("start_time", System.getProperty("application.starttime"));
-		return data;
-	}
+  @GET
+  @APIDesc("Get version info")
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  public Map<String, String> getAbout() {
+    Map<String, String> data = Maps.newLinkedHashMap();
+    //		data.put("version", Configuration.instance().getStringSetting("version", "[undefined]"));
+    data.put("version", getProperty("version"));
+    data.put("commitId", getProperty("commitId"));
+    data.put("scmBranch", getProperty("scmBranch"));
+    data.put("buildDate", getProperty("buildDate"));
+    data.put("publicationBackendBuild", getPublicationProperty("build"));
+    data.put("publicationBackendBuildDate", getPublicationProperty("buildDate"));
+    data.put("startTime", System.getProperty("application.starttime"));
+    return data;
+  }
 
-	private static synchronized String getProperty(String key) {
-		if (propertyResourceBundle == null) {
-			try {
-				propertyResourceBundle = new PropertyResourceBundle(//
-						Thread.currentThread().getContextClassLoader()//
-								.getResourceAsStream("about.properties")//
-				);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return propertyResourceBundle.getString(key);
-	}
+  private static synchronized String getProperty(String key) {
+    if (propertyResourceBundle == null) {
+      try {
+        propertyResourceBundle = new PropertyResourceBundle(//
+            Thread.currentThread().getContextClassLoader()//
+                .getResourceAsStream("about.properties")//
+        );
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return propertyResourceBundle.getString(key);
+  }
 
-	private static synchronized String getPublicationProperty(String key) {
-		if (publicationPropertyResourceBundle == null) {
-			try {
-				publicationPropertyResourceBundle = new PropertyResourceBundle(//
-						Thread.currentThread().getContextClassLoader()//
-								.getResourceAsStream("publication/WEB-INF/classes/about.properties")//
-				);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return publicationPropertyResourceBundle.getString(key);
-	}
+  private static synchronized String getPublicationProperty(String key) {
+    if (publicationPropertyResourceBundle == null) {
+      try {
+        publicationPropertyResourceBundle = new PropertyResourceBundle(//
+            Thread.currentThread().getContextClassLoader()//
+                .getResourceAsStream("publication/WEB-INF/classes/about.properties")//
+        );
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return publicationPropertyResourceBundle.getString(key);
+  }
 
 }
