@@ -130,6 +130,7 @@ public class PublishTask implements Runnable {
     boolean projectIsMVN = ProjectTypes.MVN.equals(project.getMetadataMap().get(ProjectMetadataFields.TYPE));
     final String url = projectIsMVN ? createMVNDraft(project, ps) : createRegularDraft(project, ps);
 
+    status.setUrl(url);
     status.addLogline("finished");
     status.setDone();
 
@@ -195,7 +196,6 @@ public class PublishTask implements Runnable {
     final File war = new WarMaker(basename, distDir, rootDir).make();
     status.addLogline("deploying war to " + url);
     deploy(war);
-    status.setUrl(url);
     status.addLogline("cleaning up temporary directories");
     clearDirectories();
     return url;
