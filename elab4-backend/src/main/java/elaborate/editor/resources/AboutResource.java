@@ -50,7 +50,7 @@ public class AboutResource extends AbstractElaborateResource {
     data.put("commitId", getProperty("commitId"));
     data.put("scmBranch", getProperty("scmBranch"));
     data.put("buildDate", getProperty("buildDate"));
-    data.put("publicationBackendBuild", getPublicationProperty("build"));
+    data.put("publicationBackendBuild", getPublicationProperty("commitId"));
     data.put("publicationBackendBuildDate", getPublicationProperty("buildDate"));
     data.put("startTime", System.getProperty("application.starttime"));
     return data;
