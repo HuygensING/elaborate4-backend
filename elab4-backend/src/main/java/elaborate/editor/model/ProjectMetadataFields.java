@@ -50,7 +50,7 @@ public class ProjectMetadataFields {
       ANNOTATIONTYPE_UNDERLINE_DESCRIPTION, ANNOTATIONTYPE_UNDERLINE_NAME, //
       ANNOTATIONTYPE_STRIKE_DESCRIPTION, ANNOTATIONTYPE_STRIKE_NAME //
   };
-  public static final String MVN_PLACENAME = "mvn.placename";
+  public static final String MVN_PLACENAME = "mvn.placeName";
   public static final String MVN_INSTITUTION = "mvn.institution";
   public static final String MVN_IDNO = "mvn.idno";
 
