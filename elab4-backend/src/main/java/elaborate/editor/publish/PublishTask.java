@@ -62,6 +62,7 @@ import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 import elaborate.editor.config.Configuration;
+import elaborate.editor.export.mvn.MVNClient;
 import elaborate.editor.export.mvn.MVNConversionData;
 import elaborate.editor.export.mvn.MVNConversionResult;
 import elaborate.editor.export.mvn.MVNConverter;
@@ -115,11 +116,13 @@ public class PublishTask implements Runnable {
   //	private Map<Integer, String> publishableAnnotationTypes;
   //	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
   private Map<Integer, AnnotationData> annotationDataMap;
+  private final MVNClient mvnClient = new MVNClient(config.getSetting(Configuration.MVN_SERVER_URL));
 
   public PublishTask(Publication.Settings settings) {
     this.settings = settings;
     this.projectId = settings.getProjectId();
     this.status = new Publication.Status(projectId);
+
   }
 
   @Override
@@ -148,6 +151,7 @@ public class PublishTask implements Runnable {
     MVNConversionResult report = mvnConverter.convert();
 
     String tei = report.getTEI();
+    mvnClient.putTEI(project.getName(), tei);
     return MVN_BASE_URL + project.getName().toUpperCase();
   }
 
