@@ -75,5 +75,9 @@
 			<enabled>false</enabled>
 		</security>
 
+		<mvn><!-- base url to the mvn server accepting the tei fom converted mvn projects -->
+			<server_url>http://rest.mvn.com/</server_url>
+		</mvn>
+
 	</settings>
 </config>
