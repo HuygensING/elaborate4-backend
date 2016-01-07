@@ -9,7 +9,9 @@ import elaborate.freemarker.FreeMarker;
 
 public class MVNConversionResult {
   private static final String TEMPLATE = "mvn.tei.ftl";
-  private final String title;
+  private String title;
+  private final String place;
+  private final String institution;
   private final String idno;
   private final String sigle;
   private String body = "";
@@ -19,22 +21,40 @@ public class MVNConversionResult {
   public MVNConversionResult(final Project project, final Status logger) {
     this.logger = logger;
     this.baseURL = "https://www.elaborate.huygens.knaw.nl/projects/" + project.getName();
+
     this.title = project.getMetadataMap().get(ProjectMetadataFields.PUBLICATION_TITLE);
     if (StringUtils.isEmpty(this.title)) {
       logger.addError("project has no publication title");
+      this.title = "";
     }
-    this.idno = project.getTitle();
-    if (StringUtils.isEmpty(this.idno)) {
-      logger.addError("project has no title");
-    }
+
     this.sigle = project.getName().toUpperCase();
     if (StringUtils.isEmpty(this.sigle)) {
       logger.addError("project has no name");
     }
+
+    String signatuur = project.getMetadataMap().get(ProjectMetadataFields.MVN_SIGNATUUR);
+    String[] signatuurParts = new String[] { "", "", "" };
+    if (StringUtils.isEmpty(signatuur)) {
+      //      logger.addError("er is geen signatuur ingevuld");
+    } else {
+      signatuurParts = signatuur.split(",");
+    }
+    this.place = (signatuurParts.length > 0) ? signatuurParts[0] : "";
+    this.institution = (signatuurParts.length > 1) ? signatuurParts[1] : "";
+    this.idno = (signatuurParts.length > 2) ? signatuurParts[2] : project.getTitle();
   }
 
   public String getTitle() {
     return title;
+  }
+
+  public String getPlace() {
+    return place;
+  }
+
+  public String getInstitution() {
+    return institution;
   }
 
   public String getIdno() {

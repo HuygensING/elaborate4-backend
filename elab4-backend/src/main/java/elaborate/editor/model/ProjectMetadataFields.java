@@ -50,5 +50,6 @@ public class ProjectMetadataFields {
       ANNOTATIONTYPE_UNDERLINE_DESCRIPTION, ANNOTATIONTYPE_UNDERLINE_NAME, //
       ANNOTATIONTYPE_STRIKE_DESCRIPTION, ANNOTATIONTYPE_STRIKE_NAME //
   };
+  public static final String MVN_SIGNATUUR = "mvn.signatuur";
 
 }

@@ -50,7 +50,8 @@ import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNConverter {
-  private static final boolean DEBUG = true; // false for release
+  private static final boolean DEBUG = false; // for release
+  //  private static final boolean DEBUG = true; // for testing
   private final Project project;
   private final MVNConversionData data;
   private final Status status;

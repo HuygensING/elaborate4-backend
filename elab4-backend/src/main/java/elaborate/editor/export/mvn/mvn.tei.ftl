@@ -32,6 +32,8 @@
       <sourceDesc>
         <msDesc>
           <msIdentifier>
+            <placeName>${place}</placeName>
+            <institution>${institution}</institution>
             <idno>${idno}</idno>
           </msIdentifier>
         </msDesc>
