@@ -1,5 +1,7 @@
 package elaborate.editor.export.mvn;
 
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 
 import elaborate.editor.model.ProjectMetadataFields;
@@ -9,23 +11,24 @@ import elaborate.freemarker.FreeMarker;
 
 public class MVNConversionResult {
   private static final String TEMPLATE = "mvn.tei.ftl";
-  private String title;
   private final String place;
   private final String institution;
   private final String idno;
   private final String sigle;
-  private String body = "";
   private final String baseURL;
   private final Status logger;
+  private String title;
+  private String body = "";
 
   public MVNConversionResult(final Project project, final Status logger) {
     this.logger = logger;
     this.baseURL = "https://www.elaborate.huygens.knaw.nl/projects/" + project.getName();
 
-    this.title = project.getMetadataMap().get(ProjectMetadataFields.PUBLICATION_TITLE);
+    Map<String, String> projectMetadata = project.getMetadataMap();
+    this.title = projectMetadata.get(ProjectMetadataFields.PUBLICATION_TITLE);
     if (StringUtils.isEmpty(this.title)) {
-      logger.addError("project has no publication title");
-      this.title = "";
+      logger.addError("project has no publication title, using project title");
+      this.title = project.getTitle();
     }
 
     this.sigle = project.getName().toUpperCase();
@@ -33,16 +36,9 @@ public class MVNConversionResult {
       logger.addError("project has no name");
     }
 
-    String signatuur = project.getMetadataMap().get(ProjectMetadataFields.MVN_SIGNATUUR);
-    String[] signatuurParts = new String[] { "", "", "" };
-    if (StringUtils.isEmpty(signatuur)) {
-      //      logger.addError("er is geen signatuur ingevuld");
-    } else {
-      signatuurParts = signatuur.split(",");
-    }
-    this.place = (signatuurParts.length > 0) ? signatuurParts[0] : "";
-    this.institution = (signatuurParts.length > 1) ? signatuurParts[1] : "";
-    this.idno = (signatuurParts.length > 2) ? signatuurParts[2] : project.getTitle();
+    this.place = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_PLACENAME), "");
+    this.institution = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_INSTITUTION), "");
+    this.idno = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_IDNO), "");
   }
 
   public String getTitle() {
