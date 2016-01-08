@@ -33,101 +33,101 @@ import nl.knaw.huygens.facetedsearch.FacetParameter;
 import nl.knaw.huygens.facetedsearch.QueryComposer;
 
 public class ElaborateEditorQueryComposerTest {
-	static final QueryComposer queryComposer = new ElaborateEditorQueryComposer();
+  static final QueryComposer queryComposer = new ElaborateEditorQueryComposer();
 
-	@Test
-	public void testComposeQuery1() throws Exception {
-		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters();
-		sp.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC));
-		String expected = "(*:*) AND project_id:0";
+  @Test
+  public void testComposeQuery1() throws Exception {
+    ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters();
+    sp.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC));
+    String expected = "(*:*) AND project_id:0";
 
-		queryComposer.compose(sp);
-		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.mustHighlight()).isFalse();
-	}
+    queryComposer.compose(sp);
+    assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+    assertThat(queryComposer.mustHighlight()).isFalse();
+  }
 
-	@Test
-	public void testComposeQuery2() throws Exception {
-		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
-				.setProjectId(1);
-		sp.setTerm("iets")//
-				.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
-				.setCaseSensitive(true);
-		String expected = "(name:iets textlayercs_diplomatic:iets) AND project_id:1";
-		String expectedh = "name:iets textlayercs_diplomatic:iets";
+  @Test
+  public void testComposeQuery2() throws Exception {
+    ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+        .setProjectId(1);
+    sp.setTerm("iets")//
+        .setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
+        .setCaseSensitive(true);
+    String expected = "(title:iets textlayercs_diplomatic:iets) AND project_id:1";
+    String expectedh = "title:iets textlayercs_diplomatic:iets";
 
-		queryComposer.compose(sp);
-		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.mustHighlight()).isTrue();
-		assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
-	}
+    queryComposer.compose(sp);
+    assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+    assertThat(queryComposer.mustHighlight()).isTrue();
+    assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
+  }
 
-	@Test
-	public void testComposeQuery3() throws Exception {
-		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
-				.setProjectId(1);
-		sp.setTerm("iets anders")//
-				.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
-				.setCaseSensitive(true);
-		String expected = "(name:(iets anders) textlayercs_diplomatic:(iets anders)) AND project_id:1";
-		String expectedh = "name:(iets anders) textlayercs_diplomatic:(iets anders)";
+  @Test
+  public void testComposeQuery3() throws Exception {
+    ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+        .setProjectId(1);
+    sp.setTerm("iets anders")//
+        .setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
+        .setCaseSensitive(true);
+    String expected = "(title:(iets anders) textlayercs_diplomatic:(iets anders)) AND project_id:1";
+    String expectedh = "title:(iets anders) textlayercs_diplomatic:(iets anders)";
 
-		queryComposer.compose(sp);
-		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.mustHighlight()).isTrue();
-		assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
-	}
+    queryComposer.compose(sp);
+    assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+    assertThat(queryComposer.mustHighlight()).isTrue();
+    assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
+  }
 
-	@Test
-	public void testComposeQuery4() throws Exception {
-		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
-				.setProjectId(1);
-		sp.setTerm("iets vaags")//
-				.setFuzzy(true)//
-				.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC, TranscriptionType.COMMENTS))//
-				.setCaseSensitive(false)//
-				.setSearchInAnnotations(true);
-		String expected = "(name:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)) AND project_id:1";
-		String expectedh = "name:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)";
+  @Test
+  public void testComposeQuery4() throws Exception {
+    ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+        .setProjectId(1);
+    sp.setTerm("iets vaags")//
+        .setFuzzy(true)//
+        .setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC, TranscriptionType.COMMENTS))//
+        .setCaseSensitive(false)//
+        .setSearchInAnnotations(true);
+    String expected = "(title:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)) AND project_id:1";
+    String expectedh = "title:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)";
 
-		queryComposer.compose(sp);
-		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.mustHighlight()).isTrue();
-		assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
-	}
+    queryComposer.compose(sp);
+    assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+    assertThat(queryComposer.mustHighlight()).isTrue();
+    assertThat(queryComposer.getHighlightQuery()).isEqualTo(expectedh);
+  }
 
-	@Test
-	public void testComposeQuery5() throws Exception {
-		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
-				.setProjectId(1);
-		sp.setTerm("iets vaags")//
-				.setFuzzy(true)//
-				.setCaseSensitive(false)//
-				.setSearchInAnnotations(true);
-		String expected = "(*:*) AND project_id:1";
+  @Test
+  public void testComposeQuery5() throws Exception {
+    ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+        .setProjectId(1);
+    sp.setTerm("iets vaags")//
+        .setFuzzy(true)//
+        .setCaseSensitive(false)//
+        .setSearchInAnnotations(true);
+    String expected = "(*:*) AND project_id:1";
 
-		queryComposer.compose(sp);
-		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.mustHighlight()).isFalse();
-	}
+    queryComposer.compose(sp);
+    assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+    assertThat(queryComposer.mustHighlight()).isFalse();
+  }
 
-	@Test
-	public void testComposeQuery6() throws Exception {
-		// {"searchInAnnotations":false,"searchInTranscriptions":false,"facetValues":[{"name":"metadata_folio_number","values":["199"]}],"term":"a*"}
-		ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
-				.setProjectId(1);//
-		sp.setTerm("a*")//
-				.setFuzzy(true)//
-				.setCaseSensitive(false)//
-				.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
-				.setFacetValues(ImmutableList.of(new FacetParameter().setName("metadata_folio_number").setValues(ImmutableList.of("199"))))//
-				.setSearchInAnnotations(false)//
-				.setSearchInTranscriptions(false);
-		String expected = "(+(name:a*~0.75) +metadata_folio_number:(199)) AND project_id:1";
+  @Test
+  public void testComposeQuery6() throws Exception {
+    // {"searchInAnnotations":false,"searchInTranscriptions":false,"facetValues":[{"name":"metadata_folio_number","values":["199"]}],"term":"a*"}
+    ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
+        .setProjectId(1);//
+    sp.setTerm("a*")//
+        .setFuzzy(true)//
+        .setCaseSensitive(false)//
+        .setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC))//
+        .setFacetValues(ImmutableList.of(new FacetParameter().setName("metadata_folio_number").setValues(ImmutableList.of("199"))))//
+        .setSearchInAnnotations(false)//
+        .setSearchInTranscriptions(false);
+    String expected = "(+(title:a*~0.75) +metadata_folio_number:(199)) AND project_id:1";
 
-		queryComposer.compose(sp);
-		assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
-		assertThat(queryComposer.mustHighlight()).isTrue();
-	}
+    queryComposer.compose(sp);
+    assertThat(queryComposer.getSearchQuery()).isEqualTo(expected);
+    assertThat(queryComposer.mustHighlight()).isTrue();
+  }
 
 }
