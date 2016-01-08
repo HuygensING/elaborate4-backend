@@ -38,6 +38,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -60,6 +61,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
+import com.sun.jersey.api.client.ClientResponse;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.export.mvn.MVNClient;
@@ -150,7 +152,11 @@ public class PublishTask implements Runnable {
     MVNConversionResult report = mvnConverter.convert();
     if (report.isOK()) {
       String tei = report.getTEI();
-      mvnClient.putTEI(project.getName(), tei);
+      status.addLogline("publishing TEI to MVN server");
+      ClientResponse response = mvnClient.putTEI(project.getName(), tei);
+      if (!response.getClientResponseStatus().equals(Response.Status.CREATED)) {
+        status.addError("MVN server returned error: " + response.getEntity(String.class));
+      }
     }
     return MVN_BASE_URL + project.getName().toUpperCase();
   }

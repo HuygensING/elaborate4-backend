@@ -34,6 +34,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
@@ -243,7 +244,7 @@ public class MVNConverter {
         final String type = annotationData.type.replaceAll("[ \\(\\)]+", "_").replaceFirst("_$", "");
         String attributes = "";
         if (StringUtils.isNotBlank(annotationData.body) && !"nvt".equals(annotationData.body)) {
-          attributes = " body=\"" + annotationData.body.replace("\"", "&quot;") + "\"";
+          attributes = " body=\"" + StringEscapeUtils.escapeXml(annotationData.body) + "\"";
         }
         cooked = cooked//
             .replace(originalAnnotationBegin(annotationNoString), "<" + type + attributes + ">")//
