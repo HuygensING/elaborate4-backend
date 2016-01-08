@@ -36,6 +36,8 @@ import javax.persistence.Query;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.collect.Lists;
+
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
 import elaborate.editor.model.orm.Facsimile;
@@ -50,20 +52,19 @@ import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNConverter {
-  private static final boolean DEBUG = false; // for release
-  //  private static final boolean DEBUG = true; // for testing
+  //  private static final boolean DEBUG = false; // for release
+  private static final boolean DEBUG = true; // for testing
   private final Project project;
   private final MVNConversionData data;
   private final Status status;
 
   public MVNConverter(final Project project, final MVNConversionData data, Status status) {
     this.project = project;
-    //    data = getConversionData(project.getId());
     this.data = data;
     this.status = status;
   }
 
-  // fase 1: collect MVNFolium with raw transcription 
+  // phase 1: collect MVNFolium with raw transcription 
   // order by 'order' or entryname
   // fail when 1, but not all entries have order
   // fail when entrynames are not unique
@@ -88,19 +89,20 @@ public class MVNConverter {
         + " where project_id=" + project_id//
         + " order by entry_order, name".replaceAll(" +", " ");
     final Query transcriptionQuery = entityManager.createNativeQuery(transcriptionSQL);
+    status.addLogline("collecting transcription data");
     final List<Object[]> transcriptions = transcriptionQuery.getResultList();
     if (transcriptions.isEmpty()) {
       status.addError("no transcriptions found");
 
     } else {
-      for (final Object[] transcription : transcriptions) {
+      for (final Object[] transcriptionData : transcriptions) {
         final EntryData entryData = new MVNConversionData.EntryData();
-        final Integer id = (Integer) transcription[0];
+        final Integer id = (Integer) transcriptionData[0];
         entryData.id = String.valueOf(id);
-        entryData.name = (String) transcription[1];
+        entryData.name = (String) transcriptionData[1];
         //      String order = (String) transcription[2];
-        entryData.body = (String) transcription[3];
-        entryData.facs = (String) transcription[4];
+        entryData.body = (String) transcriptionData[3];
+        entryData.facs = (String) transcriptionData[4];
         conversionData.getEntryDataList().add(entryData);
       }
 
@@ -118,6 +120,7 @@ public class MVNConverter {
           + " where project_id=" + project_id//
           + " order by annotation_num;".replaceAll(" +", " ");
       final Query annotationQuery = entityManager.createNativeQuery(annotationSQL);
+      status.addLogline("collecting annotation data");
       final List<Object[]> annotations = annotationQuery.getResultList();
       //    Log.info("SQL: {}", annotationSQL);
       //    Log.info("{} results:", annotations.size());
@@ -137,6 +140,7 @@ public class MVNConverter {
   public MVNConversionResult convert() {
     final MVNConversionResult result = new MVNConversionResult(project, status);
     final StringBuilder editionTextBuilder = new StringBuilder();
+    status.addLogline("joining transcriptions");
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
       final String pageId = result.getSigle() + "-pb-" + entryData.name;
       editionTextBuilder//
@@ -178,6 +182,8 @@ public class MVNConverter {
 
   private void validateTextNums(final String cooked, final MVNConversionResult result) {
     final Stack<String> textNumStack = new Stack<String>();
+    final List<String> openTextNums = Lists.newArrayList();
+    final List<String> closeTextNums = Lists.newArrayList();
     final Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
     boolean lastTagWasBegin = false;
     while (matcher.find()) {
@@ -186,6 +192,7 @@ public class MVNConverter {
       if ("begin".equals(beginOrEinde)) {
         lastTagWasBegin = true;
         textNumStack.push(textnum);
+        openTextNums.add(textnum);
 
       } else if ("einde".equals(beginOrEinde)) {
         final String peek = textNumStack.peek();
@@ -195,14 +202,26 @@ public class MVNConverter {
           }
           textNumStack.pop();
         } else {
-          result.addError("", "mvn:regeleinde : tekstNum '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
+          //          result.addError("", "mvn:teksteinde : tekstNum '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
         }
         lastTagWasBegin = false;
+        closeTextNums.add(textnum);
 
       } else {
         throw new RuntimeException("unexpected type mvn:tekst" + beginOrEinde);
       }
     }
+
+    List<String> openedButNotClosed = Lists.newArrayList(openTextNums);
+    openedButNotClosed.removeAll(closeTextNums);
+    for (String tekstNum : openedButNotClosed) {
+      result.addError("", "mvn:teksteinde met tekstNum '" + tekstNum + "' ontbreekt. ");
+    }
+    //    List<String> closedButNotOpened = Lists.newArrayList(closeTextNums);
+    //    closedButNotOpened.removeAll(openTextNums);
+    //    for (String tekstNum : closedButNotOpened) {
+    //      result.addError("", "mvn:teksbegin met tekstNum '" + tekstNum + "' ontbreekt. ");
+    //    }
 
   }
 

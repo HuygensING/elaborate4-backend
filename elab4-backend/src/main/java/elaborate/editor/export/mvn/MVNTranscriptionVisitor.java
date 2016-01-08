@@ -28,6 +28,7 @@ import static nl.knaw.huygens.tei.Traversal.STOP;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -589,7 +590,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
+  final static Stack<String> textNumStack = new Stack<String>();
+
   private static class TekstBeginHandler implements MVNAnnotationHandler {
+
     @Override
     public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.openLayer();
@@ -603,6 +607,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       }
       final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
       final String textNum = parts.get(0);
+      //      result.addError(currentEntryId, "<tekst num='" + textNum + "'>");
+      textNumStack.push(textNum);
       final boolean isText = isText(textNum);
       final Element element = new Element(isText ? "text" : "group")//
           .withAttribute("n", textNum)//
@@ -650,6 +656,20 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       }
       final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
       final String textNum = parts.get(0);
+      //      result.addError(currentEntryId, "</tekst num='" + textNum + "'>");
+
+      final String peek = textNumStack.peek();
+      if (textNum.equals(peek)) {
+        textNumStack.pop();
+      } else {
+        if (textNumStack.contains(textNum)) {
+          result.addError(currentEntryId, "mvn:teksteinde : tekstNum '" + textNum + "' gevonden waar '" + peek + "' verwacht was.");
+        } else {
+          result.addError(currentEntryId, "mvn:teksteinde : tekstNum '" + textNum + "' heeft geen corresponderende mvn:tekstbegin.");
+        }
+        textNumStack.remove(textNum);
+      }
+
       final boolean inTextBody = isText(textNum);
       context.openLayer();
       if (inTextBody) {
