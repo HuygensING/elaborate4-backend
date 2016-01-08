@@ -122,7 +122,6 @@ public class PublishTask implements Runnable {
     this.settings = settings;
     this.projectId = settings.getProjectId();
     this.status = new Publication.Status(projectId);
-
   }
 
   @Override
@@ -149,9 +148,10 @@ public class PublishTask implements Runnable {
     MVNConversionData data = MVNConverter.getConversionData(project.getId(), status);
     MVNConverter mvnConverter = new MVNConverter(project, data, status);
     MVNConversionResult report = mvnConverter.convert();
-
-    String tei = report.getTEI();
-    mvnClient.putTEI(project.getName(), tei);
+    if (report.isOK()) {
+      String tei = report.getTEI();
+      mvnClient.putTEI(project.getName(), tei);
+    }
     return MVN_BASE_URL + project.getName().toUpperCase();
   }
 
