@@ -54,11 +54,11 @@ import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNConverter {
   private static final boolean DEBUG = false; // for release
-  //  private static final boolean DEBUG = true; // for testing
+  // private static final boolean DEBUG = true; // for testing, don't release with DEBUG=true!!!
   private final Project project;
   private final MVNConversionData data;
   private final Status status;
-  private final TranscriptionHierarchyFixer transcriptionHiearchyFixer = new TranscriptionHierarchyFixer();
+  private final TextDecorationHierarchyFixer transcriptionHiearchyFixer = new TextDecorationHierarchyFixer();
 
   public MVNConverter(final Project project, final MVNConversionData data, Status status) {
     this.project = project;

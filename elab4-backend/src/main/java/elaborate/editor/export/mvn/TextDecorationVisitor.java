@@ -13,11 +13,11 @@ import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-public class TranscriptionHierarchyVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
+public class TextDecorationVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
 
   ArrayDeque<Element> textDecoratorDeque = new ArrayDeque<Element>();
 
-  public TranscriptionHierarchyVisitor() {
+  public TextDecorationVisitor() {
     super(new XmlContext());
     setDefaultElementHandler(this);
     setCommentHandler(this);

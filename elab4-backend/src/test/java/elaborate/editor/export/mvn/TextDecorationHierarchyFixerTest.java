@@ -2,11 +2,10 @@ package elaborate.editor.export.mvn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-public class TranscriptionHierarchyFixerTest {
-  TranscriptionHierarchyFixer thf = new TranscriptionHierarchyFixer();
+public class TextDecorationHierarchyFixerTest {
+  TextDecorationHierarchyFixer thf = new TextDecorationHierarchyFixer();
 
   @Test
   public void testFixBoldTagsAnnotationTag() {
@@ -24,7 +23,7 @@ public class TranscriptionHierarchyFixerTest {
     assertThat(fixed).isEqualTo(expected);
   }
 
-  @Ignore
+  //  @Ignore
   @Test
   public void testIncorrectAnnotationBeginEndHierarchyIsFixed() {
     String xml = "<body>"//
