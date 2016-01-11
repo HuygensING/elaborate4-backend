@@ -2,7 +2,7 @@ package elaborate.editor.export.mvn;
 
 import nl.knaw.huygens.tei.Document;
 
-public class TextDecorationHierarchyFixer {
+public class TranscriptionHierarchyFixer {
 
   public String fix(String xml) {
     TextDecorationVisitor visitor = new TextDecorationVisitor();

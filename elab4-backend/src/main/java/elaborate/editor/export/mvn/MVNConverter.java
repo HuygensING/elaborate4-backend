@@ -58,7 +58,7 @@ public class MVNConverter {
   private final Project project;
   private final MVNConversionData data;
   private final Status status;
-  private final TextDecorationHierarchyFixer transcriptionHiearchyFixer = new TextDecorationHierarchyFixer();
+  private final TranscriptionHierarchyFixer transcriptionHiearchyFixer = new TranscriptionHierarchyFixer();
 
   public MVNConverter(final Project project, final MVNConversionData data, Status status) {
     this.project = project;

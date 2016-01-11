@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-public class TextDecorationHierarchyFixerTest {
-  TextDecorationHierarchyFixer thf = new TextDecorationHierarchyFixer();
+public class TranscriptionHierarchyFixerTest {
+  TranscriptionHierarchyFixer thf = new TranscriptionHierarchyFixer();
 
   @Test
   public void testFixBoldTagsAnnotationTag() {
