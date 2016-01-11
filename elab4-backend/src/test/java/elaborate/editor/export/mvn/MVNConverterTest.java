@@ -706,6 +706,56 @@ public class MVNConverterTest {
     Annotation annotation = mockAnnotationOfType(METAMARK);
   }
 
+  //  b: <hi rend=rubric>
+  @Test
+  public void testBoldConvertsToHiRendRubric() {
+    String body = "<body>pre "//
+        + "<b>bold</b>"//
+        + " post</body>";
+    String expected = "pre <hi rend=\"rubric\">bold</hi> post";
+    assertConversion(body, mockData(), expected);
+  }
+
+  //  i: <ex>
+  @Test
+  public void testItalicConvertsToEx() {
+    String body = "<body>pre "//
+        + "<i>italic</i>"//
+        + " post</body>";
+    String expected = "pre <ex>italic</ex> post";
+    assertConversion(body, mockData(), expected);
+  }
+
+  //  strike: <del>
+  @Test
+  public void testStrikeConvertsToDel() {
+    String body = "<body>pre "//
+        + "<strike>strike</strike>"//
+        + " post</body>";
+    String expected = "pre <del>strike</del> post";
+    assertConversion(body, mockData(), expected);
+  }
+
+  //  sup: <hi rend=superscript>
+  @Test
+  public void testSupConvertsToHiRendSuperscript() {
+    String body = "<body>pre "//
+        + "<sup>superscript</sup>"//
+        + " post</body>";
+    String expected = "pre <hi rend=\"superscript\">superscript</hi> post";
+    assertConversion(body, mockData(), expected);
+  }
+
+  //  sub: <hi rend=subscript>
+  @Test
+  public void testSubConvertsToHiRendSubscript() {
+    String body = "<body>pre "//
+        + "<sub>subscript</sub>"//
+        + " post</body>";
+    String expected = "pre <hi rend=\"subscript\">subscript</hi> post";
+    assertConversion(body, mockData(), expected);
+  }
+
   /* private methods */
   private Annotation mockAnnotationOfType(MVNAnnotationType type) {
     AnnotationType witregel = mockAnnotationType(type.getName());
@@ -727,6 +777,10 @@ public class MVNConverterTest {
     annotationData.type = annotation.getAnnotationType().getName();
     conversionData.getAnnotationIndex().put(annotationNo, annotationData);
     return conversionData;
+  }
+
+  private MVNConversionData mockData() {
+    return mock(MVNConversionData.class);
   }
 
   private MVNConversionData mockData(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2) {

@@ -85,6 +85,11 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     addElementHandler(new AnnotationHandler(), "ab", "ae");
     addElementHandler(new LineBeginHandler(), "lb");
     addElementHandler(new LineEndHandler(), "le");
+    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "rubric")), "b");
+    addElementHandler(new ElementReplacer(new Element("ex")), "i");
+    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "superscript")), "sup");
+    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "subscript")), "sub");
+    addElementHandler(new ElementReplacer(new Element("del")), "strike");
   }
 
   @Override
@@ -636,6 +641,27 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         currentLineInfo.postTags = currentLineInfo.postTags + context.closeLayer();
       }
     }
+  }
+
+  static class ElementReplacer implements ElementHandler<XmlContext> {
+    private final Element replacementElement;
+
+    public ElementReplacer(Element replacementElement) {
+      this.replacementElement = replacementElement;
+    }
+
+    @Override
+    public Traversal enterElement(final Element element, final XmlContext context) {
+      context.addOpenTag(replacementElement);
+      return Traversal.NEXT;
+    }
+
+    @Override
+    public Traversal leaveElement(final Element element, final XmlContext context) {
+      context.addCloseTag(replacementElement);
+      return Traversal.NEXT;
+    }
+
   }
 
   private static boolean isText(final String textNum) {
