@@ -505,7 +505,7 @@ public class MVNConverterTest {
     assertConversion(body, mockData(1, annotation), expected);
   }
 
-  @Ignore
+  //  @Ignore
   @Test
   public void testPoezieConversie_LineGroupEndsAtAlinea() {
     Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
@@ -516,12 +516,16 @@ public class MVNConverterTest {
         + " line 2\n"//
         + "<ab id=\"2\"/>alinea<ae id=\"2\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
-        + "<lg>line 1 line 2</lg> post";
+    String expected = "pre \n"// 
+        + "      <lg> line 1\n"// 
+        + " line 2\n"// 
+        + "</lg>\n"// 
+        + "<p> post</p>\n"// 
+        + "";
     assertConversion(body, mockData(1, poezieAnnotation, 2, alineaAnnotation), expected);
   }
 
-  @Ignore
+  //  @Ignore
   @Test
   public void testPoezieConversie_LineGroupEndsAtOnderschrift() {
     Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
@@ -532,8 +536,11 @@ public class MVNConverterTest {
         + " line 2\n"//
         + "<ab id=\"2\"/>onderschrift<ae id=\"2\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre \n"//
-        + "<lg>line 1\n line 2\n</lg> onderschrift post";
+    String expected = "pre \n"//
+        + "      <lg> line 1\n"//
+        + " line 2\n"//
+        + "</lg>\n"//
+        + "<closer>onderschrift</closer> post";
     assertConversion(body, mockData(1, poezieAnnotation, 2, onderschriftAnnotation), expected);
   }
 

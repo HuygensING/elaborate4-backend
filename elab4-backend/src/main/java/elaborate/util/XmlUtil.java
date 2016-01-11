@@ -108,48 +108,48 @@ public class XmlUtil {
         .replace("&nbsp;", " ").trim();
   }
 
-  public static String fixTagHierarchy(String body) {
-    Collection<String> annotationNos = extractAnnotationNos(body);
-    String bodyWithConvertedAnnotationTags = body;
-    bodyWithConvertedAnnotationTags = convertAnnotationTagsToCustom(annotationNos, bodyWithConvertedAnnotationTags);
-    String fixed = fixXhtml(bodyWithConvertedAnnotationTags);
-    fixed = convertCustomAnnotationTagsToOriginal(annotationNos, fixed);
-    return fixed;
-  }
-
-  private static String convertCustomAnnotationTagsToOriginal(Collection<String> annotationNos, String fixed) {
-    for (String annotationNo : annotationNos) {
-      fixed = fixed//
-          .replace(customAnnotationBegin(annotationNo), originalAnnotationBegin(annotationNo))//
-          .replace(customAnnotationEnd(annotationNo), originalAnnotationEnd(annotationNo));
-    }
-    return fixed;
-  }
-
-  private static String convertAnnotationTagsToCustom(Collection<String> annotationNos, String bodyWithConvertedAnnotationTags) {
-    for (String annotationNo : annotationNos) {
-      bodyWithConvertedAnnotationTags = bodyWithConvertedAnnotationTags//
-          .replace(originalAnnotationBegin(annotationNo), customAnnotationBegin(annotationNo))//
-          .replace(originalAnnotationEnd(annotationNo), customAnnotationEnd(annotationNo));
-    }
-    return bodyWithConvertedAnnotationTags;
-  }
-
-  private static String customAnnotationEnd(String annotationNo) {
-    return "</a" + annotationNo + ">";
-  }
-
-  private static String originalAnnotationEnd(String annotationNo) {
-    return "<ae id=\"" + annotationNo + "\"/>";
-  }
-
-  private static String customAnnotationBegin(String annotationNo) {
-    return "<a" + annotationNo + ">";
-  }
-
-  private static String originalAnnotationBegin(String annotationNo) {
-    return "<ab id=\"" + annotationNo + "\"/>";
-  }
+  //  public static String fixTagHierarchy(String body) {
+  //    Collection<String> annotationNos = extractAnnotationNos(body);
+  //    String bodyWithConvertedAnnotationTags = body;
+  //    bodyWithConvertedAnnotationTags = convertAnnotationTagsToCustom(annotationNos, bodyWithConvertedAnnotationTags);
+  //    String fixed = fixXhtml(bodyWithConvertedAnnotationTags);
+  //    fixed = convertCustomAnnotationTagsToOriginal(annotationNos, fixed);
+  //    return fixed;
+  //  }
+  //
+  //  private static String convertCustomAnnotationTagsToOriginal(Collection<String> annotationNos, String fixed) {
+  //    for (String annotationNo : annotationNos) {
+  //      fixed = fixed//
+  //          .replace(customAnnotationBegin(annotationNo), originalAnnotationBegin(annotationNo))//
+  //          .replace(customAnnotationEnd(annotationNo), originalAnnotationEnd(annotationNo));
+  //    }
+  //    return fixed;
+  //  }
+  //
+  //  private static String convertAnnotationTagsToCustom(Collection<String> annotationNos, String bodyWithConvertedAnnotationTags) {
+  //    for (String annotationNo : annotationNos) {
+  //      bodyWithConvertedAnnotationTags = bodyWithConvertedAnnotationTags//
+  //          .replace(originalAnnotationBegin(annotationNo), customAnnotationBegin(annotationNo))//
+  //          .replace(originalAnnotationEnd(annotationNo), customAnnotationEnd(annotationNo));
+  //    }
+  //    return bodyWithConvertedAnnotationTags;
+  //  }
+  //
+  //  private static String customAnnotationEnd(String annotationNo) {
+  //    return "</a" + annotationNo + ">";
+  //  }
+  //
+  //  private static String originalAnnotationEnd(String annotationNo) {
+  //    return "<ae id=\"" + annotationNo + "\"/>";
+  //  }
+  //
+  //  private static String customAnnotationBegin(String annotationNo) {
+  //    return "<a" + annotationNo + ">";
+  //  }
+  //
+  //  private static String originalAnnotationBegin(String annotationNo) {
+  //    return "<ab id=\"" + annotationNo + "\"/>";
+  //  }
 
   public static Collection<String> extractAnnotationNos(String body) {
     Set<String> annotationNos = Sets.newHashSet();

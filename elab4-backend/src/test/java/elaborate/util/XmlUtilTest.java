@@ -24,7 +24,6 @@ package elaborate.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class XmlUtilTest {
@@ -74,14 +73,14 @@ public class XmlUtilTest {
     assertThat(XmlUtil.toPlainText("<b>bold</b> &apos;t <i>kofschip</i><br>&nbsp;&quot;blabla&quot;")).isEqualTo("bold 't kofschip\n \"blabla\"");
   }
 
-  @Ignore
-  @Test
-  public void testFixTagHierarchy() {
-    String body = "<ab id=\"9096396\"/><ab id=\"9096397\"/>W<ae id=\"9096396\"/>iē<ae id=\"9096397\"/>";
-    String expected = "<ab id=\"9096397\"/><ab id=\"9096396\"/>W<ae id=\"9096396\"/>iē<ae id=\"9096397\"/>";
-    String fixed = XmlUtil.fixTagHierarchy(body);
-    assertThat(fixed).isEqualTo(expected);
-  }
+  //  @Ignore
+  //  @Test
+  //  public void testFixTagHierarchy() {
+  //    String body = "<ab id=\"9096396\"/><ab id=\"9096397\"/>W<ae id=\"9096396\"/>iē<ae id=\"9096397\"/>";
+  //    String expected = "<ab id=\"9096397\"/><ab id=\"9096396\"/>W<ae id=\"9096396\"/>iē<ae id=\"9096397\"/>";
+  //    String fixed = XmlUtil.fixTagHierarchy(body);
+  //    assertThat(fixed).isEqualTo(expected);
+  //  }
 
   //  @Test
   //  public void testFixTagHierarchy2() {
