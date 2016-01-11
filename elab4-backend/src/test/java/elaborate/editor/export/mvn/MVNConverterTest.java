@@ -55,7 +55,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.base.Joiner;
@@ -493,15 +492,15 @@ public class MVNConverterTest {
   //               - een mvn:alinea-element
   //               - een mvn:onderschrift, mvn:opschrift
   //               - het einde van de tekst
-  @Ignore
+  //  @Ignore
   @Test
   public void testPoezieConversie_LineGroupEndsAtEndOfText() {
     Annotation annotation = mockAnnotationOfType(POEZIE);
     String body = "<body>pre "//
         + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre "//
-        + "<lg> post</lg>";
+    String expected = "pre \n"// 
+        + "      <lg> post</lg>\n";
     assertConversion(body, mockData(1, annotation), expected);
   }
 
@@ -544,7 +543,7 @@ public class MVNConverterTest {
     assertConversion(body, mockData(1, poezieAnnotation, 2, onderschriftAnnotation), expected);
   }
 
-  @Ignore
+  //  @Ignore
   @Test
   public void testPoezieConversie_LineGroupEndsAtOpchrift() {
     Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
@@ -555,10 +554,10 @@ public class MVNConverterTest {
         + " line 2\n"//
         + "<ab id=\"2\"/>opschrift<ae id=\"2\"/>"//
         + " post</body>";
-    String expected = "<lb n=\"1\" xml:id=\"1-lb-1\"/>pre \n"//
-        + "<lg>\n" //
-        + "<lb n=\"2\" xml:id=\"1-lb-2\"/> line 1\n"//
-        + "<lb n=\"3\" xml:id=\"1-lb-3\"/> line 2\n"//
+    String expected = "pre\n"//
+        + "\n"//
+        + "      <lg> line 1\n"//
+        + " line 2\n"//
         + "</lg>\n"//
         + "<head>opschrift</head> post";
     assertConversion(body, mockData(1, poezieAnnotation, 2, opAnnotation), expected);
