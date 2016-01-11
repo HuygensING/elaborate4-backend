@@ -85,11 +85,12 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     addElementHandler(new AnnotationHandler(), "ab", "ae");
     addElementHandler(new LineBeginHandler(), "lb");
     addElementHandler(new LineEndHandler(), "le");
-    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "rubric")), "b");
-    addElementHandler(new ElementReplacer(new Element("ex")), "i");
+    addElementHandler(new ElementReplacer(new Element("del")), "strike");
+    addElementHandler(new ElementReplacer(new Element("ex")), "i", "em");
+    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "underline")), "u");
+    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "rubric")), "b", "strong");
     addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "superscript")), "sup");
     addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "subscript")), "sub");
-    addElementHandler(new ElementReplacer(new Element("del")), "strike");
   }
 
   @Override
