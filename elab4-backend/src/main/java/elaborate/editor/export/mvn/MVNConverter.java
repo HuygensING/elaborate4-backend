@@ -58,6 +58,7 @@ public class MVNConverter {
   private final Project project;
   private final MVNConversionData data;
   private final Status status;
+  private final TranscriptionHierarchyFixer transcriptionHiearchyFixer = new TranscriptionHierarchyFixer();
 
   public MVNConverter(final Project project, final MVNConversionData data, Status status) {
     this.project = project;
@@ -263,11 +264,14 @@ public class MVNConverter {
   }
 
   private String transcriptionBody(final MVNConversionData.EntryData entryData) {
-    return entryData.body//
-        .replace("<body>", "")//
-        .replace("</body>", "")//
+    String rawBody = entryData.body//
         .replace("&nbsp;", " ")//
         .trim();
+    return transcriptionHiearchyFixer.fix(rawBody)//
+        //    return rawBody//
+        .replace("</i><i>", "")//
+        .replace("<body>", "")//
+        .replace("</body>", "");
   }
 
   private void setFacs(final ProjectEntry entry, final MVNFolium page, final MVNConversionResult result) {
