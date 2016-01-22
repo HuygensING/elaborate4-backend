@@ -9,16 +9,16 @@ public class TranscriptionHierarchyFixerTest {
 
   @Test
   public void testFixBoldTagsAnnotationTag() {
-    String xml = "<i><b><ab id=\"9096326\"/>¶<ae id=\"9096326\"/></b></i>";
-    String expected = "<ab id=\"9096326\"/><i><b>¶</b></i><ae id=\"9096326\"/>";
+    String xml = "<i><b><ab id=\"1\"/>¶<ae id=\"1\"/></b></i>";
+    String expected = "<ab id=\"1\"/><i><b>¶</b></i><ae id=\"1\"/>";
     String fixed = thf.fix(xml);
     assertThat(fixed).isEqualTo(expected);
   }
 
   @Test
   public void testTextDecorationForAnnotationTagIsIgnored() {
-    String xml = "<i><b><ab id=\"9096326\"/></b></i>";
-    String expected = "<ab id=\"9096326\"/>";
+    String xml = "<i><b><ab id=\"1\"/></b></i>";
+    String expected = "<ab id=\"1\"/>";
     String fixed = thf.fix(xml);
     assertThat(fixed).isEqualTo(expected);
   }

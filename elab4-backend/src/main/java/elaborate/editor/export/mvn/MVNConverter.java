@@ -267,8 +267,8 @@ public class MVNConverter {
     String rawBody = entryData.body//
         .replace("&nbsp;", " ")//
         .trim();
-    return transcriptionHiearchyFixer.fix(rawBody)//
-        //    return rawBody//
+    //    return transcriptionHiearchyFixer.fix(rawBody)//
+    return rawBody//
         .replace("</i><i>", "")//
         .replace("<body>", "")//
         .replace("</body>", "");
