@@ -38,6 +38,7 @@ import com.google.common.collect.ImmutableMap;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.model.orm.Transcription;
+import elaborate.util.XmlUtil;
 import nl.knaw.huygens.tei.Comment;
 import nl.knaw.huygens.tei.CommentHandler;
 import nl.knaw.huygens.tei.DelegatingVisitor;
@@ -738,7 +739,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     @Override
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
-      final String annotatedText = context.closeLayer();
+      final String annotatedText = XmlUtil.removeXMLtags(context.closeLayer());
       if (!"¤".equals(annotatedText)) {
         addError(MVNAnnotationType.WITREGEL, "Het geannoteerde teken moet ‘¤’ zijn, is '" + annotatedText + "'");
       }
