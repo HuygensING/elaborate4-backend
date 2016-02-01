@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.knaw.huygens.elab4</groupId>
 	<artifactId>elab4</artifactId>
-	<version>4.0.6-SNAPSHOT</version>
+	<version>4.0.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2011</inceptionYear>
 
@@ -64,7 +64,7 @@
 		<maven-license.version>1.8</maven-license.version>
 		<maven-war.version>2.6</maven-war.version>
 		<maven-deploy.version>2.8.2</maven-deploy.version>
-		<mockito.version>2.0.36-beta</mockito.version>
+		<mockito.version>2.0.41-beta</mockito.version>
 		<pdfbox.version>1.8.8</pdfbox.version>
 		<postgresql.version>9.3-1100-jdbc4</postgresql.version> <!-- > 9.3-1100-jdbc4 = JDK7 -->
 		<security.version>2.1.4</security.version>
@@ -75,7 +75,7 @@
 		<tomcat-maven.version>1.1</tomcat-maven.version>
 		<tomcatservlet-api.version>6.0.36</tomcatservlet-api.version>
 		<urlrewritefilter.version>4.0.4</urlrewritefilter.version>
-		<visitei.version>0.4.8</visitei.version>
+		<visitei.version>0.6.1</visitei.version>
 		<wagon-ssh.version>2.2</wagon-ssh.version>
 		<xmlunit.version>1.5</xmlunit.version>
 		<yoga.version>1.0.0</yoga.version>
