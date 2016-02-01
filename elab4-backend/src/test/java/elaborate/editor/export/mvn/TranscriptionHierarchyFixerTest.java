@@ -25,7 +25,7 @@ public class TranscriptionHierarchyFixerTest {
     assertThat(fixed).isEqualTo(expected);
   }
 
-  @Ignore
+  //  @Ignore
   @Test
   public void testIncorrectAnnotationBeginEndHierarchyIsFixed() {
     String xml = "<body>"//
