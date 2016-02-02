@@ -1,11 +1,14 @@
 package elaborate.editor.export.mvn;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Ints;
 
 import elaborate.editor.model.orm.Transcription.BodyTags;
-import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.Node;
@@ -19,22 +22,18 @@ public class TranscriptionHierarchyFixer {
     Document document = Document.createFromXml(xml, false);
     document.accept(visitor);
     String textDecorationFixed = visitor.getContext().getResult();
-    Log.info("textDecorationFixed={}", textDecorationFixed);
+    //    Log.info("textDecorationFixed={}", textDecorationFixed);
 
-    AnnotationHierarchyVisitor ahVisitor = new AnnotationHierarchyVisitor();
-    document = Document.createFromXml("<body>" + textDecorationFixed + "</body>", false);
-    textDecorationFixed = traverse(document);
-    //    document.accept(ahVisitor);
-    //    ahVisitor.status();
-
-    return textDecorationFixed;
+    document = Document.createFromXml(textDecorationFixed, false);
+    return traverse(document);//.replaceAll("<body>", "").replaceAll("</body>", "");
   }
 
   private String traverse(Document document) {
     Element documentRoot = document.getRoot();
     Element resultRoot = Element.copyOf(documentRoot);
-    Log.info("root={}", documentRoot);
-    traverseNodes((Element) documentRoot.getNodes().get(0), resultRoot, 0);
+    //    Log.info("root={}", documentRoot);
+    //    Element parentElement = (Element) documentRoot.getNodes().get(0);
+    traverseNodes(documentRoot, resultRoot, 0);
     return dom2xml(resultRoot);
   }
 
@@ -46,18 +45,39 @@ public class TranscriptionHierarchyFixer {
 
   private void traverseNodes(Element parentElement, Element resultParentElement, int level) {
     List<Grouping> groupings = Lists.newArrayList();
+    final Map<String, Integer> annotationOpenIndex = Maps.newHashMap();
+    final Map<String, Integer> annotationCloseIndex = Maps.newHashMap();
+
+    Ordering<String> annotationOpenOrdering = new Ordering<String>() {
+      @Override
+      public int compare(String id1, String id2) {
+        return Ints.compare(annotationCloseIndex.get(id2), annotationCloseIndex.get(id1));
+      }
+    }.compound(new Ordering<String>() {
+      @Override
+      public int compare(String id1, String id2) {
+        return Ints.compare(annotationOpenIndex.get(id1), annotationOpenIndex.get(id2));
+      }
+    }).compound(Ordering.natural());
+    Ordering<String> annotationCloseOrdering = annotationOpenOrdering.reverse();
+
     if (parentElement instanceof Element) {
+      String annotationBegin = BodyTags.ANNOTATION_BEGIN;
+      String annotationEnd = BodyTags.ANNOTATION_END;
       for (Node node : parentElement.getNodes()) {
-        Log.info("[{}] node={}", level, node);
+        //        Log.info("[{}] node={}", level, node);
         if (node instanceof Element) {
           Element element = (Element) node;
           if (isAnnotationMarker(element)) {
-            if (BodyTags.ANNOTATION_BEGIN.equals(element.getName())) {
+            String id = element.getAttribute("id");
+            if (annotationBegin.equals(element.getName())) {
               AnnotationOpenGrouping grouping = currentGrouping(groupings, AnnotationOpenGrouping.class);
-              grouping.addId(element.getAttribute("id"));
-            } else if (BodyTags.ANNOTATION_END.equals(element.getName())) {
+              grouping.addId(id);
+              annotationOpenIndex.put(id, groupings.size());
+            } else if (annotationEnd.equals(element.getName())) {
               AnnotationCloseGrouping grouping = currentGrouping(groupings, AnnotationCloseGrouping.class);
-              grouping.addId(element.getAttribute("id"));
+              grouping.addId(id);
+              annotationCloseIndex.put(id, groupings.size());
             }
           } else {
             NodeGrouping grouping = currentGrouping(groupings, NodeGrouping.class);
@@ -85,13 +105,15 @@ public class TranscriptionHierarchyFixer {
             }
           }
         } else if (grouping instanceof AnnotationOpenGrouping) {
-          for (String id : ((AnnotationOpenGrouping) grouping).getIds()) {
-            Element element = new Element(BodyTags.ANNOTATION_BEGIN).withAttribute("id", id);
+          List<String> ids = ((AnnotationOpenGrouping) grouping).getIds();
+          for (String id : annotationOpenOrdering.sortedCopy(ids)) {
+            Element element = new Element(annotationBegin).withAttribute("id", id);
             resultParentElement.addNode(element);
           }
         } else if (grouping instanceof AnnotationCloseGrouping) {
-          for (String id : ((AnnotationCloseGrouping) grouping).getIds()) {
-            Element element = new Element(BodyTags.ANNOTATION_END).withAttribute("id", id);
+          List<String> ids = ((AnnotationCloseGrouping) grouping).getIds();
+          for (String id : annotationCloseOrdering.sortedCopy(ids)) {
+            Element element = new Element(annotationEnd).withAttribute("id", id);
             resultParentElement.addNode(element);
           }
         }

@@ -53,8 +53,8 @@ import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
 
 public class MVNConverter {
-  private static final boolean DEBUG = false; // for release
-  // private static final boolean DEBUG = true; // for testing, don't release with DEBUG=true!!!
+  //  private static final boolean DEBUG = false; // for release
+  private static final boolean DEBUG = true; // for testing, don't release with DEBUG=true!!!
   private final Project project;
   private final MVNConversionData data;
   private final Status status;
@@ -267,8 +267,11 @@ public class MVNConverter {
     String rawBody = entryData.body//
         .replace("&nbsp;", " ")//
         .trim();
-    //    return transcriptionHiearchyFixer.fix(rawBody)//
-    return rawBody//
+    if (rawBody.contains("tali conuiuio")) {
+      Log.info(rawBody);
+    }
+    return transcriptionHiearchyFixer.fix(rawBody)//
+        //    return rawBody//
         .replace("</i><i>", "")//
         .replace("<body>", "")//
         .replace("</body>", "");
