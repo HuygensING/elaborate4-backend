@@ -62,28 +62,20 @@ public class TranscriptionHierarchyFixer {
     Ordering<String> annotationCloseOrdering = annotationOpenOrdering.reverse();
 
     if (parentElement instanceof Element) {
-      String annotationBegin = BodyTags.ANNOTATION_BEGIN;
-      String annotationEnd = BodyTags.ANNOTATION_END;
       for (Node node : parentElement.getNodes()) {
         //        Log.info("[{}] node={}", level, node);
-        if (node instanceof Element) {
+        if (node instanceof Element && isAnnotationMarker((Element) node)) {
           Element element = (Element) node;
-          if (isAnnotationMarker(element)) {
-            String id = element.getAttribute("id");
-            if (annotationBegin.equals(element.getName())) {
-              AnnotationOpenGrouping grouping = currentGrouping(groupings, AnnotationOpenGrouping.class);
-              grouping.addId(id);
-              annotationOpenIndex.put(id, groupings.size());
-            } else if (annotationEnd.equals(element.getName())) {
-              AnnotationCloseGrouping grouping = currentGrouping(groupings, AnnotationCloseGrouping.class);
-              grouping.addId(id);
-              annotationCloseIndex.put(id, groupings.size());
-            }
-          } else {
-            NodeGrouping grouping = currentGrouping(groupings, NodeGrouping.class);
-            grouping.addNode(element);
+          String id = element.getAttribute("id");
+          String name = element.getName();
+          if (BodyTags.ANNOTATION_BEGIN.equals(name)) {
+            processAnnotationElement(groupings, id, AnnotationOpenGrouping.class, annotationOpenIndex);
+
+          } else if (BodyTags.ANNOTATION_END.equals(name)) {
+            processAnnotationElement(groupings, id, AnnotationCloseGrouping.class, annotationCloseIndex);
           }
-        } else if (node instanceof Text) {
+
+        } else {
           NodeGrouping grouping = currentGrouping(groupings, NodeGrouping.class);
           grouping.addNode(node);
         }
@@ -104,20 +96,28 @@ public class TranscriptionHierarchyFixer {
               resultParentElement.addNode(new Text(((Text) node).getText()));
             }
           }
+
         } else if (grouping instanceof AnnotationOpenGrouping) {
-          List<String> ids = ((AnnotationOpenGrouping) grouping).getIds();
-          for (String id : annotationOpenOrdering.sortedCopy(ids)) {
-            Element element = new Element(annotationBegin).withAttribute("id", id);
-            resultParentElement.addNode(element);
-          }
+          addAnnotationMilestone(resultParentElement, grouping, annotationOpenOrdering, BodyTags.ANNOTATION_BEGIN);
+
         } else if (grouping instanceof AnnotationCloseGrouping) {
-          List<String> ids = ((AnnotationCloseGrouping) grouping).getIds();
-          for (String id : annotationCloseOrdering.sortedCopy(ids)) {
-            Element element = new Element(annotationEnd).withAttribute("id", id);
-            resultParentElement.addNode(element);
-          }
+          addAnnotationMilestone(resultParentElement, grouping, annotationCloseOrdering, BodyTags.ANNOTATION_END);
         }
       }
+    }
+  }
+
+  private void processAnnotationElement(List<Grouping> groupings, String id, Class<? extends AnnotationGrouping> groupingClass, Map<String, Integer> index) {
+    AnnotationGrouping grouping = currentGrouping(groupings, groupingClass);
+    grouping.addId(id);
+    index.put(id, groupings.size());
+  }
+
+  private void addAnnotationMilestone(Element resultParentElement, Grouping grouping, Ordering<String> ordering, String tagName) {
+    List<String> ids = ((AnnotationGrouping) grouping).getIds();
+    for (String id : ordering.sortedCopy(ids)) {
+      Element element = new Element(tagName).withAttribute("id", id);
+      resultParentElement.addNode(element);
     }
   }
 
