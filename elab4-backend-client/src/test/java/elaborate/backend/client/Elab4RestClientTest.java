@@ -29,7 +29,6 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 import nl.knaw.huygens.Log;
 
@@ -46,7 +45,7 @@ public class Elab4RestClientTest {
     e4 = null;
   }
 
-  @Test
+  //  @Test
   public void testAddProject() throws Exception {
     Log.info("logging in...");
     loginAsRoot();
