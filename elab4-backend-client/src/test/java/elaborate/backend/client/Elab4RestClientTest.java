@@ -73,7 +73,7 @@ public class Elab4RestClientTest {
 	}
 
 	private void loginAsRoot() {
-		boolean success = e4.login("root", "d3gelijk");
+		boolean success = e4.login("root", "L33tSp3@K");
 		assertThat(success).isTrue();
 	}
 
