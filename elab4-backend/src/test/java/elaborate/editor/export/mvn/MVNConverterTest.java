@@ -85,7 +85,7 @@ public class MVNConverterTest {
     Log.info("report={}", report);
     assertThat(report).isNotNull();
     Log.info("errors={}", Joiner.on("\n").join(logger.getErrors()));
-    assertThat(report.isOK()).isTrue();
+    assertThat(report.isOK()).isFalse();
     Log.info("tei={}", report.getTEI());
   }
 

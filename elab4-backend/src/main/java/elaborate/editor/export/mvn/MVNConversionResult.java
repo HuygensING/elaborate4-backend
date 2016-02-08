@@ -87,7 +87,11 @@ public class MVNConversionResult {
   //  }
 
   public void addError(final String entryId, final String error) {
-    logger.addError(url(entryId) + " : " + error);
+    if (StringUtils.isNotBlank(entryId)) {
+      logger.addError(url(entryId) + " : " + error);
+    } else {
+      logger.addError(error);
+    }
   }
 
   public String getTEI() {
