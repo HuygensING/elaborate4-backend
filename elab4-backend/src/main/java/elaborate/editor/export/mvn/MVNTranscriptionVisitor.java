@@ -269,7 +269,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         e.setAttribute("rend", "indent");
       }
       context.addEmptyElementTag(e);
+      context.addOpenTag("l");
       context.addLiteral(line);
+      context.addCloseTag("l");
       context.addLiteral(currentLineInfo.postTags);
       return Traversal.NEXT;
     }
