@@ -678,7 +678,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static boolean inText() {
-    return textNumStack.isEmpty();
+    return !textNumStack.isEmpty();
   }
 
   private static class TekstEindeHandler implements MVNAnnotationHandler {
