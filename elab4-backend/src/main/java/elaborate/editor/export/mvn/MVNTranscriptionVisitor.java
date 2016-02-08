@@ -54,6 +54,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   static final String abbrTag = "abbr";
   static final String expanTag = "expan";
 
+  static final Stack<String> textNumStack = new Stack<String>();
+
   public static boolean inParagraph = false;
 
   private static final String HI = "hi";
@@ -68,6 +70,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   private static Set<String> deepestTextNums;
   private static int indent;
   private static LineInfo currentLineInfo;
+  public static String currentPageBreak = "";
 
   public MVNTranscriptionVisitor(final MVNConversionResult result, final Map<Integer, AnnotationData> annotationIndex, final Set<String> deepestTextNums) {
     super(new XmlContext());
@@ -176,6 +179,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   static class PageBreakHandler extends CopyElementHandler {
     @Override
     public Traversal enterElement(final Element element, final XmlContext context) {
+      context.openLayer();
       context.addLiteral("\n" + indent());
       pageId = element.getAttribute("id");
       currentEntryId = element.getAttribute("_entryId");
@@ -191,6 +195,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public Traversal leaveElement(final Element element, final XmlContext context) {
       super.leaveElement(element, context);
       context.addLiteral("\n");
+      currentPageBreak = context.closeLayer();
+      if (inText()) {
+        addPageBreak(context);
+      }
       return Traversal.NEXT;
     }
 
@@ -597,8 +605,6 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {}
   }
 
-  final static Stack<String> textNumStack = new Stack<String>();
-
   private static class TekstBeginHandler implements MVNAnnotationHandler {
 
     @Override
@@ -632,6 +638,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         indent++;
       }
       currentLineInfo.preTags = currentLineInfo.preTags + context.closeLayer();
+      addPageBreak(context);
 
       if (parts.size() > 1) {
         final String title = parts.get(1);
@@ -668,6 +675,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static boolean isText(final String textNum) {
     return deepestTextNums.contains(textNum);
+  }
+
+  private static boolean inText() {
+    return textNumStack.isEmpty();
   }
 
   private static class TekstEindeHandler implements MVNAnnotationHandler {
@@ -763,6 +774,11 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   private static void addError(MVNAnnotationType type, String error) {
     result.addError(currentEntryId, type.getName() + " : " + error);
+  }
+
+  private static void addPageBreak(XmlContext context) {
+    context.addLiteral(currentPageBreak);
+    currentPageBreak = "";
   }
 
 }
