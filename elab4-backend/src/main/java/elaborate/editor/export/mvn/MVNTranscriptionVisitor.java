@@ -184,6 +184,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       pageId = element.getAttribute("id");
       currentEntryId = element.getAttribute("_entryId");
       element.removeAttribute("_entryId");
+      element.removeAttribute("id");
+      element.setAttribute("xml:id", pageId);
       if (element.getAttribute("facs").equals("null")) {
         element.removeAttribute("facs");
       }
