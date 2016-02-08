@@ -779,7 +779,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static void addPageBreak(XmlContext context) {
-    context.addLiteral(currentPageBreak);
+    currentLineInfo.preTags = currentLineInfo.preTags + currentPageBreak;
     currentPageBreak = "";
   }
 
