@@ -175,6 +175,24 @@
 			<version>${pdfbox.version}</version>
 		</dependency>
 
+		<!-- for mvn tei validation with rng -->
+		<!-- <dependency> <groupId>nu.validator</groupId> <artifactId>jing</artifactId> <version>20150629VNU</version> </dependency> -->
+		<dependency>
+			<groupId>com.thaiopensource</groupId>
+			<artifactId>jing</artifactId>
+			<version>20091111</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>saxon</artifactId>
+					<groupId>net.sf.saxon</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<!-- runtime dependencies -->
 		<dependency>
 			<groupId>se.jiderhamn</groupId>
@@ -360,13 +378,8 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<dependencies>
-				<dependency>
-					<groupId>nl.knaw.huygens.elab4</groupId>
-					<artifactId>elab4-backend-configuration-example</artifactId>
-					<version>${elab4.version}</version>
-					<type>war</type>
-					<scope>runtime</scope>
-				</dependency>
+				<!-- <dependency> <groupId>nl.knaw.huygens.elab4</groupId> <artifactId>elab4-backend-configuration-example</artifactId> 
+					<version>${elab4.version}</version> <type>war</type> <scope>runtime</scope> </dependency> -->
 			</dependencies>
 		</profile>
 

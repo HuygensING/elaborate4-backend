@@ -41,6 +41,7 @@ import com.google.common.collect.Lists;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
+import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
 import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
@@ -169,6 +170,10 @@ public class MVNConverter {
     final String tei = toTei(xml, result);
     result.setBody(tei);
     Log.info("tei={}", tei);
+    ValidationResult validateTEI = MVNValidator.validateTEI(tei);
+    if (!validateTEI.isValid()) {
+      result.addError("TEI", validateTEI.getMessage());
+    }
     //    for (ProjectEntry entry : project.getProjectEntries()) {
     //      MVNFolium page = new MVNFolium();
     //      String n = entry.getName();
