@@ -170,7 +170,7 @@ public class MVNConverter {
     final String tei = toTei(xml, result);
     result.setBody(tei);
     Log.info("tei={}", tei);
-    ValidationResult validateTEI = MVNValidator.validateTEI(tei);
+    ValidationResult validateTEI = MVNValidator.validateTEI(result.getTEI());
     if (!validateTEI.isValid()) {
       result.addError("", "Gegenereerde TEI is niet valide:<br>" + validateTEI.getMessage() + "<br>\n tei:<br>\n" + StringEscapeUtils.escapeHtml(tei).replaceAll("\n", "<br>\n"));
     }
