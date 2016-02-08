@@ -38,7 +38,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -154,7 +153,8 @@ public class PublishTask implements Runnable {
       String tei = report.getTEI();
       status.addLogline("publishing TEI to MVN server");
       ClientResponse response = mvnClient.putTEI(project.getName(), tei);
-      if (!response.getClientResponseStatus().equals(Response.Status.CREATED)) {
+      Log.info("responseStatus = {}", response.getClientResponseStatus());
+      if (!response.getClientResponseStatus().equals(ClientResponse.Status.CREATED)) {
         status.addError("MVN server returned error: " + response.getEntity(String.class));
       }
     }
