@@ -204,6 +204,7 @@ public class PublishTask implements Runnable {
     final List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(ps);
     exportSearchConfig(project, facetableProjectEntryMetadataFields, multivaluedFacetNames, url);
     exportBuildDate();
+    exportLoggingProperties(basename);
     // FIXME: fix, error bij de ystroom
     if (entityManager.isOpen()) {
       entityManager.close();
@@ -216,6 +217,12 @@ public class PublishTask implements Runnable {
     status.addLogline("cleaning up temporary directories");
     clearDirectories();
     return url;
+  }
+
+  private void exportLoggingProperties(String basename) {
+    Map<String, String> map = ImmutableMap.of("prefix", basename);
+    File destFile = new File(distDir, "WEB-INF/classes/logging.properties");
+    FreeMarker.templateToFile("logging.properties.ftl", destFile, map, getClass());
   }
 
   static Multimap<String, String> getMultivaluedFacetValues(String[] multivaluedFacetNames, ProjectEntry projectEntry) {
