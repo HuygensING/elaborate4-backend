@@ -97,8 +97,8 @@ public class Elab4RestClient {
   }
 
   @SuppressWarnings("unchecked")
-  public List<Map<String, String>> getProjectEntryTextLayers(long projectId, long entryId) {
-    List<Map<String, String>> map = projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("transcriptions")//
+  public List<Map<String, Object>> getProjectEntryTextLayers(long projectId, long entryId) {
+    List<Map<String, Object>> map = projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("transcriptions")//
         .request()//
         .header("Authorization", "SimpleAuth " + token)//
         .get(List.class);
