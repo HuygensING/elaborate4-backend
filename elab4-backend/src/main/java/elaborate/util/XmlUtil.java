@@ -4,7 +4,7 @@ package elaborate.util;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2015 Huygens ING
+ * Copyright (C) 2011 - 2016 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -24,6 +24,8 @@ package elaborate.util;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,73 +41,128 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.google.common.collect.Sets;
+
 import nl.knaw.huygens.Log;
 
 public class XmlUtil {
-	private static final String XML_CLOSE_TAG = "</xml>";
-	private static final String XML_OPEN_TAG = "<xml>";
+  private static final String XML_CLOSE_TAG = "</xml>";
+  private static final String XML_OPEN_TAG = "<xml>";
 
-	public static String unwrapFromXml(String xml) {
-		return xml.replaceFirst(XML_OPEN_TAG, "").replaceFirst(XML_CLOSE_TAG, "").replaceAll("&apos;", "'");
-	}
+  public static String unwrapFromXml(String xml) {
+    return xml.replaceFirst(XML_OPEN_TAG, "").replaceFirst(XML_CLOSE_TAG, "").replaceAll("&apos;", "'");
+  }
 
-	public static String wrapInXml(String xmlContent) {
-		return XML_OPEN_TAG + xmlContent + XML_CLOSE_TAG;
-	}
+  public static String wrapInXml(String xmlContent) {
+    return XML_OPEN_TAG + xmlContent + XML_CLOSE_TAG;
+  }
 
-	public static boolean isWellFormed(String body) {
-		try {
-			SAXParser parser;
-			parser = SAXParserFactory.newInstance().newSAXParser();
-			DefaultHandler dh = new DefaultHandler();
-			parser.parse(new InputSource(new StringReader(body)), dh);
-		} catch (ParserConfigurationException e1) {
-			e1.printStackTrace();
-			return false;
-		} catch (SAXException e1) {
-			e1.printStackTrace();
-			Log.error("body={}", body);
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
+  public static boolean isWellFormed(String body) {
+    try {
+      SAXParser parser;
+      parser = SAXParserFactory.newInstance().newSAXParser();
+      DefaultHandler dh = new DefaultHandler();
+      parser.parse(new InputSource(new StringReader(body)), dh);
+    } catch (ParserConfigurationException e1) {
+      e1.printStackTrace();
+      return false;
+    } catch (SAXException e1) {
+      e1.printStackTrace();
+      Log.error("body={}", body);
+      return false;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
+  }
 
-	public static String fixXhtml(String badxml) {
-		Document doc = Jsoup.parse(badxml);
-		doc.outputSettings().indentAmount(0).prettyPrint(false).escapeMode(Entities.EscapeMode.xhtml).charset("UTF-8");
-		return doc.body().html().replaceAll(" />", "/>").replace("\u00A0", "&#160;");
-		// return Jsoup.clean(badxml, Whitelist.relaxed());
-	}
+  public static String fixXhtml(String badxml) {
+    Document doc = Jsoup.parse(badxml);
+    doc.outputSettings().indentAmount(0).prettyPrint(false).escapeMode(Entities.EscapeMode.xhtml).charset("UTF-8");
+    return doc.body().html().replaceAll(" />", "/>").replace("\u00A0", "&#160;");
+    // return Jsoup.clean(badxml, Whitelist.relaxed());
+  }
 
-	static final Pattern ENDTAG_AFTER_NEWLINE_PATTERN = Pattern.compile("\n(</.*?>)"); // endtag at the beginning of line, should be at end of previouse line
+  static final Pattern ENDTAG_AFTER_NEWLINE_PATTERN = Pattern.compile("\n(</.*?>)"); // endtag at the beginning of line, should be at end of previouse line
 
-	public static String fixTagEndings(String body) {
-		String newBody = body;
-		Matcher matcher = ENDTAG_AFTER_NEWLINE_PATTERN.matcher(body);
-		while (matcher.find()) {
-			String endTag = matcher.group(1);
-			newBody = newBody.replaceFirst("\n" + endTag, endTag + "\n");
-			matcher = ENDTAG_AFTER_NEWLINE_PATTERN.matcher(newBody);
-		}
-		return newBody;
-	}
+  public static String fixTagEndings(String body) {
+    String newBody = body;
+    Matcher matcher = ENDTAG_AFTER_NEWLINE_PATTERN.matcher(body);
+    while (matcher.find()) {
+      String endTag = matcher.group(1);
+      newBody = newBody.replaceFirst("\n" + endTag, endTag + "\n");
+      matcher = ENDTAG_AFTER_NEWLINE_PATTERN.matcher(newBody);
+    }
+    return newBody;
+  }
 
-	public static String removeXMLtags(String xml) {
-		return xml.replaceAll("<.*?>", "");
-	}
+  public static String removeXMLtags(String xml) {
+    return xml.replaceAll("<.*?>", "");
+  }
 
-	private XmlUtil() {
-		throw new AssertionError("Non-instantiable class");
-	}
+  public static String toPlainText(String body) {
+    String breaksToNewlines = body.replace("<br>", "\n");
+    String noTags = removeXMLtags(breaksToNewlines);
+    return StringEscapeUtils.unescapeXml(noTags)//
+        .replace("&nbsp;", " ").trim();
+  }
 
-	public static String toPlainText(String body) {
-		String breaksToNewlines = body.replace("<br>", "\n");
-		String noTags = removeXMLtags(breaksToNewlines);
-		return StringEscapeUtils.unescapeXml(noTags)//
-				.replace("&nbsp;", " ").trim();
-	}
+  //  public static String fixTagHierarchy(String body) {
+  //    Collection<String> annotationNos = extractAnnotationNos(body);
+  //    String bodyWithConvertedAnnotationTags = body;
+  //    bodyWithConvertedAnnotationTags = convertAnnotationTagsToCustom(annotationNos, bodyWithConvertedAnnotationTags);
+  //    String fixed = fixXhtml(bodyWithConvertedAnnotationTags);
+  //    fixed = convertCustomAnnotationTagsToOriginal(annotationNos, fixed);
+  //    return fixed;
+  //  }
+  //
+  //  private static String convertCustomAnnotationTagsToOriginal(Collection<String> annotationNos, String fixed) {
+  //    for (String annotationNo : annotationNos) {
+  //      fixed = fixed//
+  //          .replace(customAnnotationBegin(annotationNo), originalAnnotationBegin(annotationNo))//
+  //          .replace(customAnnotationEnd(annotationNo), originalAnnotationEnd(annotationNo));
+  //    }
+  //    return fixed;
+  //  }
+  //
+  //  private static String convertAnnotationTagsToCustom(Collection<String> annotationNos, String bodyWithConvertedAnnotationTags) {
+  //    for (String annotationNo : annotationNos) {
+  //      bodyWithConvertedAnnotationTags = bodyWithConvertedAnnotationTags//
+  //          .replace(originalAnnotationBegin(annotationNo), customAnnotationBegin(annotationNo))//
+  //          .replace(originalAnnotationEnd(annotationNo), customAnnotationEnd(annotationNo));
+  //    }
+  //    return bodyWithConvertedAnnotationTags;
+  //  }
+  //
+  //  private static String customAnnotationEnd(String annotationNo) {
+  //    return "</a" + annotationNo + ">";
+  //  }
+  //
+  //  private static String originalAnnotationEnd(String annotationNo) {
+  //    return "<ae id=\"" + annotationNo + "\"/>";
+  //  }
+  //
+  //  private static String customAnnotationBegin(String annotationNo) {
+  //    return "<a" + annotationNo + ">";
+  //  }
+  //
+  //  private static String originalAnnotationBegin(String annotationNo) {
+  //    return "<ab id=\"" + annotationNo + "\"/>";
+  //  }
 
+  public static Collection<String> extractAnnotationNos(String body) {
+    Set<String> annotationNos = Sets.newHashSet();
+    Matcher matcher = Pattern.compile(" id=\"([0-9]+?)\"").matcher(body);
+    while (matcher.find()) {
+      annotationNos.add(matcher.group(1));
+    }
+    return annotationNos;
+  }
+
+  //-- private methods --//
+
+  private XmlUtil() {
+    throw new AssertionError("Non-instantiable class");
+  }
 }

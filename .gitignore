@@ -4,3 +4,5 @@ target/
 /locate.exe.stackdump
 /out
 /torec.tei.xml
+/elab4.iml
+.idea

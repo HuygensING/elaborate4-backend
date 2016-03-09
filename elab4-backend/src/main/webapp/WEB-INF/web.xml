@@ -1,7 +1,7 @@
 <!-- #%L
   elab4-backend
   =======
-  Copyright (C) 2011 - 2015 Huygens ING
+  Copyright (C) 2011 - 2016 Huygens ING
   =======
   This program is free software: you can redistribute 
   	it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either 
@@ -21,7 +21,7 @@
 			<!-- ResourceConfig rc = new PackagesResourceConfig("nl.knaw.huygens.jaxrstools.resources", "nl.knaw.huygens.jaxrstools.providers", 
 				"elaborate.editor.resources", "elaborate.editor.providers"); -->
 			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers</param-value>
+			<param-value>elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources</param-value>
 		</init-param>
 
 		<init-param>

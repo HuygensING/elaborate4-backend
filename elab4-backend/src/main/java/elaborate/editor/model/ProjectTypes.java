@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2015 Huygens ING
+ * Copyright (C) 2011 - 2016 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,8 +23,9 @@ package elaborate.editor.model;
  */
 
 public class ProjectTypes {
-	public final static String WORK = "work";
-	public final static String COLLECTION = "collection";
-	public final static String CORRESPONDENTIENETWERK = "correspondentienetwerk";
-	public final static String BOSCHDOC = "boschdoc";
+  public final static String WORK = "work";
+  public final static String COLLECTION = "collection";
+  public final static String CORRESPONDENTIENETWERK = "correspondentienetwerk";
+  public final static String BOSCHDOC = "boschdoc";
+  public final static String MVN = "mvn";
 }

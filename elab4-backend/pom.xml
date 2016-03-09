@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>nl.knaw.huygens.elab4</groupId>
 		<artifactId>elab4</artifactId>
-		<version>4.0.6-SNAPSHOT</version>
+		<version>4.0.7</version>
 	</parent>
 	<artifactId>elab4-backend</artifactId>
 	<packaging>war</packaging>
@@ -41,6 +41,10 @@
 				<exclusion>
 					<artifactId>slf4j-log4j12</artifactId>
 					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jersey-servlet</artifactId>
+					<groupId>com.sun.jersey</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -110,11 +114,6 @@
 			</dependency> <dependency> <groupId>org.skyscreamer</groupId> <artifactId>yoga-hibernate</artifactId> <version>${yoga.version}</version> 
 			</dependency> -->
 		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>${c3p0.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>${javaxservlet-api.version}</version>
@@ -174,6 +173,24 @@
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>${pdfbox.version}</version>
+		</dependency>
+
+		<!-- for mvn tei validation with rng -->
+		<!-- <dependency> <groupId>nu.validator</groupId> <artifactId>jing</artifactId> <version>20150629VNU</version> </dependency> -->
+		<dependency>
+			<groupId>com.thaiopensource</groupId>
+			<artifactId>jing</artifactId>
+			<version>20091111</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>saxon</artifactId>
+					<groupId>net.sf.saxon</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- runtime dependencies -->
@@ -246,6 +263,17 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>*.properties</exclude>
+				</excludes>
 			</resource>
 			<resource>
 				<directory>src/main/java</directory>
@@ -350,13 +378,8 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<dependencies>
-				<dependency>
-					<groupId>nl.knaw.huygens.elab4</groupId>
-					<artifactId>elab4-backend-configuration-example</artifactId>
-					<version>${elab4.version}</version>
-					<type>war</type>
-					<scope>runtime</scope>
-				</dependency>
+				<!-- <dependency> <groupId>nl.knaw.huygens.elab4</groupId> <artifactId>elab4-backend-configuration-example</artifactId> 
+					<version>${elab4.version}</version> <type>war</type> <scope>runtime</scope> </dependency> -->
 			</dependencies>
 		</profile>
 

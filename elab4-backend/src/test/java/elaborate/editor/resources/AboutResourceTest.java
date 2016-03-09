@@ -4,7 +4,7 @@ package elaborate.editor.resources;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2015 Huygens ING
+ * Copyright (C) 2011 - 2016 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -30,11 +30,11 @@ import org.junit.Test;
 
 public class AboutResourceTest {
 
-	@Test
-	public void testGetAbout() throws Exception {
-		AboutResource r = new AboutResource();
-		Map<String, String> about = r.getAbout();
-		assertThat(about).containsKey("publication_backend_build");
-	}
+  @Test
+  public void testGetAbout() throws Exception {
+    AboutResource r = new AboutResource();
+    Map<String, String> about = r.getAbout();
+    assertThat(about).containsKey("publicationBackendBuild");
+  }
 
 }

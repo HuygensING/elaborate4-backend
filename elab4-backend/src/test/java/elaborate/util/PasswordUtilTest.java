@@ -4,7 +4,7 @@ package elaborate.util;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2015 Huygens ING
+ * Copyright (C) 2011 - 2016 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -34,14 +34,14 @@ import com.google.common.base.Charsets;
 
 public class PasswordUtilTest {
 
-	@Ignore
-	@Test
-	public void testPassword() throws UnsupportedEncodingException {
-		final String password = "aap-noot-mies";
-		final byte[] passwordDigest2 = PasswordUtil.encode(password);
-		String encodedPassword = new String(Base64.encodeBase64(passwordDigest2), Charsets.UTF_8);
-		assertThat(PasswordUtil.matches(password, encodedPassword)).isTrue();
-		assertThat(PasswordUtil.matches("somethingelse", encodedPassword)).isFalse();
-	}
+  @Ignore
+  @Test
+  public void testPassword() throws UnsupportedEncodingException {
+    final String password = "aap-noot-mies";
+    final byte[] passwordDigest2 = PasswordUtil.encode(password);
+    String encodedPassword = new String(Base64.encodeBase64(passwordDigest2), Charsets.UTF_8);
+    assertThat(PasswordUtil.matches(password, encodedPassword)).isTrue();
+    assertThat(PasswordUtil.matches("somethingelse", encodedPassword)).isFalse();
+  }
 
 }

@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2015 Huygens ING
+ * Copyright (C) 2011 - 2016 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -42,171 +42,171 @@ import elaborate.editor.model.AbstractProjectEntryElement;
 @Table(name = "transcriptions")
 @XmlRootElement(name = "transcription")
 public class Transcription extends AbstractProjectEntryElement<Transcription> {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final String BODY_START = "<body>";
-	public static final String BODY_END = "</body>";
-	static final String DEFAULT_BODY = BODY_START + BODY_END;
+  public static final String BODY_START = "<body>";
+  public static final String BODY_END = "</body>";
+  static final String DEFAULT_BODY = BODY_START + BODY_END;
 
-	/* properties to persist */
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "transcription_type_id", columnDefinition = "int4")
-	private TranscriptionType transcriptionType;
+  /* properties to persist */
+  @JsonIgnore
+  @ManyToOne
+  @JoinColumn(name = "transcription_type_id", columnDefinition = "int4")
+  private TranscriptionType transcriptionType;
 
-	@Column(columnDefinition = "text")
-	private String title;
+  @Column(columnDefinition = "text")
+  private String title;
 
-	@Column(columnDefinition = "text")
-	private String body;
+  @Column(columnDefinition = "text")
+  private String body;
 
-	@Column(columnDefinition = "text")
-	private String text_layer;
+  @Column(columnDefinition = "text")
+  private String text_layer;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "transcription")
-	private List<Annotation> annotations = Lists.newArrayList();
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "transcription")
+  private List<Annotation> annotations = Lists.newArrayList();
 
-	// public static Transcription create() {
-	// return new Transcription();
-	// }
+  // public static Transcription create() {
+  // return new Transcription();
+  // }
 
-	/* persistent properties getters and setters */
-	public TranscriptionType getTranscriptionType() {
-		return transcriptionType;
-	}
+  /* persistent properties getters and setters */
+  public TranscriptionType getTranscriptionType() {
+    return transcriptionType;
+  }
 
-	public Transcription setTranscriptionType(TranscriptionType transcriptionType) {
-		this.transcriptionType = transcriptionType;
-		return this;
-	}
+  public Transcription setTranscriptionType(TranscriptionType transcriptionType) {
+    this.transcriptionType = transcriptionType;
+    return this;
+  }
 
-	public String getTitle() {
-		return title;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public Transcription setTitle(String title) {
-		this.title = title;
-		return this;
-	}
+  public Transcription setTitle(String title) {
+    this.title = title;
+    return this;
+  }
 
-	public String getTextLayer() {
-		return text_layer;
-	}
+  public String getTextLayer() {
+    return text_layer;
+  }
 
-	public Transcription setTextLayer(String textLayer) {
-		this.text_layer = textLayer;
-		return this;
-	}
+  public Transcription setTextLayer(String textLayer) {
+    this.text_layer = textLayer;
+    return this;
+  }
 
-	public String getBody() {
-		return body;
-	}
+  public String getBody() {
+    return body;
+  }
 
-	public Transcription setBody(String body) {
-		this.body = body;
-		return this;
-	}
+  public Transcription setBody(String body) {
+    this.body = body;
+    return this;
+  }
 
-	public void setAnnotations(List<Annotation> annotations) {
-		this.annotations = annotations;
-	}
+  public void setAnnotations(List<Annotation> annotations) {
+    this.annotations = annotations;
+  }
 
-	@JsonIgnore
-	public List<Annotation> getAnnotations() {
-		return annotations;
-	}
+  @JsonIgnore
+  public List<Annotation> getAnnotations() {
+    return annotations;
+  }
 
-	// public static final String TYPE = "transcription";
-	// static final String BODY_START = "<body>";
-	// static final String BODY_END = "</body>";
-	// static final String DEFAULT_BODY = BODY_START + BODY_END;
-	// public static final Comparator<Transcription> TRANSCRIPTION_TITLE_COMPARATOR = new Comparator<Transcription>() {
-	// @Override
-	// public int compare(Transcription t1, Transcription t2) {
-	// return t1.getTranscriptionType().getName().compareTo(t2.getTranscriptionType().getName());
-	// }
-	// };
-	//
-	//
-	// @OneToMany
-	// Annotation[] getAnnotations();
-	//
-	// @Implemented
-	// Annotation addAnnotation(User creator);
-	//
-	// @Implemented
-	// String getLabel();
-	//
-	// /**
-	// * Remove the annotation and the corresponding annotationmarkers in the Transcription Body
-	// * @param annotation The Annotation to remove
-	// * @param modifier The User credited with the removal
-	// */
-	// @Implemented
-	// void removeAnnotation(Annotation annotation, User modifier);
-	//
-	//
-	// /**
-	// * Remove annotation markers in the Transcription Body that have no corresponding annotation
-	// * @param modifier The User credited with the removal
-	// */
-	// @Implemented
-	// void removeOrphanedAnnotationReferences(User modifier);
-	//
-	// @Implemented
-	// boolean hasTranscriptionType(TranscriptionType transcriptionType);
-	//
-	//
-	// public Annotation addAnnotation(User creator) {
-	// Annotation annotation = ModelFactory.createAnnotation(transcription, creator);
-	// return annotation;
-	// }
-	//
-	// public Project getProject() {
-	// return transcription.getProjectEntry().getProject();
-	// }
-	//
-	// public String getLabel() {
-	// return String.format("transcription '%s' of %s", transcription.getTitle(), transcription.getProjectEntry().getLabel());
-	// }
-	//
-	// public String getSolrId() {
-	// return Transcription.TYPE + transcription.getId();
-	// }
-	//
-	// public void index(boolean commitNow) {
-	// new SolrIndexer().index(transcription, commitNow);
-	// }
-	//
-	// public void deindex() {
-	// new SolrIndexer().deindex(transcription);
-	// }
-	//
-	// public void removeAnnotation(Annotation annotation, User deleter) {
-	// int annotationNo = annotation.getAnnotationNo();
-	// String begintag = annotationBeginTag(annotationNo);
-	// String endtag = annotationEndTag(annotationNo);
-	// transcription.setBody(transcription.getBody().replace(begintag, "").replace(endtag, ""));
-	// ModelFactory.delete(annotation, deleter);
-	// ModelFactory.save(transcription, deleter);
-	// }
-	//
-	// public boolean hasTranscriptionType(TranscriptionType transcriptionType) {
-	// return transcription.getTranscriptionType().equals(transcriptionType);
-	// }
-	public static class BodyTags {
-		public static final String ANNOTATION_BEGIN = "ab";
-		public static final String ANNOTATION_END = "ae";
+  // public static final String TYPE = "transcription";
+  // static final String BODY_START = "<body>";
+  // static final String BODY_END = "</body>";
+  // static final String DEFAULT_BODY = BODY_START + BODY_END;
+  // public static final Comparator<Transcription> TRANSCRIPTION_TITLE_COMPARATOR = new Comparator<Transcription>() {
+  // @Override
+  // public int compare(Transcription t1, Transcription t2) {
+  // return t1.getTranscriptionType().getName().compareTo(t2.getTranscriptionType().getName());
+  // }
+  // };
+  //
+  //
+  // @OneToMany
+  // Annotation[] getAnnotations();
+  //
+  // @Implemented
+  // Annotation addAnnotation(User creator);
+  //
+  // @Implemented
+  // String getLabel();
+  //
+  // /**
+  // * Remove the annotation and the corresponding annotationmarkers in the Transcription Body
+  // * @param annotation The Annotation to remove
+  // * @param modifier The User credited with the removal
+  // */
+  // @Implemented
+  // void removeAnnotation(Annotation annotation, User modifier);
+  //
+  //
+  // /**
+  // * Remove annotation markers in the Transcription Body that have no corresponding annotation
+  // * @param modifier The User credited with the removal
+  // */
+  // @Implemented
+  // void removeOrphanedAnnotationReferences(User modifier);
+  //
+  // @Implemented
+  // boolean hasTranscriptionType(TranscriptionType transcriptionType);
+  //
+  //
+  // public Annotation addAnnotation(User creator) {
+  // Annotation annotation = ModelFactory.createAnnotation(transcription, creator);
+  // return annotation;
+  // }
+  //
+  // public Project getProject() {
+  // return transcription.getProjectEntry().getProject();
+  // }
+  //
+  // public String getLabel() {
+  // return String.format("transcription '%s' of %s", transcription.getTitle(), transcription.getProjectEntry().getLabel());
+  // }
+  //
+  // public String getSolrId() {
+  // return Transcription.TYPE + transcription.getId();
+  // }
+  //
+  // public void index(boolean commitNow) {
+  // new SolrIndexer().index(transcription, commitNow);
+  // }
+  //
+  // public void deindex() {
+  // new SolrIndexer().deindex(transcription);
+  // }
+  //
+  // public void removeAnnotation(Annotation annotation, User deleter) {
+  // int annotationNo = annotation.getAnnotationNo();
+  // String begintag = annotationBeginTag(annotationNo);
+  // String endtag = annotationEndTag(annotationNo);
+  // transcription.setBody(transcription.getBody().replace(begintag, "").replace(endtag, ""));
+  // ModelFactory.delete(annotation, deleter);
+  // ModelFactory.save(transcription, deleter);
+  // }
+  //
+  // public boolean hasTranscriptionType(TranscriptionType transcriptionType) {
+  // return transcription.getTranscriptionType().equals(transcriptionType);
+  // }
+  public static class BodyTags {
+    public static final String ANNOTATION_BEGIN = "ab";
+    public static final String ANNOTATION_END = "ae";
+    public static final List<String> ANNOTATION_MARKERS = Lists.newArrayList(ANNOTATION_BEGIN, ANNOTATION_END);
 
-		protected static final String ANNOTATION_BEGIN_CLASS = "annotationstart";
-		protected static final String ANNOTATION_END_CLASS = "annotationend";
-		protected static final List<String> EMPTY_ELEMENTNAMES = Lists.newArrayList(ANNOTATION_BEGIN, ANNOTATION_END);
+    protected static final String ANNOTATION_BEGIN_CLASS = "annotationstart";
+    protected static final String ANNOTATION_END_CLASS = "annotationend";
 
-		public static final String BODY = "body";
-		protected static final String TAG_SUP = "sup";
-		protected static final String TAG_CONTENT = "content";
-		protected static final String TAG_SPAN = "span";
-		protected static final String TAG_PAGEBREAK = "pb";
-	}
+    public static final String BODY = "body";
+    protected static final String TAG_SUP = "sup";
+    protected static final String TAG_CONTENT = "content";
+    protected static final String TAG_SPAN = "span";
+    protected static final String TAG_PAGEBREAK = "pb";
+  }
 
 }
