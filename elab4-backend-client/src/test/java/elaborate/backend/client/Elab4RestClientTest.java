@@ -75,11 +75,6 @@ public class Elab4RestClientTest {
     assertThat(versionMap).containsKey("version");
   }
 
-	private void loginAsRoot() {
-		boolean success = e4.login("root", "L33tSp3@K");
-		assertThat(success).isTrue();
-	}
-
   //	@Test
   public void testGetProjectEntries() throws Exception {
     loginAsRoot();
