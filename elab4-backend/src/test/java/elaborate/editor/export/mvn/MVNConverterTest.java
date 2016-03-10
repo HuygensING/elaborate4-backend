@@ -762,6 +762,87 @@ public class MVNConverterTest {
     assertConversion(body, mockData(), expected);
   }
 
+  @Test
+  public void testAnnotationHierarchyRepair1() {
+    String body = "<body>"//
+        + "<ab id=\"1\"/>Lorem ipsum dolor "//
+        + "<ab id=\"2\"/>sit amet, "//
+        + "<ae id=\"1\"/>"//
+        + "consectetur adipiscing elit."//
+        + "<ae id=\"2\"/>"//
+        + "</body>";
+    String expected = "<body>"//
+        + "<ab id=\"1\"/>Lorem ipsum dolor "//
+        + "<ab id=\"2\"/>sit amet, "//
+        + "<ae id=\"2\"/>"//
+        + "<ae id=\"1\"/>"//
+        + "<ab id=\"2\"/>"//
+        + "consectetur adipiscing elit."//
+        + "<ae id=\"2\"/>"//
+        + "</body>";
+    Project project = mockProject();
+    Status logger = new Status(1);
+    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger);
+    String result = mc.repairAnnotationHierarchy(body);
+    assertThat(result).isEqualTo(expected);
+  }
+
+  @Test
+  public void testAnnotationHierarchyRepair2() {
+    String body = "<body>"//
+        + "<ab id=\"1\"/>Lorem ipsum dolor "//
+        + "<ab id=\"2\"/>sit amet, "//
+        + "<ab id=\"3\"/>dolor "//
+        + "<ab id=\"4\"/>four "//
+        + "<ae id=\"1\"/>"//
+        + "consectetur adipiscing elit."//
+        + "<ae id=\"3\"/>"//
+        + "<ae id=\"2\"/>"//
+        + "<ae id=\"4\"/>"//
+        + "</body>";
+    String expected = "<body>"//
+        + "<ab id=\"1\"/>Lorem ipsum dolor "//
+        + "<ab id=\"2\"/>sit amet, "//
+        + "<ab id=\"3\"/>dolor "//
+        + "<ab id=\"4\"/>four "//
+        + "<ae id=\"4\"/>"//
+        + "<ae id=\"3\"/>"//
+        + "<ae id=\"2\"/>"//
+        + "<ae id=\"1\"/>"//
+        + "<ab id=\"2\"/>"//
+        + "<ab id=\"3\"/>"//
+        + "<ab id=\"4\"/>"//
+        + "consectetur adipiscing elit."//
+        + "<ae id=\"4\"/>"//
+        + "<ae id=\"3\"/>"//
+        + "<ae id=\"2\"/>"//
+        + "</body>";
+    Project project = mockProject();
+    Status logger = new Status(1);
+    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger);
+    String result = mc.repairAnnotationHierarchy(body);
+    assertThat(result).isEqualTo(expected);
+  }
+
+  @Test
+  public void testAnnotationHierarchyRepairWithMultipleLines() {
+    String body = "<body>\n"//
+        + "<lb/><ab id=\"1\"/>Lorem ipsum <ab id=\"2\"/>dolor<le/>\n"//
+        + "<lb/>whatever<le/>\n"//
+        + "<lb/>sit amet censect...<ae id=\"1\"/><ae id=\"2\"/><le/>\n"//
+        + "</body>";
+    String expected = "<body>\n"//
+        + "<lb/><ab id=\"1\"/>Lorem ipsum <ab id=\"2\"/>dolor<ae id=\"2\"/><ae id=\"1\"/><le/>\n"//
+        + "<lb/><ab id=\"1\"/><ab id=\"2\"/>whatever<ae id=\"2\"/><ae id=\"1\"/><le/>\n"//
+        + "<lb/><ab id=\"1\"/><ab id=\"2\"/>sit amet censect...<ae id=\"2\"/><ae id=\"1\"/><le/>\n"//
+        + "</body>";
+    Project project = mockProject();
+    Status logger = new Status(1);
+    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger);
+    String result = mc.repairAnnotationHierarchy(body);
+    assertThat(result).isEqualTo(expected);
+  }
+
   /* private methods */
   private Annotation mockAnnotationOfType(MVNAnnotationType type) {
     AnnotationType witregel = mockAnnotationType(type.getName());

@@ -162,12 +162,13 @@ public class MVNConverter {
     }
 
     final String xml = "<body>" + editionTextBuilder.toString().replace("<lb/><le/>", "").replace("\n\n", "\n") + "</body>";
-    final String cooked = cook(xml);
+    final String repairedXml = repairAnnotationHierarchy(xml);
+    final String cooked = replaceAnnotationMilestones(repairedXml);
     validateTextNums(cooked, result);
     if (DEBUG) {
       outputFiles(xml, cooked);
     }
-    final String tei = toTei(xml, result);
+    final String tei = toTei(repairedXml, result);
     result.setBody(tei);
     Log.info("tei={}", tei);
     String fullTEI = result.getTEI();
@@ -242,7 +243,14 @@ public class MVNConverter {
     }
   }
 
-  private String cook(final String xml) {
+  String repairAnnotationHierarchy(String xml) {
+    AnnotationHierarchyRepairingVisitor visitor = new AnnotationHierarchyRepairingVisitor();
+    final Document document = Document.createFromXml(xml, false);
+    document.accept(visitor);
+    return visitor.getRepairedXml();
+  }
+
+  private String replaceAnnotationMilestones(final String xml) {
     String cooked = xml;
     for (final String annotationNoString : XmlUtil.extractAnnotationNos(xml)) {
       final Integer annotationNo = Integer.valueOf(annotationNoString);
@@ -323,7 +331,7 @@ public class MVNConverter {
     final XmlContext c = visitor.getContext();
     final String rawResult = c.getResult();
 
-    return rawResult;
+    return rawResult.replace("<hi rend=\"rubric\"><hi rend=\"rubric\">¶</hi></hi>", "<hi rend=\"rubric\">¶</hi>");
   }
 
 }

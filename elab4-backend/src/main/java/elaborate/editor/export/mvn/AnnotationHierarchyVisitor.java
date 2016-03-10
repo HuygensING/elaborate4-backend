@@ -22,9 +22,9 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.util.Map.Entry;
 
+import elaborate.editor.model.orm.Transcription;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Comment;
 import nl.knaw.huygens.tei.CommentHandler;
@@ -45,8 +45,8 @@ public class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> im
     setDefaultElementHandler(this);
     setCommentHandler(this);
     setTextHandler(this);
-    addElementHandler(new AnnotationBeginHandler(), "ab");
-    addElementHandler(new AnnotationEndHandler(), "ae");
+    addElementHandler(new AnnotationBeginHandler(), Transcription.BodyTags.ANNOTATION_BEGIN);
+    addElementHandler(new AnnotationEndHandler(), Transcription.BodyTags.ANNOTATION_END);
     currentElement = root;
   }
 

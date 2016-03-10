@@ -39,6 +39,7 @@ import com.google.common.collect.ImmutableMap;
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.XmlUtil;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Comment;
 import nl.knaw.huygens.tei.CommentHandler;
 import nl.knaw.huygens.tei.DelegatingVisitor;
@@ -402,6 +403,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     @Override
     public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
+      if (element.hasName("gap")) {
+        Log.debug("break");
+      }
       context.addOpenTag(element);
     }
 
