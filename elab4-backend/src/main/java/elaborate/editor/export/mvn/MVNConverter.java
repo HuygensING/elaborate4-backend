@@ -331,7 +331,19 @@ public class MVNConverter {
     final XmlContext c = visitor.getContext();
     final String rawResult = c.getResult();
 
-    return rawResult.replace("<hi rend=\"rubric\"><hi rend=\"rubric\">¶</hi></hi>", "<hi rend=\"rubric\">¶</hi>");
+    return rawResult//
+        .replace("<b>", "")//
+        .replace("</b>", "")//
+        .replace("<u>", "")//
+        .replace("</u>", "")//
+        .replaceAll("<gap>.*?</gap>", "<gap/>")// according to the rng, gaps should be empty
+        .replace("<l><head", "<head")//
+        //        .replace("<l><hi rend=\"rubric\"><head", "<head")//
+        .replace("</head></l>", "</head>")//
+        //        .replace("</head></hi></l>", "</head>")//
+        .replace("<l><closer", "<closer")//
+        .replace("</closer></l>", "</closer>")//
+        .replace("<hi rend=\"rubric\"><hi rend=\"rubric\">¶</hi></hi>", "<hi rend=\"rubric\">¶</hi>");
   }
 
 }
