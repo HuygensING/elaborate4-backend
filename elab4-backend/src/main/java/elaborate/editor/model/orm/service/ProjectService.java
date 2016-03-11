@@ -122,7 +122,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         ProjectMetadataItem pmi = project.addMetadata(ProjectMetadataFields.TYPE, projectType, user);
         persist(pmi);
         if (ProjectTypes.MVN.equals(projectType)) {
-          project.setAnnotationTypes(mvnAnnotationTypes(getEntityManager()));
+          project.setAnnotationTypes(mvnAnnotationTypes(getEntityManager(), user));
           pmi = project.addMetadata(ProjectMetadataFields.TEXT_FONT, "junicode", user);
           persist(pmi);
         }
@@ -135,7 +135,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     }
   }
 
-  private Set<AnnotationType> mvnAnnotationTypes(EntityManager entityManager) {
+  private Set<AnnotationType> mvnAnnotationTypes(EntityManager entityManager, User creator) {
     AnnotationTypeService annotationTypeService = AnnotationTypeService.instance();
     annotationTypeService.setEntityManager(entityManager);
     Set<AnnotationType> set = Sets.newHashSet();
@@ -143,6 +143,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       AnnotationType annotationType = annotationTypeService.getAnnotationTypeByName(name, entityManager);
       if (annotationType != null) {
         set.add(annotationType);
+      } else {
+        Log.warn("missing MVN annotationtype: " + name);
       }
     }
     return set;
