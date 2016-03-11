@@ -44,7 +44,7 @@
   - Remember to run the JVM in server mode, and use a higher logging level
     that avoids logging every request
 -->
-<schema name="elaborate3" version="1.5">
+<schema name="elaborate4" version="1.5">
   <!-- attribute "name" is the name of this schema and is only used for display purposes.
        version="x.y" is Solr's version number for the schema syntax and 
        semantics.  It should not normally be changed by applications.
@@ -108,7 +108,7 @@
     <!-- required -->
     <field name="_version_" type="long" indexed="true" stored="true"/>
 
-		<!-- Elaborate3 fields -->
+		<!-- Elaborate4 fields -->
     <field name="id" type="long" indexed="true" stored="true" required="true"/>
     <field name="name" type="string" indexed="true" stored="true" required="true"/>
     <field name="title" type="text_general_rev" indexed="true" stored="true" required="true"/>
