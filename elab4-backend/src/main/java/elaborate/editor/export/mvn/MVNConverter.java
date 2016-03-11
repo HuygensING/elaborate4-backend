@@ -336,7 +336,7 @@ public class MVNConverter {
         .replace("</b>", "")//
         .replace("<u>", "")//
         .replace("</u>", "")//
-        .replaceAll("<gap>.*?</gap>", "<gap/>")// according to the rng, gaps should be empty
+        //        .replaceAll("<gap>.*?</gap>", "<gap/>")// according to the rng, gaps should be empty
         .replace("<l><head", "<head")//
         //        .replace("<l><hi rend=\"rubric\"><head", "<head")//
         .replace("</head></l>", "</head>")//

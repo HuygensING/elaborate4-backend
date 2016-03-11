@@ -39,7 +39,6 @@ import com.google.common.collect.ImmutableMap;
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.XmlUtil;
-import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Comment;
 import nl.knaw.huygens.tei.CommentHandler;
 import nl.knaw.huygens.tei.DelegatingVisitor;
@@ -369,7 +368,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       .put(MVNAnnotationType.METAMARK, new MetamarkHandler())//
       .put(MVNAnnotationType.ONDERSCHRIFT, new OnderschriftHandler())//
       .put(MVNAnnotationType.ONDUIDELIJK, new WrapInElementHandler("unclear"))//
-      .put(MVNAnnotationType.ONLEESBAAR, new WrapInElementHandler("gap"))//
+      .put(MVNAnnotationType.ONLEESBAAR, new DefectHandler())//
       .put(MVNAnnotationType.OPHOGING_ROOD, new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubricated")))//
       .put(MVNAnnotationType.OPSCHRIFT, new OpschriftHandler())//
       .put(MVNAnnotationType.PALEOGRAFISCH, new PaleografischHandler())//
@@ -403,9 +402,6 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     @Override
     public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
-      if (element.hasName("gap")) {
-        Log.debug("break");
-      }
       context.addOpenTag(element);
     }
 
@@ -767,7 +763,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static String cleanUpAnnotationBody(final AnnotationData annotation) {
-    return normalized(annotation.body).replaceAll("<span.*?>", "").replaceAll("</span>", "");
+    return normalized(annotation.body)//
+        .replaceAll("<b>", "<hi rend=\"rubric\">").replaceAll("</b>", "</hi>")//
+        .replaceAll("<u>", "<hi rend=\"underline\">").replaceAll("</u>", "</hi>");
   }
 
   private static String normalized(final String rawXml) {

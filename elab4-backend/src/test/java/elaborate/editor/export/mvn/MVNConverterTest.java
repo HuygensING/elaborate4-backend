@@ -200,15 +200,113 @@ public class MVNConverterTest {
   //               - aan het eind van de tekst
   //               - bij het begin van een mvn:opschrift of mvn:onderschrift
   @Test
-  public void testAlineaConversie() {
+  public void testAlineaEndsAtEndOfText() {
     Annotation annotation = mockAnnotationOfType(ALINEA);
     String body = "<body>pre "//
-        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
-        + " post</body>";
+        + "<ab id=\"1\"/>X"//
+        + "<ae id=\"1\"/>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "line 3"//
+        + "</body>";
     String expected = "pre "//
         + "<p>"//
-        + " post</p>\n";
+        + "line 1\n"//
+        + "line 2\n"//
+        + "line 3"//
+        + "</p>\n";
     assertConversion(body, mockData(1, annotation), expected);
+  }
+
+  @Test
+  public void testAlineaEndsAtNextAlinea() {
+    Annotation annotation = mockAnnotationOfType(ALINEA);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>X"//
+        + "<ae id=\"1\"/>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "<ab id=\"2\"/>X"//
+        + "<ae id=\"2\"/>"//
+        + "line 3"//
+        + "</body>";
+    String expected = "pre "//
+        + "<p>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "</p>\n" //
+        + "<p>"//
+        + "line 3"//
+        + "</p>\n";
+    assertConversion(body, mockData(1, annotation, 2, annotation), expected);
+  }
+
+  @Test
+  public void testAlineaEndsAtMvnPoezie() {
+    Annotation annotation = mockAnnotationOfType(ALINEA);
+    Annotation poetry = mockAnnotationOfType(POEZIE);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>X"//
+        + "<ae id=\"1\"/>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "<ab id=\"2\"/>X"//
+        + "<ae id=\"2\"/>"//
+        + "dichtregel 1"//
+        + "</body>";
+    String expected = "pre "//
+        + "<p>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "</p>\n" //
+        + "\n    <lg>"//
+        + "dichtregel 1"//
+        + "</lg>\n";
+    assertConversion(body, mockData(1, annotation, 2, poetry), expected);
+  }
+
+  @Test
+  public void testAlineaEndsAtMvnOpschrift() {
+    Annotation annotation = mockAnnotationOfType(ALINEA);
+    Annotation opschrift = mockAnnotationOfType(OPSCHRIFT);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>X"//
+        + "<ae id=\"1\"/>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "<ab id=\"2\"/>Opschrift"//
+        + "<ae id=\"2\"/>"//
+        + "line 3"//
+        + "</body>";
+    String expected = "pre "//
+        + "<p>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "</p>\n" //
+        + "<head>Opschrift</head>"//
+        + "line 3";
+    assertConversion(body, mockData(1, annotation, 2, opschrift), expected);
+  }
+
+  @Test
+  public void testAlineaEndsAtMvnOnderschrift() {
+    Annotation annotation = mockAnnotationOfType(ALINEA);
+    Annotation onderschrift = mockAnnotationOfType(ONDERSCHRIFT);
+    String body = "<body>pre "//
+        + "<ab id=\"1\"/>X"//
+        + "<ae id=\"1\"/>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "<ab id=\"2\"/>Onderschrift"//
+        + "<ae id=\"2\"/>"//
+        + "</body>";
+    String expected = "pre "//
+        + "<p>"//
+        + "line 1\n"//
+        + "line 2\n"//
+        + "</p>\n" //
+        + "<closer>Onderschrift</closer>";
+    assertConversion(body, mockData(1, annotation, 2, onderschrift), expected);
   }
 
   //  mvn:cijfers (romeins)
@@ -218,12 +316,12 @@ public class MVNConverterTest {
   @Test
   public void testCijfersConversie() {
     Annotation annotation = mockAnnotationOfType(CIJFERS);
-    String body = "<body>pre "//
-        + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
-        + " post</body>";
-    String expected = "pre "//
-        + "<num type=\"roman\">geannoteerde tekst</num>"//
-        + " post";
+    String body = "<body>Weapon "//
+        + "<ab id=\"1\"/>X<ae id=\"1\"/>"//
+        + " to the rescue!</body>";
+    String expected = "Weapon "//
+        + "<num type=\"roman\">X</num>"//
+        + " to the rescue!";
     assertConversion(body, mockData(1, annotation), expected);
   }
 
@@ -255,7 +353,7 @@ public class MVNConverterTest {
         + "<ab id=\"1\"/>geannoteerde tekst<ae id=\"1\"/>"//
         + " post</body>";
     String expected = "pre "//
-        + "<gap></gap>"//
+        + "<gap/>"//
         + " post";
     assertConversion(body, mockData(1, annotation), expected);
   }
