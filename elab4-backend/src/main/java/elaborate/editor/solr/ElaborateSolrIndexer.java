@@ -138,7 +138,9 @@ public class ElaborateSolrIndexer extends SolrIndexer {
     Log.info("facetName={}", facetName);
     doc.removeField(facetName);
     for (String value : StringUtil.getValues(multiValue)) {
-      doc.addField("mv_" + facetName, value, 1.0f);
+      if (StringUtils.isNotBlank(value)) {
+        doc.addField("mv_" + facetName, value, 1.0f);
+      }
     }
   }
 

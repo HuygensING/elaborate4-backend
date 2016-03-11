@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.knaw.huygens.elab4</groupId>
 	<artifactId>elab4</artifactId>
-	<version>4.0.8-SNAPSHOT</version>
+	<version>4.0.9-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2011</inceptionYear>
 
