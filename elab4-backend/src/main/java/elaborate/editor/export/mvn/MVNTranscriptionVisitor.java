@@ -774,6 +774,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         .replaceAll("<div>", "")//
         .replaceAll("</div>", "")//
         .replaceAll("<br>", "")//
+        .replaceAll("<span.*?>", "")//
+        .replaceAll("</span>", "")//
         .replace("&nbsp;", " ");
     return normalized;
   }
