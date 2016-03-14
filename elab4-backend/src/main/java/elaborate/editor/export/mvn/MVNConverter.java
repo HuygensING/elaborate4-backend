@@ -152,6 +152,8 @@ public class MVNConverter {
     status.addLogline("joining transcriptions");
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
       final String pageId = result.getSigle() + "-pb-" + entryData.name;
+      String transcriptionBody = transcriptionBody(entryData);
+      validateTranscriptionContainsNoEmptyLines(transcriptionBody, result, entryData.id);
       editionTextBuilder//
           .append("\n<pb n=\"")//
           .append(entryData.name)//
@@ -163,7 +165,7 @@ public class MVNConverter {
           .append(entryData.id)//
           .append("\"/>\n")//
           .append("<lb/>")//
-          .append(transcriptionBody(entryData).replace("\n", "<le/>\n<lb/>"))//
+          .append(transcriptionBody.replace("\n", "<le/>\n<lb/>"))//
           .append("<le/>");
     }
 
@@ -193,6 +195,12 @@ public class MVNConverter {
     //      result.addPages(page);
     //    }
     return result;
+  }
+
+  static void validateTranscriptionContainsNoEmptyLines(String transcriptionBody, MVNConversionResult result, String entryId) {
+    if (transcriptionBody.matches(".*\n\\s*\n.*")) {
+      result.addError(entryId, "Lege regels mogen niet voorkomen.");
+    }
   }
 
   boolean onlyTextLayerIsDiplomatic() {

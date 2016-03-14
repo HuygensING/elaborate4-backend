@@ -153,7 +153,29 @@ public class MVNConverterTest {
 
   @Test
   public void testTranscriptionWithEmptyLinesGeneratesValidationError() {
-    // TODO: make test
+    Status logger = new Status(1);
+    Project project = mockProject();
+    MVNConversionResult result = new MVNConversionResult(project, logger);
+
+    String body = "<body>Alea\niacta\nest</body>";
+    MVNConverter.validateTranscriptionContainsNoEmptyLines(body, result, "1");
+    assertThat(result.isOK()).isTrue();
+
+    body = "<body>Pecunia\n\nnon olet</body>";
+    MVNConverter.validateTranscriptionContainsNoEmptyLines(body, result, "1");
+    assertThat(result.isOK()).isFalse();
+    String expectedError = "https://www.elaborate.huygens.knaw.nl/projects/projectName/entries/1/transcriptions/diplomatic : Lege regels mogen niet voorkomen.";
+    assertThat(logger.getErrors()).contains(expectedError);
+
+    body = "<body>Luctor\n \net emergo</body>";
+    MVNConverter.validateTranscriptionContainsNoEmptyLines(body, result, "1");
+    assertThat(result.isOK()).isFalse();
+    assertThat(logger.getErrors()).contains(expectedError);
+
+    body = "<body>tab\n\t\ntab</body>";
+    MVNConverter.validateTranscriptionContainsNoEmptyLines(body, result, "1");
+    assertThat(result.isOK()).isFalse();
+    assertThat(logger.getErrors()).contains(expectedError);
   }
 
   @Test
