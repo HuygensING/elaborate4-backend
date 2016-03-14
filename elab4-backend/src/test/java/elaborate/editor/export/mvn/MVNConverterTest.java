@@ -65,6 +65,7 @@ import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.publish.Publication.Status;
 import nl.knaw.huygens.Log;
 
@@ -76,6 +77,7 @@ public class MVNConverterTest {
     when(project.getName()).thenReturn("mvn_project");
     when(project.getTitle()).thenReturn("MVN Project");
     when(project.getMetadataMap()).thenReturn(ImmutableMap.of(ProjectMetadataFields.PUBLICATION_TITLE, "MVN Project Publication"));
+    when(project.getTextLayers()).thenReturn(new String[] { TranscriptionType.DIPLOMATIC });
 
     //    AnnotationService annotationService = mock(AnnotationService.class);
     MVNConversionData data = new MVNConversionData();
@@ -91,8 +93,27 @@ public class MVNConverterTest {
 
   @Test
   public void testProjectEntryWithoutDiplomaticTranscriptionGeneratesValidationError() {
-    // TODO: make test
-    // Er is alleen een diplomatische transcriptie aanwezig.
+    Status logger = new Status(1);
+    Project project = mockProject();
+    String[] textLayers = new String[] { "Translation" };
+    when(project.getTextLayers()).thenReturn(textLayers);
+    MVNConverter c = new MVNConverter(project, mockData(), logger);
+    MVNConversionResult result = c.convert();
+
+    assertThat(result.isOK()).isFalse();
+    assertThat(logger.getErrors()).containsExactly("MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): Translation");
+  }
+
+  @Test
+  public void testProjectEntryWithOnlyDiplomaticTranscriptionPassesValidation() {
+    Status logger = new Status(1);
+    Project project = mockProject();
+    String[] textLayers = new String[] { TranscriptionType.DIPLOMATIC };
+    when(project.getTextLayers()).thenReturn(textLayers);
+    MVNConverter c = new MVNConverter(project, mockData(), logger);
+    boolean onlyTextLayerIsDiplomatic = c.onlyTextLayerIsDiplomatic();
+
+    assertThat(onlyTextLayerIsDiplomatic).isTrue();
   }
 
   @Test

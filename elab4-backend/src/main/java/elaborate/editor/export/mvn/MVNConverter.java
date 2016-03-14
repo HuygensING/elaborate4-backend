@@ -37,6 +37,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
@@ -46,6 +47,7 @@ import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.publish.Publication.Status;
 import elaborate.util.HibernateUtil;
 import elaborate.util.XmlUtil;
@@ -142,6 +144,10 @@ public class MVNConverter {
 
   public MVNConversionResult convert() {
     final MVNConversionResult result = new MVNConversionResult(project, status);
+    if (!onlyTextLayerIsDiplomatic()) {
+      result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
+      return result;
+    }
     final StringBuilder editionTextBuilder = new StringBuilder();
     status.addLogline("joining transcriptions");
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
@@ -187,6 +193,11 @@ public class MVNConverter {
     //      result.addPages(page);
     //    }
     return result;
+  }
+
+  boolean onlyTextLayerIsDiplomatic() {
+    String[] textLayers = project.getTextLayers();
+    return textLayers.length == 1 && TranscriptionType.DIPLOMATIC.equals(textLayers[0]);
   }
 
   private void validateTextNums(final String cooked, final MVNConversionResult result) {
