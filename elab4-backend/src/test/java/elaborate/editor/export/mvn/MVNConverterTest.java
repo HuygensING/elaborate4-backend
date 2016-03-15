@@ -55,6 +55,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.base.Joiner;
@@ -633,16 +634,18 @@ public class MVNConverterTest {
   //               - een mvn:alinea-element
   //               - een mvn:onderschrift, mvn:opschrift
   //               - het einde van de tekst
-  //  @Ignore
+  @Ignore
   @Test
   public void testPoezieConversie_LineGroupEndsAtEndOfText() {
     Annotation annotation = mockAnnotationOfType(POEZIE);
-    String body = "<body>pre "//
+    Annotation tekstBeginAnnotation = mockAnnotationOfType(TEKSTBEGIN);
+    Annotation tekstEindeAnnotation = mockAnnotationOfType(TEKSTEINDE);
+    String body = "<body><ab id=\"2\"/>pre "//
         + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
-        + " post</body>";
+        + " post<ab id=\"3\"/></body>";
     String expected = "pre \n"// 
         + "      <lg> post</lg>\n";
-    assertConversion(body, mockData(1, annotation), expected);
+    assertConversion(body, mockData(1, annotation, 2, tekstBeginAnnotation, 3, tekstEindeAnnotation), expected);
   }
 
   //  @Ignore
@@ -1018,6 +1021,16 @@ public class MVNConverterTest {
     annotationData.type = annotation2.getAnnotationType().getName();
     conversionData.getAnnotationIndex().put(annotationNo2, annotationData);
     return conversionData;
+  }
+
+  private MVNConversionData mockData(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2, int annotationNo3, Annotation annotation3) {
+    MVNConversionData conversionData = mockData(annotationNo1, annotation1, annotationNo2, annotation2);
+    AnnotationData annotationData = new AnnotationData();
+    annotationData.body = annotation3.getBody();
+    annotationData.type = annotation3.getAnnotationType().getName();
+    conversionData.getAnnotationIndex().put(annotationNo3, annotationData);
+    return conversionData;
+
   }
 
   private void assertConversion(String body, MVNConversionData data, String expected) {

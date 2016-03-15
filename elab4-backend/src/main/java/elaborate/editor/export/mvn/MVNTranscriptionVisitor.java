@@ -584,6 +584,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.addLiteral("\n" + indent());
       context.addOpenTag("lg");
+      //      currentLineInfo.preTags = "\n<lg>" + currentLineInfo.preTags;
       inLineGroup = true;
     }
   }
@@ -730,6 +731,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       context.addLiteral("\n" + indent());
       context.addCloseTag(element);
       currentLineInfo.postTags = currentLineInfo.postTags + context.closeLayer();
+      closeOpenLineGroup(context);
     }
   }
 
