@@ -86,7 +86,7 @@ public class MVNConverter {
         + "  e.name as name,"//
         + "  m.data as entry_order,"//
         + "  t.body as transcription,"//
-        + "  f.zoomable_url"//
+        + "  f.filename"//
         + " from project_entries e"//
         + "   left outer join project_entry_metadata_items m on (e.id = m.project_entry_id and m.field='order')"//
         + "   left outer join transcriptions t on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//

@@ -171,6 +171,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public Traversal leaveElement(final Element e, final XmlContext c) {
       closeOpenParagraph(c);
       closeOpenLineGroup(c);
+      currentPageBreak = "";
       return Traversal.NEXT;
     }
 
@@ -198,9 +199,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       super.leaveElement(element, context);
       context.addLiteral("\n");
       currentPageBreak = context.closeLayer();
-      if (inText()) {
-        addPageBreak(context);
-      }
+      //      if (inText()) {
+      //      addPageBreak(context);
+      //      }
       return Traversal.NEXT;
     }
 
@@ -250,6 +251,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public Traversal leaveElement(final Element element, final XmlContext context) {
       String line = context.closeLayer();
       context.addLiteral(currentLineInfo.preTags);
+      context.addLiteral(currentPageBreak);
+      currentPageBreak = "";
       if (currentLineInfo.witregel) {
         context.addLiteral(indent());
         context.addEmptyElementTag("lb");
