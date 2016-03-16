@@ -62,7 +62,7 @@ public class AnnotatedTextRange {
           char character = text.charAt(i);
           tpi = new TextPositionInfo(character, elementsToClose, elementsToOpen);
         } else {
-          tpi = new TextPositionInfo(elementsToClose, elementsToOpen);
+          tpi = new TextPositionInfo(elementsToClose);
         }
         i++;
         return tpi;
@@ -142,11 +142,11 @@ public class AnnotatedTextRange {
       this.hasCharacter = true;
     }
 
-    public TextPositionInfo(List<Element> closingElements, List<Element> openingElements) {
-      this.character = '\0';
+    public TextPositionInfo(List<Element> closingElements) {
       this.closingElements = closingElements;
-      this.openingElements = openingElements;
       this.hasCharacter = false;
+      this.character = '\0';
+      this.openingElements = Collections.emptyList();
     }
 
     public char getCharacter() {
