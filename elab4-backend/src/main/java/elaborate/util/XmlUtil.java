@@ -25,6 +25,7 @@ package elaborate.util;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +45,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.google.common.collect.Sets;
 
 import nl.knaw.huygens.Log;
+import nl.knaw.huygens.tei.Element;
 
 public class XmlUtil {
   private static final String XML_CLOSE_TAG = "</xml>";
@@ -158,6 +160,27 @@ public class XmlUtil {
       annotationNos.add(matcher.group(1));
     }
     return annotationNos;
+  }
+
+  public static String closingTag(Element element) {
+    return closingTag(element.getName());
+  }
+
+  public static String openingTag(Element element) {
+    StringBuilder b = new StringBuilder("<").append(element.getName());
+    Set<Entry<String, String>> entrySet = element.getAttributes().entrySet();
+    for (Entry<String, String> entry : entrySet) {
+      b.append(" ").append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"");
+    }
+    return b.append(">").toString();
+  }
+
+  public static String closingTag(String name) {
+    return "</" + name + ">";
+  }
+
+  public static String openingTag(String name) {
+    return "<" + name + ">";
   }
 
   //-- private methods --//

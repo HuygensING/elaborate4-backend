@@ -81,7 +81,7 @@ public class MVNConverter {
     final MVNConversionData conversionData = new MVNConversionData();
     final EntityManager entityManager = HibernateUtil.beginTransaction();
 
-    final String transcriptionSQL = "select"//
+    final String transcriptionSQL = ("select"//
         + "  e.id as id,"//
         + "  e.name as name,"//
         + "  m.data as entry_order,"//
@@ -92,7 +92,7 @@ public class MVNConverter {
         + "   left outer join transcriptions t on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
         + "   left outer join facsimiles f on (e.id = f.project_entry_id)"//
         + " where project_id=" + project_id//
-        + " order by entry_order, name".replaceAll(" +", " ");
+        + " order by entry_order, name").replaceAll(" +", " ");
     final Query transcriptionQuery = entityManager.createNativeQuery(transcriptionSQL);
     status.addLogline("collecting transcription data");
     final List<Object[]> transcriptions = transcriptionQuery.getResultList();
@@ -105,13 +105,12 @@ public class MVNConverter {
         final Integer id = (Integer) transcriptionData[0];
         entryData.id = String.valueOf(id);
         entryData.name = (String) transcriptionData[1];
-        //      String order = (String) transcription[2];
         entryData.body = (String) transcriptionData[3];
         entryData.facs = (String) transcriptionData[4];
         conversionData.getEntryDataList().add(entryData);
       }
 
-      final String annotationSQL = "select"//
+      final String annotationSQL = ("select"//
           + "   a.annotation_no as annotation_num,"//
           + "   at.name as annotation_type,"//
           + "   a.body as annotation_body"//
@@ -123,7 +122,7 @@ public class MVNConverter {
           + "     on (t.id = a.transcription_id)"//
           + "   on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
           + " where project_id=" + project_id//
-          + " order by annotation_num;".replaceAll(" +", " ");
+          + " order by annotation_num;").replaceAll(" +", " ");
       final Query annotationQuery = entityManager.createNativeQuery(annotationSQL);
       status.addLogline("collecting annotation data");
       final List<Object[]> annotations = annotationQuery.getResultList();
