@@ -9,11 +9,6 @@ public class RangeAnnotation {
   private Element element;
   private int startOffset;
   private int endOffset;
-  private final int order;
-
-  public RangeAnnotation(int order) {
-    this.order = order;
-  }
 
   public Element getElement() {
     return element;
@@ -44,11 +39,7 @@ public class RangeAnnotation {
 
   @Override
   public String toString() {
-    return "RangeAnnotation(" + order + ", " + element + ", " + startOffset + " - " + endOffset + ")";
-  }
-
-  public int getOrder() {
-    return order;
+    return "RangeAnnotation(" + element + ", " + startOffset + " - " + endOffset + ")";
   }
 
   @Override
