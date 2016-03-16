@@ -170,9 +170,32 @@ public class XmlUtil {
     StringBuilder b = new StringBuilder("<").append(element.getName());
     Set<Entry<String, String>> entrySet = element.getAttributes().entrySet();
     for (Entry<String, String> entry : entrySet) {
-      b.append(" ").append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"");
+      b.append(" ").append(entry.getKey()).append("=\"");
+      appendAttributeValue(b, entry.getValue());
+      b.append("\"");
     }
     return b.append(">").toString();
+  }
+
+  private static void appendAttributeValue(StringBuilder builder, String value) {
+    int n = value.length();
+    for (int i = 0; i < n; i++) {
+      char c = value.charAt(i);
+      switch (c) {
+        case '<':
+          builder.append("&lt;");
+          break;
+        case '>':
+          builder.append("&gt;");
+          break;
+        case '&':
+          builder.append("&amp;");
+          break;
+        default:
+          builder.append(c);
+          break;
+      }
+    }
   }
 
   public static String closingTag(String name) {
