@@ -89,7 +89,15 @@ public class AnnotatedTextRange {
   }
 
   public void joinAdjacentAnnotations() {
-
+    Iterator<TextPositionInfo> iterator = iterator();
+    while (iterator.hasNext()) {
+      TextPositionInfo tpi = iterator.next();
+      List<Element> closingElements = tpi.getClosingElements();
+      List<Element> openingElements = tpi.getOpeningElements();
+      if (closingElements.size() > 0 && openingElements.size() > 0) {
+        // TODO: implement!
+      }
+    }
   }
 
   void addOpenElements(StringBuilder b, int i) {
