@@ -154,28 +154,19 @@ public class MVNConverter {
       String transcriptionBody = transcriptionBody(entryData);
       validateTranscriptionContainsNoEmptyLines(transcriptionBody, result, entryData.id);
       editionTextBuilder//
-          .append("\n<pb n=\"")//
-          .append(entryData.name)//
-          .append("\" xml:id=\"")//
-          .append(pageId)//
-          .append("\" facs=\"")//
-          .append(entryData.facs)//
-          .append("\" _entryId=\"")//
-          .append(entryData.id)//
-          .append("\"/>\n")//
-          .append("<lb/>")//
-          .append(transcriptionBody.replace("\n", "<le/>\n<lb/>"))//
-          .append("<le/>");
+          .append("\n<entry n=\"").append(entryData.name).append("\" xml:id=\"").append(pageId).append("\" facs=\"").append(entryData.facs).append("\" _entryId=\"").append(entryData.id).append("\">\n")//
+          .append(transcriptionBody)//
+          .append("</entry>");
     }
 
-    final String xml = "<body>" + editionTextBuilder.toString().replace("<lb/><le/>", "").replace("\n\n", "\n") + "</body>";
-    final String repairedXml = repairAnnotationHierarchy(xml);
-    final String cooked = replaceAnnotationMilestones(repairedXml);
-    validateTextNums(cooked, result);
-    if (DEBUG) {
-      outputFiles(xml, cooked);
-    }
-    final String tei = toTei(repairedXml, result);
+    final String xml = editionTextBuilder.append("</body>").toString();
+    //    final String repairedXml = repairAnnotationHierarchy(xml);
+    //    final String cooked = replaceAnnotationMilestones(repairedXml);
+    //    validateTextNums(cooked, result);
+    //    if (DEBUG) {
+    //      outputFiles(xml, cooked);
+    //    }
+    final String tei = toTei(xml, result);
     result.setBody(tei);
     Log.info("tei={}", tei);
     String fullTEI = result.getTEI();
@@ -344,6 +335,16 @@ public class MVNConverter {
   }
 
   String toTei(final String xml, final MVNConversionResult result) {
+    Log.info("xml={}", xml);
+    final Document document = Document.createFromXml(xml, false);
+    ParseResult parseresult = new ParseResult();
+    final AnnotatedTranscriptionVisitor visitor = new AnnotatedTranscriptionVisitor(parseresult);
+    document.accept(visitor);
+
+    return visitor.getContext().getResult();
+  }
+
+  String toTei0(final String xml, final MVNConversionResult result) {
     final MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result, data.getAnnotationIndex(), data.getDeepestTextNums());
     Log.info("xml={}", xml);
 

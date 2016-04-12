@@ -67,6 +67,9 @@ public class AnnotatedTextRange {
         i++;
         return tpi;
       }
+
+      @Override
+      public void remove() {}
     };
   }
 
