@@ -173,7 +173,11 @@ public class MVNConverter {
     String fullTEI = result.getTEI();
     ValidationResult validateTEI = MVNValidator.validateTEI(fullTEI);
     if (!validateTEI.isValid()) {
-      result.addError("", "Gegenereerde TEI is niet valide:<br>" + validateTEI.getMessage() + "<br>\n tei:<br>\n" + StringEscapeUtils.escapeHtml(fullTEI).replaceAll("\n", "<br>\n"));
+      result.addError("",
+          "Gegenereerde TEI is niet valide:\n"//
+              + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
+              + " TEI:\n<pre>" + StringEscapeUtils.escapeHtml(fullTEI) + "</pre>"//
+      );
     }
     //    for (ProjectEntry entry : project.getProjectEntries()) {
     //      MVNFolium page = new MVNFolium();
