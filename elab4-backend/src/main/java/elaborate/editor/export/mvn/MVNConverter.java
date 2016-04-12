@@ -141,7 +141,7 @@ public class MVNConverter {
     return conversionData;
   }
 
-  public MVNConversionResult convert() {
+  public MVNConversionResult convert1() {
     final MVNConversionResult result = new MVNConversionResult(project, status);
     if (!onlyTextLayerIsDiplomatic()) {
       result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
@@ -160,13 +160,56 @@ public class MVNConverter {
     }
 
     final String xml = editionTextBuilder.append("</body>").toString();
-    //    final String repairedXml = repairAnnotationHierarchy(xml);
-    //    final String cooked = replaceAnnotationMilestones(repairedXml);
-    //    validateTextNums(cooked, result);
-    //    if (DEBUG) {
-    //      outputFiles(xml, cooked);
-    //    }
     final String tei = toTei(xml, result);
+    result.setBody(tei);
+    Log.info("tei={}", tei);
+    String fullTEI = result.getTEI();
+    ValidationResult validateTEI = MVNValidator.validateTEI(fullTEI);
+    if (!validateTEI.isValid()) {
+      result.addError("",
+          "Gegenereerde TEI is niet valide:\n"//
+              + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
+              + " TEI:\n<pre>" + StringEscapeUtils.escapeHtml(fullTEI) + "</pre>"//
+      );
+    }
+    return result;
+  }
+
+  public MVNConversionResult convert() {
+    final MVNConversionResult result = new MVNConversionResult(project, status);
+    if (!onlyTextLayerIsDiplomatic()) {
+      result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
+      return result;
+    }
+    final StringBuilder editionTextBuilder = new StringBuilder();
+    status.addLogline("joining transcriptions");
+    for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
+      final String pageId = result.getSigle() + "-pb-" + entryData.name;
+      String transcriptionBody = transcriptionBody(entryData);
+      validateTranscriptionContainsNoEmptyLines(transcriptionBody, result, entryData.id);
+      editionTextBuilder//
+          .append("\n<pb n=\"")//
+          .append(entryData.name)//
+          .append("\" xml:id=\"")//
+          .append(pageId)//
+          .append("\" facs=\"")//
+          .append(entryData.facs)//
+          .append("\" _entryId=\"")//
+          .append(entryData.id)//
+          .append("\"/>\n")//
+          .append("<lb/>")//
+          .append(transcriptionBody(entryData).replace("\n", "<le/>\n<lb/>"))//
+          .append("<le/>");
+    }
+
+    final String xml = "<body>" + editionTextBuilder.toString().replace("<lb/><le/>", "").replace("\n\n", "\n") + "</body>";
+    final String repairedXml = repairAnnotationHierarchy(xml);
+    final String cooked = replaceAnnotationMilestones(repairedXml);
+    validateTextNums(cooked, result);
+    if (DEBUG) {
+      outputFiles(xml, cooked);
+    }
+    final String tei = toTei(repairedXml, result);
     result.setBody(tei);
     Log.info("tei={}", tei);
     String fullTEI = result.getTEI();
@@ -334,7 +377,7 @@ public class MVNConverter {
     Log.info("body=[\n{}\n]", page.getBody());
   }
 
-  String toTei(final String xml, final MVNConversionResult result) {
+  String toTei1(final String xml, final MVNConversionResult result) {
     Log.info("xml={}", xml);
     final Document document = Document.createFromXml(xml, false);
     ParseResult parseresult = new ParseResult();
@@ -344,7 +387,7 @@ public class MVNConverter {
     return visitor.getContext().getResult();
   }
 
-  String toTei0(final String xml, final MVNConversionResult result) {
+  String toTei(final String xml, final MVNConversionResult result) {
     final MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result, data.getAnnotationIndex(), data.getDeepestTextNums());
     Log.info("xml={}", xml);
 
