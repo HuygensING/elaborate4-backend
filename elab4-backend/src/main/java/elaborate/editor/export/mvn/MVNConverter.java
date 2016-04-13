@@ -24,6 +24,7 @@ package elaborate.editor.export.mvn;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -141,25 +142,30 @@ public class MVNConverter {
     return conversionData;
   }
 
-  public MVNConversionResult convert1() {
+  public MVNConversionResult convert() {
     final MVNConversionResult result = new MVNConversionResult(project, status);
     if (!onlyTextLayerIsDiplomatic()) {
       result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
       return result;
     }
-    final StringBuilder editionTextBuilder = new StringBuilder();
+
     status.addLogline("joining transcriptions");
+    final StringBuilder editionTextBuilder = new StringBuilder("<body>");
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
       final String pageId = result.getSigle() + "-pb-" + entryData.name;
       String transcriptionBody = transcriptionBody(entryData);
       validateTranscriptionContainsNoEmptyLines(transcriptionBody, result, entryData.id);
       editionTextBuilder//
-          .append("\n<entry n=\"").append(entryData.name).append("\" xml:id=\"").append(pageId).append("\" facs=\"").append(entryData.facs).append("\" _entryId=\"").append(entryData.id).append("\">\n")//
-          .append(transcriptionBody)//
+          .append("<entry n=\"").append(entryData.name).append("\" xml:id=\"").append(pageId).append("\" facs=\"").append(entryData.facs).append("\" _entryId=\"").append(entryData.id).append("\">")//
+          .append("<lb/>")//
+          .append(transcriptionBody.replaceAll("\\s*\n", "<le/><lb/>"))//
+          .append("<le/>")//
           .append("</entry>");
     }
-
-    final String xml = editionTextBuilder.append("</body>").toString();
+    final String xml = editionTextBuilder.append("</body>").toString().replace("<lb/><le/>", "");
+    if (DEBUG) {
+      outputFiles(xml, "");
+    }
     final String tei = toTei(xml, result);
     result.setBody(tei);
     Log.info("tei={}", tei);
@@ -175,7 +181,7 @@ public class MVNConverter {
     return result;
   }
 
-  public MVNConversionResult convert() {
+  public MVNConversionResult convert0() {
     final MVNConversionResult result = new MVNConversionResult(project, status);
     if (!onlyTextLayerIsDiplomatic()) {
       result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
@@ -292,8 +298,12 @@ public class MVNConverter {
 
   private void outputFiles(final String xml, final String cooked) {
     try {
-      FileUtils.write(new File("out/rawbody.xml"), xml);
-      FileUtils.write(new File("out/cookedbody.xml"), cooked);
+      String formatted = xml//
+          .replace("<entry", "\n  <entry")//
+          .replace("</entry>", "\n  </entry>\n")//
+          .replace("<lb/>", "\n    <lb/>");
+      FileUtils.write(new File("out/raw-formatted-body.xml"), formatted);
+      //      FileUtils.write(new File("out/cooked-body.xml"), cooked);
     } catch (final IOException e) {
       e.printStackTrace();
     }
@@ -341,9 +351,9 @@ public class MVNConverter {
       Log.info(rawBody);
     }
     return transcriptionHiearchyFixer.fix(rawBody)//
-        //    return rawBody//
         .replace("</i><i>", "")//
         .replace("<body>", "")//
+        .replace("<body/>", "")//
         .replace("</body>", "");
   }
 
@@ -377,17 +387,34 @@ public class MVNConverter {
     Log.info("body=[\n{}\n]", page.getBody());
   }
 
-  String toTei1(final String xml, final MVNConversionResult result) {
+  String toTei(final String xml, final MVNConversionResult result) {
     Log.info("xml={}", xml);
     final Document document = Document.createFromXml(xml, false);
     ParseResult parseresult = new ParseResult();
-    final AnnotatedTranscriptionVisitor visitor = new AnnotatedTranscriptionVisitor(parseresult);
+    final AnnotatedTranscriptionVisitor visitor = new AnnotatedTranscriptionVisitor(data.getAnnotationIndex(), parseresult);
     document.accept(visitor);
-
-    return visitor.getContext().getResult();
+    parseresult.index();
+    StringBuilder teiBuilder = new StringBuilder();
+    Iterator<AnnotatedTextSegment> iterator = parseresult.getAnnotatedTextSegmentIterator();
+    while (iterator.hasNext()) {
+      AnnotatedTextSegment annotatedTextSegment = iterator.next();
+      Log.info("textSegment= {}", annotatedTextSegment);
+      for (XmlAnnotation xmlAnnotation : annotatedTextSegment.getOpeningAnnotations()) {
+        if (xmlAnnotation.getName().equals("l")) {
+          teiBuilder.append("<l>");
+        }
+      }
+      teiBuilder.append(annotatedTextSegment.getText());
+      for (XmlAnnotation xmlAnnotation : annotatedTextSegment.getClosingAnnotations()) {
+        if (xmlAnnotation.getName().equals("l")) {
+          teiBuilder.append("</l>\n");
+        }
+      }
+    }
+    return teiBuilder.toString();
   }
 
-  String toTei(final String xml, final MVNConversionResult result) {
+  String toTei0(final String xml, final MVNConversionResult result) {
     final MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result, data.getAnnotationIndex(), data.getDeepestTextNums());
     Log.info("xml={}", xml);
 
