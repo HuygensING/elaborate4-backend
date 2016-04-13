@@ -167,6 +167,10 @@ public class XmlUtil {
   }
 
   public static String openingTag(Element element) {
+    return openTagBuilder(element).append(">").toString();
+  }
+
+  private static StringBuilder openTagBuilder(Element element) {
     StringBuilder b = new StringBuilder("<").append(element.getName());
     Set<Entry<String, String>> entrySet = element.getAttributes().entrySet();
     for (Entry<String, String> entry : entrySet) {
@@ -174,7 +178,11 @@ public class XmlUtil {
       appendAttributeValue(b, entry.getValue());
       b.append("\"");
     }
-    return b.append(">").toString();
+    return b;
+  }
+
+  public static String milestoneTag(Element element) {
+    return openTagBuilder(element).append("/>").toString();
   }
 
   private static void appendAttributeValue(StringBuilder builder, String value) {

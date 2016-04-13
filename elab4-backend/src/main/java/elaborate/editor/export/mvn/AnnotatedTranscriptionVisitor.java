@@ -1,9 +1,11 @@
 package elaborate.editor.export.mvn;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
@@ -22,15 +24,18 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   private static boolean lastNodeWasText = false;
   private final Stack<Integer> startIndexStack = new Stack<Integer>();
   private final Stack<Element> elementStack = new Stack<Element>();
+  public static Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
+  private static String sigle;
   private static ParseResult result;
   private static final Map<String, Integer> annotationStartIndexMap = Maps.newHashMap();
   private static Map<Integer, AnnotationData> annotationIndex;
   private static int lineStartIndex = 0;
 
-  public AnnotatedTranscriptionVisitor(Map<Integer, AnnotationData> annotationIndex, ParseResult result) {
+  public AnnotatedTranscriptionVisitor(Map<Integer, AnnotationData> annotationIndex, ParseResult result, String sigle) {
     super(new XmlContext());
     AnnotatedTranscriptionVisitor.annotationIndex = annotationIndex;
     AnnotatedTranscriptionVisitor.result = result;
+    AnnotatedTranscriptionVisitor.sigle = sigle;
     setTextHandler(new TextSegmentHandler());
     setDefaultElementHandler(this);
     addElementHandler(new LineBeginsHandler(), "lb");
@@ -61,6 +66,8 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     return Traversal.NEXT;
   }
 
+  static final List<String> annotatedTextToIgnore = ImmutableList.<String> of("‡", "¤");
+
   public static class TextSegmentHandler extends XmlTextHandler<XmlContext> {
     @Override
     public Traversal visitText(Text text, XmlContext context) {
@@ -69,7 +76,9 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
         String segment = result.getTextSegments().get(currentTextSegmentIndex());
         result.getTextSegments().set(currentTextSegmentIndex(), segment + filteredText);
       } else {
-        result.getTextSegments().add(filteredText);
+        if (!annotatedTextToIgnore.contains(filteredText)) {
+          result.getTextSegments().add(filteredText);
+        }
       }
       lastNodeWasText = true;
       return Traversal.NEXT;
@@ -90,12 +99,39 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
         AnnotationData annotationData = annotationIndex.get(Integer.valueOf(id));
         if (annotationData == null) {
           Log.error("no annotationData for {}", id);
+
         } else {
-          Map<String, String> attributes = ImmutableMap.of("body", annotationData.body.trim());
-          XmlAnnotation xmlAnnotation = new XmlAnnotation(annotationData.type, attributes, 0)//
-              .setFirstSegmentIndex(annotationStartIndexMap.get(id))//
-              .setLastSegmentIndex(currentTextSegmentIndex);
-          result.getXmlAnnotations().add(xmlAnnotation);
+          String annotationBody = annotationData.body.trim();
+          if (MVNAnnotationType.TEKSTBEGIN.getName().equals(annotationData.type)) {
+            String n = annotationBody.replaceFirst(";.*$", "");
+            Map<String, String> attributes = ImmutableMap.of("n", n, "xml:id", sigle + n);
+            XmlAnnotation tekstAnnotation = new XmlAnnotation("tekst", attributes, 0)//
+                .setFirstSegmentIndex(currentTextSegmentIndex + 1);
+            textRangeAnnotationIndex.put(n, tekstAnnotation);
+
+          } else if (MVNAnnotationType.TEKSTEINDE.getName().equals(annotationData.type)) {
+            String n = annotationBody;
+            XmlAnnotation tekstAnnotation = textRangeAnnotationIndex.remove(n);
+            if (tekstAnnotation != null) {
+              tekstAnnotation.setLastSegmentIndex(currentTextSegmentIndex);
+              result.getXmlAnnotations().add(tekstAnnotation);
+              //              if (result.isTextGroup(n)) {
+              //                XmlAnnotation poetryAnnotation = new XmlAnnotation(MVNAnnotationType.POEZIE.getName(), tekstAnnotation.getAttributes(), 1)//
+              //                    .setFirstSegmentIndex(tekstAnnotation.getFirstSegmentIndex())//
+              //                    .setLastSegmentIndex(tekstAnnotation.getLastSegmentIndex());
+              //                result.getXmlAnnotations().add(poetryAnnotation);
+              //              }
+            } else {
+              Log.error("tekst {} was not opened", n);
+            }
+
+          } else {
+            Map<String, String> attributes = ImmutableMap.of("body", annotationBody);
+            XmlAnnotation xmlAnnotation = new XmlAnnotation(annotationData.type, attributes, 0)//
+                .setFirstSegmentIndex(annotationStartIndexMap.get(id))//
+                .setLastSegmentIndex(currentTextSegmentIndex);
+            result.getXmlAnnotations().add(xmlAnnotation);
+          }
         }
       }
       return Traversal.STOP;
