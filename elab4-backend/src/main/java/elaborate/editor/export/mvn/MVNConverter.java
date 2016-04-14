@@ -246,11 +246,7 @@ public class MVNConverter {
           .replace("</entry>", "\n  </entry>\n")//
           .replace("<lb/>", "\n    <lb/>");
       FileUtils.write(new File("out/raw-formatted-body.xml"), formatted);
-      FileUtils.write(new File("out/cooked-body.xml"),
-          cooked//
-              .replace("<entry", "\n  <entry")//
-              .replace("</entry>", "\n  </entry>\n")//
-              .replace("<lb/>", "\n    <lb/>"));
+      FileUtils.write(new File("out/cooked-body.xml"), cooked);
     } catch (final IOException e) {
       e.printStackTrace();
     }
@@ -283,7 +279,9 @@ public class MVNConverter {
             .replace(originalAnnotationEnd(annotationNoString), "</" + type + ">");
       }
     }
-    return cooked;
+    return cooked.replace("<entry", "\n  <entry")//
+        .replace("</entry>", "\n  </entry>\n")//
+        .replace("<lb/>", "\n    <lb/>");
   }
 
   private static String originalAnnotationBegin(final String annotationNo) {
