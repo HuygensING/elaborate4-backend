@@ -43,6 +43,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     addElementHandler(new LineBeginsHandler(), "lb");
     addElementHandler(new LineEndsHandler(), "le");
     addElementHandler(new AnnotationHandler(), "ab", "ae");
+    lineStartIndex = 0;
   }
 
   @Override

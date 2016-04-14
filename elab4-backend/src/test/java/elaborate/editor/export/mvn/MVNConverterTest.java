@@ -744,7 +744,12 @@ public class MVNConverterTest {
   @Test
   public void testInspringenConversie() {
     Annotation annotation = mockAnnotationOfType(INSPRINGEN);
-    //
+    String body = "<body>"//
+        + "<lb/><ab id=\"1\"/>¤<ae id=\"1\"/>Lorem ipsum...<le/>"//
+        + "</body>";
+
+    String expected = "\n<lb n=\"1\" xml:id=\"-lb-1\" rend=\"indent\"/>Lorem ipsum...";
+    assertConversion(body, mockData(1, annotation), expected);
   }
 
   //  mvn:tekstbegin, mvn:teksteinde
@@ -812,7 +817,6 @@ public class MVNConverterTest {
   @Test
   public void testKolomConversie() {
     Annotation annotation = mockAnnotationOfType(KOLOM);
-    //
   }
 
   //  mvn:regelnummering (tekst)
@@ -833,7 +837,6 @@ public class MVNConverterTest {
   @Test
   public void testGebruikersNotitieConversie() {
     Annotation annotation = mockAnnotationOfType(GEBRUIKERSNOTITIE);
-    //
   }
 
   //  mvn:incipit

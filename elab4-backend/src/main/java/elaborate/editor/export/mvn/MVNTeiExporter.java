@@ -42,6 +42,7 @@ public class MVNTeiExporter {
   // opening annotations
   private static void handleOpeningAnnotations(StringBuilder teiBuilder, AnnotatedTextSegment annotatedTextSegment) {
     Multimap<String, XmlAnnotation> openingAnnotationIndex = indexXmlAnnotations(annotatedTextSegment.getOpeningAnnotations());
+    handleInspringen(openingAnnotationIndex.get(MVNAnnotationType.INSPRINGEN.getName()));
     handleRegelNummering(openingAnnotationIndex.get(MVNAnnotationType.REGELNUMMERING_BLAD.getName()));
     handleOpenTekst(teiBuilder, openingAnnotationIndex.get("tekst"));
     handleOpenPoezie(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.POEZIE.getName()));
@@ -67,6 +68,21 @@ public class MVNTeiExporter {
     handleOpenCijfers(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.CIJFERS.getName()));
     handleOpenLetters(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.LETTERS.getName()));
     handleOpenAfkorting(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.AFKORTING.getName()));
+  }
+
+  private static void handleInspringen(Collection<XmlAnnotation> collection) {
+    if (!collection.isEmpty()) {
+      context.indent = true;
+    }
+  }
+
+  private static void handleRegelNummering(Collection<XmlAnnotation> collection) {
+    if (!collection.isEmpty()) {
+      XmlAnnotation xmlAnnotation = collection.iterator().next();
+      String customLineNumber = xmlAnnotation.getAttributes().get("body");
+      Log.info("{}: n='{}'", MVNAnnotationType.REGELNUMMERING_BLAD.getName(), customLineNumber);
+      context.foliumLineNumber = customLineNumber;
+    }
   }
 
   private static void handleOpenLinkerMargeKolom(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
@@ -119,15 +135,6 @@ public class MVNTeiExporter {
     Element hi = new Element("hi").withAttribute("rend", "rubricated");
     for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
       teiBuilder.append(openingTag(hi));
-    }
-  }
-
-  private static void handleRegelNummering(Collection<XmlAnnotation> collection) {
-    if (!collection.isEmpty()) {
-      XmlAnnotation xmlAnnotation = collection.iterator().next();
-      String customLineNumber = xmlAnnotation.getAttributes().get("body");
-      Log.info("{}: n='{}'", MVNAnnotationType.REGELNUMMERING_BLAD.getName(), customLineNumber);
-      context.foliumLineNumber = customLineNumber;
     }
   }
 
@@ -197,12 +204,16 @@ public class MVNTeiExporter {
     if (!collection.isEmpty()) {
       String id = context.foliumId + "-lb-" + context.foliumLineNumber;
       Element lb = new Element("lb").withAttribute("n", String.valueOf(context.foliumLineNumber)).withAttribute("xml:id", id);
+      if (context.indent) {
+        lb.setAttribute("rend", "indent");
+      }
       teiBuilder.append(NL).append(milestoneTag(lb));
       if (context.inPoetry) {
         String lId = context.foliumId + "-l-" + context.textLineNumber;
         Element l = new Element("l").withAttribute("n", String.valueOf(context.textLineNumber)).withAttribute("xml:id", lId);
         teiBuilder.append(openingTag(l));
       }
+      context.indent = false;
     }
   }
 
@@ -473,13 +484,14 @@ public class MVNTeiExporter {
   }
 
   private static class Context {
+    public boolean indent = false;
     public boolean countAsTextLine = true;
     public boolean inParagraph = false;
     public boolean inPoetry = false;
-    public String text;
-    public String foliumId;
-    public String foliumLineNumber = "1";
     public int textLineNumber = 1;
+    public String foliumLineNumber = "1";
+    public String foliumId = "";
+    public String text = "";
 
     public void incrementFoliumLineNumber() {
       Integer asInt = Integer.valueOf(foliumLineNumber.replaceAll("[^0-9]", ""));
