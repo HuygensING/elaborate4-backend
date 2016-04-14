@@ -1,6 +1,7 @@
 package elaborate.editor.export.mvn;
 
 import static elaborate.util.XmlUtil.extractAnnotationNos;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -30,8 +31,8 @@ import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
 
 public class MVNConverter {
-  //  private static final boolean DEBUG = false; // for release
-  private static final boolean DEBUG = true; // for testing, don't release with DEBUG=true!!!
+  private static final boolean DEBUG = false; // for release
+  //  private static final boolean DEBUG = true; // for testing, don't release with DEBUG=true!!!
   private final Project project;
   private final MVNConversionData data;
   private final Status status;
@@ -140,10 +141,11 @@ public class MVNConverter {
     String fullTEI = result.getTEI();
     ValidationResult validateTEI = MVNValidator.validateTEI(fullTEI);
     if (!validateTEI.isValid()) {
-      result.addError("", "Gegenereerde TEI is niet valide:\n"//
-          + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
-      //              + " TEI:\n<pre>" + escapeHtml4(fullTEI) + "</pre>"//
-      //              + " DEBUG:\n<pre>" + escapeHtml4(cooked) + "</pre>"//
+      result.addError("",
+          "Gegenereerde TEI is niet valide:\n"//
+              + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
+              + " TEI:\n<pre>" + escapeHtml4(fullTEI) + "</pre>"//
+              + " DEBUG:\n<pre>" + escapeHtml4(cooked) + "</pre>"//
       );
     }
     return result;
@@ -245,7 +247,8 @@ public class MVNConverter {
           .replace("<lb/>", "\n    <lb/>");
       FileUtils.write(new File("out/raw-formatted-body.xml"), formatted);
       FileUtils.write(new File("out/cooked-body.xml"),
-          cooked.replace("<entry", "\n  <entry")//
+          cooked//
+              .replace("<entry", "\n  <entry")//
               .replace("</entry>", "\n  </entry>\n")//
               .replace("<lb/>", "\n    <lb/>"));
     } catch (final IOException e) {
