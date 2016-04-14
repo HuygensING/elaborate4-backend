@@ -259,7 +259,6 @@ public class MVNConverter {
     final Document document = Document.createFromXml(xml, true);
     final AnnotatedTranscriptionVisitor visitor = new AnnotatedTranscriptionVisitor(data.getAnnotationIndex(), parseresult, result.getSigle());
     document.accept(visitor);
-    parseresult.fixImplicitRanges();
     parseresult.index();
     return MVNTeiExporter.from(parseresult);
   }

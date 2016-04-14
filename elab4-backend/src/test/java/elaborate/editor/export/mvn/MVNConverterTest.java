@@ -745,10 +745,14 @@ public class MVNConverterTest {
   public void testInspringenConversie() {
     Annotation annotation = mockAnnotationOfType(INSPRINGEN);
     String body = "<body>"//
+        + "<entry n=\"36v\" xml:id=\"VDS-pb-36v\">"//
         + "<lb/><ab id=\"1\"/>¤<ae id=\"1\"/>Lorem ipsum...<le/>"//
+        + "</entry>"//
         + "</body>";
 
-    String expected = "\n<lb n=\"1\" xml:id=\"-lb-1\" rend=\"indent\"/>Lorem ipsum...";
+    String expected = "\n"//
+        + "<pb xml:id=\"VDS-pb-36v\" n=\"36v\"/>\n"//
+        + "<lb n=\"1\" xml:id=\"VDS-pb-36v-lb-1\" rend=\"indent\"/>Lorem ipsum...";
     assertConversion(body, mockData(1, annotation), expected);
   }
 

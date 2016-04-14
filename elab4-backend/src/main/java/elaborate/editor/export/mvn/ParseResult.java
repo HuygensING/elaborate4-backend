@@ -30,7 +30,7 @@ public class ParseResult {
     return xmlAnnotations;
   }
 
-  public void fixImplicitRanges() {
+  public void index() {
     Collections.sort(xmlAnnotations);
     for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
       if ("tekst".equals(xmlAnnotation.getName())) {
@@ -48,13 +48,6 @@ public class ParseResult {
         }
       }
     }
-  }
-
-  public boolean isTextGroup(String tekstN) {
-    return !deepestTekstNs.contains(tekstN);
-  }
-
-  public void index() {
     Set<String> annotationNames = Sets.newTreeSet();
     for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
       openingAnnotationIndex.put(xmlAnnotation.getFirstSegmentIndex(), xmlAnnotation);
@@ -63,6 +56,10 @@ public class ParseResult {
     }
     Log.info("annotationNames = {}", annotationNames);
     indexed = true;
+  }
+
+  public boolean isTextGroup(String tekstN) {
+    return !deepestTekstNs.contains(tekstN);
   }
 
   public Iterator<AnnotatedTextSegment> getAnnotatedTextSegmentIterator() {
