@@ -260,7 +260,8 @@ public class MVNConverter {
     final AnnotatedTranscriptionVisitor visitor = new AnnotatedTranscriptionVisitor(data.getAnnotationIndex(), parseresult, result.getSigle());
     document.accept(visitor);
     parseresult.index();
-    return MVNTeiExporter.from(parseresult);
+    MVNTeiExporter teiExporter = new MVNTeiExporter(parseresult, result);
+    return teiExporter.export();
   }
 
   private String replaceAnnotationMilestones(final String xml) {
