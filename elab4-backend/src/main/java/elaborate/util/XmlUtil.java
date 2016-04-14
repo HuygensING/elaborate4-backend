@@ -185,6 +185,10 @@ public class XmlUtil {
     return openTagBuilder(element).append("/>").toString();
   }
 
+  public static String milestoneTag(String name) {
+    return milestoneTag(new Element(name));
+  }
+
   private static void appendAttributeValue(StringBuilder builder, String value) {
     int n = value.length();
     for (int i = 0; i < n; i++) {

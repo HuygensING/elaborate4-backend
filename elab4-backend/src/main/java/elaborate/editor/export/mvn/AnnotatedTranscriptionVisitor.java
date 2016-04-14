@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -101,8 +103,8 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
           Log.error("no annotationData for {}", id);
 
         } else {
-          String annotationBody = annotationData.body.trim();
           if (MVNAnnotationType.TEKSTBEGIN.getName().equals(annotationData.type)) {
+            String annotationBody = annotationData.body.trim();
             String n = annotationBody.replaceFirst(";.*$", "");
             Map<String, String> attributes = ImmutableMap.of("n", n, "xml:id", sigle + n);
             XmlAnnotation tekstAnnotation = new XmlAnnotation("tekst", attributes, 0)//
@@ -110,7 +112,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
             textRangeAnnotationIndex.put(n, tekstAnnotation);
 
           } else if (MVNAnnotationType.TEKSTEINDE.getName().equals(annotationData.type)) {
-            String n = annotationBody;
+            String n = annotationData.body.trim();
             XmlAnnotation tekstAnnotation = textRangeAnnotationIndex.remove(n);
             if (tekstAnnotation != null) {
               tekstAnnotation.setLastSegmentIndex(currentTextSegmentIndex);
@@ -126,7 +128,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
             }
 
           } else {
-            Map<String, String> attributes = ImmutableMap.of("body", annotationBody);
+            Map<String, String> attributes = ImmutableMap.of("body", StringUtils.defaultIfBlank(annotationData.body, ""));
             XmlAnnotation xmlAnnotation = new XmlAnnotation(annotationData.type, attributes, 0)//
                 .setFirstSegmentIndex(annotationStartIndexMap.get(id))//
                 .setLastSegmentIndex(currentTextSegmentIndex);

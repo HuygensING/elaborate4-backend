@@ -1,16 +1,21 @@
 package elaborate.editor.export.mvn;
 
+import static elaborate.util.XmlUtil.closingTag;
+import static elaborate.util.XmlUtil.milestoneTag;
+import static elaborate.util.XmlUtil.openingTag;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
-import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Element;
 
@@ -42,7 +47,79 @@ public class MVNTeiExporter {
     handleOpenPoezie(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.POEZIE.getName()));
     handleOpenAlinea(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ALINEA.getName()));
     handlePageBreak(teiBuilder, openingAnnotationIndex.get("entry"));
+    handleOpenLinkerMargeKolom(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.LINKERMARGEKOLOM.getName()));
+    handleOpenRechterMargeKolom(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.RECHTERMARGEKOLOM.getName()));
+    handleOpenOpschrift(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.OPSCHRIFT.getName()));
+    handleOpenOnderschrift(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONDERSCHRIFT.getName()));
+    handleOpenWitregel(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.WITREGEL.getName()));
     handleOpenRegel(teiBuilder, openingAnnotationIndex.get("l"));
+    handleOpenSub(teiBuilder, openingAnnotationIndex.get("sub"));
+    handleOpenSup(teiBuilder, openingAnnotationIndex.get("sup"));
+    handleOpenOnduidelijk(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONDUIDELIJK.getName()));
+    handleOpenDefect(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.DEFECT.getName()));
+    handleOpenDefect(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONLEESBAAR.getName()));// Onleesbaar hetzelfde behandeld als defect
+    handleOpenDoorhaling(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.DOORHALING.getName()));
+    handleOpenDoorhaling(teiBuilder, openingAnnotationIndex.get("strike"));
+    handleOpenItalic(teiBuilder, openingAnnotationIndex.get("i"));
+    handleOpenTekstKleurRood(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.TEKSTKLEUR_ROOD.getName()));
+    handleOpenTekstKleurRood(teiBuilder, openingAnnotationIndex.get("b"));
+    handleOpenOphogingRood(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.OPHOGING_ROOD.getName()));
+    handleOpenCijfers(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.CIJFERS.getName()));
+    handleOpenLetters(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.LETTERS.getName()));
+    handleOpenAfkorting(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.AFKORTING.getName()));
+  }
+
+  private static void handleOpenLinkerMargeKolom(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    Element note = new Element("note").withAttribute("place", "margin-left").withAttribute("type", "ms");
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag(note));
+    }
+  }
+
+  private static void handleOpenRechterMargeKolom(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    Element note = new Element("note").withAttribute("place", "margin-right").withAttribute("type", "ms");
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag(note));
+    }
+  }
+
+  private static void handleOpenDoorhaling(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag("del"));
+    }
+  }
+
+  private static void handleOpenItalic(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag("ex"));
+    }
+  }
+
+  private static void handleOpenCijfers(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    Element num = new Element("num").withAttribute("type", "roman");
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag(num));
+    }
+  }
+
+  private static void handleOpenLetters(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag("mentioned"));
+    }
+  }
+
+  private static void handleOpenTekstKleurRood(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    Element hi = new Element("hi").withAttribute("rend", "rubric");
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag(hi));
+    }
+  }
+
+  private static void handleOpenOphogingRood(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    Element hi = new Element("hi").withAttribute("rend", "rubricated");
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag(hi));
+    }
   }
 
   private static void handleRegelNummering(Collection<XmlAnnotation> collection) {
@@ -64,21 +141,26 @@ public class MVNTeiExporter {
         Element group = new Element("group")//
             .withAttribute("n", tekstN)//
             .withAttribute("xml:id", attributes.get("xml:id"));
-        teiBuilder.append(XmlUtil.openingTag(group));
+        teiBuilder.append(openingTag(group));
 
       } else {
         Element text = new Element("text")//
             .withAttribute("n", tekstN)//
             .withAttribute("xml:id", attributes.get("xml:id"));
-        teiBuilder.append(XmlUtil.openingTag(text)).append(XmlUtil.openingTag("body"));
+        teiBuilder.append(openingTag(text)).append(openingTag("body"));
+        //        openLineGroup(teiBuilder); // only for testing purposes
       }
     }
   }
 
+  private static void openLineGroup(StringBuilder teiBuilder) {
+    context.inPoetry = true;
+    teiBuilder.append(openingTag("lg"));
+  }
+
   private static void handleOpenPoezie(StringBuilder teiBuilder, Collection<XmlAnnotation> collection) {
     if (!collection.isEmpty()) {
-      context.inPoetry = true;
-      teiBuilder.append(XmlUtil.openingTag("lg"));
+      openLineGroup(teiBuilder);
     }
   }
 
@@ -101,7 +183,13 @@ public class MVNTeiExporter {
       addOptionalAttribute(pb, "facs", entryAttributes);
       teiBuilder//
           .append(NL)//
-          .append(XmlUtil.milestoneTag(pb));
+          .append(milestoneTag(pb));
+    }
+  }
+
+  private static void handleOpenWitregel(StringBuilder teiBuilder, Collection<XmlAnnotation> supAnnotations) {
+    for (XmlAnnotation xmlAnnotation : supAnnotations) {
+      teiBuilder.append(milestoneTag("lb"));
     }
   }
 
@@ -109,30 +197,204 @@ public class MVNTeiExporter {
     if (!collection.isEmpty()) {
       String id = context.foliumId + "-lb-" + context.foliumLineNumber;
       Element lb = new Element("lb").withAttribute("n", String.valueOf(context.foliumLineNumber)).withAttribute("xml:id", id);
-      teiBuilder.append(NL).append(XmlUtil.milestoneTag(lb));
+      teiBuilder.append(NL).append(milestoneTag(lb));
       if (context.inPoetry) {
         String lId = context.foliumId + "-l-" + context.textLineNumber;
         Element l = new Element("l").withAttribute("n", String.valueOf(context.textLineNumber)).withAttribute("xml:id", lId);
-        teiBuilder.append(XmlUtil.openingTag(l));
+        teiBuilder.append(openingTag(l));
       }
+    }
+  }
+
+  private static void handleOpenSub(StringBuilder teiBuilder, Collection<XmlAnnotation> supAnnotations) {
+    Element hi = new Element("hi").withAttribute("rend", "subscript");
+    for (XmlAnnotation xmlAnnotation : supAnnotations) {
+      teiBuilder.append(openingTag(hi));
+    }
+  }
+
+  private static void handleOpenSup(StringBuilder teiBuilder, Collection<XmlAnnotation> supAnnotations) {
+    Element hi = new Element("hi").withAttribute("rend", "superscript");
+    for (XmlAnnotation xmlAnnotation : supAnnotations) {
+      teiBuilder.append(openingTag(hi));
+    }
+  }
+
+  private static void handleOpenOnduidelijk(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    Element hi = new Element("unclear");
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag(hi));
+    }
+  }
+
+  private static void handleOpenDefect(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      Element gap = new Element("gap");
+      String annotationBody = xmlAnnotation.getAttributes().get("body");
+      if (StringUtils.isNumeric(annotationBody)) {
+        gap.setAttribute("unit", "chars");
+        gap.setAttribute("quantity", annotationBody);
+      }
+      teiBuilder.append(milestoneTag(gap));
+      context.text = "";// ignore annotated text 
+    }
+  }
+
+  private static void handleOpenOpschrift(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    openHeadOrCloser(teiBuilder, xmlAnnotations, "head");
+  }
+
+  private static void openHeadOrCloser(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, String name) {
+    Element head = new Element(name);
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(openingTag(head));
+      context.countAsTextLine = true;
+    }
+  }
+
+  private static void handleOpenOnderschrift(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    openHeadOrCloser(teiBuilder, xmlAnnotations, "closer");
+  }
+
+  private static void handleOpenAfkorting(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      String abbr = context.text;
+      String openSubstitute = "#i0#";
+      String closeSubstitute = "#i1#";
+      String expan = xmlAnnotation.getAttributes().get("body")//
+          .replaceAll("&nbsp;", " ")//
+          .replaceAll("<i[^>]*>", openSubstitute)//
+          .replace("</i>", closeSubstitute)//
+          .replaceAll("<[^>]*>", "")//
+          .replace(openSubstitute, "<ex>")//
+          .replace(closeSubstitute, "</ex>")//
+          ;
+
+      teiBuilder//
+          .append(openingTag("choice"))//
+          .append(openingTag("abbr"))//
+          .append(abbr)//
+          .append(closingTag("abbr"))//
+          .append(openingTag("expan"))//
+          .append(expan)//
+          .append(closingTag("expan"))//
+          .append(closingTag("choice"));
+      context.text = "";
     }
   }
 
   // closing annotations
   private static void handleClosingAnnotations(StringBuilder teiBuilder, AnnotatedTextSegment annotatedTextSegment) {
     Multimap<String, XmlAnnotation> closingAnnotationIndex = indexXmlAnnotations(annotatedTextSegment.getClosingAnnotations());
+    handleCloseLetters(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.LETTERS.getName()));
+    handleCloseCijfers(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.CIJFERS.getName()));
+    handleCloseOphogingRood(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.OPHOGING_ROOD.getName()));
+    handleCloseTekstKleurRood(teiBuilder, closingAnnotationIndex.get("b"));
+    handleCloseTekstKleurRood(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.TEKSTKLEUR_ROOD.getName()));
+    handleCloseDoorhaling(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.DOORHALING.getName()));
+    handleCloseDoorhaling(teiBuilder, closingAnnotationIndex.get("strike"));
+    handleCloseItalic(teiBuilder, closingAnnotationIndex.get("i"));
+    handleCloseOnduidelijk(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ONDUIDELIJK.getName()));
+    handleCloseSup(teiBuilder, closingAnnotationIndex.get("sup"));
+    handleCloseSub(teiBuilder, closingAnnotationIndex.get("sub"));
     handleCloseRegel(teiBuilder, closingAnnotationIndex);
+    handleCloseOpschrift(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.OPSCHRIFT.getName()));
+    handleCloseOnderschrift(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ONDERSCHRIFT.getName()));
     handleCloseAlinea(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ALINEA.getName()));
     handleClosePoezie(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.POEZIE.getName()));
+    handleClosePaleo(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.PALEOGRAFISCH.getName()));
+    handleCloseLinkerMargeKolom(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.LINKERMARGEKOLOM.getName()));
+    handleCloseRechterMargeKolom(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.RECHTERMARGEKOLOM.getName()));
     handleCloseTekst(teiBuilder, closingAnnotationIndex.get("tekst"));
+  }
+
+  private static void handleCloseLetters(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("mentioned"));
+    }
+  }
+
+  private static void handleCloseCijfers(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("num"));
+    }
+  }
+
+  private static void handleCloseDoorhaling(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("del"));
+    }
+  }
+
+  private static void handleCloseItalic(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("ex"));
+    }
+  }
+
+  private static void handleCloseLinkerMargeKolom(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("note"));
+    }
+  }
+
+  private static void handleCloseRechterMargeKolom(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("note"));
+    }
+  }
+
+  private static void handleCloseOphogingRood(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("hi"));
+    }
+  }
+
+  private static void handleCloseTekstKleurRood(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("hi"));
+    }
+  }
+
+  private static void handleCloseOnduidelijk(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag("unclear"));
+    }
+  }
+
+  private static void handleCloseOnderschrift(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    closeHeadOrCloser(teiBuilder, xmlAnnotations, "closer");
+  }
+
+  private static void closeHeadOrCloser(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, String name) {
+    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      teiBuilder.append(closingTag(name));
+      context.countAsTextLine = true;
+    }
+  }
+
+  private static void handleCloseOpschrift(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations) {
+    closeHeadOrCloser(teiBuilder, xmlAnnotations, "head");
+  }
+
+  private static void handleCloseSub(StringBuilder teiBuilder, Collection<XmlAnnotation> supAnnotations) {
+    for (XmlAnnotation xmlAnnotation : supAnnotations) {
+      teiBuilder.append(closingTag("hi"));
+    }
+  }
+
+  private static void handleCloseSup(StringBuilder teiBuilder, Collection<XmlAnnotation> supAnnotations) {
+    for (XmlAnnotation xmlAnnotation : supAnnotations) {
+      teiBuilder.append(closingTag("hi"));
+    }
   }
 
   private static void handleCloseRegel(StringBuilder teiBuilder, Multimap<String, XmlAnnotation> closingAnnotationIndex) {
     if (closingAnnotationIndex.containsKey("l")) {
       context.incrementFoliumLineNumber();
-      context.textLineNumber++;
+      context.incrementTextLineNumber();
       if (context.inPoetry) {
-        teiBuilder.append(XmlUtil.closingTag("l"));
+        teiBuilder.append(closingTag("l"));
       }
     }
   }
@@ -140,14 +402,34 @@ public class MVNTeiExporter {
   private static void handleCloseAlinea(StringBuilder teiBuilder, Collection<XmlAnnotation> collection) {
     if (!collection.isEmpty()) {
       context.inParagraph = false;
-      teiBuilder.append(XmlUtil.closingTag("p"));
+      teiBuilder.append(closingTag("p"));
     }
   }
 
   private static void handleClosePoezie(StringBuilder teiBuilder, Collection<XmlAnnotation> collection) {
     if (!collection.isEmpty()) {
       context.inPoetry = false;
-      teiBuilder.append(XmlUtil.closingTag("lg"));
+      teiBuilder.append(closingTag("lg"));
+    }
+  }
+
+  private static void handleClosePaleo(StringBuilder teiBuilder, Collection<XmlAnnotation> collection) {
+    for (XmlAnnotation xmlAnnotation : collection) {
+      Element note = new Element("note").withAttribute("type", "pc");
+      String openSubstitute = "#i0#";
+      String closeSubstitute = "#i1#";
+      String content = xmlAnnotation.getAttributes().get("body")//
+          .replaceAll("&nbsp;", " ")//
+          .replaceAll("<i[^>]*>", openSubstitute)//
+          .replace("</i>", closeSubstitute)//
+          .replaceAll("<[^>]*>", "")//
+          .replace(openSubstitute, "<mentioned>")//
+          .replace(closeSubstitute, "</mentioned>")//
+          ;
+      teiBuilder//
+          .append(openingTag(note))//
+          .append(content)//
+          .append(closingTag(note));
     }
   }
 
@@ -158,16 +440,22 @@ public class MVNTeiExporter {
       Map<String, String> attributes = xmlAnnotation.getAttributes();
       teiBuilder.append(NL);
       if (parseresult.isTextGroup(attributes.get("n"))) {
-        teiBuilder.append(XmlUtil.closingTag("group"));
+        teiBuilder.append(closingTag("group"));
 
       } else {
-        teiBuilder.append(XmlUtil.closingTag("body")).append(XmlUtil.closingTag("text"));
+        //        closeLineGroup(teiBuilder); // only for testing purposes
+        teiBuilder.append(closingTag("body")).append(closingTag("text"));
       }
       teiBuilder.append(NL);
     }
   }
 
   //
+
+  private static void closeLineGroup(StringBuilder teiBuilder) {
+    context.inPoetry = false;
+    teiBuilder.append(closingTag("lg"));
+  }
 
   private static Multimap<String, XmlAnnotation> indexXmlAnnotations(Collection<XmlAnnotation> annotations) {
     Multimap<String, XmlAnnotation> index = ArrayListMultimap.<String, XmlAnnotation> create();
@@ -185,6 +473,7 @@ public class MVNTeiExporter {
   }
 
   private static class Context {
+    public boolean countAsTextLine = true;
     public boolean inParagraph = false;
     public boolean inPoetry = false;
     public String text;
@@ -196,6 +485,12 @@ public class MVNTeiExporter {
       Integer asInt = Integer.valueOf(foliumLineNumber.replaceAll("[^0-9]", ""));
       Integer next = asInt + 1;
       foliumLineNumber = String.valueOf(next);
+    }
+
+    public void incrementTextLineNumber() {
+      if (countAsTextLine) {
+        textLineNumber++;
+      }
     }
   }
 }

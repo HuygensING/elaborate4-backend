@@ -1,38 +1,23 @@
 package elaborate.editor.export.mvn;
 
-/*
- * #%L
- * elab4-backend
- * =======
- * Copyright (C) 2011 - 2016 Huygens ING
- * =======
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
+import static elaborate.util.XmlUtil.extractAnnotationNos;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
@@ -140,6 +125,14 @@ public class MVNConverter {
     status.addLogline("joining transcriptions");
     final String xml = joinTranscriptions(result);
 
+    final String repairedXml = xml.replaceAll("<ab id=\"([0-9]+)\"/><ae id=\"\\1\"/>", "");
+    final String cooked = replaceAnnotationMilestones(repairedXml);
+    validateTextNums(cooked, result);
+
+    if (DEBUG) {
+      outputFiles(xml, cooked);
+    }
+
     final String tei = toTei(xml, result);
     Log.info("tei={}", tei);
     result.setBody(tei);
@@ -147,10 +140,10 @@ public class MVNConverter {
     String fullTEI = result.getTEI();
     ValidationResult validateTEI = MVNValidator.validateTEI(fullTEI);
     if (!validateTEI.isValid()) {
-      result.addError("",
-          "Gegenereerde TEI is niet valide:\n"//
-              + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
-              + " TEI:\n<pre>" + StringEscapeUtils.escapeHtml(fullTEI) + "</pre>"//
+      result.addError("", "Gegenereerde TEI is niet valide:\n"//
+          + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
+      //              + " TEI:\n<pre>" + escapeHtml4(fullTEI) + "</pre>"//
+      //              + " DEBUG:\n<pre>" + escapeHtml4(cooked) + "</pre>"//
       );
     }
     return result;
@@ -175,9 +168,7 @@ public class MVNConverter {
           .append("</entry>");
     }
     final String xml = editionTextBuilder.append("</body>").toString().replace("<lb/><le/>", "");
-    if (DEBUG) {
-      outputFiles(xml, "");
-    }
+
     return xml;
   }
 
@@ -201,6 +192,51 @@ public class MVNConverter {
     }
   }
 
+  private void validateTextNums(final String cooked, final MVNConversionResult result) {
+    final Stack<String> textNumStack = new Stack<String>();
+    final List<String> openTextNums = Lists.newArrayList();
+    final List<String> closeTextNums = Lists.newArrayList();
+    final Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
+    boolean lastTagWasBegin = false;
+    while (matcher.find()) {
+      final String beginOrEinde = matcher.group(1);
+      final String textnum = matcher.group(2).trim().replaceFirst(";.*$", "");
+      if ("begin".equals(beginOrEinde)) {
+        lastTagWasBegin = true;
+        textNumStack.push(textnum);
+        openTextNums.add(textnum);
+
+      } else if ("einde".equals(beginOrEinde)) {
+        final String peek = textNumStack.peek();
+        if (textnum.equals(peek)) {
+          if (lastTagWasBegin) {
+            data.getDeepestTextNums().add(textnum);
+          }
+          textNumStack.pop();
+        } else {
+          //          result.addError("", "mvn:teksteinde : tekstNum '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
+        }
+        lastTagWasBegin = false;
+        closeTextNums.add(textnum);
+
+      } else {
+        throw new RuntimeException("unexpected type mvn:tekst" + beginOrEinde);
+      }
+    }
+
+    List<String> openedButNotClosed = Lists.newArrayList(openTextNums);
+    openedButNotClosed.removeAll(closeTextNums);
+    for (String tekstNum : openedButNotClosed) {
+      result.addError("", "mvn:teksteinde met tekstNum '" + tekstNum + "' ontbreekt. ");
+    }
+    //    List<String> closedButNotOpened = Lists.newArrayList(closeTextNums);
+    //    closedButNotOpened.removeAll(openTextNums);
+    //    for (String tekstNum : closedButNotOpened) {
+    //      result.addError("", "mvn:teksbegin met tekstNum '" + tekstNum + "' ontbreekt. ");
+    //    }
+
+  }
+
   private void outputFiles(final String xml, final String cooked) {
     try {
       String formatted = xml//
@@ -208,7 +244,10 @@ public class MVNConverter {
           .replace("</entry>", "\n  </entry>\n")//
           .replace("<lb/>", "\n    <lb/>");
       FileUtils.write(new File("out/raw-formatted-body.xml"), formatted);
-      //      FileUtils.write(new File("out/cooked-body.xml"), cooked);
+      FileUtils.write(new File("out/cooked-body.xml"),
+          cooked.replace("<entry", "\n  <entry")//
+              .replace("</entry>", "\n  </entry>\n")//
+              .replace("<lb/>", "\n    <lb/>"));
     } catch (final IOException e) {
       e.printStackTrace();
     }
@@ -223,6 +262,33 @@ public class MVNConverter {
     parseresult.fixImplicitRanges();
     parseresult.index();
     return MVNTeiExporter.from(parseresult);
+  }
+
+  private String replaceAnnotationMilestones(final String xml) {
+    String cooked = xml;
+    for (final String annotationNoString : extractAnnotationNos(xml)) {
+      final Integer annotationNo = Integer.valueOf(annotationNoString);
+      if (data.getAnnotationIndex().containsKey(annotationNo)) {
+        final AnnotationData annotationData = data.getAnnotationIndex().get(annotationNo);
+        final String type = annotationData.type.replaceAll("[ \\(\\)]+", "_").replaceFirst("_$", "");
+        String attributes = "";
+        if (isNotBlank(annotationData.body) && !"nvt".equals(annotationData.body)) {
+          attributes = " body=\"" + escapeXml11(annotationData.body) + "\"";
+        }
+        cooked = cooked//
+            .replace(originalAnnotationBegin(annotationNoString), "<" + type + attributes + ">")//
+            .replace(originalAnnotationEnd(annotationNoString), "</" + type + ">");
+      }
+    }
+    return cooked;
+  }
+
+  private static String originalAnnotationBegin(final String annotationNo) {
+    return "<ab id=\"" + annotationNo + "\"/>";
+  }
+
+  private static String originalAnnotationEnd(final String annotationNo) {
+    return "<ae id=\"" + annotationNo + "\"/>";
   }
 
   String repairAnnotationHierarchy(String xml) {
@@ -274,7 +340,7 @@ public class MVNConverter {
   //      result.addError("",
   //          "Gegenereerde TEI is niet valide:\n"//
   //              + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
-  //              + " TEI:\n<pre>" + StringEscapeUtils.escapeHtml(fullTEI) + "</pre>"//
+  //              + " TEI:\n<pre>" + escapeHtml(fullTEI) + "</pre>"//
   //      );
   //    }
   //    //    for (ProjectEntry entry : project.getProjectEntries()) {
@@ -288,78 +354,6 @@ public class MVNConverter {
   //    //      result.addPages(page);
   //    //    }
   //    return result;
-  //  }
-
-  //  private void validateTextNums(final String cooked, final MVNConversionResult result) {
-  //    final Stack<String> textNumStack = new Stack<String>();
-  //    final List<String> openTextNums = Lists.newArrayList();
-  //    final List<String> closeTextNums = Lists.newArrayList();
-  //    final Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
-  //    boolean lastTagWasBegin = false;
-  //    while (matcher.find()) {
-  //      final String beginOrEinde = matcher.group(1);
-  //      final String textnum = matcher.group(2).trim().replaceFirst(";.*$", "");
-  //      if ("begin".equals(beginOrEinde)) {
-  //        lastTagWasBegin = true;
-  //        textNumStack.push(textnum);
-  //        openTextNums.add(textnum);
-  //
-  //      } else if ("einde".equals(beginOrEinde)) {
-  //        final String peek = textNumStack.peek();
-  //        if (textnum.equals(peek)) {
-  //          if (lastTagWasBegin) {
-  //            data.getDeepestTextNums().add(textnum);
-  //          }
-  //          textNumStack.pop();
-  //        } else {
-  //          //          result.addError("", "mvn:teksteinde : tekstNum '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
-  //        }
-  //        lastTagWasBegin = false;
-  //        closeTextNums.add(textnum);
-  //
-  //      } else {
-  //        throw new RuntimeException("unexpected type mvn:tekst" + beginOrEinde);
-  //      }
-  //    }
-  //
-  //    List<String> openedButNotClosed = Lists.newArrayList(openTextNums);
-  //    openedButNotClosed.removeAll(closeTextNums);
-  //    for (String tekstNum : openedButNotClosed) {
-  //      result.addError("", "mvn:teksteinde met tekstNum '" + tekstNum + "' ontbreekt. ");
-  //    }
-  //    //    List<String> closedButNotOpened = Lists.newArrayList(closeTextNums);
-  //    //    closedButNotOpened.removeAll(openTextNums);
-  //    //    for (String tekstNum : closedButNotOpened) {
-  //    //      result.addError("", "mvn:teksbegin met tekstNum '" + tekstNum + "' ontbreekt. ");
-  //    //    }
-  //
-  //  }
-
-  //  private String replaceAnnotationMilestones(final String xml) {
-  //    String cooked = xml;
-  //    for (final String annotationNoString : XmlUtil.extractAnnotationNos(xml)) {
-  //      final Integer annotationNo = Integer.valueOf(annotationNoString);
-  //      if (data.getAnnotationIndex().containsKey(annotationNo)) {
-  //        final AnnotationData annotationData = data.getAnnotationIndex().get(annotationNo);
-  //        final String type = annotationData.type.replaceAll("[ \\(\\)]+", "_").replaceFirst("_$", "");
-  //        String attributes = "";
-  //        if (StringUtils.isNotBlank(annotationData.body) && !"nvt".equals(annotationData.body)) {
-  //          attributes = " body=\"" + StringEscapeUtils.escapeXml(annotationData.body) + "\"";
-  //        }
-  //        cooked = cooked//
-  //            .replace(originalAnnotationBegin(annotationNoString), "<" + type + attributes + ">")//
-  //            .replace(originalAnnotationEnd(annotationNoString), "</" + type + ">");
-  //      }
-  //    }
-  //    return cooked;
-  //  }
-  //
-  //  private static String originalAnnotationEnd(final String annotationNo) {
-  //    return "<ae id=\"" + annotationNo + "\"/>";
-  //  }
-  //
-  //  private static String originalAnnotationBegin(final String annotationNo) {
-  //    return "<ab id=\"" + annotationNo + "\"/>";
   //  }
   //
   //  private void setFacs(final ProjectEntry entry, final MVNFolium page, final MVNConversionResult result) {

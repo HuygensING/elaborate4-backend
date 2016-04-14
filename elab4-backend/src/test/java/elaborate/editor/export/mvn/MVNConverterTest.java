@@ -608,11 +608,11 @@ public class MVNConverterTest {
   @Test
   public void testWitregelConversie() {
     Annotation annotation = mockAnnotationOfType(WITREGEL);
-    String body = "<body><lb/>pre "//
+    String body = "<body><lb/>"//
         + "<ab id=\"1\"/>¤<ae id=\"1\"/>"//
-        + " post<le/></body>";
-    String expected = "      <lb/>\n"//
-        + "      <lb n=\"1\" xml:id=\"1-lb-1\"/><l>pre  post</l>";
+        + "Lorem ipsum<le/></body>";
+    String expected = "<lb/>\n"//
+        + "<lb n=\"1\" xml:id=\"null-lb-1\"/>Lorem ipsum";
     assertConversion(body, mockData(1, annotation), expected);
   }
 
