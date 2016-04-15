@@ -37,11 +37,13 @@ public class MVNConverter {
   private final MVNConversionData data;
   private final Status status;
   private final TranscriptionHierarchyFixer transcriptionHiearchyFixer = new TranscriptionHierarchyFixer();
+  private final String baseURL;
 
-  public MVNConverter(final Project project, final MVNConversionData data, Status status) {
+  public MVNConverter(final Project project, final MVNConversionData data, Status status, String baseURL) {
     this.project = project;
     this.data = data;
     this.status = status;
+    this.baseURL = baseURL;
   }
 
   // phase 1: collect MVNFolium with raw transcription 
@@ -117,7 +119,7 @@ public class MVNConverter {
   }
 
   public MVNConversionResult convert() {
-    final MVNConversionResult result = new MVNConversionResult(project, status);
+    final MVNConversionResult result = new MVNConversionResult(project, status, baseURL);
     if (!onlyTextLayerIsDiplomatic()) {
       result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
       return result;

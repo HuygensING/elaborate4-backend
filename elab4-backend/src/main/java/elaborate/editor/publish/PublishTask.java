@@ -118,6 +118,7 @@ public class PublishTask implements Runnable {
   //	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
   private Map<Integer, AnnotationData> annotationDataMap;
   private final MVNClient mvnClient = new MVNClient(config.getSetting(Configuration.MVN_SERVER_URL));
+  private final String baseURL = config.getSetting(Configuration.WORK_URL);
 
   public PublishTask(Publication.Settings settings) {
     this.settings = settings;
@@ -147,7 +148,7 @@ public class PublishTask implements Runnable {
 
   private String createMVNDraft(Project project, ProjectService ps) {
     MVNConversionData data = MVNConverter.getConversionData(project.getId(), status);
-    MVNConverter mvnConverter = new MVNConverter(project, data, status);
+    MVNConverter mvnConverter = new MVNConverter(project, data, status, baseURL);
     MVNConversionResult report = mvnConverter.convert();
     if (report.isOK()) {
       String tei = report.getTEI();

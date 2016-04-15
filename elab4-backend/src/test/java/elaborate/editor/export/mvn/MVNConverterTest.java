@@ -72,6 +72,8 @@ import nl.knaw.huygens.Log;
 
 public class MVNConverterTest {
 
+  private static final String BASEURL = "http://example.org";
+
   @Test
   public void test() {
     Project project = mock(Project.class);
@@ -83,7 +85,7 @@ public class MVNConverterTest {
     //    AnnotationService annotationService = mock(AnnotationService.class);
     MVNConversionData data = new MVNConversionData();
     Status logger = new Status(1);
-    MVNConverter converter = new MVNConverter(project, data, logger);
+    MVNConverter converter = new MVNConverter(project, data, logger, BASEURL);
     MVNConversionResult report = converter.convert();
     Log.info("report={}", report);
     assertThat(report).isNotNull();
@@ -98,7 +100,7 @@ public class MVNConverterTest {
     Project project = mockProject();
     String[] textLayers = new String[] { "Translation" };
     when(project.getTextLayers()).thenReturn(textLayers);
-    MVNConverter c = new MVNConverter(project, mockData(), logger);
+    MVNConverter c = new MVNConverter(project, mockData(), logger, BASEURL);
     MVNConversionResult result = c.convert();
 
     assertThat(result.isOK()).isFalse();
@@ -111,7 +113,7 @@ public class MVNConverterTest {
     Project project = mockProject();
     String[] textLayers = new String[] { TranscriptionType.DIPLOMATIC };
     when(project.getTextLayers()).thenReturn(textLayers);
-    MVNConverter c = new MVNConverter(project, mockData(), logger);
+    MVNConverter c = new MVNConverter(project, mockData(), logger, BASEURL);
     boolean onlyTextLayerIsDiplomatic = c.onlyTextLayerIsDiplomatic();
 
     assertThat(onlyTextLayerIsDiplomatic).isTrue();
@@ -156,7 +158,7 @@ public class MVNConverterTest {
   public void testTranscriptionWithEmptyLinesGeneratesValidationError() {
     Status logger = new Status(1);
     Project project = mockProject();
-    MVNConversionResult result = new MVNConversionResult(project, logger);
+    MVNConversionResult result = new MVNConversionResult(project, logger, "http://baseurl.org");
 
     String body = "<body>Alea\niacta\nest</body>";
     MVNConverter.validateTranscriptionContainsNoEmptyLines(body, result, "1");
@@ -165,7 +167,7 @@ public class MVNConverterTest {
     body = "<body>Pecunia\n\nnon olet</body>";
     MVNConverter.validateTranscriptionContainsNoEmptyLines(body, result, "1");
     assertThat(result.isOK()).isFalse();
-    String expectedError = "https://www.elaborate.huygens.knaw.nl/projects/projectName/entries/1/transcriptions/diplomatic : Lege regels mogen niet voorkomen.";
+    String expectedError = "http://baseurl.org/projects/projectName/entries/1/transcriptions/diplomatic : Lege regels mogen niet voorkomen.";
     assertThat(logger.getErrors()).contains(expectedError);
 
     body = "<body>Luctor\n \net emergo</body>";
@@ -944,7 +946,7 @@ public class MVNConverterTest {
         + "</body>";
     Project project = mockProject();
     Status logger = new Status(1);
-    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger);
+    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger, BASEURL);
     String result = mc.repairAnnotationHierarchy(body);
     assertThat(result).isEqualTo(expected);
   }
@@ -981,7 +983,7 @@ public class MVNConverterTest {
         + "</body>";
     Project project = mockProject();
     Status logger = new Status(1);
-    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger);
+    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger, BASEURL);
     String result = mc.repairAnnotationHierarchy(body);
     assertThat(result).isEqualTo(expected);
   }
@@ -1000,7 +1002,7 @@ public class MVNConverterTest {
         + "</body>";
     Project project = mockProject();
     Status logger = new Status(1);
-    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger);
+    MVNConverter mc = new MVNConverter(project, mockData(1, mockAnnotationOfType(WITREGEL)), logger, BASEURL);
     String result = mc.repairAnnotationHierarchy(body);
     assertThat(result).isEqualTo(expected);
   }
@@ -1059,9 +1061,9 @@ public class MVNConverterTest {
   private String convert(String body, MVNConversionData data) {
     Project project = mockProject();
     Status logger = new Status(1);
-    MVNConversionResult result = new MVNConversionResult(project, logger);
+    MVNConversionResult result = new MVNConversionResult(project, logger, BASEURL);
 
-    String tei = new MVNConverter(project, data, logger).toTei(body, result);
+    String tei = new MVNConverter(project, data, logger, BASEURL).toTei(body, result);
     assertThat(result.isOK()).overridingErrorMessage("validation error(s): %s", logger.getErrors()).isTrue();
     return tei;
   }
@@ -1069,8 +1071,8 @@ public class MVNConverterTest {
   private void assertConversionFailsValidation(String body, MVNConversionData mockData, String validationError) {
     Project project = mockProject();
     Status logger = new Status(1);
-    MVNConversionResult result = new MVNConversionResult(project, logger);
-    String tei = new MVNConverter(project, mockData, logger).toTei(body, result);
+    MVNConversionResult result = new MVNConversionResult(project, logger, BASEURL);
+    String tei = new MVNConverter(project, mockData, logger, BASEURL).toTei(body, result);
     assertThat(result.isOK()).isFalse();
     assertThat(logger.getErrors()).contains(validationError);
   }
