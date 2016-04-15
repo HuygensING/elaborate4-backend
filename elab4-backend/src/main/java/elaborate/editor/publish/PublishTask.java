@@ -135,9 +135,14 @@ public class PublishTask implements Runnable {
     final Project project = entityManager.find(Project.class, projectId);
     final ProjectService ps = ProjectService.instance();
     boolean projectIsMVN = ProjectTypes.MVN.equals(project.getMetadataMap().get(ProjectMetadataFields.TYPE));
-    final String url = projectIsMVN ? createMVNDraft(project, ps) : createRegularDraft(project, ps);
+    String url = "";
+    try {
+      url = projectIsMVN ? createMVNDraft(project, ps) : createRegularDraft(project, ps);
+      status.setUrl(url);
 
-    status.setUrl(url);
+    } catch (Exception e) {
+      status.addError(e.getMessage());
+    }
     status.addLogline("finished");
     status.setDone();
 

@@ -251,7 +251,10 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   }
 
   private static void removeCurrentTextSegment() {
-    result.getTextSegments().remove(currentTextSegmentIndex());
+    List<String> textSegments = result.getTextSegments();
+    if (!textSegments.isEmpty()) {
+      textSegments.remove(currentTextSegmentIndex());
+    }
   }
 
 }

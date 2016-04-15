@@ -161,8 +161,12 @@ public class MVNConverter {
 
   private String joinTranscriptions(final MVNConversionResult result) {
     final StringBuilder editionTextBuilder = new StringBuilder("<body>");
-    for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
+    List<EntryData> entryDataList = data.getEntryDataList();
+    int total = entryDataList.size();
+    int i = 1;
+    for (final MVNConversionData.EntryData entryData : entryDataList) {
       final String pageId = result.getSigle() + "-pb-" + entryData.name;
+      result.getStatus().addLogline("adding entry '" + entryData.name + "' (" + i++ + "/" + total + ")");
       String transcriptionBody = transcriptionBody(entryData);
       validateTranscriptionContainsNoEmptyLines(transcriptionBody, result, entryData.id);
       editionTextBuilder//
