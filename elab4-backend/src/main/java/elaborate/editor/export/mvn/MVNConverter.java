@@ -1,7 +1,6 @@
 package elaborate.editor.export.mvn;
 
 import static elaborate.util.XmlUtil.extractAnnotationNos;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -144,11 +143,10 @@ public class MVNConverter {
     result.getStatus().setTei(fullTEI);
     ValidationResult validateTEI = MVNValidator.validateTEI(fullTEI);
     if (!validateTEI.isValid()) {
-      result.addError("",
-          "Gegenereerde TEI is niet valide:\n"//
-              + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
-              + " TEI:\n<pre>" + escapeHtml4(fullTEI) + "</pre>"//
-              + " DEBUG:\n<pre>" + escapeHtml4(cooked) + "</pre>"//
+      result.addError("", "Gegenereerde TEI is niet valide:\n"//
+          + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
+      //              + " TEI:\n<pre>" + escapeHtml4(fullTEI) + "</pre>"//
+      //              + " DEBUG:\n<pre>" + escapeHtml4(cooked) + "</pre>"//
       );
     }
     return result;

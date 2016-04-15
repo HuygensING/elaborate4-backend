@@ -254,7 +254,7 @@ public class MVNConverterTest {
     when(teksteinde.getBody()).thenReturn("1");
     String body = "<body>"//
         + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
-        + "<ab id=\"2\"/>A<ae id=\"2\"/>"//
+        + "<ab id=\"2\"/>‡<ae id=\"2\"/>"//
         + "line 1\n"//
         + "line 2\n"//
         + "line 3"//
@@ -280,10 +280,10 @@ public class MVNConverterTest {
     when(teksteinde.getBody()).thenReturn("1");
     String body = "<body>"//
         + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
-        + "<ab id=\"2\"/>A1<ae id=\"2\"/>"//
+        + "<ab id=\"2\"/>‡<ae id=\"2\"/>"//
         + "line 1\n"//
         + "line 2\n"//
-        + "<ab id=\"3\"/>A2<ae id=\"3\"/>"//
+        + "<ab id=\"3\"/>‡<ae id=\"3\"/>"//
         + "line 3"//
         + "<ab id=\"4\"/>‡<ae id=\"4\"/>"//
         + "</body>";
@@ -309,10 +309,10 @@ public class MVNConverterTest {
     when(teksteinde.getBody()).thenReturn("1");
     String body = "<body>"//
         + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
-        + "<ab id=\"2\"/>START ALINEA<ae id=\"2\"/>"//
+        + "<ab id=\"2\"/>‡<ae id=\"2\"/>"//
         + "line 1\n"//
         + "line 2\n"//
-        + "<ab id=\"3\"/>START POEZIE<ae id=\"3\"/>"//
+        + "<ab id=\"3\"/>‡<ae id=\"3\"/>"//
         + "dichtregel 1"//
         + "<ab id=\"4\"/>‡<ae id=\"4\"/>"//
         + "</body>";
@@ -333,7 +333,7 @@ public class MVNConverterTest {
     Annotation annotation = mockAnnotationOfType(ALINEA);
     Annotation opschrift = mockAnnotationOfType(OPSCHRIFT);
     String body = "<body>"//
-        + "<ab id=\"1\"/>X<ae id=\"1\"/>"//
+        + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
         + "line 1\n"//
         + "line 2\n"//
         + "<ab id=\"2\"/>Opschrift<ae id=\"2\"/>"//
@@ -351,7 +351,7 @@ public class MVNConverterTest {
     Annotation annotation = mockAnnotationOfType(ALINEA);
     Annotation onderschrift = mockAnnotationOfType(ONDERSCHRIFT);
     String body = "<body>"//
-        + "<ab id=\"1\"/>A<ae id=\"1\"/>"//
+        + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
         + "line 1\n"//
         + "line 2\n"//
         + "<ab id=\"2\"/>Onderschrift<ae id=\"2\"/>"//
@@ -668,7 +668,7 @@ public class MVNConverterTest {
     String body = "<body>"//
         + "<entry n=\"42r\" xml:id=\"ABC-pb-42r\">"//
         + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
-        + "<ab id=\"2\"/>P<ae id=\"2\"/>"//
+        + "<ab id=\"2\"/>‡<ae id=\"2\"/>"//
         + "<lb/>Er was eens een neushoorn uit Assen,<le/>"//
         + "<lb/>Die moest echt verschrikkelijk nodig plassen.<le/>"//
         + "<ab id=\"3\"/>‡<ae id=\"3\"/>"//
@@ -694,11 +694,10 @@ public class MVNConverterTest {
     Annotation teksteinde = mockAnnotationOfType(TEKSTEINDE);
     when(teksteinde.getBody()).thenReturn("1");
     String body = "<body>"//
-        + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
-        + "<ab id=\"2\"/>P<ae id=\"2\"/>"//
+        + "<ab id=\"1\"/><ab id=\"2\"/>‡<ae id=\"1\"/><ae id=\"2\"/>"//
         + " line 1\n"//
         + " line 2\n"//
-        + "<ab id=\"3\"/>A<ae id=\"3\"/>"//
+        + "<ab id=\"3\"/>‡<ae id=\"3\"/>"//
         + "THE END"//
         + "<ab id=\"4\"/>‡<ae id=\"4\"/>"//
         + "</body>";
@@ -717,7 +716,7 @@ public class MVNConverterTest {
     Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
     Annotation onderschriftAnnotation = mockAnnotationOfType(ONDERSCHRIFT);
     String body = "<body>"//
-        + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
+        + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
         + " line 1\n"//
         + " line 2\n"//
         + "<ab id=\"2\"/>onderschrift<ae id=\"2\"/>"//
@@ -734,7 +733,7 @@ public class MVNConverterTest {
     Annotation poezieAnnotation = mockAnnotationOfType(POEZIE);
     Annotation opAnnotation = mockAnnotationOfType(OPSCHRIFT);
     String body = "<body>"//
-        + "<ab id=\"1\"/>P<ae id=\"1\"/>"//
+        + "<ab id=\"1\"/>‡<ae id=\"1\"/>"//
         + " line 1\n"//
         + " line 2\n"//
         + "<ab id=\"2\"/>opschrift<ae id=\"2\"/>"//
@@ -1033,6 +1032,48 @@ public class MVNConverterTest {
     assertThat(result).isEqualTo(expected);
   }
 
+  @Test
+  public void testProblemWithVDS02() {
+    Annotation tekstbegin1 = mockAnnotationOfType(TEKSTBEGIN);
+    when(tekstbegin1.getBody()).thenReturn("1");
+    Annotation poezie = mockAnnotationOfType(POEZIE);
+    Annotation teksteinde1 = mockAnnotationOfType(TEKSTEINDE);
+    when(teksteinde1.getBody()).thenReturn("1");
+    Annotation tekstbegin2 = mockAnnotationOfType(TEKSTBEGIN);
+    when(tekstbegin2.getBody()).thenReturn("2");
+    Annotation alinea = mockAnnotationOfType(ALINEA);
+    Annotation teksteinde2 = mockAnnotationOfType(TEKSTEINDE);
+    when(teksteinde2.getBody()).thenReturn("2");
+    String body = "<body><entry n=\"02v\" xml:id=\"VDS-pb-02v\" facs=\"Brussel - KB - ii 116 - 002v.jpg\" _entryId=\"26831\">"//
+        + "<lb/><ab id=\"1\"/>‡<ae id=\"1\"/><ab id=\"2\"/>‡<ae id=\"2\"/>Tekst 1<le/>"//
+        + "<lb/>Diet ondersouct en can gronderen<ab id=\"3\"/>‡<ae id=\"3\"/><le/>"//
+        + "<lb/><ab id=\"4\"/>‡<ae id=\"4\"/><ab id=\"5\"/>‡<ae id=\"5\"/><b>Van den zeuen vraghen van</b><b><le/>"//
+        + "<lb/>Iherusalem zeghelijn</b><le/>"//
+        + "<lb/><ab id=\"6\"/>‡<ae id=\"6\"/><le/>"//
+        + "</entry></body>";
+    String expected = "\n"//
+        + "<text n=\"1\" xml:id=\"PROJECTNAME1\"><body><lg>\n"//
+        + "<pb xml:id=\"VDS-pb-02v\" n=\"02v\" facs=\"Brussel - KB - ii 116 - 002v.jpg\"/>\n"//
+        + "<lb n=\"1\" xml:id=\"VDS-pb-02v-lb-1\"/><l n=\"1\" xml:id=\"VDS-pb-02v-l-1\">Tekst 1</l>\n"//
+        + "<lb n=\"2\" xml:id=\"VDS-pb-02v-lb-2\"/><l n=\"2\" xml:id=\"VDS-pb-02v-l-2\">Diet ondersouct en can gronderen</l></lg>\n"//
+        + "</body></text>\n"//
+        + "\n"//
+        + "<text n=\"2\" xml:id=\"PROJECTNAME2\"><body><p>\n"//
+        + "<lb n=\"3\" xml:id=\"VDS-pb-02v-lb-3\"/><hi rend=\"rubric\">Van den zeuen vraghen van</hi>\n"//
+        + "<lb n=\"4\" xml:id=\"VDS-pb-02v-lb-4\"/><hi rend=\"rubric\">Iherusalem zeghelijn</hi>"//
+        + "</p>\n"//
+        + "</body></text>\n";
+    assertConversion(body,
+        mockData(//
+            1, tekstbegin1, //
+            2, poezie, //
+            3, teksteinde1, //
+            4, tekstbegin2, //
+            5, alinea, //
+            6, teksteinde2//
+    ), expected);
+  }
+
   /* private methods */
   private Annotation mockAnnotationOfType(MVNAnnotationType type) {
     AnnotationType witregel = mockAnnotationType(type.getName());
@@ -1072,6 +1113,18 @@ public class MVNConverterTest {
   private MVNConversionData mockData(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2, int annotationNo3, Annotation annotation3, int annotationNo4, Annotation annotation4) {
     MVNConversionData conversionData = mockData(annotationNo1, annotation1, annotationNo2, annotation2, annotationNo3, annotation3);
     addAnnotation(conversionData, annotationNo4, annotation4);
+    return conversionData;
+  }
+
+  private MVNConversionData mockData(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2, int annotationNo3, Annotation annotation3, int annotationNo4, Annotation annotation4, int annotationNo5, Annotation annotation5) {
+    MVNConversionData conversionData = mockData(annotationNo1, annotation1, annotationNo2, annotation2, annotationNo3, annotation3, annotationNo4, annotation4);
+    addAnnotation(conversionData, annotationNo5, annotation5);
+    return conversionData;
+  }
+
+  private MVNConversionData mockData(int annotationNo1, Annotation annotation1, int annotationNo2, Annotation annotation2, int annotationNo3, Annotation annotation3, int annotationNo4, Annotation annotation4, int annotationNo5, Annotation annotation5, int annotationNo6, Annotation annotation6) {
+    MVNConversionData conversionData = mockData(annotationNo1, annotation1, annotationNo2, annotation2, annotationNo3, annotation3, annotationNo4, annotation4, annotationNo5, annotation5);
+    addAnnotation(conversionData, annotationNo6, annotation6);
     return conversionData;
   }
 

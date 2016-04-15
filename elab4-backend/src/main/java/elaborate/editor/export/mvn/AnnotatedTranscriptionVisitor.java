@@ -187,8 +187,8 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     }
 
     private void handlePoezieAndAlinea(AnnotationData annotationData) {
-      // puntannotatie, so ignore the annotated textsegment
-      removeCurrentTextSegment();
+      //      // puntannotatie, so ignore the annotated textsegment
+      //      removeCurrentTextSegment();
       // start poezie or paragraph
       closeOpenPoetryOrParagraph();
       Map<String, String> attributes = new HashMap<String, String>();
@@ -250,11 +250,12 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     return result.getTextSegments().size() - 1;
   }
 
-  private static void removeCurrentTextSegment() {
-    List<String> textSegments = result.getTextSegments();
-    if (!textSegments.isEmpty()) {
-      textSegments.remove(currentTextSegmentIndex());
-    }
-  }
+  //  private static void removeCurrentTextSegment() {
+  //    List<String> textSegments = result.getTextSegments();
+  //    if (!textSegments.isEmpty()) {
+  //      String removed = textSegments.remove(currentTextSegmentIndex());
+  //      Log.info("removed: '{}'", removed);
+  //    }
+  //  }
 
 }
