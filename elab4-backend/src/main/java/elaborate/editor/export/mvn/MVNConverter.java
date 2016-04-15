@@ -141,6 +141,7 @@ public class MVNConverter {
     result.setBody(tei);
 
     String fullTEI = result.getTEI();
+    result.getStatus().setTei(fullTEI);
     ValidationResult validateTEI = MVNValidator.validateTEI(fullTEI);
     if (!validateTEI.isValid()) {
       result.addError("",

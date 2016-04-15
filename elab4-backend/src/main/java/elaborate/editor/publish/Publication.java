@@ -30,6 +30,8 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.collect.Lists;
 
 import elaborate.editor.model.ProjectTypes;
@@ -116,6 +118,7 @@ public class Publication {
 
   }
 
+  @JsonInclude(Include.NON_NULL)
   public static class Status {
     private final String id;
     private String url;
@@ -123,6 +126,7 @@ public class Publication {
     private final List<String> errors = Lists.newArrayList();
     private boolean done = false;
     private boolean fail = false;
+    private String tei;
 
     public Status(long projectId) {
       this.id = new DateTime().toString("yyyyMMddHHmmss") + projectId;
@@ -186,6 +190,14 @@ public class Publication {
 
     public String getUrl() {
       return url;
+    }
+
+    public String getTei() {
+      return tei;
+    }
+
+    public void setTei(String tei) {
+      this.tei = tei;
     }
 
   }
