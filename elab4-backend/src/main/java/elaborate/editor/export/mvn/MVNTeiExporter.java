@@ -180,7 +180,7 @@ public class MVNTeiExporter {
   private void handleOpenAlinea(StringBuilder teiBuilder, Collection<XmlAnnotation> collection) {
     if (!collection.isEmpty()) {
       context.inParagraph = true;
-      teiBuilder.append("p");
+      teiBuilder.append(openingTag("p"));
     }
   }
 
@@ -339,10 +339,10 @@ public class MVNTeiExporter {
     handleCloseSup(teiBuilder, closingAnnotationIndex.get("sup"));
     handleCloseSub(teiBuilder, closingAnnotationIndex.get("sub"));
     handleCloseRegel(teiBuilder, closingAnnotationIndex);
-    handleCloseOpschrift(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.OPSCHRIFT.getName()));
-    handleCloseOnderschrift(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ONDERSCHRIFT.getName()));
     handleCloseAlinea(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ALINEA.getName()));
     handleClosePoezie(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.POEZIE.getName()));
+    handleCloseOpschrift(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.OPSCHRIFT.getName()));
+    handleCloseOnderschrift(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ONDERSCHRIFT.getName()));
     handleClosePaleo(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.PALEOGRAFISCH.getName()));
     handleCloseLinkerMargeKolom(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.LINKERMARGEKOLOM.getName()));
     handleCloseRechterMargeKolom(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.RECHTERMARGEKOLOM.getName()));
