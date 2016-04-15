@@ -53,12 +53,12 @@ public class MVNTeiExporter {
     handleOpenPoezie(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.POEZIE.getName()));
     handleOpenAlinea(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ALINEA.getName()));
     handlePageBreak(teiBuilder, openingAnnotationIndex.get("entry"));
-    handleOpenLinkerMargeKolom(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.LINKERMARGEKOLOM.getName()));
-    handleOpenRechterMargeKolom(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.RECHTERMARGEKOLOM.getName()));
     handleOpenOpschrift(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.OPSCHRIFT.getName()));
     handleOpenOnderschrift(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONDERSCHRIFT.getName()));
     handleOpenWitregel(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.WITREGEL.getName()));
     handleOpenRegel(teiBuilder, openingAnnotationIndex.get("l"));
+    handleOpenLinkerMargeKolom(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.LINKERMARGEKOLOM.getName()));
+    handleOpenRechterMargeKolom(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.RECHTERMARGEKOLOM.getName()));
     handleOpenSub(teiBuilder, openingAnnotationIndex.get("sub"));
     handleOpenSup(teiBuilder, openingAnnotationIndex.get("sup"));
     handleOpenOnduidelijk(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONDUIDELIJK.getName()));
