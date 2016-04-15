@@ -73,7 +73,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     return Traversal.NEXT;
   }
 
-  static final List<String> annotatedTextToIgnore = ImmutableList.<String> of("‡", "¤");
+  static final List<String> ANNOTATED_TEXT_TO_IGNORE = ImmutableList.<String> of("‡", "¤");
 
   public static class TextSegmentHandler extends XmlTextHandler<XmlContext> {
     @Override
@@ -83,7 +83,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
         String segment = result.getTextSegments().get(currentTextSegmentIndex());
         result.getTextSegments().set(currentTextSegmentIndex(), segment + filteredText);
       } else {
-        if (!annotatedTextToIgnore.contains(filteredText)) {
+        if (!ANNOTATED_TEXT_TO_IGNORE.contains(filteredText)) {
           result.getTextSegments().add(filteredText);
         }
       }
@@ -105,77 +105,106 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       lastNodeWasText = false;
       final String id = element.getAttribute("id");
       final String name = element.getName();
-      int currentTextSegmentIndex = currentTextSegmentIndex();
       if (Transcription.BodyTags.ANNOTATION_BEGIN.equals(name)) {
-        annotationStartIndexMap.put(id, currentTextSegmentIndex + 1); // opening annotation for the next text segment
-        AnnotationData annotationData = annotationIndex.get(Integer.valueOf(id));
-        if (annotationData == null) {
-          Log.error("no annotationData for {}", id);
-
-        } else {
-          if (POETRY_AND_PARAGRAPH_CLOSERS.contains(annotationData.type)) {
-            closeOpenPoetryOrParagraph();
-          }
-        }
-
+        handleAnnotationBegin(id);
       } else if (Transcription.BodyTags.ANNOTATION_END.equals(name)) {
-        AnnotationData annotationData = annotationIndex.get(Integer.valueOf(id));
-        if (annotationData == null) {
-          Log.error("no annotationData for {}", id);
-
-        } else {
-          String annotationBody = StringUtils.defaultIfEmpty(annotationData.body, "").trim();
-          if (MVNAnnotationType.TEKSTBEGIN.getName().equals(annotationData.type)) {
-            String n = annotationBody.replaceFirst(";.*$", "");
-            Map<String, String> attributes = ImmutableMap.of("n", n, "xml:id", sigle + n);
-            XmlAnnotation tekstAnnotation = new XmlAnnotation("tekst", attributes, 0)//
-                .setFirstSegmentIndex(currentTextSegmentIndex + 1);
-            textRangeAnnotationIndex.put(n, tekstAnnotation);
-
-          } else if (MVNAnnotationType.TEKSTEINDE.getName().equals(annotationData.type)) {
-            closeOpenPoetryOrParagraph();
-            String n = annotationBody;
-            XmlAnnotation tekstAnnotation = textRangeAnnotationIndex.remove(n);
-            if (tekstAnnotation != null) {
-              tekstAnnotation.setLastSegmentIndex(currentTextSegmentIndex);
-              result.getXmlAnnotations().add(tekstAnnotation);
-            } else {
-              Log.error("tekst {} was not opened", n);
-            }
-
-          } else if (MVNAnnotationType.POEZIE.getName().equals(annotationData.type)//
-              || MVNAnnotationType.ALINEA.getName().equals(annotationData.type)) {
-            // puntannotatie, so ignore the annotated textsegment
-            removeCurrentTextSegment();
-            // start poezie or paragraph
-            closeOpenPoetryOrParagraph();
-            Map<String, String> attributes = new HashMap<String, String>();
-            poetryOrParagraphAnnotations.add(new XmlAnnotation(annotationData.type, attributes, 0)//
-                .setFirstSegmentIndex(currentTextSegmentIndex() + 1));
-
-          } else {
-            if (POETRY_AND_PARAGRAPH_CLOSERS.contains(annotationData.type)) {
-              closeOpenPoetryOrParagraph();
-            }
-            Map<String, String> attributes = ImmutableMap.of("body", annotationBody);
-            XmlAnnotation xmlAnnotation = new XmlAnnotation(annotationData.type, attributes, 0)//
-                .setFirstSegmentIndex(annotationStartIndexMap.get(id))//
-                .setLastSegmentIndex(currentTextSegmentIndex);
-            result.getXmlAnnotations().add(xmlAnnotation);
-          }
-        }
+        handleAnnotationEnd(id);
       }
       return Traversal.STOP;
     }
 
-    private void closeOpenPoetryOrParagraph() {
-      if (!poetryOrParagraphAnnotations.isEmpty()) {
-        XmlAnnotation lastAnnotation = poetryOrParagraphAnnotations.getLast();
-        if (lastAnnotation.getLastSegmentIndex() == null) {
-          lastAnnotation.setLastSegmentIndex(currentTextSegmentIndex());
-          result.getXmlAnnotations().add(lastAnnotation);
+    private void handleAnnotationBegin(final String id) {
+      int currentTextSegmentIndex = currentTextSegmentIndex();
+      annotationStartIndexMap.put(id, currentTextSegmentIndex + 1); // opening annotation for the next text segment
+      AnnotationData annotationData = annotationIndex.get(Integer.valueOf(id));
+      if (annotationData == null) {
+        Log.error("no annotationData for {}", id);
+
+      } else {
+        if (POETRY_AND_PARAGRAPH_CLOSERS.contains(annotationData.type)) {
+          closeOpenPoetryOrParagraph();
         }
       }
+    }
+
+    private void handleAnnotationEnd(final String id) {
+      AnnotationData annotationData = annotationIndex.get(Integer.valueOf(id));
+      if (annotationData == null) {
+        Log.error("no annotationData for {}", id);
+        return;
+      }
+
+      String annotationBody = StringUtils.defaultIfEmpty(annotationData.body, "").trim();
+      MVNAnnotationType mvnAnnotationType = MVNAnnotationType.fromName(annotationData.type);
+      switch (mvnAnnotationType) {
+        case TEKSTBEGIN:
+          handleTekstBegin(annotationBody);
+          break;
+
+        case TEKSTEINDE:
+          handleTekstEinde(annotationBody);
+          break;
+
+        case POEZIE:
+        case ALINEA:
+          handlePoezieAndAlinea(annotationData);
+          break;
+
+        default:
+          handleDefault(id, annotationData, annotationBody);
+          break;
+      }
+    }
+
+    private void closeOpenPoetryOrParagraph() {
+      if (poetryOrParagraphAnnotations.isEmpty()) return;
+
+      XmlAnnotation lastAnnotation = poetryOrParagraphAnnotations.getLast();
+      if (lastAnnotation.getLastSegmentIndex() == null) {
+        lastAnnotation.setLastSegmentIndex(currentTextSegmentIndex());
+        result.getXmlAnnotations().add(lastAnnotation);
+      }
+    }
+
+    private static void handleTekstBegin(String annotationBody) {
+      String n = annotationBody.replaceFirst(";.*$", "");
+      Map<String, String> attributes = ImmutableMap.of("n", n, "xml:id", sigle + n);
+      XmlAnnotation tekstAnnotation = new XmlAnnotation("tekst", attributes, 0)//
+          .setFirstSegmentIndex(currentTextSegmentIndex() + 1);
+      textRangeAnnotationIndex.put(n, tekstAnnotation);
+    }
+
+    private void handleTekstEinde(String annotationBody) {
+      closeOpenPoetryOrParagraph();
+      final String n = annotationBody;
+      final XmlAnnotation tekstAnnotation = textRangeAnnotationIndex.remove(n);
+      if (tekstAnnotation != null) {
+        tekstAnnotation.setLastSegmentIndex(currentTextSegmentIndex());
+        result.getXmlAnnotations().add(tekstAnnotation);
+      } else {
+        Log.error("tekst {} was not opened", n);
+      }
+    }
+
+    private void handlePoezieAndAlinea(AnnotationData annotationData) {
+      // puntannotatie, so ignore the annotated textsegment
+      removeCurrentTextSegment();
+      // start poezie or paragraph
+      closeOpenPoetryOrParagraph();
+      Map<String, String> attributes = new HashMap<String, String>();
+      poetryOrParagraphAnnotations.add(new XmlAnnotation(annotationData.type, attributes, 0)//
+          .setFirstSegmentIndex(currentTextSegmentIndex() + 1));
+    }
+
+    private void handleDefault(final String id, AnnotationData annotationData, String annotationBody) {
+      if (POETRY_AND_PARAGRAPH_CLOSERS.contains(annotationData.type)) {
+        closeOpenPoetryOrParagraph();
+      }
+      Map<String, String> attributes = ImmutableMap.of("body", annotationBody);
+      XmlAnnotation xmlAnnotation = new XmlAnnotation(annotationData.type, attributes, 0)//
+          .setFirstSegmentIndex(annotationStartIndexMap.get(id))//
+          .setLastSegmentIndex(currentTextSegmentIndex());
+      result.getXmlAnnotations().add(xmlAnnotation);
     }
 
     @Override
@@ -214,6 +243,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     public Traversal leaveElement(Element element, XmlContext context) {
       return Traversal.NEXT;
     }
+
   }
 
   private static int currentTextSegmentIndex() {
