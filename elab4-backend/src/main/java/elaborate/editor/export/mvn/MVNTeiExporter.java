@@ -66,13 +66,13 @@ public class MVNTeiExporter {
     handleOpenDefect(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONLEESBAAR.getName()));// Onleesbaar hetzelfde behandeld als defect
     handleOpenDoorhaling(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.DOORHALING.getName()));
     handleOpenDoorhaling(teiBuilder, openingAnnotationIndex.get("strike"));
+    handleOpenAfkorting(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.AFKORTING.getName()));
     handleOpenItalic(teiBuilder, openingAnnotationIndex.get("i"));
     handleOpenTekstKleurRood(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.TEKSTKLEUR_ROOD.getName()));
     handleOpenTekstKleurRood(teiBuilder, openingAnnotationIndex.get("b"));
     handleOpenOphogingRood(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.OPHOGING_ROOD.getName()));
     handleOpenCijfers(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.CIJFERS.getName()));
     handleOpenLetters(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.LETTERS.getName()));
-    handleOpenAfkorting(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.AFKORTING.getName()));
     handleOpenInitiaal(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.INITIAAL.getName()));
   }
 
