@@ -1,5 +1,7 @@
 package elaborate.editor.export.mvn;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Context {
   public String currentEntryId;
   public boolean indent = false;
@@ -27,6 +29,12 @@ public class Context {
 
   public void addError(MVNAnnotationType type, String error) {
     result.addError(currentEntryId, type.getName() + " : " + error);
+  }
+
+  public void assertTextIsInPoetryOrParagraph() {
+    if (!(inParagraph || inPoetry) && StringUtils.isNotBlank(text)) {
+      result.addError(currentEntryId, "De tekst '" + text + "' bevindt zich niet binnen de scope van een mvn:alinea of mvn:poëzie.");
+    }
   }
 
 }
