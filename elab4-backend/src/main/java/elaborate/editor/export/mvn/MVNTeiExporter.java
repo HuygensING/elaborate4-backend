@@ -39,6 +39,7 @@ public class MVNTeiExporter {
       context.text = annotatedTextSegment.getText();
       Log.info("textSegment= {}", annotatedTextSegment);
       handleOpeningAnnotations(teiBuilder, annotatedTextSegment);
+      context.assertTextIsInPoetryOrParagraph();
       teiBuilder.append(context.text);
       handleClosingAnnotations(teiBuilder, annotatedTextSegment);
     }
@@ -71,6 +72,7 @@ public class MVNTeiExporter {
       .add(new CijfersHandler(MVNAnnotationType.CIJFERS))//
       .add(new LettersHandler(MVNAnnotationType.LETTERS))//
       .add(new InitiaalHandler(MVNAnnotationType.INITIAAL))//
+      .add(new KolomHandler(MVNAnnotationType.KOLOM))//
       .build();
 
   // opening annotations
@@ -511,6 +513,19 @@ public class MVNTeiExporter {
     }
   }
 
+  private static class KolomHandler extends DefaultAnnotationHandler {
+    public KolomHandler(Object... tagObjects) {
+      super(tagObjects);
+    }
+
+    @Override
+    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
+      for (int i = 0; i < xmlAnnotations.size(); i++) {
+        teiBuilder.append(milestoneTag("cb"));
+      }
+    }
+  }
+
   private static class ItalicHandler extends ElementWrapper {
     private static final Element element = new Element("ex");
 
@@ -598,6 +613,7 @@ public class MVNTeiExporter {
             .append(closingTag(note));
       }
     }
+
   }
 
   //
