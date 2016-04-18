@@ -145,7 +145,7 @@ public class MVNConverter {
     ValidationResult validateTEI = MVNValidator.validateTEI(fullTEI);
     if (!validateTEI.isValid()) {
       result.addError("",
-          "Gegenereerde TEI is niet valide:\n"//
+          "Gegenereerde TEI voldoet niet aan TEI_MVN.rng:\n"//
               + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
               + " TEI:\n<pre>" + escapeHtml4(fullTEI) + "</pre>"//
               + " DEBUG:\n<pre>" + escapeHtml4(cooked) + "</pre>"//
