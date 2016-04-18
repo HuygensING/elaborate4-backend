@@ -59,8 +59,8 @@ public class MVNTeiExporter {
       .add(new LHandler("l"))//
       .add(new LinkerMargeKolomHandler(MVNAnnotationType.LINKERMARGEKOLOM))//
       .add(new RechterMargeKolomHandler(MVNAnnotationType.RECHTERMARGEKOLOM))//
-      .add(new HiRendWrapper("subscript", "sub"))//
-      .add(new HiRendWrapper("superscript", "sup"))//
+      .add(new SubHandler("sub"))//
+      .add(new SupHandler("sup"))//
       .add(new OnduidelijkHandler(MVNAnnotationType.ONDUIDELIJK))//
       .add(new DefectHandler(MVNAnnotationType.DEFECT, MVNAnnotationType.ONLEESBAAR))//
       .add(new DoorhalingHandler(MVNAnnotationType.DOORHALING, "strike"))//
@@ -68,8 +68,8 @@ public class MVNTeiExporter {
       .add(new ItalicHandler("i"))//
       .add(new TekstKleurRoodHandler(MVNAnnotationType.TEKSTKLEUR_ROOD, "b"))//
       .add(new OphogingRoodHandler(MVNAnnotationType.OPHOGING_ROOD))//
-      .add(new ElementWrapper(new Element("num").withAttribute("type", "roman"), MVNAnnotationType.CIJFERS))//
-      .add(new ElementWrapper(new Element("mentioned"), MVNAnnotationType.LETTERS))//
+      .add(new CijfersHandler(MVNAnnotationType.CIJFERS))//
+      .add(new LettersHandler(MVNAnnotationType.LETTERS))//
       .add(new InitiaalHandler(MVNAnnotationType.INITIAAL))//
       .build();
 
@@ -175,10 +175,10 @@ public class MVNTeiExporter {
       }
     }
 
-    private void closeLineGroup(StringBuilder teiBuilder, Context context) {
-      context.inPoetry = false;
-      teiBuilder.append(closingTag("lg"));
-    }
+    //    private void closeLineGroup(StringBuilder teiBuilder, Context context) {
+    //      context.inPoetry = false;
+    //      teiBuilder.append(closingTag("lg"));
+    //    }
 
   }
 
@@ -356,19 +356,27 @@ public class MVNTeiExporter {
     }
   }
 
-  private static class LinkerMargeKolomHandler extends ElementWrapper {
-    private static final Element note = new Element("note").withAttribute("place", "margin-left").withAttribute("type", "ms");
+  private static class MargeKolomHandler extends ElementWrapper {
+    public MargeKolomHandler(String place, Object... tagObjects) {
+      super(note(place), tagObjects);
+    }
 
-    public LinkerMargeKolomHandler(Object... tagObjects) {
-      super(note, tagObjects);
+    private static Element note(String place) {
+      return new Element("note")//
+          .withAttribute("place", "margin-" + place)//
+          .withAttribute("type", "ms");
     }
   }
 
-  private static class RechterMargeKolomHandler extends ElementWrapper {
-    private static final Element note = new Element("note").withAttribute("place", "margin-right").withAttribute("type", "ms");
+  private static class LinkerMargeKolomHandler extends MargeKolomHandler {
+    public LinkerMargeKolomHandler(Object... tagObjects) {
+      super("left", tagObjects);
+    }
+  }
 
+  private static class RechterMargeKolomHandler extends MargeKolomHandler {
     public RechterMargeKolomHandler(Object... tagObjects) {
-      super(note, tagObjects);
+      super("right", tagObjects);
     }
   }
 
@@ -398,6 +406,34 @@ public class MVNTeiExporter {
   private static class HiRendWrapper extends ElementWrapper {
     public HiRendWrapper(String rend, Object... tagObjects) {
       super(new Element("hi").withAttribute("rend", rend), tagObjects);
+    }
+  }
+
+  private static class SubHandler extends HiRendWrapper {
+    public SubHandler(Object... tagObjects) {
+      super("subscript", tagObjects);
+    }
+  }
+
+  private static class SupHandler extends HiRendWrapper {
+    public SupHandler(Object... tagObjects) {
+      super("superscript", tagObjects);
+    }
+  }
+
+  private static class CijfersHandler extends ElementWrapper {
+    private static final Element element = new Element("num").withAttribute("type", "roman");
+
+    public CijfersHandler(Object... tagObjects) {
+      super(element, tagObjects);
+    }
+  }
+
+  private static class LettersHandler extends ElementWrapper {
+    private static final Element element = new Element("mentioned");
+
+    public LettersHandler(Object... tagObjects) {
+      super(element, tagObjects);
     }
   }
 
@@ -440,6 +476,10 @@ public class MVNTeiExporter {
   }
 
   private static class AfkortingHandler extends DefaultAnnotationHandler {
+    private static final String EXPAN = "expan";
+    private static final String ABBR = "abbr";
+    private static final String CHOICE = "choice";
+
     public AfkortingHandler(Object... tagObjects) {
       super(tagObjects);
     }
@@ -460,24 +500,24 @@ public class MVNTeiExporter {
             ;
 
         teiBuilder//
-            .append(openingTag("choice"))//
-            .append(openingTag("abbr"))//
+            .append(openingTag(CHOICE))//
+            .append(openingTag(ABBR))//
             .append(abbr)//
-            .append(closingTag("abbr"))//
-            .append(openingTag("expan"))//
+            .append(closingTag(ABBR))//
+            .append(openingTag(EXPAN))//
             .append(expan)//
-            .append(closingTag("expan"))//
-            .append(closingTag("choice"));
+            .append(closingTag(EXPAN))//
+            .append(closingTag(CHOICE));
         context.text = "";
       }
     }
   }
 
   private static class ItalicHandler extends ElementWrapper {
-    private static final String EX = "ex";
+    private static final Element element = new Element("ex");
 
     public ItalicHandler(Object... tagObjects) {
-      super(new Element(EX), tagObjects);
+      super(element, tagObjects);
     }
   }
 
@@ -494,6 +534,8 @@ public class MVNTeiExporter {
   }
 
   private static class InitiaalHandler extends DefaultAnnotationHandler {
+    private static final String HI = "hi";
+
     public InitiaalHandler(Object... tagObjects) {
       super(tagObjects);
     }
@@ -515,7 +557,7 @@ public class MVNTeiExporter {
             addValidationError(body, context);
           }
 
-          Element hi = new Element("hi").withAttribute("rend", "capitalsize" + capitalsize);
+          Element hi = new Element(HI).withAttribute("rend", "capitalsize" + capitalsize);
           teiBuilder.append(openingTag(hi));
         }
       }
@@ -524,7 +566,7 @@ public class MVNTeiExporter {
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       for (int i = 0; i < xmlAnnotations.size(); i++) {
-        teiBuilder.append(closingTag("hi"));
+        teiBuilder.append(closingTag(HI));
       }
     }
 
