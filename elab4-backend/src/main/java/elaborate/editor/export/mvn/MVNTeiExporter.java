@@ -244,10 +244,10 @@ public class MVNTeiExporter {
         XmlAnnotation xmlAnnotation = xmlAnnotations.iterator().next();
         context.foliumLineNumber = "1";
         Map<String, String> entryAttributes = xmlAnnotation.getAttributes();
-        context.foliumId = entryAttributes.get("xml:id");
+        context.foliumId = entryAttributes.get(XML_ID);
         context.currentEntryId = entryAttributes.get("_entryId");
         Element pb = new Element("pb");
-        addOptionalAttribute(pb, "xml:id", entryAttributes);
+        addOptionalAttribute(pb, XML_ID, entryAttributes);
         addOptionalAttribute(pb, "n", entryAttributes);
         addOptionalAttribute(pb, "facs", entryAttributes);
         teiBuilder//
@@ -330,14 +330,14 @@ public class MVNTeiExporter {
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty()) {
         String id = context.foliumId + "-lb-" + context.foliumLineNumber;
-        Element lb = new Element("lb").withAttribute("n", String.valueOf(context.foliumLineNumber)).withAttribute("xml:id", id);
+        Element lb = new Element("lb").withAttribute("n", String.valueOf(context.foliumLineNumber)).withAttribute(XML_ID, id);
         if (context.indent) {
           lb.setAttribute("rend", "indent");
         }
         teiBuilder.append(NL).append(milestoneTag(lb));
         if (context.inPoetry) {
           String lId = context.foliumId + "-l-" + context.textLineNumber;
-          Element l = new Element("l").withAttribute("n", String.valueOf(context.textLineNumber)).withAttribute("xml:id", lId);
+          Element l = new Element("l").withAttribute("n", String.valueOf(context.textLineNumber)).withAttribute(XML_ID, lId);
           teiBuilder.append(openingTag(l));
         }
         context.indent = false;
@@ -443,7 +443,6 @@ public class MVNTeiExporter {
     public OnduidelijkHandler(Object... tagObjects) {
       super(element, tagObjects);
     }
-
   }
 
   private static class DefectHandler extends DefaultAnnotationHandler {
@@ -464,7 +463,6 @@ public class MVNTeiExporter {
         context.text = "";// ignore annotated text 
       }
     }
-
   }
 
   private static class DoorhalingHandler extends ElementWrapper {
