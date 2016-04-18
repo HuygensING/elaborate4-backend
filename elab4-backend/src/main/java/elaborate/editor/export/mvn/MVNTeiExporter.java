@@ -46,31 +46,31 @@ public class MVNTeiExporter {
   }
 
   private static final List<AnnotationHandler> ANNOTATION_HANDLERS = ImmutableList.<AnnotationHandler> builder()//
-      .add(new InspringenHandler())//
-      .add(new RegelnummeringBladHandler())//
-      .add(new PaleoHandler())//
-      .add(new TekstHandler())//
-      .add(new PoezieHandler())//
-      .add(new AlineaHandler())//
-      .add(new EntryHandler())//
-      .add(new OpschriftHandler())//
-      .add(new OnderschriftHandler())//
-      .add(new WitregelHandler())//
-      .add(new LHandler())//
-      .add(new LinkerMargeKolomHandler())//
-      .add(new RechterMargeKolomHandler())//
-      .add(new SubHandler())//
-      .add(new SupHandler())//
-      .add(new OnduidelijkHandler())//
-      .add(new DefectHandler())//
-      .add(new DoorhalingHandler())//
-      .add(new AfkortingHandler())//
-      .add(new ItalicHandler())//
-      .add(new TekstKleurRoodHandler())//
-      .add(new OphogingRoodHandler())//
-      .add(new CijfersHandler())//
-      .add(new LettersHandler())//
-      .add(new InitiaalHandler())//
+      .add(new InspringenHandler(MVNAnnotationType.INSPRINGEN))//
+      .add(new RegelnummeringBladHandler(MVNAnnotationType.REGELNUMMERING_BLAD))//
+      .add(new PaleoHandler(MVNAnnotationType.PALEOGRAFISCH))//
+      .add(new TekstHandler("tekst"))//
+      .add(new PoezieHandler(MVNAnnotationType.POEZIE))//
+      .add(new AlineaHandler(MVNAnnotationType.ALINEA))//
+      .add(new EntryHandler("entry"))//
+      .add(new OpschriftHandler(MVNAnnotationType.OPSCHRIFT))//
+      .add(new OnderschriftHandler(MVNAnnotationType.ONDERSCHRIFT))//
+      .add(new WitregelHandler(MVNAnnotationType.WITREGEL))//
+      .add(new LHandler("l"))//
+      .add(new LinkerMargeKolomHandler(MVNAnnotationType.LINKERMARGEKOLOM))//
+      .add(new RechterMargeKolomHandler(MVNAnnotationType.RECHTERMARGEKOLOM))//
+      .add(new HiRendWrapper("subscript", "sub"))//
+      .add(new HiRendWrapper("superscript", "sup"))//
+      .add(new OnduidelijkHandler(MVNAnnotationType.ONDUIDELIJK))//
+      .add(new DefectHandler(MVNAnnotationType.DEFECT, MVNAnnotationType.ONLEESBAAR))//
+      .add(new DoorhalingHandler(MVNAnnotationType.DOORHALING, "strike"))//
+      .add(new AfkortingHandler(MVNAnnotationType.AFKORTING))//
+      .add(new ItalicHandler("i"))//
+      .add(new TekstKleurRoodHandler(MVNAnnotationType.TEKSTKLEUR_ROOD, "b"))//
+      .add(new OphogingRoodHandler(MVNAnnotationType.OPHOGING_ROOD))//
+      .add(new ElementWrapper(new Element("num").withAttribute("type", "roman"), MVNAnnotationType.CIJFERS))//
+      .add(new ElementWrapper(new Element("mentioned"), MVNAnnotationType.LETTERS))//
+      .add(new InitiaalHandler(MVNAnnotationType.INITIAAL))//
       .build();
 
   // opening annotations
@@ -80,34 +80,6 @@ public class MVNTeiExporter {
       List<XmlAnnotation> xmlAnnotations = filterRelevantAnnotations(openingAnnotationIndex, annotationHandler);
       annotationHandler.onOpenAnnotation(teiBuilder, xmlAnnotations, context);
     }
-
-    //    handleInspringen(openingAnnotationIndex.get(MVNAnnotationType.INSPRINGEN.getName()));
-    //    handleRegelNummering(openingAnnotationIndex.get(MVNAnnotationType.REGELNUMMERING_BLAD.getName()));
-    //    handleOpenTekst(teiBuilder, openingAnnotationIndex.get("tekst"));
-    //    handleOpenPoezie(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.POEZIE.getName()));
-    //    handleOpenAlinea(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ALINEA.getName()));
-    //    handlePageBreak(teiBuilder, openingAnnotationIndex.get("entry"));
-    //    handleOpenOpschrift(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.OPSCHRIFT.getName()));
-    //    handleOpenOnderschrift(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONDERSCHRIFT.getName()));
-    //    handleOpenWitregel(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.WITREGEL.getName()));
-    //    handleOpenRegel(teiBuilder, openingAnnotationIndex.get("l"));
-    //    handleOpenLinkerMargeKolom(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.LINKERMARGEKOLOM.getName()));
-    //    handleOpenRechterMargeKolom(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.RECHTERMARGEKOLOM.getName()));
-    //    handleOpenSub(teiBuilder, openingAnnotationIndex.get("sub"));
-    //    handleOpenSup(teiBuilder, openingAnnotationIndex.get("sup"));
-    //    handleOpenOnduidelijk(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONDUIDELIJK.getName()));
-    //    handleOpenDefect(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.DEFECT.getName()));
-    //    handleOpenDefect(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.ONLEESBAAR.getName()));// Onleesbaar hetzelfde behandeld als defect
-    //    handleOpenDoorhaling(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.DOORHALING.getName()));
-    //    handleOpenDoorhaling(teiBuilder, openingAnnotationIndex.get("strike"));
-    //    handleOpenAfkorting(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.AFKORTING.getName()));
-    //    handleOpenItalic(teiBuilder, openingAnnotationIndex.get("i"));
-    //    handleOpenTekstKleurRood(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.TEKSTKLEUR_ROOD.getName()));
-    //    handleOpenTekstKleurRood(teiBuilder, openingAnnotationIndex.get("b"));
-    //    handleOpenOphogingRood(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.OPHOGING_ROOD.getName()));
-    //    handleOpenCijfers(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.CIJFERS.getName()));
-    //    handleOpenLetters(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.LETTERS.getName()));
-    //    handleOpenInitiaal(teiBuilder, openingAnnotationIndex.get(MVNAnnotationType.INITIAAL.getName()));
   }
 
   // closing annotations
@@ -117,27 +89,6 @@ public class MVNTeiExporter {
       List<XmlAnnotation> xmlAnnotations = filterRelevantAnnotations(closingAnnotationIndex, annotationHandler);
       annotationHandler.onCloseAnnotation(teiBuilder, xmlAnnotations, context);
     }
-    //    handleCloseInitiaal(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.INITIAAL.getName()));
-    //    handleCloseLetters(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.LETTERS.getName()));
-    //    handleCloseCijfers(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.CIJFERS.getName()));
-    //    handleCloseOphogingRood(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.OPHOGING_ROOD.getName()));
-    //    handleCloseTekstKleurRood(teiBuilder, closingAnnotationIndex.get("b"));
-    //    handleCloseTekstKleurRood(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.TEKSTKLEUR_ROOD.getName()));
-    //    handleCloseDoorhaling(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.DOORHALING.getName()));
-    //    handleCloseDoorhaling(teiBuilder, closingAnnotationIndex.get("strike"));
-    //    handleCloseItalic(teiBuilder, closingAnnotationIndex.get("i"));
-    //    handleCloseOnduidelijk(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ONDUIDELIJK.getName()));
-    //    handleCloseSup(teiBuilder, closingAnnotationIndex.get("sup"));
-    //    handleCloseSub(teiBuilder, closingAnnotationIndex.get("sub"));
-    //    handleCloseRegel(teiBuilder, closingAnnotationIndex);
-    //    handleCloseAlinea(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ALINEA.getName()));
-    //    handleClosePoezie(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.POEZIE.getName()));
-    //    handleCloseOpschrift(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.OPSCHRIFT.getName()));
-    //    handleCloseOnderschrift(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.ONDERSCHRIFT.getName()));
-    //    handleClosePaleo(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.PALEOGRAFISCH.getName()));
-    //    handleCloseLinkerMargeKolom(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.LINKERMARGEKOLOM.getName()));
-    //    handleCloseRechterMargeKolom(teiBuilder, closingAnnotationIndex.get(MVNAnnotationType.RECHTERMARGEKOLOM.getName()));
-    //    handleCloseTekst(teiBuilder, closingAnnotationIndex.get("tekst"));
   }
 
   private List<XmlAnnotation> filterRelevantAnnotations(Multimap<String, XmlAnnotation> closingAnnotationIndex, AnnotationHandler annotationHandler) {
@@ -150,8 +101,8 @@ public class MVNTeiExporter {
   }
 
   private static class InspringenHandler extends DefaultAnnotationHandler {
-    public InspringenHandler() {
-      super(MVNAnnotationType.INSPRINGEN);
+    public InspringenHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -163,8 +114,8 @@ public class MVNTeiExporter {
   }
 
   private static class RegelnummeringBladHandler extends DefaultAnnotationHandler {
-    public RegelnummeringBladHandler() {
-      super(MVNAnnotationType.REGELNUMMERING_BLAD);
+    public RegelnummeringBladHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -176,12 +127,11 @@ public class MVNTeiExporter {
         context.foliumLineNumber = customLineNumber;
       }
     }
-
   }
 
   private static class TekstHandler extends DefaultAnnotationHandler {
-    public TekstHandler() {
-      super("tekst");
+    public TekstHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -235,8 +185,8 @@ public class MVNTeiExporter {
   private static class PoezieHandler extends DefaultAnnotationHandler {
     private static final String LG = "lg";
 
-    public PoezieHandler() {
-      super(MVNAnnotationType.POEZIE);
+    public PoezieHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -261,31 +211,31 @@ public class MVNTeiExporter {
 
   }
 
-  private static class AlineaHandler extends DefaultAnnotationHandler {
-    public AlineaHandler() {
-      super(MVNAnnotationType.ALINEA);
+  private static class AlineaHandler extends ElementWrapper {
+    public AlineaHandler(Object... tagObjects) {
+      super(new Element("p"), tagObjects);
     }
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty()) {
         context.inParagraph = true;
-        teiBuilder.append(openingTag("p"));
       }
+      super.onOpenAnnotation(teiBuilder, xmlAnnotations, context);
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty()) {
         context.inParagraph = false;
-        teiBuilder.append(closingTag("p"));
       }
+      super.onCloseAnnotation(teiBuilder, xmlAnnotations, context);
     }
   }
 
   private static class EntryHandler extends DefaultAnnotationHandler {
-    public EntryHandler() {
-      super("entry");
+    public EntryHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -310,8 +260,8 @@ public class MVNTeiExporter {
   private static class OpschriftHandler extends DefaultAnnotationHandler {
     private static final String HEAD = "head";
 
-    public OpschriftHandler() {
-      super(MVNAnnotationType.OPSCHRIFT);
+    public OpschriftHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -328,8 +278,8 @@ public class MVNTeiExporter {
   private static class OnderschriftHandler extends DefaultAnnotationHandler {
     private static final String CLOSER = "closer";
 
-    public OnderschriftHandler() {
-      super(MVNAnnotationType.ONDERSCHRIFT);
+    public OnderschriftHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -345,35 +295,35 @@ public class MVNTeiExporter {
 
   private static void openHeadOrCloser(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, String name, Context context) {
     Element head = new Element(name);
-    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+    for (int i = 0; i < xmlAnnotations.size(); i++) {
       teiBuilder.append(openingTag(head));
       context.countAsTextLine = true;
     }
   }
 
   private static void closeHeadOrCloser(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, String name, Context context) {
-    for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+    for (int i = 0; i < xmlAnnotations.size(); i++) {
       teiBuilder.append(closingTag(name));
       context.countAsTextLine = true;
     }
   }
 
   private static class WitregelHandler extends DefaultAnnotationHandler {
-    public WitregelHandler() {
-      super(MVNAnnotationType.WITREGEL);
+    public WitregelHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      for (int i = 0; i < xmlAnnotations.size(); i++) {
         teiBuilder.append(milestoneTag("lb"));
       }
     }
   }
 
   private static class LHandler extends DefaultAnnotationHandler {
-    public LHandler() {
-      super("l");
+    public LHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -396,7 +346,6 @@ public class MVNTeiExporter {
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      //      if (closingAnnotationIndex.containsKey("l")) {
       if (!xmlAnnotations.isEmpty()) {
         context.incrementFoliumLineNumber();
         context.incrementTextLineNumber();
@@ -407,122 +356,63 @@ public class MVNTeiExporter {
     }
   }
 
-  private static class LinkerMargeKolomHandler extends DefaultAnnotationHandler {
+  private static class LinkerMargeKolomHandler extends ElementWrapper {
     private static final Element note = new Element("note").withAttribute("place", "margin-left").withAttribute("type", "ms");
 
-    public LinkerMargeKolomHandler() {
-      super(MVNAnnotationType.LINKERMARGEKOLOM);
-    }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(note));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(note));
-      }
+    public LinkerMargeKolomHandler(Object... tagObjects) {
+      super(note, tagObjects);
     }
   }
 
-  private static class RechterMargeKolomHandler extends DefaultAnnotationHandler {
+  private static class RechterMargeKolomHandler extends ElementWrapper {
     private static final Element note = new Element("note").withAttribute("place", "margin-right").withAttribute("type", "ms");
 
-    public RechterMargeKolomHandler() {
-      super(MVNAnnotationType.RECHTERMARGEKOLOM);
-    }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(note));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(note));
-      }
+    public RechterMargeKolomHandler(Object... tagObjects) {
+      super(note, tagObjects);
     }
   }
 
-  private static class SubHandler extends DefaultAnnotationHandler {
-    Element hi = new Element("hi").withAttribute("rend", "subscript");
+  private static class ElementWrapper extends DefaultAnnotationHandler {
+    private final Element element;
 
-    public SubHandler() {
-      super("sub");
+    public ElementWrapper(Element element, Object... tagObjects) {
+      super(tagObjects);
+      this.element = element;
     }
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(hi));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(hi));
-      }
-    }
-
-  }
-
-  private static class SupHandler extends DefaultAnnotationHandler {
-    Element hi = new Element("hi").withAttribute("rend", "superscript");
-
-    public SupHandler() {
-      super("sup");
-    }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(hi));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(hi));
-      }
-    }
-
-  }
-
-  private static class OnduidelijkHandler extends DefaultAnnotationHandler {
-    Element element = new Element("unclear");
-
-    public OnduidelijkHandler() {
-      super(MVNAnnotationType.ONDUIDELIJK);
-    }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      for (int i = 0; i < xmlAnnotations.size(); i++) {
         teiBuilder.append(openingTag(element));
       }
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      for (int i = 0; i < xmlAnnotations.size(); i++) {
         teiBuilder.append(closingTag(element));
       }
+    }
+  }
+
+  private static class HiRendWrapper extends ElementWrapper {
+    public HiRendWrapper(String rend, Object... tagObjects) {
+      super(new Element("hi").withAttribute("rend", rend), tagObjects);
+    }
+  }
+
+  private static class OnduidelijkHandler extends ElementWrapper {
+    private static final Element element = new Element("unclear");
+
+    public OnduidelijkHandler(Object... tagObjects) {
+      super(element, tagObjects);
     }
 
   }
 
   private static class DefectHandler extends DefaultAnnotationHandler {
-    public DefectHandler() {
-      super(MVNAnnotationType.DEFECT, MVNAnnotationType.ONLEESBAAR);
+    public DefectHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -541,32 +431,17 @@ public class MVNTeiExporter {
 
   }
 
-  private static class DoorhalingHandler extends DefaultAnnotationHandler {
-    private static final String DEL = "del";
+  private static class DoorhalingHandler extends ElementWrapper {
+    private static final Element del = new Element("del");
 
-    public DoorhalingHandler() {
-      super(MVNAnnotationType.DOORHALING, "strike");
+    public DoorhalingHandler(Object... tagObjects) {
+      super(del, tagObjects);
     }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(DEL));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(DEL));
-      }
-    }
-
   }
 
   private static class AfkortingHandler extends DefaultAnnotationHandler {
-    public AfkortingHandler() {
-      super(MVNAnnotationType.AFKORTING);
+    public AfkortingHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -596,127 +471,31 @@ public class MVNTeiExporter {
         context.text = "";
       }
     }
-
   }
 
-  private static class ItalicHandler extends DefaultAnnotationHandler {
+  private static class ItalicHandler extends ElementWrapper {
     private static final String EX = "ex";
 
-    public ItalicHandler() {
-      super("i");
+    public ItalicHandler(Object... tagObjects) {
+      super(new Element(EX), tagObjects);
     }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(EX));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(EX));
-      }
-    }
-
   }
 
-  private static class TekstKleurRoodHandler extends DefaultAnnotationHandler {
-    Element hi = new Element("hi").withAttribute("rend", "rubric");
-
-    public TekstKleurRoodHandler() {
-      super(MVNAnnotationType.TEKSTKLEUR_ROOD, "b");
+  private static class OphogingRoodHandler extends HiRendWrapper {
+    public OphogingRoodHandler(Object... tagObjects) {
+      super("rubricated", tagObjects);
     }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(hi));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(hi));
-      }
-    }
-
   }
 
-  private static class OphogingRoodHandler extends DefaultAnnotationHandler {
-    Element hi = new Element("hi").withAttribute("rend", "rubricated");
-
-    public OphogingRoodHandler() {
-      super(MVNAnnotationType.OPHOGING_ROOD);
+  private static class TekstKleurRoodHandler extends HiRendWrapper {
+    public TekstKleurRoodHandler(Object... tagObjects) {
+      super("rubric", tagObjects);
     }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(hi));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(hi));
-      }
-    }
-
-  }
-
-  private static class CijfersHandler extends DefaultAnnotationHandler {
-    Element num = new Element("num").withAttribute("type", "roman");
-
-    public CijfersHandler() {
-      super(MVNAnnotationType.CIJFERS);
-    }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(num));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(num));
-      }
-    }
-
-  }
-
-  private static class LettersHandler extends DefaultAnnotationHandler {
-    private static final String MENTIONED = "mentioned";
-
-    public LettersHandler() {
-      super(MVNAnnotationType.LETTERS);
-    }
-
-    @Override
-    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(openingTag(MENTIONED));
-      }
-    }
-
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
-        teiBuilder.append(closingTag(MENTIONED));
-      }
-    }
-
   }
 
   private static class InitiaalHandler extends DefaultAnnotationHandler {
-    public InitiaalHandler() {
-      super(MVNAnnotationType.INITIAAL);
+    public InitiaalHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
@@ -744,7 +523,7 @@ public class MVNTeiExporter {
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
+      for (int i = 0; i < xmlAnnotations.size(); i++) {
         teiBuilder.append(closingTag("hi"));
       }
     }
@@ -752,12 +531,11 @@ public class MVNTeiExporter {
     public void addValidationError(final String body, Context context) {
       context.addError(MVNAnnotationType.INITIAAL, "De inhoud van de annotatie ('" + body + "') is geen natuurlijk getal > 0 en < 20.");
     }
-
   }
 
   private static class PaleoHandler extends DefaultAnnotationHandler {
-    public PaleoHandler() {
-      super(MVNAnnotationType.PALEOGRAFISCH);
+    public PaleoHandler(Object... tagObjects) {
+      super(tagObjects);
     }
 
     @Override
