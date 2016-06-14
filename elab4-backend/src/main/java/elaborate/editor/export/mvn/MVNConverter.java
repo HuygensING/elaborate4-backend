@@ -216,14 +216,16 @@ public class MVNConverter {
         openTextNums.add(textnum);
 
       } else if ("einde".equals(beginOrEinde)) {
-        final String peek = textNumStack.peek();
-        if (textnum.equals(peek)) {
-          if (lastTagWasBegin) {
-            data.getDeepestTextNums().add(textnum);
+        if (!textNumStack.isEmpty()) {
+          final String peek = textNumStack.peek();
+          if (textnum.equals(peek)) {
+            if (lastTagWasBegin) {
+              data.getDeepestTextNums().add(textnum);
+            }
+            textNumStack.pop();
+          } else {
+            //          result.addError("", "mvn:teksteinde : tekstNum '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
           }
-          textNumStack.pop();
-        } else {
-          //          result.addError("", "mvn:teksteinde : tekstNum '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
         }
         lastTagWasBegin = false;
         closeTextNums.add(textnum);
