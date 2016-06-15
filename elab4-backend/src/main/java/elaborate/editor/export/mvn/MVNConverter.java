@@ -205,7 +205,7 @@ public class MVNConverter {
     final Stack<String> textNumStack = new Stack<String>();
     final List<String> openTextNums = Lists.newArrayList();
     final List<String> closeTextNums = Lists.newArrayList();
-    final Matcher matcher = Pattern.compile("mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
+    final Matcher matcher = Pattern.compile("<mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
     boolean lastTagWasBegin = false;
     while (matcher.find()) {
       final String beginOrEinde = matcher.group(1);
