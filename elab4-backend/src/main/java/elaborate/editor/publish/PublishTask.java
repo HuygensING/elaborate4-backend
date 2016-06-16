@@ -161,7 +161,16 @@ public class PublishTask implements Runnable {
       ClientResponse response = mvnClient.putTEI(project.getName(), tei);
       Log.info("responseStatus = {}", response.getClientResponseStatus());
       if (!response.getClientResponseStatus().equals(ClientResponse.Status.CREATED)) {
-        status.addError("MVN server returned error: <br/>" + response.getEntity(String.class).replaceAll("\n", "<br/>") + "<br/>On generated TEI: " + tei.replaceAll("\n", "<br/>"));
+        String error = MessageFormat.format(//
+            "MVN server returned error: <br/>{0}<br/>On generated TEI: {1}", //
+            response.getEntity(String.class)//
+                .replaceAll("\n", "<br/>"), //
+            tei.replace("&", "&amp;")//
+                .replace("<", "&lt;")//
+                .replace(">", "&gt;")//
+                .replaceAll("\n", "<br/>")//
+        );
+        status.addError(error);
       }
     }
     return MVN_BASE_URL + project.getName().toUpperCase();
