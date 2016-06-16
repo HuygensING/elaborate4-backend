@@ -162,7 +162,7 @@ public class PublishTask implements Runnable {
       Log.info("responseStatus = {}", response.getClientResponseStatus());
       if (!response.getClientResponseStatus().equals(ClientResponse.Status.CREATED)) {
         String error = MessageFormat.format(//
-            "MVN server returned error: <br/>{0}<br/>On generated TEI: {1}", //
+            "MVN server returned error: <br/>{0}<br/>On generated TEI: <hr/><pre>{1}</pre><hr/>", //
             response.getEntity(String.class)//
                 .replaceAll("\n", "<br/>"), //
             tei.replace("&", "&amp;")//
