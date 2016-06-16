@@ -161,7 +161,7 @@ public class PublishTask implements Runnable {
       ClientResponse response = mvnClient.putTEI(project.getName(), tei);
       Log.info("responseStatus = {}", response.getClientResponseStatus());
       if (!response.getClientResponseStatus().equals(ClientResponse.Status.CREATED)) {
-        status.addError("MVN server returned error: " + response.getEntity(String.class));
+        status.addError("MVN server returned error: <br/>" + response.getEntity(String.class).replaceAll("\n", "<br/>"));
       }
     }
     return MVN_BASE_URL + project.getName().toUpperCase();
@@ -412,7 +412,7 @@ public class PublishTask implements Runnable {
   private void addIfNotNull(Map<String, Object> map, String key, String value) {
     if (value != null) {
       map.put(key, value);
-    };
+    } ;
   }
 
   // private Map<String, Object> getMetadata(Project project) {
@@ -670,7 +670,7 @@ public class PublishTask implements Runnable {
               "dynamic_i_birthyear", "dynamic_i_deathyear", "dynamic_s_networkdomain", //
               "dynamic_s_characteristic", "dynamic_s_subdomain", "dynamic_s_domain", "dynamic_s_combineddomain", //
               "dynamic_s_periodical", "dynamic_s_membership"//
-      ));
+          ));
       projectData.put("personLevels", ImmutableList.of(//
           "dynamic_sort_name", "dynamic_k_birthDate", "dynamic_k_deathDate", "dynamic_sort_networkdomain", "dynamic_sort_gender"//
       ));
