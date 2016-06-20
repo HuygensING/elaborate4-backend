@@ -512,7 +512,7 @@ public class PublishTask implements Runnable {
         .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
         .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
     );
-    entityManager.persist(transcription);
+    entityManager.merge(transcription);
     entityManager.close();
   }
 
