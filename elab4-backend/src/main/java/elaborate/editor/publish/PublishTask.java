@@ -503,15 +503,20 @@ public class PublishTask implements Runnable {
   private void fixPageBreaks(Transcription transcription) {
     EntityManager entityManager = HibernateUtil.getEntityManager();
     String body = transcription.getBody();
-    transcription.setBody(body//
+    String fixed = body//
+        .replace("<strong>", "<b>")//
+        .replace("</strong>", "</b>")//
         .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3<b>¶</b>$4")//
         .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3")//
         .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2")//
         .replaceAll("¶", "<b>¶</b>")//
         .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
         .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
-        .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
-    );
+        .replaceAll("<b><b>¶</b></b>", "<b>¶</b>");
+    transcription.setBody(fixed);
+    if (!fixed.equals(body)) {
+      Log.info("fixed transcription {}:{}", transcription.getId(), fixed);
+    }
     entityManager.merge(transcription);
     entityManager.close();
   }
