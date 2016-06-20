@@ -660,6 +660,7 @@ public class PublishTask implements Runnable {
 
   private void cnwKludge(Project project, Map<String, Object> projectData, List<String> projectEntryMetadataFields) {
     if (project.getId() == 44) {
+      fixPageBreaks(project.getProjectEntries());
       List<String> fieldnames = Lists.newArrayListWithExpectedSize(projectEntryMetadataFields.size());
       for (String fieldTitle : projectEntryMetadataFields) {
         fieldnames.add(SolrUtils.facetName(fieldTitle));
@@ -684,6 +685,26 @@ public class PublishTask implements Runnable {
           "dynamic_sort_name", "dynamic_k_birthDate", "dynamic_k_deathDate", "dynamic_sort_networkdomain", "dynamic_sort_gender"//
       ));
     }
+  }
+
+  private void fixPageBreaks(List<ProjectEntry> projectEntries) {
+    EntityManager entityManager = HibernateUtil.getEntityManager();
+    for (ProjectEntry projectEntry : projectEntries) {
+      for (Transcription transcription : projectEntry.getTranscriptions()) {
+        String body = transcription.getBody();
+        transcription.setBody(body//
+            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3<b>¶</b>$4")//
+            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3")//
+            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2")//
+            .replaceAll("¶", "<b>¶</b>")//
+            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
+            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
+            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
+        );
+        entityManager.merge(transcription);
+      }
+    }
+    entityManager.close();
   }
 
   private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields, Map<String, String> typographicalAnnotationMap) {
