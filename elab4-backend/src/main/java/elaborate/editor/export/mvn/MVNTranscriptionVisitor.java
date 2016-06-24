@@ -171,6 +171,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public Traversal leaveElement(final Element e, final XmlContext c) {
       closeOpenParagraph(c);
       closeOpenLineGroup(c);
+      currentPageBreak = "";
       return Traversal.NEXT;
     }
 
@@ -198,9 +199,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       super.leaveElement(element, context);
       context.addLiteral("\n");
       currentPageBreak = context.closeLayer();
-      if (inText()) {
-        addPageBreak(context);
-      }
+      //      if (inText()) {
+      //      addPageBreak(context);
+      //      }
       return Traversal.NEXT;
     }
 
@@ -250,6 +251,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public Traversal leaveElement(final Element element, final XmlContext context) {
       String line = context.closeLayer();
       context.addLiteral(currentLineInfo.preTags);
+      context.addLiteral(currentPageBreak);
+      currentPageBreak = "";
       if (currentLineInfo.witregel) {
         context.addLiteral(indent());
         context.addEmptyElementTag("lb");
@@ -368,7 +371,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       .put(MVNAnnotationType.METAMARK, new MetamarkHandler())//
       .put(MVNAnnotationType.ONDERSCHRIFT, new OnderschriftHandler())//
       .put(MVNAnnotationType.ONDUIDELIJK, new WrapInElementHandler("unclear"))//
-      .put(MVNAnnotationType.ONLEESBAAR, new WrapInElementHandler("gap"))//
+      .put(MVNAnnotationType.ONLEESBAAR, new DefectHandler())//
       .put(MVNAnnotationType.OPHOGING_ROOD, new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubricated")))//
       .put(MVNAnnotationType.OPSCHRIFT, new OpschriftHandler())//
       .put(MVNAnnotationType.PALEOGRAFISCH, new PaleografischHandler())//
@@ -581,6 +584,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       context.addLiteral("\n" + indent());
       context.addOpenTag("lg");
+      //      currentLineInfo.preTags = "\n<lg>" + currentLineInfo.preTags;
       inLineGroup = true;
     }
   }
@@ -727,6 +731,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       context.addLiteral("\n" + indent());
       context.addCloseTag(element);
       currentLineInfo.postTags = currentLineInfo.postTags + context.closeLayer();
+      closeOpenLineGroup(context);
     }
   }
 
@@ -763,7 +768,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static String cleanUpAnnotationBody(final AnnotationData annotation) {
-    return normalized(annotation.body).replaceAll("<span.*?>", "").replaceAll("</span>", "");
+    return normalized(annotation.body)//
+        .replaceAll("<b>", "<hi rend=\"rubric\">").replaceAll("</b>", "</hi>")//
+        .replaceAll("<u>", "<hi rend=\"underline\">").replaceAll("</u>", "</hi>");
   }
 
   private static String normalized(final String rawXml) {
@@ -772,6 +779,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         .replaceAll("<div>", "")//
         .replaceAll("</div>", "")//
         .replaceAll("<br>", "")//
+        .replaceAll("<span.*?>", "")//
+        .replaceAll("</span>", "")//
         .replace("&nbsp;", " ");
     return normalized;
   }

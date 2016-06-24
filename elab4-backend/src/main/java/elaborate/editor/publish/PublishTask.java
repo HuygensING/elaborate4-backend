@@ -118,6 +118,7 @@ public class PublishTask implements Runnable {
   //	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
   private Map<Integer, AnnotationData> annotationDataMap;
   private final MVNClient mvnClient = new MVNClient(config.getSetting(Configuration.MVN_SERVER_URL));
+  private final String baseURL = config.getSetting(Configuration.WORK_URL);
 
   public PublishTask(Publication.Settings settings) {
     this.settings = settings;
@@ -134,9 +135,14 @@ public class PublishTask implements Runnable {
     final Project project = entityManager.find(Project.class, projectId);
     final ProjectService ps = ProjectService.instance();
     boolean projectIsMVN = ProjectTypes.MVN.equals(project.getMetadataMap().get(ProjectMetadataFields.TYPE));
-    final String url = projectIsMVN ? createMVNDraft(project, ps) : createRegularDraft(project, ps);
+    String url = "";
+    try {
+      url = projectIsMVN ? createMVNDraft(project, ps) : createRegularDraft(project, ps);
+      status.setUrl(url);
 
-    status.setUrl(url);
+    } catch (Exception e) {
+      status.addError(e.getMessage());
+    }
     status.addLogline("finished");
     status.setDone();
 
@@ -147,7 +153,7 @@ public class PublishTask implements Runnable {
 
   private String createMVNDraft(Project project, ProjectService ps) {
     MVNConversionData data = MVNConverter.getConversionData(project.getId(), status);
-    MVNConverter mvnConverter = new MVNConverter(project, data, status);
+    MVNConverter mvnConverter = new MVNConverter(project, data, status, baseURL);
     MVNConversionResult report = mvnConverter.convert();
     if (report.isOK()) {
       String tei = report.getTEI();
@@ -155,7 +161,16 @@ public class PublishTask implements Runnable {
       ClientResponse response = mvnClient.putTEI(project.getName(), tei);
       Log.info("responseStatus = {}", response.getClientResponseStatus());
       if (!response.getClientResponseStatus().equals(ClientResponse.Status.CREATED)) {
-        status.addError("MVN server returned error: " + response.getEntity(String.class));
+        String error = MessageFormat.format(//
+            "MVN server returned error: <br/>{0}<br/>On generated TEI: <hr/><pre>{1}</pre><hr/>", //
+            response.getEntity(String.class)//
+                .replaceAll("\n", "<br/>"), //
+            tei.replace("&", "&amp;")//
+                .replace("<", "&lt;")//
+                .replace(">", "&gt;")//
+                .replaceAll("\n", "<br/>")//
+        );
+        status.addError(error);
       }
     }
     return MVN_BASE_URL + project.getName().toUpperCase();
@@ -406,7 +421,7 @@ public class PublishTask implements Runnable {
   private void addIfNotNull(Map<String, Object> map, String key, String value) {
     if (value != null) {
       map.put(key, value);
-    };
+    } ;
   }
 
   // private Map<String, Object> getMetadata(Project project) {
@@ -467,6 +482,10 @@ public class PublishTask implements Runnable {
   private Map<String, TextlayerData> getTexts(ProjectEntry projectEntry) {
     Map<String, TextlayerData> map = Maps.newHashMap();
     for (Transcription transcription : projectEntry.getTranscriptions()) {
+      if (projectEntry.getProject().getId() == 44) {
+        // CNW kludge
+        fixPageBreaks(transcription);
+      }
       try {
         TextlayerData textlayerData = getTextlayerData(transcription);
         if (textlayerData.getText().length() < 20) {
@@ -479,6 +498,27 @@ public class PublishTask implements Runnable {
       }
     }
     return map;
+  }
+
+  private void fixPageBreaks(Transcription transcription) {
+    EntityManager entityManager = HibernateUtil.getEntityManager();
+    String body = transcription.getBody();
+    String fixed = body//
+        .replace("<strong>", "<b>")//
+        .replace("</strong>", "</b>")//
+        .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3<b>¶</b>$4")//
+        .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3")//
+        .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2")//
+        .replaceAll("¶", "<b>¶</b>")//
+        .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
+        .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
+        .replaceAll("<b><b>¶</b></b>", "<b>¶</b>");
+    transcription.setBody(fixed);
+    if (!fixed.equals(body)) {
+      Log.info("fixed transcription {}:\nraw={}\nfix={}", transcription.getId(), fixed);
+    }
+    entityManager.merge(transcription);
+    entityManager.close();
   }
 
   private TextlayerData getTextlayerData(Transcription transcription) {
@@ -664,7 +704,7 @@ public class PublishTask implements Runnable {
               "dynamic_i_birthyear", "dynamic_i_deathyear", "dynamic_s_networkdomain", //
               "dynamic_s_characteristic", "dynamic_s_subdomain", "dynamic_s_domain", "dynamic_s_combineddomain", //
               "dynamic_s_periodical", "dynamic_s_membership"//
-      ));
+          ));
       projectData.put("personLevels", ImmutableList.of(//
           "dynamic_sort_name", "dynamic_k_birthDate", "dynamic_k_deathDate", "dynamic_sort_networkdomain", "dynamic_sort_gender"//
       ));

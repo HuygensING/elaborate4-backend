@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -43,9 +42,9 @@ public class MVNConversionResult {
   private String title;
   private String body = "";
 
-  public MVNConversionResult(final Project project, final Status logger) {
+  public MVNConversionResult(final Project project, final Status logger, final String baseURL) {
     this.logger = logger;
-    this.baseURL = "https://www.elaborate.huygens.knaw.nl/projects/" + project.getName();
+    this.baseURL = baseURL + "/projects/" + project.getName();
 
     Map<String, String> projectMetadata = project.getMetadataMap();
     this.title = projectMetadata.get(ProjectMetadataFields.PUBLICATION_TITLE);

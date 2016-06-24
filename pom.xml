@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.knaw.huygens.elab4</groupId>
 	<artifactId>elab4</artifactId>
-	<version>4.0.8</version>
+	<version>4.0.9-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<inceptionYear>2011</inceptionYear>
 
@@ -35,7 +35,7 @@
 		<classloader-leak-prevention.version>1.15.2</classloader-leak-prevention.version>
 		<commons-configuration.version>1.10</commons-configuration.version><!-- because of hadoop-common dependency in solr-core -->
 		<commons-email.version>1.4</commons-email.version>
-		<commons-lang.version>2.6</commons-lang.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
 		<commons-logging.version>1.2</commons-logging.version>
 		<datables.version>1.0.3</datables.version>
 		<facetedsearchtools.version>0.3.0</facetedsearchtools.version>

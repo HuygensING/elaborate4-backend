@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.util.Set;
 
 import com.google.common.collect.Sets;
