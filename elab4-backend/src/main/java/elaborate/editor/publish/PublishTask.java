@@ -515,7 +515,7 @@ public class PublishTask implements Runnable {
         .replaceAll("<b><b>¶</b></b>", "<b>¶</b>");
     transcription.setBody(fixed);
     if (!fixed.equals(body)) {
-      Log.info("fixed transcription {}:{}", transcription.getId(), fixed);
+      Log.info("fixed transcription {}:\nraw={}\nfix={}", transcription.getId(), fixed);
     }
     entityManager.merge(transcription);
     entityManager.close();
