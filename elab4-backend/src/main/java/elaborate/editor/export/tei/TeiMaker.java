@@ -65,237 +65,261 @@ import elaborate.editor.model.orm.service.ProjectService;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 public class TeiMaker {
-	public static final Map<String, String> HI_TAGS = ImmutableMap.<String, String> builder()//
-			.put("strong", "bold")//
-			.put("b", "bold")//
-			.put("u", "underline")//
-			.put("em", "italic")//
-			.put("i", "italic")//
-			.put("sub", "subscript")//
-			.put("sup", "superscript")//
-			.build();
+  public static final Map<String, String> HI_TAGS = ImmutableMap.<String, String> builder()//
+      .put("strong", "bold")//
+      .put("b", "bold")//
+      .put("u", "underline")//
+      .put("em", "italic")//
+      .put("i", "italic")//
+      .put("sub", "subscript")//
+      .put("sup", "superscript")//
+      .build();
 
-	public static final String INTERP_GRP = "interpGrp";
+  public static final String INTERP_GRP = "interpGrp";
 
-	private Document tei;
-	private final Project project;
-	private final TeiConversionConfig config;
-	private final EntityManager entityManager;
+  private Document tei;
+  private final Project project;
+  private final TeiConversionConfig config;
+  private final EntityManager entityManager;
 
-	public TeiMaker(Project _project, TeiConversionConfig _config, EntityManager entityManager) {
-		this.project = _project;
-		this.config = _config;
-		this.entityManager = entityManager;
-		if (_project == null) {
-			tei = null;
-		} else {
-			tei = createTeiDocument();
+  public TeiMaker(Project _project, TeiConversionConfig _config, EntityManager entityManager) {
+    this.project = _project;
+    this.config = _config;
+    this.entityManager = entityManager;
+    if (_project == null) {
+      tei = null;
+    } else {
+      tei = createTeiDocument();
 
-			Element root = tei.createElement("TEI");
-			tei.appendChild(root);
+      Element root = tei.createElement("TEI");
+      root.setAttribute("xmlns", "http://www.tei-c.org/ns/1.0");
+      tei.appendChild(root);
 
-			Element header = createHeader();
-			root.appendChild(header);
-			ProjectService projectService = ProjectService.instance();
-			projectService.setEntityManager(entityManager);
-			List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(project.getId());
-			Element facsimile = createFacsimile(projectEntriesInOrder);
-			root.appendChild(facsimile);
+      Element header = createHeader();
+      root.appendChild(header);
+      addNewLine(root);
+      ProjectService projectService = ProjectService.instance();
+      projectService.setEntityManager(entityManager);
+      List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(project.getId());
+      Element facsimile = createFacsimile(projectEntriesInOrder);
+      root.appendChild(facsimile);
+      addNewLine(root);
 
-			Element text = createText(projectEntriesInOrder);
-			root.appendChild(text);
-		}
-	}
+      Element text = createText(projectEntriesInOrder);
+      root.appendChild(text);
+    }
+  }
 
-	public String toXML() {
-		if (tei == null) {
-			return null;
-		}
-		TransformerFactory transfac = TransformerFactory.newInstance();
-		try {
-			DOMSource source = new DOMSource(tei);
-			Transformer trans = transfac.newTransformer();
-			trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-			trans.setOutputProperty(OutputKeys.INDENT, "no");
-			StringWriter sw = new StringWriter();
-			StreamResult result = new StreamResult(sw);
-			trans.transform(source, result);
-			return sw.toString().replace("interpgrp>", "interpGrp>").replaceAll(" +<lb/>", "<lb/>");
-		} catch (TransformerConfigurationException e) {
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+  private void addNewLine(Element root) {
+    Text textNode = tei.createTextNode("\n");
+    root.appendChild(textNode);
+  }
 
-	private Element createFacsimile(List<ProjectEntry> projectEntriesInOrder) {
-		Element facsimileElement = tei.createElement("facsimile");
-		for (ProjectEntry entry : projectEntriesInOrder) {
-			int n = 1;
-			for (Facsimile facsimile : entry.getFacsimiles()) {
-				Element surfaceElement = tei.createElement("surface");
-				surfaceElement.setAttribute("xml:id", "facs-" + entry.getShortName() + "-" + n++);
-				surfaceElement.setAttribute("n", facsimile.getName());
+  public String toXML() {
+    if (tei == null) {
+      return null;
+    }
+    TransformerFactory transfac = TransformerFactory.newInstance();
+    try {
+      DOMSource source = new DOMSource(tei);
+      Transformer trans = transfac.newTransformer();
+      trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+      trans.setOutputProperty(OutputKeys.INDENT, "no");
+      StringWriter sw = new StringWriter();
+      StreamResult result = new StreamResult(sw);
+      trans.transform(source, result);
+      return sw.toString().replace("interpgrp>", "interpGrp>").replaceAll(" +<lb/>", "<lb/>");
+    } catch (TransformerConfigurationException e) {
+      e.printStackTrace();
+    } catch (TransformerException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
-				Element graphicElement = tei.createElement("graphic");
-				graphicElement.setAttribute("url", facsimile.getZoomableUrl());
+  private Element createFacsimile(List<ProjectEntry> projectEntriesInOrder) {
+    Element facsimileElement = tei.createElement("facsimile");
+    for (ProjectEntry entry : projectEntriesInOrder) {
+      int n = 1;
+      for (Facsimile facsimile : entry.getFacsimiles()) {
+        Element surfaceElement = tei.createElement("surface");
+        surfaceElement.setAttribute("xml:id", "facs-" + entry.getShortName() + "-" + n++);
+        surfaceElement.setAttribute("n", facsimile.getName());
 
-				surfaceElement.appendChild(graphicElement);
-				facsimileElement.appendChild(surfaceElement);
-			}
-		}
-		return facsimileElement;
-	}
+        Element graphicElement = tei.createElement("graphic");
+        graphicElement.setAttribute("url", facsimile.getZoomableUrl());
 
-	private Element createText(List<ProjectEntry> entries) {
-		int pageno = 1;
-		Element text = tei.createElement("text");
-		Element interpGrp = createProjectInterpGrp();
-		if (interpGrp != null) {
-			text.appendChild(interpGrp);
-		}
+        surfaceElement.appendChild(graphicElement);
+        facsimileElement.appendChild(surfaceElement);
+      }
+    }
+    return facsimileElement;
+  }
 
-		if (config.getGroupTextsByMetadata() != null) {
-			Element group = tei.createElement("group");
-			text.appendChild(group);
-			// TODO implement grouping
+  private Element createText(List<ProjectEntry> entries) {
+    int pageno = 1;
+    Element text = tei.createElement("text");
+    addNewLine(text);
 
-		} else {
-			Element body = tei.createElement("body");
-			text.appendChild(body);
+    Element interpGrp = createProjectInterpGrp();
+    if (interpGrp != null) {
+      text.appendChild(interpGrp);
+      addNewLine(text);
+    }
 
-			String currentFolio = "";
-			for (ProjectEntry entry : entries) {
-				// if (entry.hasTranscriptions()) {
-				pageno = processEntry(pageno, body, currentFolio, entry);
-				// }
-			}
-		}
-		return text;
-	}
+    if (config.getGroupTextsByMetadata() != null) {
+      Element group = tei.createElement("group");
+      text.appendChild(group);
+      // TODO implement grouping
 
-	private Element createProjectInterpGrp() {
-		List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
-		Element interpGrp = tei.createElement(INTERP_GRP);
-		interpGrp.appendChild(interp("title", project.getTitle()));
-		for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
-			String type = projectMetadataItem.getField();
-			String value = projectMetadataItem.getData();
-			interpGrp.appendChild(interp(type, value));
-		}
-		return interpGrp;
-	}
+    } else {
+      Element body = tei.createElement("body");
+      text.appendChild(body);
 
-	private Element interp(String type, String value) {
-		Element interp = tei.createElement("interp");
-		interp.setAttribute("type", SolrUtils.normalize(type));
-		interp.setAttribute("value", StringEscapeUtils.escapeHtml(value));
-		return interp;
-	}
+      String currentFolio = "";
+      for (ProjectEntry entry : entries) {
+        // if (entry.hasTranscriptions()) {
+        pageno = processEntry(pageno, body, currentFolio, entry);
+        // }
+      }
+    }
+    return text;
+  }
 
-	private static final Comparator<Transcription> ORDER_BY_TYPE = new Comparator<Transcription>() {
-		@Override
-		public int compare(Transcription t1, Transcription t2) {
-			Long tt1 = t1.getTranscriptionType().getId();
-			Long tt2 = t2.getTranscriptionType().getId();
-			return tt1.compareTo(tt2);
-		}
-	};
+  private Element createProjectInterpGrp() {
+    List<ProjectMetadataItem> projectMetadataItems = project.getProjectMetadataItems();
+    Element interpGrp = tei.createElement(INTERP_GRP);
+    interpGrp.appendChild(interp("title", project.getTitle()));
+    for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
+      String type = projectMetadataItem.getField();
+      String value = projectMetadataItem.getData();
+      interpGrp.appendChild(interp(type, value));
+    }
+    return interpGrp;
+  }
 
-	private int processEntry(int _pageno, Element body, String _currentFolio, ProjectEntry projectEntry) {
-		int pageno = _pageno;
-		String currentFolio = _currentFolio;
-		String folio = StringUtils.defaultIfBlank(projectEntry.getMetadataValue("Folio number"), "") + StringUtils.defaultIfBlank(projectEntry.getMetadataValue("Folio side"), "");
-		if (!currentFolio.equals(folio)) {
-			pageno = addPb(body, pageno, projectEntry, folio);
-		}
-		// addCb(body, projectEntry);
-		currentFolio = folio;
+  private Element interp(String type, String value) {
+    Element interp = tei.createElement("interp");
+    interp.setAttribute("type", SolrUtils.normalize(type));
+    interp.setAttribute("value", StringEscapeUtils.escapeHtml(value));
+    return interp;
+  }
 
-		Element entryDiv = tei.createElement("div");
-		entryDiv.setAttribute("xml:id", "e" + projectEntry.getId());
-		entryDiv.setAttribute("n", projectEntry.getName());
+  private static final Comparator<Transcription> ORDER_BY_TYPE = new Comparator<Transcription>() {
+    @Override
+    public int compare(Transcription t1, Transcription t2) {
+      Long tt1 = t1.getTranscriptionType().getId();
+      Long tt2 = t2.getTranscriptionType().getId();
+      return tt1.compareTo(tt2);
+    }
+  };
 
-		addEntryInterpGrp(entryDiv, projectEntry);
+  private int processEntry(int _pageno, Element body, String _currentFolio, ProjectEntry projectEntry) {
+    int pageno = _pageno;
+    String currentFolio = _currentFolio;
+    String folio = StringUtils.defaultIfBlank(projectEntry.getMetadataValue("Folio number"), "") + StringUtils.defaultIfBlank(projectEntry.getMetadataValue("Folio side"), "");
+    if (!currentFolio.equals(folio)) {
+      pageno = addPb(body, pageno, projectEntry, folio);
+    }
+    // addCb(body, projectEntry);
+    currentFolio = folio;
 
-		List<Transcription> orderedTranscriptions = Lists.newArrayList(projectEntry.getTranscriptions());
-		Collections.sort(orderedTranscriptions, ORDER_BY_TYPE);
-		for (Transcription transcription : orderedTranscriptions) {
-			HtmlTeiConverter htmlTeiConverter = new HtmlTeiConverter(transcription.getBody(), config, transcription.getTranscriptionType().getName(), entityManager);
-			Node transcriptionNode = htmlTeiConverter.getContent();
-			Node importedTranscriptionNode = tei.importNode(transcriptionNode, true);
-			Node child = importedTranscriptionNode.getFirstChild();
-			while (child != null) {
-				Node nextSibling = child.getNextSibling();
-				if (child.getNodeName().equals("div") && child.hasChildNodes()) {
-					entryDiv.appendChild(child);
-				}
-				child = nextSibling;
-			}
-		}
-		body.appendChild(entryDiv);
-		return pageno;
-	}
+    Element entryDiv = tei.createElement("div");
+    entryDiv.setAttribute("xml:id", "e" + projectEntry.getId());
+    entryDiv.setAttribute("n", projectEntry.getName());
 
-	private void addEntryInterpGrp(Element entryDiv, ProjectEntry projectEntry) {
-		Map<String, String> metaMap = Maps.newHashMap();
-		List<String> metadataToInclude = ImmutableList.copyOf(projectEntry.getProject().getProjectEntryMetadataFieldnames());
-		for (ProjectEntryMetadataItem meta : projectEntry.getProjectEntryMetadataItems()) {
-			if (metadataToInclude.contains(meta.getField())) {
-				metaMap.put(SolrUtils.normalize(meta.getField()), meta.getData());
-			}
-		}
-		if (!metaMap.isEmpty()) {
-			Element interpGrp = tei.createElement(INTERP_GRP);
-			for (Entry<String, String> entry : metaMap.entrySet()) {
-				Element interp = tei.createElement("interp");
-				interp.setAttribute("type", entry.getKey());
-				interp.setAttribute("value", StringEscapeUtils.escapeHtml(entry.getValue()));
+    addEntryInterpGrp(entryDiv, projectEntry);
 
-				interpGrp.appendChild(interp);
-			}
-			entryDiv.appendChild(interpGrp);
-		}
-	}
+    List<Transcription> orderedTranscriptions = Lists.newArrayList(projectEntry.getTranscriptions());
+    Collections.sort(orderedTranscriptions, ORDER_BY_TYPE);
+    for (Transcription transcription : orderedTranscriptions) {
+      HtmlTeiConverter htmlTeiConverter = new HtmlTeiConverter(transcription.getBody(), config, transcription.getTranscriptionType().getName(), entityManager);
+      Node transcriptionNode = htmlTeiConverter.getContent();
+      Node importedTranscriptionNode = tei.importNode(transcriptionNode, true);
+      Node child = importedTranscriptionNode.getFirstChild();
+      while (child != null) {
+        Node nextSibling = child.getNextSibling();
+        if (child.getNodeName().equals("div") && child.hasChildNodes()) {
+          entryDiv.appendChild(child);
+        }
+        child = nextSibling;
+      }
+    }
+    body.appendChild(entryDiv);
+    addNewLine(body);
 
-	private int addPb(Element body, int _pageno, ProjectEntry projectEntry, String folio) {
-		int pageno = _pageno;
-		Element pb = tei.createElement("pb");
-		if (StringUtils.isNotEmpty(folio)) {
-			pb.setAttribute("f", folio);
-		}
-		pb.setAttribute("facs", "#facs-" + projectEntry.getShortName() + "-" + pageno);
-		pb.setAttribute("n", String.valueOf(pageno++));
-		body.appendChild(pb);
-		return pageno;
-	}
+    return pageno;
+  }
 
-	private Element createHeader() {
-		Element header = tei.createElement("teiHeader");
-		Element fileDesc = tei.createElement("fileDesc");
-		Element titleStmt = tei.createElement("titleStmt");
-		Element title = tei.createElement("title");
-		Comment ordering = tei.createComment(MessageFormat.format("ordering: {0} / {1} / {2}", project.getLevel1(), project.getLevel2(), project.getLevel3()));
-		Text textNode = tei.createTextNode(project.getTitle());
-		title.appendChild(textNode);
-		titleStmt.appendChild(title);
-		fileDesc.appendChild(titleStmt);
-		header.appendChild(fileDesc);
-		header.appendChild(ordering);
-		return header;
-	}
+  private void addEntryInterpGrp(Element entryDiv, ProjectEntry projectEntry) {
+    Map<String, String> metaMap = Maps.newHashMap();
+    List<String> metadataToInclude = ImmutableList.copyOf(projectEntry.getProject().getProjectEntryMetadataFieldnames());
+    for (ProjectEntryMetadataItem meta : projectEntry.getProjectEntryMetadataItems()) {
+      if (metadataToInclude.contains(meta.getField())) {
+        metaMap.put(SolrUtils.normalize(meta.getField()), meta.getData());
+      }
+    }
+    if (!metaMap.isEmpty()) {
+      Element interpGrp = tei.createElement(INTERP_GRP);
+      for (Entry<String, String> entry : metaMap.entrySet()) {
+        Element interp = tei.createElement("interp");
+        interp.setAttribute("type", entry.getKey());
+        interp.setAttribute("value", StringEscapeUtils.escapeHtml(entry.getValue()));
 
-	static Document createTeiDocument() {
-		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-		try {
-			DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-			Document teiDocument = docBuilder.newDocument();
-			return teiDocument;
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+        interpGrp.appendChild(interp);
+      }
+      entryDiv.appendChild(interpGrp);
+    }
+  }
+
+  private int addPb(Element body, int _pageno, ProjectEntry projectEntry, String folio) {
+    int pageno = _pageno;
+    Element pb = tei.createElement("pb");
+    if (StringUtils.isNotEmpty(folio)) {
+      pb.setAttribute("f", folio);
+    }
+    pb.setAttribute("facs", "#facs-" + projectEntry.getShortName() + "-" + pageno);
+    pb.setAttribute("n", String.valueOf(pageno++));
+    body.appendChild(pb);
+    return pageno;
+  }
+
+  private Element createHeader() {
+    Element p = tei.createElement("p");
+    Element header = tei.createElement("teiHeader");
+    Element fileDesc = tei.createElement("fileDesc");
+    Element publicationStmt = tei.createElement("publicationStmt");
+    publicationStmt.appendChild(p);
+    Element sourceDesc = tei.createElement("sourceDesc");
+    sourceDesc.appendChild(p);
+    Element titleStmt = tei.createElement("titleStmt");
+    Element title = tei.createElement("title");
+    Comment ordering = tei.createComment(MessageFormat.format("ordering: {0} / {1} / {2}", project.getLevel1(), project.getLevel2(), project.getLevel3()));
+
+    Text textNode = tei.createTextNode(project.getTitle());
+    title.appendChild(textNode);
+
+    titleStmt.appendChild(title);
+
+    fileDesc.appendChild(titleStmt);
+    fileDesc.appendChild(publicationStmt);
+    fileDesc.appendChild(sourceDesc);
+
+    header.appendChild(fileDesc);
+    header.appendChild(ordering);
+    return header;
+  }
+
+  static Document createTeiDocument() {
+    DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+    try {
+      DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
+      Document teiDocument = docBuilder.newDocument();
+      return teiDocument;
+    } catch (ParserConfigurationException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
 }
