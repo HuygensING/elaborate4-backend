@@ -8,6 +8,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,9 +18,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
@@ -125,6 +129,7 @@ public class MVNConverter {
       result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
       return result;
     }
+    validateEntryOrder(result);
 
     status.addLogline("joining transcriptions");
     final String xml = joinTranscriptions(result);
@@ -153,6 +158,28 @@ public class MVNConverter {
       );
     }
     return result;
+  }
+
+  private void validateEntryOrder(MVNConversionResult result) {
+    boolean orderInUse = false;
+    Map<String, String> entryOrderMap = Maps.newTreeMap();
+    for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
+      entryOrderMap.put(entryData.id, entryData.order);
+      if (entryData.order != null) {
+        orderInUse = true;
+      }
+    }
+    if (orderInUse) {
+      for (Entry<String, String> entry : entryOrderMap.entrySet()) {
+        String entryId = entry.getKey();
+        String order = entry.getValue();
+        if (StringUtils.isEmpty(order)) {
+          result.addError(entryId, "Ontbrekend metadataveld 'order'");
+        } else if (!StringUtils.isNumeric(order)) {
+          result.addError(entryId, "Ongeldige waarde voor metadataveld 'order': " + order + ", mag alleen cijfers bevatten");
+        }
+      }
+    }
   }
 
   boolean onlyTextLayerIsDiplomatic() {
