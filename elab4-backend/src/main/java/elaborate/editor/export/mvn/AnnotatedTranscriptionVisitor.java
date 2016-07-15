@@ -168,7 +168,12 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
 
     private static void handleTekstBegin(String annotationBody) {
       String n = annotationBody.replaceFirst(";.*$", "");
-      Map<String, String> attributes = ImmutableMap.of("n", n, "xml:id", sigle + n);
+      Map<String, String> attributes = new HashMap<String, String>();
+      attributes.put("n", n);
+      attributes.put("xml:id", sigle + n);
+      if (annotationBody.contains(";")) {
+        attributes.put("title", annotationBody.replaceFirst("^.*;", "").trim());
+      }
       XmlAnnotation tekstAnnotation = new XmlAnnotation("tekst", attributes, 0)//
           .setFirstSegmentIndex(currentTextSegmentIndex() + 1);
       textRangeAnnotationIndex.put(n, tekstAnnotation);

@@ -156,6 +156,10 @@ public class MVNTeiExporter {
           teiBuilder.append(openingTag(text)).append(openingTag("body"));
           //        openLineGroup(teiBuilder); // only for testing purposes
         }
+        if (attributes.containsKey("title")) {
+          Element head = new Element("head").withAttribute("type", "assigned");
+          teiBuilder.append(openingTag(head)).append(attributes.get("title")).append(closingTag(head));
+        }
       }
     }
 
@@ -497,7 +501,7 @@ public class MVNTeiExporter {
             .replaceAll("<[^>]*>", "")//
             .replace(openSubstitute, "<ex>")//
             .replace(closeSubstitute, "</ex>")//
-            ;
+        ;
 
         teiBuilder//
             .append(openingTag(CHOICE))//
@@ -606,7 +610,7 @@ public class MVNTeiExporter {
             .replaceAll("<[^>]*>", "")//
             .replace(openSubstitute, "<mentioned>")//
             .replace(closeSubstitute, "</mentioned>")//
-            ;
+        ;
         teiBuilder//
             .append(openingTag(note))//
             .append(content)//
