@@ -204,7 +204,7 @@ public class MVNTeiExporter {
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      if (!xmlAnnotations.isEmpty()) {
+      if (!xmlAnnotations.isEmpty() && context.inPoetry) {
         context.inPoetry = false;
         teiBuilder.append(closingTag(LG));
       }

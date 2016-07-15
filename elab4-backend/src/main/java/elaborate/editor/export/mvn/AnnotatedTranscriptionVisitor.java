@@ -159,7 +159,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     private void closeOpenPoetryOrParagraph() {
       if (poetryOrParagraphAnnotations.isEmpty()) return;
 
-      XmlAnnotation lastAnnotation = poetryOrParagraphAnnotations.getLast();
+      XmlAnnotation lastAnnotation = poetryOrParagraphAnnotations.removeLast();
       if (lastAnnotation.getLastSegmentIndex() == null) {
         lastAnnotation.setLastSegmentIndex(currentTextSegmentIndex());
         result.getXmlAnnotations().add(lastAnnotation);
@@ -167,12 +167,12 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     }
 
     private static void handleTekstBegin(String annotationBody) {
-      String n = annotationBody.replaceFirst(";.*$", "");
+      String n = annotationBody.replaceFirst(";.*$", "").replaceAll("[^A-Za-z0-9\\.]", "X");
       Map<String, String> attributes = new HashMap<String, String>();
       attributes.put("n", n);
-      attributes.put("xml:id", sigle + n);
+      attributes.put("xml:id", sigle + "-" + n);
       if (annotationBody.contains(";")) {
-        attributes.put("title", annotationBody.replaceFirst("^.*;", "").trim());
+        attributes.put("title", annotationBody.replaceFirst("^.*;", "").replace("<br>", "").trim());
       }
       XmlAnnotation tekstAnnotation = new XmlAnnotation("tekst", attributes, 0)//
           .setFirstSegmentIndex(currentTextSegmentIndex() + 1);

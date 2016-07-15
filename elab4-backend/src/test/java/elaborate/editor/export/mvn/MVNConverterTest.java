@@ -261,7 +261,7 @@ public class MVNConverterTest {
         + "<ab id=\"3\"/>‡<ae id=\"3\"/>"//
         + "</body>";
     String expected = "\n"//
-        + "<text n=\"1\" xml:id=\"PROJECTNAME1\"><body>"//
+        + "<text n=\"1\" xml:id=\"PROJECTNAME-1\"><body>"//
         + "<p>"//
         + "line 1\n"//
         + "line 2\n"//
@@ -288,7 +288,7 @@ public class MVNConverterTest {
         + "<ab id=\"4\"/>‡<ae id=\"4\"/>"//
         + "</body>";
     String expected = "\n"//
-        + "<text n=\"1\" xml:id=\"PROJECTNAME1\"><body><p>"//
+        + "<text n=\"1\" xml:id=\"PROJECTNAME-1\"><body><p>"//
         + "line 1\n"//
         + "line 2\n"//
         + "</p>" //
@@ -317,7 +317,7 @@ public class MVNConverterTest {
         + "<ab id=\"4\"/>‡<ae id=\"4\"/>"//
         + "</body>";
     String expected = "\n"//
-        + "<text n=\"1\" xml:id=\"PROJECTNAME1\"><body><p>"//
+        + "<text n=\"1\" xml:id=\"PROJECTNAME-1\"><body><p>"//
         + "line 1\n"//
         + "line 2\n"//
         + "</p>" //
@@ -675,7 +675,7 @@ public class MVNConverterTest {
         + "</entry>"//
         + "</body>";
     String expected = "\n"//
-        + "<text n=\"1\" xml:id=\"PROJECTNAME1\"><body>"//
+        + "<text n=\"1\" xml:id=\"PROJECTNAME-1\"><body>"//
         + "<lg>\n"// 
         + "<pb xml:id=\"ABC-pb-42r\" n=\"42r\"/>\n"//
         + "<lb n=\"1\" xml:id=\"ABC-pb-42r-lb-1\"/><l n=\"1\" xml:id=\"ABC-pb-42r-l-1\">Er was eens een neushoorn uit Assen,</l>\n"//
@@ -702,7 +702,7 @@ public class MVNConverterTest {
         + "<ab id=\"4\"/>‡<ae id=\"4\"/>"//
         + "</body>";
     String expected = "\n"//
-        + "<text n=\"1\" xml:id=\"PROJECTNAME1\"><body>"//
+        + "<text n=\"1\" xml:id=\"PROJECTNAME-1\"><body>"//
         + "<lg> line 1\n"// 
         + " line 2\n"// 
         + "</lg>"// 
@@ -1054,13 +1054,13 @@ public class MVNConverterTest {
         + "<lb/><ab id=\"6\"/>‡<ae id=\"6\"/><le/>"//
         + "</entry></body>";
     String expected = "\n"//
-        + "<text n=\"1\" xml:id=\"PROJECTNAME1\"><body><lg>\n"//
+        + "<text n=\"1\" xml:id=\"PROJECTNAME-1\"><body><lg>\n"//
         + "<pb xml:id=\"VDS-pb-02v\" n=\"02v\" facs=\"Brussel - KB - ii 116 - 002v.jpg\"/>\n"//
         + "<lb n=\"1\" xml:id=\"VDS-pb-02v-lb-1\"/><l n=\"1\" xml:id=\"VDS-pb-02v-l-1\">Tekst 1</l>\n"//
         + "<lb n=\"2\" xml:id=\"VDS-pb-02v-lb-2\"/><l n=\"2\" xml:id=\"VDS-pb-02v-l-2\">Diet ondersouct en can gronderen</l></lg>\n"//
         + "</body></text>\n"//
         + "\n"//
-        + "<text n=\"2\" xml:id=\"PROJECTNAME2\"><body><p>\n"//
+        + "<text n=\"2\" xml:id=\"PROJECTNAME-2\"><body><p>\n"//
         + "<lb n=\"3\" xml:id=\"VDS-pb-02v-lb-3\"/><hi rend=\"rubric\">Van den zeuen vraghen van</hi>\n"//
         + "<lb n=\"4\" xml:id=\"VDS-pb-02v-lb-4\"/><hi rend=\"rubric\">Iherusalem zeghelijn</hi>"//
         + "</p>\n"//

@@ -260,10 +260,10 @@ public class MVNConverter {
       addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' mag maximaal 3 punten bevatten.", result, entryId);
 
     } else if (!textNumStack.isEmpty() && !textNum.matches(textNumStack.peek() + "\\.[A-Za-z0-9]+$")) {
-      addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' volgt niet op " + textNumStack.peek(), result, entryId);
+      addError(MVNAnnotationType.TEKSTBEGIN, "tekstnummer: '" + textNum + "' volgt niet op " + textNumStack.peek(), result, entryId);
 
     } else if (textNumStack.isEmpty() && textNum.contains(".")) {
-      addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' niet omvat in " + textNum.replaceFirst("\\..+", "") + " (en dieper)", result, entryId);
+      addError(MVNAnnotationType.TEKSTBEGIN, "tekstnummer '" + textNum + "' niet omvat in " + textNum.replaceFirst("\\..+", "") + " (en dieper)", result, entryId);
     }
   }
 
