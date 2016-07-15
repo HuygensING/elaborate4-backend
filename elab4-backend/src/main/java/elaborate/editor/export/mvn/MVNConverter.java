@@ -82,6 +82,7 @@ public class MVNConverter {
         final Integer id = (Integer) transcriptionData[0];
         entryData.id = String.valueOf(id);
         entryData.name = (String) transcriptionData[1];
+        entryData.order = (String) transcriptionData[2];
         entryData.body = (String) transcriptionData[3];
         entryData.facs = (String) transcriptionData[4];
         conversionData.getEntryDataList().add(entryData);
@@ -196,7 +197,7 @@ public class MVNConverter {
   }
 
   static void validateTranscriptionContainsNoEmptyLines(String transcriptionBody, MVNConversionResult result, String entryId) {
-    if (transcriptionBody.matches(".*\n\\s*\n.*")) {
+    if (Pattern.compile("\n\\s*\n").matcher(transcriptionBody).find()) {
       result.addError(entryId, "Lege regels mogen niet voorkomen.");
     }
   }
