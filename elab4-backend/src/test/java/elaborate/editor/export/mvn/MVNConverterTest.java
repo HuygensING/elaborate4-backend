@@ -823,9 +823,11 @@ public class MVNConverterTest {
   //               Het teken waarop de annotatie geplaatst was, wordt genegeerd.
   //               Elke <text>, </text>, <group> en </group> worden geplaatst op een nieuwe regel.
   @Test
-  public void testTekstBeginEindeConversie() {
+  public void testTekstBeginEindeConversieFailsValidationWhenTextNumHasMoreThatThreeDots() {
     Annotation beginAnnotation = mockAnnotationOfType(TEKSTBEGIN);
+    when(beginAnnotation.getBody()).thenReturn("1.2.3.4.5");
     Annotation eindeAnnotation = mockAnnotationOfType(TEKSTEINDE);
+    when(eindeAnnotation.getBody()).thenReturn("1.2.3.4.5");
   }
 
   /* low-priority or cancelled requirements */
@@ -1071,7 +1073,7 @@ public class MVNConverterTest {
             4, tekstbegin2, //
             5, alinea, //
             6, teksteinde2//
-    ), expected);
+        ), expected);
   }
 
   /* private methods */
