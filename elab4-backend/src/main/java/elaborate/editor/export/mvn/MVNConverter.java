@@ -129,7 +129,7 @@ public class MVNConverter {
       result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
       return result;
     }
-    validateEntryOrder(result);
+    validateEntryOrderAndName(result);
 
     status.addLogline("joining transcriptions");
     final String xml = joinTranscriptions(result);
@@ -160,10 +160,15 @@ public class MVNConverter {
     return result;
   }
 
-  private void validateEntryOrder(MVNConversionResult result) {
+  static final String VALID_XML_ID_REGEXP = "[A-Za-z][A-Za-z0-9\\-_:\\.]*";
+
+  private void validateEntryOrderAndName(MVNConversionResult result) {
     boolean orderInUse = false;
     Map<String, String> entryOrderMap = Maps.newTreeMap();
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
+      if (!entryData.name.matches(VALID_XML_ID_REGEXP)) {
+        result.addError(entryData.id, "Ongeldige entrynaam: " + entryData.name + ", voldoet niet aan de regexp " + VALID_XML_ID_REGEXP);
+      }
       entryOrderMap.put(entryData.id, entryData.order);
       if (entryData.order != null) {
         orderInUse = true;
