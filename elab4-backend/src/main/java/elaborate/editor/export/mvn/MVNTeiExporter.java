@@ -143,16 +143,17 @@ public class MVNTeiExporter {
         teiBuilder.append(NL);
         Map<String, String> attributes = xmlAnnotation.getAttributes();
         String tekstN = attributes.get("n");
+        context.textId = attributes.get(XML_ID);
         if (context.parseresult.isTextGroup(tekstN)) {
           Element group = new Element("group")//
               .withAttribute("n", tekstN)//
-              .withAttribute(XML_ID, attributes.get(XML_ID));
+              .withAttribute(XML_ID, context.textId);
           teiBuilder.append(openingTag(group));
 
         } else {
           Element text = new Element("text")//
               .withAttribute("n", tekstN)//
-              .withAttribute(XML_ID, attributes.get(XML_ID));
+              .withAttribute(XML_ID, context.textId);
           teiBuilder.append(openingTag(text)).append(openingTag("body"));
           //        openLineGroup(teiBuilder); // only for testing purposes
         }
@@ -342,8 +343,10 @@ public class MVNTeiExporter {
         }
         teiBuilder.append(NL).append(milestoneTag(lb));
         if (context.inPoetry) {
-          String lId = context.foliumId + "-l-" + context.textLineNumber;
-          Element l = new Element("l").withAttribute("n", String.valueOf(context.textLineNumber)).withAttribute(XML_ID, lId);
+          String lId = context.textId + "-l-" + context.textLineNumber;
+          Element l = new Element("l")//
+              .withAttribute("n", String.valueOf(context.textLineNumber))//
+              .withAttribute(XML_ID, lId);
           teiBuilder.append(openingTag(l));
         }
         context.indent = false;

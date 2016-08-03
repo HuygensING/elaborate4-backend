@@ -679,8 +679,8 @@ public class MVNConverterTest {
         + "<text n=\"1\" xml:id=\"PROJECTNAME-1\"><body>"//
         + "<lg>\n"// 
         + "<pb xml:id=\"ABC-pb-42r\" n=\"42r\"/>\n"//
-        + "<lb n=\"1\" xml:id=\"ABC-pb-42r-lb-1\"/><l n=\"1\" xml:id=\"ABC-pb-42r-l-1\">Er was eens een neushoorn uit Assen,</l>\n"//
-        + "<lb n=\"2\" xml:id=\"ABC-pb-42r-lb-2\"/><l n=\"2\" xml:id=\"ABC-pb-42r-l-2\">Die moest echt verschrikkelijk nodig plassen.</l>"// 
+        + "<lb n=\"1\" xml:id=\"ABC-pb-42r-lb-1\"/><l n=\"1\" xml:id=\"PROJECTNAME-1-l-1\">Er was eens een neushoorn uit Assen,</l>\n"//
+        + "<lb n=\"2\" xml:id=\"ABC-pb-42r-lb-2\"/><l n=\"2\" xml:id=\"PROJECTNAME-1-l-2\">Die moest echt verschrikkelijk nodig plassen.</l>"// 
         + "</lg>\n"//
         + "</body></text>\n";;
     assertConversion(body, mockData(1, tekstbegin, 2, poezieAnnotation, 3, teksteinde), expected);
@@ -1057,8 +1057,8 @@ public class MVNConverterTest {
     final String expected = "\n"//
         + "<text n=\"1\" xml:id=\"PROJECTNAME-1\"><body><lg>\n"//
         + "<pb xml:id=\"VDS-pb-02v\" n=\"02v\" facs=\"Brussel - KB - ii 116 - 002v.jpg\"/>\n"//
-        + "<lb n=\"1\" xml:id=\"VDS-pb-02v-lb-1\"/><l n=\"1\" xml:id=\"VDS-pb-02v-l-1\">Tekst 1</l>\n"//
-        + "<lb n=\"2\" xml:id=\"VDS-pb-02v-lb-2\"/><l n=\"2\" xml:id=\"VDS-pb-02v-l-2\">Diet ondersouct en can gronderen</l></lg>\n"//
+        + "<lb n=\"1\" xml:id=\"VDS-pb-02v-lb-1\"/><l n=\"1\" xml:id=\"PROJECTNAME-1-l-1\">Tekst 1</l>\n"//
+        + "<lb n=\"2\" xml:id=\"VDS-pb-02v-lb-2\"/><l n=\"2\" xml:id=\"PROJECTNAME-1-l-2\">Diet ondersouct en can gronderen</l></lg>\n"//
         + "</body></text>\n"//
         + "\n"//
         + "<text n=\"2\" xml:id=\"PROJECTNAME-2\"><body><p>\n"//

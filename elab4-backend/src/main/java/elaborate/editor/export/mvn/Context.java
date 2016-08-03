@@ -11,6 +11,7 @@ public class Context {
   public int textLineNumber = 1;
   public String foliumLineNumber = "1";
   public String foliumId = "";
+  public String textId = "";
   public String text = "";
   public ParseResult parseresult;
   public MVNConversionResult result;
