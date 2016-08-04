@@ -1062,8 +1062,8 @@ public class MVNConverterTest {
         + "</body></text>\n"//
         + "\n"//
         + "<text n=\"2\" xml:id=\"PROJECTNAME-2\"><body><p>\n"//
-        + "<lb n=\"3\" xml:id=\"VDS-pb-02v-lb-3\"/><hi rend=\"rubric\">Van den zeuen vraghen van</hi>\n"//
-        + "<lb n=\"4\" xml:id=\"VDS-pb-02v-lb-4\"/><hi rend=\"rubric\">Iherusalem zeghelijn</hi>"//
+        + "<lb n=\"3\" xml:id=\"VDS-pb-02v-lb-3\" np=\"1\"/><hi rend=\"rubric\">Van den zeuen vraghen van</hi>\n"//
+        + "<lb n=\"4\" xml:id=\"VDS-pb-02v-lb-4\" np=\"2\"/><hi rend=\"rubric\">Iherusalem zeghelijn</hi>"//
         + "</p>\n"//
         + "</body></text>\n";
     assertConversion(body,

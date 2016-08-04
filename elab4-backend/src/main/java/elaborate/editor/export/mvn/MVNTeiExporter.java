@@ -341,6 +341,9 @@ public class MVNTeiExporter {
         if (context.indent) {
           lb.setAttribute("rend", "indent");
         }
+        if (context.inParagraph) {
+          lb.setAttribute("np", String.valueOf(context.textLineNumber));
+        }
         teiBuilder.append(NL).append(milestoneTag(lb));
         if (context.inPoetry) {
           String lId = context.textId + "-l-" + context.textLineNumber;
