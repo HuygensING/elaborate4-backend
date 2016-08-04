@@ -39,7 +39,7 @@ public class MVNTeiExporter {
       context.text = annotatedTextSegment.getText();
       Log.info("textSegment= {}", annotatedTextSegment);
       handleOpeningAnnotations(teiBuilder, annotatedTextSegment);
-      context.assertTextIsInPoetryOrParagraph();
+      context.assertTextIsInValidScope();
       teiBuilder.append(context.text);
       handleClosingAnnotations(teiBuilder, annotatedTextSegment);
     }
@@ -273,12 +273,14 @@ public class MVNTeiExporter {
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
+      context.inOpener = true;
       openHeadOrCloser(teiBuilder, xmlAnnotations, HEAD, context);
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       closeHeadOrCloser(teiBuilder, xmlAnnotations, HEAD, context);
+      context.inCloser = false;
     }
   }
 
@@ -291,12 +293,14 @@ public class MVNTeiExporter {
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
+      context.inCloser = true;
       openHeadOrCloser(teiBuilder, xmlAnnotations, CLOSER, context);
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       closeHeadOrCloser(teiBuilder, xmlAnnotations, CLOSER, context);
+      context.inCloser = false;
     }
   }
 
