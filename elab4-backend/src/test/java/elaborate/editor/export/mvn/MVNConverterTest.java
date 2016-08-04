@@ -1171,7 +1171,7 @@ public class MVNConverterTest {
 
   @Test
   public void testValidateEntryOrderAndName() throws Exception {
-    assertThat("valid_xml:id-1.2").matches(MVNConverter.VALID_XML_ID_REGEXP);
-    assertThat("invalid xml:id!").doesNotMatch(MVNConverter.VALID_XML_ID_REGEXP);
+    assertThat("valid_xml:id-1.2").matches(MVNConverter.VALID_XML_ID_SUBSTRING_REGEXP);
+    assertThat("invalid xml:id!").doesNotMatch(MVNConverter.VALID_XML_ID_SUBSTRING_REGEXP);
   }
 }

@@ -160,14 +160,14 @@ public class MVNConverter {
     return result;
   }
 
-  static final String VALID_XML_ID_REGEXP = "[A-Za-z][A-Za-z0-9\\-_:\\.]*";
+  static final String VALID_XML_ID_SUBSTRING_REGEXP = "[A-Za-z0-9\\-_:\\.]*";
 
   private void validateEntryOrderAndName(MVNConversionResult result) {
     boolean orderInUse = false;
     Map<String, String> entryOrderMap = Maps.newTreeMap();
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
-      if (!entryData.name.matches(VALID_XML_ID_REGEXP)) {
-        result.addError(entryData.id, "Ongeldige entrynaam: " + entryData.name + ", voldoet niet aan de regexp " + VALID_XML_ID_REGEXP);
+      if (!entryData.name.matches(VALID_XML_ID_SUBSTRING_REGEXP)) {
+        result.addError(entryData.id, "Ongeldige entrynaam: " + entryData.name + ", voldoet niet aan de regexp " + VALID_XML_ID_SUBSTRING_REGEXP);
       }
       entryOrderMap.put(entryData.id, entryData.order);
       if (entryData.order != null) {
