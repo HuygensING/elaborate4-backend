@@ -104,7 +104,7 @@ public class XmlUtil {
   }
 
   public static String toPlainText(String body) {
-    String breaksToNewlines = body.replace("<br>", "\n");
+    String breaksToNewlines = body.replaceAll("<br/?>", "\n");
     String noTags = removeXMLtags(breaksToNewlines);
     return StringEscapeUtils.unescapeXml(noTags)//
         .replace("&nbsp;", " ").trim();
