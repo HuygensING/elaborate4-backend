@@ -49,7 +49,7 @@
 		<hsqldb.version>2.3.3</hsqldb.version>
 		<jackson.version>2.3.0</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
 		<javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
-		<jaxrstools.version>0.0.7</jaxrstools.version>
+		<jaxrstools.version>0.1.0</jaxrstools.version>
 		<jersey.version>1.19</jersey.version>
 		<jersey-client.version>2.6</jersey-client.version><!-- > 2.6 = jdk7 -->
 		<joda-time.version>2.9.2</joda-time.version>
