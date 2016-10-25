@@ -110,6 +110,11 @@ public class XmlUtil {
         .replace("&nbsp;", " ").trim();
   }
 
+  public static String toSimpleHTML(String body) {
+    String breaksToMilestones = body.replace("<br>", "<br/>");
+    return breaksToMilestones;
+  }
+
   //  public static String fixTagHierarchy(String body) {
   //    Collection<String> annotationNos = extractAnnotationNos(body);
   //    String bodyWithConvertedAnnotationTags = body;
