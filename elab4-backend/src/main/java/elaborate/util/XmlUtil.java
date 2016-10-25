@@ -107,7 +107,12 @@ public class XmlUtil {
     String breaksToNewlines = body.replace("<br>", "\n");
     String noTags = removeXMLtags(breaksToNewlines);
     return StringEscapeUtils.unescapeXml(noTags)//
-        .replace("&nbsp;", " ").trim();
+            .replace("&nbsp;", " ").trim();
+  }
+
+  public static String toSimpleHTML(String body) {
+    String breaksToMilestones = body.replace("<br>", "<br/>");
+    return breaksToMilestones;
   }
 
   //  public static String fixTagHierarchy(String body) {

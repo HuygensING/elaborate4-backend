@@ -877,8 +877,7 @@ public class PublishTask implements Runnable {
     }
 
     public AnnotationPublishData setText(String body) {
-      // this.body = XmlUtil.removeXMLtags(body.replaceAll("<span class=\"annotationStub\">.*?</span>", "")).trim();
-      this.body = XmlUtil.toPlainText(body);
+      this.body = XmlUtil.toSimpleHTML(body);
       return this;
     }
 
