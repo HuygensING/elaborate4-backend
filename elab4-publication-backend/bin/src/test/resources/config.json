@@ -1,0 +1,141 @@
+/*
+ * #%L
+ * elab4-publication-backend
+ * =======
+ * Copyright (C) 2013 - 2016 Huygens ING
+ * =======
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+{
+  "baseURL": "http://elaborate.example.com/elab4-gemeentearchief_kampen",
+  "defaultSortOrder": [
+    "",
+    "",
+    ""
+  ],
+  "facetInfoMap": {
+    "metadata_written_space": {
+      "type": "LIST",
+      "title": "Written space",
+      "name": "metadata_written_space"
+    },
+    "metadata_watermark": {
+      "type": "LIST",
+      "title": "Watermark",
+      "name": "metadata_watermark"
+    },
+    "metadata_collectie": {
+      "type": "LIST",
+      "title": "Collectie",
+      "name": "metadata_collectie"
+    },
+    "metadata_scribe": {
+      "type": "LIST",
+      "title": "Scribe",
+      "name": "metadata_scribe"
+    },
+    "metadata_column_on_page": {
+      "type": "LIST",
+      "title": "Column on page",
+      "name": "metadata_column_on_page"
+    },
+    "metadata_folio_side": {
+      "type": "LIST",
+      "title": "Folio side",
+      "name": "metadata_folio_side"
+    },
+    "metadata_folio_number": {
+      "type": "LIST",
+      "title": "Folio number",
+      "name": "metadata_folio_number"
+    },
+    "metadata_name_of_author": {
+      "type": "LIST",
+      "title": "Name of author",
+      "name": "metadata_name_of_author"
+    },
+    "metadata_title_of_text": {
+      "type": "LIST",
+      "title": "Title of text",
+      "name": "metadata_title_of_text"
+    },
+    "metadata_name_of_object": {
+      "type": "LIST",
+      "title": "Name of object",
+      "name": "metadata_name_of_object"
+    },
+    "metadata_inventory_number": {
+      "type": "LIST",
+      "title": "Inventory number",
+      "name": "metadata_inventory_number"
+    },
+    "metadata_scan_s": {
+      "type": "LIST",
+      "title": "Scan(s)",
+      "name": "metadata_scan_s"
+    },
+    "metadata_language": {
+      "type": "LIST",
+      "title": "Language",
+      "name": "metadata_language"
+    },
+    "metadata_location": {
+      "type": "LIST",
+      "title": "Location",
+      "name": "metadata_location"
+    },
+    "metadata_editor": {
+      "type": "LIST",
+      "title": "Editor",
+      "name": "metadata_editor"
+    },
+    "metadata_handwriting": {
+      "type": "LIST",
+      "title": "Handwriting",
+      "name": "metadata_handwriting"
+    },
+    "metadata_scribe_margin": {
+      "type": "LIST",
+      "title": "Scribe margin",
+      "name": "metadata_scribe_margin"
+    },
+    "metadata_material": {
+      "type": "LIST",
+      "title": "Material",
+      "name": "metadata_material"
+    }
+  },
+  "facetFields": [
+    "metadata_name_of_object",
+    "metadata_title_of_text",
+    "metadata_name_of_author",
+    "metadata_folio_number",
+    "metadata_folio_side",
+    "metadata_column_on_page",
+    "metadata_scribe",
+    "metadata_collectie",
+    "metadata_inventory_number",
+    "metadata_scan_s",
+    "metadata_language",
+    "metadata_location",
+    "metadata_editor",
+    "metadata_handwriting",
+    "metadata_scribe_margin",
+    "metadata_material",
+    "metadata_watermark",
+    "metadata_written_space"
+  ]
+}
