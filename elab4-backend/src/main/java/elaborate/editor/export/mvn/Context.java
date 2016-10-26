@@ -8,9 +8,12 @@ public class Context {
   public boolean countAsTextLine = true;
   public boolean inParagraph = false;
   public boolean inPoetry = false;
+  public boolean inOpener = false;
+  public boolean inCloser = false;
   public int textLineNumber = 1;
   public String foliumLineNumber = "1";
   public String foliumId = "";
+  public String textId = "";
   public String text = "";
   public ParseResult parseresult;
   public MVNConversionResult result;
@@ -31,9 +34,9 @@ public class Context {
     result.addError(currentEntryId, type.getName() + " : " + error);
   }
 
-  public void assertTextIsInPoetryOrParagraph() {
-    if (!(inParagraph || inPoetry) && StringUtils.isNotBlank(text)) {
-      result.addError(currentEntryId, "De tekst '" + text + "' bevindt zich niet binnen de scope van een mvn:alinea of mvn:poëzie.");
+  public void assertTextIsInValidScope() {
+    if (!(inParagraph || inPoetry || inOpener || inCloser) && StringUtils.isNotBlank(text)) {
+      result.addError(currentEntryId, "De tekst '" + text + "' bevindt zich niet binnen de scope van een mvn:alinea, mvn:poëzie, mvn:opschrift of mvn:onderschrift.");
     }
   }
 

@@ -39,6 +39,7 @@ import com.google.common.collect.ImmutableMap;
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.util.XmlUtil;
+import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Comment;
 import nl.knaw.huygens.tei.CommentHandler;
 import nl.knaw.huygens.tei.DelegatingVisitor;
@@ -49,6 +50,7 @@ import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
+@Deprecated
 public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
   static final String choiceTag = "choice";
   static final String abbrTag = "abbr";
@@ -626,9 +628,11 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       if (!"‡".equals(annotatedText)) {
         addError(MVNAnnotationType.TEKSTBEGIN, "Het geannoteerde teken moet ‘‡’ zijn, is '" + annotatedText + "'");
       }
+      Log.warn("textnum='{}'", annotation.body);
       final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
       final String textNum = parts.get(0);
       //      result.addError(currentEntryId, "<tekst num='" + textNum + "'>");
+      validateTextNum(textNum);
       textNumStack.push(textNum);
       final boolean isText = isText(textNum);
       final Element element = new Element(isText ? "text" : "group")//
@@ -656,6 +660,18 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         context.addLiteral(title);
         context.addCloseTag(head);
         currentLineInfo.postTags = currentLineInfo.postTags + context.closeLayer();
+      }
+    }
+
+    private void validateTextNum(final String textNum) {
+      if (textNum.split("\\.").length > 4) {
+        addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: " + textNum + " mag maximaal 3 punten bevatten.");
+      }
+      if (!textNum.matches("^[a-zA-Z0-9\\.]+$")) {
+        addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: " + textNum + " mag alleen letters, cijfers en (maximaal 3) punten bevatten.");
+      }
+      if (!textNumStack.isEmpty() && !textNum.startsWith(textNumStack.peek() + ".")) {
+        addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: " + textNum + " volgt niet op " + textNumStack.peek() + ".");
       }
     }
   }
@@ -710,9 +726,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         textNumStack.pop();
       } else {
         if (textNumStack.contains(textNum)) {
-          result.addError(currentEntryId, "mvn:teksteinde : tekstNum '" + textNum + "' gevonden waar '" + peek + "' verwacht was.");
+          addError(MVNAnnotationType.TEKSTEINDE, "tekstNum '" + textNum + "' gevonden waar '" + peek + "' verwacht was.");
         } else {
-          result.addError(currentEntryId, "mvn:teksteinde : tekstNum '" + textNum + "' heeft geen corresponderende mvn:tekstbegin.");
+          addError(MVNAnnotationType.TEKSTEINDE, "tekstNum '" + textNum + "' heeft geen corresponderende mvn:tekstbegin.");
         }
         textNumStack.remove(textNum);
       }

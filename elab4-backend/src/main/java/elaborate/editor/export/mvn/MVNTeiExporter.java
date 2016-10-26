@@ -39,7 +39,7 @@ public class MVNTeiExporter {
       context.text = annotatedTextSegment.getText();
       Log.info("textSegment= {}", annotatedTextSegment);
       handleOpeningAnnotations(teiBuilder, annotatedTextSegment);
-      context.assertTextIsInPoetryOrParagraph();
+      context.assertTextIsInValidScope();
       teiBuilder.append(context.text);
       handleClosingAnnotations(teiBuilder, annotatedTextSegment);
     }
@@ -143,18 +143,23 @@ public class MVNTeiExporter {
         teiBuilder.append(NL);
         Map<String, String> attributes = xmlAnnotation.getAttributes();
         String tekstN = attributes.get("n");
+        context.textId = attributes.get(XML_ID);
         if (context.parseresult.isTextGroup(tekstN)) {
           Element group = new Element("group")//
               .withAttribute("n", tekstN)//
-              .withAttribute(XML_ID, attributes.get(XML_ID));
+              .withAttribute(XML_ID, context.textId);
           teiBuilder.append(openingTag(group));
 
         } else {
           Element text = new Element("text")//
               .withAttribute("n", tekstN)//
-              .withAttribute(XML_ID, attributes.get(XML_ID));
+              .withAttribute(XML_ID, context.textId);
           teiBuilder.append(openingTag(text)).append(openingTag("body"));
           //        openLineGroup(teiBuilder); // only for testing purposes
+        }
+        if (attributes.containsKey("title")) {
+          Element head = new Element("head").withAttribute("type", "assigned");
+          teiBuilder.append(openingTag(head)).append(attributes.get("title")).append(closingTag(head));
         }
       }
     }
@@ -200,7 +205,7 @@ public class MVNTeiExporter {
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      if (!xmlAnnotations.isEmpty()) {
+      if (!xmlAnnotations.isEmpty() && context.inPoetry) {
         context.inPoetry = false;
         teiBuilder.append(closingTag(LG));
       }
@@ -268,12 +273,14 @@ public class MVNTeiExporter {
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
+      context.inOpener = true;
       openHeadOrCloser(teiBuilder, xmlAnnotations, HEAD, context);
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       closeHeadOrCloser(teiBuilder, xmlAnnotations, HEAD, context);
+      context.inCloser = false;
     }
   }
 
@@ -286,12 +293,14 @@ public class MVNTeiExporter {
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
+      context.inCloser = true;
       openHeadOrCloser(teiBuilder, xmlAnnotations, CLOSER, context);
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       closeHeadOrCloser(teiBuilder, xmlAnnotations, CLOSER, context);
+      context.inCloser = false;
     }
   }
 
@@ -336,10 +345,15 @@ public class MVNTeiExporter {
         if (context.indent) {
           lb.setAttribute("rend", "indent");
         }
+        if (context.inParagraph) {
+          lb.setAttribute("np", String.valueOf(context.textLineNumber));
+        }
         teiBuilder.append(NL).append(milestoneTag(lb));
         if (context.inPoetry) {
-          String lId = context.foliumId + "-l-" + context.textLineNumber;
-          Element l = new Element("l").withAttribute("n", String.valueOf(context.textLineNumber)).withAttribute(XML_ID, lId);
+          String lId = context.textId + "-l-" + context.textLineNumber;
+          Element l = new Element("l")//
+              .withAttribute("n", String.valueOf(context.textLineNumber))//
+              .withAttribute(XML_ID, lId);
           teiBuilder.append(openingTag(l));
         }
         context.indent = false;
@@ -497,7 +511,7 @@ public class MVNTeiExporter {
             .replaceAll("<[^>]*>", "")//
             .replace(openSubstitute, "<ex>")//
             .replace(closeSubstitute, "</ex>")//
-            ;
+        ;
 
         teiBuilder//
             .append(openingTag(CHOICE))//
@@ -606,7 +620,7 @@ public class MVNTeiExporter {
             .replaceAll("<[^>]*>", "")//
             .replace(openSubstitute, "<mentioned>")//
             .replace(closeSubstitute, "</mentioned>")//
-            ;
+        ;
         teiBuilder//
             .append(openingTag(note))//
             .append(content)//

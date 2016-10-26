@@ -45,7 +45,6 @@ public class AboutResource extends AbstractElaborateResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   public Map<String, String> getAbout() {
     Map<String, String> data = Maps.newLinkedHashMap();
-    //		data.put("version", Configuration.instance().getStringSetting("version", "[undefined]"));
     data.put("version", getProperty("version"));
     data.put("commitId", getProperty("commitId"));
     data.put("scmBranch", getProperty("scmBranch"));

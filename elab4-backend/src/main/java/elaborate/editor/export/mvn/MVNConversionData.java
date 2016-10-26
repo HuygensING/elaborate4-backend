@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +37,7 @@ public class MVNConversionData {
     String name;
     String body;
     String facs;
+    String order;
   }
 
   public static class AnnotationData {

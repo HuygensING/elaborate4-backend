@@ -104,15 +104,33 @@ public class XmlUtil {
   }
 
   public static String toPlainText(String body) {
-    String breaksToNewlines = body.replace("<br>", "\n");
+    String breaksToNewlines = body.replaceAll("<br/?>", "\n");
     String noTags = removeXMLtags(breaksToNewlines);
     return StringEscapeUtils.unescapeXml(noTags)//
-            .replace("&nbsp;", " ").trim();
+        .replace("&nbsp;", " ").trim();
   }
 
   public static String toSimpleHTML(String body) {
-    String breaksToMilestones = body.replace("<br>", "<br/>");
-    return breaksToMilestones;
+    String escapeAllowedHtml = body//
+        .replaceAll("<br/?>", "[[#br/#]]")//
+
+        .replaceAll("<em>(.*?)</em>", "[[#em#]]$1[[#/em#]]")//
+        .replaceAll("<i>(.*?)</i>", "[[#em#]]$1[[#/em#]]")//
+        .replaceAll("<span style=\"font-style: italic;\">(.*?)</span>", "[[#em#]]$1[[#/em#]]")//
+
+        .replaceAll("<strong>(.*?)</strong>", "[[#strong#]]$1[[#/strong#]]")//
+        .replaceAll("<b>(.*?)</b>", "[[#strong#]]$1[[#/strong#]]")//
+        .replaceAll("<span style=\"font-weight: bold;\">(.*?)</span>", "[[#strong#]]$1[[#/strong#]]")//
+
+        .replaceAll("<u>(.*?)</u>", "[[#u#]]$1[[#/u#]]")//
+        .replaceAll("<span style=\"text-decoration: underline;\">(.*?)</span>", "[[#u#]]$1[[#/u#]]")//
+
+        .replaceAll("<sup>(.*?)</sup>", "[[#sup#]]$1[[#/sup#]]")//
+        .replaceAll("<sub>(.*?)</sub>", "[[#sub#]]$1[[#/sub#]]")//
+    ;
+    return removeXMLtags(escapeAllowedHtml)//
+        .replace("[[#", "<")//
+        .replace("#]]", ">");
   }
 
   //  public static String fixTagHierarchy(String body) {

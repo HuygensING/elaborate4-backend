@@ -39,62 +39,66 @@ import elaborate.util.HibernateUtil;
 import nl.knaw.huygens.Log;
 
 public class Indexer {
-	private static final int COMMIT_EVERY_N_RECORDS = 100;
+  private static final int COMMIT_EVERY_N_RECORDS = 100;
 
-	@SuppressWarnings("boxing")
-	public static void main(String[] args) {
-		boolean wipeIndexFirst = args.length == 0 ? false : "-w".equals(args[0]);
-		StopWatch sw = new StopWatch();
-		sw.start();
-		ElaborateSolrIndexer solr = new ElaborateSolrIndexer();
-		if (wipeIndexFirst) {
-			Log.info("clearing index");
-			solr.clear();
-		}
-		EntityManager entityManager = HibernateUtil.getEntityManager();
-		try {
-			ProjectEntryService projectEntryService = ProjectEntryService.instance();
-			projectEntryService.setEntityManager(entityManager);
-			List<ProjectEntry> projectentries = projectEntryService.getAll();
-			int size = projectentries.size();
-			Log.info("indexing {} projectEntries", size);
-			int n = 1;
-			for (ProjectEntry projectEntry : projectentries) {
-				Log.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
-						new Object[] { //
-								projectEntry.getId(), n, size, //
-								percentage(n, size), //
-								time_remaining(n, size, sw.getTime()) //
-				} //
-				);
-				solr.index(projectEntry, autoCommit(n));
-				n++;
-			}
-		} finally {
-			entityManager.close();
-		}
-		solr.commit();
-		sw.stop();
-		Log.info("done in {}", convert(sw.getTime()));
-	}
+  @SuppressWarnings("boxing")
+  public static void main(String[] args) {
+    boolean wipeIndexFirst = args.length == 0 ? false : "-w".equals(args[0]);
+    new Indexer().index(wipeIndexFirst);
+  }
 
-	private static String time_remaining(int n, long total, long timeelapsed) {
-		long timeRemaining = (timeelapsed / n) * (total - n);
-		return convert(timeRemaining);
-	}
+  public void index(boolean wipeIndexFirst) {
+    StopWatch sw = new StopWatch();
+    sw.start();
+    ElaborateSolrIndexer solr = new ElaborateSolrIndexer();
+    if (wipeIndexFirst) {
+      Log.info("clearing index");
+      solr.clear();
+    }
+    EntityManager entityManager = HibernateUtil.getEntityManager();
+    try {
+      ProjectEntryService projectEntryService = ProjectEntryService.instance();
+      projectEntryService.setEntityManager(entityManager);
+      List<ProjectEntry> projectentries = projectEntryService.getAll();
+      int size = projectentries.size();
+      Log.info("indexing {} projectEntries", size);
+      int n = 1;
+      for (ProjectEntry projectEntry : projectentries) {
+        Log.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
+            new Object[] { //
+                projectEntry.getId(), n, size, //
+                percentage(n, size), //
+                time_remaining(n, size, sw.getTime()) //
+            } //
+        );
+        solr.index(projectEntry, autoCommit(n));
+        n++;
+      }
+    } finally {
+      entityManager.close();
+    }
+    solr.commit();
+    sw.stop();
+    Log.info("done in {}", convert(sw.getTime()));
+  }
 
-	private static String percentage(int part, int total) {
-		return new DecimalFormat("0.00").format((double) (100 * part) / (double) total);
-	}
+  private static String time_remaining(int n, long total, long timeelapsed) {
+    long timeRemaining = (timeelapsed / n) * (total - n);
+    return convert(timeRemaining);
+  }
 
-	private static boolean autoCommit(int n) {
-		return (n % COMMIT_EVERY_N_RECORDS) == 0;
-	}
+  private static String percentage(int part, int total) {
+    return new DecimalFormat("0.00").format((double) (100 * part) / (double) total);
+  }
 
-	public static String convert(long ms) {
-		Date date = new Date(ms - (1000 * 60 * 60));
-		DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
-		return formatter.format(date);
-	}
+  private static boolean autoCommit(int n) {
+    return (n % COMMIT_EVERY_N_RECORDS) == 0;
+  }
+
+  public static String convert(long ms) {
+    Date date = new Date(ms - (1000 * 60 * 60));
+    DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
+    return formatter.format(date);
+  }
 
 }

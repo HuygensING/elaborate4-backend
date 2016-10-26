@@ -8,6 +8,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,9 +18,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
@@ -82,6 +86,7 @@ public class MVNConverter {
         final Integer id = (Integer) transcriptionData[0];
         entryData.id = String.valueOf(id);
         entryData.name = (String) transcriptionData[1];
+        entryData.order = (String) transcriptionData[2];
         entryData.body = (String) transcriptionData[3];
         entryData.facs = (String) transcriptionData[4];
         conversionData.getEntryDataList().add(entryData);
@@ -124,6 +129,7 @@ public class MVNConverter {
       result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
       return result;
     }
+    validateEntryOrderAndName(result);
 
     status.addLogline("joining transcriptions");
     final String xml = joinTranscriptions(result);
@@ -152,6 +158,33 @@ public class MVNConverter {
       );
     }
     return result;
+  }
+
+  static final String VALID_XML_ID_SUBSTRING_REGEXP = "[A-Za-z0-9\\-_:\\.]*";
+
+  private void validateEntryOrderAndName(MVNConversionResult result) {
+    boolean orderInUse = false;
+    Map<String, String> entryOrderMap = Maps.newTreeMap();
+    for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
+      if (!entryData.name.matches(VALID_XML_ID_SUBSTRING_REGEXP)) {
+        result.addError(entryData.id, "Ongeldige entrynaam: " + entryData.name + ", voldoet niet aan de regexp " + VALID_XML_ID_SUBSTRING_REGEXP);
+      }
+      entryOrderMap.put(entryData.id, entryData.order);
+      if (entryData.order != null) {
+        orderInUse = true;
+      }
+    }
+    if (orderInUse) {
+      for (Entry<String, String> entry : entryOrderMap.entrySet()) {
+        String entryId = entry.getKey();
+        String order = entry.getValue();
+        if (StringUtils.isEmpty(order)) {
+          result.addError(entryId, "Ontbrekend metadataveld 'order'");
+        } else if (!StringUtils.isNumeric(order)) {
+          result.addError(entryId, "Ongeldige waarde voor metadataveld 'order': " + order + ", mag alleen cijfers bevatten");
+        }
+      }
+    }
   }
 
   boolean onlyTextLayerIsDiplomatic() {
@@ -196,7 +229,7 @@ public class MVNConverter {
   }
 
   static void validateTranscriptionContainsNoEmptyLines(String transcriptionBody, MVNConversionResult result, String entryId) {
-    if (transcriptionBody.matches(".*\n\\s*\n.*")) {
+    if (Pattern.compile("\n\\s*\n").matcher(transcriptionBody).find()) {
       result.addError(entryId, "Lege regels mogen niet voorkomen.");
     }
   }
@@ -210,8 +243,10 @@ public class MVNConverter {
     while (matcher.find()) {
       final String beginOrEinde = matcher.group(1);
       final String textnum = matcher.group(2).trim().replaceFirst(";.*$", "");
+      Log.info("{}: textNumStack: {}, textNum: {}", beginOrEinde, textNumStack, textnum);
       if ("begin".equals(beginOrEinde)) {
         lastTagWasBegin = true;
+        validateTextNum(result, textnum, textNumStack, "");
         textNumStack.push(textnum);
         openTextNums.add(textnum);
 
@@ -224,8 +259,10 @@ public class MVNConverter {
             }
             textNumStack.pop();
           } else {
-            //          result.addError("", "mvn:teksteinde : tekstNum '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
+            result.addError("", "mvn:teksteinde : tekstnummer '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
           }
+        } else {
+          result.addError("", "mvn:teksteinde : tekstnummer '" + textnum + "' heeft geen overeenkomstig mvn:tekstbegin");
         }
         lastTagWasBegin = false;
         closeTextNums.add(textnum);
@@ -238,7 +275,7 @@ public class MVNConverter {
     List<String> openedButNotClosed = Lists.newArrayList(openTextNums);
     openedButNotClosed.removeAll(closeTextNums);
     for (String tekstNum : openedButNotClosed) {
-      result.addError("", "mvn:teksteinde met tekstNum '" + tekstNum + "' ontbreekt. ");
+      result.addError("", "mvn:teksteinde met tekstnummer '" + tekstNum + "' ontbreekt. ");
     }
     //    List<String> closedButNotOpened = Lists.newArrayList(closeTextNums);
     //    closedButNotOpened.removeAll(openTextNums);
@@ -246,6 +283,21 @@ public class MVNConverter {
     //      result.addError("", "mvn:teksbegin met tekstNum '" + tekstNum + "' ontbreekt. ");
     //    }
 
+  }
+
+  private void validateTextNum(MVNConversionResult result, final String textNum, Stack<String> textNumStack, String entryId) {
+    if (!textNum.matches("^[a-zA-Z0-9\\.]+$")) {
+      addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' mag alleen letters, cijfers en (maximaal 3) punten bevatten.", result, entryId);
+
+    } else if (textNum.split("\\.").length > 4) {
+      addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' mag maximaal 3 punten bevatten.", result, entryId);
+
+    } else if (!textNumStack.isEmpty() && !textNum.matches(textNumStack.peek() + "\\.[A-Za-z0-9]+$")) {
+      addError(MVNAnnotationType.TEKSTBEGIN, "tekstnummer: '" + textNum + "' volgt niet op " + textNumStack.peek(), result, entryId);
+
+    } else if (textNumStack.isEmpty() && textNum.contains(".")) {
+      addError(MVNAnnotationType.TEKSTBEGIN, "tekstnummer '" + textNum + "' niet omvat in " + textNum.replaceFirst("\\..+", "") + " (en dieper)", result, entryId);
+    }
   }
 
   private void outputFiles(final String xml, final String cooked) {
@@ -261,14 +313,18 @@ public class MVNConverter {
     }
   }
 
-  String toTei(final String xml, final MVNConversionResult result) {
+  private static void addError(MVNAnnotationType type, String error, MVNConversionResult result, String currentEntryId) {
+    result.addError(currentEntryId, type.getName() + " : " + error);
+  }
+
+  String toTei(final String xml, final MVNConversionResult conversionResult) {
     Log.info("xml={}", xml);
     ParseResult parseresult = new ParseResult();
     final Document document = Document.createFromXml(xml, true);
-    final AnnotatedTranscriptionVisitor visitor = new AnnotatedTranscriptionVisitor(data.getAnnotationIndex(), parseresult, result.getSigle());
+    final AnnotatedTranscriptionVisitor visitor = new AnnotatedTranscriptionVisitor(data.getAnnotationIndex(), parseresult, conversionResult.getSigle());
     document.accept(visitor);
     parseresult.index();
-    MVNTeiExporter teiExporter = new MVNTeiExporter(parseresult, result);
+    MVNTeiExporter teiExporter = new MVNTeiExporter(parseresult, conversionResult);
     return teiExporter.export();
   }
 
