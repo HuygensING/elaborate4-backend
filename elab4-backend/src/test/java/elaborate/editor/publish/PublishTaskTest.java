@@ -58,203 +58,202 @@ import nl.knaw.huygens.solr.FacetInfo;
 
 public class PublishTaskTest extends AbstractTest {
 
-	@Before
-	public void setUp() throws Exception {}
+  @Before
+  public void setUp() throws Exception {}
 
-	@After
-	public void tearDown() throws Exception {}
+  @After
+  public void tearDown() throws Exception {}
 
-	@Test
-	public void testGetProjectData_WithProjectTitle() throws Exception {
-		Settings settings = mock(Publication.Settings.class);
-		Project mockProject = mock(Project.class);
-		String projectTitle = "titel";
-		when(mockProject.getTitle()).thenReturn(projectTitle);
-		when(mockProject.getName()).thenReturn("project-name");
-		when(mockProject.getLevel1()).thenReturn("level1");
-		when(mockProject.getLevel2()).thenReturn("level2");
-		when(mockProject.getLevel3()).thenReturn("level3");
+  @Test
+  public void testGetProjectData_WithProjectTitle() throws Exception {
+    Settings settings = mock(Publication.Settings.class);
+    Project mockProject = mock(Project.class);
+    String projectTitle = "titel";
+    when(mockProject.getTitle()).thenReturn(projectTitle);
+    when(mockProject.getName()).thenReturn("project-name");
+    when(mockProject.getLevel1()).thenReturn("level1");
+    when(mockProject.getLevel2()).thenReturn("level2");
+    when(mockProject.getLevel3()).thenReturn("level3");
 
-		PublishTask publishTask = new PublishTask(settings);
-		EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String> create());
-		EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String> create());
-		List<EntryData> entries = ImmutableList.of(entry1, entry2);
+    PublishTask publishTask = new PublishTask(settings);
+    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String> create());
+    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String> create());
+    List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
-		Map<Long, List<String>> thumbnails = Maps.newHashMap();
-		Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
-		assertThat(projectData.get("title")).isEqualTo(projectTitle);
+    Map<Long, List<String>> thumbnails = Maps.newHashMap();
+    Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
+    assertThat(projectData.get("title")).isEqualTo(projectTitle);
 
-		Log.info("projectData={}", projectData);
+    Log.info("projectData={}", projectData);
 
-		String json = PublishTask.toJson(projectData);
-		Log.info("json={}", json);
-		assertThat(json).isNotEmpty();
-	}
+    String json = PublishTask.toJson(projectData);
+    Log.info("json={}", json);
+    assertThat(json).isNotEmpty();
+  }
 
-	@Test
-	public void testGetProjectData_WithPublicationTitle() throws Exception {
-		Settings settings = mock(Publication.Settings.class);
-		Project mockProject = mock(Project.class);
-		when(mockProject.getName()).thenReturn("project-name");
-		when(mockProject.getLevel1()).thenReturn("level1");
-		when(mockProject.getLevel2()).thenReturn("level2");
-		when(mockProject.getLevel3()).thenReturn("level3");
-		String projectTitle = "Project title";
-		when(mockProject.getTitle()).thenReturn(projectTitle);
+  @Test
+  public void testGetProjectData_WithPublicationTitle() throws Exception {
+    Settings settings = mock(Publication.Settings.class);
+    Project mockProject = mock(Project.class);
+    when(mockProject.getName()).thenReturn("project-name");
+    when(mockProject.getLevel1()).thenReturn("level1");
+    when(mockProject.getLevel2()).thenReturn("level2");
+    when(mockProject.getLevel3()).thenReturn("level3");
+    String projectTitle = "Project title";
+    when(mockProject.getTitle()).thenReturn(projectTitle);
 
-		String publicationTitle = "Publication title";
-		Map<String, String> metadataMap = Maps.newHashMap();
-		metadataMap.put(ProjectMetadataFields.PUBLICATION_TITLE, publicationTitle);
-		metadataMap.put(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold");
-		metadataMap.put(ProjectMetadataFields.TEXT_FONT, "comicsans");
-		metadataMap.put("extra", "extra");
-		when(mockProject.getMetadataMap()).thenReturn(metadataMap);
+    String publicationTitle = "Publication title";
+    Map<String, String> metadataMap = Maps.newHashMap();
+    metadataMap.put(ProjectMetadataFields.PUBLICATION_TITLE, publicationTitle);
+    metadataMap.put(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold");
+    metadataMap.put(ProjectMetadataFields.TEXT_FONT, "comicsans");
+    metadataMap.put("extra", "extra");
+    when(mockProject.getMetadataMap()).thenReturn(metadataMap);
 
-		PublishTask publishTask = new PublishTask(settings);
-		EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String> create());
-		EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String> create());
-		List<EntryData> entries = ImmutableList.of(entry1, entry2);
+    PublishTask publishTask = new PublishTask(settings);
+    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String> create());
+    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String> create());
+    List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
-		Map<Long, List<String>> thumbnails = Maps.newHashMap();
-		Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
-		assertThat(projectData.get("title")).isEqualTo(publicationTitle);
+    Map<Long, List<String>> thumbnails = Maps.newHashMap();
+    Map<String, Object> projectData = publishTask.getProjectData(mockProject, entries, thumbnails);
+    assertThat(projectData.get("title")).isEqualTo(publicationTitle);
 
-		@SuppressWarnings("unchecked")
-		Map<String, List<String>> map = (Map<String, List<String>>) projectData.get("metadata");
-		assertThat(map).doesNotContainKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
+    @SuppressWarnings("unchecked")
+    Map<String, List<String>> map = (Map<String, List<String>>) projectData.get("metadata");
+    assertThat(map).doesNotContainKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
 
-		boolean containsKey = map.containsKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
-		assertThat(containsKey).isFalse();
-		assertThat(projectData).doesNotContainKey("entryTermSingular");
-		assertThat(projectData.get("textFont")).isEqualTo("comicsans");
+    boolean containsKey = map.containsKey(ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME);
+    assertThat(containsKey).isFalse();
+    assertThat(projectData).doesNotContainKey("entryTermSingular");
+    assertThat(projectData.get("textFont")).isEqualTo("comicsans");
 
-		Log.info("projectData={}", projectData);
+    Log.info("projectData={}", projectData);
 
-		String json = PublishTask.toJson(projectData);
-		Log.info("json={}", json);
-		assertThat(StringUtils.isNotBlank(json)).isTrue();
-	}
+    String json = PublishTask.toJson(projectData);
+    Log.info("json={}", json);
+    assertThat(StringUtils.isNotBlank(json)).isTrue();
+  }
 
-	@Test
-	public void testEntryFilename() throws Exception {
-		ProjectEntry entry = mock(ProjectEntry.class);
-		when(entry.getId()).thenReturn(9999l);
+  @Test
+  public void testEntryFilename() throws Exception {
+    ProjectEntry entry = mock(ProjectEntry.class);
+    when(entry.getId()).thenReturn(9999l);
 
-		assertThat(PublishTask.entryFilename(9999)).isEqualTo("entry9999.json");
-	}
+    assertThat(PublishTask.entryFilename(9999)).isEqualTo("entry9999.json");
+  }
 
-	@Test
-	public void testGetProjectEntryData() throws Exception {
-		Settings settings = mock(Publication.Settings.class);
+  @Test
+  public void testGetProjectEntryData() throws Exception {
+    Settings settings = mock(Publication.Settings.class);
 
-		PublishTask publishTask = new PublishTask(settings);
+    PublishTask publishTask = new PublishTask(settings);
 
-		ProjectEntry entry = mock(ProjectEntry.class);
-		Project project = mock(Project.class);
-		String entryName = "entryname";
-		when(entry.getName()).thenReturn(entryName);
-		when(entry.getProject()).thenReturn(project);
-		String[] textLayers = new String[] { TranscriptionType.DIPLOMATIC, TranscriptionType.COMMENTS };
-		when(project.getTextLayers()).thenReturn(textLayers);
+    ProjectEntry entry = mock(ProjectEntry.class);
+    Project project = mock(Project.class);
+    String entryName = "entryname";
+    when(entry.getName()).thenReturn(entryName);
+    when(entry.getProject()).thenReturn(project);
+    String[] textLayers = new String[] { TranscriptionType.DIPLOMATIC, TranscriptionType.COMMENTS };
+    when(project.getTextLayers()).thenReturn(textLayers);
 
-		List<String> projectEntryMetadataFields = Lists.newArrayList("Meta1", "Meta2");
-		Map<String, String> map = Maps.newHashMap();
-		Map<String, Object> projectEntryData = publishTask.getProjectEntryData(entry, projectEntryMetadataFields, map);
-		assertThat(projectEntryData.get("name")).isEqualTo(entryName);
+    List<String> projectEntryMetadataFields = Lists.newArrayList("Meta1", "Meta2");
+    Map<String, String> map = Maps.newHashMap();
+    Map<String, Object> projectEntryData = publishTask.getProjectEntryData(entry, projectEntryMetadataFields, map);
+    assertThat(projectEntryData.get("name")).isEqualTo(entryName);
 
-		Log.info("projectEntryData={}", projectEntryData);
+    Log.info("projectEntryData={}", projectEntryData);
 
-		String json = PublishTask.toJson(projectEntryData);
-		Log.info("json={}", json);
-		assertThat(json).isNotEmpty();
-	}
+    String json = PublishTask.toJson(projectEntryData);
+    Log.info("json={}", json);
+    assertThat(json).isNotEmpty();
+  }
 
-	@Test
-	public void testGetSearchConfigMap() throws Exception {
-		List<String> selectedProjectEntryMetadataFields = ImmutableList.of("Field1", "Field2", "Field3");
-		Project project = new Project()//
-				.setProjectEntryMetadataFieldnames(ImmutableList.of("Field1", "Field2", "Field3", "field4"))//
-				.setLevel1("Field1")//
-				.setLevel2("Field3");
-		Collection<String> multivaluedFacetTitles = Lists.newArrayList();
-		SearchConfig searchConfig = new SearchConfig(project, selectedProjectEntryMetadataFields, multivaluedFacetTitles);
-		Log.info("searchConfig={}", searchConfig);
-		assertThat(searchConfig).isNotNull();
+  @Test
+  public void testGetSearchConfigMap() throws Exception {
+    List<String> selectedProjectEntryMetadataFields = ImmutableList.of("Field1", "Field2", "Field3");
+    Project project = new Project()//
+        .setProjectEntryMetadataFieldnames(ImmutableList.of("Field1", "Field2", "Field3", "field4"))//
+        .setLevel1("Field1")//
+        .setLevel2("Field3");
+    Collection<String> multivaluedFacetTitles = Lists.newArrayList();
+    SearchConfig searchConfig = new SearchConfig(project, selectedProjectEntryMetadataFields, multivaluedFacetTitles);
+    Log.info("searchConfig={}", searchConfig);
+    assertThat(searchConfig).isNotNull();
 
-		Map<String, FacetInfo> map = searchConfig.getFacetInfoMap();
-		assertThat(map).isNotNull();
-		assertThat(map).containsKey("metadata_field1");
-		assertThat(map).doesNotContainKey("publishable");
-		String json = PublishTask.toJson(searchConfig);
-		Log.info(json);
-		assertThat(json).isNotNull();
-	}
+    Map<String, FacetInfo> map = searchConfig.getFacetInfoMap();
+    assertThat(map).isNotNull();
+    assertThat(map).containsKey("metadata_field1");
+    assertThat(map).doesNotContainKey("publishable");
+    String json = PublishTask.toJson(searchConfig);
+    Log.info(json);
+    assertThat(json).isNotNull();
+  }
 
-	@Test
-	public void testSetText() throws Exception {
-		AnnotationPublishData ad = new AnnotationPublishData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
-		// assertThat(ad.getText()).isEqualTo("dit is de annotatietekst");
-//		assertThat(ad.getText()).isEqualTo("dit is de geannoteerde tekst dit is de annotatietekst");
-		assertThat(ad.getText()).isEqualTo("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
-	}
+  @Test
+  public void testSetText() throws Exception {
+    AnnotationPublishData ad = new AnnotationPublishData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
+    // assertThat(ad.getText()).isEqualTo("dit is de annotatietekst");
+    assertThat(ad.getText()).isEqualTo("dit is de geannoteerde tekst dit is de annotatietekst");
+  }
 
-	@Test
-	public void testGetTypographicalAnnotationMap() throws Exception {
-		Settings settings = mock(Publication.Settings.class);
-		PublishTask publishTask = new PublishTask(settings);
-		Project project = mock(Project.class);
-		Map<String, String> metadataMap = ImmutableMap.of(//
-				ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold", //
-				ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION, "Vetgedrukt", //
-				ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, "italic", //
-				ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION, ""//
-		);
-		when(project.getMetadataMap()).thenReturn(metadataMap);
-		Map<String, String> map = publishTask.getTypographicalAnnotationMap(project);
-		assertThat(map).containsOnly(entry("b", "Vetgedrukt [bold]"), entry("i", "italic"));
-	}
+  @Test
+  public void testGetTypographicalAnnotationMap() throws Exception {
+    Settings settings = mock(Publication.Settings.class);
+    PublishTask publishTask = new PublishTask(settings);
+    Project project = mock(Project.class);
+    Map<String, String> metadataMap = ImmutableMap.of(//
+        ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold", //
+        ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION, "Vetgedrukt", //
+        ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, "italic", //
+        ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION, ""//
+    );
+    when(project.getMetadataMap()).thenReturn(metadataMap);
+    Map<String, String> map = publishTask.getTypographicalAnnotationMap(project);
+    assertThat(map).containsOnly(entry("b", "Vetgedrukt [bold]"), entry("i", "italic"));
+  }
 
-	@Test
-	public void testAnnotationTypeKey() throws Exception {
-		Settings settings = mock(Publication.Settings.class);
-		PublishTask publishTask = new PublishTask(settings);
-		AnnotationTypeData ad = new AnnotationTypeData().setName("name").setDescription("description");
-		String key = publishTask.annotationTypeKey(ad);
-		assertThat(key).isEqualTo("description [name]");
-	}
+  @Test
+  public void testAnnotationTypeKey() throws Exception {
+    Settings settings = mock(Publication.Settings.class);
+    PublishTask publishTask = new PublishTask(settings);
+    AnnotationTypeData ad = new AnnotationTypeData().setName("name").setDescription("description");
+    String key = publishTask.annotationTypeKey(ad);
+    assertThat(key).isEqualTo("description [name]");
+  }
 
-	@Test
-	public void testGetBaseURLFillsInProjectname() throws Exception {
-		Settings settings = mock(Publication.Settings.class);
-		PublishTask publishTask = new PublishTask(settings);
-		assertThat(publishTask.getBaseURL("project-name")).isEqualTo("http://example.org/project-name/draft");
-	}
+  @Test
+  public void testGetBaseURLFillsInProjectname() throws Exception {
+    Settings settings = mock(Publication.Settings.class);
+    PublishTask publishTask = new PublishTask(settings);
+    assertThat(publishTask.getBaseURL("project-name")).isEqualTo("http://example.org/project-name/draft");
+  }
 
-	@Test
-	public void testMultiValuedFacets() {
-		Project project = mock(Project.class);
-		Settings settings = mock(Publication.Settings.class);
-		PublishTask publishTask = new PublishTask(settings);
-		Map<String, String> metadataMap = ImmutableMap.of(//
-				ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS, "MultivaluedField 1;MultivaluedField 2"//
-		);
-		when(project.getMetadataMap()).thenReturn(metadataMap);
+  @Test
+  public void testMultiValuedFacets() {
+    Project project = mock(Project.class);
+    Settings settings = mock(Publication.Settings.class);
+    PublishTask publishTask = new PublishTask(settings);
+    Map<String, String> metadataMap = ImmutableMap.of(//
+        ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS, "MultivaluedField 1;MultivaluedField 2"//
+    );
+    when(project.getMetadataMap()).thenReturn(metadataMap);
 
-		Collection<String> facetsToSplit = publishTask.getFacetsToSplit(project);
+    Collection<String> facetsToSplit = publishTask.getFacetsToSplit(project);
 
-		assertThat(facetsToSplit).containsOnly("metadata_multivaluedfield_1", "metadata_multivaluedfield_2");
-	}
+    assertThat(facetsToSplit).containsOnly("metadata_multivaluedfield_1", "metadata_multivaluedfield_2");
+  }
 
-	@Test
-	public void testMultivalueFacetValueIndex() {
-		ProjectEntry projectEntry = mock(ProjectEntry.class);
-		when(projectEntry.getMetadataValue("multi")).thenReturn("a | b | c");
-		when(projectEntry.getMetadataValue("single")).thenReturn("d | e | f");
-		String[] multivaluedFacetNames = new String[] { "multi" };
-		Multimap<String, String> multivaluedFacetValues = PublishTask.getMultivaluedFacetValues(multivaluedFacetNames, projectEntry);
-		assertThat(multivaluedFacetValues).containsValues("a", "b", "c");
-		assertThat(multivaluedFacetValues).containsKeys("multi");
-		assertThat(multivaluedFacetValues).hasSize(3);
+  @Test
+  public void testMultivalueFacetValueIndex() {
+    ProjectEntry projectEntry = mock(ProjectEntry.class);
+    when(projectEntry.getMetadataValue("multi")).thenReturn("a | b | c");
+    when(projectEntry.getMetadataValue("single")).thenReturn("d | e | f");
+    String[] multivaluedFacetNames = new String[] { "multi" };
+    Multimap<String, String> multivaluedFacetValues = PublishTask.getMultivaluedFacetValues(multivaluedFacetNames, projectEntry);
+    assertThat(multivaluedFacetValues).containsValues("a", "b", "c");
+    assertThat(multivaluedFacetValues).containsKeys("multi");
+    assertThat(multivaluedFacetValues).hasSize(3);
 
-	}
+  }
 }

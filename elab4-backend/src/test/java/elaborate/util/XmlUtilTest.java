@@ -73,6 +73,47 @@ public class XmlUtilTest {
     assertThat(XmlUtil.toPlainText("<b>bold</b> &apos;t <i>kofschip</i><br>&nbsp;&quot;blabla&quot;")).isEqualTo("bold 't kofschip\n \"blabla\"");
   }
 
+  @Test
+  public void testToSimpleHTMLPreservesSimpleTagsRemovesOthers() {
+    String body = "<span><b>bold</b> &apos;t <i>kofschip</i><br>&nbsp;&quot;blabla&quot;</span>";
+    String expected = "<strong>bold</strong> &apos;t <em>kofschip</em><br/>&nbsp;&quot;blabla&quot;";
+    assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
+  }
+
+  @Test
+  public void testToSimpleHTMLPreservesUnderline() {
+    String body = "<span style=\"text-decoration: underline;\">I</span>b<span style=\"text-decoration: underline;\">i</span> or <u>underline</u>";
+    String expected = "<u>I</u>b<u>i</u> or <u>underline</u>";
+    assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
+  }
+
+  @Test
+  public void testToSimpleHTMLPreservesSupAndSub() {
+    String body = "<sub>subscript</sub> en <sup>superscript</sup>";
+    assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(body);
+  }
+
+  @Test
+  public void testToSimpleHTMLNormalizesBoldToStrong() {
+    String body = "<b>bold</b>, <span style=\"font-weight: bold;\">bold span</span> and <strong>strong</strong>";
+    String expected = "<strong>bold</strong>, <strong>bold span</strong> and <strong>strong</strong>";
+    assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
+  }
+
+  @Test
+  public void testToSimpleHTMLNormalizesItalicsToEm() {
+    String body = "<i>italic</i>, <span style=\"font-style: italic;\">italic span</span> and <em>emphasized</em>";
+    String expected = "<em>italic</em>, <em>italic span</em> and <em>emphasized</em>";
+    assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
+  }
+
+  @Test
+  public void testToSimpleHTMLNormalizesBreaks() {
+    String body = "line 1<br>line 2<br/>line 3";
+    String expected = "line 1<br/>line 2<br/>line 3";
+    assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
+  }
+
   //  @Ignore
   //  @Test
   //  public void testFixTagHierarchy() {
