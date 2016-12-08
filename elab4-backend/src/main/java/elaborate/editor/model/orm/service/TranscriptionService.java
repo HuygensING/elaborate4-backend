@@ -276,9 +276,16 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
         Set<AnnotationMetadataItem> annotationMetadataItems = Sets.newHashSet();
         for (String key : update.metadata.keySet()) {
-          AnnotationTypeMetadataItem annotationTypeMetadataItem = (AnnotationTypeMetadataItem) getEntityManager().createQuery("from AnnotationTypeMetadataItem as m where m.name=?1").setParameter(1, key).getSingleResult();
+          AnnotationTypeMetadataItem annotationTypeMetadataItem = (AnnotationTypeMetadataItem) getEntityManager()//
+              .createQuery("from AnnotationTypeMetadataItem as m where m.name=?1 and m.annotationType=?2")//
+              .setParameter(1, key)//
+              .setParameter(2, annotationType)//
+              .getSingleResult();
           if (annotationTypeMetadataItem != null) {
-            AnnotationMetadataItem item = new AnnotationMetadataItem().setAnnotation(annotation).setAnnotationTypeMetadataItem(annotationTypeMetadataItem).setData(update.metadata.get(key));
+            AnnotationMetadataItem item = new AnnotationMetadataItem()//
+                .setAnnotation(annotation)//
+                .setAnnotationTypeMetadataItem(annotationTypeMetadataItem)//
+                .setData(update.metadata.get(key));
             persist(item);
             annotationMetadataItems.add(item);
           }
