@@ -285,12 +285,13 @@ public class TeiMaker {
   }
 
   private Element createHeader() {
-    Element p = tei.createElement("p");
+    Element p1 = tei.createElement("p");
     Element header = tei.createElement("teiHeader");
     Element fileDesc = tei.createElement("fileDesc");
     Element publicationStmt = tei.createElement("publicationStmt");
-    publicationStmt.appendChild(p);
+    publicationStmt.appendChild(p1);
     Element sourceDesc = tei.createElement("sourceDesc");
+    Element p = tei.createElement("p");
     sourceDesc.appendChild(p);
     Element titleStmt = tei.createElement("titleStmt");
     Element title = tei.createElement("title");
