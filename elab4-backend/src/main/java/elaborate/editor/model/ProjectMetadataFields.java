@@ -53,5 +53,6 @@ public class ProjectMetadataFields {
   public static final String MVN_PLACENAME = "mvn.placeName";
   public static final String MVN_INSTITUTION = "mvn.institution";
   public static final String MVN_IDNO = "mvn.idno";
+  public static final String MVN_SUBTITLE = "mvn.subtitle";
 
 }

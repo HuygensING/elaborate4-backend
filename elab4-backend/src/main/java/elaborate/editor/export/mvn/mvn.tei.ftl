@@ -25,6 +25,7 @@
     <fileDesc>
       <titleStmt>
         <title>${title}</title>
+        <title type="sub">${subtitle}</title>
       </titleStmt>
       <publicationStmt>
         <p></p>

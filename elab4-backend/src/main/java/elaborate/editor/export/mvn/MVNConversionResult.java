@@ -36,6 +36,7 @@ public class MVNConversionResult {
   private final String place;
   private final String institution;
   private final String idno;
+  private final String subtitle;
   private final String sigle;
   private final String baseURL;
   private final Status logger;
@@ -61,10 +62,15 @@ public class MVNConversionResult {
     this.place = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_PLACENAME), "");
     this.institution = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_INSTITUTION), "");
     this.idno = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_IDNO), "");
+    this.subtitle = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_SUBTITLE), "");
   }
 
   public String getTitle() {
     return title;
+  }
+
+  public String getSubtitle() {
+    return subtitle;
   }
 
   public String getPlace() {
