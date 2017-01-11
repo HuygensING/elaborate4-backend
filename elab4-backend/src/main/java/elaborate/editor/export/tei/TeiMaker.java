@@ -200,8 +200,8 @@ public class TeiMaker {
 
   private Element interp(String type, String value) {
     Element interp = tei.createElement("interp");
-    interp.setAttribute("type", SolrUtils.normalize(type));
-    interp.setAttribute("value", StringEscapeUtils.escapeHtml(value));
+    interp.setAttribute("type", SolrUtils.normalize(type).replace(" ", ""));
+    interp.appendChild(tei.createTextNode(StringEscapeUtils.escapeHtml(value)));
     return interp;
   }
 
@@ -289,7 +289,9 @@ public class TeiMaker {
     Element header = tei.createElement("teiHeader");
     Element fileDesc = tei.createElement("fileDesc");
     Element publicationStmt = tei.createElement("publicationStmt");
-    publicationStmt.appendChild(p1);
+    Element publisher = tei.createElement("publisher");
+    publisher.appendChild(tei.createTextNode("Huygens ING"));
+    publicationStmt.appendChild(publisher);
     Element sourceDesc = tei.createElement("sourceDesc");
     Element p = tei.createElement("p");
     sourceDesc.appendChild(p);
