@@ -73,7 +73,7 @@ public class MVNTeiExporter {
       .add(new LettersHandler(MVNAnnotationType.LETTERS))//
       .add(new InitiaalHandler(MVNAnnotationType.INITIAAL))//
       .add(new KolomHandler(MVNAnnotationType.KOLOM))//
-      //      .add(new VersregelHandler(MVNAnnotationType.VERSREGEL))//
+      .add(new VersregelHandler(MVNAnnotationType.VERSREGEL))//
       .build();
 
   // opening annotations
@@ -172,6 +172,9 @@ public class MVNTeiExporter {
       for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
         Map<String, String> attributes = xmlAnnotation.getAttributes();
         teiBuilder.append(NL);
+        if (context.inPoetry) {
+          teiBuilder.append(closingTag("lg"));
+        }
         if (context.parseresult.isTextGroup(attributes.get("n"))) {
           teiBuilder.append(closingTag("group"));
 
@@ -200,20 +203,23 @@ public class MVNTeiExporter {
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty()) {
+        context.inParagraph = false;
+        context.inPoetry = true;
         openLineGroup(teiBuilder, context);
       }
+      super.onOpenAnnotation(teiBuilder, xmlAnnotations, context);
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty() && context.inPoetry) {
-        context.inPoetry = false;
         teiBuilder.append(closingTag(LG));
+        context.inPoetry = false;
       }
+      super.onCloseAnnotation(teiBuilder, xmlAnnotations, context);
     }
 
     private static void openLineGroup(StringBuilder teiBuilder, Context context) {
-      context.inPoetry = true;
       teiBuilder.append(openingTag(LG));
     }
 
@@ -227,18 +233,19 @@ public class MVNTeiExporter {
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty()) {
+        context.inPoetry = false;
         context.inParagraph = true;
       }
       super.onOpenAnnotation(teiBuilder, xmlAnnotations, context);
     }
 
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      if (!xmlAnnotations.isEmpty()) {
-        context.inParagraph = false;
-      }
-      super.onCloseAnnotation(teiBuilder, xmlAnnotations, context);
-    }
+    //    @Override
+    //    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
+    //      if (!xmlAnnotations.isEmpty()) {
+    //        context.inParagraph = false;
+    //      }
+    //      super.onCloseAnnotation(teiBuilder, xmlAnnotations, context);
+    //    }
   }
 
   private static class EntryHandler extends DefaultAnnotationHandler {
@@ -314,6 +321,7 @@ public class MVNTeiExporter {
   }
 
   private static void openHeadOrCloser(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, String name, Context context) {
+    context.inPoetry = false;
     Element head = new Element(name);
     for (int i = 0; i < xmlAnnotations.size(); i++) {
       teiBuilder.append(openingTag(head));
@@ -348,13 +356,20 @@ public class MVNTeiExporter {
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      teiBuilder.append(closingTag("l"));
-      context.incrementTextLineNumber();
-      String lId = context.textId + "-l-" + context.textLineNumber;
-      Element l = new Element("l")//
-          .withAttribute("n", String.valueOf(context.textLineNumber))//
-          .withAttribute(XML_ID, lId);
-      teiBuilder.append(openingTag(l));
+      if (!xmlAnnotations.isEmpty()) {
+        if (!context.inPoetry) {
+          context.addError(MVNAnnotationType.VERSREGEL, "versregel annotatie buiten een mvn:poetry sectie");
+
+        } else {
+          teiBuilder.append(closingTag("l"));
+          context.incrementTextLineNumber();
+          String lId = context.textId + "-l-" + context.textLineNumber;
+          Element l = new Element("l")//
+              .withAttribute("n", String.valueOf(context.textLineNumber))//
+              .withAttribute(XML_ID, lId);
+          teiBuilder.append(openingTag(l));
+        }
+      }
     }
   }
 
