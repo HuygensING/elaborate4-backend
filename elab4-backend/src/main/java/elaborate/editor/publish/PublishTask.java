@@ -137,7 +137,7 @@ public class PublishTask implements Runnable {
     boolean projectIsMVN = ProjectTypes.MVN.equals(project.getMetadataMap().get(ProjectMetadataFields.TYPE));
     String url = "";
     try {
-      url = projectIsMVN ? createMVNDraft(project, ps) : createRegularDraft(project, ps);
+      url = projectIsMVN ? createMVNDraft(project) : createRegularDraft(project, ps);
       status.setUrl(url);
 
     } catch (Exception e) {
@@ -151,7 +151,7 @@ public class PublishTask implements Runnable {
     ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
   }
 
-  private String createMVNDraft(Project project, ProjectService ps) {
+  private String createMVNDraft(Project project) {
     MVNConversionData data = MVNConverter.getConversionData(project.getId(), status);
     MVNConverter mvnConverter = new MVNConverter(project, data, status, baseURL);
     MVNConversionResult report = mvnConverter.convert();

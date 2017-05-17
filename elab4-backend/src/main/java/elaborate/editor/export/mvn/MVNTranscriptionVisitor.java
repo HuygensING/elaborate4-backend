@@ -51,6 +51,7 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
 @Deprecated
+// use MVNTeiExporter
 public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
   static final String choiceTag = "choice";
   static final String abbrTag = "abbr";

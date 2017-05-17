@@ -54,6 +54,7 @@ public class MVNConverter {
   // order by 'order' or entryname
   // fail when 1, but not all entries have order
   // fail when entrynames are not unique
+  // fail when entrynames contain characters illegal in xml:id
   // select id, name from project_entries where project_id=$projectId
   // select 
 
