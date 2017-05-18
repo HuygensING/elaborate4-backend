@@ -25,10 +25,11 @@ package elaborate.editor.export.mvn;
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -57,7 +58,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   static final String abbrTag = "abbr";
   static final String expanTag = "expan";
 
-  static final Stack<String> textNumStack = new Stack<String>();
+  static final Deque<String> textNumStack = new ArrayDeque<String>();
 
   public static boolean inParagraph = false;
 

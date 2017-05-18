@@ -25,9 +25,10 @@ package elaborate.editor.export.tei;
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import javax.persistence.EntityManager;
 
@@ -49,7 +50,7 @@ import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
 public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
-  static final Stack<Element> openElements = new Stack<Element>();
+  static final Deque<Element> openElements = new ArrayDeque<Element>();
 
   private static int linenum = 1;
   private static boolean skipNextNewline = false;

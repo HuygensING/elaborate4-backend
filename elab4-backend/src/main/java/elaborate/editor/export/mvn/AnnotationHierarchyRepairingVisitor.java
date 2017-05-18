@@ -3,10 +3,11 @@ package elaborate.editor.export.mvn;
 import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_BEGIN;
 import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_END;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 
 import com.google.common.collect.Lists;
 
@@ -20,8 +21,8 @@ import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
 public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
-  Stack<String> openAnnotationStack = new Stack<String>();
-  Stack<Element> openElements = new Stack<Element>();
+  Deque<String> openAnnotationStack = new ArrayDeque<String>();
+  Deque<Element> openElements = new ArrayDeque<Element>();
 
   public AnnotationHierarchyRepairingVisitor() {
     super(new XmlContext());
@@ -129,8 +130,10 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
   public class LineEndHandler extends RenderElementHandler {
     @Override
     public Traversal enterElement(Element element, XmlContext context) {
-      addCloseOtherElements(context, Lists.reverse(openElements));
-      addAnnotationEnds(context, Lists.reverse(openAnnotationStack));
+      List<Element> reverseOpenElements = Lists.newArrayList(openElements.descendingIterator());
+      addCloseOtherElements(context, reverseOpenElements);
+      List<String> reverseOpenAnnotationStack = Lists.newArrayList(openAnnotationStack.descendingIterator());
+      addAnnotationEnds(context, reverseOpenAnnotationStack);
       return super.enterElement(element, context);
     }
 

@@ -7,10 +7,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -236,7 +237,7 @@ public class MVNConverter {
   }
 
   private void validateTextNums(final String cooked, final MVNConversionResult result) {
-    final Stack<String> textNumStack = new Stack<String>();
+    final Deque<String> textNumStack = new ArrayDeque<String>();
     final List<String> openTextNums = Lists.newArrayList();
     final List<String> closeTextNums = Lists.newArrayList();
     final Matcher matcher = Pattern.compile("<mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
@@ -286,7 +287,7 @@ public class MVNConverter {
 
   }
 
-  private void validateTextNum(MVNConversionResult result, final String textNum, Stack<String> textNumStack, String entryId) {
+  private void validateTextNum(MVNConversionResult result, final String textNum, Deque<String> textNumStack, String entryId) {
     if (!textNum.matches("^[a-zA-Z0-9\\.]+$")) {
       addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' mag alleen letters, cijfers en (maximaal 3) punten bevatten.", result, entryId);
 

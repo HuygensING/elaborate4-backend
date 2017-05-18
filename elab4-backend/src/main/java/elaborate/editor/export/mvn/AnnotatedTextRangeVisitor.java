@@ -1,7 +1,8 @@
 package elaborate.editor.export.mvn;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Set;
-import java.util.Stack;
 
 import com.google.common.collect.Sets;
 
@@ -17,7 +18,7 @@ import nl.knaw.huygens.tei.XmlContext;
 
 public class AnnotatedTextRangeVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
   private final Set<RangeAnnotation> rangeAnnotations = Sets.newLinkedHashSet();
-  private final Stack<Integer> elementOffsetStack = new Stack<Integer>();
+  private final Deque<Integer> elementOffsetStack = new ArrayDeque<Integer>();
 
   public AnnotatedTextRangeVisitor() {
     super(new XmlContext());

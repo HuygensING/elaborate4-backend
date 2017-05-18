@@ -5,7 +5,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -26,8 +25,8 @@ import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
 public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext> {
   private static boolean lastNodeWasText = false;
-  private final Stack<Integer> startIndexStack = new Stack<Integer>();
-  private final Stack<Element> elementStack = new Stack<Element>();
+  private final Deque<Integer> startIndexStack = new ArrayDeque<Integer>();
+  private final Deque<Element> elementStack = new ArrayDeque<Element>();
   public static Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
   private static String sigle;
   private static ParseResult result;
