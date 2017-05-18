@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import com.google.common.collect.Lists;
 
@@ -21,7 +22,7 @@ import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
 public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
-  Deque<String> openAnnotationStack = new ArrayDeque<String>();
+  Stack<String> openAnnotationStack = new Stack<String>();
   Deque<Element> openElements = new ArrayDeque<Element>();
 
   public AnnotationHierarchyRepairingVisitor() {
@@ -130,15 +131,15 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
   public class LineEndHandler extends RenderElementHandler {
     @Override
     public Traversal enterElement(Element element, XmlContext context) {
-      List<Element> reverseOpenElements = Lists.newArrayList(openElements.descendingIterator());
-      addCloseOtherElements(context, reverseOpenElements);
-      List<String> reverseOpenAnnotationStack = Lists.newArrayList(openAnnotationStack.descendingIterator());
-      addAnnotationEnds(context, reverseOpenAnnotationStack);
+      addCloseOtherElements(context, openElements);
+      addAnnotationEnds(context, Lists.reverse(openAnnotationStack));
       return super.enterElement(element, context);
     }
 
-    private void addCloseOtherElements(XmlContext context, List<Element> elementsToClose) {
-      for (Element element : elementsToClose) {
+    private void addCloseOtherElements(XmlContext context, Deque<Element> openElements) {
+      Iterator<Element> descendingIterator = openElements.descendingIterator();
+      while (descendingIterator.hasNext()) {
+        Element element = descendingIterator.next();
         context.addCloseTag(element);
       }
     }
