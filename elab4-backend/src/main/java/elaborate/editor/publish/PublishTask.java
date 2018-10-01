@@ -4,7 +4,7 @@ package elaborate.editor.publish;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,46 +22,14 @@ package elaborate.editor.publish;
  * #L%
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.output.FileWriterWithEncoding;
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.common.SolrInputDocument;
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import com.google.common.io.Files;
 import com.sun.jersey.api.client.ClientResponse;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.export.mvn.MVNClient;
 import elaborate.editor.export.mvn.MVNConversionData;
@@ -69,15 +37,7 @@ import elaborate.editor.export.mvn.MVNConversionResult;
 import elaborate.editor.export.mvn.MVNConverter;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.ProjectTypes;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.AnnotationMetadataItem;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.Facsimile;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.ProjectEntryMetadataItem;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.*;
 import elaborate.editor.model.orm.service.AnnotationService;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
@@ -88,11 +48,22 @@ import elaborate.util.HibernateUtil;
 import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
-import nl.knaw.huygens.facetedsearch.IndexException;
-import nl.knaw.huygens.facetedsearch.LocalSolrServer;
-import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.facetedsearch.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.FileWriterWithEncoding;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.common.SolrInputDocument;
+import org.joda.time.DateTime;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class PublishTask implements Runnable {
   private static final String MVN_BASE_URL = "http://test.mvn.huygens.knaw.nl/";
@@ -502,7 +473,7 @@ public class PublishTask implements Runnable {
 
   private void fixPageBreaks(Transcription transcription) {
     EntityManager entityManager = HibernateUtil.getEntityManager();
-    String body = transcription.getBody();
+    String body = cleanupAfterWord(transcription.getBody());
     String fixed = body//
         .replace("<strong>", "<b>")//
         .replace("</strong>", "</b>")//
@@ -524,7 +495,7 @@ public class PublishTask implements Runnable {
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
     TextlayerData textlayerData = new TextlayerData()//
-        .setText(tw.getBody())//
+        .setText(cleanupAfterWord(tw.getBody()))//
         .setAnnotations(getAnnotationData(tw.annotationNumbers));
     return textlayerData;
   }
@@ -538,7 +509,7 @@ public class PublishTask implements Runnable {
         if (settings.includeAnnotationType(annotationType)) {
           AnnotationPublishData ad2 = new AnnotationPublishData()//
               .setN(annotation.getAnnotationNo())//
-              .setText(annotation.getBody())//
+              .setText(cleanupAfterWord(annotation.getBody()))//
               .setAnnotatedText(annotation.getAnnotatedText())//
               .setType(getAnnotationTypeData(annotationType, annotation.getAnnotationMetadataItems()));
           list.add(ad2);
@@ -1000,6 +971,9 @@ public class PublishTask implements Runnable {
       return this;
     }
 
+  }
+  private String cleanupAfterWord(String dirty) {
+    return dirty.replaceAll("(?s)<!--.*?-->", "");
   }
 
 }

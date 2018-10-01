@@ -4,7 +4,7 @@ package elaborate.publication.solr;
  * #%L
  * elab4-publication-backend
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,7 +22,18 @@ package elaborate.publication.solr;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.RangeField;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
+import org.assertj.core.data.MapEntry;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -30,20 +41,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.assertj.core.data.MapEntry;
-import org.junit.Test;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.RangeField;
-import nl.knaw.huygens.solr.FacetInfo;
-import nl.knaw.huygens.solr.FacetType;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SearchServiceTest {
 
