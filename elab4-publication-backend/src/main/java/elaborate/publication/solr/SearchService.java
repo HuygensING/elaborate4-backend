@@ -255,7 +255,7 @@ public class SearchService {
     return outMap;
   }
 
-  static Map<String, Object> readConfigMap(InputStream inputStream) throws IOException, JsonParseException, JsonMappingException {
+  static Map<String, Object> readConfigMap(InputStream inputStream) throws IOException {
     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
     Map<String, Object> configMap = new ObjectMapper().readValue(inputStreamReader, Map.class);
     if (configMap == null) {

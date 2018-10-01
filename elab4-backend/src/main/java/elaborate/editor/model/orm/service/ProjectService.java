@@ -882,7 +882,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
     if (!canPublish) {
       throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
-    };
+    }
 
     String projectType = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.TYPE), ProjectTypes.COLLECTION);
     List<Long> publishableAnnotationTypeIds = getPublishableAnnotationTypeIds(projectMetadata);

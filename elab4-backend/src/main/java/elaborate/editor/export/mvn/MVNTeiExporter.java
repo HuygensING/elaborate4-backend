@@ -696,7 +696,7 @@ public class MVNTeiExporter {
   //
 
   private Multimap<String, XmlAnnotation> indexXmlAnnotations(Collection<XmlAnnotation> annotations) {
-    Multimap<String, XmlAnnotation> index = ArrayListMultimap.<String, XmlAnnotation> create();
+    Multimap<String, XmlAnnotation> index = ArrayListMultimap.create();
     for (XmlAnnotation xmlAnnotation : annotations) {
       index.put(xmlAnnotation.getName(), xmlAnnotation);
     }

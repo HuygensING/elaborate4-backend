@@ -46,7 +46,7 @@ public class Elab4RestClientTest {
   }
 
   //  @Test
-  public void testAddProject() throws Exception {
+  public void testAddProject() {
     Log.info("logging in...");
     loginAsRoot();
     Log.info("add project...");
@@ -58,31 +58,31 @@ public class Elab4RestClientTest {
   }
 
   //	@Test
-  public void testLoginFaila() throws Exception {
+  public void testLoginFaila() {
     boolean success = e4.login("bla", "boe");
     assertThat(success).isFalse();
   }
 
   //	@Test
-  public void testLoginSucceeds() throws Exception {
+  public void testLoginSucceeds() {
     loginAsRoot();
   }
 
   //	@Test
-  public void testVersion() throws Exception {
+  public void testVersion() {
     Map<String, String> versionMap = e4.getAbout();
     Log.info("{}", versionMap);
     assertThat(versionMap).containsKey("version");
   }
 
   //	@Test
-  public void testGetProjectEntries() throws Exception {
+  public void testGetProjectEntries() {
     loginAsRoot();
     e4.getProjectEntries(1);
   }
 
   //	@Test
-  public void testCNWPagebreakFix() throws Exception {
+  public void testCNWPagebreakFix() {
     loginAsRoot();
     int projectId = 44; // CNW
     List<Map<String, Object>> transcriptionMaps = e4.getProjectEntryTextLayers(projectId, 24857);

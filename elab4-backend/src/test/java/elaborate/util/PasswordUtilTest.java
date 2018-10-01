@@ -36,7 +36,7 @@ public class PasswordUtilTest {
 
   @Ignore
   @Test
-  public void testPassword() throws UnsupportedEncodingException {
+  public void testPassword() {
     final String password = "aap-noot-mies";
     final byte[] passwordDigest2 = PasswordUtil.encode(password);
     String encodedPassword = new String(Base64.encodeBase64(passwordDigest2), Charsets.UTF_8);

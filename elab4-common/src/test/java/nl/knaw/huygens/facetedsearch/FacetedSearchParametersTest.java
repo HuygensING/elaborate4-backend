@@ -31,13 +31,13 @@ import org.junit.Test;
 public class FacetedSearchParametersTest<T> {
 
 	@Before
-	public void setUp() throws Exception {}
+	public void setUp() {}
 
 	@After
-	public void tearDown() throws Exception {}
+	public void tearDown() {}
 
 	@Test
-	public void testSetTerm() throws Exception {
+	public void testSetTerm() {
 		FacetedSearchParameters<?> facetedSearchParameters = new FacetedSearchParameters()//
 				.setCaseSensitive(true)//
 				.setFacetFields(new String[] {});

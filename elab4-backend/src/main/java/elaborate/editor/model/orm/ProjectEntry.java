@@ -121,9 +121,9 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 		this.facsimiles = facsimiles;
 		return this;
 
-	};
+	}
 
-	@JsonIgnore
+  @JsonIgnore
 	public List<Transcription> getTranscriptions() {
 		return transcriptions;
 	}

@@ -41,7 +41,7 @@ public class PermissionsTest {
 	private ImmutableList<User> writeusers;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		root = new User().setId(0).setRoot(true);
 		admin = new User().setId(1).setRoleString(ElaborateRoles.getRolestringFor(ElaborateRoles.ADMIN));
 		projectleader = new User().setId(3).setRoleString(ElaborateRoles.getRolestringFor(ElaborateRoles.PROJECTLEADER));
@@ -51,10 +51,10 @@ public class PermissionsTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {}
+	public void tearDown() {}
 
 	@Test
-	public void testGetPermission1() throws Exception {
+	public void testGetPermission1() {
 		for (User writeuser : writeusers) {
 			for (User user : allusers) {
 				Permission permission = Permissions.getPermission(writeuser, user);
@@ -64,19 +64,19 @@ public class PermissionsTest {
 	}
 
 	@Test
-	public void testGetPermission2() throws Exception {
+	public void testGetPermission2() {
 		Permission permission = Permissions.getPermission(plainUser, plainUser);
 		assertThat(permission.canWrite()).isTrue();
 	}
 
 	@Test
-	public void testGetPermission3() throws Exception {
+	public void testGetPermission3() {
 		Permission permission = Permissions.getPermission(plainUser, admin);
 		assertThat(permission.canWrite()).isFalse();
 	}
 
 	@Test
-	public void testGetPermission4() throws Exception {
+	public void testGetPermission4() {
 		Permission permission = Permissions.getPermission(null, plainUser);
 		assertThat(permission.canWrite()).isFalse();
 	}

@@ -115,17 +115,17 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testCRUD_asProjectLeader() throws Exception {
+	public void testCRUD_asProjectLeader() {
 		testAsAuthorizedUser("bladiebla", projectleader);
 	}
 
 	@Test
-	public void testCRUD_asRoot() throws Exception {
+	public void testCRUD_asRoot() {
 		testAsAuthorizedUser("ofallevil", root);
 	}
 
 	@Test
-	public void testCRUD_asAdmin() throws Exception {
+	public void testCRUD_asAdmin() {
 		testAsAuthorizedUser("administer", admin);
 	}
 
@@ -168,12 +168,12 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 	}
 
 	@Test(expected = UnauthorizedException.class)
-	public void testCreateAsUser() throws Exception {
+	public void testCreateAsUser() {
 		createAsUnauthorizedUser(user);
 	}
 
 	@Test(expected = UnauthorizedException.class)
-	public void testCreateAsReader() throws Exception {
+	public void testCreateAsReader() {
 		createAsUnauthorizedUser(reader);
 	}
 
@@ -193,12 +193,12 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testUpdateAsUser() throws Exception {
+	public void testUpdateAsUser() {
 		updateAsUnauthorizedUser(user);
 	}
 
 	@Test
-	public void testUpdateAsReader() throws Exception {
+	public void testUpdateAsReader() {
 		updateAsUnauthorizedUser(reader);
 	}
 
@@ -217,12 +217,12 @@ public class AnnotationTypeServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void testDeleteAsUser() throws Exception {
+	public void testDeleteAsUser() {
 		deleteAsUnauthorizedUser(user);
 	}
 
 	@Test
-	public void testDeleteAsReader() throws Exception {
+	public void testDeleteAsReader() {
 		deleteAsUnauthorizedUser(reader);
 	}
 

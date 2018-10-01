@@ -27,9 +27,9 @@ import java.util.Set;
 public class SessionUser implements java.security.Principal {
 	public enum Role {
 		User, Admin, Projectleader, Reader
-	};
+	}
 
-	private long userId;
+  private long userId;
 	private String name;
 	private String emailAddress;
 	private Set<Role> roles;

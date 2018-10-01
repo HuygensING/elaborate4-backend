@@ -22,59 +22,24 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import static elaborate.editor.export.mvn.MVNAnnotationType.AFKORTING;
-import static elaborate.editor.export.mvn.MVNAnnotationType.ALINEA;
-import static elaborate.editor.export.mvn.MVNAnnotationType.CIJFERS;
-import static elaborate.editor.export.mvn.MVNAnnotationType.DEFECT;
-import static elaborate.editor.export.mvn.MVNAnnotationType.DOORHALING;
-import static elaborate.editor.export.mvn.MVNAnnotationType.GEBRUIKERSNOTITIE;
-import static elaborate.editor.export.mvn.MVNAnnotationType.INCIPIT;
-import static elaborate.editor.export.mvn.MVNAnnotationType.INITIAAL;
-import static elaborate.editor.export.mvn.MVNAnnotationType.INSPRINGEN;
-import static elaborate.editor.export.mvn.MVNAnnotationType.KOLOM;
-import static elaborate.editor.export.mvn.MVNAnnotationType.LETTERS;
-import static elaborate.editor.export.mvn.MVNAnnotationType.LINKERMARGEKOLOM;
-import static elaborate.editor.export.mvn.MVNAnnotationType.METAMARK;
-import static elaborate.editor.export.mvn.MVNAnnotationType.ONDERSCHRIFT;
-import static elaborate.editor.export.mvn.MVNAnnotationType.ONDUIDELIJK;
-import static elaborate.editor.export.mvn.MVNAnnotationType.ONLEESBAAR;
-import static elaborate.editor.export.mvn.MVNAnnotationType.OPHOGING_ROOD;
-import static elaborate.editor.export.mvn.MVNAnnotationType.OPSCHRIFT;
-import static elaborate.editor.export.mvn.MVNAnnotationType.PALEOGRAFISCH;
-import static elaborate.editor.export.mvn.MVNAnnotationType.POEZIE;
-import static elaborate.editor.export.mvn.MVNAnnotationType.RECHTERMARGEKOLOM;
-import static elaborate.editor.export.mvn.MVNAnnotationType.REGELNUMMERING_BLAD;
-import static elaborate.editor.export.mvn.MVNAnnotationType.REGELNUMMERING_TEKST;
-import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTBEGIN;
-import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTEINDE;
-import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTKLEUR_ROOD;
-import static elaborate.editor.export.mvn.MVNAnnotationType.VERSREGEL;
-import static elaborate.editor.export.mvn.MVNAnnotationType.VREEMDTEKEN;
-import static elaborate.editor.export.mvn.MVNAnnotationType.WITREGEL;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
-
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
 import elaborate.editor.model.ProjectMetadataFields;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.TranscriptionType;
+import elaborate.editor.model.orm.*;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publication.Status;
 import nl.knaw.huygens.Log;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.util.Arrays;
+
+import static elaborate.editor.export.mvn.MVNAnnotationType.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MVNConverterTest {
 
@@ -689,7 +654,7 @@ public class MVNConverterTest {
         + "<lb n=\"1\" xml:id=\"ABC-pb-42r-lb-1\"/><l n=\"1\" xml:id=\"PROJECTNAME-1-l-1\">Er was eens een neushoorn uit Assen,</l>\n"//
         + "<lb n=\"2\" xml:id=\"ABC-pb-42r-lb-2\"/><l n=\"2\" xml:id=\"PROJECTNAME-1-l-2\">Die moest echt verschrikkelijk nodig plassen.</l>"// 
         + "</lg>\n"//
-        + "</body></text>\n";;
+        + "</body></text>\n";
     assertConversion(body, mockData(1, tekstbegin, 2, poezieAnnotation, 3, teksteinde), expected);
   }
 
@@ -1107,13 +1072,13 @@ public class MVNConverterTest {
   }
 
   @Test
-  public void testValidateEntryOrderAndName() throws Exception {
+  public void testValidateEntryOrderAndName() {
     assertThat("valid_xml:id-1.2").matches(MVNConverter.VALID_XML_ID_SUBSTRING_REGEXP);
     assertThat("invalid xml:id!").doesNotMatch(MVNConverter.VALID_XML_ID_SUBSTRING_REGEXP);
   }
 
   @Test
-  public void testTextShouldBeInAlineaOrPoetry() throws Exception {
+  public void testTextShouldBeInAlineaOrPoetry() {
     final Annotation tekstbegin1 = mockAnnotationOfType(TEKSTBEGIN);
     when(tekstbegin1.getBody()).thenReturn("1");
     final Annotation poezie = mockAnnotationOfType(POEZIE);

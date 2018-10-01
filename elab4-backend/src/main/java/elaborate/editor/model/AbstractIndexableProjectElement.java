@@ -46,13 +46,13 @@ public abstract class AbstractIndexableProjectElement<T extends AbstractIndexabl
 	@Transient
 	public String getSolrId() {
 		return "";
-	};
+	}
 
-	public void index(boolean commitNow) {};
+  public void index(boolean commitNow) {}
 
-	/**
+  /**
 	 * Remove the entity representation from the index
 	 */
-	public void deindex() {};
+	public void deindex() {}
 
 }

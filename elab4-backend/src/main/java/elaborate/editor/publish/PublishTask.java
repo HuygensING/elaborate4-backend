@@ -392,7 +392,7 @@ public class PublishTask implements Runnable {
   private void addIfNotNull(Map<String, Object> map, String key, String value) {
     if (value != null) {
       map.put(key, value);
-    } ;
+    }
   }
 
   // private Map<String, Object> getMetadata(Project project) {
@@ -464,7 +464,7 @@ public class PublishTask implements Runnable {
         }
         map.put(transcription.getTextLayer(), textlayerData);
       } catch (Exception e) {
-        Log.error("Error '{}' for transcription {}, body: '{}'", new Object[] { e.getMessage(), transcription.getId(), transcription.getBody() });
+        Log.error("Error '{}' for transcription {}, body: '{}'", e.getMessage(), transcription.getId(), transcription.getBody());
         e.printStackTrace();
       }
     }

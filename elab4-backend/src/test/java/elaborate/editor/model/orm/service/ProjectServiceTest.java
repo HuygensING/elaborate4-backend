@@ -48,7 +48,7 @@ public class ProjectServiceTest extends AbstractTest {
   private static User notRoot;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     userService = UserService.instance();
     projectService = ProjectService.instance();
     root = new User().setRoot(true).setUsername("root");
@@ -59,21 +59,21 @@ public class ProjectServiceTest extends AbstractTest {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     projectService.rollbackTransaction();
     userService.delete(root.getId());
     userService.rollbackTransaction();
   }
 
   @Test(expected = UnauthorizedException.class)
-  public void testCreateAsNotRoot() throws Exception {
+  public void testCreateAsNotRoot() {
     ProjectPrototype prototype = new ProjectPrototype().setTitle("name");
     Project created = projectService.create(prototype, notRoot);
     assertThat(created).isNotNull();
   }
 
   @Test
-  public void testCreateAsRoot() throws Exception {
+  public void testCreateAsRoot() {
     ProjectPrototype prototype = new ProjectPrototype().setTitle("name");
     Project created = projectService.create(prototype, root);
     long project_id = created.getId();
@@ -82,21 +82,21 @@ public class ProjectServiceTest extends AbstractTest {
   }
 
   @Test
-  public void testGetAll() throws Exception {
+  public void testGetAll() {
     List<Project> all = projectService.getAll(root);
     assertThat(all).isNotEmpty();
     Log.info("{}", all.size());
   }
 
   @Test
-  public void testGetProjectEntryIdsInOrder() throws Exception {
+  public void testGetProjectEntryIdsInOrder() {
     List<Long> idList = projectService.getProjectEntryIdsInOrder(1);
     Log.info("ids:{}", idList);
     assertThat(idList).isNotEmpty();
   }
 
   @Test
-  public void testGetAnnotationDataForProject() throws Exception {
+  public void testGetAnnotationDataForProject() {
     Map<Integer, AnnotationData> annotationDataForProject = projectService.getAnnotationDataForProject(44l);
     assertThat(annotationDataForProject).isNotEmpty();
     Log.info("annotationTypesForProject={}", annotationDataForProject);

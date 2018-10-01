@@ -22,16 +22,16 @@ package elaborate.editor.resources;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
 
 import java.util.Map;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AboutResourceTest {
 
   @Test
-  public void testGetAbout() throws Exception {
+  public void testGetAbout() {
     AboutResource r = new AboutResource();
     Map<String, String> about = r.getAbout();
     assertThat(about).containsKey("publicationBackendBuild");

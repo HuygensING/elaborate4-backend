@@ -52,11 +52,11 @@ import static org.mockito.Mockito.when;
 public class PublishTaskTest extends AbstractTest {
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
   }
 
   @Test
@@ -131,7 +131,7 @@ public class PublishTaskTest extends AbstractTest {
   }
 
   @Test
-  public void testEntryFilename() throws Exception {
+  public void testEntryFilename() {
     ProjectEntry entry = mock(ProjectEntry.class);
     when(entry.getId()).thenReturn(9999l);
 
@@ -186,14 +186,14 @@ public class PublishTaskTest extends AbstractTest {
   }
 
   @Test
-  public void testSetText() throws Exception {
+  public void testSetText() {
     AnnotationPublishData ad = new AnnotationPublishData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
     // assertThat(ad.getText()).isEqualTo("dit is de annotatietekst");
     assertThat(ad.getText()).isEqualTo("dit is de geannoteerde tekst dit is de annotatietekst");
   }
 
   @Test
-  public void testGetTypographicalAnnotationMap() throws Exception {
+  public void testGetTypographicalAnnotationMap() {
     Settings settings = mock(Publication.Settings.class);
     PublishTask publishTask = new PublishTask(settings);
     Project project = mock(Project.class);
@@ -209,7 +209,7 @@ public class PublishTaskTest extends AbstractTest {
   }
 
   @Test
-  public void testAnnotationTypeKey() throws Exception {
+  public void testAnnotationTypeKey() {
     Settings settings = mock(Publication.Settings.class);
     PublishTask publishTask = new PublishTask(settings);
     AnnotationTypeData ad = new AnnotationTypeData().setName("name").setDescription("description");
@@ -218,7 +218,7 @@ public class PublishTaskTest extends AbstractTest {
   }
 
   @Test
-  public void testGetBaseURLFillsInProjectname() throws Exception {
+  public void testGetBaseURLFillsInProjectname() {
     Settings settings = mock(Publication.Settings.class);
     PublishTask publishTask = new PublishTask(settings);
     assertThat(publishTask.getBaseURL("project-name")).isEqualTo("http://example.org/project-name/draft");

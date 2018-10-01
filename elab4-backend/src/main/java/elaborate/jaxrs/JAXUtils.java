@@ -74,7 +74,7 @@ public class JAXUtils {
 		String basePath = pathValueOf(cls);
 		if (!basePath.isEmpty()) {
 			for (Method method : cls.getMethods()) {
-				Builder<String> builder = ImmutableList.<String> builder();
+				Builder<String> builder = ImmutableList.builder();
 				if (method.isAnnotationPresent(GET.class)) {
 					builder.add(HttpMethod.GET);
 				}

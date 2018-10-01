@@ -125,7 +125,7 @@ public class StringUtil {
 		return replaced.toString();
 	}
 
-	static List<String> hostProtocols = Lists.newArrayList(new String[] { "http", "https" });
+	static List<String> hostProtocols = Lists.newArrayList("http", "https");
 
 	/**
 	 * change ULRs in <code>textWithURLs</code> to links

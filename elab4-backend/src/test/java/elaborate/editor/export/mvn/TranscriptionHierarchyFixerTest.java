@@ -218,6 +218,6 @@ public class TranscriptionHierarchyFixerTest {
         + "</body>";
     String fixed = thf.fix(xml);
     assertThat(fixed).isEqualTo(expected);
-  };
+  }
 
 }

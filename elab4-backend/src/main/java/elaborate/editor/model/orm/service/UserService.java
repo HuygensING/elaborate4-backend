@@ -141,7 +141,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 
 	/* */
 	public ImmutableMap<String, String> getSettings(long id) {
-		Builder<String, String> settings = ImmutableMap.<String, String> builder();
+		Builder<String, String> settings = ImmutableMap.builder();
 
 		openEntityManager();
 		User user;

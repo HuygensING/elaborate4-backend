@@ -88,32 +88,32 @@ public class User extends AbstractStoredEntity<User> {
 	/* persistent properties getters and setters */
 	public String getUsername() {
 		return username;
-	};
+	}
 
-	public User setUsername(String name) {
+  public User setUsername(String name) {
 		username = name;
 		return this;
-	};
+	}
 
-	public String getTitle() {
+  public String getTitle() {
 		return title;
-	};
+	}
 
-	public User setTitle(String title) {
+  public User setTitle(String title) {
 		this.title = title;
 		return this;
-	};
+	}
 
-	public String getEmail() {
+  public String getEmail() {
 		return email;
-	};
+	}
 
-	public User setEmail(String email) {
+  public User setEmail(String email) {
 		this.email = email;
 		return this;
-	};
+	}
 
-	public String getFirstName() {
+  public String getFirstName() {
 		return firstname;
 	}
 
@@ -163,9 +163,9 @@ public class User extends AbstractStoredEntity<User> {
 	public User setRoot(boolean isRoot) {
 		this.isRoot = isRoot;
 		return this;
-	};
+	}
 
-	@JsonIgnore
+  @JsonIgnore
 	public Set<UserSetting> getUserSettings() {
 		return userSettings;
 	}

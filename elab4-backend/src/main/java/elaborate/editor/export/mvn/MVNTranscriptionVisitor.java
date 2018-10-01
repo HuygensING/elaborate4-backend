@@ -390,10 +390,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       .put(MVNAnnotationType.WITREGEL, new WitregelHandler())//
       .build();
 
-  public static interface MVNAnnotationHandler {
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context);
+  public interface MVNAnnotationHandler {
+    void handleOpenAnnotation(AnnotationData annotation, XmlContext context);
 
-    public void handleCloseAnnotation(AnnotationData annotationData, XmlContext context);
+    void handleCloseAnnotation(AnnotationData annotationData, XmlContext context);
   }
 
   private static class WrapInElementHandler implements MVNAnnotationHandler {

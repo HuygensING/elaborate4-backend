@@ -110,6 +110,6 @@ public class WarMaker {
    * @return Formatted file path
    */
   private String generateZipEntry(String file) {
-    return file.substring(sourceDir.getAbsolutePath().length() + 1, file.length());
+    return file.substring(sourceDir.getAbsolutePath().length() + 1);
   }
 }

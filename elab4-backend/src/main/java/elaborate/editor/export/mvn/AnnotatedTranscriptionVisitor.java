@@ -94,7 +94,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     return Traversal.NEXT;
   }
 
-  static final List<String> ANNOTATED_TEXT_TO_IGNORE = ImmutableList.<String> of("‡", "¤");
+  static final List<String> ANNOTATED_TEXT_TO_IGNORE = ImmutableList.of("‡", "¤");
 
   public static class TextSegmentHandler extends XmlTextHandler<XmlContext> {
     @Override

@@ -36,7 +36,7 @@ public class ElaborateEditorQueryComposerTest {
   static final QueryComposer queryComposer = new ElaborateEditorQueryComposer();
 
   @Test
-  public void testComposeQuery1() throws Exception {
+  public void testComposeQuery1() {
     ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters();
     sp.setTextLayers(ImmutableList.of(TranscriptionType.DIPLOMATIC));
     String expected = "(*:*) AND project_id:0";
@@ -47,7 +47,7 @@ public class ElaborateEditorQueryComposerTest {
   }
 
   @Test
-  public void testComposeQuery2() throws Exception {
+  public void testComposeQuery2() {
     ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
         .setProjectId(1);
     sp.setTerm("iets")//
@@ -63,7 +63,7 @@ public class ElaborateEditorQueryComposerTest {
   }
 
   @Test
-  public void testComposeQuery3() throws Exception {
+  public void testComposeQuery3() {
     ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
         .setProjectId(1);
     sp.setTerm("iets anders")//
@@ -79,7 +79,7 @@ public class ElaborateEditorQueryComposerTest {
   }
 
   @Test
-  public void testComposeQuery4() throws Exception {
+  public void testComposeQuery4() {
     ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
         .setProjectId(1);
     sp.setTerm("iets vaags")//
@@ -97,7 +97,7 @@ public class ElaborateEditorQueryComposerTest {
   }
 
   @Test
-  public void testComposeQuery5() throws Exception {
+  public void testComposeQuery5() {
     ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
         .setProjectId(1);
     sp.setTerm("iets vaags")//
@@ -112,7 +112,7 @@ public class ElaborateEditorQueryComposerTest {
   }
 
   @Test
-  public void testComposeQuery6() throws Exception {
+  public void testComposeQuery6() {
     // {"searchInAnnotations":false,"searchInTranscriptions":false,"facetValues":[{"name":"metadata_folio_number","values":["199"]}],"term":"a*"}
     ElaborateEditorSearchParameters sp = new ElaborateEditorSearchParameters()//
         .setProjectId(1);//
