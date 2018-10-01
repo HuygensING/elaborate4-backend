@@ -22,20 +22,19 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class AnnotatedTextRange {
   public Multimap<Integer, Element> elementStartIndex = LinkedHashMultimap.create();
