@@ -4,7 +4,7 @@ package elaborate.editor.publish;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,28 +22,7 @@ package elaborate.editor.publish;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
-import static org.assertj.guava.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-
+import com.google.common.collect.*;
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
@@ -55,14 +34,30 @@ import elaborate.editor.publish.PublishTask.AnnotationTypeData;
 import elaborate.editor.publish.PublishTask.EntryData;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.solr.FacetInfo;
+import org.apache.commons.lang.StringUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
+import static org.assertj.guava.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PublishTaskTest extends AbstractTest {
 
   @Before
-  public void setUp() throws Exception {}
+  public void setUp() throws Exception {
+  }
 
   @After
-  public void tearDown() throws Exception {}
+  public void tearDown() throws Exception {
+  }
 
   @Test
   public void testGetProjectData_WithProjectTitle() throws Exception {
@@ -76,8 +71,8 @@ public class PublishTaskTest extends AbstractTest {
     when(mockProject.getLevel3()).thenReturn("level3");
 
     PublishTask publishTask = new PublishTask(settings);
-    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String> create());
-    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String> create());
+    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
+    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
     List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -111,8 +106,8 @@ public class PublishTaskTest extends AbstractTest {
     when(mockProject.getMetadataMap()).thenReturn(metadataMap);
 
     PublishTask publishTask = new PublishTask(settings);
-    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String> create());
-    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String> create());
+    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
+    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
     List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -154,7 +149,7 @@ public class PublishTaskTest extends AbstractTest {
     String entryName = "entryname";
     when(entry.getName()).thenReturn(entryName);
     when(entry.getProject()).thenReturn(project);
-    String[] textLayers = new String[] { TranscriptionType.DIPLOMATIC, TranscriptionType.COMMENTS };
+    String[] textLayers = new String[]{TranscriptionType.DIPLOMATIC, TranscriptionType.COMMENTS};
     when(project.getTextLayers()).thenReturn(textLayers);
 
     List<String> projectEntryMetadataFields = Lists.newArrayList("Meta1", "Meta2");
@@ -249,11 +244,21 @@ public class PublishTaskTest extends AbstractTest {
     ProjectEntry projectEntry = mock(ProjectEntry.class);
     when(projectEntry.getMetadataValue("multi")).thenReturn("a | b | c");
     when(projectEntry.getMetadataValue("single")).thenReturn("d | e | f");
-    String[] multivaluedFacetNames = new String[] { "multi" };
+    String[] multivaluedFacetNames = new String[]{"multi"};
     Multimap<String, String> multivaluedFacetValues = PublishTask.getMultivaluedFacetValues(multivaluedFacetNames, projectEntry);
     assertThat(multivaluedFacetValues).containsValues("a", "b", "c");
     assertThat(multivaluedFacetValues).containsKeys("multi");
     assertThat(multivaluedFacetValues).hasSize(3);
+  }
 
+  @Test
+  public void testCleanupAfterWord() {
+    String dirty = "<!-- some word shit with \n lots of newlines \n and other #$% -->This is the actual text.<!-- single line -->";
+    String clean = cleanupAfterWord(dirty);
+    assertThat(clean).isEqualTo("This is the actual text.");
+  }
+
+  private String cleanupAfterWord(String dirty) {
+    return dirty.replaceAll("(?s)<!--.*?-->", "");
   }
 }
