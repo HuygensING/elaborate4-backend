@@ -22,24 +22,22 @@ package elaborate.editor.solr;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.solr.common.SolrInputDocument;
-import org.assertj.core.util.Lists;
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
-
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.SolrFields;
+import org.apache.solr.common.SolrInputDocument;
+import org.assertj.core.util.Lists;
+import org.junit.Test;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ElaborateSolrIndexerTest extends AbstractTest {
 

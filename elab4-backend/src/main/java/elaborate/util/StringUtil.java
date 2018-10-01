@@ -22,6 +22,13 @@ package elaborate.util;
  * #L%
  */
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import org.apache.commons.io.output.NullWriter;
+import org.apache.commons.lang.StringUtils;
+import org.w3c.tidy.Tidy;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -32,14 +39,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.output.NullWriter;
-import org.apache.commons.lang.StringUtils;
-import org.w3c.tidy.Tidy;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 
 public class StringUtil {
 	private static final String UTF8 = "UTF8";
