@@ -136,7 +136,7 @@ public class Project extends AbstractDocument<Project> {
 		for (String pemfn : getProjectEntryMetadataFieldnames()) {
 			facetFields.add(SolrUtils.facetName(pemfn));
 		}
-		return facetFields.toArray(new String[facetFields.size()]);
+		return facetFields.toArray(new String[0]);
 	}
 
 	@JsonIgnore

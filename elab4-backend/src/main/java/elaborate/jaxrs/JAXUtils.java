@@ -43,11 +43,11 @@ import com.google.common.collect.Lists;
 
 public class JAXUtils {
 	public static class API {
-		public String path;
-		public ImmutableList<String> requestTypes;
-		public ImmutableList<String> requestContentTypes;
-		public ImmutableList<String> responseContentTypes;
-		public String description;
+		public final String path;
+		public final ImmutableList<String> requestTypes;
+		public final ImmutableList<String> requestContentTypes;
+		public final ImmutableList<String> responseContentTypes;
+		public final String description;
 
 		public API(String path, ImmutableList<String> requestTypes, ImmutableList<String> requestContentTypes, ImmutableList<String> responseContentTypes, String desc) {
 			this.path = path;

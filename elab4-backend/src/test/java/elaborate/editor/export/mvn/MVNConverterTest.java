@@ -439,7 +439,7 @@ public class MVNConverterTest {
   private void assertAnnotationBodyIsInvalidForInitiaal(final String annotationBody) {
     final Annotation annotation = mockAnnotationOfType(INITIAAL);
     when(annotation.getBody()).thenReturn(annotationBody);
-    final Long entryId = 1l;
+    final Long entryId = 1L;
     final String body = "<body>"//
         + "<entry n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\">"//
         + "pre "//
@@ -609,7 +609,7 @@ public class MVNConverterTest {
   @Test
   public void testWitregelConversieOfIllegalCharacterGivesValidationError() {
     final Annotation annotation = mockAnnotationOfType(WITREGEL);
-    final Long entryId = 12234l;
+    final Long entryId = 12234L;
     final String body = "<body>"//
         + "<entry n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\">"//
         + " pre "//
@@ -1218,8 +1218,7 @@ public class MVNConverterTest {
     Publication.Status status = new Publication.Status(projectId);
     MVNConversionData data = getConversionData(project);
     MVNConverter mvnConverter = new MVNConverter(project, data, status, baseURL);
-    MVNConversionResult report = mvnConverter.convert();
-    return report;
+    return mvnConverter.convert();
   }
 
   private MVNConversionData getConversionData(Project project) {

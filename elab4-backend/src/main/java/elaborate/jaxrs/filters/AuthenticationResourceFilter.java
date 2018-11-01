@@ -42,7 +42,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 public class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {
 	public static final String HEADER = "Authorization";
 
-	SessionService sessionService = SessionService.instance();
+	final SessionService sessionService = SessionService.instance();
 
 	@Override
 	public ContainerRequest filter(ContainerRequest request) {

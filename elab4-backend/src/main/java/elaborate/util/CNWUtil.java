@@ -274,8 +274,7 @@ public class CNWUtil {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.roll(Calendar.DAY_OF_YEAR, -1);
-		int i = cal.get(Calendar.DAY_OF_MONTH);
-		return i;
+    return cal.get(Calendar.DAY_OF_MONTH);
 	}
 
 	private String fixDate(String datestring) {

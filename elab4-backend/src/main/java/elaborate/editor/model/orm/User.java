@@ -221,8 +221,7 @@ public class User extends AbstractStoredEntity<User> {
 	}
 
 	public UserSetting addUserSetting(String key, String value) {
-		UserSetting setting = ModelFactory.create(UserSetting.class).setUser(this).setKey(key).setValue(value);
-		return setting;
+    return ModelFactory.create(UserSetting.class).setUser(this).setKey(key).setValue(value);
 	}
 
 	public void removeUserSetting(String key) {
@@ -245,13 +244,12 @@ public class User extends AbstractStoredEntity<User> {
 	}
 
 	private Predicate<UserSetting> userSettingWithKey(final String key) {
-		Predicate<UserSetting> predicate = new Predicate<UserSetting>() {
-			@Override
-			public boolean apply(UserSetting userSetting) {
-				return key.equals(userSetting.getKey());
-			}
-		};
-		return predicate;
+    return new Predicate<UserSetting>() {
+      @Override
+      public boolean apply(UserSetting userSetting) {
+        return key.equals(userSetting.getKey());
+      }
+    };
 	}
 
 	public boolean hasUserSetting(final String key) {

@@ -37,7 +37,7 @@ import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
 public class AnnotationBodyConverter {
-  static TreeSet<String> unhandledTags = new TreeSet<String>();
+  static final TreeSet<String> unhandledTags = new TreeSet<String>();
 
   @SuppressWarnings("synthetic-access")
   public static String convert(String xml) {

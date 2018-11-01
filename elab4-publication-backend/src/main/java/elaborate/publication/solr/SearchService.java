@@ -36,8 +36,6 @@ import javax.inject.Singleton;
 
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -269,8 +267,7 @@ public class SearchService {
       SearchData searchData = searchDataIndex.get(searchId);
       if (searchData != null) {
         Map<String, Object> resultsMap = searchData.getResults();
-        List<String> list = (List<String>) resultsMap.remove("ids");
-        return list;
+        return (List<String>) resultsMap.remove("ids");
       }
     } catch (Exception e) {
       throw new RuntimeException(e);

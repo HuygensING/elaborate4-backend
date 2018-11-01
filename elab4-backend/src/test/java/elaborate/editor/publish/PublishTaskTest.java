@@ -71,8 +71,8 @@ public class PublishTaskTest extends AbstractTest {
     when(mockProject.getLevel3()).thenReturn("level3");
 
     PublishTask publishTask = new PublishTask(settings);
-    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
-    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
+    EntryData entry1 = new EntryData(1L, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
+    EntryData entry2 = new EntryData(2L, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
     List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -106,8 +106,8 @@ public class PublishTaskTest extends AbstractTest {
     when(mockProject.getMetadataMap()).thenReturn(metadataMap);
 
     PublishTask publishTask = new PublishTask(settings);
-    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
-    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
+    EntryData entry1 = new EntryData(1L, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
+    EntryData entry2 = new EntryData(2L, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
     List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -133,7 +133,7 @@ public class PublishTaskTest extends AbstractTest {
   @Test
   public void testEntryFilename() {
     ProjectEntry entry = mock(ProjectEntry.class);
-    when(entry.getId()).thenReturn(9999l);
+    when(entry.getId()).thenReturn(9999L);
 
     assertThat(PublishTask.entryFilename(9999)).isEqualTo("entry9999.json");
   }

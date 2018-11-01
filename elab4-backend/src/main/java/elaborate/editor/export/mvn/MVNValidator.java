@@ -42,7 +42,7 @@ import com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory;
 import nl.knaw.huygens.Log;
 
 public class MVNValidator {
-  static Validator validator;
+  static final Validator validator;
 
   static {
     SchemaFactory factory = new XMLSyntaxSchemaFactory();

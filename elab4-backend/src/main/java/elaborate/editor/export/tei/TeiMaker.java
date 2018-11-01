@@ -77,7 +77,7 @@ public class TeiMaker {
 
   public static final String INTERP_GRP = "interpGrp";
 
-  private Document tei;
+  private final Document tei;
   private final Project project;
   private final TeiConversionConfig config;
   private final EntityManager entityManager;
@@ -317,8 +317,7 @@ public class TeiMaker {
     DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
     try {
       DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-      Document teiDocument = docBuilder.newDocument();
-      return teiDocument;
+      return docBuilder.newDocument();
     } catch (ParserConfigurationException e) {
       e.printStackTrace();
     }

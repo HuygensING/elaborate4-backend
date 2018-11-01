@@ -37,8 +37,7 @@ public class MVNClient {
   private static WebResource webresource;
 
   public MVNClient(String mvnServerBaseURL) {
-    String path = mvnServerBaseURL;
-    MVNClient.webresource = client.resource(path).path("editions");
+    MVNClient.webresource = client.resource(mvnServerBaseURL).path("editions");
     client.setFollowRedirects(true);
   }
 

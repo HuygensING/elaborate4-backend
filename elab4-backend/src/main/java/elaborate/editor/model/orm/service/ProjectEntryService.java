@@ -50,8 +50,8 @@ import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntry> {
-	private static ProjectEntryService instance = new ProjectEntryService();
-	ProjectService projectService = ProjectService.instance();
+	private static final ProjectEntryService instance = new ProjectEntryService();
+	final ProjectService projectService = ProjectService.instance();
 
 	private ProjectEntryService() {}
 

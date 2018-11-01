@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class Session {
 	Date lastAccessed;
-	long userId;
+	final long userId;
 	private boolean federated = false;
 
 	public Session(long userId) {

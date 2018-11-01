@@ -60,7 +60,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
 
 @Singleton
 public class TranscriptionService extends AbstractStoredEntityService<Transcription> {
-  private static TranscriptionService instance = new TranscriptionService();
+  private static final TranscriptionService instance = new TranscriptionService();
 
   private TranscriptionService() {}
 
@@ -206,9 +206,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
   private List<AnnotationMetadataItem> createAnnotationMetadataItems(Annotation annotation, AnnotationInputWrapper annotationInput, AnnotationType annotationType) {
     Map<String, Long> atmiMap = Maps.newHashMap();
-    Iterator<AnnotationTypeMetadataItem> iterator = annotationType.getMetadataItems().iterator();
-    while (iterator.hasNext()) {
-      AnnotationTypeMetadataItem annotationTypeMetadataItem = iterator.next();
+    for (AnnotationTypeMetadataItem annotationTypeMetadataItem : annotationType.getMetadataItems()) {
       atmiMap.put(annotationTypeMetadataItem.getName(), annotationTypeMetadataItem.getId());
     }
 
@@ -350,7 +348,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     }
   }
 
-  static Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
+  static final Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
     @Override
     public Integer apply(Annotation annotation) {
       return annotation.getAnnotationNo();
@@ -383,17 +381,15 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
   }
 
   private String annotationEndTag(Object annotationNo) {
-    String endtag = String.format("<%s id=\"%s\"/>", //
+    return String.format("<%s id=\"%s\"/>", //
         Transcription.BodyTags.ANNOTATION_END, //
         annotationNo);
-    return endtag;
   }
 
   private String annotationBeginTag(Object annotationNo) {
-    String begintag = String.format("<%s id=\"%s\"/>", //
+    return String.format("<%s id=\"%s\"/>", //
         Transcription.BodyTags.ANNOTATION_BEGIN, //
         annotationNo);
-    return begintag;
   }
 
   private void processTags(Set<Integer> annotationNoSet, Set<String> orphanedAnnotationTags, Matcher matcher) {

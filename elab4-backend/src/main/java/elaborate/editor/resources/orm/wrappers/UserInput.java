@@ -45,7 +45,7 @@ public class UserInput {
 	// "role": "USER"
 	// },
 
-	private static final long NULL_ID = -1l;
+	private static final long NULL_ID = -1L;
 	public long id = NULL_ID;
 	public String username;
 	public String email;

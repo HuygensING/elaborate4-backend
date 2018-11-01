@@ -52,7 +52,7 @@ public class Configuration {
   private static Map<String, String> messages;
   private static Map<String, String> renditions;
 
-  private static Configuration instance = new Configuration();
+  private static final Configuration instance = new Configuration();
   private static XMLConfiguration xmlConfig = instance.load(createConfigReader());
 
   private Configuration() {}

@@ -24,8 +24,6 @@ package elaborate.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.UnsupportedEncodingException;
-
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Ignore;
 import org.junit.Test;

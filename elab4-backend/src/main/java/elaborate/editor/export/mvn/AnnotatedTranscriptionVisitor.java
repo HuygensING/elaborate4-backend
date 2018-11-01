@@ -49,13 +49,13 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   private static boolean lastNodeWasText = false;
   private final Deque<Integer> startIndexStack = new ArrayDeque<Integer>();
   private final Deque<Element> elementStack = new ArrayDeque<Element>();
-  public static Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
+  public static final Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
   private static String sigle;
   private static ParseResult result;
   private static final Map<String, Integer> annotationStartIndexMap = Maps.newHashMap();
   private static Map<Integer, AnnotationData> annotationIndex;
   private static int lineStartIndex = 0;
-  private static Deque<XmlAnnotation> poetryOrParagraphAnnotations = new ArrayDeque<XmlAnnotation>();
+  private static final Deque<XmlAnnotation> poetryOrParagraphAnnotations = new ArrayDeque<XmlAnnotation>();
 
   public AnnotatedTranscriptionVisitor(Map<Integer, AnnotationData> annotationIndex, ParseResult result, String sigle) {
     super(new XmlContext());
@@ -202,13 +202,12 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
 
     private void handleTekstEinde(String annotationBody) {
       closeOpenPoetryOrParagraph();
-      final String n = annotationBody;
-      final XmlAnnotation tekstAnnotation = textRangeAnnotationIndex.remove(n);
+      final XmlAnnotation tekstAnnotation = textRangeAnnotationIndex.remove(annotationBody);
       if (tekstAnnotation != null) {
         tekstAnnotation.setLastSegmentIndex(currentTextSegmentIndex());
         result.getXmlAnnotations().add(tekstAnnotation);
       } else {
-        Log.error("tekst {} was not opened", n);
+        Log.error("tekst {} was not opened", annotationBody);
       }
     }
 

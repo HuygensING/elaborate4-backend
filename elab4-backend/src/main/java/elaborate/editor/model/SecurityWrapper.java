@@ -33,11 +33,11 @@ import nl.knaw.huygens.security.client.UnauthorizedException;
 import nl.knaw.huygens.security.client.model.SecurityInformation;
 
 public class SecurityWrapper {
-	static Configuration config = Configuration.instance();
-	static UserService userservice = UserService.instance();
+	static final Configuration config = Configuration.instance();
+	static final UserService userservice = UserService.instance();
 
-	static Client client = new Client();
-	static HuygensAuthorizationHandler hah = new HuygensAuthorizationHandler(client, config.getSetting("security.hss.url"), config.getSetting("security.hss.credentials"));
+	static final Client client = new Client();
+	static final HuygensAuthorizationHandler hah = new HuygensAuthorizationHandler(client, config.getSetting("security.hss.url"), config.getSetting("security.hss.credentials"));
 
 	public static Session createSession(String sessionToken) throws UnauthorizedException {
 		SecurityInformation securityInformation = hah.getSecurityInformation(sessionToken);

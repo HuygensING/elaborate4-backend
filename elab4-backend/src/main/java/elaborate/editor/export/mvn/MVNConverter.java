@@ -22,11 +22,23 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import static elaborate.util.XmlUtil.extractAnnotationNos;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.export.mvn.MVNConversionData.EntryData;
+import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.TranscriptionType;
+import elaborate.editor.publish.Publication.Status;
+import elaborate.util.HibernateUtil;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.tei.Document;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -37,25 +49,10 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.export.mvn.MVNConversionData.EntryData;
-import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.TranscriptionType;
-import elaborate.editor.publish.Publication.Status;
-import elaborate.util.HibernateUtil;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.tei.Document;
+import static elaborate.util.XmlUtil.extractAnnotationNos;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class MVNConverter {
   private static final boolean DEBUG = false; // for release
@@ -233,9 +230,8 @@ public class MVNConverter {
           .append("<le/>")//
           .append("</entry>");
     }
-    final String xml = editionTextBuilder.append("</body>").toString().replace("<lb/><le/>", "");
 
-    return xml;
+    return editionTextBuilder.append("</body>").toString().replace("<lb/><le/>", "");
   }
 
   private String transcriptionBody(final MVNConversionData.EntryData entryData) {

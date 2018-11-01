@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 
 public class TranscriptionHierarchyFixerTest {
-  TranscriptionHierarchyFixer thf = new TranscriptionHierarchyFixer();
+  final TranscriptionHierarchyFixer thf = new TranscriptionHierarchyFixer();
 
   @Test
   public void testFixBoldTagsAnnotationTag() {

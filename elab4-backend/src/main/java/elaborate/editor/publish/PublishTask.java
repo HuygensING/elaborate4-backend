@@ -83,7 +83,7 @@ public class PublishTask implements Runnable {
   private File jsonDir;
   private SolrServerWrapper solrServer;
 
-  Configuration config = Configuration.instance();
+  final Configuration config = Configuration.instance();
   private EntityManager entityManager;
   //	private Map<Integer, String> publishableAnnotationTypes;
   //	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
@@ -494,10 +494,9 @@ public class PublishTask implements Runnable {
 
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
-    TextlayerData textlayerData = new TextlayerData()//
+    return new TextlayerData()//
         .setText(cleanupAfterWord(tw.getBody()))//
         .setAnnotations(getAnnotationData(tw.annotationNumbers));
-    return textlayerData;
   }
 
   private List<AnnotationPublishData> getAnnotationData(List<Integer> annotationNumbers) {
@@ -537,12 +536,11 @@ public class PublishTask implements Runnable {
 
   private AnnotationTypeData getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
     Map<String, Object> metadata = getMetadataMap(meta);
-    AnnotationTypeData annotationTypeData = new AnnotationTypeData()//
+    return new AnnotationTypeData()//
         .setId(annotationType.getId())//
         .setName(annotationType.getName())//
         .setDescription(annotationType.getDescription())//
         .setMetadata(metadata);
-    return annotationTypeData;
   }
 
   private Map<String, Object> getMetadataMap(Set<AnnotationMetadataItem> meta) {
@@ -750,7 +748,7 @@ public class PublishTask implements Runnable {
   }
 
   static class AnnotationIndexData {
-    private long entryId = 0l;
+    private long entryId = 0L;
     private String textLayer = "";
     private String annotatedText = "";
     private String annotationText = "";

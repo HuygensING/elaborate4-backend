@@ -201,8 +201,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
       final Document document = Document.createFromXml(xml, false);
       document.accept(visitor);
       final XmlContext c = visitor.getContext();
-      String rawResult = c.getResult();
-      return rawResult;
+      return c.getResult();
 
     } catch (Exception e) {
       Log.error(e.getMessage());

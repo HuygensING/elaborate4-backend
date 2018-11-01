@@ -28,6 +28,6 @@ import com.google.common.collect.Maps;
 
 public class AnnotationInputWrapper {
 	public String body = "";
-	public long typeId = 1l;
-	public Map<String, String> metadata = Maps.newHashMap();
+	public final long typeId = 1L;
+	public final Map<String, String> metadata = Maps.newHashMap();
 }

@@ -149,13 +149,12 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 
 			query.set(HighlightParams.MERGE_CONTIGUOUS_FRAGMENTS, false);
 			query.set(HighlightParams.MAX_CHARS, -1);
-			query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[textFieldMap.size()]));
+			query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[0]));
 			query.set(HighlightParams.Q, queryComposer.getHighlightQuery());
 		}
 		query = setSort(query, sp);
 
-		Map<String, Object> data = getSearchData(sp, facetFields, query, fieldsToReturn);
-		return data;
+		return getSearchData(sp, facetFields, query, fieldsToReturn);
 	}
 
 	private String[] getFacetFields(ElaborateSearchParameters sp) {
@@ -302,7 +301,7 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 		for (String level : collection) {
 			list.add(SolrUtils.facetName(level));
 		}
-		return list.toArray(new String[list.size()]);
+		return list.toArray(new String[0]);
 	}
 
 	/**

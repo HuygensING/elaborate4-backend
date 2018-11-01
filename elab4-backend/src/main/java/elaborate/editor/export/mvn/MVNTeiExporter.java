@@ -636,9 +636,9 @@ public class MVNTeiExporter {
         String body = xmlAnnotation.getAttributes().get("body");
         if (body != null) {
           String capitalsize = body.trim();
-          Integer size = 0;
+          int size = 0;
           if (StringUtils.isNumeric(capitalsize)) {
-            size = Integer.valueOf(capitalsize);
+            size = Integer.parseInt(capitalsize);
             if (size < 1 || size > 19) {
               addValidationError(body, context);
             }

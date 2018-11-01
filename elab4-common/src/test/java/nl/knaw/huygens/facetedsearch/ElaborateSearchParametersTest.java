@@ -26,8 +26,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nl.knaw.huygens.AbstractTest;

@@ -57,7 +57,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Singleton
 public class UserService extends AbstractStoredEntityService<User> {
-	private static UserService instance = new UserService();
+	private static final UserService instance = new UserService();
 	private final Map<Long, String> tokenMap = Maps.newHashMap();
 
 	private UserService() {}
@@ -294,9 +294,9 @@ public class UserService extends AbstractStoredEntityService<User> {
 		if (user == null) {
 			throw new BadRequestException("unknown e-mail address: " + emailAddress);
 		}
-		Long userId = user.getId();
+		long userId = user.getId();
 		String expectedToken = tokenMap.get(userId);
-		if (expectedToken == null || !passwordData.getToken().equals(expectedToken)) {
+		if (!passwordData.getToken().equals(expectedToken)) {
 			throw new BadRequestException("token and e-mail address don't match");
 		}
 

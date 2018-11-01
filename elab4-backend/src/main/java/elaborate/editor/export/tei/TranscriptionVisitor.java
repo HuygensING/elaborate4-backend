@@ -253,8 +253,7 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
     }
 
     private TagInfo tagInfo(Annotation annotation, AnnotationType annotationType) {
-      TagInfo taginfo = config.getAnnotationTypeMapper().get(annotationType).apply(annotation);
-      return taginfo;
+      return config.getAnnotationTypeMapper().get(annotationType).apply(annotation);
     }
 
     private void addNote(XmlContext context, Annotation annotation) {
@@ -281,8 +280,7 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
       Map<String, String> attrs = Maps.newHashMap();
       attrs.put("type", key);
       attrs.put("value", StringEscapeUtils.escapeHtml(value));
-      Element meta = new Element("interp", attrs);
-      return meta;
+      return new Element("interp", attrs);
     }
 
     private Annotation getAnnotation(String annotationId) {

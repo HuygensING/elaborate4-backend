@@ -73,8 +73,7 @@ public class SearchResource {
 				.setTextLayers(ImmutableList.of("Diplomatic"));
 		searchService.setSolrDir(getSolrDir());
 		SearchData search = searchService.createSearch(elaborateSearchParameters);
-		Map<String, Object> searchResult = searchService.getSearchResult(search.getId(), 0, 1000);
-		return searchResult;
+    return searchService.getSearchResult(search.getId(), 0, 1000);
 	}
 
 	private String getSolrDir() {

@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
 	private static final String UTF8 = "UTF8";
-	static Tidy TIDY = new Tidy();
+	static final Tidy TIDY = new Tidy();
 
 	static {
 		TIDY.setAltText("");
@@ -124,7 +124,7 @@ public class StringUtil {
 		return replaced.toString();
 	}
 
-	static List<String> hostProtocols = Lists.newArrayList("http", "https");
+	static final List<String> hostProtocols = Lists.newArrayList("http", "https");
 
 	/**
 	 * change ULRs in <code>textWithURLs</code> to links
@@ -151,7 +151,7 @@ public class StringUtil {
 				if (hostProtocols.contains(protocol)) {
 					linktext = url.getHost() + linktext;
 				}
-				replaced.append("<a target=\"_blank\" href=\"" + url + "\">" + linktext + "</a>");
+				replaced.append("<a target=\"_blank\" href=\"").append(url).append("\">").append(linktext).append("</a>");
 			} catch (MalformedURLException e) {
 				replaced.append(token);
 			}
@@ -195,7 +195,7 @@ public class StringUtil {
 		return string.replaceAll("\"", "\\\\\"").replaceAll("'", "\\\\'");
 	}
 
-	static List<String> XML_ENTITIES = Lists.newArrayList("quot", "amp", "apos", "lt", "gt");
+	static final List<String> XML_ENTITIES = Lists.newArrayList("quot", "amp", "apos", "lt", "gt");
 
 	public static String fixXML(String brokenxml) {
 		String fixedXml = brokenxml.replaceAll("&", "&amp;");

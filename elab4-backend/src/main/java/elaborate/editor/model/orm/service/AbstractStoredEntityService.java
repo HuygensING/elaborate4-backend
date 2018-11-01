@@ -22,19 +22,8 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-import java.text.MessageFormat;
-import java.util.Date;
-
-import javax.inject.Singleton;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.LockModeType;
-import javax.persistence.TypedQuery;
-
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.AbstractTrackedEntity;
@@ -49,6 +38,11 @@ import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+
+import javax.inject.Singleton;
+import javax.persistence.*;
+import java.text.MessageFormat;
+import java.util.Date;
 
 @Singleton
 public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> {
@@ -94,8 +88,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	/* public */
 	public ImmutableList<T> getAll() {
 		TypedQuery<T> createQuery = (TypedQuery<T>) getEntityManager().createQuery("from " + getEntityName(), getEntityClass());
-		ImmutableList<T> list = ImmutableList.copyOf(createQuery.getResultList());
-		return list;
+    return ImmutableList.copyOf(createQuery.getResultList());
 	}
 
 	public SolrServerWrapper getSolrServer() {

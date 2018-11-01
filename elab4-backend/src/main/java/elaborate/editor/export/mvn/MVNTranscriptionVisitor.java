@@ -336,8 +336,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     private MVNAnnotationType getVerifiedType(final AnnotationData annotationData) {
       final String typeName = annotationData.type;
       verifyAnnotationTypeIsAllowed(typeName);
-      final MVNAnnotationType type = MVNAnnotationType.fromName(typeName);
-      return type;
+      return MVNAnnotationType.fromName(typeName);
     }
 
     private void verifyAnnotationTypeIsAllowed(final String type) {
@@ -358,7 +357,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   }
 
-  static Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
+  static final Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
       .put(MVNAnnotationType.AFKORTING, new AfkortingHandler())//
       .put(MVNAnnotationType.ALINEA, new AlineaHandler())//
       .put(MVNAnnotationType.CIJFERS, new WrapInElementHandler(new Element("num").withAttribute("type", "roman")))//
@@ -397,7 +396,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static class WrapInElementHandler implements MVNAnnotationHandler {
-    Element element;
+    final Element element;
 
     public WrapInElementHandler(final Element element) {
       this.element = element;
@@ -480,14 +479,14 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static class InitiaalHandler implements MVNAnnotationHandler {
-    Element hi = new Element("hi");
+    final Element hi = new Element("hi");
 
     @Override
     public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
-      Integer size = 0;
+      int size = 0;
       final String body = annotation.body.trim();
       if (StringUtils.isNumeric(body)) {
-        size = Integer.valueOf(body);
+        size = Integer.parseInt(body);
         if (size < 1 || size > 19) {
           addValidationError(body);
         }
@@ -792,7 +791,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static String normalized(final String rawXml) {
-    final String normalized = rawXml//
+    return rawXml//
         .replaceAll("<i .*?>", "<i>")//
         .replaceAll("<div>", "")//
         .replaceAll("</div>", "")//
@@ -800,7 +799,6 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         .replaceAll("<span.*?>", "")//
         .replaceAll("</span>", "")//
         .replace("&nbsp;", " ");
-    return normalized;
   }
 
   private static void addError(MVNAnnotationType type, String error) {

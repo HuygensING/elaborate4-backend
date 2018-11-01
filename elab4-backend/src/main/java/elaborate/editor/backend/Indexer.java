@@ -41,7 +41,7 @@ public class Indexer {
 
   @SuppressWarnings("boxing")
   public static void main(String[] args) {
-    boolean wipeIndexFirst = args.length == 0 ? false : "-w".equals(args[0]);
+    boolean wipeIndexFirst = args.length != 0 && "-w".equals(args[0]);
     new Indexer().index(wipeIndexFirst);
   }
 
@@ -63,11 +63,9 @@ public class Indexer {
       int n = 1;
       for (ProjectEntry projectEntry : projectentries) {
         Log.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
-            new Object[] { //
             projectEntry.getId(), n, size, //
             percentage(n, size), //
             time_remaining(n, size, sw.getTime()) //
-            } //
         );
         solr.index(projectEntry, autoCommit(n));
         n++;
