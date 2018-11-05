@@ -168,7 +168,7 @@ public class PublishTask implements Runnable {
     final Map<Long, List<String>> thumbnails = Maps.newHashMap();
     final Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
     final String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
-    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[] {};
+    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[]{};
     for (final ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
         status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
@@ -352,6 +352,7 @@ public class PublishTask implements Runnable {
     map.put("baseURL", getBaseURL(project.getName()));
     map.put("annotationIndex", ANNOTATION_INDEX_JSON);
     map.put("multivaluedFacetIndex", calculateMultivaluedFacetIndex(entries));
+    map.put("facetDefaultOrder", facetDefaultOrder(project));
 
     addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
     addIfNotNull(map, "entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
@@ -370,6 +371,14 @@ public class PublishTask implements Runnable {
     return map;
   }
 
+  private Map<String, String> facetDefaultOrder(Project project) {
+    final Map<String, String> facetDefaultOrder = new HashMap<String, String>();
+    for (String f : settings.getFacetFields()) {
+      facetDefaultOrder.put(f, "az");
+    }
+    return facetDefaultOrder;
+  }
+
   private Map<String, Map<String, List<Long>>> calculateMultivaluedFacetIndex(List<EntryData> entries) {
     Map<String, ListMultimap<String, Long>> tmpindex = Maps.newHashMap();
     for (EntryData entryData : entries) {
@@ -377,7 +386,7 @@ public class PublishTask implements Runnable {
         String facetName = entry.getKey();
         String facetValue = entry.getValue();
         if (!tmpindex.containsKey(facetName)) {
-          tmpindex.put(facetName, ArrayListMultimap.<String, Long> create());
+          tmpindex.put(facetName, ArrayListMultimap.<String, Long>create());
         }
         tmpindex.get(facetName).put(facetValue, entryData.entryId);
       }
@@ -970,6 +979,7 @@ public class PublishTask implements Runnable {
     }
 
   }
+
   private String cleanupAfterWord(String dirty) {
     return dirty.replaceAll("(?s)<!--.*?-->", "");
   }

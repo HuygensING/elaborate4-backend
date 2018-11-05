@@ -21,24 +21,26 @@ package elaborate.editor.model.orm.service;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import static elaborate.editor.model.orm.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
-import java.util.Map;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ProjectPrototype;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
+import elaborate.editor.publish.Publication;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static elaborate.editor.model.orm.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Ignore
 public class ProjectServiceTest extends AbstractTest {
@@ -100,6 +102,14 @@ public class ProjectServiceTest extends AbstractTest {
     Map<Integer, AnnotationData> annotationDataForProject = projectService.getAnnotationDataForProject(44L);
     assertThat(annotationDataForProject).isNotEmpty();
     Log.info("annotationTypesForProject={}", annotationDataForProject);
+  }
+
+  @Test
+  public void testGetSettings() {
+    long id = 1L;
+    Map<String, String> metadata = new HashMap<String, String>();
+    Publication.Settings settings = projectService.getSettings(id, notRoot, metadata);
+    assertThat(settings).isNotNull();
   }
 
   // @Test

@@ -877,12 +877,17 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
     }
 
+    Publication.Settings settings = getSettings(project_id, user, projectMetadata);
+    return publisher.publish(settings);
+  }
+
+  Publication.Settings getSettings(long project_id, User user, Map<String, String> projectMetadata) {
     String projectType = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.TYPE), ProjectTypes.COLLECTION);
     List<Long> publishableAnnotationTypeIds = getPublishableAnnotationTypeIds(projectMetadata);
     List<String> publishableProjectEntryMetadataFields = getPublishableProjectEntryMetadataFields(projectMetadata);
     List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(projectMetadata);
     List<String> publishableTextLayers = getPublishableTextLayers(projectMetadata);
-    Publication.Settings settings = new Publication.Settings()//
+    return new Publication.Settings()//
         .setProjectId(project_id)//
         .setUser(user)//
         .setTextLayers(publishableTextLayers)//
@@ -890,8 +895,6 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .setProjectEntryMetadataFields(publishableProjectEntryMetadataFields)//
         .setFacetFields(facetableProjectEntryMetadataFields)//
         .setProjectType(projectType);
-
-    return publisher.publish(settings);
   }
 
   private List<String> getPublishableTextLayers(Map<String, String> projectMetadata) {
