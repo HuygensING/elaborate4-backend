@@ -10,20 +10,22 @@ package elaborate.backend.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
-import java.util.List;
-import java.util.Map;
+import jersey.repackaged.com.google.common.collect.Maps;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -33,13 +35,11 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
-import org.glassfish.jersey.jackson.JacksonFeature;
-
-import jersey.repackaged.com.google.common.collect.Maps;
-import nl.knaw.huygens.Log;
+import java.util.List;
+import java.util.Map;
 
 public class Elab4RestClient {
+  private Logger LOG = LoggerFactory.getLogger(getClass());
   private final WebTarget sessionsTarget;
   private final WebTarget projectsTarget;
   private final WebTarget elab4;
@@ -112,7 +112,7 @@ public class Elab4RestClient {
         .request(MediaType.APPLICATION_JSON)//
         .header("Authorization", "SimpleAuth " + token)//
         .put(entity);
-    Log.info("response.status={}", response.getStatus());
+    LOG.info("response.status={}", response.getStatus());
   }
 
   public Integer addProject(String projectTitle) {
@@ -123,7 +123,7 @@ public class Elab4RestClient {
         .request(MediaType.APPLICATION_JSON)//
         .header("Authorization", "SimpleAuth " + token)//
         .post(entity);
-    Log.info("response = {}", response);
+    LOG.info("response = {}", response);
     String location = response.getHeaderString("Location");
     return Integer.valueOf(location.replaceFirst("^.*/", ""));
   }

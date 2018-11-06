@@ -6,4 +6,4 @@ git tag ${tag}
 # echo "build=$tag" > $propfile
 # echo "builddate=`date`" >> $propfile
 rm ${dest}/WEB-INF/lib/*.jar
-mvn clean compile war:exploded && rsync -cav target/elab4-publication-backend*/* $dest/
+mvn clean compile war:exploded && rsync -cav target/elab4-publication-backend*/* ${dest}/
