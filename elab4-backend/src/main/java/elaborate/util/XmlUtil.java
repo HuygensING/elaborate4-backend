@@ -100,7 +100,7 @@ public class XmlUtil {
   }
 
   public static String removeXMLtags(String xml) {
-    return xml.replaceAll("<.*?>", "");
+    return xml.replaceAll("(?s)<.*?>", "");
   }
 
   public static String toPlainText(String body) {

@@ -295,7 +295,7 @@ public class PublishTask implements Runnable {
   private void exportBuildDate() {
     File properties = new File(distDir, "WEB-INF/classes/about.properties");
     try {
-      FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), true);
+      FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), Charsets.UTF_8, true);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -419,7 +419,7 @@ public class PublishTask implements Runnable {
     }
   };
 
-  Map<String, Object> getProjectEntryData(ProjectEntry projectEntry, List<String> projectMetadataFields, Map<String, String> typograhicalAnnotationMap) {
+  Map<String, Object> getProjectEntryData(ProjectEntry projectEntry, List<String> projectMetadataFields) {
     Map<String, TextlayerData> texts = getTexts(projectEntry);
     Multimap<String, AnnotationIndexData> annotationDataMap = ArrayListMultimap.create();
     for (String textLayer : projectEntry.getProject().getTextLayers()) {
@@ -695,7 +695,7 @@ public class PublishTask implements Runnable {
     File json = new File(jsonDir, entryFilename);
     EntityManager entityManager = HibernateUtil.getEntityManager();
     entityManager.merge(projectEntry);
-    Map<String, Object> entryData = getProjectEntryData(projectEntry, projectEntryMetadataFields, typographicalAnnotationMap);
+    Map<String, Object> entryData = getProjectEntryData(projectEntry, projectEntryMetadataFields);
     Multimap<String, AnnotationIndexData> annotationDataMap = (Multimap<String, AnnotationIndexData>) entryData.remove("annotationDataMap");
     entityManager.close();
     exportJson(json, entryData);
@@ -855,7 +855,7 @@ public class PublishTask implements Runnable {
     }
 
     public AnnotationPublishData setText(String body) {
-      this.body = XmlUtil.toSimpleHTML(body);
+      this.body = XmlUtil.toSimpleHTML(body).trim();
       return this;
     }
 
@@ -980,7 +980,7 @@ public class PublishTask implements Runnable {
 
   }
 
-  private String cleanupAfterWord(String dirty) {
+  static String cleanupAfterWord(String dirty) {
     return dirty.replaceAll("(?s)<!--.*?-->", "");
   }
 
