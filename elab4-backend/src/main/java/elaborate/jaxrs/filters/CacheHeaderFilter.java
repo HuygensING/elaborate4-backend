@@ -4,7 +4,7 @@ package elaborate.jaxrs.filters;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -30,7 +30,7 @@ import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
-public class CacheHeaderFilter implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
+class CacheHeaderFilter implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
 
 	@Override
 	public ContainerRequestFilter getRequestFilter() {

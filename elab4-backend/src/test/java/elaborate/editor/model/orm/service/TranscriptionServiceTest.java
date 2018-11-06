@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -34,7 +34,7 @@ import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.User;
 import nl.knaw.huygens.Log;
 
-public class TranscriptionServiceTest extends AbstractTest {
+class TranscriptionServiceTest extends AbstractTest {
 
 	@Before
 	public void setUp() throws Exception {}
@@ -43,7 +43,7 @@ public class TranscriptionServiceTest extends AbstractTest {
 	public void tearDown() throws Exception {}
 
 	// @Test
-	public void testAddAnnotation() throws Exception {
+	public void testAddAnnotation() {
 		TranscriptionService ts = TranscriptionService.instance();
 		AnnotationInputWrapper annotationInput = new AnnotationInputWrapper();
 		annotationInput.body = "body";

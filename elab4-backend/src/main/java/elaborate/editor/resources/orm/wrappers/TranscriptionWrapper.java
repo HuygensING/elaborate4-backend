@@ -4,7 +4,7 @@ package elaborate.editor.resources.orm.wrappers;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -39,7 +39,7 @@ import nl.knaw.huygens.tei.Document;
 
 public class TranscriptionWrapper {
 	// TODO: split into input/output object
-	private long id = 0l;
+	private long id = 0L;
 	private String textLayer = "";
 	private String body = "";
 	private static final String NBSP = "\\u00A0";
@@ -63,18 +63,16 @@ public class TranscriptionWrapper {
 		return id;
 	}
 
-	public TranscriptionWrapper setId(long id) {
+	private void setId(long id) {
 		this.id = id;
-		return this;
 	}
 
 	public String getTextLayer() {
 		return textLayer;
 	}
 
-	public TranscriptionWrapper setTextLayer(String textLayer) {
+	private void setTextLayer(String textLayer) {
 		this.textLayer = textLayer;
-		return this;
 	}
 
 	public String getBody() {
@@ -89,7 +87,7 @@ public class TranscriptionWrapper {
 	@JsonIgnore
 	public List<Integer> annotationNumbers = Lists.newArrayList();
 
-	void convertBodyForOutput(String bodyIn) {
+	private void convertBodyForOutput(String bodyIn) {
 		// Log.info("body from db={}", bodyIn);
 		String xml = bodyIn;
 		if (!XmlUtil.isWellFormed(bodyIn)) {
@@ -153,8 +151,7 @@ public class TranscriptionWrapper {
 		TranscriptionBodyInputVisitor visitor = new TranscriptionBodyInputVisitor();
 		document.accept(visitor);
 
-		String bodyOut = visitor.getContext().getResult().replace("<span class=\"hilite\" data-highlight=\"\"></span>", "").trim();
-		return bodyOut;
+    return visitor.getContext().getResult().replace("<span class=\"hilite\" data-highlight=\"\"></span>", "").trim();
 	}
 
 }

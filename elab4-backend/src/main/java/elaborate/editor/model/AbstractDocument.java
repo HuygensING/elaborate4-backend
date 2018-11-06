@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -41,15 +41,14 @@ public abstract class AbstractDocument<T extends AbstractDocument<T>> extends Ab
 	public T setName(String name) {
 		this.name = name;
 		return ((T) this);
-	};
+	}
 
-	public String getTitle() {
+  public String getTitle() {
 		return title;
-	};
+	}
 
-	public T setTitle(String title) {
+  public void setTitle(String title) {
 		this.title = title;
-		return ((T) this);
-	};
+	}
 
 }

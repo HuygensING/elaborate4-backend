@@ -4,7 +4,7 @@ package elaborate.freemarker;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -63,11 +63,11 @@ public class FreeMarker {
 		}
 	}
 
-	public static String templateToFile(String fmTemplate, File file, Object fmRootMap, Class<?> clazz) {
+	public static void templateToFile(String fmTemplate, File file, Object fmRootMap, Class<?> clazz) {
 		try {
 			FileWriter out = new FileWriter(file);
-			return processTemplate(fmTemplate, fmRootMap, clazz, out);
-		} catch (IOException e) {
+      processTemplate(fmTemplate, fmRootMap, clazz, out);
+    } catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}

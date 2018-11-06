@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -28,6 +28,6 @@ import com.google.common.collect.Maps;
 
 public class AnnotationInputWrapper {
 	public String body = "";
-	public long typeId = 1l;
+	public long typeId = 1L;
 	public Map<String, String> metadata = Maps.newHashMap();
 }

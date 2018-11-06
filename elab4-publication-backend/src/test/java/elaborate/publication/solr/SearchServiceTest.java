@@ -4,7 +4,7 @@ package elaborate.publication.solr;
  * #%L
  * elab4-publication-backend
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -33,8 +33,6 @@ import java.util.Map;
 import org.assertj.core.data.MapEntry;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -112,7 +110,7 @@ public class SearchServiceTest {
 	}
 
 	@Test
-	public void testDeserializingRangeFieldListWorks() throws JsonParseException, JsonMappingException, IOException {
+	public void testDeserializingRangeFieldListWorks() throws IOException {
 		String json = "{\"rangeFields\": ["//
 				+ "{"//
 				+ " \"name\": \"metadata_datum\","//

@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -31,8 +31,8 @@ import javax.persistence.MappedSuperclass;
 public abstract class AbstractMetadataItem<T extends AbstractMetadataItem<T>> extends AbstractTrackedEntity<AbstractMetadataItem<T>> {
 	private static final long serialVersionUID = 1L;
 
-	String field;
-	String data;
+	private String field;
+	private String data;
 
 	public String getField() {
 		return field;

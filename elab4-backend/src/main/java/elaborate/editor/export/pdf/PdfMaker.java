@@ -4,7 +4,7 @@ package elaborate.editor.export.pdf;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -42,12 +42,8 @@ import elaborate.editor.model.orm.service.ProjectService;
 public class PdfMaker {
 
 	private PDDocument doc;
-	private final Project project;
-	private final EntityManager entityManager;
 
-	public PdfMaker(Project _project, EntityManager _entityManager) {
-		this.project = _project;
-		this.entityManager = _entityManager;
+  public PdfMaker(Project _project, EntityManager _entityManager) {
 		if (_project == null) {
 			doc = null;
 
@@ -56,8 +52,8 @@ public class PdfMaker {
 				doc = new PDDocument();
 
 				ProjectService projectService = ProjectService.instance();
-				projectService.setEntityManager(entityManager);
-				List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(project.getId());
+				projectService.setEntityManager(_entityManager);
+				List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(_project.getId());
 
 				for (ProjectEntry projectEntry : projectEntriesInOrder) {
 					PDPage page = new PDPage();

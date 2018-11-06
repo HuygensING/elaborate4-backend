@@ -4,7 +4,7 @@ package elaborate.editor.resources.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -36,15 +36,14 @@ import elaborate.editor.model.orm.User;
 
 @Ignore
 public class UserResourceTest extends ResourceTest {
-	private static EntityManager entityManager;
 
-	public UserResourceTest() {
+  public UserResourceTest() {
 		super();
 	}
 
 	@Before
 	public void setUp1() {
-		entityManager = entityManagerFactory.createEntityManager();
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
 		User user1 = ModelFactory.create(User.class).setUsername("john").setFirstName("John").setLastName("Doe");
 		User user2 = ModelFactory.create(User.class).setUsername("butch").setFirstName("Butcher").setLastName("Baker");
 		entityManager.getTransaction().begin();

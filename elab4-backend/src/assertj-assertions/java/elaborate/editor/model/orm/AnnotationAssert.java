@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -193,7 +193,7 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 	 * @throws AssertionError
 	 *           - if the actual Annotation's body is not equal to the given one.
 	 */
-	public AnnotationAssert hasBody(String body) {
+	public void hasBody(String body) {
 		// check that actual Annotation we want to make assertions on is not null.
 		isNotNull();
 
@@ -207,7 +207,6 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
 		}
 
 		// return the current assertion for method chaining
-		return this;
 	}
 
 	/**

@@ -4,7 +4,7 @@ package elaborate.editor.solr;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -171,7 +171,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
     }
   }
 
-  protected static List<String> extractCorrespondents(String value) {
+  static List<String> extractCorrespondents(String value) {
     List<String> correspondents = Lists.newArrayList();
     if (value.contains("-->")) {
       String[] subValues = value.split("-->");
@@ -201,8 +201,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
       final Document document = Document.createFromXml(xml, false);
       document.accept(visitor);
       final XmlContext c = visitor.getContext();
-      String rawResult = c.getResult();
-      return rawResult;
+      return c.getResult();
 
     } catch (Exception e) {
       Log.error(e.getMessage());

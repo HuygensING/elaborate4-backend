@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -60,7 +60,7 @@ import nl.knaw.huygens.solr.FacetType;
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Project extends AbstractDocument<Project> {
 	private static final long serialVersionUID = 1L;
-	protected static final String FIELDNAME_SEPARATOR = ";";
+	private static final String FIELDNAME_SEPARATOR = ";";
 	public static final String NEW_PROJECT_NAME = "new_project";
 	private static final Set<String> DEFAULT_FACETFIELDS = Sets.newLinkedHashSet(Lists.newArrayList("publishable"));
 	private static final Set<FacetInfo> DEFAULT_FACETINFO = Sets.newHashSet(//
@@ -82,7 +82,8 @@ public class Project extends AbstractDocument<Project> {
 	private List<ProjectEntry> projectEntries;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
-	List<ProjectMetadataItem> project_metadata_items;
+  private
+  List<ProjectMetadataItem> project_metadata_items;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(//
@@ -90,7 +91,8 @@ public class Project extends AbstractDocument<Project> {
 	joinColumns = { @JoinColumn(name = "project_id", columnDefinition = "int4", nullable = false, updatable = false) }, //
 	inverseJoinColumns = { @JoinColumn(name = "annotation_type_id", columnDefinition = "int4", nullable = false, updatable = false) //
 	})
-	Set<AnnotationType> annotationTypes = Sets.newHashSet();
+  private
+  Set<AnnotationType> annotationTypes = Sets.newHashSet();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(//
@@ -129,10 +131,9 @@ public class Project extends AbstractDocument<Project> {
 		return level_3;
 	}
 
-	public Project setLevel3(String level_3) {
+	public void setLevel3(String level_3) {
 		this.level_3 = level_3;
-		return this;
-	}
+  }
 
 	public Project setProjectEntryMetadataFieldnames(List<String> project_entry_metadata_fieldnames) {
 		this.project_entry_metadata_fieldnames = Joiner.on(FIELDNAME_SEPARATOR).join(project_entry_metadata_fieldnames);
@@ -171,10 +172,9 @@ public class Project extends AbstractDocument<Project> {
 		return project_leader_id;
 	}
 
-	public Project setProjectLeaderId(long project_leader_id) {
+	public void setProjectLeaderId(long project_leader_id) {
 		this.project_leader_id = project_leader_id;
-		return this;
-	}
+  }
 
 	@JsonIgnore
 	public List<ProjectEntry> getProjectEntries() {

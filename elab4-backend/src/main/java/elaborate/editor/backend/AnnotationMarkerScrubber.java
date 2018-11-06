@@ -4,7 +4,7 @@ package elaborate.editor.backend;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -38,7 +38,7 @@ import elaborate.editor.model.orm.service.TranscriptionService;
 import elaborate.util.HibernateUtil;
 import nl.knaw.huygens.Log;
 
-public class AnnotationMarkerScrubber {
+class AnnotationMarkerScrubber {
 	@SuppressWarnings("boxing")
 	public static void main(String[] args) {
 		StopWatch sw = new StopWatch();
@@ -77,7 +77,7 @@ public class AnnotationMarkerScrubber {
 		return new DecimalFormat("0.00").format((double) (100 * part) / (double) total);
 	}
 
-	public static String convert(long ms) {
+	private static String convert(long ms) {
 		Date date = new Date(ms);
 		DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
 		return formatter.format(date);

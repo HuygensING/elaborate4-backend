@@ -4,7 +4,7 @@ package elaborate.editor.export.mvn;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -54,13 +54,13 @@ import nl.knaw.huygens.tei.XmlContext;
 @Deprecated
 // use MVNTeiExporter
 public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
-  static final String choiceTag = "choice";
-  static final String abbrTag = "abbr";
-  static final String expanTag = "expan";
+  private static final String choiceTag = "choice";
+  private static final String abbrTag = "abbr";
+  private static final String expanTag = "expan";
 
-  static final Deque<String> textNumStack = new ArrayDeque<String>();
+  private static final Deque<String> textNumStack = new ArrayDeque<String>();
 
-  public static boolean inParagraph = false;
+  private static boolean inParagraph = false;
 
   private static final String HI = "hi";
   private static int lb = 1;
@@ -74,7 +74,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   private static Set<String> deepestTextNums;
   private static int indent;
   private static LineInfo currentLineInfo;
-  public static String currentPageBreak = "";
+  private static String currentPageBreak = "";
 
   public MVNTranscriptionVisitor(final MVNConversionResult result, final Map<Integer, AnnotationData> annotationIndex, final Set<String> deepestTextNums) {
     super(new XmlContext());
@@ -336,8 +336,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     private MVNAnnotationType getVerifiedType(final AnnotationData annotationData) {
       final String typeName = annotationData.type;
       verifyAnnotationTypeIsAllowed(typeName);
-      final MVNAnnotationType type = MVNAnnotationType.fromName(typeName);
-      return type;
+      return MVNAnnotationType.fromName(typeName);
     }
 
     private void verifyAnnotationTypeIsAllowed(final String type) {
@@ -358,7 +357,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   }
 
-  static Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
+  private static Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
       .put(MVNAnnotationType.AFKORTING, new AfkortingHandler())//
       .put(MVNAnnotationType.ALINEA, new AlineaHandler())//
       .put(MVNAnnotationType.CIJFERS, new WrapInElementHandler(new Element("num").withAttribute("type", "roman")))//
@@ -390,10 +389,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       .put(MVNAnnotationType.WITREGEL, new WitregelHandler())//
       .build();
 
-  public static interface MVNAnnotationHandler {
-    public void handleOpenAnnotation(AnnotationData annotation, XmlContext context);
+  public interface MVNAnnotationHandler {
+    void handleOpenAnnotation(AnnotationData annotation, XmlContext context);
 
-    public void handleCloseAnnotation(AnnotationData annotationData, XmlContext context);
+    void handleCloseAnnotation(AnnotationData annotationData, XmlContext context);
   }
 
   private static class WrapInElementHandler implements MVNAnnotationHandler {
@@ -792,7 +791,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static String normalized(final String rawXml) {
-    final String normalized = rawXml//
+    return rawXml//
         .replaceAll("<i .*?>", "<i>")//
         .replaceAll("<div>", "")//
         .replaceAll("</div>", "")//
@@ -800,7 +799,6 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         .replaceAll("<span.*?>", "")//
         .replaceAll("</span>", "")//
         .replace("&nbsp;", " ");
-    return normalized;
   }
 
   private static void addError(MVNAnnotationType type, String error) {

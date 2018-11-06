@@ -4,7 +4,7 @@ package elaborate.editor.resources;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -56,7 +56,8 @@ public class SessionResource extends AbstractElaborateResource {
 	UserService userService;
 
 	@Inject
-	SessionService sessionService;
+  private
+  SessionService sessionService;
 
 	@POST
 	@Path("login")

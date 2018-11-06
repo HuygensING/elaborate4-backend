@@ -4,7 +4,7 @@ package nl.knaw.huygens.facetedsearch;
  * #%L
  * elab4-common
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as
@@ -66,10 +66,10 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 	private static final int ROWS = 50000;
 	private static final int FACET_LIMIT = 10000;
 
-	protected SolrServer server;
+	SolrServer server;
 	private final QueryComposer queryComposer;
 
-	public AbstractSolrServer(QueryComposer queryComposer) {
+	AbstractSolrServer(QueryComposer queryComposer) {
 		this.queryComposer = queryComposer;
 	}
 
@@ -167,8 +167,7 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 		}
 		query = setSort(query, sp);
 
-		Map<String, Object> data = getSearchData(sp, facetFields, query, fieldsToReturn);
-		return data;
+    return getSearchData(sp, facetFields, query, fieldsToReturn);
 	}
 
 	private String[] getFacetFields(ElaborateSearchParameters sp) {
@@ -370,7 +369,7 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 	 * @param title
 	 * @param type
 	 */
-	protected FacetCount convertFacet(FacetField field, String title, FacetType type) {
+	private FacetCount convertFacet(FacetField field, String title, FacetType type) {
 		if (field != null) {
 			FacetCount facetCount = new FacetCount()//
 					.setName(field.getName())//
@@ -390,8 +389,8 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 		return null;
 	}
 
-	public static final String HL_PRE = "<em>";
-	public static final String HL_POST = "</em>";
+	private static final String HL_PRE = "<em>";
+	private static final String HL_POST = "</em>";
 	private static final Pattern HL_REGEX = Pattern.compile(HL_PRE + "(.+?)" + HL_POST);
 
 	public static Collection<String> extractTerms(List<String> snippets) {

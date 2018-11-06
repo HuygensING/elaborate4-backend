@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -50,20 +50,23 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
 	 * properties to persist
 	 */
 
-	int annotationNo;
+	private int annotationNo;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "annotation_type_id", columnDefinition = "int4")
-	AnnotationType annotationType;
+  private
+  AnnotationType annotationType;
 
 	private String body;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "annotation")
-	Set<AnnotationMetadataItem> annotationMetadataItems = Sets.newHashSet();
+  private
+  Set<AnnotationMetadataItem> annotationMetadataItems = Sets.newHashSet();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "transcription_id", columnDefinition = "int4")
-	Transcription transcription;
+  private
+  Transcription transcription;
 
 	/*
 	 * persistent properties getters and setters
@@ -73,19 +76,17 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
 		return annotationNo;
 	}
 
-	public Annotation setAnnotationNo(int annotationNo) {
+	public void setAnnotationNo(int annotationNo) {
 		this.annotationNo = annotationNo;
-		return this;
-	}
+  }
 
 	public AnnotationType getAnnotationType() {
 		return annotationType;
 	}
 
-	public Annotation setAnnotationType(AnnotationType annotationType) {
+	public void setAnnotationType(AnnotationType annotationType) {
 		this.annotationType = annotationType;
-		return this;
-	}
+  }
 
 	public String getBody() {
 		return body;
@@ -109,10 +110,9 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
 		return transcription;
 	}
 
-	public Annotation setTranscription(Transcription transcription) {
+	public void setTranscription(Transcription transcription) {
 		this.transcription = transcription;
-		return this;
-	}
+  }
 
 	/* transient methods */
 

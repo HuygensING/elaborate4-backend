@@ -1,5 +1,27 @@
 package elaborate.editor.export.mvn;
 
+/*
+ * #%L
+ * elab4-backend
+ * =======
+ * Copyright (C) 2011 - 2018 Huygens ING
+ * =======
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_BEGIN;
 import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_END;
 
@@ -21,9 +43,9 @@ import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
-public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
-  Stack<String> openAnnotationStack = new Stack<String>();
-  Deque<Element> openElements = new ArrayDeque<Element>();
+class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
+  private Stack<String> openAnnotationStack = new Stack<String>();
+  private Deque<Element> openElements = new ArrayDeque<Element>();
 
   public AnnotationHierarchyRepairingVisitor() {
     super(new XmlContext());
@@ -73,9 +95,7 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
     }
 
     private void addAnnotationBegins(XmlContext context, List<String> annotationsToReopen) {
-      Iterator<String> openIterator = Lists.reverse(annotationsToReopen).iterator();
-      while (openIterator.hasNext()) {
-        String annotationId = openIterator.next();
+      for (String annotationId : Lists.reverse(annotationsToReopen)) {
         openAnnotationStack.push(annotationId);
         addAnnotationBeginElement(context, annotationId);
       }
@@ -89,9 +109,7 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
   }
 
   private void addAnnotationEnds(XmlContext context, List<String> annotationsToReopen) {
-    Iterator<String> closeIterator = annotationsToReopen.iterator();
-    while (closeIterator.hasNext()) {
-      String annotationId = closeIterator.next();
+    for (String annotationId : annotationsToReopen) {
       addAnnotationEndElement(context, annotationId);
     }
   }
@@ -111,17 +129,13 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
     }
 
     private void addAnnotationBegins(XmlContext context) {
-      Iterator<String> openIterator = openAnnotationStack.iterator();
-      while (openIterator.hasNext()) {
-        String annotationId = openIterator.next();
+      for (String annotationId : openAnnotationStack) {
         addAnnotationBeginElement(context, annotationId);
       }
     }
 
     private void addOpenOtherElements(XmlContext context) {
-      Iterator<Element> elementIterator = openElements.iterator();
-      while (elementIterator.hasNext()) {
-        Element element = elementIterator.next();
+      for (Element element : openElements) {
         context.addOpenTag(element);
       }
 

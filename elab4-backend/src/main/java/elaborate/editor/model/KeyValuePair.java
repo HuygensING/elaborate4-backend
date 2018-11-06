@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,9 +22,9 @@ package elaborate.editor.model;
  * #L%
  */
 
-public class KeyValuePair {
-	String key;
-	Object value;
+class KeyValuePair {
+	private String key;
+	private Object value;
 
 	public void setKey(String key) {
 		this.key = key;

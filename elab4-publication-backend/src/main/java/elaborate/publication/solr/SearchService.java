@@ -4,7 +4,7 @@ package elaborate.publication.solr;
  * #%L
  * elab4-publication-backend
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -36,8 +36,6 @@ import javax.inject.Singleton;
 
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -174,11 +172,11 @@ public class SearchService {
     }
   }
 
-  public int toRange(int value, int minValue, int maxValue) {
+  private int toRange(int value, int minValue, int maxValue) {
     return Math.min(Math.max(value, minValue), maxValue);
   }
 
-  public String getSolrDir() {
+  private String getSolrDir() {
     return solrDir;
   }
 
@@ -209,11 +207,11 @@ public class SearchService {
     facetInfoMap = _facetInfoMap;
   }
 
-  void setRangeFields(List<RangeField> rangeFields) {
+  private void setRangeFields(List<RangeField> rangeFields) {
     this.rangeFields = rangeFields;
   }
 
-  void loadConfig() {
+  private void loadConfig() {
     //		Log.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
     try {
       InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.json");
@@ -255,7 +253,7 @@ public class SearchService {
     return outMap;
   }
 
-  static Map<String, Object> readConfigMap(InputStream inputStream) throws IOException, JsonParseException, JsonMappingException {
+  static Map<String, Object> readConfigMap(InputStream inputStream) throws IOException {
     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
     Map<String, Object> configMap = new ObjectMapper().readValue(inputStreamReader, Map.class);
     if (configMap == null) {
@@ -269,8 +267,7 @@ public class SearchService {
       SearchData searchData = searchDataIndex.get(searchId);
       if (searchData != null) {
         Map<String, Object> resultsMap = searchData.getResults();
-        List<String> list = (List<String>) resultsMap.remove("ids");
-        return list;
+        return (List<String>) resultsMap.remove("ids");
       }
     } catch (Exception e) {
       throw new RuntimeException(e);

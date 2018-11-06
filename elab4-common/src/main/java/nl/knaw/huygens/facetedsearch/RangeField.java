@@ -4,7 +4,7 @@ package nl.knaw.huygens.facetedsearch;
  * #%L
  * elab4-common
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -28,9 +28,9 @@ public class RangeField {
 	public String lowerField;
 	public String upperField;
 
-	public RangeField() {};
+	public RangeField() {}
 
-	public RangeField(String name, String lower, String upper) {
+  public RangeField(String name, String lower, String upper) {
 		this.name = name;
 		lowerField = lower;
 		upperField = upper;

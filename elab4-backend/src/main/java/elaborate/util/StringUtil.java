@@ -4,7 +4,7 @@ package elaborate.util;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -43,7 +43,7 @@ import com.google.common.collect.Lists;
 
 public class StringUtil {
 	private static final String UTF8 = "UTF8";
-	static Tidy TIDY = new Tidy();
+	private static Tidy TIDY = new Tidy();
 
 	static {
 		TIDY.setAltText("");
@@ -125,7 +125,7 @@ public class StringUtil {
 		return replaced.toString();
 	}
 
-	static List<String> hostProtocols = Lists.newArrayList(new String[] { "http", "https" });
+	private static List<String> hostProtocols = Lists.newArrayList(new String[] { "http", "https" });
 
 	/**
 	 * change ULRs in <code>textWithURLs</code> to links
@@ -152,7 +152,7 @@ public class StringUtil {
 				if (hostProtocols.contains(protocol)) {
 					linktext = url.getHost() + linktext;
 				}
-				replaced.append("<a target=\"_blank\" href=\"" + url + "\">" + linktext + "</a>");
+				replaced.append("<a target=\"_blank\" href=\"").append(url).append("\">").append(linktext).append("</a>");
 			} catch (MalformedURLException e) {
 				replaced.append(token);
 			}
@@ -196,7 +196,7 @@ public class StringUtil {
 		return string.replaceAll("\"", "\\\\\"").replaceAll("'", "\\\\'");
 	}
 
-	static List<String> XML_ENTITIES = Lists.newArrayList("quot", "amp", "apos", "lt", "gt");
+	private static List<String> XML_ENTITIES = Lists.newArrayList("quot", "amp", "apos", "lt", "gt");
 
 	public static String fixXML(String brokenxml) {
 		String fixedXml = brokenxml.replaceAll("&", "&amp;");

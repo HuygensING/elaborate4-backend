@@ -4,7 +4,7 @@ package elaborate.editor.export.mvn;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -61,13 +61,13 @@ public enum MVNAnnotationType {
 
   private enum AnnotatedTextUsage {
     use, ignore
-  };
+  }
 
   private final String name;
   private final AnnotatedTextUsage ignoreText;
   private final static Set<String> allNames = Sets.newHashSet();
 
-  private MVNAnnotationType(final String name, final AnnotatedTextUsage ignoreText) {
+  MVNAnnotationType(final String name, final AnnotatedTextUsage ignoreText) {
     this.name = name;
     this.ignoreText = ignoreText;
   }

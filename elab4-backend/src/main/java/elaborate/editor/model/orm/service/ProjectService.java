@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -277,9 +277,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
             ProjectEntry.class)//
         .setParameter("projectId", id)//
         .getResultList();
-    ImmutableList<ProjectEntry> projectEntries = ImmutableList.copyOf(resultList);
 
-    return projectEntries;
+    return ImmutableList.copyOf(resultList);
   }
 
   public List<ProjectEntry> getProjectEntriesInOrder(long id) {
@@ -312,9 +311,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .setParameter("level3", project.getLevel3())//
         .setParameter("projectId", id)//
         .getResultList();
-    ImmutableList<Long> projectEntryIds = ImmutableList.copyOf(resultList);
 
-    return projectEntryIds;
+    return ImmutableList.copyOf(resultList);
   }
 
   public ProjectEntry createProjectEntry(long id, ProjectEntry projectEntry, User user) {
@@ -424,7 +422,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     return projects;
   }
 
-  void logMemory() {
+  private void logMemory() {
     int mb = 1024 * 1024;
     System.gc();
     // Getting the runtime reference from system
@@ -579,14 +577,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   }
 
   private Long getTranscriptionCount(long project_id, EntityManager entityManager) {
-    Long transcriptionCount = (Long) entityManager//
+    return (Long) entityManager//
         .createQuery("select count(*) from Transcription"//
             + " where project_entry_id in"//
             + " (select id from ProjectEntry where project_id=:project_id)"//
     )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
-    return transcriptionCount;
   }
 
   // private Long getAnnotationCount(long project_id, EntityManager entityManager) {
@@ -603,14 +600,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   // }
 
   private Long getFacsimileCount(long project_id, EntityManager entityManager) {
-    Long facsimileCount = (Long) entityManager//
+    return (Long) entityManager//
         .createQuery("select count(*) from"//
             + " Facsimile where project_entry_id in"//
             + " (select id from ProjectEntry where project_id=:project_id)"//
     )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
-    return facsimileCount;
   }
 
   private Map<String, Object> getTextLayerCountMap(long project_id, EntityManager entityManager, Project project) {
@@ -650,13 +646,12 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   }
 
   private Long getEntriesCount(long project_id, EntityManager entityManager) {
-    Long entriesCount = (Long) entityManager//
+    return (Long) entityManager//
         .createQuery("select count(*) from ProjectEntry"//
             + " where project_id=:project_id"//
     )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
-    return entriesCount;
   }
 
   public List<FacetInfo> getFacetInfo(long project_id, User user) {
@@ -676,18 +671,16 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     Set<Long> modifiedEntryIds = Sets.newHashSet();
     try {
       Project project = getProjectIfUserCanRead(project_id, user);
-      List<String> previous = Lists.newArrayList(project.getTextLayers());
-      List<String> deletedTextLayers = previous;
-      deletedTextLayers.removeAll(textLayers);
+      Lists.newArrayList(project.getTextLayers()).removeAll(textLayers);
       project.setTextLayers(textLayers);
 
       persist(project);
       persist(project.addLogEntry("project textlayers changed", user));
       setModifiedBy(project, user);
 
-      if (!deletedTextLayers.isEmpty()) {
-        persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(deletedTextLayers), user));
-        for (String textlayer : deletedTextLayers) {
+      if (!Lists.newArrayList(project.getTextLayers()).isEmpty()) {
+        persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(Lists.newArrayList(project.getTextLayers())), user));
+        for (String textlayer : Lists.newArrayList(project.getTextLayers())) {
           List<?> resultList = getEntityManager()//
               .createQuery("select e.id, t.id from ProjectEntry e join e.transcriptions as t with t.text_layer=:textlayer where e.project=:project")//
               .setParameter("project", project)//
@@ -718,7 +711,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   }
 
   public void setProjectSettings(long project_id, Map<String, String> settingsMap, User user) {
-    Long userId = -1l;
+    Long userId = -1L;
     beginTransaction();
     try {
 
@@ -882,7 +875,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
     if (!canPublish) {
       throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
-    };
+    }
 
     String projectType = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.TYPE), ProjectTypes.COLLECTION);
     List<Long> publishableAnnotationTypeIds = getPublishableAnnotationTypeIds(projectMetadata);
@@ -897,9 +890,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .setProjectEntryMetadataFields(publishableProjectEntryMetadataFields)//
         .setFacetFields(facetableProjectEntryMetadataFields)//
         .setProjectType(projectType);
-    Publication.Status publicationStatus = publisher.publish(settings);
 
-    return publicationStatus;
+    return publisher.publish(settings);
   }
 
   private List<String> getPublishableTextLayers(Map<String, String> projectMetadata) {
@@ -1095,17 +1087,14 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       closeEntityManager();
     }
 
-    ReindexStatus status = new ReindexStatus();
-    return status;
+    return new ReindexStatus();
   }
 
   /**
    * Remove annotations that have no corresponding annotationmarkers (begin and end) in the Transcription Body
-   * 
-   * @param modifier
-   *          The User credited with the removal
+   *
    */
-  public void removeOrphanedAnnotations(long project_id) {
+  private void removeOrphanedAnnotations(long project_id) {
     beginTransaction();
     Project project = read(project_id);
     TranscriptionService transcriptionService = TranscriptionService.instance();

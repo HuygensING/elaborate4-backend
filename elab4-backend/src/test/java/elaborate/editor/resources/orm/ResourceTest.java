@@ -4,7 +4,7 @@ package elaborate.editor.resources.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -30,9 +30,9 @@ import com.sun.jersey.test.framework.WebAppDescriptor;
 import elaborate.editor.model.ModelFactory;
 
 public class ResourceTest extends JerseyTest {
-	protected static EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
+	static EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
 
-	public ResourceTest() {
+	ResourceTest() {
 		super(new WebAppDescriptor.Builder()//
 				.initParam("com.sun.jersey.config.property.packages", "elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers")//
 				.initParam("com.sun.jersey.spi.container.ResourceFilters", "elaborate.jaxrs.filters.ElaborateResourceFilterFactory")//

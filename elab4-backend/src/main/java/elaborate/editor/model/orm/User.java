@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -88,32 +88,31 @@ public class User extends AbstractStoredEntity<User> {
 	/* persistent properties getters and setters */
 	public String getUsername() {
 		return username;
-	};
+	}
 
-	public User setUsername(String name) {
+  public User setUsername(String name) {
 		username = name;
 		return this;
-	};
+	}
 
-	public String getTitle() {
+  public String getTitle() {
 		return title;
-	};
+	}
 
-	public User setTitle(String title) {
+  public void setTitle(String title) {
 		this.title = title;
-		return this;
-	};
+  }
 
-	public String getEmail() {
+  public String getEmail() {
 		return email;
-	};
+	}
 
-	public User setEmail(String email) {
+  public User setEmail(String email) {
 		this.email = email;
 		return this;
-	};
+	}
 
-	public String getFirstName() {
+  public String getFirstName() {
 		return firstname;
 	}
 
@@ -136,10 +135,9 @@ public class User extends AbstractStoredEntity<User> {
 		return encodedpassword;
 	}
 
-	public User setEncodedPassword(byte[] encodedPassword) {
+	public void setEncodedPassword(byte[] encodedPassword) {
 		this.encodedpassword = encodedPassword;
-		return this;
-	}
+  }
 
 	public String getRoleString() {
 		return rolestring;
@@ -163,9 +161,9 @@ public class User extends AbstractStoredEntity<User> {
 	public User setRoot(boolean isRoot) {
 		this.isRoot = isRoot;
 		return this;
-	};
+	}
 
-	@JsonIgnore
+  @JsonIgnore
 	public Set<UserSetting> getUserSettings() {
 		return userSettings;
 	}
@@ -198,11 +196,8 @@ public class User extends AbstractStoredEntity<User> {
 	 * @return true if this User has the given role, false otherwise
 	 */
 	public boolean hasRole(String role) {
-		if (role.equals(ElaborateRoles.READER)) {
-			return true;
-		}
-		return isRoot() || getRoles().contains(role);
-	}
+    return role.equals(ElaborateRoles.READER) || isRoot() || getRoles().contains(role);
+  }
 
 	public boolean hasHighestRole(String role) {
 		return (getRole().equals(role));
@@ -221,8 +216,7 @@ public class User extends AbstractStoredEntity<User> {
 	}
 
 	public UserSetting addUserSetting(String key, String value) {
-		UserSetting setting = ModelFactory.create(UserSetting.class).setUser(this).setKey(key).setValue(value);
-		return setting;
+    return ModelFactory.create(UserSetting.class).setUser(this).setKey(key).setValue(value);
 	}
 
 	public void removeUserSetting(String key) {
@@ -235,7 +229,7 @@ public class User extends AbstractStoredEntity<User> {
 		return getUserSetting(key, null);
 	}
 
-	public String getUserSetting(final String key, final String defaultValue) {
+	private String getUserSetting(final String key, final String defaultValue) {
 		return (hasUserSetting(key) && userSetting(key) != null) ? userSetting(key) : defaultValue;
 	}
 
@@ -245,16 +239,15 @@ public class User extends AbstractStoredEntity<User> {
 	}
 
 	private Predicate<UserSetting> userSettingWithKey(final String key) {
-		Predicate<UserSetting> predicate = new Predicate<UserSetting>() {
-			@Override
-			public boolean apply(UserSetting userSetting) {
-				return key.equals(userSetting.getKey());
-			}
-		};
-		return predicate;
+    return new Predicate<UserSetting>() {
+      @Override
+      public boolean apply(UserSetting userSetting) {
+        return key.equals(userSetting.getKey());
+      }
+    };
 	}
 
-	public boolean hasUserSetting(final String key) {
+	private boolean hasUserSetting(final String key) {
 		return Iterables.any(Lists.newArrayList(getUserSettings()), userSettingWithKey(key));
 	}
 

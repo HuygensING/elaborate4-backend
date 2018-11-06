@@ -4,7 +4,7 @@ package elaborate.jaxrs;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -105,23 +105,23 @@ public class JAXUtils {
 	 * Returns the path of the annotated element,
 	 * or an empty string if no annotation is present.
 	 */
-	static String pathValueOf(AnnotatedElement element) {
+	private static String pathValueOf(AnnotatedElement element) {
 		Path annotation = element.getAnnotation(Path.class);
 		String value = (annotation != null) ? annotation.value() : "";
 		return StringUtils.removeStart(value, "/");
 	}
 
-	static ImmutableList<String> requestContentTypesOf(Method method) {
+	private static ImmutableList<String> requestContentTypesOf(Method method) {
 		Consumes annotation = method.getAnnotation(Consumes.class);
 		return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String> of();
 	}
 
-	static ImmutableList<String> responseContentTypesOf(Method method) {
+	private static ImmutableList<String> responseContentTypesOf(Method method) {
 		Produces annotation = method.getAnnotation(Produces.class);
 		return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String> of();
 	}
 
-	static String descriptionOf(Method method) {
+	private static String descriptionOf(Method method) {
 		APIDesc annotation = method.getAnnotation(APIDesc.class);
 		return (annotation != null) ? annotation.value() : "";
 	}

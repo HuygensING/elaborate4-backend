@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -51,7 +51,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntry> {
 	private static ProjectEntryService instance = new ProjectEntryService();
-	ProjectService projectService = ProjectService.instance();
+	private ProjectService projectService = ProjectService.instance();
 
 	private ProjectEntryService() {}
 
@@ -249,7 +249,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		return facsimile;
 	}
 
-	public Facsimile updateFacsimile(long facsimile_id, Facsimile facsimileData, User user) {
+	public void updateFacsimile(long facsimile_id, Facsimile facsimileData, User user) {
 		beginTransaction();
 		Facsimile facsimile;
 		try {
@@ -266,10 +266,9 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		} finally {
 			commitTransaction();
 		}
-		return facsimile;
-	}
+  }
 
-	public Facsimile deleteFacsimile(long facsimile_id, User user) {
+	public void deleteFacsimile(long facsimile_id, User user) {
 		beginTransaction();
 		Facsimile facsimile;
 		try {
@@ -284,8 +283,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		} finally {
 			commitTransaction();
 		}
-		return facsimile;
-	}
+  }
 
 	private Facsimile getFacsimile(long facsimile_id) {
 		Facsimile facsimile;

@@ -4,7 +4,7 @@ package nl.knaw.huygens.facetedsearch;
  * #%L
  * elab4-common
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -39,7 +39,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SearchData {
 	private final long id;
 	private Date created_on = new Date();
-	String json = "{}";
+	private String json = "{}";
 
 	public SearchData() {
 		setCreatedOn(new Date());
@@ -56,10 +56,9 @@ public class SearchData {
 		return json;
 	}
 
-	public SearchData setJson(String json) {
+	public void setJson(String json) {
 		this.json = json;
-		return this;
-	}
+  }
 
 	public SearchData setResults(Map<String, Object> result) {
 		StringWriter stringWriter = new StringWriter();

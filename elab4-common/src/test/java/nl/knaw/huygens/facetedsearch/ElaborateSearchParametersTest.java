@@ -4,7 +4,7 @@ package nl.knaw.huygens.facetedsearch;
  * #%L
  * elab4-common
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -26,8 +26,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nl.knaw.huygens.AbstractTest;
@@ -35,7 +33,7 @@ import nl.knaw.huygens.Log;
 
 public class ElaborateSearchParametersTest extends AbstractTest {
 	@Test
-	public void testJson() throws JsonGenerationException, JsonMappingException, IOException {
+	public void testJson() throws IOException {
 		ElaborateSearchParameters e = new ElaborateSearchParameters();
 		Log.info(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(e));
 	}

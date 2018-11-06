@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -97,7 +97,7 @@ public class ProjectServiceTest extends AbstractTest {
 
   @Test
   public void testGetAnnotationDataForProject() throws Exception {
-    Map<Integer, AnnotationData> annotationDataForProject = projectService.getAnnotationDataForProject(44l);
+    Map<Integer, AnnotationData> annotationDataForProject = projectService.getAnnotationDataForProject(44L);
     assertThat(annotationDataForProject).isNotEmpty();
     Log.info("annotationTypesForProject={}", annotationDataForProject);
   }

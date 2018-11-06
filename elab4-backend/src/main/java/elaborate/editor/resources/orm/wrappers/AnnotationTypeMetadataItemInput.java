@@ -4,7 +4,7 @@ package elaborate.editor.resources.orm.wrappers;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -44,19 +44,18 @@ public class AnnotationTypeMetadataItemInput {
 	// "description": "Index",
 	// "name": "index"
 	// },
-	long id;
-	List<MetadataInput> annotationTypeMetadataItems = Lists.newArrayList();
-	String description;
-	String name;
+  private long id;
+	private List<MetadataInput> annotationTypeMetadataItems = Lists.newArrayList();
+	private String description;
+	private String name;
 
 	public long getId() {
 		return id;
 	}
 
-	public AnnotationTypeMetadataItemInput setId(long id) {
+	public void setId(long id) {
 		this.id = id;
-		return this;
-	}
+  }
 
 	public List<MetadataInput> getAnnotationTypeMetadataItems() {
 		return annotationTypeMetadataItems;

@@ -10,7 +10,7 @@ import elaborate.editor.model.orm.service.UserService;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -32,12 +32,12 @@ import nl.knaw.huygens.security.client.HuygensAuthorizationHandler;
 import nl.knaw.huygens.security.client.UnauthorizedException;
 import nl.knaw.huygens.security.client.model.SecurityInformation;
 
-public class SecurityWrapper {
-	static Configuration config = Configuration.instance();
-	static UserService userservice = UserService.instance();
+class SecurityWrapper {
+	private static Configuration config = Configuration.instance();
+	private static UserService userservice = UserService.instance();
 
-	static Client client = new Client();
-	static HuygensAuthorizationHandler hah = new HuygensAuthorizationHandler(client, config.getSetting("security.hss.url"), config.getSetting("security.hss.credentials"));
+	private static Client client = new Client();
+	private static HuygensAuthorizationHandler hah = new HuygensAuthorizationHandler(client, config.getSetting("security.hss.url"), config.getSetting("security.hss.credentials"));
 
 	public static Session createSession(String sessionToken) throws UnauthorizedException {
 		SecurityInformation securityInformation = hah.getSecurityInformation(sessionToken);

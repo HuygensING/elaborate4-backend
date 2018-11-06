@@ -4,7 +4,7 @@ package elaborate.editor.export.mvn;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -37,8 +37,7 @@ public class MVNClient {
   private static WebResource webresource;
 
   public MVNClient(String mvnServerBaseURL) {
-    String path = mvnServerBaseURL;
-    MVNClient.webresource = client.resource(path).path("editions");
+    MVNClient.webresource = client.resource(mvnServerBaseURL).path("editions");
     client.setFollowRedirects(true);
   }
 

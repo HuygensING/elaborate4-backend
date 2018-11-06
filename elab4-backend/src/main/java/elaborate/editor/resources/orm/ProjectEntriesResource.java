@@ -4,7 +4,7 @@ package elaborate.editor.resources.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -172,8 +172,7 @@ public class ProjectEntriesResource extends AbstractElaborateResource {
   @APIDesc("Returns the facsimile with the given facsimile_id of the project entry with the given entry_id of the project with the given project_id")
   @JsonView(Views.Minimal.class)
   public Facsimile getFacsimile(@PathParam("project_id") long project_id, @PathParam("facsimile_id") long facsimile_id) {
-    Facsimile facsimile = projectEntryService.readFacsimile(facsimile_id, user);
-    return facsimile;
+    return projectEntryService.readFacsimile(facsimile_id, user);
   }
 
   @PUT

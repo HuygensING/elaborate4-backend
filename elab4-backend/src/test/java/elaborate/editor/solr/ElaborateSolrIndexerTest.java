@@ -4,7 +4,7 @@ package elaborate.editor.solr;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -63,12 +63,12 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 	public void test_newlines_in_entry_metadata_are_replaced() throws Exception {
 		// Setup mock project
 		Project mockProject = mock(Project.class);
-		when(mockProject.getId()).thenReturn(2l);
+		when(mockProject.getId()).thenReturn(2L);
 		when(mockProject.getProjectEntryMetadataFieldnames()).thenReturn(ImmutableList.of("multiline"));
 
 		// Setup mock projectentry
 		ProjectEntry mockEntry = mock(ProjectEntry.class);
-		when(mockEntry.getId()).thenReturn(1l);
+		when(mockEntry.getId()).thenReturn(1L);
 		when(mockEntry.getName()).thenReturn("name");
 		when(mockEntry.getProject()).thenReturn(mockProject);
 		when(mockEntry.isPublishable()).thenReturn(true);
@@ -98,12 +98,12 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 	public void test_multivalued_metadata_is_split_into_multiple_fields() throws Exception {
 		// Setup mock project
 		Project mockProject = mock(Project.class);
-		when(mockProject.getId()).thenReturn(2l);
+		when(mockProject.getId()).thenReturn(2L);
 		when(mockProject.getProjectEntryMetadataFieldnames()).thenReturn(ImmutableList.of("Field 1", "MultiField 1"));
 
 		// Setup mock projectentry
 		ProjectEntry mockEntry = mock(ProjectEntry.class);
-		when(mockEntry.getId()).thenReturn(1l);
+		when(mockEntry.getId()).thenReturn(1L);
 		when(mockEntry.getName()).thenReturn("name");
 		when(mockEntry.getProject()).thenReturn(mockProject);
 		when(mockEntry.isPublishable()).thenReturn(true);

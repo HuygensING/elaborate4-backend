@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -204,11 +204,9 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     return annotationType;
   }
 
-  private List<AnnotationMetadataItem> createAnnotationMetadataItems(Annotation annotation, AnnotationInputWrapper annotationInput, AnnotationType annotationType) {
+  private void createAnnotationMetadataItems(Annotation annotation, AnnotationInputWrapper annotationInput, AnnotationType annotationType) {
     Map<String, Long> atmiMap = Maps.newHashMap();
-    Iterator<AnnotationTypeMetadataItem> iterator = annotationType.getMetadataItems().iterator();
-    while (iterator.hasNext()) {
-      AnnotationTypeMetadataItem annotationTypeMetadataItem = iterator.next();
+    for (AnnotationTypeMetadataItem annotationTypeMetadataItem : annotationType.getMetadataItems()) {
       atmiMap.put(annotationTypeMetadataItem.getName(), annotationTypeMetadataItem.getId());
     }
 
@@ -229,7 +227,6 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
       persist(ami);
       annotationMetadataItems.add(ami);
     }
-    return annotationMetadataItems;
   }
 
   public Annotation readAnnotation(long annotation_id, User user) {
@@ -350,14 +347,14 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     }
   }
 
-  static Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
+  private static Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
     @Override
     public Integer apply(Annotation annotation) {
       return annotation.getAnnotationNo();
     }
   };
 
-  void removeOrphanedAnnotationReferences(Transcription transcription) {
+  private void removeOrphanedAnnotationReferences(Transcription transcription) {
     List<Annotation> annotations = Lists.newArrayList(transcription.getAnnotations());
     Set<Integer> annotationNoSet = Sets.newHashSet(Iterables.transform(annotations, EXTRACT_ANNOTATION_NO));
     Set<String> orphanedAnnotationTags = Sets.newHashSet();
@@ -383,17 +380,15 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
   }
 
   private String annotationEndTag(Object annotationNo) {
-    String endtag = String.format("<%s id=\"%s\"/>", //
+    return String.format("<%s id=\"%s\"/>", //
         Transcription.BodyTags.ANNOTATION_END, //
         annotationNo);
-    return endtag;
   }
 
   private String annotationBeginTag(Object annotationNo) {
-    String begintag = String.format("<%s id=\"%s\"/>", //
+    return String.format("<%s id=\"%s\"/>", //
         Transcription.BodyTags.ANNOTATION_BEGIN, //
         annotationNo);
-    return begintag;
   }
 
   private void processTags(Set<Integer> annotationNoSet, Set<String> orphanedAnnotationTags, Matcher matcher) {

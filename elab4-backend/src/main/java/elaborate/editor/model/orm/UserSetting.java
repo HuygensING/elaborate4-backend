@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -40,13 +40,16 @@ public class UserSetting extends AbstractStoredEntity<UserSetting> {
 	/* properties to persist */
 	@ManyToOne
 	@JoinColumn(name = "user_id", columnDefinition = "int4")
-	User user;
+  private
+  User user;
 
 	@Column(name = "setting_key")
-	String key;
+  private
+  String key;
 
 	@Column(name = "setting_value")
-	String value;
+  private
+  String value;
 
 	/* persistent properties getters and setters */
 	public User getUser() {

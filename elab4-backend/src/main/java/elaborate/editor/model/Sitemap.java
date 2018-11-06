@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -50,15 +50,14 @@ public class Sitemap {
 		}
 	};
 	public final String description = "Elaborate backend sitemap";
-	public final ImmutableList<API> availableAPIList;
 
-	public Sitemap(Application application) {
+  public Sitemap(Application application) {
 		List<API> list = Lists.newArrayList();
 		for (Class<?> cls : application.getClasses()) {
 			List<API> apis = JAXUtils.generateAPIs(cls);
 			list.addAll(apis);
 		}
-		availableAPIList = ImmutableList.copyOf(Ordering.from(PATH_COMPARATOR).compound(REQUESTTYPES_COMPARATOR).sortedCopy(list));
+    ImmutableList<API> availableAPIList = ImmutableList.copyOf(Ordering.from(PATH_COMPARATOR).compound(REQUESTTYPES_COMPARATOR).sortedCopy(list));
 	}
 
 }

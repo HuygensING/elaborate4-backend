@@ -4,7 +4,7 @@ package elaborate.editor.export.mvn;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -42,7 +42,7 @@ import com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory;
 import nl.knaw.huygens.Log;
 
 public class MVNValidator {
-  static Validator validator;
+  private static Validator validator;
 
   static {
     SchemaFactory factory = new XMLSyntaxSchemaFactory();

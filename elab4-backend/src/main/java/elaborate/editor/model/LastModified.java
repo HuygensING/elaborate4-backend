@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,7 +27,7 @@ import java.util.Date;
 
 import elaborate.editor.model.orm.User;
 
-public class LastModified {
+class LastModified {
 
 	private Date date;
 	private User user;
@@ -46,19 +46,19 @@ public class LastModified {
 		return getUser().getUsername();
 	}
 
-	public Date getDate() {
+	private Date getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	private void setDate(Date date) {
 		this.date = date;
 	}
 
-	public User getUser() {
+	private User getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	private void setUser(User user) {
 		this.user = user;
 	}
 

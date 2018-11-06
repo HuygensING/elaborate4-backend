@@ -4,7 +4,7 @@ package elaborate.util;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,10 +22,10 @@ package elaborate.util;
  * #L%
  */
 
-public class DelimiterDetector {
-	StringBuilder pre = new StringBuilder();
-	StringBuilder center = new StringBuilder();
-	StringBuilder post = new StringBuilder();
+class DelimiterDetector {
+	private StringBuilder pre = new StringBuilder();
+	private StringBuilder center = new StringBuilder();
+	private StringBuilder post = new StringBuilder();
 
 	public DelimiterDetector(String string) {
 		boolean atStart = true;

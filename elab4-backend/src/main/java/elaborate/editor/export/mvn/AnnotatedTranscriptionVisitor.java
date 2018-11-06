@@ -1,5 +1,27 @@
 package elaborate.editor.export.mvn;
 
+/*
+ * #%L
+ * elab4-backend
+ * =======
+ * Copyright (C) 2011 - 2018 Huygens ING
+ * =======
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -23,11 +45,11 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
-public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext> {
+class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext> {
   private static boolean lastNodeWasText = false;
   private final Deque<Integer> startIndexStack = new ArrayDeque<Integer>();
   private final Deque<Element> elementStack = new ArrayDeque<Element>();
-  public static Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
+  private static Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
   private static String sigle;
   private static ParseResult result;
   private static final Map<String, Integer> annotationStartIndexMap = Maps.newHashMap();
@@ -72,7 +94,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     return Traversal.NEXT;
   }
 
-  static final List<String> ANNOTATED_TEXT_TO_IGNORE = ImmutableList.<String> of("‡", "¤");
+  private static final List<String> ANNOTATED_TEXT_TO_IGNORE = ImmutableList.<String> of("‡", "¤");
 
   public static class TextSegmentHandler extends XmlTextHandler<XmlContext> {
     @Override
@@ -91,7 +113,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     }
   }
 
-  static final List<String> POETRY_AND_PARAGRAPH_CLOSERS = ImmutableList.of(//
+  private static final List<String> POETRY_AND_PARAGRAPH_CLOSERS = ImmutableList.of(//
       MVNAnnotationType.ALINEA.getName(), //
       MVNAnnotationType.POEZIE.getName(), //
       MVNAnnotationType.ONDERSCHRIFT.getName(), //
@@ -180,13 +202,12 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
 
     private void handleTekstEinde(String annotationBody) {
       closeOpenPoetryOrParagraph();
-      final String n = annotationBody;
-      final XmlAnnotation tekstAnnotation = textRangeAnnotationIndex.remove(n);
+      final XmlAnnotation tekstAnnotation = textRangeAnnotationIndex.remove(annotationBody);
       if (tekstAnnotation != null) {
         tekstAnnotation.setLastSegmentIndex(currentTextSegmentIndex());
         result.getXmlAnnotations().add(tekstAnnotation);
       } else {
-        Log.error("tekst {} was not opened", n);
+        Log.error("tekst {} was not opened", annotationBody);
       }
     }
 

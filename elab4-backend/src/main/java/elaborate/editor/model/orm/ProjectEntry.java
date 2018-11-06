@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -97,10 +97,9 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 		return shortName;
 	}
 
-	public ProjectEntry setShortName(String shortName) {
+	public void setShortName(String shortName) {
 		this.shortName = shortName;
-		return this;
-	}
+  }
 
 	@JsonView({ Views.Minimal.class })
 	public boolean isPublishable() {
@@ -121,9 +120,9 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
 		this.facsimiles = facsimiles;
 		return this;
 
-	};
+	}
 
-	@JsonIgnore
+  @JsonIgnore
 	public List<Transcription> getTranscriptions() {
 		return transcriptions;
 	}

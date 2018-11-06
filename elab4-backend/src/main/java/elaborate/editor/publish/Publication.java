@@ -4,7 +4,7 @@ package elaborate.editor.publish;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -59,7 +59,7 @@ public class Publication {
     }
 
     public boolean includeAnnotationType(AnnotationType annotationType) {
-      return getAnnotationTypeIds().isEmpty() ? true : getAnnotationTypeIds().contains(annotationType.getId());
+      return getAnnotationTypeIds().isEmpty() || getAnnotationTypeIds().contains(annotationType.getId());
     }
 
     public List<String> getProjectEntryMetadataFields() {

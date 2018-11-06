@@ -4,7 +4,7 @@ package nl.knaw.huygens.facetedsearch;
  * #%L
  * elab4-common
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,11 +23,11 @@ package nl.knaw.huygens.facetedsearch;
  */
 
 public interface QueryComposer {
-	public void compose(ElaborateSearchParameters esp);
+	void compose(ElaborateSearchParameters esp);
 
-	public String getSearchQuery();
+	String getSearchQuery();
 
-	public String getHighlightQuery();
+	String getHighlightQuery();
 
-	public boolean mustHighlight();
+	boolean mustHighlight();
 }

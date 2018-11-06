@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -50,8 +50,8 @@ public class SessionService {
 	private static final int MINUTES = 1000 * 60;
 	static final int SESSION_TIMEOUT = 8 * 60 * MINUTES;
 	private static final int SESSIONID_SIZE = 20;
-	Map<String, Session> sessionMap = Maps.newHashMap();
-	UserService userService = UserService.instance();
+	private Map<String, Session> sessionMap = Maps.newHashMap();
+	private UserService userService = UserService.instance();
 
 	private SessionService() {}
 
@@ -100,8 +100,8 @@ public class SessionService {
 	}
 
 	public static final String SIMPLEAUTH = "SimpleAuth";
-	public static final String FEDERATED = "Federated";
-	public static final List<String> SCHEMES = ImmutableList.of(SIMPLEAUTH, FEDERATED);
+	private static final String FEDERATED = "Federated";
+	private static final List<String> SCHEMES = ImmutableList.of(SIMPLEAUTH, FEDERATED);
 
 	public ElaborateSecurityContext getSecurityContext(String scheme, String key) throws UnauthorizedException {
 		if (SCHEMES.contains(scheme)) {
@@ -135,8 +135,7 @@ public class SessionService {
 			sessionMap.put(sessionId, session);
 		}
 		long userId = session.getUserId();
-		User user = userService.read(userId);
-		return user;
+    return userService.read(userId);
 	}
 
 	private static final Comparator<SessionUserInfo> ON_LAST_ACCESSED = new Comparator<SessionUserInfo>() {

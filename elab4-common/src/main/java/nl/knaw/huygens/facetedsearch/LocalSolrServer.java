@@ -4,7 +4,7 @@ package nl.knaw.huygens.facetedsearch;
  * #%L
  * elab4-common
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -28,7 +28,7 @@ import org.apache.solr.core.CoreContainer;
 
 public class LocalSolrServer extends AbstractSolrServer {
 
-	public static final String SOLR_DIRECTORY = "solr";
+	private static final String SOLR_DIRECTORY = "solr";
 	//	public static final String SOLR_CONFIG_FILE = "solrconfig.xml";
 
 	private final String solrDir;

@@ -4,7 +4,7 @@ package elaborate.editor.publish;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,46 +22,14 @@ package elaborate.editor.publish;
  * #L%
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.output.FileWriterWithEncoding;
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.common.SolrInputDocument;
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import com.google.common.io.Files;
 import com.sun.jersey.api.client.ClientResponse;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.export.mvn.MVNClient;
 import elaborate.editor.export.mvn.MVNConversionData;
@@ -69,15 +37,7 @@ import elaborate.editor.export.mvn.MVNConversionResult;
 import elaborate.editor.export.mvn.MVNConverter;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.ProjectTypes;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.AnnotationMetadataItem;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.Facsimile;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.ProjectEntryMetadataItem;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.*;
 import elaborate.editor.model.orm.service.AnnotationService;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
@@ -88,11 +48,22 @@ import elaborate.util.HibernateUtil;
 import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
-import nl.knaw.huygens.facetedsearch.IndexException;
-import nl.knaw.huygens.facetedsearch.LocalSolrServer;
-import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.facetedsearch.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.FileWriterWithEncoding;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.common.SolrInputDocument;
+import org.joda.time.DateTime;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class PublishTask implements Runnable {
   private static final String MVN_BASE_URL = "http://test.mvn.huygens.knaw.nl/";
@@ -112,7 +83,7 @@ public class PublishTask implements Runnable {
   private File jsonDir;
   private SolrServerWrapper solrServer;
 
-  Configuration config = Configuration.instance();
+  private Configuration config = Configuration.instance();
   private EntityManager entityManager;
   //	private Map<Integer, String> publishableAnnotationTypes;
   //	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
@@ -197,7 +168,7 @@ public class PublishTask implements Runnable {
     final Map<Long, List<String>> thumbnails = Maps.newHashMap();
     final Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
     final String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
-    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[] {};
+    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[]{};
     for (final ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
         status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
@@ -324,7 +295,7 @@ public class PublishTask implements Runnable {
   private void exportBuildDate() {
     File properties = new File(distDir, "WEB-INF/classes/about.properties");
     try {
-      FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), true);
+      FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), Charsets.UTF_8, true);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -406,7 +377,7 @@ public class PublishTask implements Runnable {
         String facetName = entry.getKey();
         String facetValue = entry.getValue();
         if (!tmpindex.containsKey(facetName)) {
-          tmpindex.put(facetName, ArrayListMultimap.<String, Long> create());
+          tmpindex.put(facetName, ArrayListMultimap.<String, Long>create());
         }
         tmpindex.get(facetName).put(facetValue, entryData.entryId);
       }
@@ -421,7 +392,7 @@ public class PublishTask implements Runnable {
   private void addIfNotNull(Map<String, Object> map, String key, String value) {
     if (value != null) {
       map.put(key, value);
-    } ;
+    }
   }
 
   // private Map<String, Object> getMetadata(Project project) {
@@ -493,7 +464,7 @@ public class PublishTask implements Runnable {
         }
         map.put(transcription.getTextLayer(), textlayerData);
       } catch (Exception e) {
-        Log.error("Error '{}' for transcription {}, body: '{}'", new Object[] { e.getMessage(), transcription.getId(), transcription.getBody() });
+        Log.error("Error '{}' for transcription {}, body: '{}'", new Object[]{e.getMessage(), transcription.getId(), transcription.getBody()});
         e.printStackTrace();
       }
     }
@@ -523,10 +494,9 @@ public class PublishTask implements Runnable {
 
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
-    TextlayerData textlayerData = new TextlayerData()//
+    return new TextlayerData()//
         .setText(tw.getBody())//
         .setAnnotations(getAnnotationData(tw.annotationNumbers));
-    return textlayerData;
   }
 
   private List<AnnotationPublishData> getAnnotationData(List<Integer> annotationNumbers) {
@@ -566,12 +536,11 @@ public class PublishTask implements Runnable {
 
   private AnnotationTypeData getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
     Map<String, Object> metadata = getMetadataMap(meta);
-    AnnotationTypeData annotationTypeData = new AnnotationTypeData()//
+    return new AnnotationTypeData()//
         .setId(annotationType.getId())//
         .setName(annotationType.getName())//
         .setDescription(annotationType.getDescription())//
         .setMetadata(metadata);
-    return annotationTypeData;
   }
 
   private Map<String, Object> getMetadataMap(Set<AnnotationMetadataItem> meta) {
@@ -779,7 +748,7 @@ public class PublishTask implements Runnable {
   }
 
   static class AnnotationIndexData {
-    private long entryId = 0l;
+    private long entryId = 0L;
     private String textLayer = "";
     private String annotatedText = "";
     private String annotationText = "";

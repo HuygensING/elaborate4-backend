@@ -4,7 +4,7 @@ package elaborate.jaxrs.filters;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -39,10 +39,10 @@ import com.sun.jersey.spi.container.ResourceFilter;
 import elaborate.editor.model.SessionService;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
-public class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {
-	public static final String HEADER = "Authorization";
+class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {
+	private static final String HEADER = "Authorization";
 
-	SessionService sessionService = SessionService.instance();
+	private SessionService sessionService = SessionService.instance();
 
 	@Override
 	public ContainerRequest filter(ContainerRequest request) {

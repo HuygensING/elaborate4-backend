@@ -4,7 +4,7 @@ package elaborate.editor.export.mvn;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.sun.jersey.api.client.ClientResponse;
 
-public class MVNClientTest {
+class MVNClientTest {
 
   //  @Test
   public void testMVNClient() {

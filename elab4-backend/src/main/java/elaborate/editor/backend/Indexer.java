@@ -4,7 +4,7 @@ package elaborate.editor.backend;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -38,16 +38,16 @@ import elaborate.editor.solr.ElaborateSolrIndexer;
 import elaborate.util.HibernateUtil;
 import nl.knaw.huygens.Log;
 
-public class Indexer {
+class Indexer {
   private static final int COMMIT_EVERY_N_RECORDS = 100;
 
   @SuppressWarnings("boxing")
   public static void main(String[] args) {
-    boolean wipeIndexFirst = args.length == 0 ? false : "-w".equals(args[0]);
+    boolean wipeIndexFirst = args.length != 0 && "-w".equals(args[0]);
     new Indexer().index(wipeIndexFirst);
   }
 
-  public void index(boolean wipeIndexFirst) {
+  private void index(boolean wipeIndexFirst) {
     StopWatch sw = new StopWatch();
     sw.start();
     ElaborateSolrIndexer solr = new ElaborateSolrIndexer();
@@ -95,7 +95,7 @@ public class Indexer {
     return (n % COMMIT_EVERY_N_RECORDS) == 0;
   }
 
-  public static String convert(long ms) {
+  private static String convert(long ms) {
     Date date = new Date(ms - (1000 * 60 * 60));
     DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
     return formatter.format(date);

@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -29,7 +29,7 @@ import javax.persistence.Transient;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class AbstractIndexableProjectElement<T extends AbstractIndexableProjectElement<?>> extends AbstractProjectEntryElement<AbstractIndexableProjectElement<?>> {
+abstract class AbstractIndexableProjectElement<T extends AbstractIndexableProjectElement<?>> extends AbstractProjectEntryElement<AbstractIndexableProjectElement<?>> {
 	private static final long serialVersionUID = 1L;
 
 	private String body;
@@ -46,13 +46,13 @@ public abstract class AbstractIndexableProjectElement<T extends AbstractIndexabl
 	@Transient
 	public String getSolrId() {
 		return "";
-	};
+	}
 
-	public void index(boolean commitNow) {};
+  public void index(boolean commitNow) {}
 
-	/**
+  /**
 	 * Remove the entity representation from the index
 	 */
-	public void deindex() {};
+	public void deindex() {}
 
 }

@@ -4,7 +4,7 @@ package elaborate.jaxrs;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,7 +27,7 @@ import java.util.List;
 import com.sun.jersey.api.wadl.config.WadlGeneratorConfig;
 import com.sun.jersey.api.wadl.config.WadlGeneratorDescription;
 
-public class CustomWadlGeneratorConfig extends WadlGeneratorConfig {
+class CustomWadlGeneratorConfig extends WadlGeneratorConfig {
 	@Override
 	public List<WadlGeneratorDescription> configure() {
 		return generator(CustomJAXBWadlGenerator.class)//

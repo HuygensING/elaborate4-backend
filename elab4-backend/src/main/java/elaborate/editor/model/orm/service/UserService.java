@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -77,7 +77,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 	}
 
 	/* CRUD methods */
-	public User create(User user, User creator) {
+	public void create(User user, User creator) {
 		beginTransaction();
 
 		if (creator.getPermissionFor(user).canWrite()) {
@@ -92,9 +92,8 @@ public class UserService extends AbstractStoredEntityService<User> {
 			normalizeEmailAddress(user);
 			User create = super.create(user);
 			commitTransaction();
-			return create;
 
-		} else {
+    } else {
 			rollbackTransaction();
 			throw new UnauthorizedException("user " + creator.getUsername() + " is not authorized to create new users");
 		}
@@ -118,7 +117,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 		return user;
 	}
 
-	public User update(User user, User modifier) {
+	public void update(User user, User modifier) {
 		beginTransaction();
 		User updated;
 		try {
@@ -127,8 +126,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 		} finally {
 			commitTransaction();
 		}
-		return updated;
-	}
+  }
 
 	public void delete(long id, User modifier) {
 		beginTransaction();
@@ -332,7 +330,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 		updateLoginStatus(user, true);
 	}
 
-	public void updateLoginStatus(User user, boolean loggingOff) {
+	private void updateLoginStatus(User user, boolean loggingOff) {
 		beginTransaction();
 		user = super.read(user.getId());
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

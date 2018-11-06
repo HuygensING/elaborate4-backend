@@ -4,7 +4,7 @@ package elaborate.jaxrs;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -28,10 +28,9 @@ import com.sun.jersey.api.model.Parameter;
 import com.sun.jersey.server.wadl.generators.WadlGeneratorJAXBGrammarGenerator;
 import com.sun.research.ws.wadl.Param;
 
-public class CustomJAXBWadlGenerator extends WadlGeneratorJAXBGrammarGenerator {
+class CustomJAXBWadlGenerator extends WadlGeneratorJAXBGrammarGenerator {
 	@Override
 	public Param createParam(AbstractResource r, AbstractMethod m, final Parameter p) {
-		Param param = super.createParam(r, m, p);
-		return param;
+    return super.createParam(r, m, p);
 	}
 }

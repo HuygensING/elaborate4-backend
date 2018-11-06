@@ -4,7 +4,7 @@ package elaborate.editor.resources;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -37,14 +37,14 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.security.ElaborateSecurityContext;
 
 public abstract class AbstractElaborateResource {
-	public AbstractElaborateResource() {
+	protected AbstractElaborateResource() {
 		java.util.logging.Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
 	}
 
 	@Context
 	Request request;
 
-	public User getUser() {
+	protected User getUser() {
 		User user = null;
 		ContainerRequest cr = (ContainerRequest) request;
 		SecurityContext securityContext = cr.getSecurityContext();

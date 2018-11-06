@@ -4,7 +4,7 @@ package elaborate.editor.export.mvn;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -474,7 +474,7 @@ public class MVNConverterTest {
   private void assertAnnotationBodyIsInvalidForInitiaal(final String annotationBody) {
     final Annotation annotation = mockAnnotationOfType(INITIAAL);
     when(annotation.getBody()).thenReturn(annotationBody);
-    final Long entryId = 1l;
+    final Long entryId = 1L;
     final String body = "<body>"//
         + "<entry n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\">"//
         + "pre "//
@@ -644,7 +644,7 @@ public class MVNConverterTest {
   @Test
   public void testWitregelConversieOfIllegalCharacterGivesValidationError() {
     final Annotation annotation = mockAnnotationOfType(WITREGEL);
-    final Long entryId = 12234l;
+    final Long entryId = 12234L;
     final String body = "<body>"//
         + "<entry n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\">"//
         + " pre "//
@@ -689,7 +689,7 @@ public class MVNConverterTest {
         + "<lb n=\"1\" xml:id=\"ABC-pb-42r-lb-1\"/><l n=\"1\" xml:id=\"PROJECTNAME-1-l-1\">Er was eens een neushoorn uit Assen,</l>\n"//
         + "<lb n=\"2\" xml:id=\"ABC-pb-42r-lb-2\"/><l n=\"2\" xml:id=\"PROJECTNAME-1-l-2\">Die moest echt verschrikkelijk nodig plassen.</l>"// 
         + "</lg>\n"//
-        + "</body></text>\n";;
+        + "</body></text>\n";
     assertConversion(body, mockData(1, tekstbegin, 2, poezieAnnotation, 3, teksteinde), expected);
   }
 
@@ -1253,8 +1253,7 @@ public class MVNConverterTest {
     Publication.Status status = new Publication.Status(projectId);
     MVNConversionData data = getConversionData(project);
     MVNConverter mvnConverter = new MVNConverter(project, data, status, baseURL);
-    MVNConversionResult report = mvnConverter.convert();
-    return report;
+    return mvnConverter.convert();
   }
 
   private MVNConversionData getConversionData(Project project) {

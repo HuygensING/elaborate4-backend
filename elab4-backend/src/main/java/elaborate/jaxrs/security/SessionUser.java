@@ -4,7 +4,7 @@ package elaborate.jaxrs.security;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,9 +27,9 @@ import java.util.Set;
 public class SessionUser implements java.security.Principal {
 	public enum Role {
 		User, Admin, Projectleader, Reader
-	};
+	}
 
-	private long userId;
+  private long userId;
 	private String name;
 	private String emailAddress;
 	private Set<Role> roles;

@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -46,7 +46,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
 @Singleton
 public class SearchService extends AbstractStoredEntityService<StorableSearchData> {
 	private static final SearchService instance = new SearchService();
-	ProjectService projectService = ProjectService.instance();
+	private ProjectService projectService = ProjectService.instance();
 
 	private SearchService() {}
 

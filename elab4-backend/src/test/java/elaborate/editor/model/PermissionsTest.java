@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -33,18 +33,16 @@ import com.google.common.collect.ImmutableList;
 import elaborate.editor.model.orm.User;
 
 public class PermissionsTest {
-	User root;
-	User admin;
-	User projectleader;
-	User plainUser;
+  private User admin;
+  private User plainUser;
 	private ImmutableList<User> allusers;
 	private ImmutableList<User> writeusers;
 
 	@Before
 	public void setUp() throws Exception {
-		root = new User().setId(0).setRoot(true);
+    User root = new User().setId(0).setRoot(true);
 		admin = new User().setId(1).setRoleString(ElaborateRoles.getRolestringFor(ElaborateRoles.ADMIN));
-		projectleader = new User().setId(3).setRoleString(ElaborateRoles.getRolestringFor(ElaborateRoles.PROJECTLEADER));
+    User projectleader = new User().setId(3).setRoleString(ElaborateRoles.getRolestringFor(ElaborateRoles.PROJECTLEADER));
 		plainUser = new User().setId(2).setRoleString(ElaborateRoles.getRolestringFor(ElaborateRoles.USER));
 		allusers = ImmutableList.of(root, admin, projectleader, plainUser);
 		writeusers = ImmutableList.of(root, admin, projectleader);

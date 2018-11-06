@@ -1,5 +1,27 @@
 package elaborate.editor.export.mvn;
 
+/*
+ * #%L
+ * elab4-backend
+ * =======
+ * Copyright (C) 2011 - 2018 Huygens ING
+ * =======
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -16,8 +38,8 @@ import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
 
 public class AnnotatedTextRange {
-  public Multimap<Integer, Element> elementStartIndex = LinkedHashMultimap.create();
-  public Multimap<Integer, Element> elementEndIndex = LinkedHashMultimap.create();
+  private Multimap<Integer, Element> elementStartIndex = LinkedHashMultimap.create();
+  private Multimap<Integer, Element> elementEndIndex = LinkedHashMultimap.create();
   private Set<RangeAnnotation> rangeAnnotations = Sets.newLinkedHashSet();
   private String text;
 
@@ -25,7 +47,7 @@ public class AnnotatedTextRange {
     disassemble(xml);
   }
 
-  void disassemble(String xml) {
+  private void disassemble(String xml) {
     AnnotatedTextRangeVisitor v = new AnnotatedTextRangeVisitor();
     Document document = Document.createFromXml(xml, true);
     document.accept(v);
@@ -44,7 +66,7 @@ public class AnnotatedTextRange {
     return rangeAnnotations;
   }
 
-  public Iterator<TextPositionInfo> iterator() {
+  private Iterator<TextPositionInfo> iterator() {
     return new Iterator<AnnotatedTextRange.TextPositionInfo>() {
       int i = 0;
 
@@ -117,7 +139,7 @@ public class AnnotatedTextRange {
     }
   }
 
-  void index() {
+  private void index() {
     for (RangeAnnotation rangeAnnotation : rangeAnnotations) {
       elementStartIndex.put(rangeAnnotation.getStartOffset(), rangeAnnotation.getElement());
       elementEndIndex.put(rangeAnnotation.getEndOffset(), rangeAnnotation.getElement());

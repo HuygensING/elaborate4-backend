@@ -4,7 +4,7 @@ package elaborate.editor.solr;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -35,7 +35,7 @@ public class SolrIndexer {
 	private final SolrServer server;
 	private final String idField;
 
-	public SolrIndexer(SolrServer server, String idField) {
+	SolrIndexer(SolrServer server, String idField) {
 		this.server = server;
 		this.idField = idField;
 	}
@@ -77,7 +77,7 @@ public class SolrIndexer {
 		return isUp;
 	}
 
-	public void deleteById(String id) {
+	void deleteById(String id) {
 		try {
 			this.server.deleteById(id);
 		} catch (SolrServerException e) {
@@ -87,7 +87,7 @@ public class SolrIndexer {
 		}
 	}
 
-	protected void index(SolrInputDocument doc, boolean commitNow) {
+	void index(SolrInputDocument doc, boolean commitNow) {
 		try {
 			String id = String.valueOf(doc.getField(idField).getValue());
 			this.server.deleteById(id);

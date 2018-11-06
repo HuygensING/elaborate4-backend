@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -33,7 +33,7 @@ import elaborate.editor.AbstractTest;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
 
-public class ProjectEntryServiceTest extends AbstractTest {
+class ProjectEntryServiceTest extends AbstractTest {
 
 	private ProjectEntryService projectEntryService;
 
@@ -46,7 +46,7 @@ public class ProjectEntryServiceTest extends AbstractTest {
 	public void tearDown() throws Exception {}
 
 	// @Test
-	public void testRead() throws Exception {
+	public void testRead() {
 		User user = mock(User.class);
 		when(user.getId()).thenReturn((long) 1);
 		ProjectEntry pe = projectEntryService.read(1, user);

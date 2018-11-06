@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -59,46 +59,46 @@ public abstract class AbstractTrackedEntity<T extends AbstractTrackedEntity<T>> 
 	@JsonView({ Views.Extended.class })
 	public User getCreator() {
 		return creator;
-	};
+	}
 
-	public T setCreator(User user) {
+  public T setCreator(User user) {
 		this.creator = user;
 		return ((T) this);
-	};
+	}
 
-	@JsonView({ Views.Extended.class })
+  @JsonView({ Views.Extended.class })
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "CET")
 	public Date getCreatedOn() {
 		return created_on;
-	};
+	}
 
-	public T setCreatedOn(Date date) {
+  public T setCreatedOn(Date date) {
 		this.created_on = date;
 		return ((T) this);
-	};
+	}
 
-	@JsonView({ Views.Extended.class })
+  @JsonView({ Views.Extended.class })
 	public User getModifier() {
 		return modifier;
-	};
+	}
 
-	public T setModifier(User user) {
+  public T setModifier(User user) {
 		this.modifier = user;
 		return ((T) this);
-	};
+	}
 
-	@JsonView({ Views.Extended.class })
+  @JsonView({ Views.Extended.class })
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "CET")
 	public Date getModifiedOn() {
 		return modified_on;
-	};
+	}
 
-	public T setModifiedOn(Date date) {
+  public T setModifiedOn(Date date) {
 		this.modified_on = date;
 		return ((T) this);
-	};
+	}
 
-	public void setModifiedBy(User _modifier) {
+  public void setModifiedBy(User _modifier) {
 		setModifier(_modifier);
 		setModifiedOn(new Date());
 	}
@@ -107,6 +107,6 @@ public abstract class AbstractTrackedEntity<T extends AbstractTrackedEntity<T>> 
 		setCreator(creator);
 		setCreatedOn(new Date());
 		setModifiedBy(creator);
-	};
+	}
 
 }

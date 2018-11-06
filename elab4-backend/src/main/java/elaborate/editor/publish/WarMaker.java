@@ -4,7 +4,7 @@ package elaborate.editor.publish;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
 
 import nl.knaw.huygens.Log;
 
-public class WarMaker {
+class WarMaker {
   private final String basename;
   private final File sourceDir;
   private final File destinationDir;
@@ -90,7 +90,7 @@ public class WarMaker {
    * @param node
    *          file or directory
    */
-  public void addToFileList(File node) {
+  private void addToFileList(File node) {
     if (node.isFile()) {
       fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
 

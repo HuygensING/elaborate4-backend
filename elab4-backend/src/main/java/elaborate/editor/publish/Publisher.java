@@ -4,7 +4,7 @@ package elaborate.editor.publish;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -30,7 +30,7 @@ import com.google.common.collect.Maps;
 
 public class Publisher {
 	private static Publisher instance;
-	final Map<String, PublishTask> taskIndex = Maps.newHashMap();
+	private final Map<String, PublishTask> taskIndex = Maps.newHashMap();
 
 	private Publisher() {}
 

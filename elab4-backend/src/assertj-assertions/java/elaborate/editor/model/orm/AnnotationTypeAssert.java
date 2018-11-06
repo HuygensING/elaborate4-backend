@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -116,7 +116,7 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 	 * @throws AssertionError
 	 *           - if the actual AnnotationType's description is not equal to the given one.
 	 */
-	public AnnotationTypeAssert hasDescription(String description) {
+	public void hasDescription(String description) {
 		// check that actual AnnotationType we want to make assertions on is not null.
 		isNotNull();
 
@@ -130,8 +130,7 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 	/**
 	 * Verifies that the actual AnnotationType's id is equal to the given one.
@@ -271,7 +270,7 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 	 * @throws AssertionError
 	 *           - if the actual AnnotationType's name is not equal to the given one.
 	 */
-	public AnnotationTypeAssert hasName(String name) {
+	public void hasName(String name) {
 		// check that actual AnnotationType we want to make assertions on is not null.
 		isNotNull();
 
@@ -285,8 +284,7 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 	/**
 	 * Verifies that the actual AnnotationType's rev is equal to the given one.

@@ -4,7 +4,7 @@ package nl.knaw.huygens.facetedsearch;
  * #%L
  * elab4-common
  * =======
- * Copyright (C) 2013 - 2016 Huygens ING
+ * Copyright (C) 2013 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -33,8 +33,8 @@ public class FacetParameter {
 		and, or
 	}
 
-	String name = "";
-	List<String> values = Lists.newArrayList();
+	private String name = "";
+	private List<String> values = Lists.newArrayList();
 	private AndOr combineValuesWith = AndOr.or;
 
 	public String getName() {
@@ -46,7 +46,7 @@ public class FacetParameter {
 		return this;
 	}
 
-	public List<String> getValues() {
+	private List<String> getValues() {
 		return values;
 	}
 

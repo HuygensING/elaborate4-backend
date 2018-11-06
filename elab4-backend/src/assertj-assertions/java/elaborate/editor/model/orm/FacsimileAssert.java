@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -115,7 +115,7 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 	 * @throws AssertionError
 	 *           - if the actual Facsimile's filename is not equal to the given one.
 	 */
-	public FacsimileAssert hasFilename(String filename) {
+	public void hasFilename(String filename) {
 		// check that actual Facsimile we want to make assertions on is not null.
 		isNotNull();
 
@@ -129,8 +129,7 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 	/**
 	 * Verifies that the actual Facsimile's id is equal to the given one.

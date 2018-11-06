@@ -4,7 +4,7 @@ package elaborate.editor.model;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,7 +27,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 public class Permission {
-	Set<String> allowedActions = Sets.newHashSet();
+	private Set<String> allowedActions = Sets.newHashSet();
 	private boolean canRead = false;
 	private boolean canWrite = false;
 
@@ -36,13 +36,12 @@ public class Permission {
 		return this;
 	}
 
-	public Permission setCanWrite(boolean b) {
+	public void setCanWrite(boolean b) {
 		this.canWrite = b;
 		if (b) {
 			setCanRead(true);
 		}
-		return this;
-	}
+  }
 
 	public boolean canRead() {
 		return this.canRead;
@@ -60,24 +59,20 @@ public class Permission {
 		return allowedActions.contains(action);
 	}
 
-	public Permission allow(String action) {
+	private void allow(String action) {
 		allowedActions.add(action);
-		return this;
-	}
+  }
 
-	public Permission allow(Action action) {
+	public void allow(Action action) {
 		allow(action.name());
-		return this;
-	}
+  }
 
-	public Permission disallow(String action) {
+	private void disallow(String action) {
 		allowedActions.remove(action);
-		return this;
-	}
+  }
 
-	public Permission disallow(Action action) {
+	public void disallow(Action action) {
 		disallow(action.name());
-		return this;
-	}
+  }
 
 }

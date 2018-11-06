@@ -4,7 +4,7 @@ package elaborate.jaxrs.security;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -50,7 +50,7 @@ public class ElabSecurityContext implements javax.ws.rs.core.SecurityContext {
 
 	@Override
 	public boolean isSecure() {
-		return (null != session) ? session.isSecure() : false;
+		return (null != session) && session.isSecure();
 	}
 
 	@Override

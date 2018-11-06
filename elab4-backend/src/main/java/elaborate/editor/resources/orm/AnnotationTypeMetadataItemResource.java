@@ -4,7 +4,7 @@ package elaborate.editor.resources.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -29,7 +29,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -49,12 +48,9 @@ import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 @AuthorizationRequired
 @Singleton
 public class AnnotationTypeMetadataItemResource extends AbstractElaborateResource {
-	@Context
-	private final User user;
-	private final AnnotationTypeMetadataItemService annotationTypeMetadataItemService = AnnotationTypeMetadataItemService.instance();
+  private final AnnotationTypeMetadataItemService annotationTypeMetadataItemService = AnnotationTypeMetadataItemService.instance();
 
 	public AnnotationTypeMetadataItemResource(User user) {
-		this.user = user;
 	}
 
 	@GET

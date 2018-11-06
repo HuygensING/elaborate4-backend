@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2016 Huygens ING
+ * Copyright (C) 2011 - 2018 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -29,7 +29,7 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
 
 public class ExtendedProjectEntry {
-	ProjectEntry projectEntry;
+	private ProjectEntry projectEntry;
 	private String l1;
 	private String l2;
 	private String l3;
