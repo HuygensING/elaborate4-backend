@@ -41,15 +41,15 @@ public abstract class AbstractDocument<T extends AbstractDocument<T>> extends Ab
 	public T setName(String name) {
 		this.name = name;
 		return ((T) this);
-	};
+	}
 
-	public String getTitle() {
+  public String getTitle() {
 		return title;
-	};
+	}
 
-	public T setTitle(String title) {
+  public T setTitle(String title) {
 		this.title = title;
 		return ((T) this);
-	};
+	}
 
 }

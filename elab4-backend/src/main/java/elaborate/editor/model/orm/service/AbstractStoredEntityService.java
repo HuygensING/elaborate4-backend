@@ -22,19 +22,8 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-import java.text.MessageFormat;
-import java.util.Date;
-
-import javax.inject.Singleton;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.LockModeType;
-import javax.persistence.TypedQuery;
-
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.AbstractTrackedEntity;
@@ -49,6 +38,11 @@ import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+
+import javax.inject.Singleton;
+import javax.persistence.*;
+import java.text.MessageFormat;
+import java.util.Date;
 
 @Singleton
 public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity<T>> {
@@ -68,13 +62,13 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		return entity;
 	}
 
-	public T read(long id) {
+	T read(long id) {
 		T entity = (T) getEntityManager().find(getEntityClass(), id);
 		checkEntityFound(entity, id);
 		return entity;
 	}
 
-	public T update(T entity) {
+	T update(T entity) {
 		T original = (T) getEntityManager().find(getEntityClass(), entity.getId());
 		if (entity instanceof AbstractTrackedEntity) {
 			AbstractTrackedEntity trackedOriginal = (AbstractTrackedEntity) original;
@@ -94,8 +88,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	/* public */
 	public ImmutableList<T> getAll() {
 		TypedQuery<T> createQuery = (TypedQuery<T>) getEntityManager().createQuery("from " + getEntityName(), getEntityClass());
-		ImmutableList<T> list = ImmutableList.copyOf(createQuery.getResultList());
-		return list;
+    return ImmutableList.copyOf(createQuery.getResultList());
 	}
 
 	public SolrServerWrapper getSolrServer() {
@@ -119,14 +112,14 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	 * @throws NotFoundException
 	 *           when there was no entity found with the given id
 	 */
-	protected void checkEntityFound(T entity, long id) {
+	void checkEntityFound(T entity, long id) {
 		if (entity == null) {
 			closeEntityManager();
 			throw new NotFoundException(MessageFormat.format("No {0} found with id {1,number,#}", getEntityName(), id));
 		}
 	}
 
-	protected boolean rootOrAdmin(User user) {
+	boolean rootOrAdmin(User user) {
 		return user.isRoot() || user.hasRole(ElaborateRoles.ADMIN);
 	}
 
@@ -150,7 +143,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		setModifiedBy(trackedEntity, creator);
 	}
 
-	protected ElaborateSolrIndexer getSolrIndexer() {
+	ElaborateSolrIndexer getSolrIndexer() {
 		if (solrindexer == null) {
 			solrindexer = new ElaborateSolrIndexer();
 		}
@@ -158,11 +151,11 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	}
 
 	/* entitymanager methods */
-	final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
+	private final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
 	// EntityManager entityManager;
-	protected static final ThreadLocal<EntityManager> tlem = new ThreadLocal<EntityManager>() {};
+	private static final ThreadLocal<EntityManager> tlem = new ThreadLocal<EntityManager>() {};
 
-	public EntityManager getEntityManager() {
+	EntityManager getEntityManager() {
 		EntityManager em = tlem.get();
 		if (em == null) {
 			throw new RuntimeException("no entityManager set, did you call openEntityManager() or beginTransaction()?");
@@ -171,7 +164,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	}
 
 	/** start read **/
-	public void openEntityManager() {
+	void openEntityManager() {
 		if (tlem.get() == null) {
 			tlem.set(ENTITY_MANAGER_FACTORY.createEntityManager());
 		}
@@ -183,7 +176,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	}
 
 	/** end read **/
-	public void closeEntityManager() {
+	void closeEntityManager() {
 		EntityManager em = tlem.get();
 		if (em != null) {
 			em.close();
@@ -223,28 +216,28 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		getEntityManager().persist(entity);
 	}
 
-	public void merge(Object entity) {
+	private void merge(Object entity) {
 		getEntityManager().merge(entity);
 	}
 
-	public void remove(Object entity) {
+	void remove(Object entity) {
 		getEntityManager().remove(entity);
 	}
 
-	public <X extends AbstractStoredEntity<X>> X find(Class<X> entityClass, Object primaryKey) {
+	<X extends AbstractStoredEntity<X>> X find(Class<X> entityClass, Object primaryKey) {
 		return getEntityManager().find(entityClass, primaryKey);
 	}
 
 	/* private methods */
 
-	void initServices() {
+	private void initServices() {
 		if (projectService == null) {
 			projectService = ProjectService.instance();
 			// projectEntryService = ProjectEntryService.instance();
 		}
 	}
 
-	Project checkProjectReadPermissions(long project_id, User user) {
+	private Project checkProjectReadPermissions(long project_id, User user) {
 		initServices();
 		projectService.setEntityManager(getEntityManager());
 		return projectService.getProjectIfUserCanRead(project_id, user);
@@ -257,10 +250,9 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		checkProjectReadPermissions(project_id, user);
 	}
 
-	Project checkProjectWritePermissions(long project_id, User user) {
+	private void checkProjectWritePermissions(long project_id, User user) {
 		Project project = checkProjectReadPermissions(project_id, user);
 		if (user.getPermissionFor(project).canWrite()) {
-			return project;
 		} else {
 			// closeEntityManager();
 			throw new UnauthorizedException("user " + user.getUsername() + " has no write permission for project " + project.getName());

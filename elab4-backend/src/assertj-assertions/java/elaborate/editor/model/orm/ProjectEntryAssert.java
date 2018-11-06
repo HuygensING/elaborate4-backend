@@ -167,7 +167,7 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 	 * @throws AssertionError
 	 *           - if the actual ProjectEntry's id is not equal to the given one.
 	 */
-	public ProjectEntryAssert hasId(long id) {
+	public void hasId(long id) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
 		isNotNull();
 
@@ -181,8 +181,7 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 	/**
 	 * Verifies that the actual ProjectEntry's modifiedOn is equal to the given one.
@@ -245,7 +244,7 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 	 * @throws AssertionError
 	 *           - if the actual ProjectEntry's name is not equal to the given one.
 	 */
-	public ProjectEntryAssert hasName(String name) {
+	public void hasName(String name) {
 		// check that actual ProjectEntry we want to make assertions on is not null.
 		isNotNull();
 
@@ -259,8 +258,7 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 	/**
 	 * Verifies that the actual ProjectEntry's project is equal to the given one.

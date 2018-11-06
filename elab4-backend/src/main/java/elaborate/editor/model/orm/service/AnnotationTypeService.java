@@ -37,7 +37,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 @Singleton
 public class AnnotationTypeService extends AbstractStoredEntityService<AnnotationType> {
   private static final String DEFAULT_ANNOTATIONTYPE_NAME = "Uncategorized";
-  private static AnnotationTypeService instance = new AnnotationTypeService();
+  private static final AnnotationTypeService instance = new AnnotationTypeService();
 
   private AnnotationTypeService() {}
 

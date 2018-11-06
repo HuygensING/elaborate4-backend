@@ -86,7 +86,7 @@ public class XmlUtil {
     // return Jsoup.clean(badxml, Whitelist.relaxed());
   }
 
-  static final Pattern ENDTAG_AFTER_NEWLINE_PATTERN = Pattern.compile("\n(</.*?>)"); // endtag at the beginning of line, should be at end of previouse line
+  private static final Pattern ENDTAG_AFTER_NEWLINE_PATTERN = Pattern.compile("\n(</.*?>)"); // endtag at the beginning of line, should be at end of previouse line
 
   public static String fixTagEndings(String body) {
     String newBody = body;

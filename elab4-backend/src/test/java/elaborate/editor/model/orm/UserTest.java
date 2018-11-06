@@ -32,7 +32,7 @@ import javax.persistence.EntityManager;
 
 import elaborate.editor.model.ModelFactory;
 
-public class UserTest extends StoredEntityTest {
+class UserTest extends StoredEntityTest {
 	// @Test
 	public void test2() {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();

@@ -31,7 +31,7 @@ import nl.knaw.huygens.facetedsearch.QueryComposer;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 
-public class SolrServerFactory {
+class SolrServerFactory {
 	private static SolrServerWrapper instance;
 
 	public static synchronized SolrServerWrapper getInstance() {

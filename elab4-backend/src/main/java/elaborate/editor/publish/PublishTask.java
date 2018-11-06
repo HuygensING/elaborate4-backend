@@ -83,7 +83,7 @@ public class PublishTask implements Runnable {
   private File jsonDir;
   private SolrServerWrapper solrServer;
 
-  Configuration config = Configuration.instance();
+  final Configuration config = Configuration.instance();
   private EntityManager entityManager;
   //	private Map<Integer, String> publishableAnnotationTypes;
   //	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
@@ -108,7 +108,7 @@ public class PublishTask implements Runnable {
     boolean projectIsMVN = ProjectTypes.MVN.equals(project.getMetadataMap().get(ProjectMetadataFields.TYPE));
     String url = "";
     try {
-      url = projectIsMVN ? createMVNDraft(project, ps) : createRegularDraft(project, ps);
+      url = projectIsMVN ? createMVNDraft(project) : createRegularDraft(project, ps);
       status.setUrl(url);
 
     } catch (Exception e) {
@@ -122,7 +122,7 @@ public class PublishTask implements Runnable {
     ps.setMetadata(projectId, PUBLICATION_URL, url, settings.getUser());
   }
 
-  private String createMVNDraft(Project project, ProjectService ps) {
+  private String createMVNDraft(Project project) {
     MVNConversionData data = MVNConverter.getConversionData(project.getId(), status);
     MVNConverter mvnConverter = new MVNConverter(project, data, status, baseURL);
     MVNConversionResult report = mvnConverter.convert();
@@ -168,7 +168,7 @@ public class PublishTask implements Runnable {
     final Map<Long, List<String>> thumbnails = Maps.newHashMap();
     final Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
     final String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
-    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[] {};
+    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[]{};
     for (final ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
         status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
@@ -352,6 +352,7 @@ public class PublishTask implements Runnable {
     map.put("baseURL", getBaseURL(project.getName()));
     map.put("annotationIndex", ANNOTATION_INDEX_JSON);
     map.put("multivaluedFacetIndex", calculateMultivaluedFacetIndex(entries));
+    map.put("facetDefaultOrder", facetDefaultOrder(project));
 
     addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
     addIfNotNull(map, "entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
@@ -370,6 +371,14 @@ public class PublishTask implements Runnable {
     return map;
   }
 
+  private Map<String, String> facetDefaultOrder(Project project) {
+    final Map<String, String> facetDefaultOrder = new HashMap<String, String>();
+    for (String f : settings.getFacetFields()) {
+      facetDefaultOrder.put(f, "az");
+    }
+    return facetDefaultOrder;
+  }
+
   private Map<String, Map<String, List<Long>>> calculateMultivaluedFacetIndex(List<EntryData> entries) {
     Map<String, ListMultimap<String, Long>> tmpindex = Maps.newHashMap();
     for (EntryData entryData : entries) {
@@ -377,7 +386,7 @@ public class PublishTask implements Runnable {
         String facetName = entry.getKey();
         String facetValue = entry.getValue();
         if (!tmpindex.containsKey(facetName)) {
-          tmpindex.put(facetName, ArrayListMultimap.<String, Long> create());
+          tmpindex.put(facetName, ArrayListMultimap.<String, Long>create());
         }
         tmpindex.get(facetName).put(facetValue, entryData.entryId);
       }
@@ -392,7 +401,7 @@ public class PublishTask implements Runnable {
   private void addIfNotNull(Map<String, Object> map, String key, String value) {
     if (value != null) {
       map.put(key, value);
-    } ;
+    }
   }
 
   // private Map<String, Object> getMetadata(Project project) {
@@ -464,7 +473,7 @@ public class PublishTask implements Runnable {
         }
         map.put(transcription.getTextLayer(), textlayerData);
       } catch (Exception e) {
-        Log.error("Error '{}' for transcription {}, body: '{}'", new Object[] { e.getMessage(), transcription.getId(), transcription.getBody() });
+        Log.error("Error '{}' for transcription {}, body: '{}'", e.getMessage(), transcription.getId(), transcription.getBody());
         e.printStackTrace();
       }
     }
@@ -494,10 +503,9 @@ public class PublishTask implements Runnable {
 
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
-    TextlayerData textlayerData = new TextlayerData()//
+    return new TextlayerData()//
         .setText(cleanupAfterWord(tw.getBody()))//
         .setAnnotations(getAnnotationData(tw.annotationNumbers));
-    return textlayerData;
   }
 
   private List<AnnotationPublishData> getAnnotationData(List<Integer> annotationNumbers) {
@@ -537,12 +545,11 @@ public class PublishTask implements Runnable {
 
   private AnnotationTypeData getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
     Map<String, Object> metadata = getMetadataMap(meta);
-    AnnotationTypeData annotationTypeData = new AnnotationTypeData()//
+    return new AnnotationTypeData()//
         .setId(annotationType.getId())//
         .setName(annotationType.getName())//
         .setDescription(annotationType.getDescription())//
         .setMetadata(metadata);
-    return annotationTypeData;
   }
 
   private Map<String, Object> getMetadataMap(Set<AnnotationMetadataItem> meta) {
@@ -750,7 +757,7 @@ public class PublishTask implements Runnable {
   }
 
   static class AnnotationIndexData {
-    private long entryId = 0l;
+    private long entryId = 0L;
     private String textLayer = "";
     private String annotatedText = "";
     private String annotationText = "";
@@ -972,6 +979,7 @@ public class PublishTask implements Runnable {
     }
 
   }
+
   private String cleanupAfterWord(String dirty) {
     return dirty.replaceAll("(?s)<!--.*?-->", "");
   }

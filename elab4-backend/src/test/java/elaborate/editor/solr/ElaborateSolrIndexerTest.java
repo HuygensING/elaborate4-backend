@@ -22,24 +22,22 @@ package elaborate.editor.solr;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.solr.common.SolrInputDocument;
-import org.assertj.core.util.Lists;
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
-
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.SolrFields;
+import org.apache.solr.common.SolrInputDocument;
+import org.assertj.core.util.Lists;
+import org.junit.Test;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ElaborateSolrIndexerTest extends AbstractTest {
 
@@ -60,15 +58,15 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 	// }
 
 	@Test
-	public void test_newlines_in_entry_metadata_are_replaced() throws Exception {
+	public void test_newlines_in_entry_metadata_are_replaced() {
 		// Setup mock project
 		Project mockProject = mock(Project.class);
-		when(mockProject.getId()).thenReturn(2l);
+		when(mockProject.getId()).thenReturn(2L);
 		when(mockProject.getProjectEntryMetadataFieldnames()).thenReturn(ImmutableList.of("multiline"));
 
 		// Setup mock projectentry
 		ProjectEntry mockEntry = mock(ProjectEntry.class);
-		when(mockEntry.getId()).thenReturn(1l);
+		when(mockEntry.getId()).thenReturn(1L);
 		when(mockEntry.getName()).thenReturn("name");
 		when(mockEntry.getProject()).thenReturn(mockProject);
 		when(mockEntry.isPublishable()).thenReturn(true);
@@ -95,15 +93,15 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 	}
 
 	@Test
-	public void test_multivalued_metadata_is_split_into_multiple_fields() throws Exception {
+	public void test_multivalued_metadata_is_split_into_multiple_fields() {
 		// Setup mock project
 		Project mockProject = mock(Project.class);
-		when(mockProject.getId()).thenReturn(2l);
+		when(mockProject.getId()).thenReturn(2L);
 		when(mockProject.getProjectEntryMetadataFieldnames()).thenReturn(ImmutableList.of("Field 1", "MultiField 1"));
 
 		// Setup mock projectentry
 		ProjectEntry mockEntry = mock(ProjectEntry.class);
-		when(mockEntry.getId()).thenReturn(1l);
+		when(mockEntry.getId()).thenReturn(1L);
 		when(mockEntry.getName()).thenReturn("name");
 		when(mockEntry.getProject()).thenReturn(mockProject);
 		when(mockEntry.isPublishable()).thenReturn(true);
@@ -131,7 +129,7 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 	}
 
 	@Test
-	public void testConvert() throws Exception {
+	public void testConvert() {
 		String xml = "";
 		String expected = "";
 		String out = ElaborateSolrIndexer.convert(xml);
@@ -139,35 +137,35 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
 	}
 
 	@Test
-	public void testExtractCorrespondentsFromValueWithSlash() throws Exception {
+	public void testExtractCorrespondentsFromValueWithSlash() {
 		String value = "Boddaert, Elisabeth Carolina/Spengler, Constantia Gerharda Heije van";
 		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
 		assertThat(extractCorrespondents).containsExactly("Boddaert, Elisabeth Carolina", "Spengler, Constantia Gerharda Heije van");
 	}
 
 	@Test
-	public void testExtractCorrespondentsFromValueWithSlashAndHash() throws Exception {
+	public void testExtractCorrespondentsFromValueWithSlashAndHash() {
 		String value = "Groesbeek, Klaas/Nijhoff, Paulus#Scheltema & Holkema's Boekhandel, Uitgeverij";
 		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
 		assertThat(extractCorrespondents).containsExactly("Groesbeek, Klaas", "Nijhoff, Paulus");
 	}
 
 	@Test
-	public void testExtractCorrespondentsFromValueWithArrow() throws Exception {
+	public void testExtractCorrespondentsFromValueWithArrow() {
 		String value = "Alberdingk Thijm, Karel Joan Lodewijk-->Verwey, Albert";
 		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
 		assertThat(extractCorrespondents).containsExactly("Alberdingk Thijm, Karel Joan Lodewijk", "Verwey, Albert");
 	}
 
 	@Test
-	public void testExtractCorrespondentsFromValueWithSlashedAndArrow() throws Exception {
+	public void testExtractCorrespondentsFromValueWithSlashedAndArrow() {
 		String value = "Groesbeek, Klaas/Nijhoff, Paulus-->Verwey, Albert/Alberdingk Thijm, Karel Joan Lodewijk";
 		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
 		assertThat(extractCorrespondents).containsExactly("Groesbeek, Klaas", "Nijhoff, Paulus", "Verwey, Albert", "Alberdingk Thijm, Karel Joan Lodewijk");
 	}
 
 	@Test
-	public void testExtractCorrespondentsFromSingleValue() throws Exception {
+	public void testExtractCorrespondentsFromSingleValue() {
 		String value = "Aert, Louis";
 		List<String> extractCorrespondents = ElaborateSolrIndexer.extractCorrespondents(value);
 		assertThat(extractCorrespondents).containsExactly("Aert, Louis");

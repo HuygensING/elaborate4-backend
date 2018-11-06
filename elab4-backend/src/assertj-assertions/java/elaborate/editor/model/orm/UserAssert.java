@@ -165,7 +165,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
 	 * @throws AssertionError
 	 *           - if the actual User's id is not equal to the given one.
 	 */
-	public UserAssert hasId(long id) {
+	public void hasId(long id) {
 		// check that actual User we want to make assertions on is not null.
 		isNotNull();
 
@@ -179,8 +179,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 	/**
 	 * Verifies that the actual User's lastName is equal to the given one.
@@ -503,7 +502,7 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
 	 * @throws AssertionError
 	 *           - if the actual User's username is not equal to the given one.
 	 */
-	public UserAssert hasUsername(String username) {
+	public void hasUsername(String username) {
 		// check that actual User we want to make assertions on is not null.
 		isNotNull();
 
@@ -517,7 +516,6 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 }

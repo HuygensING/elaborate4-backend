@@ -30,7 +30,7 @@ import com.google.common.collect.Maps;
 
 public class Publisher {
 	private static Publisher instance;
-	final Map<String, PublishTask> taskIndex = Maps.newHashMap();
+	private final Map<String, PublishTask> taskIndex = Maps.newHashMap();
 
 	private Publisher() {}
 

@@ -42,10 +42,10 @@ import nl.knaw.huygens.solr.FacetType;
 
 public class SearchConfig {
   private static final String MULTIVALUED_PREFIX = "mv_";
-  List<String> facetFields = Lists.newArrayList();
-  Map<String, FacetInfo> facetInfoMap = Maps.newLinkedHashMap();
-  List<String> defaultSortOrder = Lists.newArrayList();
-  String baseURL;
+  private List<String> facetFields = Lists.newArrayList();
+  private Map<String, FacetInfo> facetInfoMap = Maps.newLinkedHashMap();
+  private List<String> defaultSortOrder = Lists.newArrayList();
+  private String baseURL;
   private final List<RangeField> rangeFields = Lists.newArrayList();
 
   public SearchConfig(Project project, List<String> metadataFieldsForFacets, Collection<String> multivaluedFacetNames) {
@@ -95,7 +95,7 @@ public class SearchConfig {
     return StringUtils.defaultIfEmpty(level, "");
   }
 
-  public List<RangeField> getRangeFields() {
+  private List<RangeField> getRangeFields() {
     return rangeFields;
   }
 

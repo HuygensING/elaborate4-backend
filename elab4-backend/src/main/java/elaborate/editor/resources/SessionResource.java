@@ -56,7 +56,8 @@ public class SessionResource extends AbstractElaborateResource {
 	UserService userService;
 
 	@Inject
-	SessionService sessionService;
+  private
+  SessionService sessionService;
 
 	@POST
 	@Path("login")

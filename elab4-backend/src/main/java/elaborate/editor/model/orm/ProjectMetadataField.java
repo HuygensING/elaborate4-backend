@@ -42,8 +42,8 @@ import elaborate.editor.model.AbstractTrackedEntity;
 public class ProjectMetadataField extends AbstractTrackedEntity<ProjectMetadataField> {
 	private static final long serialVersionUID = 1L;
 
-	String fieldName = "";
-	String valueOptions = "";
+	private String fieldName = "";
+	private String valueOptions = "";
 
 	public String getFieldName() {
 		return fieldName;

@@ -43,11 +43,11 @@ import com.google.common.collect.Lists;
 
 public class JAXUtils {
 	public static class API {
-		public String path;
-		public ImmutableList<String> requestTypes;
-		public ImmutableList<String> requestContentTypes;
-		public ImmutableList<String> responseContentTypes;
-		public String description;
+		public final String path;
+		public final ImmutableList<String> requestTypes;
+		public final ImmutableList<String> requestContentTypes;
+		public final ImmutableList<String> responseContentTypes;
+		public final String description;
 
 		public API(String path, ImmutableList<String> requestTypes, ImmutableList<String> requestContentTypes, ImmutableList<String> responseContentTypes, String desc) {
 			this.path = path;
@@ -74,7 +74,7 @@ public class JAXUtils {
 		String basePath = pathValueOf(cls);
 		if (!basePath.isEmpty()) {
 			for (Method method : cls.getMethods()) {
-				Builder<String> builder = ImmutableList.<String> builder();
+				Builder<String> builder = ImmutableList.builder();
 				if (method.isAnnotationPresent(GET.class)) {
 					builder.add(HttpMethod.GET);
 				}
@@ -105,23 +105,23 @@ public class JAXUtils {
 	 * Returns the path of the annotated element,
 	 * or an empty string if no annotation is present.
 	 */
-	static String pathValueOf(AnnotatedElement element) {
+	private static String pathValueOf(AnnotatedElement element) {
 		Path annotation = element.getAnnotation(Path.class);
 		String value = (annotation != null) ? annotation.value() : "";
 		return StringUtils.removeStart(value, "/");
 	}
 
-	static ImmutableList<String> requestContentTypesOf(Method method) {
+	private static ImmutableList<String> requestContentTypesOf(Method method) {
 		Consumes annotation = method.getAnnotation(Consumes.class);
 		return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String> of();
 	}
 
-	static ImmutableList<String> responseContentTypesOf(Method method) {
+	private static ImmutableList<String> responseContentTypesOf(Method method) {
 		Produces annotation = method.getAnnotation(Produces.class);
 		return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String> of();
 	}
 
-	static String descriptionOf(Method method) {
+	private static String descriptionOf(Method method) {
 		APIDesc annotation = method.getAnnotation(APIDesc.class);
 		return (annotation != null) ? annotation.value() : "";
 	}

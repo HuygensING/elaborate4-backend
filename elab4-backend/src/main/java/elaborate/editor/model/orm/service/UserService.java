@@ -57,7 +57,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Singleton
 public class UserService extends AbstractStoredEntityService<User> {
-	private static UserService instance = new UserService();
+	private static final UserService instance = new UserService();
 	private final Map<Long, String> tokenMap = Maps.newHashMap();
 
 	private UserService() {}
@@ -77,7 +77,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 	}
 
 	/* CRUD methods */
-	public User create(User user, User creator) {
+	public void create(User user, User creator) {
 		beginTransaction();
 
 		if (creator.getPermissionFor(user).canWrite()) {
@@ -92,9 +92,8 @@ public class UserService extends AbstractStoredEntityService<User> {
 			normalizeEmailAddress(user);
 			User create = super.create(user);
 			commitTransaction();
-			return create;
 
-		} else {
+    } else {
 			rollbackTransaction();
 			throw new UnauthorizedException("user " + creator.getUsername() + " is not authorized to create new users");
 		}
@@ -118,7 +117,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 		return user;
 	}
 
-	public User update(User user, User modifier) {
+	public void update(User user, User modifier) {
 		beginTransaction();
 		User updated;
 		try {
@@ -127,8 +126,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 		} finally {
 			commitTransaction();
 		}
-		return updated;
-	}
+  }
 
 	public void delete(long id, User modifier) {
 		beginTransaction();
@@ -141,7 +139,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 
 	/* */
 	public ImmutableMap<String, String> getSettings(long id) {
-		Builder<String, String> settings = ImmutableMap.<String, String> builder();
+		Builder<String, String> settings = ImmutableMap.builder();
 
 		openEntityManager();
 		User user;
@@ -294,9 +292,9 @@ public class UserService extends AbstractStoredEntityService<User> {
 		if (user == null) {
 			throw new BadRequestException("unknown e-mail address: " + emailAddress);
 		}
-		Long userId = user.getId();
+		long userId = user.getId();
 		String expectedToken = tokenMap.get(userId);
-		if (expectedToken == null || !passwordData.getToken().equals(expectedToken)) {
+		if (!passwordData.getToken().equals(expectedToken)) {
 			throw new BadRequestException("token and e-mail address don't match");
 		}
 
@@ -332,7 +330,7 @@ public class UserService extends AbstractStoredEntityService<User> {
 		updateLoginStatus(user, true);
 	}
 
-	public void updateLoginStatus(User user, boolean loggingOff) {
+	private void updateLoginStatus(User user, boolean loggingOff) {
 		beginTransaction();
 		user = super.read(user.getId());
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -23,7 +23,7 @@ package elaborate.editor.export.mvn;
  */
 
 
-public class MVNFolium {
+class MVNFolium {
 
   private String n = "";
   private String id = "";

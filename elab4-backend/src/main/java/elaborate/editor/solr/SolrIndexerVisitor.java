@@ -28,7 +28,7 @@ import nl.knaw.huygens.tei.ElementHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-public class SolrIndexerVisitor extends DelegatingVisitor<XmlContext> {
+class SolrIndexerVisitor extends DelegatingVisitor<XmlContext> {
 
 	public SolrIndexerVisitor() {
 		super(new XmlContext());

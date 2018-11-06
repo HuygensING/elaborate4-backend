@@ -50,7 +50,7 @@ import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.XmlContext;
 
-public class HtmlTeiConverter {
+class HtmlTeiConverter {
   private Document teiDocument;
   private final TeiConversionConfig config;
   private final EntityManager entityManager;
@@ -121,7 +121,7 @@ public class HtmlTeiConverter {
     return null;
   }
 
-  String convert2TEI(String xml, String transcriptionType) {
+  private String convert2TEI(String xml, String transcriptionType) {
     DelegatingVisitor<XmlContext> visitor = new TranscriptionVisitor(config, transcriptionType, entityManager);
 
     xml = xml.replace("<i></em></i>", "</em>")//

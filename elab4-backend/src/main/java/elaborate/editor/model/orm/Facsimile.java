@@ -44,12 +44,12 @@ public class Facsimile extends AbstractProjectEntryElement<Facsimile> {
 	public static final String THUMBNAIL_PREFIX = "t100_";
 	public static final String BROWSE_IMAGE_PREFIX = "t500_";
 
-	String name;
-	String filename;
-	String zoomableUrl;
+	private String name;
+	private String filename;
+	private String zoomableUrl;
 
-	String title;// not used
-	String thumbnailUrl;// not used
+	private String title;// not used
+	private String thumbnailUrl;// not used
 
 	public String getName() {
 		return name;

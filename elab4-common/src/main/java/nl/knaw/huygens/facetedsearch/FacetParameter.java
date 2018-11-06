@@ -33,8 +33,8 @@ public class FacetParameter {
 		and, or
 	}
 
-	String name = "";
-	List<String> values = Lists.newArrayList();
+	private String name = "";
+	private List<String> values = Lists.newArrayList();
 	private AndOr combineValuesWith = AndOr.or;
 
 	public String getName() {
@@ -46,7 +46,7 @@ public class FacetParameter {
 		return this;
 	}
 
-	public List<String> getValues() {
+	private List<String> getValues() {
 		return values;
 	}
 

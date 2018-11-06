@@ -22,8 +22,6 @@ package elaborate.publication.solr;
  * #L%
  */
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -87,7 +85,7 @@ public class SearchServiceTest {
 	}
 
 	@Test
-	public void testMetadataFieldTitlesAreReturned() throws Exception {
+	public void testMetadataFieldTitlesAreReturned() {
 		List<Map<String, Object>> results = Lists.newArrayList();
 		Map<String, Object> map = Maps.newHashMap();
 		map.put("metadata_field1", ImmutableList.of("value"));
@@ -110,7 +108,7 @@ public class SearchServiceTest {
 	}
 
 	@Test
-	public void testDeserializingRangeFieldListWorks() throws JsonParseException, JsonMappingException, IOException {
+	public void testDeserializingRangeFieldListWorks() throws IOException {
 		String json = "{\"rangeFields\": ["//
 				+ "{"//
 				+ " \"name\": \"metadata_datum\","//

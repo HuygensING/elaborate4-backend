@@ -37,8 +37,8 @@ import java.util.List;
 import java.util.Set;
 
 public class AnnotatedTextRange {
-  public Multimap<Integer, Element> elementStartIndex = LinkedHashMultimap.create();
-  public Multimap<Integer, Element> elementEndIndex = LinkedHashMultimap.create();
+  public final Multimap<Integer, Element> elementStartIndex = LinkedHashMultimap.create();
+  public final Multimap<Integer, Element> elementEndIndex = LinkedHashMultimap.create();
   private Set<RangeAnnotation> rangeAnnotations = Sets.newLinkedHashSet();
   private String text;
 

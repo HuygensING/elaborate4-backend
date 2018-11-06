@@ -36,7 +36,7 @@ import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
-public class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
+class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
   private static final String TAG_SUP = "sup";
   private static final String TAG_SPAN = "span";
   private static final String ATTR_DATA_MARKER = "data-marker";

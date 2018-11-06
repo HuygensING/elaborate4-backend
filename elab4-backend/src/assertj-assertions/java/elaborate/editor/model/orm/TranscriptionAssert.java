@@ -115,7 +115,7 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 	 * @throws AssertionError
 	 *           - if the actual Transcription's body is not equal to the given one.
 	 */
-	public TranscriptionAssert hasBody(String body) {
+	public void hasBody(String body) {
 		// check that actual Transcription we want to make assertions on is not null.
 		isNotNull();
 
@@ -129,8 +129,7 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 	/**
 	 * Verifies that the actual Transcription's createdOn is equal to the given one.

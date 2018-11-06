@@ -87,7 +87,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   private static final String PROJECT_LEADER = "Project leader";
   private static final String COUNT_KEY = "count";
   private static final List<String> DEFAULT_PROJECTENTRYMETADATAFIELDNAMES = Lists.newArrayList();
-  private static ProjectService instance = new ProjectService();
+  private static final ProjectService instance = new ProjectService();
 
   private ProjectService() {}
 
@@ -277,9 +277,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
             ProjectEntry.class)//
         .setParameter("projectId", id)//
         .getResultList();
-    ImmutableList<ProjectEntry> projectEntries = ImmutableList.copyOf(resultList);
 
-    return projectEntries;
+    return ImmutableList.copyOf(resultList);
   }
 
   public List<ProjectEntry> getProjectEntriesInOrder(long id) {
@@ -312,9 +311,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .setParameter("level3", project.getLevel3())//
         .setParameter("projectId", id)//
         .getResultList();
-    ImmutableList<Long> projectEntryIds = ImmutableList.copyOf(resultList);
 
-    return projectEntryIds;
+    return ImmutableList.copyOf(resultList);
   }
 
   public ProjectEntry createProjectEntry(long id, ProjectEntry projectEntry, User user) {
@@ -579,14 +577,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   }
 
   private Long getTranscriptionCount(long project_id, EntityManager entityManager) {
-    Long transcriptionCount = (Long) entityManager//
+    return (Long) entityManager//
         .createQuery("select count(*) from Transcription"//
             + " where project_entry_id in"//
             + " (select id from ProjectEntry where project_id=:project_id)"//
     )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
-    return transcriptionCount;
   }
 
   // private Long getAnnotationCount(long project_id, EntityManager entityManager) {
@@ -603,14 +600,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   // }
 
   private Long getFacsimileCount(long project_id, EntityManager entityManager) {
-    Long facsimileCount = (Long) entityManager//
+    return (Long) entityManager//
         .createQuery("select count(*) from"//
             + " Facsimile where project_entry_id in"//
             + " (select id from ProjectEntry where project_id=:project_id)"//
     )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
-    return facsimileCount;
   }
 
   private Map<String, Object> getTextLayerCountMap(long project_id, EntityManager entityManager, Project project) {
@@ -650,13 +646,12 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   }
 
   private Long getEntriesCount(long project_id, EntityManager entityManager) {
-    Long entriesCount = (Long) entityManager//
+    return (Long) entityManager//
         .createQuery("select count(*) from ProjectEntry"//
             + " where project_id=:project_id"//
     )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
-    return entriesCount;
   }
 
   public List<FacetInfo> getFacetInfo(long project_id, User user) {
@@ -676,18 +671,16 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     Set<Long> modifiedEntryIds = Sets.newHashSet();
     try {
       Project project = getProjectIfUserCanRead(project_id, user);
-      List<String> previous = Lists.newArrayList(project.getTextLayers());
-      List<String> deletedTextLayers = previous;
-      deletedTextLayers.removeAll(textLayers);
+      ((List<String>) Lists.newArrayList(project.getTextLayers())).removeAll(textLayers);
       project.setTextLayers(textLayers);
 
       persist(project);
       persist(project.addLogEntry("project textlayers changed", user));
       setModifiedBy(project, user);
 
-      if (!deletedTextLayers.isEmpty()) {
-        persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(deletedTextLayers), user));
-        for (String textlayer : deletedTextLayers) {
+      if (!((List<String>) Lists.newArrayList(project.getTextLayers())).isEmpty()) {
+        persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(Lists.newArrayList(project.getTextLayers())), user));
+        for (String textlayer : Lists.newArrayList(project.getTextLayers())) {
           List<?> resultList = getEntityManager()//
               .createQuery("select e.id, t.id from ProjectEntry e join e.transcriptions as t with t.text_layer=:textlayer where e.project=:project")//
               .setParameter("project", project)//
@@ -718,7 +711,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   }
 
   public void setProjectSettings(long project_id, Map<String, String> settingsMap, User user) {
-    Long userId = -1l;
+    long userId = -1L;
     beginTransaction();
     try {
 
@@ -741,7 +734,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         } else if (PROJECT_NAME.equals(key)) {
           project.setName(value);
         } else if (PROJECT_LEADER.equals(key)) {
-          userId = Long.valueOf(value);
+          userId = Long.parseLong(value);
           project.setProjectLeaderId(userId);
         }
         persist(pmi);
@@ -882,14 +875,19 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
     if (!canPublish) {
       throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
-    };
+    }
 
+    Publication.Settings settings = getSettings(project_id, user, projectMetadata);
+    return publisher.publish(settings);
+  }
+
+  Publication.Settings getSettings(long project_id, User user, Map<String, String> projectMetadata) {
     String projectType = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.TYPE), ProjectTypes.COLLECTION);
     List<Long> publishableAnnotationTypeIds = getPublishableAnnotationTypeIds(projectMetadata);
     List<String> publishableProjectEntryMetadataFields = getPublishableProjectEntryMetadataFields(projectMetadata);
     List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(projectMetadata);
     List<String> publishableTextLayers = getPublishableTextLayers(projectMetadata);
-    Publication.Settings settings = new Publication.Settings()//
+    return new Publication.Settings()//
         .setProjectId(project_id)//
         .setUser(user)//
         .setTextLayers(publishableTextLayers)//
@@ -897,9 +895,6 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .setProjectEntryMetadataFields(publishableProjectEntryMetadataFields)//
         .setFacetFields(facetableProjectEntryMetadataFields)//
         .setProjectType(projectType);
-    Publication.Status publicationStatus = publisher.publish(settings);
-
-    return publicationStatus;
   }
 
   private List<String> getPublishableTextLayers(Map<String, String> projectMetadata) {
@@ -1095,8 +1090,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       closeEntityManager();
     }
 
-    ReindexStatus status = new ReindexStatus();
-    return status;
+    return new ReindexStatus();
   }
 
   /**

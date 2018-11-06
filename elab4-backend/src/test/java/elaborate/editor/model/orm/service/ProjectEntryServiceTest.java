@@ -33,20 +33,20 @@ import elaborate.editor.AbstractTest;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
 
-public class ProjectEntryServiceTest extends AbstractTest {
+class ProjectEntryServiceTest extends AbstractTest {
 
 	private ProjectEntryService projectEntryService;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		projectEntryService = ProjectEntryService.instance();
 	}
 
 	@After
-	public void tearDown() throws Exception {}
+	public void tearDown() {}
 
 	// @Test
-	public void testRead() throws Exception {
+	public void testRead() {
 		User user = mock(User.class);
 		when(user.getId()).thenReturn((long) 1);
 		ProjectEntry pe = projectEntryService.read(1, user);

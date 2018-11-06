@@ -50,8 +50,8 @@ public class SessionService {
 	private static final int MINUTES = 1000 * 60;
 	static final int SESSION_TIMEOUT = 8 * 60 * MINUTES;
 	private static final int SESSIONID_SIZE = 20;
-	Map<String, Session> sessionMap = Maps.newHashMap();
-	UserService userService = UserService.instance();
+	final Map<String, Session> sessionMap = Maps.newHashMap();
+	final UserService userService = UserService.instance();
 
 	private SessionService() {}
 
@@ -135,8 +135,7 @@ public class SessionService {
 			sessionMap.put(sessionId, session);
 		}
 		long userId = session.getUserId();
-		User user = userService.read(userId);
-		return user;
+    return userService.read(userId);
 	}
 
 	private static final Comparator<SessionUserInfo> ON_LAST_ACCESSED = new Comparator<SessionUserInfo>() {

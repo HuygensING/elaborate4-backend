@@ -42,7 +42,7 @@ public abstract class AbstractProjectEntity<T extends AbstractProjectEntity<T>> 
 	@JoinColumn(name = "project_id", columnDefinition = "int4")
 	private Project project;
 
-	public AbstractProjectEntity() {
+	protected AbstractProjectEntity() {
 		super();
 	}
 

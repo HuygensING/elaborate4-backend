@@ -29,7 +29,7 @@ import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
 
 public class ExtendedProjectEntry {
-	ProjectEntry projectEntry;
+	private ProjectEntry projectEntry;
 	private String l1;
 	private String l2;
 	private String l3;

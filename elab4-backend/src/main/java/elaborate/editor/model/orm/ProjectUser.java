@@ -44,7 +44,8 @@ public class ProjectUser implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "serial")
-	long id;
+  private
+  long id;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", columnDefinition = "int4")

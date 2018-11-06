@@ -22,6 +22,13 @@ package elaborate.util;
  * #L%
  */
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import org.apache.commons.io.output.NullWriter;
+import org.apache.commons.lang.StringUtils;
+import org.w3c.tidy.Tidy;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -33,17 +40,9 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.output.NullWriter;
-import org.apache.commons.lang.StringUtils;
-import org.w3c.tidy.Tidy;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-
 public class StringUtil {
 	private static final String UTF8 = "UTF8";
-	static Tidy TIDY = new Tidy();
+	static final Tidy TIDY = new Tidy();
 
 	static {
 		TIDY.setAltText("");
@@ -125,7 +124,7 @@ public class StringUtil {
 		return replaced.toString();
 	}
 
-	static List<String> hostProtocols = Lists.newArrayList(new String[] { "http", "https" });
+	static final List<String> hostProtocols = Lists.newArrayList("http", "https");
 
 	/**
 	 * change ULRs in <code>textWithURLs</code> to links
@@ -152,7 +151,7 @@ public class StringUtil {
 				if (hostProtocols.contains(protocol)) {
 					linktext = url.getHost() + linktext;
 				}
-				replaced.append("<a target=\"_blank\" href=\"" + url + "\">" + linktext + "</a>");
+				replaced.append("<a target=\"_blank\" href=\"").append(url).append("\">").append(linktext).append("</a>");
 			} catch (MalformedURLException e) {
 				replaced.append(token);
 			}
@@ -196,7 +195,7 @@ public class StringUtil {
 		return string.replaceAll("\"", "\\\\\"").replaceAll("'", "\\\\'");
 	}
 
-	static List<String> XML_ENTITIES = Lists.newArrayList("quot", "amp", "apos", "lt", "gt");
+	static final List<String> XML_ENTITIES = Lists.newArrayList("quot", "amp", "apos", "lt", "gt");
 
 	public static String fixXML(String brokenxml) {
 		String fixedXml = brokenxml.replaceAll("&", "&amp;");

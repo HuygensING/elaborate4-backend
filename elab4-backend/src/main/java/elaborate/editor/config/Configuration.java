@@ -52,7 +52,7 @@ public class Configuration {
   private static Map<String, String> messages;
   private static Map<String, String> renditions;
 
-  private static Configuration instance = new Configuration();
+  private static final Configuration instance = new Configuration();
   private static XMLConfiguration xmlConfig = instance.load(createConfigReader());
 
   private Configuration() {}
@@ -61,7 +61,7 @@ public class Configuration {
     return instance;
   }
 
-  public static void fatalError(String message) {
+  private static void fatalError(String message) {
     System.err.printf("## %s\n", message);
     // System.exit(-1);
     throw new RuntimeException(message);
@@ -71,7 +71,7 @@ public class Configuration {
     xmlConfig = load(createConfigReader());
   }
 
-  public XMLConfiguration load(Reader reader) {
+  private XMLConfiguration load(Reader reader) {
     try {
       messages = Maps.newTreeMap();
       AbstractConfiguration.setDefaultListDelimiter(',');
@@ -168,7 +168,7 @@ public class Configuration {
     return Joiner.on(xmlConfig.getListDelimiter()).join(xmlConfig.getStringArray(SETTINGS_PREFIX + key));
   }
 
-  public String[] getSettings(String key) {
+  private String[] getSettings(String key) {
     // Log.info("'{}'", xmlConfig.getListDelimiter());
     // Log.info("'{}'", AbstractConfiguration.getDefaultListDelimiter());
     return xmlConfig.getStringArray(SETTINGS_PREFIX + key);
@@ -215,7 +215,7 @@ public class Configuration {
 
   // ---------------------------------------------------------------------------
 
-  public static final String APPLICATION_MODE_KEY = "application.mode";
+  private static final String APPLICATION_MODE_KEY = "application.mode";
   public static final String SOLR_URL_KEY = "solr.url";
   public static final String ROOT_PATH = "rootpath";
   public static final String PROJECT_FILES_BASEDIR = "";

@@ -58,7 +58,7 @@ public class AnnotationTypeMetadataItem extends AbstractStoredEntity<AnnotationT
 		return this;
 	}
 
-	public String getDescription() {
+	private String getDescription() {
 		return description;
 	}
 

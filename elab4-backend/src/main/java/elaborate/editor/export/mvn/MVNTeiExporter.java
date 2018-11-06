@@ -95,6 +95,7 @@ public class MVNTeiExporter {
       .add(new LettersHandler(MVNAnnotationType.LETTERS))//
       .add(new InitiaalHandler(MVNAnnotationType.INITIAAL))//
       .add(new KolomHandler(MVNAnnotationType.KOLOM))//
+      .add(new VersregelHandler(MVNAnnotationType.VERSREGEL))//
       .build();
 
   // opening annotations
@@ -193,6 +194,9 @@ public class MVNTeiExporter {
       for (XmlAnnotation xmlAnnotation : xmlAnnotations) {
         Map<String, String> attributes = xmlAnnotation.getAttributes();
         teiBuilder.append(NL);
+        if (context.inPoetry) {
+          teiBuilder.append(closingTag("lg"));
+        }
         if (context.parseresult.isTextGroup(attributes.get("n"))) {
           teiBuilder.append(closingTag("group"));
 
@@ -221,20 +225,23 @@ public class MVNTeiExporter {
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty()) {
+        context.inParagraph = false;
+        context.inPoetry = true;
         openLineGroup(teiBuilder, context);
       }
+      super.onOpenAnnotation(teiBuilder, xmlAnnotations, context);
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty() && context.inPoetry) {
-        context.inPoetry = false;
         teiBuilder.append(closingTag(LG));
+        context.inPoetry = false;
       }
+      super.onCloseAnnotation(teiBuilder, xmlAnnotations, context);
     }
 
     private static void openLineGroup(StringBuilder teiBuilder, Context context) {
-      context.inPoetry = true;
       teiBuilder.append(openingTag(LG));
     }
 
@@ -248,18 +255,19 @@ public class MVNTeiExporter {
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       if (!xmlAnnotations.isEmpty()) {
+        context.inPoetry = false;
         context.inParagraph = true;
       }
       super.onOpenAnnotation(teiBuilder, xmlAnnotations, context);
     }
 
-    @Override
-    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      if (!xmlAnnotations.isEmpty()) {
-        context.inParagraph = false;
-      }
-      super.onCloseAnnotation(teiBuilder, xmlAnnotations, context);
-    }
+    //    @Override
+    //    public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
+    //      if (!xmlAnnotations.isEmpty()) {
+    //        context.inParagraph = false;
+    //      }
+    //      super.onCloseAnnotation(teiBuilder, xmlAnnotations, context);
+    //    }
   }
 
   private static class EntryHandler extends DefaultAnnotationHandler {
@@ -295,14 +303,18 @@ public class MVNTeiExporter {
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      context.inOpener = true;
-      openHeadOrCloser(teiBuilder, xmlAnnotations, HEAD, context);
+      if (!xmlAnnotations.isEmpty()) {
+        context.inOpener = true;
+        openHeadOrCloser(teiBuilder, xmlAnnotations, HEAD, context);
+      }
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      closeHeadOrCloser(teiBuilder, xmlAnnotations, HEAD, context);
-      context.inCloser = false;
+      if (!xmlAnnotations.isEmpty()) {
+        closeHeadOrCloser(teiBuilder, xmlAnnotations, HEAD, context);
+        context.inOpener = false;
+      }
     }
   }
 
@@ -315,18 +327,23 @@ public class MVNTeiExporter {
 
     @Override
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      context.inCloser = true;
-      openHeadOrCloser(teiBuilder, xmlAnnotations, CLOSER, context);
+      if (!xmlAnnotations.isEmpty()) {
+        context.inCloser = true;
+        openHeadOrCloser(teiBuilder, xmlAnnotations, CLOSER, context);
+      }
     }
 
     @Override
     public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
-      closeHeadOrCloser(teiBuilder, xmlAnnotations, CLOSER, context);
-      context.inCloser = false;
+      if (!xmlAnnotations.isEmpty()) {
+        closeHeadOrCloser(teiBuilder, xmlAnnotations, CLOSER, context);
+        context.inCloser = false;
+      }
     }
   }
 
   private static void openHeadOrCloser(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, String name, Context context) {
+    context.inPoetry = false;
     Element head = new Element(name);
     for (int i = 0; i < xmlAnnotations.size(); i++) {
       teiBuilder.append(openingTag(head));
@@ -350,6 +367,30 @@ public class MVNTeiExporter {
     public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
       for (int i = 0; i < xmlAnnotations.size(); i++) {
         teiBuilder.append(milestoneTag("lb"));
+      }
+    }
+  }
+
+  private static class VersregelHandler extends DefaultAnnotationHandler {
+    public VersregelHandler(Object... tagObjects) {
+      super(tagObjects);
+    }
+
+    @Override
+    public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {
+      if (!xmlAnnotations.isEmpty()) {
+        if (!context.inPoetry) {
+          context.addError(MVNAnnotationType.VERSREGEL, "versregel annotatie buiten een mvn:poetry sectie");
+
+        } else {
+          teiBuilder.append(closingTag("l"));
+          context.incrementTextLineNumber();
+          String lId = context.textId + "-l-" + context.textLineNumber;
+          Element l = new Element("l")//
+              .withAttribute("n", String.valueOf(context.textLineNumber))//
+              .withAttribute(XML_ID, lId);
+          teiBuilder.append(openingTag(l));
+        }
       }
     }
   }
@@ -595,9 +636,9 @@ public class MVNTeiExporter {
         String body = xmlAnnotation.getAttributes().get("body");
         if (body != null) {
           String capitalsize = body.trim();
-          Integer size = 0;
+          int size = 0;
           if (StringUtils.isNumeric(capitalsize)) {
-            size = Integer.valueOf(capitalsize);
+            size = Integer.parseInt(capitalsize);
             if (size < 1 || size > 19) {
               addValidationError(body, context);
             }
@@ -655,7 +696,7 @@ public class MVNTeiExporter {
   //
 
   private Multimap<String, XmlAnnotation> indexXmlAnnotations(Collection<XmlAnnotation> annotations) {
-    Multimap<String, XmlAnnotation> index = ArrayListMultimap.<String, XmlAnnotation> create();
+    Multimap<String, XmlAnnotation> index = ArrayListMultimap.create();
     for (XmlAnnotation xmlAnnotation : annotations) {
       index.put(xmlAnnotation.getName(), xmlAnnotation);
     }

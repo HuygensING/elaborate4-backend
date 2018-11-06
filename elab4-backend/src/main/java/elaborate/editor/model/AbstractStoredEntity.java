@@ -46,10 +46,11 @@ public abstract class AbstractStoredEntity<T extends AbstractStoredEntity<T>> im
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "serial")
-	long id;
+  private
+  long id;
 
 	// @Version
-	long rev = 0;
+  private long rev = 0;
 
 	@JsonView({ Views.IdOnly.class })
 	public long getId() {

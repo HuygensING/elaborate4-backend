@@ -61,13 +61,13 @@ public enum MVNAnnotationType {
 
   private enum AnnotatedTextUsage {
     use, ignore
-  };
+  }
 
   private final String name;
   private final AnnotatedTextUsage ignoreText;
   private final static Set<String> allNames = Sets.newHashSet();
 
-  private MVNAnnotationType(final String name, final AnnotatedTextUsage ignoreText) {
+  MVNAnnotationType(final String name, final AnnotatedTextUsage ignoreText) {
     this.name = name;
     this.ignoreText = ignoreText;
   }

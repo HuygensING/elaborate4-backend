@@ -64,15 +64,13 @@ public interface SolrServerWrapper {
 	/**
 	 * Adds a document to the index, replacing a previously added document
 	 * with the same unique id.
-	 * @param doc the document to add.
+	 * @param docs the document to add.
 	 * @throws IndexException if an error occurs.
 	 */
 	void add(Collection<SolrInputDocument> docs) throws IndexException;
 
 	/**
-	 * @param query
-	 * @param sort
-	 * @param ascending
+	 * @param facetedSearchParameters
 	 * @return
 	 * @throws IndexException
 	 */

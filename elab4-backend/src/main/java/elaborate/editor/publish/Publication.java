@@ -59,7 +59,7 @@ public class Publication {
     }
 
     public boolean includeAnnotationType(AnnotationType annotationType) {
-      return getAnnotationTypeIds().isEmpty() ? true : getAnnotationTypeIds().contains(annotationType.getId());
+      return getAnnotationTypeIds().isEmpty() || getAnnotationTypeIds().contains(annotationType.getId());
     }
 
     public List<String> getProjectEntryMetadataFields() {

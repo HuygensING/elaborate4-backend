@@ -57,8 +57,8 @@ import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 @Path("search")
 public class SearchResource {
 	private static final String SEARCH_PATH_TEMPLATE = "/search/{0,number,#}";
-	static final String KEY_NEXT = "_next";
-	static final String KEY_PREV = "_prev";
+	private static final String KEY_NEXT = "_next";
+	private static final String KEY_PREV = "_prev";
 
 	@Context
 	SearchService searchService;
@@ -73,8 +73,7 @@ public class SearchResource {
 				.setTextLayers(ImmutableList.of("Diplomatic"));
 		searchService.setSolrDir(getSolrDir());
 		SearchData search = searchService.createSearch(elaborateSearchParameters);
-		Map<String, Object> searchResult = searchService.getSearchResult(search.getId(), 0, 1000);
-		return searchResult;
+    return searchService.getSearchResult(search.getId(), 0, 1000);
 	}
 
 	private String getSolrDir() {
@@ -121,7 +120,7 @@ public class SearchResource {
 		return builder.build();
 	}
 
-	void addPrevNextURIs(Map<String, Object> searchResult, long searchId, int start, int rows) {
+	private void addPrevNextURIs(Map<String, Object> searchResult, long searchId, int start, int rows) {
 		int prevStart = Math.max(0, start - rows);
 		Log.info("prevStart={}", prevStart);
 		String path = MessageFormat.format(SEARCH_PATH_TEMPLATE, searchId);
@@ -146,7 +145,7 @@ public class SearchResource {
 		searchResult.put(key, builder.build().toString());
 	}
 
-	protected URI createURI(SearchData e) {
+	private URI createURI(SearchData e) {
 		URI uri;
 		try {
 			uri = new URI(String.valueOf(e.getId()));

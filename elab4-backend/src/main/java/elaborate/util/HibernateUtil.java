@@ -28,7 +28,7 @@ import javax.persistence.EntityManagerFactory;
 import elaborate.editor.model.ModelFactory;
 
 public class HibernateUtil {
-	final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
+	private final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
 
 	public static EntityManager beginTransaction() {
 		EntityManager entityManager = getEntityManager();
@@ -41,7 +41,7 @@ public class HibernateUtil {
 		endTransaction(entityManager);
 	}
 
-	public static void endTransaction(EntityManager entityManager) {
+	private static void endTransaction(EntityManager entityManager) {
 		entityManager.close();
 	}
 

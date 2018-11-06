@@ -29,12 +29,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-public class TextAnnotation {
+class TextAnnotation {
   private final String name;
   private final Map<String, String> attributes;
   private final int depth;
 
-  public TextAnnotation(String name, Map<String, String> attributes, int depth) {
+  TextAnnotation(String name, Map<String, String> attributes, int depth) {
     this.name = name;
     this.attributes = attributes;
     this.depth = depth;
@@ -48,7 +48,7 @@ public class TextAnnotation {
     return attributes;
   }
 
-  public Integer getDepth() {
+  Integer getDepth() {
     return depth;
   }
 

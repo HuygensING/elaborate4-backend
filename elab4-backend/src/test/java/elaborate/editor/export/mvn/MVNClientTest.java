@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.sun.jersey.api.client.ClientResponse;
 
-public class MVNClientTest {
+class MVNClientTest {
 
   //  @Test
   public void testMVNClient() {

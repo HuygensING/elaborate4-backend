@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
 
 import nl.knaw.huygens.Log;
 
-public class WarMaker {
+class WarMaker {
   private final String basename;
   private final File sourceDir;
   private final File destinationDir;
@@ -90,7 +90,7 @@ public class WarMaker {
    * @param node
    *          file or directory
    */
-  public void addToFileList(File node) {
+  private void addToFileList(File node) {
     if (node.isFile()) {
       fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
 
@@ -110,6 +110,6 @@ public class WarMaker {
    * @return Formatted file path
    */
   private String generateZipEntry(String file) {
-    return file.substring(sourceDir.getAbsolutePath().length() + 1, file.length());
+    return file.substring(sourceDir.getAbsolutePath().length() + 1);
   }
 }

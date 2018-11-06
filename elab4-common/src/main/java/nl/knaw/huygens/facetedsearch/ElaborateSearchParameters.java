@@ -54,7 +54,7 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 		return textLayers;
 	}
 
-	public ElaborateSearchParameters setLevelFields(String level1, String level2, String level3) {
+	public void setLevelFields(String level1, String level2, String level3) {
 		if (StringUtils.isNotBlank(level1)) {
 			this.level1Field = SolrUtils.facetName(level1);
 		}
@@ -64,8 +64,7 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 		if (StringUtils.isNotBlank(level1)) {
 			this.level3Field = SolrUtils.facetName(level3);
 		}
-		return this;
-	}
+  }
 
 	public ElaborateSearchParameters setSearchInTranscriptions(boolean searchInTranscriptions) {
 		this.searchInTranscriptions = searchInTranscriptions;
@@ -81,7 +80,7 @@ public class ElaborateSearchParameters extends FacetedSearchParameters<Elaborate
 		return this;
 	}
 
-	public boolean getSearchInAnnotations() {
+	private boolean getSearchInAnnotations() {
 		return searchInAnnotations;
 	}
 

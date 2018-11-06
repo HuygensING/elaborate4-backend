@@ -32,7 +32,7 @@ import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
-public class LoggingResourceFilter implements ResourceFilter, ContainerRequestFilter, ContainerResponseFilter {
+class LoggingResourceFilter implements ResourceFilter, ContainerRequestFilter, ContainerResponseFilter {
 	// private final StopWatch sw = new StopWatch();
 
 	@Override

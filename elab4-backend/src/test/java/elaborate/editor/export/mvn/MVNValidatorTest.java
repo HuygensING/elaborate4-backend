@@ -22,22 +22,21 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
-import static org.assertj.core.api.Assertions.assertThat;
+import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
+import nl.knaw.huygens.Log;
+import org.apache.commons.io.FileUtils;
+import org.glassfish.grizzly.utils.Charsets;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Test;
-
-import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
-import nl.knaw.huygens.Log;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MVNValidatorTest {
   @Test
   public void testValidation() throws IOException {
-    String tei = FileUtils.readFileToString(new File("src/test/resources/validatortest.xml"));
+    String tei = FileUtils.readFileToString(new File("src/test/resources/validatortest.xml"), Charsets.UTF8_CHARSET);
     ValidationResult result = MVNValidator.validateTEI(tei);
     Log.info("result={}", result);
     assertThat(result.isValid()).isTrue();

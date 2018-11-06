@@ -28,7 +28,7 @@ import org.apache.solr.core.CoreContainer;
 
 public class LocalSolrServer extends AbstractSolrServer {
 
-	public static final String SOLR_DIRECTORY = "solr";
+	private static final String SOLR_DIRECTORY = "solr";
 	//	public static final String SOLR_CONFIG_FILE = "solrconfig.xml";
 
 	private final String solrDir;

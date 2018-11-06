@@ -46,27 +46,27 @@ public class ElaborateSecurityContextTest {
 	}
 
 	@Test
-	public void testGetUser() throws Exception {
+	public void testGetUser() {
 		assertThat(elaborateSecurityContext.getUser()).isEqualTo(user);
 	}
 
 	@Test
-	public void testGetUserPrincipal() throws Exception {
+	public void testGetUserPrincipal() {
 		assertThat(elaborateSecurityContext.getUserPrincipal().getName()).isEqualTo(user.getUsername());
 	}
 
 	@Test
-	public void testIsUserInRole() throws Exception {
+	public void testIsUserInRole() {
 		assertThat(elaborateSecurityContext.isUserInRole(ElaborateRoles.ADMIN)).isTrue();
 	}
 
 	@Test
-	public void testGetAuthenticationScheme() throws Exception {
+	public void testGetAuthenticationScheme() {
 		assertThat(elaborateSecurityContext.getAuthenticationScheme()).isEqualTo("SimpleAuth");
 	}
 
 	@Test
-	public void testIsSecure() throws Exception {
+	public void testIsSecure() {
 		assertThat(elaborateSecurityContext.isSecure()).isFalse();
 	}
 

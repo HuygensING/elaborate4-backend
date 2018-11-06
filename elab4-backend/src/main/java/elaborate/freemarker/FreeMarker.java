@@ -63,11 +63,11 @@ public class FreeMarker {
 		}
 	}
 
-	public static String templateToFile(String fmTemplate, File file, Object fmRootMap, Class<?> clazz) {
+	public static void templateToFile(String fmTemplate, File file, Object fmRootMap, Class<?> clazz) {
 		try {
 			FileWriter out = new FileWriter(file);
-			return processTemplate(fmTemplate, fmRootMap, clazz, out);
-		} catch (IOException e) {
+      processTemplate(fmTemplate, fmRootMap, clazz, out);
+    } catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}

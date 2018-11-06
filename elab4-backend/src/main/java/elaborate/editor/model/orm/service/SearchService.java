@@ -46,7 +46,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
 @Singleton
 public class SearchService extends AbstractStoredEntityService<StorableSearchData> {
 	private static final SearchService instance = new SearchService();
-	ProjectService projectService = ProjectService.instance();
+	final ProjectService projectService = ProjectService.instance();
 
 	private SearchService() {}
 

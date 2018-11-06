@@ -22,7 +22,7 @@ package elaborate.editor.config;
  * #L%
  */
 
-public class ConfigLocation {
+class ConfigLocation {
 	private static String CONFIG_XML;
 	private static final String DEFAULT = "default";
 	private static final String FILENAME = "config.xml";
@@ -39,7 +39,7 @@ public class ConfigLocation {
 		}
 	}
 
-	public static String createInstance(String instance) throws IllegalStateException {
+	private static String createInstance(String instance) throws IllegalStateException {
 		if (CONFIG_XML == null) {
 			CONFIG_XML = FILENAME;
 		} else {

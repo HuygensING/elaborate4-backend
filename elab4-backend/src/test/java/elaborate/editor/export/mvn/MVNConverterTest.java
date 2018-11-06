@@ -22,53 +22,24 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import static elaborate.editor.export.mvn.MVNAnnotationType.AFKORTING;
-import static elaborate.editor.export.mvn.MVNAnnotationType.ALINEA;
-import static elaborate.editor.export.mvn.MVNAnnotationType.CIJFERS;
-import static elaborate.editor.export.mvn.MVNAnnotationType.DEFECT;
-import static elaborate.editor.export.mvn.MVNAnnotationType.DOORHALING;
-import static elaborate.editor.export.mvn.MVNAnnotationType.GEBRUIKERSNOTITIE;
-import static elaborate.editor.export.mvn.MVNAnnotationType.INCIPIT;
-import static elaborate.editor.export.mvn.MVNAnnotationType.INITIAAL;
-import static elaborate.editor.export.mvn.MVNAnnotationType.INSPRINGEN;
-import static elaborate.editor.export.mvn.MVNAnnotationType.KOLOM;
-import static elaborate.editor.export.mvn.MVNAnnotationType.LETTERS;
-import static elaborate.editor.export.mvn.MVNAnnotationType.LINKERMARGEKOLOM;
-import static elaborate.editor.export.mvn.MVNAnnotationType.METAMARK;
-import static elaborate.editor.export.mvn.MVNAnnotationType.ONDERSCHRIFT;
-import static elaborate.editor.export.mvn.MVNAnnotationType.ONDUIDELIJK;
-import static elaborate.editor.export.mvn.MVNAnnotationType.ONLEESBAAR;
-import static elaborate.editor.export.mvn.MVNAnnotationType.OPHOGING_ROOD;
-import static elaborate.editor.export.mvn.MVNAnnotationType.OPSCHRIFT;
-import static elaborate.editor.export.mvn.MVNAnnotationType.PALEOGRAFISCH;
-import static elaborate.editor.export.mvn.MVNAnnotationType.POEZIE;
-import static elaborate.editor.export.mvn.MVNAnnotationType.RECHTERMARGEKOLOM;
-import static elaborate.editor.export.mvn.MVNAnnotationType.REGELNUMMERING_BLAD;
-import static elaborate.editor.export.mvn.MVNAnnotationType.REGELNUMMERING_TEKST;
-import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTBEGIN;
-import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTEINDE;
-import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTKLEUR_ROOD;
-import static elaborate.editor.export.mvn.MVNAnnotationType.VERSREGEL;
-import static elaborate.editor.export.mvn.MVNAnnotationType.VREEMDTEKEN;
-import static elaborate.editor.export.mvn.MVNAnnotationType.WITREGEL;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.export.mvn.MVNConversionData.EntryData;
+import elaborate.editor.model.ProjectMetadataFields;
+import elaborate.editor.model.orm.*;
+import elaborate.editor.publish.Publication;
+import elaborate.editor.publish.Publication.Status;
+import nl.knaw.huygens.Log;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
 
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.model.ProjectMetadataFields;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.TranscriptionType;
-import elaborate.editor.publish.Publication.Status;
-import nl.knaw.huygens.Log;
+import static elaborate.editor.export.mvn.MVNAnnotationType.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MVNConverterTest {
 
@@ -207,10 +178,9 @@ public class MVNConverterTest {
   //               Elke l krijgt een n-attribuut dat regelnummer per tekst aangeeft. Het wordt automatisch toegekend.
   //               Elke l krijgt een xml:id attribuut (concatenatie sigle, ’l’, n-attribuut)
   //
-  //               Met lage prioriteit: Versregels die niet overeenkomen met fysieke regelafbreking worden aangegeven met
+  //               Versregels die niet overeenkomen met fysieke regelafbreking worden aangegeven met
   //               mvn:versregel. Zie aldaar.
   //
-  //               Met lagere prioriteit: 
   //               Als we te maken hebben met proza (dat wil zeggen: we bevinden ons binnen de scope van een mvn:alinea) krijgt de lb een np-attribuut. Het np-attribuut bevat een regelnummering vanaf het begin van de betreffende tekst. 
   @Test
   public void testRegelConversie() {}
@@ -322,8 +292,10 @@ public class MVNConverterTest {
         + "line 1\n"//
         + "line 2\n"//
         + "</p>" //
+        //        + "<lg><l n=\"1\" xml:id=\"PROJECTNAME-1-l-1\">"//
         + "<lg>"//
         + "dichtregel 1"//
+        //        + "</l></lg>\n"//
         + "</lg>\n"//
         + "</body></text>\n";
     assertConversion(body, mockData(1, tekstbegin, 2, alinea, 3, poetry, 4, teksteinde), expected);
@@ -467,7 +439,7 @@ public class MVNConverterTest {
   private void assertAnnotationBodyIsInvalidForInitiaal(final String annotationBody) {
     final Annotation annotation = mockAnnotationOfType(INITIAAL);
     when(annotation.getBody()).thenReturn(annotationBody);
-    final Long entryId = 1l;
+    final Long entryId = 1L;
     final String body = "<body>"//
         + "<entry n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\">"//
         + "pre "//
@@ -637,7 +609,7 @@ public class MVNConverterTest {
   @Test
   public void testWitregelConversieOfIllegalCharacterGivesValidationError() {
     final Annotation annotation = mockAnnotationOfType(WITREGEL);
-    final Long entryId = 12234l;
+    final Long entryId = 12234L;
     final String body = "<body>"//
         + "<entry n=\"01r\" xml:id=\"mvn-brussel-kb-ii-116-pb-01r\" facs=\"http://localhost:8080/jp2/14165714814681.jp2\" _entryId=\"" + entryId + "\">"//
         + " pre "//
@@ -682,7 +654,7 @@ public class MVNConverterTest {
         + "<lb n=\"1\" xml:id=\"ABC-pb-42r-lb-1\"/><l n=\"1\" xml:id=\"PROJECTNAME-1-l-1\">Er was eens een neushoorn uit Assen,</l>\n"//
         + "<lb n=\"2\" xml:id=\"ABC-pb-42r-lb-2\"/><l n=\"2\" xml:id=\"PROJECTNAME-1-l-2\">Die moest echt verschrikkelijk nodig plassen.</l>"// 
         + "</lg>\n"//
-        + "</body></text>\n";;
+        + "</body></text>\n";
     assertConversion(body, mockData(1, tekstbegin, 2, poezieAnnotation, 3, teksteinde), expected);
   }
 
@@ -848,10 +820,32 @@ public class MVNConverterTest {
   //               Een puntannotatie.
   //  Validatie:   Geen
   //  Conversie:   Zie sectie Problemen: Poëzie
-  //  Prioriteit:  Laag
-  @Test
+  //  @Test
   public void testVersregelConversie() {
-    final Annotation annotation = mockAnnotationOfType(VERSREGEL);
+    final Annotation tekstBegin = mockAnnotationOfType(TEKSTBEGIN);
+    final Annotation poetryAnnotation = mockAnnotationOfType(POEZIE);
+    final Annotation versregelannotation = mockAnnotationOfType(VERSREGEL);
+    final Annotation tekstEinde = mockAnnotationOfType(TEKSTEINDE);
+    final String body = "<body><entry n=\"1\" xml:id=\"X\">"//
+        + "<ab id=\"0\"/>¤<ae id=\"0\"/>"//
+        + "<ab id=\"1\"/>¤<ae id=\"1\"/>Normaal. "//
+        + "<ab id=\"2\"/>¤<ae id=\"2\"/>Groen.\n"//
+        + "Dat moet je doen."//
+        + "<ab id=\"3\"/>¤<ae id=\"3\"/>"//
+        + "</entry></body>";
+    final String expected = "<pb xml:id=\"X\" n=\"1\"/>\n"//
+        + "<lg>\n"//
+        + "<l n=\"1\" xml:id=\"X-l-1\">Normaal. </l>"//
+        + "<l n=\"2\" xml:id=\"X-l-2\">Groen.</l>"//
+        + "<l n=\"3\" xml:id=\"X-l-3\">Dat moet je doen.</l>"//
+        + "</lg>";
+    assertConversion(body,
+        mockData(//
+            0, tekstBegin, //
+            1, poetryAnnotation, //
+            2, versregelannotation, //
+            3, tekstEinde//
+        ), expected);
   }
 
   //  mvn:kolom
@@ -1077,6 +1071,52 @@ public class MVNConverterTest {
         ), expected);
   }
 
+  @Test
+  public void testValidateEntryOrderAndName() {
+    assertThat("valid_xml:id-1.2").matches(MVNConverter.VALID_XML_ID_SUBSTRING_REGEXP);
+    assertThat("invalid xml:id!").doesNotMatch(MVNConverter.VALID_XML_ID_SUBSTRING_REGEXP);
+  }
+
+  @Test
+  public void testTextShouldBeInAlineaOrPoetry() {
+    final Annotation tekstbegin1 = mockAnnotationOfType(TEKSTBEGIN);
+    when(tekstbegin1.getBody()).thenReturn("1");
+    final Annotation poezie = mockAnnotationOfType(POEZIE);
+    final Annotation teksteinde1 = mockAnnotationOfType(TEKSTEINDE);
+    when(teksteinde1.getBody()).thenReturn("1");
+    final Annotation tekstbegin2 = mockAnnotationOfType(TEKSTBEGIN);
+    when(tekstbegin2.getBody()).thenReturn("2");
+    final Annotation alinea = mockAnnotationOfType(ALINEA);
+    final Annotation teksteinde2 = mockAnnotationOfType(TEKSTEINDE);
+    when(teksteinde2.getBody()).thenReturn("2");
+    final String body = "<body><entry n=\"02v\" xml:id=\"VDS-pb-02v\" facs=\"Brussel - KB - ii 116 - 002v.jpg\" _entryId=\"26831\">"//
+        + "<lb/>ILLEGAL1<ab id=\"1\"/>‡<ae id=\"1\"/><ab id=\"2\"/>‡<ae id=\"2\"/>Tekst 1<le/>"//
+        + "<lb/>Diet ondersouct en can gronderen<ab id=\"3\"/>‡<ae id=\"3\"/><le/>"//
+        + "<lb/><ab id=\"4\"/>‡<ae id=\"4\"/>ILLEGAL2<ab id=\"5\"/>‡<ae id=\"5\"/><b>Van den zeuen vraghen van</b><b><le/>"//
+        + "<lb/>Iherusalem zeghelijn</b><le/>"//
+        + "<lb/><ab id=\"6\"/>‡<ae id=\"6\"/><le/>"//
+        + "ILLEGAL3</entry></body>";
+    String expectedError1 = "http://example.org/projects/projectName/entries/26831/transcriptions/diplomatic : De tekst 'ILLEGAL1' bevindt zich niet binnen de scope van een mvn:alinea, mvn:poëzie, mvn:opschrift of mvn:onderschrift.";
+    //    String expectedError2 = "http://example.org/projects/projectName/entries/26831/transcriptions/diplomatic : De tekst 'ILLEGAL2' bevindt zich niet binnen de scope van een mvn:alinea, mvn:poëzie, mvn:opschrift of mvn:onderschrift.";
+    //    String expectedError3 = "http://example.org/projects/projectName/entries/26831/transcriptions/diplomatic : De tekst 'ILLEGAL3' bevindt zich niet binnen de scope van een mvn:alinea, mvn:poëzie, mvn:opschrift of mvn:onderschrift.";
+    assertConversionFailsValidation(body,
+        mockData(//
+            1, tekstbegin1, //
+            2, poezie, //
+            3, teksteinde1, //
+            4, tekstbegin2, //
+            5, alinea, //
+            6, teksteinde2//
+        ), expectedError1);
+  }
+
+  // 2017-05-17
+
+  // Elke l krijgt een xml:id attribuut (concatenatie tekst xml:id, ’l’, n-attribuut, gescheiden door hyphens). Dit geldt niet voor op- en onderschriften (die buiten het bereik van de mvn:poezie vallen).
+
+  // versregel:  Het geannoteerde teken is ‘¤’
+  //  Er wordt een extra l-element gegenereerd, inclusief oplopende nummering, zoals beschreven onder Regel.
+
   /* private methods */
   private Annotation mockAnnotationOfType(final MVNAnnotationType type) {
     final AnnotationType witregel = mockAnnotationType(type.getName());
@@ -1149,16 +1189,19 @@ public class MVNConverterTest {
     final MVNConversionResult result = new MVNConversionResult(project, logger, BASEURL);
     final String tei = new MVNConverter(project, data, logger, BASEURL).toTei(body, result);
     //    assertThat(result.isOK()).overridingErrorMessage("validation error(s): %s", logger.getErrors()).isTrue();
+    if (logger.isFail()) {
+      Log.error("logger.getErrors()={}", logger.getErrors());
+    }
     return tei;
   }
 
-  private void assertConversionFailsValidation(final String body, final MVNConversionData mockData, final String validationError) {
+  private void assertConversionFailsValidation(final String body, final MVNConversionData mockData, final String... validationErrors) {
     final Project project = mockProject();
     final Status logger = new Status(1);
     final MVNConversionResult result = new MVNConversionResult(project, logger, BASEURL);
     new MVNConverter(project, mockData, logger, BASEURL).toTei(body, result);
     assertThat(result.isOK()).isFalse();
-    assertThat(logger.getErrors()).contains(validationError);
+    assertThat(logger.getErrors()).containsAll(Arrays.asList(validationErrors));
   }
 
   private Project mockProject() {
@@ -1169,9 +1212,36 @@ public class MVNConverterTest {
     return project;
   }
 
-  @Test
-  public void testValidateEntryOrderAndName() throws Exception {
-    assertThat("valid_xml:id-1.2").matches(MVNConverter.VALID_XML_ID_SUBSTRING_REGEXP);
-    assertThat("invalid xml:id!").doesNotMatch(MVNConverter.VALID_XML_ID_SUBSTRING_REGEXP);
+  private MVNConversionResult mvnConvert(Project project) {
+    String baseURL = "http://test.elaborate.org";
+    long projectId = project.getId();
+    Publication.Status status = new Publication.Status(projectId);
+    MVNConversionData data = getConversionData(project);
+    MVNConverter mvnConverter = new MVNConverter(project, data, status, baseURL);
+    return mvnConverter.convert();
+  }
+
+  private MVNConversionData getConversionData(Project project) {
+    MVNConversionData mvnConversionData = new MVNConversionData();
+    for (ProjectEntry projectEntry : project.getProjectEntries()) {
+      final EntryData entryData = new MVNConversionData.EntryData();
+      final Long id = projectEntry.getId();
+      entryData.id = String.valueOf(id);
+      entryData.name = projectEntry.getName();
+      entryData.order = projectEntry.getMetadataValue("order");
+      entryData.facs = projectEntry.getFacsimiles().get(0).getFilename();
+
+      Transcription transcription = projectEntry.getTranscriptions().get(0);
+      entryData.body = transcription.getBody();
+      mvnConversionData.getEntryDataList().add(entryData);
+      for (Annotation annotation : transcription.getAnnotations()) {
+        final AnnotationData annotationData = new MVNConversionData.AnnotationData();
+        int annotationNum = annotation.getAnnotationNo();
+        annotationData.type = annotation.getAnnotationType().getName();
+        annotationData.body = annotation.getBody();
+        mvnConversionData.getAnnotationIndex().put(annotationNum, annotationData);
+      }
+    }
+    return mvnConversionData;
   }
 }

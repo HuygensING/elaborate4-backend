@@ -37,14 +37,14 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.security.ElaborateSecurityContext;
 
 public abstract class AbstractElaborateResource {
-	public AbstractElaborateResource() {
+	protected AbstractElaborateResource() {
 		java.util.logging.Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
 	}
 
 	@Context
 	Request request;
 
-	public User getUser() {
+	protected User getUser() {
 		User user = null;
 		ContainerRequest cr = (ContainerRequest) request;
 		SecurityContext securityContext = cr.getSecurityContext();

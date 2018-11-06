@@ -23,7 +23,7 @@ package elaborate.editor.resources.orm;
  */
 
 public class PasswordData {
-	String token;
+	private String token;
 	private String newpassword;
 	private String emailAddress;
 

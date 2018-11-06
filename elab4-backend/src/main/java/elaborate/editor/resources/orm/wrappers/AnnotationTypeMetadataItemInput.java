@@ -44,19 +44,18 @@ public class AnnotationTypeMetadataItemInput {
 	// "description": "Index",
 	// "name": "index"
 	// },
-	long id;
-	List<MetadataInput> annotationTypeMetadataItems = Lists.newArrayList();
-	String description;
-	String name;
+  private long id;
+	private List<MetadataInput> annotationTypeMetadataItems = Lists.newArrayList();
+	private String description;
+	private String name;
 
 	public long getId() {
 		return id;
 	}
 
-	public AnnotationTypeMetadataItemInput setId(long id) {
+	public void setId(long id) {
 		this.id = id;
-		return this;
-	}
+  }
 
 	public List<MetadataInput> getAnnotationTypeMetadataItems() {
 		return annotationTypeMetadataItems;

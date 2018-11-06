@@ -52,11 +52,11 @@ import static org.mockito.Mockito.when;
 public class PublishTaskTest extends AbstractTest {
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
   }
 
   @Test
@@ -71,8 +71,8 @@ public class PublishTaskTest extends AbstractTest {
     when(mockProject.getLevel3()).thenReturn("level3");
 
     PublishTask publishTask = new PublishTask(settings);
-    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
-    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
+    EntryData entry1 = new EntryData(1L, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
+    EntryData entry2 = new EntryData(2L, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
     List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -106,8 +106,8 @@ public class PublishTaskTest extends AbstractTest {
     when(mockProject.getMetadataMap()).thenReturn(metadataMap);
 
     PublishTask publishTask = new PublishTask(settings);
-    EntryData entry1 = new EntryData(1l, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
-    EntryData entry2 = new EntryData(2l, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
+    EntryData entry1 = new EntryData(1L, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
+    EntryData entry2 = new EntryData(2L, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
     List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -131,9 +131,9 @@ public class PublishTaskTest extends AbstractTest {
   }
 
   @Test
-  public void testEntryFilename() throws Exception {
+  public void testEntryFilename() {
     ProjectEntry entry = mock(ProjectEntry.class);
-    when(entry.getId()).thenReturn(9999l);
+    when(entry.getId()).thenReturn(9999L);
 
     assertThat(PublishTask.entryFilename(9999)).isEqualTo("entry9999.json");
   }
@@ -186,14 +186,14 @@ public class PublishTaskTest extends AbstractTest {
   }
 
   @Test
-  public void testSetText() throws Exception {
+  public void testSetText() {
     AnnotationPublishData ad = new AnnotationPublishData().setText("<span class=\"annotationStub\"><span class=\"citedAnnotation\">dit is de geannoteerde tekst</span></span> dit is de annotatietekst");
     // assertThat(ad.getText()).isEqualTo("dit is de annotatietekst");
     assertThat(ad.getText()).isEqualTo("dit is de geannoteerde tekst dit is de annotatietekst");
   }
 
   @Test
-  public void testGetTypographicalAnnotationMap() throws Exception {
+  public void testGetTypographicalAnnotationMap() {
     Settings settings = mock(Publication.Settings.class);
     PublishTask publishTask = new PublishTask(settings);
     Project project = mock(Project.class);
@@ -209,7 +209,7 @@ public class PublishTaskTest extends AbstractTest {
   }
 
   @Test
-  public void testAnnotationTypeKey() throws Exception {
+  public void testAnnotationTypeKey() {
     Settings settings = mock(Publication.Settings.class);
     PublishTask publishTask = new PublishTask(settings);
     AnnotationTypeData ad = new AnnotationTypeData().setName("name").setDescription("description");
@@ -218,7 +218,7 @@ public class PublishTaskTest extends AbstractTest {
   }
 
   @Test
-  public void testGetBaseURLFillsInProjectname() throws Exception {
+  public void testGetBaseURLFillsInProjectname() {
     Settings settings = mock(Publication.Settings.class);
     PublishTask publishTask = new PublishTask(settings);
     assertThat(publishTask.getBaseURL("project-name")).isEqualTo("http://example.org/project-name/draft");

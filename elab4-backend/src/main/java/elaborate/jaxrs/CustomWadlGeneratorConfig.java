@@ -27,7 +27,7 @@ import java.util.List;
 import com.sun.jersey.api.wadl.config.WadlGeneratorConfig;
 import com.sun.jersey.api.wadl.config.WadlGeneratorDescription;
 
-public class CustomWadlGeneratorConfig extends WadlGeneratorConfig {
+class CustomWadlGeneratorConfig extends WadlGeneratorConfig {
 	@Override
 	public List<WadlGeneratorDescription> configure() {
 		return generator(CustomJAXBWadlGenerator.class)//

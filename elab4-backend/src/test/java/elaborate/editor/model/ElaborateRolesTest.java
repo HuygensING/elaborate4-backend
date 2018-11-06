@@ -36,42 +36,42 @@ import org.junit.Test;
 public class ElaborateRolesTest {
 
 	@Test
-	public void testHighestRole1() throws Exception {
+	public void testHighestRole1() {
 		assertThat(highestRole(newArrayList(ADMIN, USER))).isEqualTo(ADMIN);
 	}
 
 	@Test
-	public void testHighestRole2() throws Exception {
+	public void testHighestRole2() {
 		assertThat(highestRole(newArrayList(USER, READER))).isEqualTo(USER);
 	}
 
 	@Test
-	public void testHighestRole3() throws Exception {
+	public void testHighestRole3() {
 		assertThat(highestRole(newArrayList(USER, READER, PROJECTLEADER))).isEqualTo(PROJECTLEADER);
 	}
 
 	@Test
-	public void testHighestRole4() throws Exception {
+	public void testHighestRole4() {
 		assertThat(highestRole(newArrayList(READER))).isEqualTo(READER);
 	}
 
 	@Test
-	public void testGetRolestringForReader() throws Exception {
+	public void testGetRolestringForReader() {
 		assertThat(getRolestringFor(READER)).isEqualTo("READER");
 	}
 
 	@Test
-	public void testGetRolestringForUser() throws Exception {
+	public void testGetRolestringForUser() {
 		assertThat(getRolestringFor(USER)).isEqualTo("READER,USER");
 	}
 
 	@Test
-	public void testGetRolestringForProjectLeader() throws Exception {
+	public void testGetRolestringForProjectLeader() {
 		assertThat(getRolestringFor(PROJECTLEADER)).isEqualTo("READER,PROJECTLEADER,USER");
 	}
 
 	@Test
-	public void testGetRolestringForAdmin() throws Exception {
+	public void testGetRolestringForAdmin() {
 		assertThat(getRolestringFor(ADMIN)).isEqualTo("READER,ADMIN,PROJECTLEADER,USER");
 	}
 

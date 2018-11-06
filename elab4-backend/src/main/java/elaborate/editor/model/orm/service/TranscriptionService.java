@@ -22,9 +22,21 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
+import com.google.common.base.Function;
+import com.google.common.collect.*;
+import elaborate.editor.model.AbstractStoredEntity;
+import elaborate.editor.model.AnnotationInputWrapper;
+import elaborate.editor.model.ModelFactory;
+import elaborate.editor.model.orm.*;
+import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
+
+import javax.inject.Singleton;
+import javax.persistence.TypedQuery;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,35 +44,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Singleton;
-import javax.persistence.TypedQuery;
-
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import elaborate.editor.model.AbstractStoredEntity;
-import elaborate.editor.model.AnnotationInputWrapper;
-import elaborate.editor.model.ModelFactory;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.AnnotationMetadataItem;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.AnnotationTypeMetadataItem;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.TranscriptionType;
-import elaborate.editor.model.orm.User;
-import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
-
 @Singleton
 public class TranscriptionService extends AbstractStoredEntityService<Transcription> {
-  private static TranscriptionService instance = new TranscriptionService();
+  private static final TranscriptionService instance = new TranscriptionService();
 
   private TranscriptionService() {}
 
@@ -206,9 +192,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
   private List<AnnotationMetadataItem> createAnnotationMetadataItems(Annotation annotation, AnnotationInputWrapper annotationInput, AnnotationType annotationType) {
     Map<String, Long> atmiMap = Maps.newHashMap();
-    Iterator<AnnotationTypeMetadataItem> iterator = annotationType.getMetadataItems().iterator();
-    while (iterator.hasNext()) {
-      AnnotationTypeMetadataItem annotationTypeMetadataItem = iterator.next();
+    for (AnnotationTypeMetadataItem annotationTypeMetadataItem : annotationType.getMetadataItems()) {
       atmiMap.put(annotationTypeMetadataItem.getName(), annotationTypeMetadataItem.getId());
     }
 
@@ -350,7 +334,7 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     }
   }
 
-  static Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
+  static final Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
     @Override
     public Integer apply(Annotation annotation) {
       return annotation.getAnnotationNo();
@@ -383,17 +367,15 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
   }
 
   private String annotationEndTag(Object annotationNo) {
-    String endtag = String.format("<%s id=\"%s\"/>", //
+    return String.format("<%s id=\"%s\"/>", //
         Transcription.BodyTags.ANNOTATION_END, //
         annotationNo);
-    return endtag;
   }
 
   private String annotationBeginTag(Object annotationNo) {
-    String begintag = String.format("<%s id=\"%s\"/>", //
+    return String.format("<%s id=\"%s\"/>", //
         Transcription.BodyTags.ANNOTATION_BEGIN, //
         annotationNo);
-    return begintag;
   }
 
   private void processTags(Set<Integer> annotationNoSet, Set<String> orphanedAnnotationTags, Matcher matcher) {

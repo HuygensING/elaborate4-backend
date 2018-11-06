@@ -50,7 +50,7 @@ public class ElabSecurityContext implements javax.ws.rs.core.SecurityContext {
 
 	@Override
 	public boolean isSecure() {
-		return (null != session) ? session.isSecure() : false;
+		return (null != session) && session.isSecure();
 	}
 
 	@Override

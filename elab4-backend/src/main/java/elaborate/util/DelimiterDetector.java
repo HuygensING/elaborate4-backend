@@ -23,9 +23,9 @@ package elaborate.util;
  */
 
 public class DelimiterDetector {
-	StringBuilder pre = new StringBuilder();
-	StringBuilder center = new StringBuilder();
-	StringBuilder post = new StringBuilder();
+	final StringBuilder pre = new StringBuilder();
+	final StringBuilder center = new StringBuilder();
+	final StringBuilder post = new StringBuilder();
 
 	public DelimiterDetector(String string) {
 		boolean atStart = true;

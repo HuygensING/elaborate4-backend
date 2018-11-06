@@ -36,7 +36,7 @@ import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-public class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
+class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
   private final Element root = new Element("xml");
   private Element currentElement;
 

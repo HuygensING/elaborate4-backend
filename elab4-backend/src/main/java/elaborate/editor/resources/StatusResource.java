@@ -56,7 +56,7 @@ public class StatusResource extends AbstractElaborateResource {
 		return new MemoryStatus();
 	}
 
-	static final int MB = 1024 * 1024;
+	private static final int MB = 1024 * 1024;
 
 	static class MemoryStatus {
 		private final Runtime runtime;
@@ -99,8 +99,8 @@ public class StatusResource extends AbstractElaborateResource {
 	}
 
 	static class ServerStatus {
-		String url;
-		String status;
+		final String url;
+		final String status;
 
 		public ServerStatus(String url, boolean online) {
 			status = online ? "online" : "offline";

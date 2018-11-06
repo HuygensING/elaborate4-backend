@@ -38,13 +38,13 @@ import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
 public class SearchResourceTest {
 
 	@Before
-	public void setUp() throws Exception {}
+	public void setUp() {}
 
 	@After
-	public void tearDown() throws Exception {}
+	public void tearDown() {}
 
 	@Test
-	public void testAddPrevNextURIs1() throws Exception {
+	public void testAddPrevNextURIs1() {
 		Map<String, Object> searchResult = Maps.newHashMap();
 		searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
 		SearchResource searchResource = new SearchResource(null);
@@ -54,7 +54,7 @@ public class SearchResourceTest {
 	}
 
 	@Test
-	public void testAddPrevNextURIs2() throws Exception {
+	public void testAddPrevNextURIs2() {
 		SearchResource searchResource = new SearchResource(null);
 		Map<String, Object> searchResult = Maps.newHashMap();
 		searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);

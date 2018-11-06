@@ -531,7 +531,7 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 	 * @throws AssertionError
 	 *           - if the actual Project's name is not equal to the given one.
 	 */
-	public ProjectAssert hasName(String name) {
+	public void hasName(String name) {
 		// check that actual Project we want to make assertions on is not null.
 		isNotNull();
 
@@ -545,8 +545,7 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
 		}
 
 		// return the current assertion for method chaining
-		return this;
-	}
+  }
 
 	/**
 	 * Verifies that the actual Project's projectEntries contains the given ProjectEntry elements.

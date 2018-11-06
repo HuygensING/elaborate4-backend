@@ -24,6 +24,6 @@ package elaborate.editor.config;
 
 import elaborate.editor.AbstractTest;
 
-public final class ConfigurationTest extends AbstractTest {
+final class ConfigurationTest extends AbstractTest {
 
 }

@@ -45,14 +45,14 @@ public class UserInput {
 	// "role": "USER"
 	// },
 
-	private static final long NULL_ID = -1l;
+	private static final long NULL_ID = -1L;
 	public long id = NULL_ID;
-	public String username;
-	public String email;
-	public String firstName;
-	public String lastName;
-	public String role;
-	public String password;
+	private String username;
+	private String email;
+	private String firstName;
+	private String lastName;
+	private String role;
+	private String password;
 
 	public User getUser() {
 		User user = (id == NULL_ID) ? new User() : UserService.instance().getUser(id);

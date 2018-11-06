@@ -50,15 +50,14 @@ public class Sitemap {
 		}
 	};
 	public final String description = "Elaborate backend sitemap";
-	public final ImmutableList<API> availableAPIList;
 
-	public Sitemap(Application application) {
+  public Sitemap(Application application) {
 		List<API> list = Lists.newArrayList();
 		for (Class<?> cls : application.getClasses()) {
 			List<API> apis = JAXUtils.generateAPIs(cls);
 			list.addAll(apis);
 		}
-		availableAPIList = ImmutableList.copyOf(Ordering.from(PATH_COMPARATOR).compound(REQUESTTYPES_COMPARATOR).sortedCopy(list));
+    ImmutableList<API> availableAPIList = ImmutableList.copyOf(Ordering.from(PATH_COMPARATOR).compound(REQUESTTYPES_COMPARATOR).sortedCopy(list));
 	}
 
 }

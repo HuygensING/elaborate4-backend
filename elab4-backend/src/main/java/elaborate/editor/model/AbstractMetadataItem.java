@@ -31,8 +31,8 @@ import javax.persistence.MappedSuperclass;
 public abstract class AbstractMetadataItem<T extends AbstractMetadataItem<T>> extends AbstractTrackedEntity<AbstractMetadataItem<T>> {
 	private static final long serialVersionUID = 1L;
 
-	String field;
-	String data;
+	private String field;
+	private String data;
 
 	public String getField() {
 		return field;

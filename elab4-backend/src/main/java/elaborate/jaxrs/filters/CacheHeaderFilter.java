@@ -30,7 +30,7 @@ import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
-public class CacheHeaderFilter implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
+class CacheHeaderFilter implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
 
 	@Override
 	public ContainerRequestFilter getRequestFilter() {

@@ -37,8 +37,8 @@ import elaborate.editor.model.AbstractTrackedEntity;
 public class ProjectMetadataItem extends AbstractTrackedEntity<ProjectMetadataItem> {
 	private static final long serialVersionUID = 1L;
 
-	String field;
-	String data;
+	private String field;
+	private String data;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id", columnDefinition = "int4")

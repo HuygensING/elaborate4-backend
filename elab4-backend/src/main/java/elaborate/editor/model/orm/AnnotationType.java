@@ -60,13 +60,13 @@ public class AnnotationType extends AbstractTrackedEntity<AnnotationType> {
 	public AnnotationType setName(String name) {
 		this.name = name;
 		return this;
-	};
+	}
 
-	public String getDescription() {
+  public String getDescription() {
 		return description;
-	};
+	}
 
-	public AnnotationType setDescription(String description) {
+  public AnnotationType setDescription(String description) {
 		this.description = description;
 		return this;
 	}
@@ -78,9 +78,9 @@ public class AnnotationType extends AbstractTrackedEntity<AnnotationType> {
 	public AnnotationType setMetadataItems(Set<AnnotationTypeMetadataItem> annotationTypeMetadataItems) {
 		this.annotationTypeMetadataItems = annotationTypeMetadataItems;
 		return this;
-	};
+	}
 
-	// AnnotationTypeMetadataItem addMetadataItem(String name, String description) {
+  // AnnotationTypeMetadataItem addMetadataItem(String name, String description) {
 	// return null;
 	// };
 

@@ -27,7 +27,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 public class Permission {
-	Set<String> allowedActions = Sets.newHashSet();
+	final Set<String> allowedActions = Sets.newHashSet();
 	private boolean canRead = false;
 	private boolean canWrite = false;
 

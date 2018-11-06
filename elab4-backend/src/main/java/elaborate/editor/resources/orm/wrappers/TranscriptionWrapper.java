@@ -22,24 +22,22 @@ package elaborate.editor.resources.orm.wrappers;
  * #L%
  */
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
-
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
+import java.util.List;
+import java.util.Map;
 
 public class TranscriptionWrapper {
 	// TODO: split into input/output object
-	private long id = 0l;
+	private long id = 0L;
 	private String textLayer = "";
 	private String body = "";
 	private static final String NBSP = "\\u00A0";
@@ -153,8 +151,7 @@ public class TranscriptionWrapper {
 		TranscriptionBodyInputVisitor visitor = new TranscriptionBodyInputVisitor();
 		document.accept(visitor);
 
-		String bodyOut = visitor.getContext().getResult().replace("<span class=\"hilite\" data-highlight=\"\"></span>", "").trim();
-		return bodyOut;
+    return visitor.getContext().getResult().replace("<span class=\"hilite\" data-highlight=\"\"></span>", "").trim();
 	}
 
 }

@@ -25,9 +25,10 @@ package elaborate.editor.export.tei;
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import javax.persistence.EntityManager;
 
@@ -48,8 +49,8 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
-public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
-  static final Stack<Element> openElements = new Stack<Element>();
+class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
+  private static final Deque<Element> openElements = new ArrayDeque<Element>();
 
   private static int linenum = 1;
   private static boolean skipNextNewline = false;
@@ -252,8 +253,7 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
     }
 
     private TagInfo tagInfo(Annotation annotation, AnnotationType annotationType) {
-      TagInfo taginfo = config.getAnnotationTypeMapper().get(annotationType).apply(annotation);
-      return taginfo;
+      return config.getAnnotationTypeMapper().get(annotationType).apply(annotation);
     }
 
     private void addNote(XmlContext context, Annotation annotation) {
@@ -280,8 +280,7 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
       Map<String, String> attrs = Maps.newHashMap();
       attrs.put("type", key);
       attrs.put("value", StringEscapeUtils.escapeHtml(value));
-      Element meta = new Element("interp", attrs);
-      return meta;
+      return new Element("interp", attrs);
     }
 
     private Annotation getAnnotation(String annotationId) {
@@ -313,7 +312,7 @@ public class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
     }
   }
 
-  static class Handler implements ElementHandler<XmlContext> {
+  private static class Handler implements ElementHandler<XmlContext> {
     @Override
     public Traversal enterElement(Element element, XmlContext context) {
       return NEXT;

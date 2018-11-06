@@ -32,7 +32,7 @@ import javax.persistence.EntityManager;
 
 import elaborate.editor.model.ModelFactory;
 
-public class ProjectTest extends StoredEntityTest {
+class ProjectTest extends StoredEntityTest {
 
 	// @Test
 	public void test1() {

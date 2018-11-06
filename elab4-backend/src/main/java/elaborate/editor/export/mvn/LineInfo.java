@@ -23,7 +23,7 @@ package elaborate.editor.export.mvn;
  */
 
 
-public class LineInfo {
+class LineInfo {
   public boolean witregel = false;
   public boolean inspringen = false;
   public boolean useCustomLineNo = false;

@@ -22,9 +22,9 @@ package elaborate.editor.model;
  * #L%
  */
 
-public class KeyValuePair {
-	String key;
-	Object value;
+class KeyValuePair {
+	private String key;
+	private Object value;
 
 	public void setKey(String key) {
 		this.key = key;

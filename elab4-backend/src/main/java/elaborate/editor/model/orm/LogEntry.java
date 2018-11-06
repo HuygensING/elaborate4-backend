@@ -43,16 +43,17 @@ import elaborate.editor.model.AbstractStoredEntity;
 public class LogEntry extends AbstractStoredEntity<LogEntry>implements Comparable<LogEntry> {
 	private static final long serialVersionUID = 1L;
 
-	String comment;
+	private String comment;
 
 	// @Column(name = "project_title")
-	String projectTitle;
+  private String projectTitle;
 
 	// @Column(name = "user_name")
-	String userName;
+  private String userName;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	// @Column(name = "created_on")
+  private
+  // @Column(name = "created_on")
 	Date createdOn;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -84,10 +85,9 @@ public class LogEntry extends AbstractStoredEntity<LogEntry>implements Comparabl
 		return projectTitle;
 	}
 
-	public LogEntry setProjectTitle(String projectTitle) {
+	private void setProjectTitle(String projectTitle) {
 		this.projectTitle = projectTitle;
-		return this;
-	}
+  }
 
 	public String getUserName() {
 		return userName;
@@ -98,7 +98,7 @@ public class LogEntry extends AbstractStoredEntity<LogEntry>implements Comparabl
 		return this;
 	}
 
-	public Date getCreatedOn() {
+	private Date getCreatedOn() {
 		return createdOn;
 	}
 

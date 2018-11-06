@@ -35,7 +35,7 @@ import nl.knaw.huygens.Log;
 public class AbstractSolrServerTest {
 
 	@Test
-	public void testExtractTerms() throws Exception {
+	public void testExtractTerms() {
 		String snippet1 = "bladie <em>bla</em> <em>bla1</em>.";
 		String snippet2 = "bladie <em>bla</em> <em>bla2</em>.";
 		Collection<String> extractTerms = AbstractSolrServer.extractTerms(ImmutableList.of(snippet1, snippet2));

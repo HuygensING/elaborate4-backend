@@ -24,7 +24,7 @@ package elaborate.editor.export.mvn;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class Context {
+class Context {
   public String currentEntryId;
   public boolean indent = false;
   public boolean countAsTextLine = true;

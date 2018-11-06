@@ -44,7 +44,7 @@ import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
-public class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
+class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
 	private static int notenum;
 	private static List<Integer> annotationIds;
 	private static Map<Integer, AnnotationData> annotationDataMap;

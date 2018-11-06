@@ -40,13 +40,16 @@ public class UserSetting extends AbstractStoredEntity<UserSetting> {
 	/* properties to persist */
 	@ManyToOne
 	@JoinColumn(name = "user_id", columnDefinition = "int4")
-	User user;
+  private
+  User user;
 
 	@Column(name = "setting_key")
-	String key;
+  private
+  String key;
 
 	@Column(name = "setting_value")
-	String value;
+  private
+  String value;
 
 	/* persistent properties getters and setters */
 	public User getUser() {

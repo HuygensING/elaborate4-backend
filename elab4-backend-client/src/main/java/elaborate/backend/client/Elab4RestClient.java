@@ -69,17 +69,15 @@ public class Elab4RestClient {
   }
 
   public Map<String, String> getAbout() {
-    Map<String, String> about = elab4.path("about").request().get(Map.class);
-    return about;
+    return elab4.path("about").request().get(Map.class);
   }
 
   @SuppressWarnings("unchecked")
   public List<Map<String, Object>> getProjectEntries(int i) {
-    List<Map<String, Object>> list = projectsTarget.path(String.valueOf(i)).path("entries")//
+    return projectsTarget.path(String.valueOf(i)).path("entries")//
         .request()//
         .header("Authorization", "SimpleAuth " + token)//
         .get(List.class);
-    return list;
   }
 
   @SuppressWarnings("unchecked")
@@ -98,11 +96,10 @@ public class Elab4RestClient {
 
   @SuppressWarnings("unchecked")
   public List<Map<String, Object>> getProjectEntryTextLayers(long projectId, long entryId) {
-    List<Map<String, Object>> map = projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("transcriptions")//
+    return projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("transcriptions")//
         .request()//
         .header("Authorization", "SimpleAuth " + token)//
         .get(List.class);
-    return map;
   }
 
   public void setProjectEntryTextLayerBody(int projectId, int entryId, int transcriptionId, String newBody) {
@@ -128,8 +125,7 @@ public class Elab4RestClient {
         .post(entity);
     Log.info("response = {}", response);
     String location = response.getHeaderString("Location");
-    Integer projectId = Integer.valueOf(location.replaceFirst("^.*/", ""));
-    return projectId;
+    return Integer.valueOf(location.replaceFirst("^.*/", ""));
   }
 
   public Boolean deleteProject(int projectId) {

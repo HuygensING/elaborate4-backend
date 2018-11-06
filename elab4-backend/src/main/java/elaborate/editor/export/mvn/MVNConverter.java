@@ -22,30 +22,9 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import static elaborate.util.XmlUtil.extractAnnotationNos;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
 import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
@@ -55,6 +34,25 @@ import elaborate.editor.publish.Publication.Status;
 import elaborate.util.HibernateUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static elaborate.util.XmlUtil.extractAnnotationNos;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class MVNConverter {
   private static final boolean DEBUG = false; // for release
@@ -76,6 +74,7 @@ public class MVNConverter {
   // order by 'order' or entryname
   // fail when 1, but not all entries have order
   // fail when entrynames are not unique
+  // fail when entrynames contain characters illegal in xml:id
   // select id, name from project_entries where project_id=$projectId
   // select 
 
@@ -231,9 +230,8 @@ public class MVNConverter {
           .append("<le/>")//
           .append("</entry>");
     }
-    final String xml = editionTextBuilder.append("</body>").toString().replace("<lb/><le/>", "");
 
-    return xml;
+    return editionTextBuilder.append("</body>").toString().replace("<lb/><le/>", "");
   }
 
   private String transcriptionBody(final MVNConversionData.EntryData entryData) {
@@ -257,7 +255,7 @@ public class MVNConverter {
   }
 
   private void validateTextNums(final String cooked, final MVNConversionResult result) {
-    final Stack<String> textNumStack = new Stack<String>();
+    final Deque<String> textNumStack = new ArrayDeque<String>();
     final List<String> openTextNums = Lists.newArrayList();
     final List<String> closeTextNums = Lists.newArrayList();
     final Matcher matcher = Pattern.compile("<mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
@@ -307,7 +305,7 @@ public class MVNConverter {
 
   }
 
-  private void validateTextNum(MVNConversionResult result, final String textNum, Stack<String> textNumStack, String entryId) {
+  private void validateTextNum(MVNConversionResult result, final String textNum, Deque<String> textNumStack, String entryId) {
     if (!textNum.matches("^[a-zA-Z0-9\\.]+$")) {
       addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' mag alleen letters, cijfers en (maximaal 3) punten bevatten.", result, entryId);
 

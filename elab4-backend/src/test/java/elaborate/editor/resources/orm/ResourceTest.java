@@ -30,7 +30,7 @@ import com.sun.jersey.test.framework.WebAppDescriptor;
 import elaborate.editor.model.ModelFactory;
 
 public class ResourceTest extends JerseyTest {
-	protected static EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
+	protected static final EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
 
 	public ResourceTest() {
 		super(new WebAppDescriptor.Builder()//

@@ -28,9 +28,9 @@ public class RangeField {
 	public String lowerField;
 	public String upperField;
 
-	public RangeField() {};
+	public RangeField() {}
 
-	public RangeField(String name, String lower, String upper) {
+  public RangeField(String name, String lower, String upper) {
 		this.name = name;
 		lowerField = lower;
 		upperField = upper;
