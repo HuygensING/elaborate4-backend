@@ -54,13 +54,13 @@ import nl.knaw.huygens.tei.XmlContext;
 @Deprecated
 // use MVNTeiExporter
 public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
-  private static final String choiceTag = "choice";
-  private static final String abbrTag = "abbr";
-  private static final String expanTag = "expan";
+  static final String choiceTag = "choice";
+  static final String abbrTag = "abbr";
+  static final String expanTag = "expan";
 
-  private static final Deque<String> textNumStack = new ArrayDeque<String>();
+  static final Deque<String> textNumStack = new ArrayDeque<String>();
 
-  private static boolean inParagraph = false;
+  public static boolean inParagraph = false;
 
   private static final String HI = "hi";
   private static int lb = 1;
@@ -74,7 +74,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   private static Set<String> deepestTextNums;
   private static int indent;
   private static LineInfo currentLineInfo;
-  private static String currentPageBreak = "";
+  public static String currentPageBreak = "";
 
   public MVNTranscriptionVisitor(final MVNConversionResult result, final Map<Integer, AnnotationData> annotationIndex, final Set<String> deepestTextNums) {
     super(new XmlContext());
@@ -357,7 +357,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
   }
 
-  private static Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
+  static final Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
       .put(MVNAnnotationType.AFKORTING, new AfkortingHandler())//
       .put(MVNAnnotationType.ALINEA, new AlineaHandler())//
       .put(MVNAnnotationType.CIJFERS, new WrapInElementHandler(new Element("num").withAttribute("type", "roman")))//
@@ -396,7 +396,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static class WrapInElementHandler implements MVNAnnotationHandler {
-    Element element;
+    final Element element;
 
     public WrapInElementHandler(final Element element) {
       this.element = element;
@@ -479,14 +479,14 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   }
 
   private static class InitiaalHandler implements MVNAnnotationHandler {
-    Element hi = new Element("hi");
+    final Element hi = new Element("hi");
 
     @Override
     public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
-      Integer size = 0;
+      int size = 0;
       final String body = annotation.body.trim();
       if (StringUtils.isNumeric(body)) {
-        size = Integer.valueOf(body);
+        size = Integer.parseInt(body);
         if (size < 1 || size > 19) {
           addValidationError(body);
         }

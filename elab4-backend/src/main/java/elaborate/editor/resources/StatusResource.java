@@ -99,8 +99,8 @@ public class StatusResource extends AbstractElaborateResource {
 	}
 
 	static class ServerStatus {
-		String url;
-		String status;
+		final String url;
+		final String status;
 
 		public ServerStatus(String url, boolean online) {
 			status = online ? "online" : "offline";

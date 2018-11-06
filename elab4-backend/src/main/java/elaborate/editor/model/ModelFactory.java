@@ -37,7 +37,7 @@ public class ModelFactory {
 	// private static final String PERSISTENCE_UNIT_NAME = "nl.knaw.huygens.elaborate.jpa";
 	private static final String PERSISTENCE_UNIT_NAME = "nl.knaw.huygens.elaborate.old.jpa";
 	public static final ModelFactory INSTANCE = new ModelFactory();
-	private static TranscriptionService transcriptionService = TranscriptionService.instance();
+	private static final TranscriptionService transcriptionService = TranscriptionService.instance();
 
 	private final static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 

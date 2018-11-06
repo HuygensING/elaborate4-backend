@@ -50,7 +50,7 @@ public class XmlUtilTest {
   }
 
   @Test
-  public void testFixTagEndings() throws Exception {
+  public void testFixTagEndings() {
     String in = "<tag>bla<bla>babal<tag>\n</tag></bla></tag>whatever";
     String fixed = "<tag>bla<bla>babal<tag></tag></bla></tag>\nwhatever";
     assertThat(XmlUtil.fixTagEndings(in)).isEqualTo(fixed);
@@ -63,7 +63,7 @@ public class XmlUtilTest {
   }
 
   @Test
-  public void testRemoveXMLtags() throws Exception {
+  public void testRemoveXMLtags() {
     assertThat(XmlUtil.removeXMLtags("<body>kaal</body>")).isEqualTo("kaal");
     assertThat(XmlUtil.removeXMLtags("<1>aap\n <2>noot\n mies</2></1>")).isEqualTo("aap\n noot\n mies");
   }

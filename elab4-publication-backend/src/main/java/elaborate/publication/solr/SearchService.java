@@ -22,8 +22,18 @@ package elaborate.publication.solr;
  * #L%
  */
 
-import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.*;
+import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
+import org.joda.time.DateTime;
 
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,26 +42,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.inject.Singleton;
-
-import org.joda.time.DateTime;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
-import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
-import nl.knaw.huygens.facetedsearch.LocalSolrServer;
-import nl.knaw.huygens.facetedsearch.RangeField;
-import nl.knaw.huygens.facetedsearch.SearchData;
-import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
-import nl.knaw.huygens.solr.FacetInfo;
-import nl.knaw.huygens.solr.FacetType;
+import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 
 @Singleton
 public class SearchService {
@@ -172,11 +163,11 @@ public class SearchService {
     }
   }
 
-  private int toRange(int value, int minValue, int maxValue) {
+  public int toRange(int value, int minValue, int maxValue) {
     return Math.min(Math.max(value, minValue), maxValue);
   }
 
-  private String getSolrDir() {
+  public String getSolrDir() {
     return solrDir;
   }
 
@@ -207,11 +198,11 @@ public class SearchService {
     facetInfoMap = _facetInfoMap;
   }
 
-  private void setRangeFields(List<RangeField> rangeFields) {
+  void setRangeFields(List<RangeField> rangeFields) {
     this.rangeFields = rangeFields;
   }
 
-  private void loadConfig() {
+  void loadConfig() {
     //		Log.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
     try {
       InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.json");
@@ -229,6 +220,9 @@ public class SearchService {
   @SuppressWarnings("unchecked")
   static List<RangeField> toRangeFieldList(Object object) {
     List<RangeField> list = Lists.newArrayList();
+    if (object == null) {
+      return list;
+    }
     List<Map<String, Object>> mapList = (List<Map<String, Object>>) object;
     for (Map<String, Object> map : mapList) {
       list.add(new RangeField((String) map.get("name"), (String) map.get("lowerField"), (String) map.get("upperField")));
@@ -238,7 +232,7 @@ public class SearchService {
 
   @SuppressWarnings("unchecked")
   static String[] toStringArray(Object object) {
-    return ((List<String>) object).toArray(new String[] {});
+    return ((List<String>) object).toArray(new String[]{});
   }
 
   @SuppressWarnings("unchecked")
@@ -253,7 +247,7 @@ public class SearchService {
     return outMap;
   }
 
-  static Map<String, Object> readConfigMap(InputStream inputStream) throws IOException {
+  public static Map<String, Object> readConfigMap(InputStream inputStream) throws IOException {
     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
     Map<String, Object> configMap = new ObjectMapper().readValue(inputStreamReader, Map.class);
     if (configMap == null) {

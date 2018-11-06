@@ -25,8 +25,8 @@ package elaborate.editor.model;
 import java.util.Date;
 
 public class Session {
-	private Date lastAccessed;
-	private long userId;
+	Date lastAccessed;
+	final long userId;
 	private boolean federated = false;
 
 	public Session(long userId) {

@@ -32,7 +32,7 @@ public class ElaborateQueryComposerTest {
   private static final QueryComposer queryComposer = new ElaborateQueryComposer();
 
   @Test
-  public void testcomposeQueryString1() throws Exception {
+  public void testcomposeQueryString1() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
     sp.setTextLayers(ImmutableList.of("Diplomatic"));
     String expected = "*:*";
@@ -43,7 +43,7 @@ public class ElaborateQueryComposerTest {
   }
 
   @Test
-  public void testcomposeQueryString2() throws Exception {
+  public void testcomposeQueryString2() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
     sp.setTerm("iets")//
         .setTextLayers(ImmutableList.of("Diplomatic"))//
@@ -59,7 +59,7 @@ public class ElaborateQueryComposerTest {
   }
 
   @Test
-  public void testcomposeQueryString3() throws Exception {
+  public void testcomposeQueryString3() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
     sp.setTerm("iets anders")//
         .setTextLayers(ImmutableList.of("Diplomatic"))//
@@ -75,7 +75,7 @@ public class ElaborateQueryComposerTest {
   }
 
   @Test
-  public void testcomposeQueryString4() throws Exception {
+  public void testcomposeQueryString4() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
     sp.setTerm("iets vaags")//
         .setFuzzy(true)//
@@ -93,7 +93,7 @@ public class ElaborateQueryComposerTest {
   }
 
   @Test
-  public void testcomposeQueryString5() throws Exception {
+  public void testcomposeQueryString5() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
     sp.setTerm("iets vaags")//
         .setFuzzy(true)//
@@ -108,7 +108,7 @@ public class ElaborateQueryComposerTest {
   }
 
   @Test
-  public void testcomposeQueryString6() throws Exception {
+  public void testcomposeQueryString6() {
     //  {"searchInAnnotations":false,"searchInTranscriptions":false,"facetValues":[{"name":"metadata_folio_number","values":["199"]}],"term":"a*"}
     ElaborateSearchParameters sp = new ElaborateSearchParameters()//
         .setTerm("a*")//
@@ -127,7 +127,7 @@ public class ElaborateQueryComposerTest {
   }
 
   @Test
-  public void testcomposeQueryStringWithRange() throws Exception {
+  public void testcomposeQueryStringWithRange() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
     sp.setTerm("iets vaags")//
         .setFuzzy(true)//

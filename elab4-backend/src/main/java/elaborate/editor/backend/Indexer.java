@@ -22,21 +22,19 @@ package elaborate.editor.backend;
  * #L%
  */
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.apache.commons.lang.time.StopWatch;
-
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 import elaborate.editor.solr.ElaborateSolrIndexer;
 import elaborate.util.HibernateUtil;
 import nl.knaw.huygens.Log;
+import org.apache.commons.lang.time.StopWatch;
+
+import javax.persistence.EntityManager;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 class Indexer {
   private static final int COMMIT_EVERY_N_RECORDS = 100;
@@ -65,11 +63,9 @@ class Indexer {
       int n = 1;
       for (ProjectEntry projectEntry : projectentries) {
         Log.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
-            new Object[] { //
-                projectEntry.getId(), n, size, //
-                percentage(n, size), //
-                time_remaining(n, size, sw.getTime()) //
-            } //
+            projectEntry.getId(), n, size, //
+            percentage(n, size), //
+            time_remaining(n, size, sw.getTime()) //
         );
         solr.index(projectEntry, autoCommit(n));
         n++;

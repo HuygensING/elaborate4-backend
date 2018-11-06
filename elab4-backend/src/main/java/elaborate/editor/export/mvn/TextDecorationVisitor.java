@@ -36,9 +36,9 @@ import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-class TextDecorationVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
+public class TextDecorationVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
 
-  private ArrayDeque<Element> textDecoratorDeque = new ArrayDeque<Element>();
+  final ArrayDeque<Element> textDecoratorDeque = new ArrayDeque<Element>();
 
   public TextDecorationVisitor() {
     super(new XmlContext());

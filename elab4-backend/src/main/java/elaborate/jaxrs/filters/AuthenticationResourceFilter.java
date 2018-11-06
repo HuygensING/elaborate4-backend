@@ -39,10 +39,10 @@ import com.sun.jersey.spi.container.ResourceFilter;
 import elaborate.editor.model.SessionService;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
-class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {
-	private static final String HEADER = "Authorization";
+public class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {
+	public static final String HEADER = "Authorization";
 
-	private SessionService sessionService = SessionService.instance();
+	final SessionService sessionService = SessionService.instance();
 
 	@Override
 	public ContainerRequest filter(ContainerRequest request) {

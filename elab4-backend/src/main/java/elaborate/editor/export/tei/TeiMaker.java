@@ -77,7 +77,7 @@ public class TeiMaker {
 
   public static final String INTERP_GRP = "interpGrp";
 
-  private Document tei;
+  private final Document tei;
   private final Project project;
   private final TeiConversionConfig config;
   private final EntityManager entityManager;

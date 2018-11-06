@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -327,8 +326,8 @@ public class MVNConverter {
           .replace("<entry", "\n  <entry")//
           .replace("</entry>", "\n  </entry>\n")//
           .replace("<lb/>", "\n    <lb/>");
-      FileUtils.write(new File("out/raw-formatted-body.xml"), formatted, Charsets.UTF_8);
-      FileUtils.write(new File("out/cooked-body.xml"), cooked, Charsets.UTF_8);
+      FileUtils.write(new File("out/raw-formatted-body.xml"), formatted);
+      FileUtils.write(new File("out/cooked-body.xml"), cooked);
     } catch (final IOException e) {
       e.printStackTrace();
     }

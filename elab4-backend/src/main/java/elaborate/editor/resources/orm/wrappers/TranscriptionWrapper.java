@@ -22,20 +22,18 @@ package elaborate.editor.resources.orm.wrappers;
  * #L%
  */
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
-
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
+import java.util.List;
+import java.util.Map;
 
 public class TranscriptionWrapper {
 	// TODO: split into input/output object
@@ -63,16 +61,18 @@ public class TranscriptionWrapper {
 		return id;
 	}
 
-	private void setId(long id) {
+	public TranscriptionWrapper setId(long id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getTextLayer() {
 		return textLayer;
 	}
 
-	private void setTextLayer(String textLayer) {
+	public TranscriptionWrapper setTextLayer(String textLayer) {
 		this.textLayer = textLayer;
+		return this;
 	}
 
 	public String getBody() {
@@ -87,7 +87,7 @@ public class TranscriptionWrapper {
 	@JsonIgnore
 	public List<Integer> annotationNumbers = Lists.newArrayList();
 
-	private void convertBodyForOutput(String bodyIn) {
+	void convertBodyForOutput(String bodyIn) {
 		// Log.info("body from db={}", bodyIn);
 		String xml = bodyIn;
 		if (!XmlUtil.isWellFormed(bodyIn)) {

@@ -119,7 +119,7 @@ public class UserResource extends AbstractElaborateResource {
 	@Produces(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Adds or sets a setting for the given field for the user with the given id, returns the new settings")
 	public Object setUserSetting(@PathParam("id") long id, @PathParam("field") String field, String value) {
-		Log.info("setUserSetting({},{},{})", new Object[] { id, field, value });
+		Log.info("setUserSetting({},{},{})", id, field, value);
 		userService.setSetting(id, field, value, getUser());
 		return userService.getSettings(id);
 	}

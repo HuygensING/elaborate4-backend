@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;

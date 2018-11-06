@@ -22,7 +22,6 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-
 import static org.mockito.Mockito.mock;
 
 import org.junit.Test;

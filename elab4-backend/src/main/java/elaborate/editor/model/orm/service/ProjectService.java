@@ -87,7 +87,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   private static final String PROJECT_LEADER = "Project leader";
   private static final String COUNT_KEY = "count";
   private static final List<String> DEFAULT_PROJECTENTRYMETADATAFIELDNAMES = Lists.newArrayList();
-  private static ProjectService instance = new ProjectService();
+  private static final ProjectService instance = new ProjectService();
 
   private ProjectService() {}
 
@@ -422,7 +422,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     return projects;
   }
 
-  private void logMemory() {
+  void logMemory() {
     int mb = 1024 * 1024;
     System.gc();
     // Getting the runtime reference from system
@@ -671,14 +671,14 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     Set<Long> modifiedEntryIds = Sets.newHashSet();
     try {
       Project project = getProjectIfUserCanRead(project_id, user);
-      Lists.newArrayList(project.getTextLayers()).removeAll(textLayers);
+      ((List<String>) Lists.newArrayList(project.getTextLayers())).removeAll(textLayers);
       project.setTextLayers(textLayers);
 
       persist(project);
       persist(project.addLogEntry("project textlayers changed", user));
       setModifiedBy(project, user);
 
-      if (!Lists.newArrayList(project.getTextLayers()).isEmpty()) {
+      if (!((List<String>) Lists.newArrayList(project.getTextLayers())).isEmpty()) {
         persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(Lists.newArrayList(project.getTextLayers())), user));
         for (String textlayer : Lists.newArrayList(project.getTextLayers())) {
           List<?> resultList = getEntityManager()//
@@ -711,7 +711,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   }
 
   public void setProjectSettings(long project_id, Map<String, String> settingsMap, User user) {
-    Long userId = -1L;
+    long userId = -1L;
     beginTransaction();
     try {
 
@@ -734,7 +734,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         } else if (PROJECT_NAME.equals(key)) {
           project.setName(value);
         } else if (PROJECT_LEADER.equals(key)) {
-          userId = Long.valueOf(value);
+          userId = Long.parseLong(value);
           project.setProjectLeaderId(userId);
         }
         persist(pmi);
@@ -877,12 +877,17 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       throw new UnauthorizedException(MessageFormat.format("{0} has no publishing permission for {1}", user.getUsername(), project.getTitle()));
     }
 
+    Publication.Settings settings = getSettings(project_id, user, projectMetadata);
+    return publisher.publish(settings);
+  }
+
+  Publication.Settings getSettings(long project_id, User user, Map<String, String> projectMetadata) {
     String projectType = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.TYPE), ProjectTypes.COLLECTION);
     List<Long> publishableAnnotationTypeIds = getPublishableAnnotationTypeIds(projectMetadata);
     List<String> publishableProjectEntryMetadataFields = getPublishableProjectEntryMetadataFields(projectMetadata);
     List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(projectMetadata);
     List<String> publishableTextLayers = getPublishableTextLayers(projectMetadata);
-    Publication.Settings settings = new Publication.Settings()//
+    return new Publication.Settings()//
         .setProjectId(project_id)//
         .setUser(user)//
         .setTextLayers(publishableTextLayers)//
@@ -890,8 +895,6 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .setProjectEntryMetadataFields(publishableProjectEntryMetadataFields)//
         .setFacetFields(facetableProjectEntryMetadataFields)//
         .setProjectType(projectType);
-
-    return publisher.publish(settings);
   }
 
   private List<String> getPublishableTextLayers(Map<String, String> projectMetadata) {
@@ -1092,9 +1095,11 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   /**
    * Remove annotations that have no corresponding annotationmarkers (begin and end) in the Transcription Body
-   *
+   * 
+   * @param modifier
+   *          The User credited with the removal
    */
-  private void removeOrphanedAnnotations(long project_id) {
+  public void removeOrphanedAnnotations(long project_id) {
     beginTransaction();
     Project project = read(project_id);
     TranscriptionService transcriptionService = TranscriptionService.instance();

@@ -22,23 +22,14 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
+import com.google.common.collect.Sets;
+import nl.knaw.huygens.tei.*;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
-import nl.knaw.huygens.tei.Comment;
-import nl.knaw.huygens.tei.CommentHandler;
-import nl.knaw.huygens.tei.DelegatingVisitor;
-import nl.knaw.huygens.tei.Element;
-import nl.knaw.huygens.tei.ElementHandler;
-import nl.knaw.huygens.tei.Text;
-import nl.knaw.huygens.tei.TextHandler;
-import nl.knaw.huygens.tei.Traversal;
-import nl.knaw.huygens.tei.XmlContext;
-
-class AnnotatedTextRangeVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
+public class AnnotatedTextRangeVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
   private final Set<RangeAnnotation> rangeAnnotations = Sets.newLinkedHashSet();
   private final Deque<Integer> elementOffsetStack = new ArrayDeque<Integer>();
 

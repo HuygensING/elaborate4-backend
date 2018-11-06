@@ -22,14 +22,12 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
-import static org.assertj.core.api.Assertions.assertThat;
+import nl.knaw.huygens.Log;
+import org.junit.Test;
 
 import java.util.Set;
 
-import org.junit.Test;
-
-import nl.knaw.huygens.Log;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnnotatedTextRangeTest {
 

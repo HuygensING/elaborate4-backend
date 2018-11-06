@@ -39,7 +39,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import jersey.repackaged.com.google.common.collect.Maps;
 import nl.knaw.huygens.Log;
 
-class Elab4RestClient {
+public class Elab4RestClient {
   private final WebTarget sessionsTarget;
   private final WebTarget projectsTarget;
   private final WebTarget elab4;
@@ -73,11 +73,11 @@ class Elab4RestClient {
   }
 
   @SuppressWarnings("unchecked")
-  public void getProjectEntries(int i) {
-    projectsTarget.path(String.valueOf(i)).path("entries")//
-            .request()//
-            .header("Authorization", "SimpleAuth " + token)//
-            .get(List.class);
+  public List<Map<String, Object>> getProjectEntries(int i) {
+    return projectsTarget.path(String.valueOf(i)).path("entries")//
+        .request()//
+        .header("Authorization", "SimpleAuth " + token)//
+        .get(List.class);
   }
 
   @SuppressWarnings("unchecked")

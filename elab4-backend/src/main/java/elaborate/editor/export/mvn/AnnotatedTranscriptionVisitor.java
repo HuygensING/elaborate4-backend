@@ -45,17 +45,17 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
-class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext> {
+public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext> {
   private static boolean lastNodeWasText = false;
   private final Deque<Integer> startIndexStack = new ArrayDeque<Integer>();
   private final Deque<Element> elementStack = new ArrayDeque<Element>();
-  private static Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
+  public static final Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
   private static String sigle;
   private static ParseResult result;
   private static final Map<String, Integer> annotationStartIndexMap = Maps.newHashMap();
   private static Map<Integer, AnnotationData> annotationIndex;
   private static int lineStartIndex = 0;
-  private static Deque<XmlAnnotation> poetryOrParagraphAnnotations = new ArrayDeque<XmlAnnotation>();
+  private static final Deque<XmlAnnotation> poetryOrParagraphAnnotations = new ArrayDeque<XmlAnnotation>();
 
   public AnnotatedTranscriptionVisitor(Map<Integer, AnnotationData> annotationIndex, ParseResult result, String sigle) {
     super(new XmlContext());
@@ -94,7 +94,7 @@ class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implem
     return Traversal.NEXT;
   }
 
-  private static final List<String> ANNOTATED_TEXT_TO_IGNORE = ImmutableList.<String> of("‡", "¤");
+  static final List<String> ANNOTATED_TEXT_TO_IGNORE = ImmutableList.of("‡", "¤");
 
   public static class TextSegmentHandler extends XmlTextHandler<XmlContext> {
     @Override
@@ -113,7 +113,7 @@ class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implem
     }
   }
 
-  private static final List<String> POETRY_AND_PARAGRAPH_CLOSERS = ImmutableList.of(//
+  static final List<String> POETRY_AND_PARAGRAPH_CLOSERS = ImmutableList.of(//
       MVNAnnotationType.ALINEA.getName(), //
       MVNAnnotationType.POEZIE.getName(), //
       MVNAnnotationType.ONDERSCHRIFT.getName(), //

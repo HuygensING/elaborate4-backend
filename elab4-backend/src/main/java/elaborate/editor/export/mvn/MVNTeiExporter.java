@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import static elaborate.util.XmlUtil.closingTag;
 import static elaborate.util.XmlUtil.milestoneTag;
 import static elaborate.util.XmlUtil.openingTag;
@@ -637,9 +636,9 @@ public class MVNTeiExporter {
         String body = xmlAnnotation.getAttributes().get("body");
         if (body != null) {
           String capitalsize = body.trim();
-          Integer size = 0;
+          int size = 0;
           if (StringUtils.isNumeric(capitalsize)) {
-            size = Integer.valueOf(capitalsize);
+            size = Integer.parseInt(capitalsize);
             if (size < 1 || size > 19) {
               addValidationError(body, context);
             }
@@ -697,7 +696,7 @@ public class MVNTeiExporter {
   //
 
   private Multimap<String, XmlAnnotation> indexXmlAnnotations(Collection<XmlAnnotation> annotations) {
-    Multimap<String, XmlAnnotation> index = ArrayListMultimap.<String, XmlAnnotation> create();
+    Multimap<String, XmlAnnotation> index = ArrayListMultimap.create();
     for (XmlAnnotation xmlAnnotation : annotations) {
       index.put(xmlAnnotation.getName(), xmlAnnotation);
     }

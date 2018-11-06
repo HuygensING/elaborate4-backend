@@ -38,12 +38,12 @@ class ProjectEntryServiceTest extends AbstractTest {
 	private ProjectEntryService projectEntryService;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		projectEntryService = ProjectEntryService.instance();
 	}
 
 	@After
-	public void tearDown() throws Exception {}
+	public void tearDown() {}
 
 	// @Test
 	public void testRead() {

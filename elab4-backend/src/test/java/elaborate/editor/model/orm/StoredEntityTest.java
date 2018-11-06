@@ -35,13 +35,13 @@ class StoredEntityTest extends AbstractTest {
 	static EntityManagerFactory entityManagerFactory;
 
 	@BeforeClass
-	public static void setUpClass() throws Exception {
+	public static void setUpClass() {
 		entityManagerFactory = Persistence.createEntityManagerFactory("nl.knaw.huygens.elaborate.test.jpa");
 		// entityManagerFactory = Persistence.createEntityManagerFactory("nl.knaw.huygens.elaborate.test.psql.jpa");
 	}
 
 	@AfterClass
-	public static void tearDownClass() throws Exception {
+	public static void tearDownClass() {
 		if (entityManagerFactory != null) {
 			entityManagerFactory.close();
 		}

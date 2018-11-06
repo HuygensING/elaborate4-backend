@@ -22,7 +22,16 @@ package elaborate.publication.solr;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.RangeField;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
+import org.assertj.core.data.MapEntry;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -30,18 +39,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.assertj.core.data.MapEntry;
-import org.junit.Test;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.RangeField;
-import nl.knaw.huygens.solr.FacetInfo;
-import nl.knaw.huygens.solr.FacetType;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SearchServiceTest {
 
@@ -87,7 +85,7 @@ public class SearchServiceTest {
 	}
 
 	@Test
-	public void testMetadataFieldTitlesAreReturned() throws Exception {
+	public void testMetadataFieldTitlesAreReturned() {
 		List<Map<String, Object>> results = Lists.newArrayList();
 		Map<String, Object> map = Maps.newHashMap();
 		map.put("metadata_field1", ImmutableList.of("value"));

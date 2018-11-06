@@ -36,21 +36,21 @@ public class SolrUtilsTest {
 	}
 
 	@Test
-	public void testEscapeFacetValue() throws Exception {
+	public void testEscapeFacetValue() {
 		String in = "This? is a 'test' (#@!$)";
 		String expected = "This\\?\\ is\\ a\\ 'test'\\ \\(#@\\!$\\)";
 		assertThat(SolrUtils.escapeFacetValue(in)).isEqualTo(expected);
 	}
 
 	@Test
-	public void testEmptyFacetValue() throws Exception {
+	public void testEmptyFacetValue() {
 		String in = ":empty";
 		String expected = "\\:empty";
 		assertThat(SolrUtils.escapeFacetValue(in)).isEqualTo(expected);
 	}
 
 	@Test
-	public void testSplitTerms1() throws Exception {
+	public void testSplitTerms1() {
 		String terms = "losse woorden \"gekoppelde woorden\"";
 		List<String> splitTerms = SolrUtils.splitTerms(terms);
 		assertThat(splitTerms.size()).isEqualTo(3);
@@ -60,7 +60,7 @@ public class SolrUtilsTest {
 	}
 
 	@Test
-	public void testSplitTerms2() throws Exception {
+	public void testSplitTerms2() {
 		String terms = "\"drie gekoppelde woorden\" twee losse woorden";
 		List<String> splitTerms = SolrUtils.splitTerms(terms);
 		assertThat(splitTerms.size()).isEqualTo(4);

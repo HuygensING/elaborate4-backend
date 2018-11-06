@@ -180,7 +180,7 @@ public class TranscriptionHierarchyFixer {
   }
 
   // Grouping classes
-  static interface Grouping {}
+  interface Grouping {}
 
   static final class NodeGrouping implements Grouping {
     private final List<Node> nodes = Lists.newArrayList();
@@ -206,8 +206,8 @@ public class TranscriptionHierarchyFixer {
     }
   }
 
-  static final class AnnotationOpenGrouping extends AnnotationGrouping {};
+  static final class AnnotationOpenGrouping extends AnnotationGrouping {}
 
-  static final class AnnotationCloseGrouping extends AnnotationGrouping {};
+  static final class AnnotationCloseGrouping extends AnnotationGrouping {}
 
 }

@@ -22,24 +22,23 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-
 import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 public class AnnotatedTextRange {
-  private Multimap<Integer, Element> elementStartIndex = LinkedHashMultimap.create();
-  private Multimap<Integer, Element> elementEndIndex = LinkedHashMultimap.create();
+  public final Multimap<Integer, Element> elementStartIndex = LinkedHashMultimap.create();
+  public final Multimap<Integer, Element> elementEndIndex = LinkedHashMultimap.create();
   private Set<RangeAnnotation> rangeAnnotations = Sets.newLinkedHashSet();
   private String text;
 
@@ -47,7 +46,7 @@ public class AnnotatedTextRange {
     disassemble(xml);
   }
 
-  private void disassemble(String xml) {
+  void disassemble(String xml) {
     AnnotatedTextRangeVisitor v = new AnnotatedTextRangeVisitor();
     Document document = Document.createFromXml(xml, true);
     document.accept(v);
@@ -66,7 +65,7 @@ public class AnnotatedTextRange {
     return rangeAnnotations;
   }
 
-  private Iterator<TextPositionInfo> iterator() {
+  public Iterator<TextPositionInfo> iterator() {
     return new Iterator<AnnotatedTextRange.TextPositionInfo>() {
       int i = 0;
 
@@ -139,7 +138,7 @@ public class AnnotatedTextRange {
     }
   }
 
-  private void index() {
+  void index() {
     for (RangeAnnotation rangeAnnotation : rangeAnnotations) {
       elementStartIndex.put(rangeAnnotation.getStartOffset(), rangeAnnotation.getElement());
       elementEndIndex.put(rangeAnnotation.getEndOffset(), rangeAnnotation.getElement());

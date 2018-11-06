@@ -34,7 +34,7 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Singleton
 public class AnnotationTypeMetadataItemService extends AbstractStoredEntityService<AnnotationTypeMetadataItem> {
-	private static AnnotationTypeMetadataItemService instance = new AnnotationTypeMetadataItemService();
+	private static final AnnotationTypeMetadataItemService instance = new AnnotationTypeMetadataItemService();
 
 	private AnnotationTypeMetadataItemService() {}
 

@@ -22,17 +22,12 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.google.common.collect.*;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.solr.FacetCount;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
+import nl.knaw.huygens.solr.RangeOption;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -46,19 +41,11 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.HighlightParams;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multiset;
-import com.google.common.collect.Sets;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.solr.FacetCount;
-import nl.knaw.huygens.solr.FacetInfo;
-import nl.knaw.huygens.solr.FacetType;
-import nl.knaw.huygens.solr.RangeOption;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AbstractSolrServer implements SolrServerWrapper {
 	public static final String KEY_NUMFOUND = "numFound";
@@ -66,10 +53,10 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 	private static final int ROWS = 50000;
 	private static final int FACET_LIMIT = 10000;
 
-	SolrServer server;
+	protected SolrServer server;
 	private final QueryComposer queryComposer;
 
-	AbstractSolrServer(QueryComposer queryComposer) {
+	public AbstractSolrServer(QueryComposer queryComposer) {
 		this.queryComposer = queryComposer;
 	}
 
@@ -162,12 +149,12 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 
 			query.set(HighlightParams.MERGE_CONTIGUOUS_FRAGMENTS, false);
 			query.set(HighlightParams.MAX_CHARS, -1);
-			query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[textFieldMap.size()]));
+			query.set(HighlightParams.FIELDS, textFieldMap.keySet().toArray(new String[0]));
 			query.set(HighlightParams.Q, queryComposer.getHighlightQuery());
 		}
 		query = setSort(query, sp);
 
-    return getSearchData(sp, facetFields, query, fieldsToReturn);
+		return getSearchData(sp, facetFields, query, fieldsToReturn);
 	}
 
 	private String[] getFacetFields(ElaborateSearchParameters sp) {
@@ -314,7 +301,7 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 		for (String level : collection) {
 			list.add(SolrUtils.facetName(level));
 		}
-		return list.toArray(new String[list.size()]);
+		return list.toArray(new String[0]);
 	}
 
 	/**
@@ -369,7 +356,7 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 	 * @param title
 	 * @param type
 	 */
-	private FacetCount convertFacet(FacetField field, String title, FacetType type) {
+	protected FacetCount convertFacet(FacetField field, String title, FacetType type) {
 		if (field != null) {
 			FacetCount facetCount = new FacetCount()//
 					.setName(field.getName())//
@@ -389,8 +376,8 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 		return null;
 	}
 
-	private static final String HL_PRE = "<em>";
-	private static final String HL_POST = "</em>";
+	public static final String HL_PRE = "<em>";
+	public static final String HL_POST = "</em>";
 	private static final Pattern HL_REGEX = Pattern.compile(HL_PRE + "(.+?)" + HL_POST);
 
 	public static Collection<String> extractTerms(List<String> snippets) {

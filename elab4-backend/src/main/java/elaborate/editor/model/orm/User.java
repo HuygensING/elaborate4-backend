@@ -99,9 +99,10 @@ public class User extends AbstractStoredEntity<User> {
 		return title;
 	}
 
-  public void setTitle(String title) {
+  public User setTitle(String title) {
 		this.title = title;
-  }
+		return this;
+	}
 
   public String getEmail() {
 		return email;
@@ -135,9 +136,10 @@ public class User extends AbstractStoredEntity<User> {
 		return encodedpassword;
 	}
 
-	public void setEncodedPassword(byte[] encodedPassword) {
+	public User setEncodedPassword(byte[] encodedPassword) {
 		this.encodedpassword = encodedPassword;
-  }
+		return this;
+	}
 
 	public String getRoleString() {
 		return rolestring;
@@ -196,8 +198,11 @@ public class User extends AbstractStoredEntity<User> {
 	 * @return true if this User has the given role, false otherwise
 	 */
 	public boolean hasRole(String role) {
-    return role.equals(ElaborateRoles.READER) || isRoot() || getRoles().contains(role);
-  }
+		if (role.equals(ElaborateRoles.READER)) {
+			return true;
+		}
+		return isRoot() || getRoles().contains(role);
+	}
 
 	public boolean hasHighestRole(String role) {
 		return (getRole().equals(role));
@@ -229,7 +234,7 @@ public class User extends AbstractStoredEntity<User> {
 		return getUserSetting(key, null);
 	}
 
-	private String getUserSetting(final String key, final String defaultValue) {
+	public String getUserSetting(final String key, final String defaultValue) {
 		return (hasUserSetting(key) && userSetting(key) != null) ? userSetting(key) : defaultValue;
 	}
 
@@ -247,7 +252,7 @@ public class User extends AbstractStoredEntity<User> {
     };
 	}
 
-	private boolean hasUserSetting(final String key) {
+	public boolean hasUserSetting(final String key) {
 		return Iterables.any(Lists.newArrayList(getUserSettings()), userSettingWithKey(key));
 	}
 

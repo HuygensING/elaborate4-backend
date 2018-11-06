@@ -83,7 +83,7 @@ public class PublishTask implements Runnable {
   private File jsonDir;
   private SolrServerWrapper solrServer;
 
-  private Configuration config = Configuration.instance();
+  final Configuration config = Configuration.instance();
   private EntityManager entityManager;
   //	private Map<Integer, String> publishableAnnotationTypes;
   //	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
@@ -295,7 +295,7 @@ public class PublishTask implements Runnable {
   private void exportBuildDate() {
     File properties = new File(distDir, "WEB-INF/classes/about.properties");
     try {
-      FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), Charsets.UTF_8, true);
+      FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), true);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -352,6 +352,7 @@ public class PublishTask implements Runnable {
     map.put("baseURL", getBaseURL(project.getName()));
     map.put("annotationIndex", ANNOTATION_INDEX_JSON);
     map.put("multivaluedFacetIndex", calculateMultivaluedFacetIndex(entries));
+    map.put("facetDefaultOrder", facetDefaultOrder(project));
 
     addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
     addIfNotNull(map, "entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
@@ -368,6 +369,14 @@ public class PublishTask implements Runnable {
     //
     // map.put("settings", projectSettings);
     return map;
+  }
+
+  private Map<String, String> facetDefaultOrder(Project project) {
+    final Map<String, String> facetDefaultOrder = new HashMap<String, String>();
+    for (String f : settings.getFacetFields()) {
+      facetDefaultOrder.put(f, "az");
+    }
+    return facetDefaultOrder;
   }
 
   private Map<String, Map<String, List<Long>>> calculateMultivaluedFacetIndex(List<EntryData> entries) {
@@ -464,7 +473,7 @@ public class PublishTask implements Runnable {
         }
         map.put(transcription.getTextLayer(), textlayerData);
       } catch (Exception e) {
-        Log.error("Error '{}' for transcription {}, body: '{}'", new Object[]{e.getMessage(), transcription.getId(), transcription.getBody()});
+        Log.error("Error '{}' for transcription {}, body: '{}'", e.getMessage(), transcription.getId(), transcription.getBody());
         e.printStackTrace();
       }
     }
@@ -473,7 +482,7 @@ public class PublishTask implements Runnable {
 
   private void fixPageBreaks(Transcription transcription) {
     EntityManager entityManager = HibernateUtil.getEntityManager();
-    String body = transcription.getBody();
+    String body = cleanupAfterWord(transcription.getBody());
     String fixed = body//
         .replace("<strong>", "<b>")//
         .replace("</strong>", "</b>")//
@@ -495,7 +504,7 @@ public class PublishTask implements Runnable {
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
     return new TextlayerData()//
-        .setText(tw.getBody())//
+        .setText(cleanupAfterWord(tw.getBody()))//
         .setAnnotations(getAnnotationData(tw.annotationNumbers));
   }
 
@@ -508,7 +517,7 @@ public class PublishTask implements Runnable {
         if (settings.includeAnnotationType(annotationType)) {
           AnnotationPublishData ad2 = new AnnotationPublishData()//
               .setN(annotation.getAnnotationNo())//
-              .setText(annotation.getBody())//
+              .setText(cleanupAfterWord(annotation.getBody()))//
               .setAnnotatedText(annotation.getAnnotatedText())//
               .setType(getAnnotationTypeData(annotationType, annotation.getAnnotationMetadataItems()));
           list.add(ad2);
@@ -969,6 +978,10 @@ public class PublishTask implements Runnable {
       return this;
     }
 
+  }
+
+  private String cleanupAfterWord(String dirty) {
+    return dirty.replaceAll("(?s)<!--.*?-->", "");
   }
 
 }

@@ -31,12 +31,12 @@ public class PermissionTest {
 	private Permission permission;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		permission = new Permission();
 	}
 
 	@Test
-	public void testAllow() throws Exception {
+	public void testAllow() {
 		assertThat(permission.can(Action.ADD)).isFalse();
 
 		permission.allow(Action.ADD);
@@ -47,7 +47,7 @@ public class PermissionTest {
 	}
 
 	@Test
-	public void testSetCanRead() throws Exception {
+	public void testSetCanRead() {
 		assertThat(permission.canRead()).isFalse();
 
 		permission.setCanRead(true);
@@ -55,7 +55,7 @@ public class PermissionTest {
 	}
 
 	@Test
-	public void testSetCanWrite() throws Exception {
+	public void testSetCanWrite() {
 		assertThat(permission.canRead()).isFalse();
 		assertThat(permission.canWrite()).isFalse();
 

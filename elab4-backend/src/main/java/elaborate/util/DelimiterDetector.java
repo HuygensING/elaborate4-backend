@@ -22,10 +22,10 @@ package elaborate.util;
  * #L%
  */
 
-class DelimiterDetector {
-	private StringBuilder pre = new StringBuilder();
-	private StringBuilder center = new StringBuilder();
-	private StringBuilder post = new StringBuilder();
+public class DelimiterDetector {
+	final StringBuilder pre = new StringBuilder();
+	final StringBuilder center = new StringBuilder();
+	final StringBuilder post = new StringBuilder();
 
 	public DelimiterDetector(String string) {
 		boolean atStart = true;

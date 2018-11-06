@@ -25,7 +25,7 @@ package elaborate.editor.export.mvn;
 import java.util.Collection;
 import java.util.List;
 
-interface AnnotationHandler {
+public interface AnnotationHandler {
   List<String> relevantTags();
 
   void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> collection, Context context);

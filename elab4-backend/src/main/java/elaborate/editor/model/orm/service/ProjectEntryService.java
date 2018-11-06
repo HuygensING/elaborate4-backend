@@ -50,8 +50,8 @@ import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntry> {
-	private static ProjectEntryService instance = new ProjectEntryService();
-	private ProjectService projectService = ProjectService.instance();
+	private static final ProjectEntryService instance = new ProjectEntryService();
+	final ProjectService projectService = ProjectService.instance();
 
 	private ProjectEntryService() {}
 
@@ -249,7 +249,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		return facsimile;
 	}
 
-	public void updateFacsimile(long facsimile_id, Facsimile facsimileData, User user) {
+	public Facsimile updateFacsimile(long facsimile_id, Facsimile facsimileData, User user) {
 		beginTransaction();
 		Facsimile facsimile;
 		try {
@@ -266,9 +266,10 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		} finally {
 			commitTransaction();
 		}
-  }
+		return facsimile;
+	}
 
-	public void deleteFacsimile(long facsimile_id, User user) {
+	public Facsimile deleteFacsimile(long facsimile_id, User user) {
 		beginTransaction();
 		Facsimile facsimile;
 		try {
@@ -283,7 +284,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 		} finally {
 			commitTransaction();
 		}
-  }
+		return facsimile;
+	}
 
 	private Facsimile getFacsimile(long facsimile_id) {
 		Facsimile facsimile;

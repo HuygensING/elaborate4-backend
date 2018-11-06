@@ -27,7 +27,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 public class Permission {
-	private Set<String> allowedActions = Sets.newHashSet();
+	final Set<String> allowedActions = Sets.newHashSet();
 	private boolean canRead = false;
 	private boolean canWrite = false;
 
@@ -36,12 +36,13 @@ public class Permission {
 		return this;
 	}
 
-	public void setCanWrite(boolean b) {
+	public Permission setCanWrite(boolean b) {
 		this.canWrite = b;
 		if (b) {
 			setCanRead(true);
 		}
-  }
+		return this;
+	}
 
 	public boolean canRead() {
 		return this.canRead;
@@ -59,20 +60,24 @@ public class Permission {
 		return allowedActions.contains(action);
 	}
 
-	private void allow(String action) {
+	public Permission allow(String action) {
 		allowedActions.add(action);
-  }
+		return this;
+	}
 
-	public void allow(Action action) {
+	public Permission allow(Action action) {
 		allow(action.name());
-  }
+		return this;
+	}
 
-	private void disallow(String action) {
+	public Permission disallow(String action) {
 		allowedActions.remove(action);
-  }
+		return this;
+	}
 
-	public void disallow(Action action) {
+	public Permission disallow(Action action) {
 		disallow(action.name());
-  }
+		return this;
+	}
 
 }

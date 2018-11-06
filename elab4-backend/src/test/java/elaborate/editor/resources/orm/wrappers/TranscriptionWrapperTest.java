@@ -42,13 +42,13 @@ import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 public class TranscriptionWrapperTest {
 
 	@Before
-	public void setUp() throws Exception {}
+	public void setUp() {}
 
 	@After
-	public void tearDown() throws Exception {}
+	public void tearDown() {}
 
 	@Test
-	public void testTranscriptionWrapper() throws Exception {
+	public void testTranscriptionWrapper() {
 		String textLayer = "textlayer";
 		String title = "title";
 		String body = "<body><ab id=\"9085822\"/>sdgdgdgsdgsdfg<ae id=\"9085822\"/></body>";
@@ -64,7 +64,7 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
-	public void testTranscriptionWrapperWithBadXHtmlInput() throws Exception {
+	public void testTranscriptionWrapperWithBadXHtmlInput() {
 		String textLayer = "textlayer";
 		String title = "title";
 		String body = "<body><span style=\"font-size:11.0pt;line-height:115%; font-family:\"Verdana\",\"sans-serif\";mso-fareast-font-family:Calibri;mso-fareast-theme-font: minor-latin;mso-bidi-font-family:\"Times New Roman\";mso-bidi-theme-font:minor-bidi; mso-ansi-language:NL;mso-fareast-language:EN-US;mso-bidi-language:AR-SA\">Hoezo mag ik niet copy-pasten vanuit Word? Maar ik wil het!</span></body>";
@@ -87,7 +87,7 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
-	public void testConvertBodyWithEmptyTagsForOutput() throws Exception {
+	public void testConvertBodyWithEmptyTagsForOutput() {
 		String in = "<body>bla <i></i> bla <strong></strong> bla</body>";
 		String expected = "bla  bla  bla";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
@@ -96,7 +96,7 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
-	public void testConvertBodyForOutput() throws Exception {
+	public void testConvertBodyForOutput() {
 		String in = "<body>"//
 				+ "  "//
 				+ "<ab id=\"9085822\"/>"//
@@ -130,7 +130,7 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
-	public void testConvertBodyForOutput_with_superfluous_newlines_at_the_end() throws Exception {
+	public void testConvertBodyForOutput_with_superfluous_newlines_at_the_end() {
 		String in = "<body>lorem epsum doleres whatever\n \n\n\n</body>";
 		String expected = "lorem epsum doleres whatever";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
@@ -139,7 +139,7 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
-	public void testConvertBodyForOutput_with_superfluous_whitespace_at_the_end() throws Exception {
+	public void testConvertBodyForOutput_with_superfluous_whitespace_at_the_end() {
 		String in = "<body>body\n \n </body>";
 		String expected = "body";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
@@ -148,7 +148,7 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
-	public void testConvertBodyForOutput_with_shift_space() throws Exception {
+	public void testConvertBodyForOutput_with_shift_space() {
 		String in = "<body>header\n  paragraph 1\n  paragraph 2   \n paragraph 3</body>";
 		String expected = "header<br>&nbsp;&nbsp;paragraph 1<br>&nbsp;&nbsp;paragraph 2&nbsp;&nbsp;&nbsp;<br> paragraph 3";
 		Transcription transcription = mockTranscription("textLayer", "title", in);
@@ -157,49 +157,49 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
-	public void testConvertFromInput() throws Exception {
+	public void testConvertFromInput() {
 		String in = "<span data-marker=\"begin\" data-id=\"9085822\">bla die bla</span><sup data-marker=\"end\" data-id=\"9085822\">1</sup><br>hello world";
 		String expected = "<body><ab id=\"9085822\"/>bla die bla<ae id=\"9085822\"/>\nhello world</body>";
 		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
 	}
 
 	@Test
-	public void testConvertFromInputWithBadChar() throws Exception {
+	public void testConvertFromInputWithBadChar() {
 		String in = "the smiling ones danced like blooming girls, I presumed boldly to rank the former";
 		String expected = "<body>the smiling ones danced like blooming girls, I presumed boldly to rank  the former</body>";
 		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
 	}
 
 	@Test
-	public void testConvertFromInputWithBreaks() throws Exception {
+	public void testConvertFromInputWithBreaks() {
 		String in = "hop<br>on<br>pop";
 		String expected = "<body>hop\non\npop</body>";
 		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
 	}
 
 	@Test
-	public void testConvertFromInputRemovesXMLComments() throws Exception {
+	public void testConvertFromInputRemovesXMLComments() {
 		String in = "bla <!-- ignore comments --> bla";
 		String expected = "<body>bla  bla</body>";
 		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
 	}
 
 	@Test
-	public void testConvertFromInputConvertsEmToI() throws Exception {
+	public void testConvertFromInputConvertsEmToI() {
 		String in = "<em style=\"white-space: normal;\">Casteleijn</em>";
 		String expected = "<body><i>Casteleijn</i></body>";
 		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
 	}
 
 	@Test
-	public void testConvertFromInputConvertsStrongToB() throws Exception {
+	public void testConvertFromInputConvertsStrongToB() {
 		String in = "<strong style=\"white-space: normal;\">TGIF</strong>";
 		String expected = "<body><b>TGIF</b></body>";
 		assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
 	}
 
 	@Test
-	public void testConvertFromInputRemovesMostWordTags() throws Exception {
+	public void testConvertFromInputRemovesMostWordTags() {
 		String in = "<p class=\"MsoNormal\" style=\"margin-right:29.9pt;text-align:justify\">"//
 				+ "I <i style=\"mso-bidi-font-style:normal\">HEART</i>"//
 				+ " <b style=\"mso-bidi-font-weight:normal\">WORD!!</b>"//
@@ -223,7 +223,7 @@ public class TranscriptionWrapperTest {
 	// }
 
 	@Test
-	public void testSuperscriptIsHandledWell() throws Exception {
+	public void testSuperscriptIsHandledWell() {
 		TranscriptionWrapper tw = new TranscriptionWrapper();
 		tw.setBody("<sup>super</sup> normaal <sub>sub</sub><br><sup>super</sup> normaal <sub>sub<br></sub><sup>super</sup> normaal <sub>sub</sub><br>");
 		String expected = "<body><sup>super</sup> normaal <sub>sub</sub>\n<sup>super</sup> normaal <sub>sub\n</sub><sup>super</sup> normaal <sub>sub</sub>\n</body>";
@@ -231,7 +231,7 @@ public class TranscriptionWrapperTest {
 	}
 
 	@Test
-	public void testAnnotationMarkerIsHandledWell() throws Exception {
+	public void testAnnotationMarkerIsHandledWell() {
 		TranscriptionWrapper tw = new TranscriptionWrapper();
 		tw.setBody("<sup>super</sup> "//
 				+ "<span data-id=\"9075405\" data-marker=\"begin\"></span>"//

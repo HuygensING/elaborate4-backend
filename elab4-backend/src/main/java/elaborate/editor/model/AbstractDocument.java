@@ -47,8 +47,9 @@ public abstract class AbstractDocument<T extends AbstractDocument<T>> extends Ab
 		return title;
 	}
 
-  public void setTitle(String title) {
+  public T setTitle(String title) {
 		this.title = title;
+		return ((T) this);
 	}
 
 }

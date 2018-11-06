@@ -50,8 +50,8 @@ public class SessionService {
 	private static final int MINUTES = 1000 * 60;
 	static final int SESSION_TIMEOUT = 8 * 60 * MINUTES;
 	private static final int SESSIONID_SIZE = 20;
-	private Map<String, Session> sessionMap = Maps.newHashMap();
-	private UserService userService = UserService.instance();
+	final Map<String, Session> sessionMap = Maps.newHashMap();
+	final UserService userService = UserService.instance();
 
 	private SessionService() {}
 
@@ -100,8 +100,8 @@ public class SessionService {
 	}
 
 	public static final String SIMPLEAUTH = "SimpleAuth";
-	private static final String FEDERATED = "Federated";
-	private static final List<String> SCHEMES = ImmutableList.of(SIMPLEAUTH, FEDERATED);
+	public static final String FEDERATED = "Federated";
+	public static final List<String> SCHEMES = ImmutableList.of(SIMPLEAUTH, FEDERATED);
 
 	public ElaborateSecurityContext getSecurityContext(String scheme, String key) throws UnauthorizedException {
 		if (SCHEMES.contains(scheme)) {

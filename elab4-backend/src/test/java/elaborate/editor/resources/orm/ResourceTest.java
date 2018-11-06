@@ -30,9 +30,9 @@ import com.sun.jersey.test.framework.WebAppDescriptor;
 import elaborate.editor.model.ModelFactory;
 
 public class ResourceTest extends JerseyTest {
-	static EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
+	protected static final EntityManagerFactory entityManagerFactory = ModelFactory.INSTANCE.getEntityManagerFactory();
 
-	ResourceTest() {
+	public ResourceTest() {
 		super(new WebAppDescriptor.Builder()//
 				.initParam("com.sun.jersey.config.property.packages", "elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers")//
 				.initParam("com.sun.jersey.spi.container.ResourceFilters", "elaborate.jaxrs.filters.ElaborateResourceFilterFactory")//

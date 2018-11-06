@@ -37,10 +37,10 @@ import nl.knaw.huygens.Log;
 class TranscriptionServiceTest extends AbstractTest {
 
 	@Before
-	public void setUp() throws Exception {}
+	public void setUp() {}
 
 	@After
-	public void tearDown() throws Exception {}
+	public void tearDown() {}
 
 	// @Test
 	public void testAddAnnotation() {
