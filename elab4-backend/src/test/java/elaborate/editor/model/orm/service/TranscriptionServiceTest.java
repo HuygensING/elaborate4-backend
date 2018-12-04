@@ -21,38 +21,45 @@ package elaborate.editor.model.orm.service;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import static elaborate.editor.model.orm.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import org.junit.After;
-import org.junit.Before;
 
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.AnnotationInputWrapper;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.User;
 import nl.knaw.huygens.Log;
+import org.junit.After;
+import org.junit.Before;
 
-class TranscriptionServiceTest extends AbstractTest {
+import java.util.HashMap;
 
-	@Before
-	public void setUp() {}
+import static elaborate.editor.model.orm.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-	@After
-	public void tearDown() {}
+public class TranscriptionServiceTest extends AbstractTest {
 
-	// @Test
-	public void testAddAnnotation() {
-		TranscriptionService ts = TranscriptionService.instance();
-		AnnotationInputWrapper annotationInput = new AnnotationInputWrapper();
-		annotationInput.body = "body";
-		User root = mock(User.class);
-		when(root.isRoot()).thenReturn(true);
-		Annotation annotation = ts.addAnnotation(1, annotationInput, root);
-		Log.info("annotation={}", annotation);
-		assertThat(annotation).isNotNull();
-		assertThat(annotation).hasBody("body");
-	}
+  @Before
+  public void setUp() {
+  }
+
+  @After
+  public void tearDown() {
+  }
+
+  //  @Test
+  public void testAddAnnotation() {
+    TranscriptionService ts = TranscriptionService.instance();
+    AnnotationInputWrapper annotationInput = new AnnotationInputWrapper();
+    annotationInput.body = "body";
+    annotationInput.typeId = 123;
+    annotationInput.metadata = new HashMap<String, String>();
+
+    User root = mock(User.class);
+    when(root.isRoot()).thenReturn(true);
+    Annotation annotation = ts.addAnnotation(1, annotationInput, root);
+    Log.info("annotation={}", annotation);
+    assertThat(annotation).isNotNull();
+    assertThat(annotation).hasBody("body");
+  }
 
 }
