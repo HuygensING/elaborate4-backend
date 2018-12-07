@@ -828,7 +828,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     List<LogEntry> logEntries;
     try {
       Project project = getProjectIfUserCanRead(project_id, user);
-      logEntries = Ordering.natural().sortedCopy(project.getLogEntries());
+      logEntries = Ordering.natural().sortedCopy(project.getLogEntries()).subList(0,1000); // limit to 1000
     } finally {
       closeEntityManager();
     }
