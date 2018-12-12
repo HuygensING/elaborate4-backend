@@ -227,8 +227,8 @@
         </repository>
         <!-- use the following if you ARE using a snapshot version. -->
         <snapshotRepository>
-            <id>maven.huygens</id>
-            <name>Huygens Maven Repository</name>
+            <id>maven.huygens.snapshot</id>
+            <name>Huygens Maven Snapshot Repository</name>
             <url>${huygens-repo}</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
