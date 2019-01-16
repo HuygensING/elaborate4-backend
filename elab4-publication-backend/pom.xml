@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>nl.knaw.huygens.elab4</groupId>
-    <artifactId>elab4</artifactId>
-    <version>4.0.13</version>
-  </parent>
-  <artifactId>elab4-publication-backend</artifactId>
-  <packaging>war</packaging>
-  <inceptionYear>2013</inceptionYear>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nl.knaw.huygens.elab4</groupId>
+        <artifactId>elab4</artifactId>
+        <version>4.0.14-SNAPSHOT</version>
+    </parent>
+    <artifactId>elab4-publication-backend</artifactId>
+    <packaging>war</packaging>
+    <inceptionYear>2013</inceptionYear>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

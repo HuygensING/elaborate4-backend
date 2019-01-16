@@ -4,7 +4,7 @@ package elaborate.editor.resources.orm.wrappers;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2018 Huygens ING
+ * Copyright (C) 2011 - 2019 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -47,12 +47,12 @@ public class UserInput {
 
 	private static final long NULL_ID = -1L;
 	public long id = NULL_ID;
-	private String username;
-	private String email;
-	private String firstName;
-	private String lastName;
-	private String role;
-	private String password;
+	public String username;
+	public String email;
+	public String firstName;
+	public String lastName;
+	public String role;
+	public String password;
 
 	public User getUser() {
 		User user = (id == NULL_ID) ? new User() : UserService.instance().getUser(id);

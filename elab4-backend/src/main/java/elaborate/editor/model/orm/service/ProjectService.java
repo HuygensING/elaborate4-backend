@@ -4,7 +4,7 @@ package elaborate.editor.model.orm.service;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2018 Huygens ING
+ * Copyright (C) 2011 - 2019 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -828,7 +828,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     List<LogEntry> logEntries;
     try {
       Project project = getProjectIfUserCanRead(project_id, user);
-      logEntries = Ordering.natural().sortedCopy(project.getLogEntries());
+      logEntries = Ordering.natural().sortedCopy(project.getLogEntries()).subList(0,1000); // limit to 1000
     } finally {
       closeEntityManager();
     }

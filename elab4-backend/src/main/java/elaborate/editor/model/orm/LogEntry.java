@@ -4,7 +4,7 @@ package elaborate.editor.model.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2018 Huygens ING
+ * Copyright (C) 2011 - 2019 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,20 +22,12 @@ package elaborate.editor.model.orm;
  * #L%
  */
 
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import elaborate.editor.model.AbstractStoredEntity;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 @Entity
 @Table(name = "log_entries")
@@ -98,7 +90,7 @@ public class LogEntry extends AbstractStoredEntity<LogEntry>implements Comparabl
 		return this;
 	}
 
-	private Date getCreatedOn() {
+	public Date getCreatedOn() {
 		return createdOn;
 	}
 
