@@ -4,7 +4,7 @@ package elaborate.publication.resources;
  * #%L
  * elab4-publication-backend
  * =======
- * Copyright (C) 2013 - 2018 Huygens ING
+ * Copyright (C) 2013 - 2019 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
