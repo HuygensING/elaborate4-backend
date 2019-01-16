@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.knaw.huygens.elab4</groupId>
   <artifactId>elab4</artifactId>
-  <version>4.0.14-SNAPSHOT</version>
+  <version>4.0.15-SNAPSHOT</version>
   <packaging>pom</packaging>
   <inceptionYear>2011</inceptionYear>
 
@@ -64,6 +64,7 @@
     <maven-compiler.version>3.5.1</maven-compiler.version>
     <maven-license.version>1.8</maven-license.version>
     <maven-war.version>2.6</maven-war.version>
+    <maven-deploy.version>2.8.2</maven-deploy.version>
     <mockito.version>2.23.0</mockito.version>
     <pdfbox.version>1.8.8</pdfbox.version>
     <postgresql.version>9.3-1100-jdbc4</postgresql.version> <!-- > 9.3-1100-jdbc4 = JDK7 -->
