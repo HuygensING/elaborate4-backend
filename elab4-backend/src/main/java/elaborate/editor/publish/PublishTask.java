@@ -183,7 +183,7 @@ public class PublishTask implements Runnable {
       }
     }
     commitAndCloseSolr();
-    exportPojectData(entryData, thumbnails, annotationIndex);
+    exportProjectData(entryData, thumbnails, annotationIndex);
 
     final String basename = getBasename(project);
     final String url = getBaseURL(project.getName());
@@ -629,7 +629,7 @@ public class PublishTask implements Runnable {
     }
   }
 
-  private void exportPojectData(List<EntryData> entryData, Map<Long, List<String>> thumbnails, Multimap<String, AnnotationIndexData> annotationIndex) {
+  private void exportProjectData(List<EntryData> entryData, Map<Long, List<String>> thumbnails, Multimap<String, AnnotationIndexData> annotationIndex) {
     File json = new File(jsonDir, "config.json");
     EntityManager entityManager = HibernateUtil.getEntityManager();
     Project project = entityManager.find(Project.class, projectId);
