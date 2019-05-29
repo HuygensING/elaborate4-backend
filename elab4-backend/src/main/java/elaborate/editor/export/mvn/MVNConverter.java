@@ -182,7 +182,7 @@ public class MVNConverter {
     return result;
   }
 
-  static final String VALID_XML_ID_SUBSTRING_REGEXP = "[A-Za-z0-9\\-_:\\.]*";
+  static final String VALID_XML_ID_SUBSTRING_REGEXP = "[A-Za-z0-9\\-_:.]*";
 
   private void validateEntryOrderAndName(MVNConversionResult result) {
     boolean orderInUse = false;
@@ -307,7 +307,7 @@ public class MVNConverter {
   }
 
   private void validateTextNum(MVNConversionResult result, final String textNum, Deque<String> textNumStack, String entryId) {
-    if (!textNum.matches("^[a-zA-Z0-9\\.]+$")) {
+    if (!textNum.matches("^[a-zA-Z0-9.]+$")) {
       addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' mag alleen letters, cijfers en (maximaal 3) punten bevatten.", result, entryId);
 
     } else if (textNum.split("\\.").length > 4) {
@@ -355,7 +355,7 @@ public class MVNConverter {
       final Integer annotationNo = Integer.valueOf(annotationNoString);
       if (data.getAnnotationIndex().containsKey(annotationNo)) {
         final AnnotationData annotationData = data.getAnnotationIndex().get(annotationNo);
-        final String type = annotationData.type.replaceAll("[ \\(\\)]+", "_").replaceFirst("_$", "");
+        final String type = annotationData.type.replaceAll("[ ()]+", "_").replaceFirst("_$", "");
         String attributes = "";
         if (isNotBlank(annotationData.body) && !"nvt".equals(annotationData.body)) {
           attributes = " body=\"" + escapeXml11(annotationData.body) + "\"";

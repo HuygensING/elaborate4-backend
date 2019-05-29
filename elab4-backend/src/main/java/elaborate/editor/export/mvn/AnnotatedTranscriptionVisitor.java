@@ -188,7 +188,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     }
 
     private static void handleTekstBegin(String annotationBody) {
-      String n = annotationBody.replaceFirst(";.*$", "").replaceAll("[^A-Za-z0-9\\.]", "X");
+      String n = annotationBody.replaceFirst(";.*$", "").replaceAll("[^A-Za-z0-9.]", "X");
       Map<String, String> attributes = new HashMap<String, String>();
       attributes.put("n", n);
       attributes.put("xml:id", sigle + "-" + n);

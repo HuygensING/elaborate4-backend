@@ -60,16 +60,16 @@ public class CNWUtil {
 			edtf = edtf.replaceAll("/unknown", "") + "~";
 		}
 		if (edtf.contains("~?")) {
-			edtf = edtf.replaceAll("\\~\\?", "") + "?";
+			edtf = edtf.replaceAll("~\\?", "") + "?";
 		}
 		if (edtf.contains("?~")) {
-			edtf = edtf.replaceAll("\\?\\~", "") + "?";
+			edtf = edtf.replaceAll("\\?~", "") + "?";
 		}
 		if (edtf.contains("?")) {
 			edtf = edtf.replaceAll("\\?", "") + "?";
 		}
 		if (edtf.contains("~")) {
-			edtf = edtf.replaceAll("\\~", "") + "~";
+			edtf = edtf.replaceAll("~", "") + "~";
 		}
 		if (edtf.contains("u")) {
 			edtf = edtf.replace("u", "0") + "/" + edtf.replace("u", "9");
