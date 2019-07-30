@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -642,21 +642,22 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     return list;
   }
 
-  public void setTextlayers(long project_id, List<String> textLayers, User user) {
+  public void setTextLayers(long project_id, List<String> textLayers, User user) {
     beginTransaction();
     Set<Long> modifiedEntryIds = Sets.newHashSet();
     try {
       Project project = getProjectIfUserCanRead(project_id, user);
-      ((List<String>) Lists.newArrayList(project.getTextLayers())).removeAll(textLayers);
+      List<String> textLayersToRemove = Lists.newArrayList(project.getTextLayers());
+      textLayersToRemove.removeAll(textLayers);
       project.setTextLayers(textLayers);
 
       persist(project);
       persist(project.addLogEntry("project textlayers changed", user));
       setModifiedBy(project, user);
 
-      if (!((List<String>) Lists.newArrayList(project.getTextLayers())).isEmpty()) {
-        persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(Lists.newArrayList(project.getTextLayers())), user));
-        for (String textlayer : Lists.newArrayList(project.getTextLayers())) {
+      if (!textLayersToRemove.isEmpty()) {
+        persist(project.addLogEntry("removing textlayer(s) " + Joiner.on(", ").join(textLayersToRemove), user));
+        for (String textlayer : textLayersToRemove) {
           List<?> resultList = getEntityManager()//
               .createQuery("select e.id, t.id from ProjectEntry e join e.transcriptions as t with t.text_layer=:textlayer where e.project=:project")//
               .setParameter("project", project)//
