@@ -10,34 +10,17 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -45,13 +28,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
-
+import com.google.common.collect.*;
 import elaborate.editor.export.mvn.MVNAnnotationType;
 import elaborate.editor.export.pdf.PdfMaker;
 import elaborate.editor.export.tei.TagInfo;
@@ -61,18 +38,7 @@ import elaborate.editor.model.Action;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.ProjectPrototype;
 import elaborate.editor.model.ProjectTypes;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.AnnotationMetadataItem;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.LogEntry;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.ProjectEntryMetadataItem;
-import elaborate.editor.model.orm.ProjectMetadataItem;
-import elaborate.editor.model.orm.ProjectUser;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.TranscriptionType;
-import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.*;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
 import nl.knaw.huygens.Log;
@@ -80,6 +46,15 @@ import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 import nl.knaw.huygens.solr.FacetInfo;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ProjectService extends AbstractStoredEntityService<Project> {
   private static final String PROJECT_NAME = "name";
@@ -89,7 +64,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   private static final List<String> DEFAULT_PROJECTENTRYMETADATAFIELDNAMES = Lists.newArrayList();
   private static final ProjectService instance = new ProjectService();
 
-  private ProjectService() {}
+  private ProjectService() {
+  }
 
   public static ProjectService instance() {
     return instance;
@@ -537,7 +513,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     try {
       Project project = getProjectIfUserCanRead(project_id, user);
 
-      statistics = ImmutableMap.<String, Object> of("entries", getProjectEntriesStatistics(project_id, getEntityManager(), project));
+      statistics = ImmutableMap.<String, Object>of("entries", getProjectEntriesStatistics(project_id, getEntityManager(), project));
 
     } finally {
       closeEntityManager();
@@ -581,7 +557,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .createQuery("select count(*) from Transcription"//
             + " where project_entry_id in"//
             + " (select id from ProjectEntry where project_id=:project_id)"//
-    )//
+        )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
   }
@@ -604,7 +580,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .createQuery("select count(*) from"//
             + " Facsimile where project_entry_id in"//
             + " (select id from ProjectEntry where project_id=:project_id)"//
-    )//
+        )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
   }
@@ -617,7 +593,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
               + " where text_layer = :text_layer"//
               + " and project_entry_id in"//
               + " (select id from ProjectEntry where project_id=:project_id)"//
-      )//
+          )//
           .setParameter("text_layer", textLayer)//
           .setParameter("project_id", project_id)//
           .getSingleResult();
@@ -636,7 +612,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
               + "     (select id from Transcription"//
               + "       where project_entry_id in"//
               + "         (select id from ProjectEntry where project_id=:project_id))"//
-      )//
+          )//
           .setParameter("annotation_type_id", annotationType.getId())//
           .setParameter("project_id", project_id)//
           .getSingleResult();
@@ -649,7 +625,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     return (Long) entityManager//
         .createQuery("select count(*) from ProjectEntry"//
             + " where project_id=:project_id"//
-    )//
+        )//
         .setParameter("project_id", project_id)//
         .getSingleResult();
   }
@@ -828,7 +804,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     List<LogEntry> logEntries;
     try {
       Project project = getProjectIfUserCanRead(project_id, user);
-      logEntries = Ordering.natural().sortedCopy(project.getLogEntries()).subList(0,1000); // limit to 1000
+      logEntries = Ordering.natural().sortedCopy(project.getLogEntries());
+      if (logEntries.size() > 1000) {
+        logEntries = logEntries.subList(0, 1000); // limit to 1000
+      }
     } finally {
       closeEntityManager();
     }
@@ -932,7 +911,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     List<Long> publishableAnnotationTypeIds = Lists.newArrayList();
     if (metadataString != null) {
       try {
-        publishableAnnotationTypeIds = new ObjectMapper().readValue(metadataString, new TypeReference<List<Long>>() {});
+        publishableAnnotationTypeIds = new ObjectMapper().readValue(metadataString, new TypeReference<List<Long>>() {
+        });
       } catch (JsonParseException e) {
         e.printStackTrace();
       } catch (JsonMappingException e) {
@@ -949,7 +929,6 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     return publisher.getStatus(status_id);
   }
 
-  /** private **/
   private String exportTei(Project project, String groupTextsByMetadata, AnnotationType versregels) {
     Function<Annotation, TagInfo> mapToL = new Function<Annotation, TagInfo>() {
       @Override
@@ -1095,10 +1074,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   /**
    * Remove annotations that have no corresponding annotationmarkers (begin and end) in the Transcription Body
-   * 
-   * @param modifier
-   *          The User credited with the removal
-   */
+   *
+   **/
   public void removeOrphanedAnnotations(long project_id) {
     beginTransaction();
     Project project = read(project_id);
