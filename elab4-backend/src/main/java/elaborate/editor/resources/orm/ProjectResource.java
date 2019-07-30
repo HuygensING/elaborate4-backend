@@ -155,7 +155,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @RolesAllowed("ADMIN")
   @APIDesc("Updates the textlayers settings of the project with the given project_id")
   public void updateTextlayersSettings(@PathParam("project_id") long project_id, List<String> textLayers) {
-    projectService.setTextlayers(project_id, textLayers, getUser());
+    projectService.setTextLayers(project_id, textLayers, getUser());
   }
 
   // /* project facets */

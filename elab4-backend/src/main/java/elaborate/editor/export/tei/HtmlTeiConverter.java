@@ -143,7 +143,7 @@ class HtmlTeiConverter {
 
   private String toXml(String html) {
     String fixedHtml = html//
-        .replaceAll("\\&", "&amp;")//
+        .replaceAll("&", "&amp;")//
         .replaceAll("<br>", "<br/>\n")//
         .replaceAll("<body>", "<div>")//
         .replaceAll("</body>", "</div>\n")//
