@@ -132,7 +132,7 @@ public class Configuration {
       if (messageId != null) {
         String message = config.getString("message(" + i + ")");
         if (message != null) {
-          message = message.replaceAll("\\{", "<").replaceAll("\\}", ">");
+          message = message.replaceAll("\\{", "<").replaceAll("}", ">");
         }
         messages.put(parentId + "." + messageId, message);
       }

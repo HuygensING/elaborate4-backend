@@ -39,7 +39,6 @@ import java.util.List;
 class Indexer {
   private static final int COMMIT_EVERY_N_RECORDS = 100;
 
-  @SuppressWarnings("boxing")
   public static void main(String[] args) {
     boolean wipeIndexFirst = args.length != 0 && "-w".equals(args[0]);
     new Indexer().index(wipeIndexFirst);

@@ -33,7 +33,7 @@ import com.google.common.collect.Lists;
 
 public class SolrUtils {
 	// Special Lucene characters: + - & | ! ( ) { } [ ] ^ " ~ * ? : \
-	private static final Pattern SPECIAL = Pattern.compile("[+\\-&|!(){}\\[\\]\\^\"~*?:\\\\]");
+	private static final Pattern SPECIAL = Pattern.compile("[+\\-&|!(){}\\[\\]^\"~*?:\\\\]");
 
 	public static final String METADATAFIELD_PREFIX = "metadata_";
 	public static final String EMPTYVALUE_SYMBOL = ":empty";

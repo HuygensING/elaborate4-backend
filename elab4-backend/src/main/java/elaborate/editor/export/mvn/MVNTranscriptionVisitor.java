@@ -668,7 +668,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       if (textNum.split("\\.").length > 4) {
         addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: " + textNum + " mag maximaal 3 punten bevatten.");
       }
-      if (!textNum.matches("^[a-zA-Z0-9\\.]+$")) {
+      if (!textNum.matches("^[a-zA-Z0-9.]+$")) {
         addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: " + textNum + " mag alleen letters, cijfers en (maximaal 3) punten bevatten.");
       }
       if (!textNumStack.isEmpty() && !textNum.startsWith(textNumStack.peek() + ".")) {
