@@ -287,6 +287,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         .setParameter("level3", project.getLevel3())//
         .setParameter("projectId", id)//
         .getResultList();
+// query translates to:
+//    select pe.id from project_entries pe
+//    left join project_entry_metadata_items l1 on l1.project_entry_id = pe.id
+//    left join project_entry_metadata_items l2 on l2.project_entry_id = pe.id
+//    left join project_entry_metadata_items l3 on l3.project_entry_id = pe.id
+//    where pe.project_id=:projectId and l1.field=:level1 and l2.field=:level2 and l3.field=:level3
+//    order by l1.data,l2.data,l2.data,pe.name;
 
     return ImmutableList.copyOf(resultList);
   }
