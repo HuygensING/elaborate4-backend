@@ -280,7 +280,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
                 " left join pe.projectEntryMetadataItems l2 with l2.field=:level2" + //
                 " left join pe.projectEntryMetadataItems l3 with l3.field=:level3" + //
                 " where project_id=:projectId" + //
-                " order by ascii(l1.data),ascii(l2.data),ascii(l3.data),pe.name", //
+                " order by l1.data,l2.data,l3.data,pe.name", //
             Long.class)//
         .setParameter("level1", project.getLevel1())//
         .setParameter("level2", project.getLevel2())//
