@@ -4,7 +4,7 @@
   <parent>
     <groupId>nl.knaw.huygens.elab4</groupId>
     <artifactId>elab4</artifactId>
-    <version>4.0.15-SNAPSHOT</version>
+    <version>4.0.17-SNAPSHOT</version>
   </parent>
   <artifactId>elab4-backend-client</artifactId>
   <inceptionYear>2013</inceptionYear>
