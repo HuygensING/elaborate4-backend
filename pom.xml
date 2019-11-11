@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.knaw.huygens.elab4</groupId>
   <artifactId>elab4</artifactId>
-  <version>4.0.15-SNAPSHOT</version>
+  <version>4.0.17-SNAPSHOT</version>
   <packaging>pom</packaging>
   <inceptionYear>2011</inceptionYear>
 
@@ -77,7 +77,7 @@
     <tomcatservlet-api.version>6.0.36</tomcatservlet-api.version>
     <urlrewritefilter.version>4.0.4</urlrewritefilter.version>
     <visitei.version>0.6.2</visitei.version>
-    <wagon-ssh.version>2.7</wagon-ssh.version>
+    <wagon-ssh.version>3.3.3</wagon-ssh.version>
     <xmlunit.version>1.5</xmlunit.version>
     <yoga.version>1.0.0</yoga.version>
     <annotations-java5.version>16.0.3</annotations-java5.version>

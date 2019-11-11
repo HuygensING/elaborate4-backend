@@ -46,6 +46,7 @@ public enum MVNAnnotationType {
   PALEOGRAFISCH("mvn:paleografisch", AnnotatedTextUsage.use), //
   POEZIE("mvn:poëzie", AnnotatedTextUsage.ignore), //
   REGELNUMMERING_BLAD("mvn:regelnummering (blad)", AnnotatedTextUsage.ignore), //
+  TAAL("mvn:taal", AnnotatedTextUsage.use), //
   TEKSTBEGIN("mvn:tekstbegin", AnnotatedTextUsage.use), //
   TEKSTEINDE("mvn:teksteinde", AnnotatedTextUsage.use), //
   TEKSTKLEUR_ROOD("mvn:tekstkleur (rood)", AnnotatedTextUsage.use), //
