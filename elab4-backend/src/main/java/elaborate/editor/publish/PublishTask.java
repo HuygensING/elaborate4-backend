@@ -67,9 +67,12 @@ import java.util.Map.Entry;
 
 public class PublishTask implements Runnable {
   private static final String MVN_BASE_URL = "http://test.mvn.huygens.knaw.nl/";
-  private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-  private static final String THUMBNAIL_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=";
-  private static final String ZOOM_URL = "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/viewer2.1.html?rft_id=";
+  private static final SimpleDateFormat SIMPLE_DATE_FORMAT =
+      new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+  private static final String THUMBNAIL_URL =
+      "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&svc.level=1&rft_id=";
+  private static final String ZOOM_URL =
+      "https://tomcat.tiler01.huygens.knaw.nl/adore-djatoka/viewer2.1.html?rft_id=";
   private static final String PUBLICATION_URL = "publicationURL";
   private static final String PUBLICATION_TOMCAT_WEBAPPDIR = "publication.tomcat.webappdir";
   private static final String ANNOTATION_INDEX_JSON = "annotation_index.json";
@@ -88,7 +91,8 @@ public class PublishTask implements Runnable {
   //	private Map<Integer, String> publishableAnnotationTypes;
   //	private Map<Integer, Map<String, String>> publishableAnnotationParameters;
   private Map<Integer, AnnotationData> annotationDataMap;
-  private final MVNClient mvnClient = new MVNClient(config.getSetting(Configuration.MVN_SERVER_URL));
+  private final MVNClient mvnClient =
+      new MVNClient(config.getSetting(Configuration.MVN_SERVER_URL));
   private final String baseURL = config.getSetting(Configuration.WORK_URL);
 
   public PublishTask(Publication.Settings settings) {
@@ -105,7 +109,8 @@ public class PublishTask implements Runnable {
     entityManager = HibernateUtil.getEntityManager();
     final Project project = entityManager.find(Project.class, projectId);
     final ProjectService ps = ProjectService.instance();
-    boolean projectIsMVN = ProjectTypes.MVN.equals(project.getMetadataMap().get(ProjectMetadataFields.TYPE));
+    boolean projectIsMVN =
+        ProjectTypes.MVN.equals(project.getMetadataMap().get(ProjectMetadataFields.TYPE));
     String url = "";
     try {
       url = projectIsMVN ? createMVNDraft(project) : createRegularDraft(project, ps);
@@ -132,15 +137,17 @@ public class PublishTask implements Runnable {
       ClientResponse response = mvnClient.putTEI(project.getName(), tei);
       Log.info("responseStatus = {}", response.getClientResponseStatus());
       if (!response.getClientResponseStatus().equals(ClientResponse.Status.CREATED)) {
-        String error = MessageFormat.format(//
-            "MVN server returned error: <br/>{0}<br/>On generated TEI: <hr/><pre>{1}</pre><hr/>", //
-            response.getEntity(String.class)//
-                .replaceAll("\n", "<br/>"), //
-            tei.replace("&", "&amp;")//
-                .replace("<", "&lt;")//
-                .replace(">", "&gt;")//
-                .replaceAll("\n", "<br/>")//
-        );
+        String error =
+            MessageFormat.format( //
+                "MVN server returned error: <br/>{0}<br/>On generated TEI: <hr/><pre>{1}</pre><hr/>", //
+                response
+                    .getEntity(String.class) //
+                    .replaceAll("\n", "<br/>"), //
+                tei.replace("&", "&amp;") //
+                    .replace("<", "&lt;") //
+                    .replace(">", "&gt;") //
+                    .replaceAll("\n", "<br/>") //
+                );
         status.addError(error);
       }
     }
@@ -155,7 +162,9 @@ public class PublishTask implements Runnable {
 
     // these 2 use transaction explicitly
     final List<String> projectEntryMetadataFields = getProjectEntryMetadataFields(ps);
-    annotationDataMap = filterOnPublishableAnnotationTypes(ps.getAnnotationDataForProject(projectId), settings.getAnnotationTypeIds());
+    annotationDataMap =
+        filterOnPublishableAnnotationTypes(
+            ps.getAnnotationDataForProject(projectId), settings.getAnnotationTypeIds());
 
     // the rest don't (see TODO)
     ps.setEntityManager(entityManager);
@@ -167,16 +176,28 @@ public class PublishTask implements Runnable {
     final List<EntryData> entryData = Lists.newArrayList();
     final Map<Long, List<String>> thumbnails = Maps.newHashMap();
     final Multimap<String, AnnotationIndexData> annotationIndex = ArrayListMultimap.create();
-    final String value = project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
-    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[]{};
+    final String value =
+        project.getMetadataMap().get(ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS);
+    final String[] multivaluedMetadataFields = value != null ? value.split(";") : new String[] {};
     for (final ProjectEntry projectEntry : projectEntriesInOrder) {
       if (projectEntry.isPublishable()) {
-        status.addLogline(MessageFormat.format("exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
-        final ExportedEntryData eed = exportEntryData(projectEntry, entryNum++, projectEntryMetadataFields, typographicalAnnotationMap);
+        status.addLogline(
+            MessageFormat.format(
+                "exporting entry {0,number,#}: \"{1}\"", entryNum, projectEntry.getName()));
+        final ExportedEntryData eed =
+            exportEntryData(
+                projectEntry, entryNum++, projectEntryMetadataFields, typographicalAnnotationMap);
         final long id = projectEntry.getId();
-        final Multimap<String, String> multivaluedFacetValues = getMultivaluedFacetValues(multivaluedMetadataFields, projectEntry);
+        final Multimap<String, String> multivaluedFacetValues =
+            getMultivaluedFacetValues(multivaluedMetadataFields, projectEntry);
         final String datafile = id + ".json";
-        entryData.add(new EntryData(id, projectEntry.getName(), projectEntry.getShortName(), datafile, multivaluedFacetValues));
+        entryData.add(
+            new EntryData(
+                id,
+                projectEntry.getName(),
+                projectEntry.getShortName(),
+                datafile,
+                multivaluedFacetValues));
         thumbnails.put(id, eed.thumbnailUrls);
         annotationIndex.putAll(eed.annotationDataMap);
         indexEntry(projectEntry, multivaluedFacetNames);
@@ -187,7 +208,8 @@ public class PublishTask implements Runnable {
 
     final String basename = getBasename(project);
     final String url = getBaseURL(project.getName());
-    final List<String> facetableProjectEntryMetadataFields = getFacetableProjectEntryMetadataFields(ps);
+    final List<String> facetableProjectEntryMetadataFields =
+        getFacetableProjectEntryMetadataFields(ps);
     exportSearchConfig(project, facetableProjectEntryMetadataFields, multivaluedFacetNames, url);
     exportBuildDate();
     exportLoggingProperties(basename);
@@ -211,7 +233,8 @@ public class PublishTask implements Runnable {
     FreeMarker.templateToFile("logging.properties.ftl", destFile, map, getClass());
   }
 
-  static Multimap<String, String> getMultivaluedFacetValues(String[] multivaluedFacetNames, ProjectEntry projectEntry) {
+  static Multimap<String, String> getMultivaluedFacetValues(
+      String[] multivaluedFacetNames, ProjectEntry projectEntry) {
     Multimap<String, String> multivaluedFacetValues = ArrayListMultimap.create();
     for (String multivaluedFacet : multivaluedFacetNames) {
       String multivalue = projectEntry.getMetadataValue(multivaluedFacet);
@@ -222,7 +245,8 @@ public class PublishTask implements Runnable {
     return multivaluedFacetValues;
   }
 
-  private Map<Integer, AnnotationData> filterOnPublishableAnnotationTypes(Map<Integer, AnnotationData> annotationDataMap, List<Long> publishableAnnotationTypeIds) {
+  private Map<Integer, AnnotationData> filterOnPublishableAnnotationTypes(
+      Map<Integer, AnnotationData> annotationDataMap, List<Long> publishableAnnotationTypeIds) {
     if (publishableAnnotationTypeIds == null || publishableAnnotationTypeIds.isEmpty()) {
       // default action: use all annotations
       return annotationDataMap;
@@ -258,14 +282,39 @@ public class PublishTask implements Runnable {
   Map<String, String> getTypographicalAnnotationMap(Project project) {
     Map<String, String> typographicalAnnotationMap = Maps.newHashMap();
     Map<String, String> metadataMap = project.getMetadataMap();
-    addMapping(typographicalAnnotationMap, metadataMap, "b", ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION);
-    addMapping(typographicalAnnotationMap, metadataMap, "i", ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION);
-    addMapping(typographicalAnnotationMap, metadataMap, "u", ProjectMetadataFields.ANNOTATIONTYPE_UNDERLINE_NAME, ProjectMetadataFields.ANNOTATIONTYPE_UNDERLINE_DESCRIPTION);
-    addMapping(typographicalAnnotationMap, metadataMap, "strike", ProjectMetadataFields.ANNOTATIONTYPE_STRIKE_NAME, ProjectMetadataFields.ANNOTATIONTYPE_STRIKE_DESCRIPTION);
+    addMapping(
+        typographicalAnnotationMap,
+        metadataMap,
+        "b",
+        ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME,
+        ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION);
+    addMapping(
+        typographicalAnnotationMap,
+        metadataMap,
+        "i",
+        ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME,
+        ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION);
+    addMapping(
+        typographicalAnnotationMap,
+        metadataMap,
+        "u",
+        ProjectMetadataFields.ANNOTATIONTYPE_UNDERLINE_NAME,
+        ProjectMetadataFields.ANNOTATIONTYPE_UNDERLINE_DESCRIPTION);
+    addMapping(
+        typographicalAnnotationMap,
+        metadataMap,
+        "strike",
+        ProjectMetadataFields.ANNOTATIONTYPE_STRIKE_NAME,
+        ProjectMetadataFields.ANNOTATIONTYPE_STRIKE_DESCRIPTION);
     return typographicalAnnotationMap;
   }
 
-  private void addMapping(Map<String, String> typographicalAnnotationMap, Map<String, String> metadataMap, String key, String nameKey, String descriptionKey) {
+  private void addMapping(
+      Map<String, String> typographicalAnnotationMap,
+      Map<String, String> metadataMap,
+      String key,
+      String nameKey,
+      String descriptionKey) {
     if (metadataMap.containsKey(nameKey)) {
       String name = metadataMap.get(nameKey);
       String description = metadataMap.get(descriptionKey);
@@ -287,15 +336,21 @@ public class PublishTask implements Runnable {
     return "elab4-" + project.getName();
   }
 
-  private void exportSearchConfig(Project project, List<String> facetFields, Collection<String> multivaluedFacetNames, String baseurl) {
+  private void exportSearchConfig(
+      Project project,
+      List<String> facetFields,
+      Collection<String> multivaluedFacetNames,
+      String baseurl) {
     File json = new File(distDir, "WEB-INF/classes/config.json");
-    exportJson(json, new SearchConfig(project, facetFields, multivaluedFacetNames).setBaseURL(baseurl));
+    exportJson(
+        json, new SearchConfig(project, facetFields, multivaluedFacetNames).setBaseURL(baseurl));
   }
 
   private void exportBuildDate() {
     File properties = new File(distDir, "WEB-INF/classes/about.properties");
     try {
-      FileUtils.write(properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), Charsets.UTF_8, true);
+      FileUtils.write(
+          properties, "publishdate=" + SIMPLE_DATE_FORMAT.format(new Date()), Charsets.UTF_8, true);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -305,7 +360,8 @@ public class PublishTask implements Runnable {
     List<String> projectEntryMetadataFields = settings.getProjectEntryMetadataFields();
     if (projectEntryMetadataFields.isEmpty()) {
       User rootUser = new User().setRoot(true);
-      projectEntryMetadataFields = ImmutableList.copyOf(ps.getProjectEntryMetadataFields(projectId, rootUser));
+      projectEntryMetadataFields =
+          ImmutableList.copyOf(ps.getProjectEntryMetadataFields(projectId, rootUser));
     }
     return projectEntryMetadataFields;
   }
@@ -331,20 +387,27 @@ public class PublishTask implements Runnable {
     return MessageFormat.format("entry{0,number,#}.json", num);
   }
 
-  Map<String, Object> getProjectData(Project project, List<EntryData> entries, Map<Long, List<String>> thumbnails) {
+  Map<String, Object> getProjectData(
+      Project project, List<EntryData> entries, Map<Long, List<String>> thumbnails) {
     Map<String, String> metadataMap = project.getMetadataMap();
     for (String key : ProjectMetadataFields.ANNOTATIONTYPE_FIELDS) {
       metadataMap.remove(key);
     }
     Map<String, Object> map = Maps.newHashMap();
     map.put("id", project.getId());
-    map.put("title", StringUtils.defaultIfBlank(metadataMap.remove(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
+    map.put(
+        "title",
+        StringUtils.defaultIfBlank(
+            metadataMap.remove(ProjectMetadataFields.PUBLICATION_TITLE), project.getTitle()));
     map.put("publicationDate", new DateTime().toString("yyyy-MM-dd HH:mm"));
     map.put("entries", entries);
 
-    map.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
+    map.put(
+        "levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
     List<String> publishableTextLayers = settings.getTextLayers();
-    map.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
+    map.put(
+        "textLayers",
+        publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
 
     map.put("thumbnails", thumbnails);
     // map.put("entryMetadataFields", project.getProjectEntryMetadataFieldnames());
@@ -355,17 +418,22 @@ public class PublishTask implements Runnable {
     map.put("facetDefaultOrder", facetDefaultOrder(project));
 
     addIfNotNull(map, "textFont", metadataMap.remove(ProjectMetadataFields.TEXT_FONT));
-    addIfNotNull(map, "entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
-    addIfNotNull(map, "entryTermPlural", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_PLURAL));
+    addIfNotNull(
+        map, "entryTermSingular", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_SINGULAR));
+    addIfNotNull(
+        map, "entryTermPlural", metadataMap.remove(ProjectMetadataFields.ENTRYTERM_PLURAL));
     map.put("metadata", metadataMap);
 
-    // Map<String, String> settingsMap = ProjectService.instance().getProjectSettings(project.getId(), project.getModifier());
+    // Map<String, String> settingsMap =
+    // ProjectService.instance().getProjectSettings(project.getId(), project.getModifier());
     // Map<String, Object> projectSettings = Maps.newHashMap();
     // projectSettings.putAll(settingsMap);
-    // projectSettings.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(), project.getLevel3()));
+    // projectSettings.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(),
+    // project.getLevel3()));
     //
     // List<String> publishableTextLayers = settings.getTextLayers();
-    // projectSettings.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() : publishableTextLayers);
+    // projectSettings.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() :
+    // publishableTextLayers);
     //
     // map.put("settings", projectSettings);
     return map;
@@ -379,7 +447,8 @@ public class PublishTask implements Runnable {
     return facetDefaultOrder;
   }
 
-  private Map<String, Map<String, List<Long>>> calculateMultivaluedFacetIndex(List<EntryData> entries) {
+  private Map<String, Map<String, List<Long>>> calculateMultivaluedFacetIndex(
+      List<EntryData> entries) {
     Map<String, ListMultimap<String, Long>> tmpindex = Maps.newHashMap();
     for (EntryData entryData : entries) {
       for (Entry<String, String> entry : entryData.multivaluedFacetValues.entries()) {
@@ -412,14 +481,16 @@ public class PublishTask implements Runnable {
   // return metamap;
   // }
 
-  private static final Comparator<Facsimile> SORT_ON_NAME = new Comparator<Facsimile>() {
-    @Override
-    public int compare(Facsimile f1, Facsimile f2) {
-      return f1.getName().compareTo(f2.getName());
-    }
-  };
+  private static final Comparator<Facsimile> SORT_ON_NAME =
+      new Comparator<Facsimile>() {
+        @Override
+        public int compare(Facsimile f1, Facsimile f2) {
+          return f1.getName().compareTo(f2.getName());
+        }
+      };
 
-  Map<String, Object> getProjectEntryData(ProjectEntry projectEntry, List<String> projectMetadataFields) {
+  Map<String, Object> getProjectEntryData(
+      ProjectEntry projectEntry, List<String> projectMetadataFields) {
     Map<String, TextlayerData> texts = getTexts(projectEntry);
     Multimap<String, AnnotationIndexData> annotationDataMap = ArrayListMultimap.create();
     for (String textLayer : projectEntry.getProject().getTextLayers()) {
@@ -427,14 +498,15 @@ public class PublishTask implements Runnable {
       TextlayerData textlayerData = texts.get(textLayer);
       if (textlayerData != null) {
         for (AnnotationPublishData ad : textlayerData.getAnnotationData()) {
-          AnnotationIndexData annotationIndexData = new AnnotationIndexData()//
-              .setEntryId(projectEntry.getId())//
-              .setEntryName(projectEntry.getName())//
-              .setN(ad.getN())//
-              .setAnnotatedText(ad.getAnnotatedText())//
-              .setAnnotationText(ad.getText())//
-              .setTextLayer(textLayer)//
-              .setAnnotationOrder(order++);
+          AnnotationIndexData annotationIndexData =
+              new AnnotationIndexData() //
+                  .setEntryId(projectEntry.getId()) //
+                  .setEntryName(projectEntry.getName()) //
+                  .setN(ad.getN()) //
+                  .setAnnotatedText(ad.getAnnotatedText()) //
+                  .setAnnotationText(ad.getText()) //
+                  .setTextLayer(textLayer) //
+                  .setAnnotationOrder(order++);
           String atype = annotationTypeKey(ad.getType());
           annotationDataMap.put(atype, annotationIndexData);
         }
@@ -469,11 +541,18 @@ public class PublishTask implements Runnable {
       try {
         TextlayerData textlayerData = getTextlayerData(transcription);
         if (textlayerData.getText().length() < 20) {
-          Log.warn("empty {} transcription for entry {}", transcription.getTextLayer(), projectEntry.getId());
+          Log.warn(
+              "empty {} transcription for entry {}",
+              transcription.getTextLayer(),
+              projectEntry.getId());
         }
         map.put(transcription.getTextLayer(), textlayerData);
       } catch (Exception e) {
-        Log.error("Error '{}' for transcription {}, body: '{}'", e.getMessage(), transcription.getId(), transcription.getBody());
+        Log.error(
+            "Error '{}' for transcription {}, body: '{}'",
+            e.getMessage(),
+            transcription.getId(),
+            transcription.getBody());
         e.printStackTrace();
       }
     }
@@ -483,16 +562,19 @@ public class PublishTask implements Runnable {
   private void fixPageBreaks(Transcription transcription) {
     EntityManager entityManager = HibernateUtil.getEntityManager();
     String body = cleanupAfterWord(transcription.getBody());
-    String fixed = body//
-        .replace("<strong>", "<b>")//
-        .replace("</strong>", "</b>")//
-        .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3<b>¶</b>$4")//
-        .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3")//
-        .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2")//
-        .replaceAll("¶", "<b>¶</b>")//
-        .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
-        .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")//
-        .replaceAll("<b><b>¶</b></b>", "<b>¶</b>");
+    String fixed =
+        body //
+            .replace("<strong>", "<b>") //
+            .replace("</strong>", "</b>") //
+            .replaceAll(
+                "(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)¶([^<]*?)</b>",
+                "$1<b>¶</b>$2<b>¶</b>$3<b>¶</b>$4") //
+            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3") //
+            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2") //
+            .replaceAll("¶", "<b>¶</b>") //
+            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>") //
+            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>") //
+            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>");
     transcription.setBody(fixed);
     if (!fixed.equals(body)) {
       Log.info("fixed transcription {}:\nraw={}\nfix={}", transcription.getId(), fixed);
@@ -503,8 +585,8 @@ public class PublishTask implements Runnable {
 
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
-    return new TextlayerData()//
-        .setText(cleanupAfterWord(tw.getBody()))//
+    return new TextlayerData() //
+        .setText(cleanupAfterWord(tw.getBody())) //
         .setAnnotations(getAnnotationData(tw.annotationNumbers));
   }
 
@@ -515,11 +597,14 @@ public class PublishTask implements Runnable {
       if (annotation != null) {
         AnnotationType annotationType = annotation.getAnnotationType();
         if (settings.includeAnnotationType(annotationType)) {
-          AnnotationPublishData ad2 = new AnnotationPublishData()//
-              .setN(annotation.getAnnotationNo())//
-              .setText(cleanupAfterWord(annotation.getBody()))//
-              .setAnnotatedText(annotation.getAnnotatedText())//
-              .setType(getAnnotationTypeData(annotationType, annotation.getAnnotationMetadataItems()));
+          AnnotationPublishData ad2 =
+              new AnnotationPublishData() //
+                  .setN(annotation.getAnnotationNo()) //
+                  .setText(cleanupAfterWord(annotation.getBody())) //
+                  .setAnnotatedText(annotation.getAnnotatedText()) //
+                  .setType(
+                      getAnnotationTypeData(
+                          annotationType, annotation.getAnnotationMetadataItems()));
           list.add(ad2);
         }
       }
@@ -536,33 +621,38 @@ public class PublishTask implements Runnable {
   // Map<String, Object> map = Maps.newHashMap();
   // map.put("n", annotation.getAnnotationNo());
   // map.put("text", annotation.getBody());
-  // map.put("type", getAnnotationTypeData(annotationType, annotation.getAnnotationMetadataItems()));
+  // map.put("type", getAnnotationTypeData(annotationType,
+  // annotation.getAnnotationMetadataItems()));
   // list.add(map);
   // }
   // }
   // return list;
   // }
 
-  private AnnotationTypeData getAnnotationTypeData(AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
+  private AnnotationTypeData getAnnotationTypeData(
+      AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
     Map<String, Object> metadata = getMetadataMap(meta);
-    return new AnnotationTypeData()//
-        .setId(annotationType.getId())//
-        .setName(annotationType.getName())//
-        .setDescription(annotationType.getDescription())//
+    return new AnnotationTypeData() //
+        .setId(annotationType.getId()) //
+        .setName(annotationType.getName()) //
+        .setDescription(annotationType.getDescription()) //
         .setMetadata(metadata);
   }
 
   private Map<String, Object> getMetadataMap(Set<AnnotationMetadataItem> meta) {
     Map<String, Object> map = Maps.newHashMap();
     for (AnnotationMetadataItem annotationMetadataItem : meta) {
-      map.put(annotationMetadataItem.getAnnotationTypeMetadataItem().getName(), annotationMetadataItem.getData());
+      map.put(
+          annotationMetadataItem.getAnnotationTypeMetadataItem().getName(),
+          annotationMetadataItem.getData());
     }
     return map;
   }
 
   private List<Metadata> getMetadata(ProjectEntry projectEntry, List<String> metadataFields) {
     Map<String, String> metamap = Maps.newHashMap();
-    for (ProjectEntryMetadataItem projectEntryMetadataItem : projectEntry.getProjectEntryMetadataItems()) {
+    for (ProjectEntryMetadataItem projectEntryMetadataItem :
+        projectEntry.getProjectEntryMetadataItems()) {
       String key = projectEntryMetadataItem.getField();
       String value = projectEntryMetadataItem.getData();
       metamap.put(key, value);
@@ -629,7 +719,10 @@ public class PublishTask implements Runnable {
     }
   }
 
-  private void exportProjectData(List<EntryData> entryData, Map<Long, List<String>> thumbnails, Multimap<String, AnnotationIndexData> annotationIndex) {
+  private void exportProjectData(
+      List<EntryData> entryData,
+      Map<Long, List<String>> thumbnails,
+      Multimap<String, AnnotationIndexData> annotationIndex) {
     File json = new File(jsonDir, "config.json");
     EntityManager entityManager = HibernateUtil.getEntityManager();
     Project project = entityManager.find(Project.class, projectId);
@@ -652,18 +745,21 @@ public class PublishTask implements Runnable {
     Configuration configuration = Configuration.instance();
     String version = configuration.getSetting("publication.version." + projectType);
     String cdnBaseURL = configuration.getSetting("publication.cdn");
-    Map<String, Object> fmRootMap = ImmutableMap.of(//
-        "BASE_URL", projectData.get("baseURL"), //
-        "TYPE", projectType, //
-        "ELABORATE_CDN", cdnBaseURL, //
-        "VERSION", version//
-    );
+    Map<String, Object> fmRootMap =
+        ImmutableMap.of( //
+            "BASE_URL", projectData.get("baseURL"), //
+            "TYPE", projectType, //
+            "ELABORATE_CDN", cdnBaseURL, //
+            "VERSION", version //
+            );
     FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
   }
 
-  private void cnwKludge(Project project, Map<String, Object> projectData, List<String> projectEntryMetadataFields) {
+  private void cnwKludge(
+      Project project, Map<String, Object> projectData, List<String> projectEntryMetadataFields) {
     if (project.getId() == 44) {
-      List<String> fieldnames = Lists.newArrayListWithExpectedSize(projectEntryMetadataFields.size());
+      List<String> fieldnames =
+          Lists.newArrayListWithExpectedSize(projectEntryMetadataFields.size());
       for (String fieldTitle : projectEntryMetadataFields) {
         fieldnames.add(SolrUtils.facetName(fieldTitle));
       }
@@ -676,27 +772,47 @@ public class PublishTask implements Runnable {
       }
       projectData.put("levels", levelFieldNames);
 
-      projectData.put("personMetadataFields",
-          ImmutableList.of(//
-              "dynamic_s_koppelnaam", "dynamic_s_altname", "dynamic_s_gender", //
-              "dynamic_i_birthyear", "dynamic_i_deathyear", "dynamic_s_networkdomain", //
-              "dynamic_s_characteristic", "dynamic_s_subdomain", "dynamic_s_domain", "dynamic_s_combineddomain", //
-              "dynamic_s_periodical", "dynamic_s_membership"//
-          ));
-      projectData.put("personLevels", ImmutableList.of(//
-          "dynamic_sort_name", "dynamic_k_birthDate", "dynamic_k_deathDate", "dynamic_sort_networkdomain", "dynamic_sort_gender"//
-      ));
+      projectData.put(
+          "personMetadataFields",
+          ImmutableList.of( //
+              "dynamic_s_koppelnaam",
+              "dynamic_s_altname",
+              "dynamic_s_gender", //
+              "dynamic_i_birthyear",
+              "dynamic_i_deathyear",
+              "dynamic_s_networkdomain", //
+              "dynamic_s_characteristic",
+              "dynamic_s_subdomain",
+              "dynamic_s_domain",
+              "dynamic_s_combineddomain", //
+              "dynamic_s_periodical",
+              "dynamic_s_membership" //
+              ));
+      projectData.put(
+          "personLevels",
+          ImmutableList.of( //
+              "dynamic_sort_name",
+              "dynamic_k_birthDate",
+              "dynamic_k_deathDate",
+              "dynamic_sort_networkdomain",
+              "dynamic_sort_gender" //
+              ));
     }
   }
 
-  private ExportedEntryData exportEntryData(ProjectEntry projectEntry, int entryNum, List<String> projectEntryMetadataFields, Map<String, String> typographicalAnnotationMap) {
+  private ExportedEntryData exportEntryData(
+      ProjectEntry projectEntry,
+      int entryNum,
+      List<String> projectEntryMetadataFields,
+      Map<String, String> typographicalAnnotationMap) {
     // String entryFilename = entryFilename(entryNum);
     String entryFilename = projectEntry.getId() + ".json";
     File json = new File(jsonDir, entryFilename);
     EntityManager entityManager = HibernateUtil.getEntityManager();
     entityManager.merge(projectEntry);
     Map<String, Object> entryData = getProjectEntryData(projectEntry, projectEntryMetadataFields);
-    Multimap<String, AnnotationIndexData> annotationDataMap = (Multimap<String, AnnotationIndexData>) entryData.remove("annotationDataMap");
+    Multimap<String, AnnotationIndexData> annotationDataMap =
+        (Multimap<String, AnnotationIndexData>) entryData.remove("annotationDataMap");
     entityManager.close();
     exportJson(json, entryData);
 
@@ -735,7 +851,8 @@ public class PublishTask implements Runnable {
   }
 
   private void indexEntry(ProjectEntry projectEntry, Collection<String> facetsToSplit) {
-    SolrInputDocument doc = ElaborateSolrIndexer.getSolrInputDocument(projectEntry, true, facetsToSplit);
+    SolrInputDocument doc =
+        ElaborateSolrIndexer.getSolrInputDocument(projectEntry, true, facetsToSplit);
     try {
       solrServer.add(doc);
     } catch (IndexException e) {
@@ -827,7 +944,6 @@ public class PublishTask implements Runnable {
     public String getEntryName() {
       return entryName;
     }
-
   }
 
   public static class AnnotationPublishData {
@@ -871,7 +987,6 @@ public class PublishTask implements Runnable {
     public AnnotationTypeData getType() {
       return annotationTypeData;
     }
-
   }
 
   public static class AnnotationTypeData {
@@ -915,7 +1030,6 @@ public class PublishTask implements Runnable {
     public Map<String, Object> getMetadata() {
       return metadata;
     }
-
   }
 
   public static class Metadata {
@@ -939,15 +1053,18 @@ public class PublishTask implements Runnable {
   }
 
   public static class EntryData {
-    @JsonIgnore
-    public final Long entryId;
-    @JsonIgnore
-    public final Multimap<String, String> multivaluedFacetValues;
+    @JsonIgnore public final Long entryId;
+    @JsonIgnore public final Multimap<String, String> multivaluedFacetValues;
     public final String datafile;
     public final String name;
     public final String shortName;
 
-    public EntryData(Long entryId, String _name, String _shortName, String _datafile, Multimap<String, String> _multivaluedFacetValues) {
+    public EntryData(
+        Long entryId,
+        String _name,
+        String _shortName,
+        String _datafile,
+        Multimap<String, String> _multivaluedFacetValues) {
       this.entryId = entryId;
       this.name = _name;
       this.shortName = _shortName;
@@ -977,11 +1094,9 @@ public class PublishTask implements Runnable {
       this.annotations = annotations;
       return this;
     }
-
   }
 
   static String cleanupAfterWord(String dirty) {
     return dirty.replaceAll("(?s)<!--.*?-->", "");
   }
-
 }
