@@ -263,6 +263,12 @@
             <version>${annotations-java5.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${javax.ws.rs-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

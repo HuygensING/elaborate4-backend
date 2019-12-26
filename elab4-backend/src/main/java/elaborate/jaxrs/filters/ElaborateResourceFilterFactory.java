@@ -22,33 +22,31 @@ package elaborate.jaxrs.filters;
  * #L%
  */
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.model.AbstractMethod;
 import com.sun.jersey.spi.container.ResourceFilter;
 import com.sun.jersey.spi.container.ResourceFilterFactory;
-
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
+import java.util.List;
+
 public class ElaborateResourceFilterFactory implements ResourceFilterFactory {
-	private static final Class<AuthorizationRequired> ANNOTATION_CLASS = AuthorizationRequired.class;
+  private static final Class<AuthorizationRequired> ANNOTATION_CLASS = AuthorizationRequired.class;
 
-	@Override
-	public List<ResourceFilter> create(AbstractMethod am) {
-		List<ResourceFilter> singletonList = Lists.newArrayList();
-		singletonList.add(new LoggingResourceFilter());
-		singletonList.add(new CacheHeaderFilter());
+  @Override
+  public List<ResourceFilter> create(AbstractMethod am) {
+    List<ResourceFilter> singletonList = Lists.newArrayList();
+    singletonList.add(new LoggingResourceFilter());
+    singletonList.add(new CacheHeaderFilter());
 
-		if (needsAuthorization(am)) {
-			singletonList.add(new AuthenticationResourceFilter());
-		}
-		return singletonList;
-	}
+    if (needsAuthorization(am)) {
+      singletonList.add(new AuthenticationResourceFilter());
+    }
+    return singletonList;
+  }
 
-	private boolean needsAuthorization(AbstractMethod am) {
-		return (am.getAnnotation(ANNOTATION_CLASS) != null) //
-				|| (am.getResource().getAnnotation(ANNOTATION_CLASS) != null);
-	}
-
+  private boolean needsAuthorization(AbstractMethod am) {
+    return (am.getAnnotation(ANNOTATION_CLASS) != null) //
+        || (am.getResource().getAnnotation(ANNOTATION_CLASS) != null);
+  }
 }
