@@ -1,4 +1,4 @@
-package elaborate.editor.providers;
+package elaborate.jaxrs.filters;
 
 /*
  * #%L
@@ -22,15 +22,17 @@ package elaborate.editor.providers;
  * #L%
  */
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerResponse;
-import com.sun.jersey.spi.container.ContainerResponseFilter;
+import com.sun.jersey.spi.container.*;
 
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.Provider;
 
-@Provider
-public class CORSResponseFilter implements ContainerResponseFilter {
+public class CORSResponseFilter
+    implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
+
+  @Override
+  public ContainerRequest filter(ContainerRequest containerRequest) {
+    return containerRequest;
+  }
 
   @Override
   public ContainerResponse filter(
@@ -40,5 +42,15 @@ public class CORSResponseFilter implements ContainerResponseFilter {
     //    headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
     //    headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
     return containerResponse;
+  }
+
+  @Override
+  public ContainerRequestFilter getRequestFilter() {
+    return this;
+  }
+
+  @Override
+  public ContainerResponseFilter getResponseFilter() {
+    return this;
   }
 }
