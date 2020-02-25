@@ -62,7 +62,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 		return entity;
 	}
 
-	T read(long id) {
+	public T read(long id) {
 		T entity = (T) getEntityManager().find(getEntityClass(), id);
 		checkEntityFound(entity, id);
 		return entity;
