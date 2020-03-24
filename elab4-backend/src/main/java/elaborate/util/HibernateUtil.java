@@ -4,7 +4,7 @@ package elaborate.util;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2019 Huygens ING
+ * Copyright (C) 2011 - 2020 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,10 +22,10 @@ package elaborate.util;
  * #L%
  */
 
+import elaborate.editor.model.ModelFactory;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
-import elaborate.editor.model.ModelFactory;
 
 public class HibernateUtil {
 	private final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
@@ -41,7 +41,7 @@ public class HibernateUtil {
 		endTransaction(entityManager);
 	}
 
-	private static void endTransaction(EntityManager entityManager) {
+	public static void endTransaction(EntityManager entityManager) {
 		entityManager.close();
 	}
 

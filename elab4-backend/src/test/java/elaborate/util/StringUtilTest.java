@@ -4,7 +4,7 @@ package elaborate.util;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2019 Huygens ING
+ * Copyright (C) 2011 - 2020 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,26 +22,23 @@ package elaborate.util;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriBuilderException;
-
-import org.joda.time.DateTime;
-import org.joda.time.Hours;
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import elaborate.editor.resources.SessionResource;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 import nl.knaw.huygens.Log;
+import org.joda.time.DateTime;
+import org.joda.time.Hours;
+import org.junit.Test;
+
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriBuilderException;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StringUtilTest {
 

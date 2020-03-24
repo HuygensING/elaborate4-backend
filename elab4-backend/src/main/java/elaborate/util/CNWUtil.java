@@ -4,7 +4,7 @@ package elaborate.util;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2019 Huygens ING
+ * Copyright (C) 2011 - 2020 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,6 +23,11 @@ package elaborate.util;
  */
 
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.filters.CORSFilter;
+
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,13 +36,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-
-import nl.knaw.huygens.Log;
-
 public class CNWUtil {
-
+CORSFilter c=null;
 	public String convertDate(String dateString) {
 		String edtf = dateString//
 				.replaceAll("-XX", "")//

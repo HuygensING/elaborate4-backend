@@ -4,7 +4,7 @@ package elaborate.jaxrs.filters;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2019 Huygens ING
+ * Copyright (C) 2011 - 2020 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -38,7 +38,7 @@ public class ElaborateResourceFilterFactory implements ResourceFilterFactory {
     List<ResourceFilter> singletonList = Lists.newArrayList();
     singletonList.add(new LoggingResourceFilter());
     singletonList.add(new CacheHeaderFilter());
-    singletonList.add(new CORSResponseFilter());
+//    singletonList.add(new CORSResponseFilter());
 
     if (needsAuthorization(am)) {
       singletonList.add(new AuthenticationResourceFilter());

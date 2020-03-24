@@ -4,7 +4,7 @@ package elaborate.jaxrs.filters;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2019 Huygens ING
+ * Copyright (C) 2011 - 2020 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -38,7 +38,7 @@ public class CORSResponseFilter
   public ContainerResponse filter(
       ContainerRequest containerRequest, ContainerResponse containerResponse) {
     MultivaluedMap<String, Object> headers = containerResponse.getHttpHeaders();
-    headers.add("Access-Control-Allow-Origin", "*"); // Allow Access from everywhere
+//    headers.add("Access-Control-Allow-Origin", "*"); // Allow Access from everywhere
     //    headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
     //    headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
     return containerResponse;

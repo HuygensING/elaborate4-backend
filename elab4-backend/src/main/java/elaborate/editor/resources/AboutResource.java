@@ -4,7 +4,7 @@ package elaborate.editor.resources;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2019 Huygens ING
+ * Copyright (C) 2011 - 2020 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,18 +22,16 @@ package elaborate.editor.resources;
  * #L%
  */
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.PropertyResourceBundle;
+import com.google.common.collect.Maps;
+import elaborate.jaxrs.APIDesc;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-
-import com.google.common.collect.Maps;
-
-import elaborate.jaxrs.APIDesc;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+import java.io.IOException;
+import java.util.Map;
+import java.util.PropertyResourceBundle;
 
 @Path("about")
 public class AboutResource extends AbstractElaborateResource {

@@ -22,37 +22,23 @@ package elaborate.jaxrs.filters;
  * #L%
  */
 
-import javax.ws.rs.core.MultivaluedMap;
-
 import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
-import com.sun.jersey.spi.container.ResourceFilter;
 
-class CacheHeaderFilter implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
+public class CORSFilter implements ContainerResponseFilter {
+  @Override
+  public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
 
-	@Override
-	public ContainerRequestFilter getRequestFilter() {
-		return this;
-	}
+//    response.getHttpHeaders().add("Access-Control-Allow-Origin", "*");
+    //    response
+    //        .getHttpHeaders()
+    //        .add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+    //    response.getHttpHeaders().add("Access-Control-Allow-Credentials", "true");
+    //    response
+    //        .getHttpHeaders()
+    //        .add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 
-	@Override
-	public ContainerRequest filter(ContainerRequest request) {
-		return request;
-	}
-
-	@Override
-	public ContainerResponseFilter getResponseFilter() {
-		return this;
-	}
-
-	@Override
-	public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
-		MultivaluedMap<String, Object> httpHeaders = response.getHttpHeaders();
-		httpHeaders.putSingle("Pragma", "no-cache");
-		httpHeaders.putSingle("Cache-Control", "no-cache, must-revalidate");
-		return response;
-	}
-
+    return response;
+  }
 }

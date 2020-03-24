@@ -4,7 +4,7 @@ package elaborate.editor.backend;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2019 Huygens ING
+ * Copyright (C) 2011 - 2020 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -36,7 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-class Indexer {
+public class Indexer {
   private static final int COMMIT_EVERY_N_RECORDS = 100;
 
   public static void main(String[] args) {
