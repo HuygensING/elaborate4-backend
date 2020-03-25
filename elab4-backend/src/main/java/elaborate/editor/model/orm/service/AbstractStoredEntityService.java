@@ -176,7 +176,7 @@ public abstract class AbstractStoredEntityService<T extends AbstractStoredEntity
 	}
 
 	/** end read **/
-	void closeEntityManager() {
+	public void closeEntityManager() {
 		EntityManager em = tlem.get();
 		if (em != null) {
 			em.close();
