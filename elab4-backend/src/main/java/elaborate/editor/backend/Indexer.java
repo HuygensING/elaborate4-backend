@@ -44,7 +44,7 @@ public class Indexer {
     new Indexer().index(wipeIndexFirst);
   }
 
-  private void index(boolean wipeIndexFirst) {
+  public void index(boolean wipeIndexFirst) {
     StopWatch sw = new StopWatch();
     sw.start();
     ElaborateSolrIndexer solr = new ElaborateSolrIndexer();

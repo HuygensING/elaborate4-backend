@@ -7,8 +7,8 @@
         <version>4.0.17-SNAPSHOT</version>
     </parent>
     <artifactId>elab4-backend</artifactId>
-    <!--      <packaging>jar</packaging>  &lt;!&ndash;for elab4-huygens&ndash;&gt;-->
-    <packaging>war</packaging>
+    <packaging>jar</packaging>  <!--for elab4-huygens-->
+    <!--    <packaging>war</packaging>-->
     <inceptionYear>2011</inceptionYear>
 
     <dependencies>
