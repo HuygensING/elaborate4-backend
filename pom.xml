@@ -28,7 +28,7 @@
 
         <appassembler-maven.version>1.3.1</appassembler-maven.version>
         <assertj-core.version>1.7.1</assertj-core.version><!-- 2.0.0 = jdk1.7 -->
-        <assertj-guava.version>1.3.0</assertj-guava.version><!-- 2.0.0 = jdk1.7 -->
+        <assertj-guava.version>1.3.1</assertj-guava.version><!-- 2.0.0 = jdk1.7 -->
         <assertj-assertions-generator>1.6.0</assertj-assertions-generator>
         <build-helper-maven.version>1.10</build-helper-maven.version>
         <c3p0.version>0.9.1.2</c3p0.version>
@@ -59,7 +59,7 @@
         <jsr250-api.version>1.0</jsr250-api.version>
         <jtidy.version>r938</jtidy.version>
         <jetty-maven.version>9.3.8.RC0</jetty-maven.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <log.version>1.1.1</log.version>
         <maven-assembly.version>2.4</maven-assembly.version>
         <maven-compiler.version>3.5.1</maven-compiler.version>
@@ -105,7 +105,7 @@
             <id>central</id>
             <name>Maven Repository Switchboard</name>
             <layout>default</layout>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
