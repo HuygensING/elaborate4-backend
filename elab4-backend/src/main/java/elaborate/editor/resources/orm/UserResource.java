@@ -22,30 +22,19 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-import java.util.Map;
+import com.google.common.collect.*;
+import elaborate.editor.model.orm.*;
+import elaborate.editor.model.orm.service.*;
+import elaborate.editor.resources.*;
+import elaborate.editor.resources.orm.wrappers.*;
+import elaborate.jaxrs.*;
+import elaborate.jaxrs.Annotations.*;
+import nl.knaw.huygens.*;
+import nl.knaw.huygens.jaxrstools.resources.*;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import elaborate.editor.model.orm.User;
-import elaborate.editor.model.orm.service.UserService;
-import elaborate.editor.resources.AbstractElaborateResource;
-import elaborate.editor.resources.orm.wrappers.UserInput;
-import elaborate.jaxrs.APIDesc;
-import elaborate.jaxrs.Annotations.AuthorizationRequired;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.util.*;
 
 @Path("users")
 @AuthorizationRequired
@@ -70,7 +59,7 @@ public class UserResource extends AbstractElaborateResource {
 
 	@POST
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
-	// @RolesAllowed("ADMIN")
+	// @RolesAllowed({ ADMIN })
 	@APIDesc("Adds a new user")
 	public Response create(UserInput userInput) {
 		User user = userInput.getUser();
@@ -80,7 +69,7 @@ public class UserResource extends AbstractElaborateResource {
 
 	@PUT
 	@Path("{id: [0-9]+}")
-	// @RolesAllowed("ADMIN")
+	// @RolesAllowed({ ADMIN })
 	@Consumes(UTF8MediaType.APPLICATION_JSON)
 	@APIDesc("Updates the user with the given id")
 	public void update(@PathParam("id") long id, UserInput userInput) {
@@ -90,7 +79,7 @@ public class UserResource extends AbstractElaborateResource {
 
 	@DELETE
 	@Path("{id: [0-9]+}")
-	// @RolesAllowed("ADMIN")
+	// @RolesAllowed({ ADMIN })
 	@APIDesc("Deletes the user with the given id")
 	public void delete(@PathParam("id") long id) {
 		userService.delete(id, getUser());
