@@ -597,7 +597,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleOpenAnnotation(final AnnotationData annotation, final XmlContext context) {
       String customLineNo = annotation.body;
       if (StringUtils.isNumeric(customLineNo)) {
-        lb = Integer.valueOf(customLineNo);
+        lb = Integer.parseInt(customLineNo);
       } else {
         currentLineInfo.lineNo = customLineNo;
         currentLineInfo.useCustomLineNo = true;

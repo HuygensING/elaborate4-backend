@@ -108,8 +108,8 @@ CORSFilter c=null;
 				edtf = lower + "/" + upper;
 			} else {
 				String[] parts = edtf.split("-");
-				int year = Integer.valueOf(parts[0]);
-				int month = Integer.valueOf(parts[1]);
+				int year = Integer.parseInt(parts[0]);
+				int month = Integer.parseInt(parts[1]);
 				if (month == 1) {
 					edtf = MessageFormat.format("{0}-12/{1}-02", String.valueOf((year - 1)), String.valueOf(year));
 				} else if (month == 12) {
@@ -129,8 +129,8 @@ CORSFilter c=null;
 				edtf = lower + "/" + upper;
 			} else {
 				String[] parts = edtf.split("-");
-				int year = Integer.valueOf(parts[0]);
-				int month = Integer.valueOf(parts[1]);
+				int year = Integer.parseInt(parts[0]);
+				int month = Integer.parseInt(parts[1]);
 				int firstYear = year;
 				int lastYear = year;
 				int firstMonth = month - 6;
@@ -180,8 +180,8 @@ CORSFilter c=null;
 			edtf = edtf.replace(" eind", "");
 			if (edtf.length() == 7) {
 				Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.YEAR, Integer.valueOf(edtf.substring(0, 4)));
-				cal.set(Calendar.MONTH, Integer.valueOf(edtf.substring(5, 7)) - 1);
+				cal.set(Calendar.YEAR, Integer.parseInt(edtf.substring(0, 4)));
+				cal.set(Calendar.MONTH, Integer.parseInt(edtf.substring(5, 7)) - 1);
 				int day2 = cal.getActualMaximum(Calendar.DATE);
 				int day1 = day2 - 13;
 				edtf = MessageFormat.format("{0}-{1}/{0}-{2}", edtf, day1, day2);
@@ -266,8 +266,8 @@ CORSFilter c=null;
 	private int lastDayOfTheMonth(List<String> dmy) {
 		// Log.info("dmy={}", dmy);
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, Integer.valueOf(dmy.get(0)));
-		cal.set(Calendar.MONTH, Integer.valueOf(dmy.get(1)));
+		cal.set(Calendar.YEAR, Integer.parseInt(dmy.get(0)));
+		cal.set(Calendar.MONTH, Integer.parseInt(dmy.get(1)));
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
@@ -282,9 +282,9 @@ CORSFilter c=null;
 			return datestring;
 		}
 		String[] parts = datestring.split("-");
-		int year = Integer.valueOf(parts[0]);
-		int month = Integer.valueOf(parts[1]);
-		int day = Integer.valueOf(parts[2]);
+		int year = Integer.parseInt(parts[0]);
+		int month = Integer.parseInt(parts[1]);
+		int day = Integer.parseInt(parts[2]);
 		return String.format("%04d", year) + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
 	}
 

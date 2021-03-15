@@ -22,19 +22,11 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import java.util.Map.Entry;
+import elaborate.editor.model.orm.*;
+import nl.knaw.huygens.*;
+import nl.knaw.huygens.tei.*;
 
-import elaborate.editor.model.orm.Transcription;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.tei.Comment;
-import nl.knaw.huygens.tei.CommentHandler;
-import nl.knaw.huygens.tei.DelegatingVisitor;
-import nl.knaw.huygens.tei.Element;
-import nl.knaw.huygens.tei.ElementHandler;
-import nl.knaw.huygens.tei.Text;
-import nl.knaw.huygens.tei.TextHandler;
-import nl.knaw.huygens.tei.Traversal;
-import nl.knaw.huygens.tei.XmlContext;
+import java.util.Map.*;
 
 class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
   private final Element root = new Element("xml");
@@ -81,7 +73,7 @@ class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> implement
     return Traversal.NEXT;
   }
 
-  public class AnnotationBeginHandler implements ElementHandler<XmlContext> {
+  public static class AnnotationBeginHandler implements ElementHandler<XmlContext> {
     @Override
     public Traversal enterElement(Element element, XmlContext context) {
       return Traversal.NEXT;
@@ -93,7 +85,7 @@ class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> implement
     }
   }
 
-  public class AnnotationEndHandler implements ElementHandler<XmlContext> {
+  public static class AnnotationEndHandler implements ElementHandler<XmlContext> {
     @Override
     public Traversal enterElement(Element element, XmlContext context) {
       return Traversal.NEXT;

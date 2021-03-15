@@ -22,19 +22,11 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import com.google.common.base.*;
+import com.google.common.collect.*;
+import nl.knaw.huygens.*;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
-
-import nl.knaw.huygens.Log;
+import java.util.*;
 
 public class ParseResult {
   private final List<String> textSegments = new ArrayList<String>();
@@ -58,16 +50,14 @@ public class ParseResult {
       if ("tekst".equals(xmlAnnotation.getName())) {
         Log.info("textAnnotation={}", xmlAnnotation);
         String n = xmlAnnotation.getAttributes().get("n");
-        if (deepestTekstNs.isEmpty()) {
-          deepestTekstNs.add(n);
-        } else {
+        if (!deepestTekstNs.isEmpty()) {
           int index = deepestTekstNs.size() - 1;
           String lastN = deepestTekstNs.get(index);
           if (n.startsWith(lastN + ".")) {
             deepestTekstNs.remove(index);
           }
-          deepestTekstNs.add(n);
         }
+        deepestTekstNs.add(n);
       }
     }
     Set<String> annotationNames = Sets.newTreeSet();

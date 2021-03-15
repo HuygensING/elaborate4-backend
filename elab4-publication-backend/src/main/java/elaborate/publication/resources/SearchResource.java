@@ -22,37 +22,21 @@ package elaborate.publication.resources;
  * #L%
  */
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.*;
+import elaborate.publication.solr.*;
+import nl.knaw.huygens.*;
+import nl.knaw.huygens.facetedsearch.*;
+import nl.knaw.huygens.jaxrstools.exceptions.*;
+import nl.knaw.huygens.jaxrstools.resources.*;
+import org.apache.commons.lang.*;
 
-import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.UriBuilder;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.google.common.collect.ImmutableList;
-
-import elaborate.publication.solr.SearchService;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
-import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
-import nl.knaw.huygens.facetedsearch.SearchData;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+import javax.servlet.*;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.*;
+import java.net.*;
+import java.text.*;
+import java.util.*;
 
 @Path("search")
 public class SearchResource {
@@ -103,8 +87,8 @@ public class SearchResource {
 		if (!StringUtils.isNumeric(startString) || !StringUtils.isNumeric(rowsString)) {
 			throw new BadRequestException();
 		}
-		int start = Integer.valueOf(startString);
-		int rows = Integer.valueOf(rowsString);
+		int start = Integer.parseInt(startString);
+		int rows = Integer.parseInt(rowsString);
 		Map<String, Object> searchResult = searchService.getSearchResult(searchId, start, rows);
 		addPrevNextURIs(searchResult, searchId, start, rows);
 		ResponseBuilder builder = Response.ok(searchResult);

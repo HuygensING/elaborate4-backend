@@ -49,7 +49,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class AbstractSolrServer implements SolrServerWrapper {
-  private Logger LOG = LoggerFactory.getLogger(getClass());
+  private final Logger LOG = LoggerFactory.getLogger(getClass());
   public static final String KEY_NUMFOUND = "numFound";
   private static final int HIGHLIGHT_FRAGSIZE = 100;
   private static final int ROWS = 50000;

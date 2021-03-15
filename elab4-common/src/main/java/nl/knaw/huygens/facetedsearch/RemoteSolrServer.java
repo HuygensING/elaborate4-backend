@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class RemoteSolrServer extends AbstractSolrServer {
-  private Logger LOG = LoggerFactory.getLogger(getClass());
+  private final Logger LOG = LoggerFactory.getLogger(getClass());
   private final String solrUrl;
 
   public RemoteSolrServer(String solrUrl, QueryComposer queryComposer) {

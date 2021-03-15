@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Elab4RestClient {
-  private Logger LOG = LoggerFactory.getLogger(getClass());
+  private final Logger LOG = LoggerFactory.getLogger(getClass());
   private final WebTarget sessionsTarget;
   private final WebTarget projectsTarget;
   private final WebTarget elab4;

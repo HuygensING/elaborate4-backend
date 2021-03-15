@@ -41,7 +41,7 @@ class Context {
   public MVNConversionResult result;
 
   public void incrementFoliumLineNumber() {
-    Integer asInt = Integer.valueOf(foliumLineNumber.replaceAll("[^0-9]", ""));
+    int asInt = Integer.parseInt(foliumLineNumber.replaceAll("[^0-9]", ""));
     Integer next = asInt + 1;
     foliumLineNumber = String.valueOf(next);
   }
