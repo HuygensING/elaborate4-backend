@@ -67,7 +67,7 @@
     <maven-deploy.version>2.8.2</maven-deploy.version>
     <mockito.version>2.23.0</mockito.version>
     <pdfbox.version>1.8.8</pdfbox.version>
-    <postgresql.version>9.3-1100-jdbc4</postgresql.version> <!-- > 9.3-1100-jdbc4 = JDK7 -->
+    <postgresql.version>9.4.1212.jre7</postgresql.version> <!-- > 9.3-1100-jdbc4 = JDK7 -->
     <security.version>2.1.4</security.version>
     <!-- <security.version>2.2.1</security.version> --><!-- nog niet voldoende getest -->
     <servlet-api.version>3.1.0</servlet-api.version>
