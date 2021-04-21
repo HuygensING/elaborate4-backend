@@ -30,7 +30,7 @@
     <assertj-core.version>1.7.1</assertj-core.version><!-- 2.0.0 = jdk1.7 -->
     <assertj-guava.version>1.3.0</assertj-guava.version><!-- 2.0.0 = jdk1.7 -->
     <assertj-assertions-generator>1.6.0</assertj-assertions-generator>
-    <build-helper-maven.version>1.10</build-helper-maven.version>
+    <build-helper-maven.version>3.2.0</build-helper-maven.version>
     <c3p0.version>0.9.1.2</c3p0.version>
     <classloader-leak-prevention.version>1.15.4</classloader-leak-prevention.version>
     <commons-configuration.version>1.10
@@ -57,13 +57,13 @@
     <jsoup.version>1.7.3</jsoup.version><!-- >= 1.8.1 throws an error -->
     <jsr250-api.version>1.0</jsr250-api.version>
     <jtidy.version>r938</jtidy.version>
-    <jetty-maven.version>9.3.8.RC0</jetty-maven.version>
+    <jetty-maven.version>11.0.2</jetty-maven.version>
     <junit.version>4.12</junit.version>
     <log.version>1.1.1</log.version>
     <maven-assembly.version>2.4</maven-assembly.version>
-    <maven-compiler.version>3.5.1</maven-compiler.version>
-    <maven-license.version>1.8</maven-license.version>
-    <maven-war.version>2.6</maven-war.version>
+    <maven-compiler.version>3.8.1</maven-compiler.version>
+    <maven-license.version>1.20</maven-license.version>
+    <maven-war.version>3.3.0</maven-war.version>
     <maven-deploy.version>2.8.2</maven-deploy.version>
     <mockito.version>2.23.0</mockito.version>
     <pdfbox.version>1.8.15</pdfbox.version>
@@ -77,7 +77,7 @@
     <tomcatservlet-api.version>6.0.36</tomcatservlet-api.version>
     <urlrewritefilter.version>4.0.4</urlrewritefilter.version>
     <visitei.version>0.6.2</visitei.version>
-    <wagon-ssh.version>2.7</wagon-ssh.version>
+    <wagon-ssh.version>3.4.3</wagon-ssh.version>
     <xmlunit.version>1.5</xmlunit.version>
     <yoga.version>1.0.0</yoga.version>
     <annotations-java5.version>16.0.3</annotations-java5.version>
@@ -174,7 +174,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.10</version>
+        <version>${build-helper-maven.version}</version>
         <executions>
           <execution>
             <id>timestamp-property</id>
@@ -207,9 +207,9 @@
     <url>https://www.huygens.knaw.nl/</url>
   </organization>
 
-  <prerequisites>
-    <maven>3.0</maven>
-  </prerequisites>
+<!--  <prerequisites>-->
+<!--    <maven>3.0</maven>-->
+<!--  </prerequisites>-->
 
   <distributionManagement>
     <repository>
