@@ -58,6 +58,11 @@
       <version>${annotations-java5.version}</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>${jaxb-api.version}</version>
+    </dependency>
 
     <!-- test dependencies -->
     <dependency>
