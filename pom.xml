@@ -48,7 +48,7 @@
     <hibernate.version>5.4.24.Final</hibernate.version><!-- > 4.2.7 uses javassist, leads to "org.hibernate.jpa.boot.archive.spi.ArchiveException:
 			Could not build ClassFile", > 4.3.8.Final : java.lang.ClassNotFoundException: javax.transaction.SystemException -->
     <hsqldb.version>2.3.3</hsqldb.version>
-    <jackson.version>2.10.0</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
+    <jackson.version>2.12.2</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
     <javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
     <jaxrstools.version>0.1.0</jaxrstools.version>
     <jersey.version>1.19.4</jersey.version>
@@ -81,7 +81,7 @@
     <xmlunit.version>1.5</xmlunit.version>
     <yoga.version>1.0.0</yoga.version>
     <annotations-java5.version>16.0.3</annotations-java5.version>
-    <commons-text.version>1.6</commons-text.version>
+    <commons-text.version>1.9</commons-text.version>
     <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
   </properties>
 
