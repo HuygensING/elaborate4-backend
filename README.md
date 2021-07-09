@@ -1,6 +1,8 @@
 eLaborate (backend)
 ===================
 
+![](https://github.com/HuygensING/elaborate4-backend/workflows/tests/badge.svg)
+
 ## What is eLaborate?
 
 eLaborate is an online work environment in which scholars can upload scans, transcribe and annotate text, and publish the results as on online text edition which is freely available to all users.
