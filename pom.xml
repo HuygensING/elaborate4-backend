@@ -52,7 +52,7 @@
     <javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
     <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
     <jaxrstools.version>0.1.0</jaxrstools.version>
-    <jersey-client.version>2.6</jersey-client.version><!-- > 2.6 = jdk7 -->
+    <jersey-client.version>2.34</jersey-client.version><!-- > 2.6 = jdk7 -->
     <jersey.version>1.19.4</jersey.version>
     <jetty-maven.version>11.0.2</jetty-maven.version>
     <joda-time.version>2.10.1</joda-time.version>
