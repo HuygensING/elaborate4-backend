@@ -18,7 +18,7 @@ jobs:
       - name: 3/5 - Add maven mirror settings for http repositories
         uses: whelk-io/maven-settings-xml-action@v18
         with:
-          mirrors: '[{ "id": "https-maven-restlet", "url": "https://maven.restlet.org", "mirrorFor": "maven-restlet" },{ "id": "https-apache-snapshots", "url": "https://repository.apache.org/snapshots", "mirrorFor": "apache.snapshots" }]'
+          mirrors: '[{ "id": "https-maven-restlet", "url": "https://maven.restlet.org", "mirrorOf": "maven-restlet" },{ "id": "https-apache-snapshots", "url": "https://repository.apache.org/snapshots", "mirrorOf": "apache.snapshots" }]'
 
       - name: 4/5 - Cache Maven packages
         uses: actions/cache@v2
