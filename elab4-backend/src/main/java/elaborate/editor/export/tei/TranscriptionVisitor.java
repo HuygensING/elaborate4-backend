@@ -56,7 +56,8 @@ class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
 
   private static final String TAG_LB = "lb";
 
-  public TranscriptionVisitor(TeiConversionConfig config, String transcriptionType, EntityManager entityManager) {
+  public TranscriptionVisitor(
+      TeiConversionConfig config, String transcriptionType, EntityManager entityManager) {
     super(new XmlContext());
     setTextHandler(new XmlTextHandler<XmlContext>());
     setDefaultElementHandler(new DefaultElementHandler());
@@ -66,7 +67,10 @@ class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
     addElementHandler(new DivHandler(transcriptionType), "div");
     addElementHandler(new XmlHandler(), "xml");
     addElementHandler(new SpanHandler(), "span");
-    addElementHandler(new AnnotationHandler(config, entityManager), Transcription.BodyTags.ANNOTATION_BEGIN, Transcription.BodyTags.ANNOTATION_END);
+    addElementHandler(
+        new AnnotationHandler(config, entityManager),
+        Transcription.BodyTags.ANNOTATION_BEGIN,
+        Transcription.BodyTags.ANNOTATION_END);
   }
 
   static class BrHandler implements ElementHandler<XmlContext> {
@@ -198,7 +202,6 @@ class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
     static boolean isStartMilestone(String id) {
       return id.endsWith("s");
     }
-
   }
 
   static class AnnotationHandler implements ElementHandler<XmlContext> {
@@ -283,9 +286,9 @@ class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
     }
 
     private Annotation getAnnotation(String annotationId) {
-      return AnnotationService.instance().getAnnotationByAnnotationNo(Integer.parseInt(annotationId), entityManager);
+      return AnnotationService.instance()
+          .getAnnotationByAnnotationNo(Integer.parseInt(annotationId), entityManager);
     }
-
   }
 
   static class DefaultElementHandler implements ElementHandler<XmlContext> {
@@ -322,5 +325,4 @@ class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
       return NEXT;
     }
   }
-
 }

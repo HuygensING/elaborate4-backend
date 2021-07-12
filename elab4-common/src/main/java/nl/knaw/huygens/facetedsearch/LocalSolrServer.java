@@ -28,42 +28,41 @@ import org.apache.solr.core.CoreContainer;
 
 public class LocalSolrServer extends AbstractSolrServer {
 
-	private static final String SOLR_DIRECTORY = "solr";
-	//	public static final String SOLR_CONFIG_FILE = "solrconfig.xml";
+  private static final String SOLR_DIRECTORY = "solr";
+  //	public static final String SOLR_CONFIG_FILE = "solrconfig.xml";
 
-	private final String solrDir;
-	private final String coreName;
-	private CoreContainer container;
+  private final String solrDir;
+  private final String coreName;
+  private CoreContainer container;
 
-	public LocalSolrServer(String solrDir, String coreName, QueryComposer queryComposer) {
-		super(queryComposer);
-		this.solrDir = StringUtils.defaultIfBlank(solrDir, SOLR_DIRECTORY);
-		this.coreName = StringUtils.defaultIfBlank(coreName, "core1");
-		setServer();
-	}
+  public LocalSolrServer(String solrDir, String coreName, QueryComposer queryComposer) {
+    super(queryComposer);
+    this.solrDir = StringUtils.defaultIfBlank(solrDir, SOLR_DIRECTORY);
+    this.coreName = StringUtils.defaultIfBlank(coreName, "core1");
+    setServer();
+  }
 
-	@Override
-	public void shutdown() throws IndexException {
-		try {
-			server.optimize();
-		} catch (Exception e) {
-			throw new IndexException(e.getMessage());
-		} finally {
-			if (container != null) {
-				container.shutdown();
-			}
-		}
-	}
+  @Override
+  public void shutdown() throws IndexException {
+    try {
+      server.optimize();
+    } catch (Exception e) {
+      throw new IndexException(e.getMessage());
+    } finally {
+      if (container != null) {
+        container.shutdown();
+      }
+    }
+  }
 
-	@Override
-	public void setServer() {
-		try {
-			container = new CoreContainer(solrDir);
-			container.load();
-			server = new EmbeddedSolrServer(container, coreName);
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
+  @Override
+  public void setServer() {
+    try {
+      container = new CoreContainer(solrDir);
+      container.load();
+      server = new EmbeddedSolrServer(container, coreName);
+    } catch (Exception e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
 }

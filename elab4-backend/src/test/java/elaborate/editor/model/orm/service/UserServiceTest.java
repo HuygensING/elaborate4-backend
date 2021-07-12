@@ -37,25 +37,26 @@ import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
 
-	@Test
-	public void testEmailToBeSentHasCorrectValues() throws Exception {
-		String from_email = "from@example.org";
-		String from_name = "From Name";
-		String to_email = "to@example.org";
-		String username = "bladiebla";
+  @Test
+  public void testEmailToBeSentHasCorrectValues() throws Exception {
+    String from_email = "from@example.org";
+    String from_name = "From Name";
+    String to_email = "to@example.org";
+    String username = "bladiebla";
 
-		Configuration config = mock(Configuration.class);
-		when(config.getSetting(Configuration.FROM_EMAIL)).thenReturn(from_email);
-		when(config.getSetting(Configuration.FROM_NAME)).thenReturn(from_name);
+    Configuration config = mock(Configuration.class);
+    when(config.getSetting(Configuration.FROM_EMAIL)).thenReturn(from_email);
+    when(config.getSetting(Configuration.FROM_NAME)).thenReturn(from_name);
 
-		Emailer emailer = mock(Emailer.class);
+    Emailer emailer = mock(Emailer.class);
 
-		User user = mock(User.class);
-		when(user.getUsername()).thenReturn(username);
-		when(user.getEmail()).thenReturn(to_email);
+    User user = mock(User.class);
+    when(user.getUsername()).thenReturn(username);
+    when(user.getEmail()).thenReturn(to_email);
 
-		UserService userservice = UserService.instance();
-		userservice.composeAndSendEmail(config, emailer, user);
-		verify(emailer).sendMail(eq(from_email), eq(from_name), eq(to_email), anyString(), contains(username));
-	}
+    UserService userservice = UserService.instance();
+    userservice.composeAndSendEmail(config, emailer, user);
+    verify(emailer)
+        .sendMail(eq(from_email), eq(from_name), eq(to_email), anyString(), contains(username));
+  }
 }

@@ -49,53 +49,52 @@ import elaborate.jaxrs.Annotations.AuthorizationRequired;
 @Path("annotationtypes")
 @AuthorizationRequired
 public class AnnotationTypeResource extends AbstractElaborateResource {
-	@Context
-	private AnnotationTypeService annotationTypeService;
+  @Context private AnnotationTypeService annotationTypeService;
 
-	@GET
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	@APIDesc("Returns a list of all annotationtypes")
-	@JsonView(Views.Minimal.class)
-	public ImmutableList<AnnotationType> getAll() {
-		return annotationTypeService.getAll();
-	}
+  @GET
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  @APIDesc("Returns a list of all annotationtypes")
+  @JsonView(Views.Minimal.class)
+  public ImmutableList<AnnotationType> getAll() {
+    return annotationTypeService.getAll();
+  }
 
-	@GET
-	@Path("{id: [0-9]+}")
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	@JsonView(Views.Minimal.class)
-	@APIDesc("Returns the annotationtype with the given id")
-	public AnnotationType getAnnotationType(@PathParam("id") long id) {
-		return annotationTypeService.read(id, getUser());
-	}
+  @GET
+  @Path("{id: [0-9]+}")
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  @JsonView(Views.Minimal.class)
+  @APIDesc("Returns the annotationtype with the given id")
+  public AnnotationType getAnnotationType(@PathParam("id") long id) {
+    return annotationTypeService.read(id, getUser());
+  }
 
-	@POST
-	@Consumes(UTF8MediaType.APPLICATION_JSON)
-	@APIDesc("Adds a new AnnotationType")
-	public Response create(AnnotationTypeMetadataItemInput input) {
-		AnnotationType annotationType = input.getAnnotationType();
-		annotationTypeService.create(annotationType, getUser());
-		return Response.created(createURI(annotationType)).build();
-	}
+  @POST
+  @Consumes(UTF8MediaType.APPLICATION_JSON)
+  @APIDesc("Adds a new AnnotationType")
+  public Response create(AnnotationTypeMetadataItemInput input) {
+    AnnotationType annotationType = input.getAnnotationType();
+    annotationTypeService.create(annotationType, getUser());
+    return Response.created(createURI(annotationType)).build();
+  }
 
-	@PUT
-	@Path("{id: [0-9]+}")
-	@Consumes(UTF8MediaType.APPLICATION_JSON)
-	@APIDesc("Updates the annotationtype with the given id")
-	public void update(@PathParam("id") long id, AnnotationTypeMetadataItemInput input) {
-		input.setId(id);
-		annotationTypeService.update(input.getAnnotationType(), getUser());
-	}
+  @PUT
+  @Path("{id: [0-9]+}")
+  @Consumes(UTF8MediaType.APPLICATION_JSON)
+  @APIDesc("Updates the annotationtype with the given id")
+  public void update(@PathParam("id") long id, AnnotationTypeMetadataItemInput input) {
+    input.setId(id);
+    annotationTypeService.update(input.getAnnotationType(), getUser());
+  }
 
-	@DELETE
-	@Path("{id: [0-9]+}")
-	@APIDesc("Deletes the annotationtype with the given id")
-	public void delete(@PathParam("id") long id) {
-		annotationTypeService.delete(id, getUser());
-	}
+  @DELETE
+  @Path("{id: [0-9]+}")
+  @APIDesc("Deletes the annotationtype with the given id")
+  public void delete(@PathParam("id") long id) {
+    annotationTypeService.delete(id, getUser());
+  }
 
-	@Path("{id: [0-9]+}/metadataitems")
-	public AnnotationTypeMetadataItemResource getMetadataItemResource() {
-		return new AnnotationTypeMetadataItemResource(getUser());
-	}
+  @Path("{id: [0-9]+}/metadataitems")
+  public AnnotationTypeMetadataItemResource getMetadataItemResource() {
+    return new AnnotationTypeMetadataItemResource(getUser());
+  }
 }

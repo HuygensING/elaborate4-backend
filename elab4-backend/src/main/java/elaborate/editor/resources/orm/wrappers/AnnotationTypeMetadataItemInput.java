@@ -33,105 +33,105 @@ import elaborate.editor.model.orm.AnnotationTypeMetadataItem;
 
 public class AnnotationTypeMetadataItemInput {
 
-	// "id": 177,
-	// "annotationTypeMetadataItems": [
-	// {
-	// "id": 13,
-	// "description": "index term",
-	// "name": "Index term"
-	// }
-	// ],
-	// "description": "Index",
-	// "name": "index"
-	// },
+  // "id": 177,
+  // "annotationTypeMetadataItems": [
+  // {
+  // "id": 13,
+  // "description": "index term",
+  // "name": "Index term"
+  // }
+  // ],
+  // "description": "Index",
+  // "name": "index"
+  // },
   private long id;
-	private List<MetadataInput> annotationTypeMetadataItems = Lists.newArrayList();
-	private String description;
-	private String name;
+  private List<MetadataInput> annotationTypeMetadataItems = Lists.newArrayList();
+  private String description;
+  private String name;
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
+  public long getId() {
+    return id;
   }
 
-	public List<MetadataInput> getAnnotationTypeMetadataItems() {
-		return annotationTypeMetadataItems;
-	}
+  public void setId(long id) {
+    this.id = id;
+  }
 
-	public AnnotationTypeMetadataItemInput setAnnotationTypeMetadataItems(List<MetadataInput> annotationTypeMetadataItems) {
-		this.annotationTypeMetadataItems = annotationTypeMetadataItems;
-		return this;
-	}
+  public List<MetadataInput> getAnnotationTypeMetadataItems() {
+    return annotationTypeMetadataItems;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public AnnotationTypeMetadataItemInput setAnnotationTypeMetadataItems(
+      List<MetadataInput> annotationTypeMetadataItems) {
+    this.annotationTypeMetadataItems = annotationTypeMetadataItems;
+    return this;
+  }
 
-	public AnnotationTypeMetadataItemInput setDescription(String description) {
-		this.description = description;
-		return this;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public AnnotationTypeMetadataItemInput setDescription(String description) {
+    this.description = description;
+    return this;
+  }
 
-	public AnnotationTypeMetadataItemInput setName(String name) {
-		this.name = name;
-		return this;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public AnnotationType getAnnotationType() {
-		Set<AnnotationTypeMetadataItem> items = Sets.newHashSet();
-		for (MetadataInput input : annotationTypeMetadataItems) {
-			AnnotationTypeMetadataItem item = new AnnotationTypeMetadataItem()//
-					.setId(input.getId())//
-					.setName(input.getName())//
-					.setDescription(input.getDescription());
-			items.add(item);
-		}
-		return new AnnotationType()//
-				.setId(id)//
-				.setName(name)//
-				.setDescription(description)//
-				.setMetadataItems(items);
-	}
+  public AnnotationTypeMetadataItemInput setName(String name) {
+    this.name = name;
+    return this;
+  }
 
-	public static class MetadataInput {
-		long id;
-		String description;
-		String name;
+  public AnnotationType getAnnotationType() {
+    Set<AnnotationTypeMetadataItem> items = Sets.newHashSet();
+    for (MetadataInput input : annotationTypeMetadataItems) {
+      AnnotationTypeMetadataItem item =
+          new AnnotationTypeMetadataItem() //
+              .setId(input.getId()) //
+              .setName(input.getName()) //
+              .setDescription(input.getDescription());
+      items.add(item);
+    }
+    return new AnnotationType() //
+        .setId(id) //
+        .setName(name) //
+        .setDescription(description) //
+        .setMetadataItems(items);
+  }
 
-		public long getId() {
-			return id;
-		}
+  public static class MetadataInput {
+    long id;
+    String description;
+    String name;
 
-		public MetadataInput setId(long id) {
-			this.id = id;
-			return this;
-		}
+    public long getId() {
+      return id;
+    }
 
-		public String getDescription() {
-			return description;
-		}
+    public MetadataInput setId(long id) {
+      this.id = id;
+      return this;
+    }
 
-		public MetadataInput setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+    public String getDescription() {
+      return description;
+    }
 
-		public String getName() {
-			return name;
-		}
+    public MetadataInput setDescription(String description) {
+      this.description = description;
+      return this;
+    }
 
-		public MetadataInput setName(String name) {
-			this.name = name;
-			return this;
-		}
+    public String getName() {
+      return name;
+    }
 
-	}
-
+    public MetadataInput setName(String name) {
+      this.name = name;
+      return this;
+    }
+  }
 }

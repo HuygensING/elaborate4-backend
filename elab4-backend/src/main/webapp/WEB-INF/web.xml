@@ -11,55 +11,59 @@
   	with this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L% -->
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
-	<display-name>eLaborate back-end</display-name>
-	<description>RESTful back-end for eLaborate</description>
-	<servlet>
-		<servlet-name>JerseyRESTService</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-		<init-param>
-			<!-- ResourceConfig rc = new PackagesResourceConfig("nl.knaw.huygens.jaxrstools.resources", "nl.knaw.huygens.jaxrstools.providers", 
-				"elaborate.editor.resources", "elaborate.editor.providers"); -->
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources</param-value>
-		</init-param>
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+    <display-name>eLaborate back-end</display-name>
+    <description>RESTful back-end for eLaborate</description>
+    <servlet>
+        <servlet-name>JerseyRESTService</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <!-- ResourceConfig rc = new PackagesResourceConfig("nl.knaw.huygens.jaxrstools.resources", "nl.knaw.huygens.jaxrstools.providers",
+                "elaborate.editor.resources", "elaborate.editor.providers"); -->
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>elaborate.editor.resources;elaborate.editor.providers;nl.knaw.huygens.jaxrstools.resources
+            </param-value>
+        </init-param>
 
-		<init-param>
-			<!-- rc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE); -->
-			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-			<param-value>true</param-value>
-		</init-param>
+        <init-param>
+            <!-- rc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE); -->
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
 
-		<init-param>
-			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
-			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
-		</init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+        </init-param>
 
-		<init-param>
-			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-			<param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter;nl.knaw.huygens.jaxrstools.filters.CORSFilter</param-value>
-		</init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+            <param-value>
+                com.sun.jersey.api.container.filter.GZIPContentEncodingFilter;nl.knaw.huygens.jaxrstools.filters.CORSFilter
+            </param-value>
+        </init-param>
 
-		<init-param>
-			<!-- rc.getResourceFilterFactories().add(new RolesAllowedResourceFilterFactory()); -->
-			<!-- rc.getResourceFilterFactories().add(new ElaborateResourceFilterFactory()); -->
-			<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
-			<param-value>elaborate.jaxrs.filters.ElaborateResourceFilterFactory</param-value>
-		</init-param>
+        <init-param>
+            <!-- rc.getResourceFilterFactories().add(new RolesAllowedResourceFilterFactory()); -->
+            <!-- rc.getResourceFilterFactories().add(new ElaborateResourceFilterFactory()); -->
+            <param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
+            <param-value>elaborate.jaxrs.filters.ElaborateResourceFilterFactory</param-value>
+        </init-param>
 
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-	<!-- Catch all requests -->
-	<servlet-mapping>
-		<servlet-name>JerseyRESTService</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
+    <!-- Catch all requests -->
+    <servlet-mapping>
+        <servlet-name>JerseyRESTService</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
 
-	<listener>
-		<listener-class>se.jiderhamn.classloader.leak.prevention.ClassLoaderLeakPreventor</listener-class>
-	</listener>
-	<listener>
-		<listener-class>elaborate.editor.backend.ApplicationInitializer</listener-class>
-	</listener>
+    <listener>
+        <listener-class>se.jiderhamn.classloader.leak.prevention.ClassLoaderLeakPreventor</listener-class>
+    </listener>
+    <listener>
+        <listener-class>elaborate.editor.backend.ApplicationInitializer</listener-class>
+    </listener>
 </web-app>  

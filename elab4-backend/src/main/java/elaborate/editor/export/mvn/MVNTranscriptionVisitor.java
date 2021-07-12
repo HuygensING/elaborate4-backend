@@ -53,7 +53,8 @@ import static nl.knaw.huygens.tei.Traversal.STOP;
 
 @Deprecated
 // use MVNTeiExporter
-public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
+public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext>
+    implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
   static final String choiceTag = "choice";
   static final String abbrTag = "abbr";
   static final String expanTag = "expan";
@@ -76,7 +77,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
   private static LineInfo currentLineInfo;
   public static String currentPageBreak = "";
 
-  public MVNTranscriptionVisitor(final MVNConversionResult result, final Map<Integer, AnnotationData> annotationIndex, final Set<String> deepestTextNums) {
+  public MVNTranscriptionVisitor(
+      final MVNConversionResult result,
+      final Map<Integer, AnnotationData> annotationIndex,
+      final Set<String> deepestTextNums) {
     super(new XmlContext());
     MVNTranscriptionVisitor.deepestTextNums = deepestTextNums;
     MVNTranscriptionVisitor.pageId = "1";
@@ -95,10 +99,14 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     addElementHandler(new LineEndHandler(), "le");
     addElementHandler(new ElementReplacer(new Element("del")), "strike");
     addElementHandler(new ElementReplacer(new Element("ex")), "i", "em");
-    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "underline")), "u");
-    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "rubric")), "b", "strong");
-    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "superscript")), "sup");
-    addElementHandler(new ElementReplacer(new Element("hi").withAttribute("rend", "subscript")), "sub");
+    addElementHandler(
+        new ElementReplacer(new Element("hi").withAttribute("rend", "underline")), "u");
+    addElementHandler(
+        new ElementReplacer(new Element("hi").withAttribute("rend", "rubric")), "b", "strong");
+    addElementHandler(
+        new ElementReplacer(new Element("hi").withAttribute("rend", "superscript")), "sup");
+    addElementHandler(
+        new ElementReplacer(new Element("hi").withAttribute("rend", "subscript")), "sub");
   }
 
   @Override
@@ -178,7 +186,6 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       currentPageBreak = "";
       return Traversal.NEXT;
     }
-
   }
 
   static class PageBreakHandler extends CopyElementHandler {
@@ -208,7 +215,6 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       //      }
       return Traversal.NEXT;
     }
-
   }
 
   static class CopyElementHandler implements ElementHandler<XmlContext> {
@@ -269,9 +275,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       } else {
         lb++;
       }
-      Element e = new Element("lb")//
-          .withAttribute("n", String.valueOf(lineNo))//
-          .withAttribute("xml:id", pageId + "-lb-" + lineNo);
+      Element e =
+          new Element("lb") //
+              .withAttribute("n", String.valueOf(lineNo)) //
+              .withAttribute("xml:id", pageId + "-lb-" + lineNo);
       if (currentLineInfo.inspringen) {
         e.setAttribute("rend", "indent");
       }
@@ -300,7 +307,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       return STOP;
     }
 
-    private void handleOpenAnnotation(final AnnotationData annotationData, final XmlContext context) {
+    private void handleOpenAnnotation(
+        final AnnotationData annotationData, final XmlContext context) {
       final MVNAnnotationType type = getVerifiedType(annotationData);
       ignoreText = type.ignoreText();
       //      if (MVNAnnotationType.REGELNUMMERING_BLAD.equals(type)) {
@@ -308,7 +316,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       //        if (StringUtils.isNumeric(body)) {
       //          lb = Integer.valueOf(body);
       //        } else {
-      //          addError(MVNAnnotationType.REGELNUMMERING_BLAD, "body: '" + body + "' is not numeric");
+      //          addError(MVNAnnotationType.REGELNUMMERING_BLAD, "body: '" + body + "' is not
+      // numeric");
       //        }
       //
       //      } else {
@@ -322,7 +331,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       //      }
     }
 
-    private void handleCloseAnnotation(final AnnotationData annotationData, final XmlContext context) {
+    private void handleCloseAnnotation(
+        final AnnotationData annotationData, final XmlContext context) {
       final MVNAnnotationType type = getVerifiedType(annotationData);
       ignoreText = false; // but what if it's inside another mvnannotation that should ignore text?
       if (handlers.containsKey(type)) {
@@ -354,40 +364,56 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     private AnnotationData getAnnotationData(final String annotationId) {
       return annotationIndex.get(Integer.valueOf(annotationId));
     }
-
   }
 
-  static final Map<MVNAnnotationType, MVNAnnotationHandler> handlers = ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler> builder()//
-      .put(MVNAnnotationType.AFKORTING, new AfkortingHandler())//
-      .put(MVNAnnotationType.ALINEA, new AlineaHandler())//
-      .put(MVNAnnotationType.CIJFERS, new WrapInElementHandler(new Element("num").withAttribute("type", "roman")))//
-      .put(MVNAnnotationType.DEFECT, new DefectHandler())//
-      .put(MVNAnnotationType.DOORHALING, new WrapInElementHandler("del"))//
-      .put(MVNAnnotationType.GEBRUIKERSNOTITIE, new GebruikersnotitieHandler())//
-      .put(MVNAnnotationType.INCIPIT, new IncipitHandler())//
-      .put(MVNAnnotationType.INITIAAL, new InitiaalHandler())//
-      .put(MVNAnnotationType.INSPRINGEN, new InspringenHandler())//
-      .put(MVNAnnotationType.KOLOM, new KolomHandler())//
-      .put(MVNAnnotationType.LETTERS, new WrapInElementHandler("mentioned"))//
-      .put(MVNAnnotationType.LINKERMARGEKOLOM, new WrapInElementHandler(new Element("note").withAttribute("place", "margin-left").withAttribute("type", "ms")))//
-      .put(MVNAnnotationType.RECHTERMARGEKOLOM, new WrapInElementHandler(new Element("note").withAttribute("place", "margin-right").withAttribute("type", "ms")))//
-      .put(MVNAnnotationType.METAMARK, new MetamarkHandler())//
-      .put(MVNAnnotationType.ONDERSCHRIFT, new OnderschriftHandler())//
-      .put(MVNAnnotationType.ONDUIDELIJK, new WrapInElementHandler("unclear"))//
-      .put(MVNAnnotationType.ONLEESBAAR, new DefectHandler())//
-      .put(MVNAnnotationType.OPHOGING_ROOD, new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubricated")))//
-      .put(MVNAnnotationType.OPSCHRIFT, new OpschriftHandler())//
-      .put(MVNAnnotationType.PALEOGRAFISCH, new PaleografischHandler())//
-      .put(MVNAnnotationType.POEZIE, new PoezieHandler())//
-      .put(MVNAnnotationType.REGELNUMMERING_BLAD, new RegelnummeringBladHandler())//
-      .put(MVNAnnotationType.REGELNUMMERING_TEKST, new RegelnummeringTekstHandler())//
-      .put(MVNAnnotationType.TEKSTBEGIN, new TekstBeginHandler())//
-      .put(MVNAnnotationType.TEKSTEINDE, new TekstEindeHandler())//
-      .put(MVNAnnotationType.TEKSTKLEUR_ROOD, new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubric")))//
-      .put(MVNAnnotationType.VERSREGEL, new VersregelHandler())//
-      .put(MVNAnnotationType.VREEMDTEKEN, new VreemdtekenHandler())//
-      .put(MVNAnnotationType.WITREGEL, new WitregelHandler())//
-      .build();
+  static final Map<MVNAnnotationType, MVNAnnotationHandler> handlers =
+      ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler>builder() //
+          .put(MVNAnnotationType.AFKORTING, new AfkortingHandler()) //
+          .put(MVNAnnotationType.ALINEA, new AlineaHandler()) //
+          .put(
+              MVNAnnotationType.CIJFERS,
+              new WrapInElementHandler(new Element("num").withAttribute("type", "roman"))) //
+          .put(MVNAnnotationType.DEFECT, new DefectHandler()) //
+          .put(MVNAnnotationType.DOORHALING, new WrapInElementHandler("del")) //
+          .put(MVNAnnotationType.GEBRUIKERSNOTITIE, new GebruikersnotitieHandler()) //
+          .put(MVNAnnotationType.INCIPIT, new IncipitHandler()) //
+          .put(MVNAnnotationType.INITIAAL, new InitiaalHandler()) //
+          .put(MVNAnnotationType.INSPRINGEN, new InspringenHandler()) //
+          .put(MVNAnnotationType.KOLOM, new KolomHandler()) //
+          .put(MVNAnnotationType.LETTERS, new WrapInElementHandler("mentioned")) //
+          .put(
+              MVNAnnotationType.LINKERMARGEKOLOM,
+              new WrapInElementHandler(
+                  new Element("note")
+                      .withAttribute("place", "margin-left")
+                      .withAttribute("type", "ms"))) //
+          .put(
+              MVNAnnotationType.RECHTERMARGEKOLOM,
+              new WrapInElementHandler(
+                  new Element("note")
+                      .withAttribute("place", "margin-right")
+                      .withAttribute("type", "ms"))) //
+          .put(MVNAnnotationType.METAMARK, new MetamarkHandler()) //
+          .put(MVNAnnotationType.ONDERSCHRIFT, new OnderschriftHandler()) //
+          .put(MVNAnnotationType.ONDUIDELIJK, new WrapInElementHandler("unclear")) //
+          .put(MVNAnnotationType.ONLEESBAAR, new DefectHandler()) //
+          .put(
+              MVNAnnotationType.OPHOGING_ROOD,
+              new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubricated"))) //
+          .put(MVNAnnotationType.OPSCHRIFT, new OpschriftHandler()) //
+          .put(MVNAnnotationType.PALEOGRAFISCH, new PaleografischHandler()) //
+          .put(MVNAnnotationType.POEZIE, new PoezieHandler()) //
+          .put(MVNAnnotationType.REGELNUMMERING_BLAD, new RegelnummeringBladHandler()) //
+          .put(MVNAnnotationType.REGELNUMMERING_TEKST, new RegelnummeringTekstHandler()) //
+          .put(MVNAnnotationType.TEKSTBEGIN, new TekstBeginHandler()) //
+          .put(MVNAnnotationType.TEKSTEINDE, new TekstEindeHandler()) //
+          .put(
+              MVNAnnotationType.TEKSTKLEUR_ROOD,
+              new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubric"))) //
+          .put(MVNAnnotationType.VERSREGEL, new VersregelHandler()) //
+          .put(MVNAnnotationType.VREEMDTEKEN, new VreemdtekenHandler()) //
+          .put(MVNAnnotationType.WITREGEL, new WitregelHandler()) //
+          .build();
 
   public interface MVNAnnotationHandler {
     void handleOpenAnnotation(AnnotationData annotation, XmlContext context);
@@ -435,7 +461,6 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       context.addCloseTag(expanTag);
       context.addCloseTag(choiceTag);
     }
-
   }
 
   private static class AlineaHandler implements MVNAnnotationHandler {
@@ -448,7 +473,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     @Override
-    public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) { // no action on closeAnnotation
+    public void handleCloseAnnotation(
+        final AnnotationData annotation, final XmlContext context) { // no action on closeAnnotation
     }
   }
 
@@ -504,9 +530,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     }
 
     private void addValidationError(final String body) {
-      addError(MVNAnnotationType.INITIAAL, "De inhoud van de annotatie ('" + body + "') is geen natuurlijk getal > 0 en < 20.");
+      addError(
+          MVNAnnotationType.INITIAAL,
+          "De inhoud van de annotatie ('" + body + "') is geen natuurlijk getal > 0 en < 20.");
     }
-
   }
 
   private static class InspringenHandler implements MVNAnnotationHandler {
@@ -572,7 +599,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       final Element note = new Element("note").withAttribute("type", "pc");
       context.addOpenTag(note);
-      context.addLiteral(cleanUpAnnotationBody(annotation).replaceAll("<i>", "<mentioned>").replaceAll("</i>", "</mentioned>"));
+      context.addLiteral(
+          cleanUpAnnotationBody(annotation)
+              .replaceAll("<i>", "<mentioned>")
+              .replaceAll("</i>", "</mentioned>"));
       context.addCloseTag(note);
     }
   }
@@ -627,7 +657,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       final String annotatedText = context.closeLayer();
       if (!"‡".equals(annotatedText)) {
-        addError(MVNAnnotationType.TEKSTBEGIN, "Het geannoteerde teken moet ‘‡’ zijn, is '" + annotatedText + "'");
+        addError(
+            MVNAnnotationType.TEKSTBEGIN,
+            "Het geannoteerde teken moet ‘‡’ zijn, is '" + annotatedText + "'");
       }
       Log.warn("textnum='{}'", annotation.body);
       final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
@@ -636,9 +668,10 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       validateTextNum(textNum);
       textNumStack.push(textNum);
       final boolean isText = isText(textNum);
-      final Element element = new Element(isText ? "text" : "group")//
-          .withAttribute("n", textNum)//
-          .withAttribute("xml:id", result.getSigle() + "-" + textNum);
+      final Element element =
+          new Element(isText ? "text" : "group") //
+              .withAttribute("n", textNum) //
+              .withAttribute("xml:id", result.getSigle() + "-" + textNum);
       context.openLayer();
       context.addLiteral("\n" + indent());
       context.addOpenTag(element);
@@ -666,13 +699,21 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
 
     private void validateTextNum(final String textNum) {
       if (textNum.split("\\.").length > 4) {
-        addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: " + textNum + " mag maximaal 3 punten bevatten.");
+        addError(
+            MVNAnnotationType.TEKSTBEGIN,
+            "Ongeldig tekstnummer: " + textNum + " mag maximaal 3 punten bevatten.");
       }
       if (!textNum.matches("^[a-zA-Z0-9.]+$")) {
-        addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: " + textNum + " mag alleen letters, cijfers en (maximaal 3) punten bevatten.");
+        addError(
+            MVNAnnotationType.TEKSTBEGIN,
+            "Ongeldig tekstnummer: "
+                + textNum
+                + " mag alleen letters, cijfers en (maximaal 3) punten bevatten.");
       }
       if (!textNumStack.isEmpty() && !textNum.startsWith(textNumStack.peek() + ".")) {
-        addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: " + textNum + " volgt niet op " + textNumStack.peek() + ".");
+        addError(
+            MVNAnnotationType.TEKSTBEGIN,
+            "Ongeldig tekstnummer: " + textNum + " volgt niet op " + textNumStack.peek() + ".");
       }
     }
   }
@@ -695,7 +736,6 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
       context.addCloseTag(replacementElement);
       return Traversal.NEXT;
     }
-
   }
 
   private static boolean isText(final String textNum) {
@@ -716,7 +756,9 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       final String annotatedText = context.closeLayer();
       if (!"‡".equals(annotatedText)) {
-        addError(MVNAnnotationType.TEKSTEINDE, "Het geannoteerde teken moet ‘‡’ zijn, is '" + annotatedText + "'");
+        addError(
+            MVNAnnotationType.TEKSTEINDE,
+            "Het geannoteerde teken moet ‘‡’ zijn, is '" + annotatedText + "'");
       }
       final List<String> parts = Splitter.on(";").trimResults().splitToList(annotation.body);
       final String textNum = parts.get(0);
@@ -727,9 +769,13 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
         textNumStack.pop();
       } else {
         if (textNumStack.contains(textNum)) {
-          addError(MVNAnnotationType.TEKSTEINDE, "tekstNum '" + textNum + "' gevonden waar '" + peek + "' verwacht was.");
+          addError(
+              MVNAnnotationType.TEKSTEINDE,
+              "tekstNum '" + textNum + "' gevonden waar '" + peek + "' verwacht was.");
         } else {
-          addError(MVNAnnotationType.TEKSTEINDE, "tekstNum '" + textNum + "' heeft geen corresponderende mvn:tekstbegin.");
+          addError(
+              MVNAnnotationType.TEKSTEINDE,
+              "tekstNum '" + textNum + "' heeft geen corresponderende mvn:tekstbegin.");
         }
         textNumStack.remove(textNum);
       }
@@ -778,26 +824,30 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     public void handleCloseAnnotation(final AnnotationData annotation, final XmlContext context) {
       final String annotatedText = XmlUtil.removeXMLtags(context.closeLayer());
       if (!"¤".equals(annotatedText)) {
-        addError(MVNAnnotationType.WITREGEL, "Het geannoteerde teken moet ‘¤’ zijn, is '" + annotatedText + "'");
+        addError(
+            MVNAnnotationType.WITREGEL,
+            "Het geannoteerde teken moet ‘¤’ zijn, is '" + annotatedText + "'");
       }
       currentLineInfo.witregel = true;
     }
   }
 
   private static String cleanUpAnnotationBody(final AnnotationData annotation) {
-    return normalized(annotation.body)//
-        .replaceAll("<b>", "<hi rend=\"rubric\">").replaceAll("</b>", "</hi>")//
-        .replaceAll("<u>", "<hi rend=\"underline\">").replaceAll("</u>", "</hi>");
+    return normalized(annotation.body) //
+        .replaceAll("<b>", "<hi rend=\"rubric\">")
+        .replaceAll("</b>", "</hi>") //
+        .replaceAll("<u>", "<hi rend=\"underline\">")
+        .replaceAll("</u>", "</hi>");
   }
 
   private static String normalized(final String rawXml) {
-    return rawXml//
-        .replaceAll("<i .*?>", "<i>")//
-        .replaceAll("<div>", "")//
-        .replaceAll("</div>", "")//
-        .replaceAll("<br>", "")//
-        .replaceAll("<span.*?>", "")//
-        .replaceAll("</span>", "")//
+    return rawXml //
+        .replaceAll("<i .*?>", "<i>") //
+        .replaceAll("<div>", "") //
+        .replaceAll("</div>", "") //
+        .replaceAll("<br>", "") //
+        .replaceAll("<span.*?>", "") //
+        .replaceAll("</span>", "") //
         .replace("&nbsp;", " ");
   }
 
@@ -809,5 +859,4 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext> imple
     currentLineInfo.preTags = currentLineInfo.preTags + currentPageBreak;
     currentPageBreak = "";
   }
-
 }

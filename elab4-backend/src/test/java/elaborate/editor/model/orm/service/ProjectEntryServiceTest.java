@@ -35,22 +35,21 @@ import static org.mockito.Mockito.when;
 
 class ProjectEntryServiceTest extends AbstractTest {
 
-	private ProjectEntryService projectEntryService;
+  private ProjectEntryService projectEntryService;
 
-	@Before
-	public void setUp() {
-		projectEntryService = ProjectEntryService.instance();
-	}
+  @Before
+  public void setUp() {
+    projectEntryService = ProjectEntryService.instance();
+  }
 
-	@After
-	public void tearDown() {}
+  @After
+  public void tearDown() {}
 
-	// @Test
-	public void testRead() {
-		User user = mock(User.class);
-		when(user.getId()).thenReturn((long) 1);
-		ProjectEntry pe = projectEntryService.read(1, user);
-		assertThat(pe).hasId(1);
-	}
-
+  // @Test
+  public void testRead() {
+    User user = mock(User.class);
+    when(user.getId()).thenReturn((long) 1);
+    ProjectEntry pe = projectEntryService.read(1, user);
+    assertThat(pe).hasId(1);
+  }
 }

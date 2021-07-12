@@ -55,104 +55,105 @@ import elaborate.publication.solr.SearchService;
 
 @Path("search")
 public class SearchResource {
-	private static final String SEARCH_PATH_TEMPLATE = "/search/{0,number,#}";
-	private static final String KEY_NEXT = "_next";
-	private static final String KEY_PREV = "_prev";
+  private static final String SEARCH_PATH_TEMPLATE = "/search/{0,number,#}";
+  private static final String KEY_NEXT = "_next";
+  private static final String KEY_PREV = "_prev";
 
-	@Context
-	SearchService searchService;
-	@Context
-	ServletContext context;
+  @Context SearchService searchService;
+  @Context ServletContext context;
 
-	@GET
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	public Object doSimpleSearch(@QueryParam("q") @DefaultValue("") String term) {
-		ElaborateSearchParameters elaborateSearchParameters = new ElaborateSearchParameters()//
-				.setTerm(term)//
-				.setTextLayers(ImmutableList.of("Diplomatic"));
-		searchService.setSolrDir(getSolrDir());
-		SearchData search = searchService.createSearch(elaborateSearchParameters);
+  @GET
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  public Object doSimpleSearch(@QueryParam("q") @DefaultValue("") String term) {
+    ElaborateSearchParameters elaborateSearchParameters =
+        new ElaborateSearchParameters() //
+            .setTerm(term) //
+            .setTextLayers(ImmutableList.of("Diplomatic"));
+    searchService.setSolrDir(getSolrDir());
+    SearchData search = searchService.createSearch(elaborateSearchParameters);
     return searchService.getSearchResult(search.getId(), 0, 1000);
-	}
+  }
 
-	private String getSolrDir() {
-		return context.getRealPath("/WEB-INF/solr");
-	}
+  private String getSolrDir() {
+    return context.getRealPath("/WEB-INF/solr");
+  }
 
-	@POST
-	@Consumes(UTF8MediaType.APPLICATION_JSON)
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	public Response createSearch(//
-			ElaborateSearchParameters elaborateSearchParameters//
-	) {
-		Log.debug("elaborateSearchParameters:{}", elaborateSearchParameters);
-		searchService.setSolrDir(getSolrDir());
-		SearchData search = searchService.createSearch(elaborateSearchParameters);
-		return Response.created(createURI(search)).build();
-	}
+  @POST
+  @Consumes(UTF8MediaType.APPLICATION_JSON)
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  public Response createSearch( //
+      ElaborateSearchParameters elaborateSearchParameters //
+      ) {
+    Log.debug("elaborateSearchParameters:{}", elaborateSearchParameters);
+    searchService.setSolrDir(getSolrDir());
+    SearchData search = searchService.createSearch(elaborateSearchParameters);
+    return Response.created(createURI(search)).build();
+  }
 
-	@GET
-	@Path("{search_id:[0-9]+}")
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	public Response getSearchResults(//
-			@PathParam("search_id") long searchId, //
-			@QueryParam("start") @DefaultValue("0") String startString, //
-			@QueryParam("rows") @DefaultValue("100") String rowsString//
-	) {
-		if (!StringUtils.isNumeric(startString) || !StringUtils.isNumeric(rowsString)) {
-			throw new BadRequestException();
-		}
-		int start = Integer.parseInt(startString);
-		int rows = Integer.parseInt(rowsString);
-		Map<String, Object> searchResult = searchService.getSearchResult(searchId, start, rows);
-		addPrevNextURIs(searchResult, searchId, start, rows);
-		ResponseBuilder builder = Response.ok(searchResult);
-		return builder.build();
-	}
+  @GET
+  @Path("{search_id:[0-9]+}")
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  public Response getSearchResults( //
+      @PathParam("search_id") long searchId, //
+      @QueryParam("start") @DefaultValue("0") String startString, //
+      @QueryParam("rows") @DefaultValue("100") String rowsString //
+      ) {
+    if (!StringUtils.isNumeric(startString) || !StringUtils.isNumeric(rowsString)) {
+      throw new BadRequestException();
+    }
+    int start = Integer.parseInt(startString);
+    int rows = Integer.parseInt(rowsString);
+    Map<String, Object> searchResult = searchService.getSearchResult(searchId, start, rows);
+    addPrevNextURIs(searchResult, searchId, start, rows);
+    ResponseBuilder builder = Response.ok(searchResult);
+    return builder.build();
+  }
 
-	@GET
-	@Path("{search_id:[0-9]+}/allids")
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	public Response getAllSearchResultIds(@PathParam("search_id") long searchId) {
-		List<String> searchResultIds = searchService.getAllSearchResultIds(searchId);
-		ResponseBuilder builder = Response.ok(searchResultIds);
-		return builder.build();
-	}
+  @GET
+  @Path("{search_id:[0-9]+}/allids")
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  public Response getAllSearchResultIds(@PathParam("search_id") long searchId) {
+    List<String> searchResultIds = searchService.getAllSearchResultIds(searchId);
+    ResponseBuilder builder = Response.ok(searchResultIds);
+    return builder.build();
+  }
 
-	private void addPrevNextURIs(Map<String, Object> searchResult, long searchId, int start, int rows) {
-		int prevStart = Math.max(0, start - rows);
-		Log.info("prevStart={}", prevStart);
-		String path = MessageFormat.format(SEARCH_PATH_TEMPLATE, searchId);
-		if (start > 0) {
-			addURI(searchResult, KEY_PREV, path, prevStart, rows);
-		}
+  private void addPrevNextURIs(
+      Map<String, Object> searchResult, long searchId, int start, int rows) {
+    int prevStart = Math.max(0, start - rows);
+    Log.info("prevStart={}", prevStart);
+    String path = MessageFormat.format(SEARCH_PATH_TEMPLATE, searchId);
+    if (start > 0) {
+      addURI(searchResult, KEY_PREV, path, prevStart, rows);
+    }
 
-		int nextStart = start + rows;
-		int size = (Integer) searchResult.get(AbstractSolrServer.KEY_NUMFOUND);
-		Log.info("nextStart={}, size={}", nextStart, size);
-		if (nextStart < size) {
-			addURI(searchResult, KEY_NEXT, path, start + rows, rows);
-		}
-	}
+    int nextStart = start + rows;
+    int size = (Integer) searchResult.get(AbstractSolrServer.KEY_NUMFOUND);
+    Log.info("nextStart={}, size={}", nextStart, size);
+    if (nextStart < size) {
+      addURI(searchResult, KEY_NEXT, path, start + rows, rows);
+    }
+  }
 
-	private void addURI(Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
-		UriBuilder builder = UriBuilder//
-				.fromUri(searchService.getBaseURL() + "/api/")//
-				.path(prevLink)//
-				.queryParam("start", start)//
-				.queryParam("rows", rows);
-		searchResult.put(key, builder.build().toString());
-	}
+  private void addURI(
+      Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
+    UriBuilder builder =
+        UriBuilder //
+            .fromUri(searchService.getBaseURL() + "/api/") //
+            .path(prevLink) //
+            .queryParam("start", start) //
+            .queryParam("rows", rows);
+    searchResult.put(key, builder.build().toString());
+  }
 
-	private URI createURI(SearchData e) {
-		URI uri;
-		try {
-			uri = new URI(String.valueOf(e.getId()));
-		} catch (URISyntaxException ue) {
-			uri = null;
-			ue.printStackTrace();
-		}
-		return uri;
-	}
-
+  private URI createURI(SearchData e) {
+    URI uri;
+    try {
+      uri = new URI(String.valueOf(e.getId()));
+    } catch (URISyntaxException ue) {
+      uri = null;
+      ue.printStackTrace();
+    }
+    return uri;
+  }
 }

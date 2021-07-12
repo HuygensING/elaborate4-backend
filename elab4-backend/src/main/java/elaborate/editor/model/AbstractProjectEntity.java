@@ -35,25 +35,25 @@ import elaborate.editor.model.orm.Project;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class AbstractProjectEntity<T extends AbstractProjectEntity<T>> extends AbstractTrackedEntity<T> {
-	private static final long serialVersionUID = -7339519088116167633L;
+public abstract class AbstractProjectEntity<T extends AbstractProjectEntity<T>>
+    extends AbstractTrackedEntity<T> {
+  private static final long serialVersionUID = -7339519088116167633L;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id", columnDefinition = "int4")
-	private Project project;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "project_id", columnDefinition = "int4")
+  private Project project;
 
-	protected AbstractProjectEntity() {
-		super();
-	}
+  protected AbstractProjectEntity() {
+    super();
+  }
 
-	@JsonIgnore
-	public Project getProject() {
-		return project;
-	}
+  @JsonIgnore
+  public Project getProject() {
+    return project;
+  }
 
-	public T setProject(Project _project) {
-		this.project = _project;
-		return (T) this;
-	}
-
+  public T setProject(Project _project) {
+    this.project = _project;
+    return (T) this;
+  }
 }

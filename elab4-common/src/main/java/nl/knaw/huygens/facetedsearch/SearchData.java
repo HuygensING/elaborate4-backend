@@ -36,63 +36,63 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @XmlRootElement(name = "searchdata")
 public class SearchData {
-	private final long id;
-	private Date created_on = new Date();
-	private String json = "{}";
+  private final long id;
+  private Date created_on = new Date();
+  private String json = "{}";
 
-	public SearchData() {
-		setCreatedOn(new Date());
-		id = created_on.getTime();
-	}
-
-	private final ObjectMapper objectMapper = new ObjectMapper();
-
-	public Date getCreatedOn() {
-		return created_on;
-	}
-
-	public String getJson() {
-		return json;
-	}
-
-	public void setJson(String json) {
-		this.json = json;
+  public SearchData() {
+    setCreatedOn(new Date());
+    id = created_on.getTime();
   }
 
-	public SearchData setResults(Map<String, Object> result) {
-		StringWriter stringWriter = new StringWriter();
-		try {
-			objectMapper.writeValue(stringWriter, result);
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		setJson(stringWriter.toString());
-		return this;
-	}
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
-	@JsonIgnore
-	public Map<String, Object> getResults() {
-		try {
-			return objectMapper.readValue(json, Map.class);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+  public Date getCreatedOn() {
+    return created_on;
+  }
 
-	public long getId() {
-		return id;
-	}
+  public String getJson() {
+    return json;
+  }
 
-	public void setCreatedOn(Date date) {
-		created_on = date;
-	}
+  public void setJson(String json) {
+    this.json = json;
+  }
+
+  public SearchData setResults(Map<String, Object> result) {
+    StringWriter stringWriter = new StringWriter();
+    try {
+      objectMapper.writeValue(stringWriter, result);
+    } catch (JsonGenerationException e) {
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    setJson(stringWriter.toString());
+    return this;
+  }
+
+  @JsonIgnore
+  public Map<String, Object> getResults() {
+    try {
+      return objectMapper.readValue(json, Map.class);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (JsonMappingException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public void setCreatedOn(Date date) {
+    created_on = date;
+  }
 }

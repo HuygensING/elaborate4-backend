@@ -47,10 +47,14 @@ public class SearchConfig {
   private String baseURL;
   private final List<RangeField> rangeFields = Lists.newArrayList();
 
-  public SearchConfig(Project project, List<String> metadataFieldsForFacets, Collection<String> multivaluedFacetNames) {
+  public SearchConfig(
+      Project project,
+      List<String> metadataFieldsForFacets,
+      Collection<String> multivaluedFacetNames) {
     // TODO: refactor CNW Kludge
     if (44 == project.getId()) {
-      getRangeFields().add(new RangeField("metadata_datum", "metadata_datum_lower", "metadata_datum_upper"));
+      getRangeFields()
+          .add(new RangeField("metadata_datum", "metadata_datum_lower", "metadata_datum_upper"));
     }
     for (Entry<String, FacetInfo> entry : project.getFacetInfoMap().entrySet()) {
       String facetName = entry.getKey();
@@ -70,21 +74,23 @@ public class SearchConfig {
 
     facetFields = ImmutableList.copyOf(facetInfoMap.keySet());
 
-    defaultSortOrder = ImmutableList.of(//
-        fieldOf(project.getLevel1()), //
-        fieldOf(project.getLevel2()), //
-        fieldOf(project.getLevel3())//
-    );
+    defaultSortOrder =
+        ImmutableList.of( //
+            fieldOf(project.getLevel1()), //
+            fieldOf(project.getLevel2()), //
+            fieldOf(project.getLevel3()) //
+            );
   }
 
   private void insertFacetsForCNW(Project project, String key) {
     if (project.getId() == 44) {
       if (key.equals("metadata_ontvanger")) {
         String name = MULTIVALUED_PREFIX + "metadata_correspondents";
-        FacetInfo facetInfo = new FacetInfo()//
-            .setName(name)//
-            .setTitle("Correspondent")//
-            .setType(FacetType.LIST);
+        FacetInfo facetInfo =
+            new FacetInfo() //
+                .setName(name) //
+                .setTitle("Correspondent") //
+                .setType(FacetType.LIST);
         facetInfoMap.put(name, facetInfo);
       }
     }

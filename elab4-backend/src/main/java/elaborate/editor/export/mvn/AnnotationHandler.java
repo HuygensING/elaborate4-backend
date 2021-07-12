@@ -28,7 +28,9 @@ import java.util.List;
 public interface AnnotationHandler {
   List<String> relevantTags();
 
-  void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> collection, Context context);
+  void onOpenAnnotation(
+      StringBuilder teiBuilder, Collection<XmlAnnotation> collection, Context context);
 
-  void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> collection, Context context);
+  void onCloseAnnotation(
+      StringBuilder teiBuilder, Collection<XmlAnnotation> collection, Context context);
 }

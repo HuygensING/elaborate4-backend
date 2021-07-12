@@ -44,10 +44,15 @@ public class ElaborateQueryComposer implements QueryComposer {
 
     } else {
       List<String> terms = getTerms(sp);
-      String termQuery = (terms.size() == 1) ? terms.get(0) : MessageFormat.format("({0})", Joiner.on(" ").join(terms));
+      String termQuery =
+          (terms.size() == 1)
+              ? terms.get(0)
+              : MessageFormat.format("({0})", Joiner.on(" ").join(terms));
 
       List<String> fieldQueries = Lists.newArrayList();
-      fieldQueries.add(MessageFormat.format("{0}:{1}", SolrFields.TITLE, termQuery)); // always search in entry title as well
+      fieldQueries.add(
+          MessageFormat.format(
+              "{0}:{1}", SolrFields.TITLE, termQuery)); // always search in entry title as well
       for (String field : sp.getTextFieldsToSearch().keySet()) {
         fieldQueries.add(MessageFormat.format("{0}:{1}", field, termQuery));
       }
@@ -84,10 +89,11 @@ public class ElaborateQueryComposer implements QueryComposer {
       } else {
         long lowerDate = fp.getLowerLimit();
         long upperDate = fp.getUpperLimit();
-        String rangeQuery = MessageFormat.format(//
-            "+{0}_lower:[{1,number,#} TO {2,number,#}] +{0}_upper:[{1,number,#} TO {2,number,#}]", //
-            fp.getName(), lowerDate, upperDate//
-        );
+        String rangeQuery =
+            MessageFormat.format( //
+                "+{0}_lower:[{1,number,#} TO {2,number,#}] +{0}_upper:[{1,number,#} TO {2,number,#}]", //
+                fp.getName(), lowerDate, upperDate //
+                );
         facetQueries.add(rangeQuery);
       }
       //
@@ -129,5 +135,4 @@ public class ElaborateQueryComposer implements QueryComposer {
   public boolean mustHighlight() {
     return mustHighlight;
   }
-
 }

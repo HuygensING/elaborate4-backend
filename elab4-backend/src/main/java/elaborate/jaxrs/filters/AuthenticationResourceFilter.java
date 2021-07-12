@@ -39,55 +39,54 @@ import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 import elaborate.editor.model.SessionService;
 
 public class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {
-	public static final String HEADER = "Authorization";
+  public static final String HEADER = "Authorization";
 
-	final SessionService sessionService = SessionService.instance();
+  final SessionService sessionService = SessionService.instance();
 
-	@Override
-	public ContainerRequest filter(ContainerRequest request) {
-		// OPTIONS calls don't need authorization, apparently
-		if ("OPTIONS".equals(request.getMethod())) {
-			return request;
-		}
+  @Override
+  public ContainerRequest filter(ContainerRequest request) {
+    // OPTIONS calls don't need authorization, apparently
+    if ("OPTIONS".equals(request.getMethod())) {
+      return request;
+    }
 
-		// Authentication via header or cookie
-		String authentication = request.getHeaderValue(HEADER);
-		if (StringUtils.isBlank(authentication)) {
-			Cookie cookie = request.getCookies().get(HEADER);
-			if (cookie != null) {
-				authentication = cookie.getValue();
-			}
-		}
-		// Log.info("authentication={}", authentication);
-		if (StringUtils.isNotBlank(authentication)) {
-			List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
-			if (parts.size() == 2) {
-				String scheme = parts.get(0);
-				String key = parts.get(1);
-				try {
-					SecurityContext securityContext = sessionService.getSecurityContext(scheme, key);
-					if (securityContext != null) {
-						request.setSecurityContext(securityContext);
-						return request;
-					}
-				} catch (nl.knaw.huygens.security.client.UnauthorizedException e) {
-					throw new UnauthorizedException(e.getMessage());
-				}
-			}
-		} else {
+    // Authentication via header or cookie
+    String authentication = request.getHeaderValue(HEADER);
+    if (StringUtils.isBlank(authentication)) {
+      Cookie cookie = request.getCookies().get(HEADER);
+      if (cookie != null) {
+        authentication = cookie.getValue();
+      }
+    }
+    // Log.info("authentication={}", authentication);
+    if (StringUtils.isNotBlank(authentication)) {
+      List<String> parts = Lists.newArrayList(Splitter.on(" ").split(authentication));
+      if (parts.size() == 2) {
+        String scheme = parts.get(0);
+        String key = parts.get(1);
+        try {
+          SecurityContext securityContext = sessionService.getSecurityContext(scheme, key);
+          if (securityContext != null) {
+            request.setSecurityContext(securityContext);
+            return request;
+          }
+        } catch (nl.knaw.huygens.security.client.UnauthorizedException e) {
+          throw new UnauthorizedException(e.getMessage());
+        }
+      }
+    } else {
 
-		}
-		throw new UnauthorizedException("No valid " + HEADER + " header in request");
-	}
+    }
+    throw new UnauthorizedException("No valid " + HEADER + " header in request");
+  }
 
-	@Override
-	public ContainerRequestFilter getRequestFilter() {
-		return this;
-	}
+  @Override
+  public ContainerRequestFilter getRequestFilter() {
+    return this;
+  }
 
-	@Override
-	public ContainerResponseFilter getResponseFilter() {
-		return null;
-	}
-
+  @Override
+  public ContainerResponseFilter getResponseFilter() {
+    return null;
+  }
 }

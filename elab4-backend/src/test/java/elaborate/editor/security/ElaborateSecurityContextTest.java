@@ -33,41 +33,40 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ElaborateSecurityContextTest {
-	private User user;
-	private ElaborateSecurityContext elaborateSecurityContext;
+  private User user;
+  private ElaborateSecurityContext elaborateSecurityContext;
 
-	@Before
-	public void setUp() {
-		user = mock(User.class);
-		when(user.getUsername()).thenReturn("username");
-		when(user.hasRole("ADMIN")).thenReturn(true);
+  @Before
+  public void setUp() {
+    user = mock(User.class);
+    when(user.getUsername()).thenReturn("username");
+    when(user.hasRole("ADMIN")).thenReturn(true);
 
-		elaborateSecurityContext = new ElaborateSecurityContext(user);
-	}
+    elaborateSecurityContext = new ElaborateSecurityContext(user);
+  }
 
-	@Test
-	public void testGetUser() {
-		assertThat(elaborateSecurityContext.getUser()).isEqualTo(user);
-	}
+  @Test
+  public void testGetUser() {
+    assertThat(elaborateSecurityContext.getUser()).isEqualTo(user);
+  }
 
-	@Test
-	public void testGetUserPrincipal() {
-		assertThat(elaborateSecurityContext.getUserPrincipal().getName()).isEqualTo(user.getUsername());
-	}
+  @Test
+  public void testGetUserPrincipal() {
+    assertThat(elaborateSecurityContext.getUserPrincipal().getName()).isEqualTo(user.getUsername());
+  }
 
-	@Test
-	public void testIsUserInRole() {
-		assertThat(elaborateSecurityContext.isUserInRole(ElaborateRoles.ADMIN)).isTrue();
-	}
+  @Test
+  public void testIsUserInRole() {
+    assertThat(elaborateSecurityContext.isUserInRole(ElaborateRoles.ADMIN)).isTrue();
+  }
 
-	@Test
-	public void testGetAuthenticationScheme() {
-		assertThat(elaborateSecurityContext.getAuthenticationScheme()).isEqualTo("SimpleAuth");
-	}
+  @Test
+  public void testGetAuthenticationScheme() {
+    assertThat(elaborateSecurityContext.getAuthenticationScheme()).isEqualTo("SimpleAuth");
+  }
 
-	@Test
-	public void testIsSecure() {
-		assertThat(elaborateSecurityContext.isSecure()).isFalse();
-	}
-
+  @Test
+  public void testIsSecure() {
+    assertThat(elaborateSecurityContext.isSecure()).isFalse();
+  }
 }

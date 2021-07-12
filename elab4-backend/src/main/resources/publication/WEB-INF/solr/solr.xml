@@ -39,7 +39,8 @@
 -->
 
 <solr persistent="true">
-  <cores host="${host:}" hostPort="${jetty.port:8983}" hostContext="${hostContext:solr}" zkClientTimeout="${zkClientTimeout:15000}">
-    <core name="entries" instanceDir="entries"/>
-  </cores>
+    <cores host="${host:}" hostPort="${jetty.port:8983}" hostContext="${hostContext:solr}"
+           zkClientTimeout="${zkClientTimeout:15000}">
+        <core name="entries" instanceDir="entries"/>
+    </cores>
 </solr>

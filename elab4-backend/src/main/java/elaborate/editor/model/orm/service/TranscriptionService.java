@@ -104,7 +104,10 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
       persist(transcription);
       cleanupAnnotations(transcription);
       ProjectEntry projectEntry = transcription.getProjectEntry();
-      String logLine = MessageFormat.format("updated transcription ''{0}'' for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
+      String logLine =
+          MessageFormat.format(
+              "updated transcription ''{0}'' for entry ''{1}''",
+              transcription.getTextLayer(), projectEntry.getName());
       updateParents(projectEntry, user, logLine);
 
     } finally {
@@ -126,7 +129,10 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
       ProjectEntry projectEntry = transcription.getProjectEntry();
 
-      String logLine = MessageFormat.format("deleted transcription ''{0}'' and its annotations for entry ''{1}''", transcription.getTextLayer(), projectEntry.getName());
+      String logLine =
+          MessageFormat.format(
+              "deleted transcription ''{0}'' and its annotations for entry ''{1}''",
+              transcription.getTextLayer(), projectEntry.getName());
 
       updateParents(projectEntry, user, logLine);
     } finally {
@@ -152,7 +158,8 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
   private static final int ANNOTATION_NO_START = 9000000;
 
-  public Annotation addAnnotation(long transcription_id, AnnotationInputWrapper annotationInput, User user) {
+  public Annotation addAnnotation(
+      long transcription_id, AnnotationInputWrapper annotationInput, User user) {
     beginTransaction();
     Annotation annotation;
     try {
@@ -174,7 +181,10 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
       ProjectEntry projectEntry = transcription.getProjectEntry();
 
-      String logLine = MessageFormat.format("added annotation ''{0}'' for transcription ''{1}'' in entry ''{2}''", annotationType.getName(), transcription.getTextLayer(), projectEntry.getName());
+      String logLine =
+          MessageFormat.format(
+              "added annotation ''{0}'' for transcription ''{1}'' in entry ''{2}''",
+              annotationType.getName(), transcription.getTextLayer(), projectEntry.getName());
       updateParents(projectEntry, user, logLine);
     } finally {
       commitTransaction();
@@ -198,28 +208,36 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     AnnotationType annotationType = find(AnnotationType.class, annotationInput.typeId);
     if (annotationType == null) {
       rollbackTransaction();
-      throw new BadRequestException("bad typeId: no AnnotationType found with id " + annotationInput.typeId);
+      throw new BadRequestException(
+          "bad typeId: no AnnotationType found with id " + annotationInput.typeId);
     }
     return annotationType;
   }
 
-  private List<AnnotationMetadataItem> createAnnotationMetadataItems(Annotation annotation, AnnotationInputWrapper annotationInput, AnnotationType annotationType) {
+  private List<AnnotationMetadataItem> createAnnotationMetadataItems(
+      Annotation annotation,
+      AnnotationInputWrapper annotationInput,
+      AnnotationType annotationType) {
     Map<String, Long> atmiMap = Maps.newHashMap();
-    for (AnnotationTypeMetadataItem annotationTypeMetadataItem : annotationType.getMetadataItems()) {
+    for (AnnotationTypeMetadataItem annotationTypeMetadataItem :
+        annotationType.getMetadataItems()) {
       atmiMap.put(annotationTypeMetadataItem.getName(), annotationTypeMetadataItem.getId());
     }
 
-    List<AnnotationMetadataItem> annotationMetadataItems = Lists.newArrayListWithCapacity(annotationInput.metadata.size());
+    List<AnnotationMetadataItem> annotationMetadataItems =
+        Lists.newArrayListWithCapacity(annotationInput.metadata.size());
     for (Entry<String, String> entry : annotationInput.metadata.entrySet()) {
       String key = entry.getKey();
       String value = entry.getValue();
       AnnotationMetadataItem ami = ModelFactory.create(AnnotationMetadataItem.class);
       if (!atmiMap.containsKey(key)) {
         rollbackTransaction();
-        throw new BadRequestException("bad metadata key: no AnnotationTypeMetadataItem found with name " + key);
+        throw new BadRequestException(
+            "bad metadata key: no AnnotationTypeMetadataItem found with name " + key);
       }
       long atmiId = atmiMap.get(key);
-      AnnotationTypeMetadataItem annotationTypeMetadataItem = find(AnnotationTypeMetadataItem.class, atmiId);
+      AnnotationTypeMetadataItem annotationTypeMetadataItem =
+          find(AnnotationTypeMetadataItem.class, atmiId);
       ami.setAnnotationTypeMetadataItem(annotationTypeMetadataItem);
       ami.setData(value);
       ami.setAnnotation(annotation);
@@ -267,34 +285,40 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
         persist(annotation);
 
         // annotationmetadata: remove existing
-        for (AnnotationMetadataItem annotationMetadataItem : annotation.getAnnotationMetadataItems()) {
+        for (AnnotationMetadataItem annotationMetadataItem :
+            annotation.getAnnotationMetadataItems()) {
           remove(annotationMetadataItem);
         }
 
         Set<AnnotationMetadataItem> annotationMetadataItems = Sets.newHashSet();
         for (String key : update.metadata.keySet()) {
-          AnnotationTypeMetadataItem annotationTypeMetadataItem = (AnnotationTypeMetadataItem) getEntityManager()//
-              .createQuery("from AnnotationTypeMetadataItem as m where m.name=?1 and m.annotationType=?2")//
-              .setParameter(1, key)//
-              .setParameter(2, annotationType)//
-              .getSingleResult();
+          AnnotationTypeMetadataItem annotationTypeMetadataItem =
+              (AnnotationTypeMetadataItem)
+                  getEntityManager() //
+                      .createQuery(
+                          "from AnnotationTypeMetadataItem as m where m.name=?1 and m.annotationType=?2") //
+                      .setParameter(1, key) //
+                      .setParameter(2, annotationType) //
+                      .getSingleResult();
           if (annotationTypeMetadataItem != null) {
-            AnnotationMetadataItem item = new AnnotationMetadataItem()//
-                .setAnnotation(annotation)//
-                .setAnnotationTypeMetadataItem(annotationTypeMetadataItem)//
-                .setData(update.metadata.get(key));
+            AnnotationMetadataItem item =
+                new AnnotationMetadataItem() //
+                    .setAnnotation(annotation) //
+                    .setAnnotationTypeMetadataItem(annotationTypeMetadataItem) //
+                    .setData(update.metadata.get(key));
             persist(item);
             annotationMetadataItems.add(item);
           }
         }
 
-        String logLine = MessageFormat.format(//
-            "updated ''{0}'' annotation on ''{1}'' in transcription ''{2}'' in entry ''{3}''", //
-            annotation.getAnnotationType().getName(), //
-            annotation.getAnnotatedText(), //
-            transcription.getTextLayer(), //
-            projectEntry.getName()//
-        );
+        String logLine =
+            MessageFormat.format( //
+                "updated ''{0}'' annotation on ''{1}'' in transcription ''{2}'' in entry ''{3}''", //
+                annotation.getAnnotationType().getName(), //
+                annotation.getAnnotatedText(), //
+                transcription.getTextLayer(), //
+                projectEntry.getName() //
+                );
         updateParents(projectEntry, user, logLine);
 
         // String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
@@ -321,7 +345,12 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
         remove(annotation);
 
-        String logLine = MessageFormat.format("deleted annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''", annotation.getAnnotationType().getName(), transcription.getTextLayer(), projectEntry.getName());
+        String logLine =
+            MessageFormat.format(
+                "deleted annotation ''{0}'' for transcription ''{1}'' for entry ''{2}''",
+                annotation.getAnnotationType().getName(),
+                transcription.getTextLayer(),
+                projectEntry.getName());
 
         updateParents(projectEntry, user, logLine);
       }
@@ -333,7 +362,8 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
 
   public ImmutableList<TranscriptionType> getTranscriptionTypes() {
     ImmutableList<TranscriptionType> list;
-    TypedQuery<TranscriptionType> createQuery = getEntityManager().createQuery("from TranscriptionType", TranscriptionType.class);
+    TypedQuery<TranscriptionType> createQuery =
+        getEntityManager().createQuery("from TranscriptionType", TranscriptionType.class);
     list = ImmutableList.copyOf(createQuery.getResultList());
     return list;
   }
@@ -347,16 +377,18 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     }
   }
 
-  static final Function<Annotation, Integer> EXTRACT_ANNOTATION_NO = new Function<Annotation, Integer>() {
-    @Override
-    public Integer apply(Annotation annotation) {
-      return annotation.getAnnotationNo();
-    }
-  };
+  static final Function<Annotation, Integer> EXTRACT_ANNOTATION_NO =
+      new Function<Annotation, Integer>() {
+        @Override
+        public Integer apply(Annotation annotation) {
+          return annotation.getAnnotationNo();
+        }
+      };
 
   void removeOrphanedAnnotationReferences(Transcription transcription) {
     List<Annotation> annotations = Lists.newArrayList(transcription.getAnnotations());
-    Set<Integer> annotationNoSet = Sets.newHashSet(Iterables.transform(annotations, EXTRACT_ANNOTATION_NO));
+    Set<Integer> annotationNoSet =
+        Sets.newHashSet(Iterables.transform(annotations, EXTRACT_ANNOTATION_NO));
     Set<String> orphanedAnnotationTags = Sets.newHashSet();
     String body = transcription.getBody();
     String format = "(?m)(?s)<%s id=\"(.*?)\"/>";
@@ -380,18 +412,21 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
   }
 
   private String annotationEndTag(Object annotationNo) {
-    return String.format("<%s id=\"%s\"/>", //
+    return String.format(
+        "<%s id=\"%s\"/>", //
         Transcription.BodyTags.ANNOTATION_END, //
         annotationNo);
   }
 
   private String annotationBeginTag(Object annotationNo) {
-    return String.format("<%s id=\"%s\"/>", //
+    return String.format(
+        "<%s id=\"%s\"/>", //
         Transcription.BodyTags.ANNOTATION_BEGIN, //
         annotationNo);
   }
 
-  private void processTags(Set<Integer> annotationNoSet, Set<String> orphanedAnnotationTags, Matcher matcher) {
+  private void processTags(
+      Set<Integer> annotationNoSet, Set<String> orphanedAnnotationTags, Matcher matcher) {
     while (matcher.find()) {
       final String aNoString = matcher.group(1);
       try {
@@ -410,5 +445,4 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     removeOrphanedAnnotations(transcription);
     removeOrphanedAnnotationReferences(transcription);
   }
-
 }

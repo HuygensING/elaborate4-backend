@@ -32,7 +32,7 @@ import elaborate.publication.solr.SearchService;
 @Provider
 public class SearchServiceProvider extends SingletonTypeInjectableProvider<Context, SearchService> {
 
-	public SearchServiceProvider() {
-		super(SearchService.class, SearchService.instance());
-	}
+  public SearchServiceProvider() {
+    super(SearchService.class, SearchService.instance());
+  }
 }

@@ -1,4 +1,3 @@
-
 eLaborate (backend)
 ===================
 
@@ -6,11 +5,10 @@ eLaborate (backend)
 
 ## What is eLaborate?
 
-eLaborate is an online work environment in which scholars can upload scans, transcribe and annotate text, and publish the results as on online text edition which is freely available to all users.
-eLaborate is developed by Huygens ING.
+eLaborate is an online work environment in which scholars can upload scans, transcribe and annotate text, and publish
+the results as on online text edition which is freely available to all users. eLaborate is developed by Huygens ING.
 
-This project is the REST-based backend, which connects with database and SOLR index.
-It compiles to a webapp.
+This project is the REST-based backend, which connects with database and SOLR index. It compiles to a webapp.
 
 Installation
 ===========
@@ -35,6 +33,7 @@ Use the config files in the solr/ directory.
 
 Build the backend webapp
 ------------------------
+
 ```
 cd elab4
 mvn install
@@ -51,7 +50,7 @@ REST API
 
 ### about
 
-  `GET /about`
+`GET /about`
 
 returns the backend build version as JSON
 
@@ -68,12 +67,12 @@ example output:
 ### sessions
 
 To login as the root user with the default password:
-  `POST /sessions/login/`
+`POST /sessions/login/`
 
 data to post: `"username=root&password=toor"`
 
-All the following REST calls need and `Authorization` header.
-All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
+All the following REST calls need and `Authorization` header. All `POST`/`PUT` calls accept and return JSON, unless
+otherwise specified.
 
 ### users
 
@@ -105,12 +104,12 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 
 * Delete:
   `DELETE /users/{user_id}`
-  
+
 * request a password reset (sends email)
   `POST /sessions/passwordresetrequest`
-  
+
   send the user's e-mail address as data, sends an email with a link to the password reset frontent page
-  
+
 * reset password
   `POST /sessions/passwordreset`
 
@@ -121,7 +120,7 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
       }
 
   where token is the token given in the email
-  
+
 ### projectmetadata
 
 * Create:
@@ -198,7 +197,6 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 
 * delete metadata:
   `DELETE /annotationtypes/{type_id}/metadataitems/{meta_id}`
-
 
 ### projects
 
@@ -282,14 +280,15 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
   `entry.term_plural` - the name used in this project to indicate multiple entries (eg. 'letters')
 
   `annotationtype.b.name` - short name for the annotationtype to be displayed as <b>bold</b> for this project
-  `annotationtype.b.description` - longer description for the annotationtype to be displayed as <b>bold</b> for this project
+  `annotationtype.b.description` - longer description for the annotationtype to be displayed as <b>bold</b> for this
+  project
   `annotationtype.i.name` - short name for the annotationtype to be displayed as <i>italic</i>
   `annotationtype.i.description` - longer description for the annotationtype to be displayed as <i>italic</i>
   `annotationtype.u.name` - short name for the annotationtype to be displayed as <u>underline</u>
   `annotationtype.u.description` - longer description for the annotationtype to be displayed as <u>underline</u>
   `annotationtype.strike.name` - short name for the annotationtype to be displayed as <strike>strikethrough</strike>
-  `annotationtype.strike.description` - longer description for the annotationtype to be displayed as <strike>strikethrough</strike>
-
+  `annotationtype.strike.description` - longer description for the annotationtype to be displayed as <strike>
+  strikethrough</strike>
 
 #### project entry metadatafields
 
@@ -342,9 +341,9 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
         "next" : 1235
       }
 
-  when `prev=-1`, entry `{entry_id}` is the first.
-  when `next=-1`, entry `{entry_id}` is the last.
-  The entry ids are sorted in alphabetical order using the contents of the metadata fields as defined in `project.level1`, `project.level2` and `project.level3`, and the `entryname`.
+  when `prev=-1`, entry `{entry_id}` is the first. when `next=-1`, entry `{entry_id}` is the last. The entry ids are
+  sorted in alphabetical order using the contents of the metadata fields as defined in `project.level1`
+  , `project.level2` and `project.level3`, and the `entryname`.
 
 * Read entry settings:
   `GET /projects/{project_id}/entries/{entry_id}/settings`
@@ -357,7 +356,7 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
         ....
       }
 
-   where the values are strings.
+  where the values are strings.
 
 * update multiple entrysettings:
   `PUT /projects/{project_id}/multipleentrysettings`
@@ -372,12 +371,12 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
         }
       }
 
-   where the (selected) projectEntityIds are longs, settings is a hashmap, Publishable is a boolean, and all other values are strings.
+  where the (selected) projectEntityIds are longs, settings is a hashmap, Publishable is a boolean, and all other values
+  are strings.
 
 
 * all transcripties for this entry:
   `GET /projects/{project_id}/entries/{entry_id}/transcriptions`
-
 
 ### facsimiles
 
@@ -404,7 +403,6 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
 
 * Delete:
   `DELETE /projects/{project_id}/entries/{entry_id}/facsimiles/{facsimile_id}`
-
 
 ### transcriptions
 
@@ -488,10 +486,10 @@ All `POST`/`PUT` calls accept and return JSON, unless otherwise specified.
         "searchInAnnotations" : false,
         "resultFields" : ["Document title","Author(s)"],
         "sortParameters":[
-			    {"fieldname":"Language","direction":"desc"},
-			    {"fieldname":"Signature"},
-			    {"fieldname":"Notes"}
-			  ],
+  		    {"fieldname":"Language","direction":"desc"},
+  		    {"fieldname":"Signature"},
+  		    {"fieldname":"Notes"}
+  		  ],
         "facetFields" : [ ],
         "facetInfoMap" : null,
         "orderLevels" : [ ],
@@ -519,26 +517,29 @@ You can POST some json settings:
       "annotationTypeIds" : [1,2,3]
     }
 
+where `projectEntryMetadataFields` is an array of those metadata fields that should be included in the publication (as
+facets), in the given order. By default all metadata fields will be included, in the order set in the project.
 
-where `projectEntryMetadataFields` is an array of those metadata fields that should be included in the publication (as facets), in the given order.
-By default all metadata fields will be included, in the order set in the project.
+`annotationTypeIds` is a list of ids of those annotationtypes that should be included in the publication. By default all
+annotationtypes will be included.
 
-`annotationTypeIds` is a list of ids of those annotationtypes that should be included in the publication.
-By default all annotationtypes will be included.
-
-For the publication, the project metadata, and the entry content will be exported to json, the entry text will be indexed, and everything will be packaged into a war file that is deployed to the tomcat server.
-The post will start the publication process in the background, and return a `Location` header with a link to the progress of the publishing:
+For the publication, the project metadata, and the entry content will be exported to json, the entry text will be
+indexed, and everything will be packaged into a war file that is deployed to the tomcat server. The post will start the
+publication process in the background, and return a `Location` header with a link to the progress of the publishing:
 a json map with the following keys:
 
 - `id` - the publication task id
 - `done`  - boolean set to `true` when the publishing is finished.
-- `fail`  - boolean set to `true` when the publishing has been cancelled due to an internal error, the cause will be logged in a logline.
+- `fail`  - boolean set to `true` when the publishing has been cancelled due to an internal error, the cause will be
+  logged in a logline.
 - `url` - the url where the publication can be seen once the publishing has finished successfully.
 - `loglines` - an array of log lines with timestamps, indicating the progress of the publishing process.
 
 Only those entries that have `publishable=true` will be shown in the publication.
 
-The publication has a `search` comparable to the backend, with the exception of the need to login, and to provide the projectId.
+The publication has a `search` comparable to the backend, with the exception of the need to login, and to provide the
+projectId.
 
 -
+
 Last updated: 2014-03-27

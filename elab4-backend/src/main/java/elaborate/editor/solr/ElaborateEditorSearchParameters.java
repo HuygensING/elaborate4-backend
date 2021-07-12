@@ -31,19 +31,19 @@ import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 
 @XmlRootElement
 public class ElaborateEditorSearchParameters extends ElaborateSearchParameters {
-	private long projectId = 0;
+  private long projectId = 0;
 
-	public ElaborateEditorSearchParameters setProjectId(final long projectId) {
-		this.projectId = projectId;
-		return this;
-	}
+  public ElaborateEditorSearchParameters setProjectId(final long projectId) {
+    this.projectId = projectId;
+    return this;
+  }
 
-	public long getProjectId() {
-		return projectId;
-	}
+  public long getProjectId() {
+    return projectId;
+  }
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-	}
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
+  }
 }

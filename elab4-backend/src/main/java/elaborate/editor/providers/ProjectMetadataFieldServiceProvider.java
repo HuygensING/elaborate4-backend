@@ -30,9 +30,10 @@ import com.sun.jersey.spi.inject.SingletonTypeInjectableProvider;
 import elaborate.editor.model.orm.service.ProjectMetadataFieldService;
 
 @Provider
-public class ProjectMetadataFieldServiceProvider extends SingletonTypeInjectableProvider<Context, ProjectMetadataFieldService> {
+public class ProjectMetadataFieldServiceProvider
+    extends SingletonTypeInjectableProvider<Context, ProjectMetadataFieldService> {
 
-	public ProjectMetadataFieldServiceProvider() {
-		super(ProjectMetadataFieldService.class, ProjectMetadataFieldService.instance());
-	}
+  public ProjectMetadataFieldServiceProvider() {
+    super(ProjectMetadataFieldService.class, ProjectMetadataFieldService.instance());
+  }
 }

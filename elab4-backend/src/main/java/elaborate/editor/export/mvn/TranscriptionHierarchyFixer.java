@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +48,7 @@ public class TranscriptionHierarchyFixer {
     //    Log.info("textDecorationFixed={}", textDecorationFixed);
 
     document = Document.createFromXml(textDecorationFixed, false);
-    return traverse(document);//.replaceAll("<body>", "").replaceAll("</body>", "");
+    return traverse(document); // .replaceAll("<body>", "").replaceAll("</body>", "");
   }
 
   private String traverse(Document document) {
@@ -72,17 +71,20 @@ public class TranscriptionHierarchyFixer {
     final Map<String, Integer> annotationOpenIndex = Maps.newHashMap();
     final Map<String, Integer> annotationCloseIndex = Maps.newHashMap();
 
-    Ordering<String> annotationOpenOrdering = new Ordering<String>() {
-      @Override
-      public int compare(String id1, String id2) {
-        return Ints.compare(annotationCloseIndex.get(id2), annotationCloseIndex.get(id1));
-      }
-    }.compound(new Ordering<String>() {
-      @Override
-      public int compare(String id1, String id2) {
-        return Ints.compare(annotationOpenIndex.get(id1), annotationOpenIndex.get(id2));
-      }
-    }).compound(Ordering.natural());
+    Ordering<String> annotationOpenOrdering =
+        new Ordering<String>() {
+          @Override
+          public int compare(String id1, String id2) {
+            return Ints.compare(annotationCloseIndex.get(id2), annotationCloseIndex.get(id1));
+          }
+        }.compound(
+                new Ordering<String>() {
+                  @Override
+                  public int compare(String id1, String id2) {
+                    return Ints.compare(annotationOpenIndex.get(id1), annotationOpenIndex.get(id2));
+                  }
+                })
+            .compound(Ordering.natural());
     Ordering<String> annotationCloseOrdering = annotationOpenOrdering.reverse();
 
     if (parentElement instanceof Element) {
@@ -93,10 +95,12 @@ public class TranscriptionHierarchyFixer {
           String id = element.getAttribute("id");
           String name = element.getName();
           if (BodyTags.ANNOTATION_BEGIN.equals(name)) {
-            processAnnotationElement(groupings, id, AnnotationOpenGrouping.class, annotationOpenIndex);
+            processAnnotationElement(
+                groupings, id, AnnotationOpenGrouping.class, annotationOpenIndex);
 
           } else if (BodyTags.ANNOTATION_END.equals(name)) {
-            processAnnotationElement(groupings, id, AnnotationCloseGrouping.class, annotationCloseIndex);
+            processAnnotationElement(
+                groupings, id, AnnotationCloseGrouping.class, annotationCloseIndex);
           }
 
         } else {
@@ -122,22 +126,29 @@ public class TranscriptionHierarchyFixer {
           }
 
         } else if (grouping instanceof AnnotationOpenGrouping) {
-          addAnnotationMilestone(resultParentElement, grouping, annotationOpenOrdering, BodyTags.ANNOTATION_BEGIN);
+          addAnnotationMilestone(
+              resultParentElement, grouping, annotationOpenOrdering, BodyTags.ANNOTATION_BEGIN);
 
         } else if (grouping instanceof AnnotationCloseGrouping) {
-          addAnnotationMilestone(resultParentElement, grouping, annotationCloseOrdering, BodyTags.ANNOTATION_END);
+          addAnnotationMilestone(
+              resultParentElement, grouping, annotationCloseOrdering, BodyTags.ANNOTATION_END);
         }
       }
     }
   }
 
-  private void processAnnotationElement(List<Grouping> groupings, String id, Class<? extends AnnotationGrouping> groupingClass, Map<String, Integer> index) {
+  private void processAnnotationElement(
+      List<Grouping> groupings,
+      String id,
+      Class<? extends AnnotationGrouping> groupingClass,
+      Map<String, Integer> index) {
     AnnotationGrouping grouping = currentGrouping(groupings, groupingClass);
     grouping.addId(id);
     index.put(id, groupings.size());
   }
 
-  private void addAnnotationMilestone(Element resultParentElement, Grouping grouping, Ordering<String> ordering, String tagName) {
+  private void addAnnotationMilestone(
+      Element resultParentElement, Grouping grouping, Ordering<String> ordering, String tagName) {
     List<String> ids = ((AnnotationGrouping) grouping).getIds();
     for (String id : ordering.sortedCopy(ids)) {
       Element element = new Element(tagName).withAttribute("id", id);
@@ -195,7 +206,7 @@ public class TranscriptionHierarchyFixer {
     }
   }
 
-  static abstract class AnnotationGrouping implements Grouping {
+  abstract static class AnnotationGrouping implements Grouping {
     private final List<String> ids = Lists.newArrayList();
 
     public void addId(String id) {
@@ -210,5 +221,4 @@ public class TranscriptionHierarchyFixer {
   static final class AnnotationOpenGrouping extends AnnotationGrouping {}
 
   static final class AnnotationCloseGrouping extends AnnotationGrouping {}
-
 }

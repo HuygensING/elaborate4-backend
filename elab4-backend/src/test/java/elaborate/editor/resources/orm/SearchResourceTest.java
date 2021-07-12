@@ -36,39 +36,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SearchResourceTest {
 
-	@Before
-	public void setUp() {}
+  @Before
+  public void setUp() {}
 
-	@After
-	public void tearDown() {}
+  @After
+  public void tearDown() {}
 
-	@Test
-	public void testAddPrevNextURIs1() {
-		Map<String, Object> searchResult = Maps.newHashMap();
-		searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
-		SearchResource searchResource = new SearchResource(null);
-		searchResource.addPrevNextURIs(searchResult, 1, 2, 0, 50);
-		assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://server.example.com:2013/projects/1/search/2?start=50&rows=50");
-		assertThat(searchResult).doesNotContainKey(SearchResource.KEY_PREV);
-	}
+  @Test
+  public void testAddPrevNextURIs1() {
+    Map<String, Object> searchResult = Maps.newHashMap();
+    searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
+    SearchResource searchResource = new SearchResource(null);
+    searchResource.addPrevNextURIs(searchResult, 1, 2, 0, 50);
+    assertThat(searchResult.get(SearchResource.KEY_NEXT))
+        .isEqualTo("http://server.example.com:2013/projects/1/search/2?start=50&rows=50");
+    assertThat(searchResult).doesNotContainKey(SearchResource.KEY_PREV);
+  }
 
-	@Test
-	public void testAddPrevNextURIs2() {
-		SearchResource searchResource = new SearchResource(null);
-		Map<String, Object> searchResult = Maps.newHashMap();
-		searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
-		searchResource.addPrevNextURIs(searchResult, 1, 2, 10, 50);
-		assertThat(searchResult.get(SearchResource.KEY_NEXT)).isEqualTo("http://server.example.com:2013/projects/1/search/2?start=60&rows=50");
-		assertThat(searchResult.get(SearchResource.KEY_PREV)).isEqualTo("http://server.example.com:2013/projects/1/search/2?start=0&rows=50");
-	}
+  @Test
+  public void testAddPrevNextURIs2() {
+    SearchResource searchResource = new SearchResource(null);
+    Map<String, Object> searchResult = Maps.newHashMap();
+    searchResult.put(AbstractSolrServer.KEY_NUMFOUND, 100);
+    searchResource.addPrevNextURIs(searchResult, 1, 2, 10, 50);
+    assertThat(searchResult.get(SearchResource.KEY_NEXT))
+        .isEqualTo("http://server.example.com:2013/projects/1/search/2?start=60&rows=50");
+    assertThat(searchResult.get(SearchResource.KEY_PREV))
+        .isEqualTo("http://server.example.com:2013/projects/1/search/2?start=0&rows=50");
+  }
 
-	@Test
-	public void testMessageFormat() {
-		String path = MessageFormat.format("/projects/{0,number,#}/search/{1,number,#}", 31415, 1000000);
-		assertThat(path).isEqualTo("/projects/31415/search/1000000");
-	}
+  @Test
+  public void testMessageFormat() {
+    String path =
+        MessageFormat.format("/projects/{0,number,#}/search/{1,number,#}", 31415, 1000000);
+    assertThat(path).isEqualTo("/projects/31415/search/1000000");
+  }
 
-	// TODO: add test:
-	// show that terms from the facetvalues in the query aren't highlighted.
+  // TODO: add test:
+  // show that terms from the facetvalues in the query aren't highlighted.
 
 }

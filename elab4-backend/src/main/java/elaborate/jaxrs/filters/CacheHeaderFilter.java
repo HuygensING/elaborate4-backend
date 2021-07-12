@@ -32,27 +32,26 @@ import com.sun.jersey.spi.container.ResourceFilter;
 
 class CacheHeaderFilter implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {
 
-	@Override
-	public ContainerRequestFilter getRequestFilter() {
-		return this;
-	}
+  @Override
+  public ContainerRequestFilter getRequestFilter() {
+    return this;
+  }
 
-	@Override
-	public ContainerRequest filter(ContainerRequest request) {
-		return request;
-	}
+  @Override
+  public ContainerRequest filter(ContainerRequest request) {
+    return request;
+  }
 
-	@Override
-	public ContainerResponseFilter getResponseFilter() {
-		return this;
-	}
+  @Override
+  public ContainerResponseFilter getResponseFilter() {
+    return this;
+  }
 
-	@Override
-	public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
-		MultivaluedMap<String, Object> httpHeaders = response.getHttpHeaders();
-		httpHeaders.putSingle("Pragma", "no-cache");
-		httpHeaders.putSingle("Cache-Control", "no-cache, must-revalidate");
-		return response;
-	}
-
+  @Override
+  public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
+    MultivaluedMap<String, Object> httpHeaders = response.getHttpHeaders();
+    httpHeaders.putSingle("Pragma", "no-cache");
+    httpHeaders.putSingle("Cache-Control", "no-cache, must-revalidate");
+    return response;
+  }
 }

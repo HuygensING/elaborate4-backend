@@ -31,76 +31,75 @@ import org.apache.solr.common.SolrInputDocument;
 import nl.knaw.huygens.Log;
 
 public class SolrIndexer {
-	private static final int STATUS_OK = 0;
-	private final SolrServer server;
-	private final String idField;
+  private static final int STATUS_OK = 0;
+  private final SolrServer server;
+  private final String idField;
 
-	SolrIndexer(SolrServer server, String idField) {
-		this.server = server;
-		this.idField = idField;
-	}
+  SolrIndexer(SolrServer server, String idField) {
+    this.server = server;
+    this.idField = idField;
+  }
 
-	// -- public methods
-	public void clear() {
-		try {
-			this.server.deleteByQuery("*:*");
-		} catch (SolrServerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  // -- public methods
+  public void clear() {
+    try {
+      this.server.deleteByQuery("*:*");
+    } catch (SolrServerException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-	public void commit() {
-		try {
-			this.server.commit();
-			this.server.optimize();
-		} catch (SolrServerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  public void commit() {
+    try {
+      this.server.commit();
+      this.server.optimize();
+    } catch (SolrServerException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-	@SuppressWarnings("boxing")
-	public boolean isUp() {
-		boolean isUp = false;
-		try {
-			int status = this.server.ping().getStatus();
-			Log.info("solrserver status = {}", status);
-			isUp = (status == STATUS_OK);
-		} catch (SolrServerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return isUp;
-	}
+  @SuppressWarnings("boxing")
+  public boolean isUp() {
+    boolean isUp = false;
+    try {
+      int status = this.server.ping().getStatus();
+      Log.info("solrserver status = {}", status);
+      isUp = (status == STATUS_OK);
+    } catch (SolrServerException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return isUp;
+  }
 
-	void deleteById(String id) {
-		try {
-			this.server.deleteById(id);
-		} catch (SolrServerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  void deleteById(String id) {
+    try {
+      this.server.deleteById(id);
+    } catch (SolrServerException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-	void index(SolrInputDocument doc, boolean commitNow) {
-		try {
-			String id = String.valueOf(doc.getField(idField).getValue());
-			this.server.deleteById(id);
-			// Log.info("doc={}", doc);
-			this.server.add(doc);
-			if (commitNow) {
-				this.server.commit();
-			}
-		} catch (SolrServerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+  void index(SolrInputDocument doc, boolean commitNow) {
+    try {
+      String id = String.valueOf(doc.getField(idField).getValue());
+      this.server.deleteById(id);
+      // Log.info("doc={}", doc);
+      this.server.add(doc);
+      if (commitNow) {
+        this.server.commit();
+      }
+    } catch (SolrServerException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }

@@ -36,126 +36,126 @@ import nl.knaw.huygens.solr.FacetInfo;
 
 @SuppressWarnings("unchecked")
 public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
-    private String term = "*";
-    private boolean caseSensitive = false;
-    private String[] facetFields = new String[] {};
-    private List<FacetParameter> facetParameters = Lists.newArrayList();
-    private Map<String, FacetInfo> facetInfoMap;
-    private Collection<String> resultFields = Lists.newArrayList();
-    private boolean fuzzy = false;
-    private LinkedHashSet<SortParameter> sortParameters = Sets.newLinkedHashSet();
+  private String term = "*";
+  private boolean caseSensitive = false;
+  private String[] facetFields = new String[] {};
+  private List<FacetParameter> facetParameters = Lists.newArrayList();
+  private Map<String, FacetInfo> facetInfoMap;
+  private Collection<String> resultFields = Lists.newArrayList();
+  private boolean fuzzy = false;
+  private LinkedHashSet<SortParameter> sortParameters = Sets.newLinkedHashSet();
 
-    public T setTerm(final String term) {
-        if (StringUtils.isNotBlank(term)) {
-            this.term = term;
-        }
-        return (T) this;
+  public T setTerm(final String term) {
+    if (StringUtils.isNotBlank(term)) {
+      this.term = term;
     }
+    return (T) this;
+  }
 
-    public String getTerm() {
-        return term;
-    }
+  public String getTerm() {
+    return term;
+  }
 
-    public T setCaseSensitive(boolean matchCase) {
-        this.caseSensitive = matchCase;
-        return (T) this;
-    }
+  public T setCaseSensitive(boolean matchCase) {
+    this.caseSensitive = matchCase;
+    return (T) this;
+  }
 
-    public boolean isCaseSensitive() {
-        return caseSensitive;
-    }
+  public boolean isCaseSensitive() {
+    return caseSensitive;
+  }
 
-    public T setFacetFields(String[] _facetFields) {
-        this.facetFields = _facetFields;
-        return (T) this;
-    }
+  public T setFacetFields(String[] _facetFields) {
+    this.facetFields = _facetFields;
+    return (T) this;
+  }
 
-    public String[] getFacetFields() {
-        return facetFields;
-    }
+  public String[] getFacetFields() {
+    return facetFields;
+  }
 
-    public T setResultFields(Collection<String> _resultFields) {
-        this.resultFields = Sets.newHashSet(_resultFields);
-        this.resultFields.removeAll(Arrays.asList("", null));
-        return (T) this;
-    }
+  public T setResultFields(Collection<String> _resultFields) {
+    this.resultFields = Sets.newHashSet(_resultFields);
+    this.resultFields.removeAll(Arrays.asList("", null));
+    return (T) this;
+  }
 
-    public Collection<String> getResultFields() {
-        return resultFields;
-    }
+  public Collection<String> getResultFields() {
+    return resultFields;
+  }
 
-    public boolean isFuzzy() {
-        return fuzzy;
-    }
+  public boolean isFuzzy() {
+    return fuzzy;
+  }
 
-    public T setFuzzy(Boolean fuzzy) {
-        this.fuzzy = fuzzy;
-        return (T) this;
-    }
+  public T setFuzzy(Boolean fuzzy) {
+    this.fuzzy = fuzzy;
+    return (T) this;
+  }
 
-    public List<FacetParameter> getFacetValues() {
-        return facetParameters;
-    }
+  public List<FacetParameter> getFacetValues() {
+    return facetParameters;
+  }
 
-    public T setFacetValues(List<FacetParameter> fp) {
-        this.facetParameters = fp;
-        return (T) this;
-    }
+  public T setFacetValues(List<FacetParameter> fp) {
+    this.facetParameters = fp;
+    return (T) this;
+  }
 
-    public Map<String, FacetInfo> getFacetInfoMap() {
-        return facetInfoMap;
-    }
+  public Map<String, FacetInfo> getFacetInfoMap() {
+    return facetInfoMap;
+  }
 
-    public T setFacetInfoMap(Map<String, FacetInfo> facetInfoMap) {
-        this.facetInfoMap = facetInfoMap;
-        return (T) this;
-    }
+  public T setFacetInfoMap(Map<String, FacetInfo> facetInfoMap) {
+    this.facetInfoMap = facetInfoMap;
+    return (T) this;
+  }
 
-    public LinkedHashSet<SortParameter> getSortParameters() {
-        return sortParameters;
-    }
+  public LinkedHashSet<SortParameter> getSortParameters() {
+    return sortParameters;
+  }
 
-    public FacetedSearchParameters<T> setSortParameters(List<SortParameter> sortParameters) {
-        this.sortParameters = new LinkedHashSet<SortParameter>(sortParameters);
-        return this;
-    }
+  public FacetedSearchParameters<T> setSortParameters(List<SortParameter> sortParameters) {
+    this.sortParameters = new LinkedHashSet<SortParameter>(sortParameters);
+    return this;
+  }
 
-    private String sort = null;
-    private String sortDir = "asc";
+  private String sort = null;
+  private String sortDir = "asc";
 
-    /**
-     * @deprecated use {@link FacetedSearchParameters#setSortParameters(List<SortParameter>)} instead.
-     */
-    @Deprecated
-    public T setSort(final String sort) {
-        this.sort = sort;
-        return (T) this;
-    }
+  /**
+   * @deprecated use {@link FacetedSearchParameters#setSortParameters(List<SortParameter>)} instead.
+   */
+  @Deprecated
+  public T setSort(final String sort) {
+    this.sort = sort;
+    return (T) this;
+  }
 
-    /** @deprecated use {@link FacetedSearchParameters#getSortParameters()} instead. */
-    @Deprecated
-    public String getSort() {
-        return sort;
-    }
+  /** @deprecated use {@link FacetedSearchParameters#getSortParameters()} instead. */
+  @Deprecated
+  public String getSort() {
+    return sort;
+  }
 
-    /**
-     * @deprecated use {@link FacetedSearchParameters#setSortParameters(List<SortParameter>)} instead.
-     */
-    @Deprecated
-    public T setSortDir(final String sortDir) {
-        this.sortDir = sortDir;
-        return (T) this;
-    }
+  /**
+   * @deprecated use {@link FacetedSearchParameters#setSortParameters(List<SortParameter>)} instead.
+   */
+  @Deprecated
+  public T setSortDir(final String sortDir) {
+    this.sortDir = sortDir;
+    return (T) this;
+  }
 
-    /** @deprecated use {@link FacetedSearchParameters#getSortParameters()} instead. */
-    @Deprecated
-    public String getSortDir() {
-        return sortDir;
-    }
+  /** @deprecated use {@link FacetedSearchParameters#getSortParameters()} instead. */
+  @Deprecated
+  public String getSortDir() {
+    return sortDir;
+  }
 
-    /** @deprecated use {@link FacetedSearchParameters#getSortParameters()} instead. */
-    @Deprecated
-    public boolean isAscending() {
-        return "asc".equals(sortDir);
-    }
+  /** @deprecated use {@link FacetedSearchParameters#getSortParameters()} instead. */
+  @Deprecated
+  public boolean isAscending() {
+    return "asc".equals(sortDir);
+  }
 }

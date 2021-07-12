@@ -39,8 +39,10 @@ import nl.knaw.huygens.Log;
 public class ParseResult {
   private final List<String> textSegments = new ArrayList<String>();
   private final List<XmlAnnotation> xmlAnnotations = new ArrayList<XmlAnnotation>();
-  private final Multimap<Integer, XmlAnnotation> openingAnnotationIndex = ArrayListMultimap.create();
-  private final Multimap<Integer, XmlAnnotation> closingAnnotationIndex = ArrayListMultimap.create();
+  private final Multimap<Integer, XmlAnnotation> openingAnnotationIndex =
+      ArrayListMultimap.create();
+  private final Multimap<Integer, XmlAnnotation> closingAnnotationIndex =
+      ArrayListMultimap.create();
   private boolean indexed = false;
   private final List<String> deepestTekstNs = Lists.newArrayList();
 
@@ -94,9 +96,10 @@ public class ParseResult {
 
       @Override
       public AnnotatedTextSegment next() {
-        AnnotatedTextSegment ats = new AnnotatedTextSegment(textSegments.get(index))//
-            .withOpeningAnnotations(openingAnnotationIndex.get(index))//
-            .withClosingAnnotations(closingAnnotationIndex.get(index));
+        AnnotatedTextSegment ats =
+            new AnnotatedTextSegment(textSegments.get(index)) //
+                .withOpeningAnnotations(openingAnnotationIndex.get(index)) //
+                .withClosingAnnotations(closingAnnotationIndex.get(index));
         index++;
         return ats;
       }
@@ -105,5 +108,4 @@ public class ParseResult {
       public void remove() {}
     };
   }
-
 }

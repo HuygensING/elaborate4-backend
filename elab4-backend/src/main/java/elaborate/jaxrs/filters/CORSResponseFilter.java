@@ -42,7 +42,7 @@ public class CORSResponseFilter
   public ContainerResponse filter(
       ContainerRequest containerRequest, ContainerResponse containerResponse) {
     MultivaluedMap<String, Object> headers = containerResponse.getHttpHeaders();
-//    headers.add("Access-Control-Allow-Origin", "*"); // Allow Access from everywhere
+    //    headers.add("Access-Control-Allow-Origin", "*"); // Allow Access from everywhere
     //    headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
     //    headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
     return containerResponse;

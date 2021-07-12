@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,176 +47,185 @@ public class TranscriptionHierarchyFixerTest {
 
   @Test
   public void testIncorrectAnnotationBeginEndHierarchyIsFixed1() {
-    String xml = "<body>"//
-        + "<ab id=\"1\"/>"//
-        + "<ab id=\"2\"/>"//
-        + "<ab id=\"3\"/>"//
-        + "<ab id=\"4\"/>"//
-        + "<b>D</b>"//
-        + "<ae id=\"4\"/>"//
-        + "<ae id=\"3\"/>"//
-        + "<ab id=\"5\"/>"//
-        + "e"//
-        + "<ae id=\"2\"/>"//
-        + "<ae id=\"5\"/>"//
-        + " tali conuiuio"//
-        + "<ae id=\"1\"/>"//
-        + "</body>";
-    String expected = "<body>"//
-        + "<ab id=\"1\"/>"//
-        + "<ab id=\"2\"/>"//
-        + "<ab id=\"3\"/>"//
-        + "<ab id=\"4\"/>"//
-        + "<b>D</b>"//
-        + "<ae id=\"4\"/>"//
-        + "<ae id=\"3\"/>"//
-        + "<ab id=\"5\"/>"//
-        + "e"//
-        + "<ae id=\"5\"/>"//
-        + "<ae id=\"2\"/>"//
-        + " tali conuiuio"//
-        + "<ae id=\"1\"/>"//
-        + "</body>";
+    String xml =
+        "<body>" //
+            + "<ab id=\"1\"/>" //
+            + "<ab id=\"2\"/>" //
+            + "<ab id=\"3\"/>" //
+            + "<ab id=\"4\"/>" //
+            + "<b>D</b>" //
+            + "<ae id=\"4\"/>" //
+            + "<ae id=\"3\"/>" //
+            + "<ab id=\"5\"/>" //
+            + "e" //
+            + "<ae id=\"2\"/>" //
+            + "<ae id=\"5\"/>" //
+            + " tali conuiuio" //
+            + "<ae id=\"1\"/>" //
+            + "</body>";
+    String expected =
+        "<body>" //
+            + "<ab id=\"1\"/>" //
+            + "<ab id=\"2\"/>" //
+            + "<ab id=\"3\"/>" //
+            + "<ab id=\"4\"/>" //
+            + "<b>D</b>" //
+            + "<ae id=\"4\"/>" //
+            + "<ae id=\"3\"/>" //
+            + "<ab id=\"5\"/>" //
+            + "e" //
+            + "<ae id=\"5\"/>" //
+            + "<ae id=\"2\"/>" //
+            + " tali conuiuio" //
+            + "<ae id=\"1\"/>" //
+            + "</body>";
     String fixed = thf.fix(xml);
     assertThat(fixed).isEqualTo(expected);
   }
 
   @Test
   public void testIncorrectAnnotationBeginEndHierarchyIsFixed2() {
-    String xml = "<body>"//
-        + "<ab id=\"1\"/>"//
-        + "<ab id=\"2\"/>"//
-        + "<ab id=\"3\"/>"//
-        + "<ab id=\"4\"/>"//
-        + "<b>V</b>"//
-        + "<ae id=\"4\"/>"//
-        + "<ae id=\"1\"/>"//
-        + "<ab id=\"5\"/>a<ae id=\"5\"/>n"//
-        + "<ae id=\"2\"/>"//
-        + " jherusalem zeghelijn"//
-        + "<ae id=\"3\"/>"//
-        + "</body>";
-    String expected = "<body>"//
-        + "<ab id=\"3\"/>"//
-        + "<ab id=\"2\"/>"//
-        + "<ab id=\"1\"/>"//
-        + "<ab id=\"4\"/>"//
-        + "<b>V</b>"//
-        + "<ae id=\"4\"/>"//
-        + "<ae id=\"1\"/>"//
-        + "<ab id=\"5\"/>a<ae id=\"5\"/>n"//
-        + "<ae id=\"2\"/>"//
-        + " jherusalem zeghelijn"//
-        + "<ae id=\"3\"/>"//
-        + "</body>";
+    String xml =
+        "<body>" //
+            + "<ab id=\"1\"/>" //
+            + "<ab id=\"2\"/>" //
+            + "<ab id=\"3\"/>" //
+            + "<ab id=\"4\"/>" //
+            + "<b>V</b>" //
+            + "<ae id=\"4\"/>" //
+            + "<ae id=\"1\"/>" //
+            + "<ab id=\"5\"/>a<ae id=\"5\"/>n" //
+            + "<ae id=\"2\"/>" //
+            + " jherusalem zeghelijn" //
+            + "<ae id=\"3\"/>" //
+            + "</body>";
+    String expected =
+        "<body>" //
+            + "<ab id=\"3\"/>" //
+            + "<ab id=\"2\"/>" //
+            + "<ab id=\"1\"/>" //
+            + "<ab id=\"4\"/>" //
+            + "<b>V</b>" //
+            + "<ae id=\"4\"/>" //
+            + "<ae id=\"1\"/>" //
+            + "<ab id=\"5\"/>a<ae id=\"5\"/>n" //
+            + "<ae id=\"2\"/>" //
+            + " jherusalem zeghelijn" //
+            + "<ae id=\"3\"/>" //
+            + "</body>";
     String fixed = thf.fix(xml);
     assertThat(fixed).isEqualTo(expected);
   }
 
   @Test
   public void testIncorrectAnnotationBeginEndHierarchyIsFixed3() {
-    String xml = "<body>"//
-        + "<ab id=\"3\"/>"//
-        + "<ab id=\"2\"/>"//
-        + "e"//
-        + "<ae id=\"3\"/>"//
-        + "<ae id=\"2\"/>"//
-        + "</body>";
-    String expected = "<body>"//
-        + "<ab id=\"2\"/>"//
-        + "<ab id=\"3\"/>e<ae id=\"3\"/>"//
-        + "<ae id=\"2\"/>"//
-        + "</body>";
+    String xml =
+        "<body>" //
+            + "<ab id=\"3\"/>" //
+            + "<ab id=\"2\"/>" //
+            + "e" //
+            + "<ae id=\"3\"/>" //
+            + "<ae id=\"2\"/>" //
+            + "</body>";
+    String expected =
+        "<body>" //
+            + "<ab id=\"2\"/>" //
+            + "<ab id=\"3\"/>e<ae id=\"3\"/>" //
+            + "<ae id=\"2\"/>" //
+            + "</body>";
     String fixed = thf.fix(xml);
     assertThat(fixed).isEqualTo(expected);
   }
 
   @Test
   public void testIncorrectAnnotationBeginEndHierarchyIsFixed3a() {
-    String xml = "<body>"//
-        + "<lb/>"//
-        + "<ab id=\"6\"/>"//
-        + "<ab id=\"3\"/>"//
-        + "<ab id=\"1\"/>"//
-        + "<ab id=\"7\"/>"//
-        + "<b>D</b>"//
-        + "<ae id=\"7\"/>"//
-        + "<ae id=\"1\"/>"//
-        + "<ab id=\"2\"/>"//
-        + "e"//
-        + "<ae id=\"3\"/>"//
-        + "<ae id=\"2\"/>"//
-        + " tali conuiuio"//
-        + "<ae id=\"6\"/>"//
-        + " "//
-        + "<ab id=\"5\"/>"//
-        + "<ab id=\"4\"/>B<ae id=\"4\"/>"//
-        + "enedicamus"//
-        + "<ae id=\"5\"/>"//
-        + " domino"//
-        + "<le/>"//
-        + "</body>";
-    String expected = "<body>"//
-        + "<lb/>"//
-        + "<ab id=\"6\"/>"//
-        + "<ab id=\"3\"/>"//
-        + "<ab id=\"1\"/>"//
-        + "<ab id=\"7\"/><b>D</b><ae id=\"7\"/>"//
-        + "<ae id=\"1\"/>"//
-        + "<ab id=\"2\"/>e<ae id=\"2\"/>"//
-        + "<ae id=\"3\"/>"//
-        + " tali conuiuio"//
-        + "<ae id=\"6\"/>"//
-        + " "//
-        + "<ab id=\"5\"/>"//
-        + "<ab id=\"4\"/>B<ae id=\"4\"/>"//
-        + "enedicamus"//
-        + "<ae id=\"5\"/>"//
-        + " domino"//
-        + "<le/></body>";
+    String xml =
+        "<body>" //
+            + "<lb/>" //
+            + "<ab id=\"6\"/>" //
+            + "<ab id=\"3\"/>" //
+            + "<ab id=\"1\"/>" //
+            + "<ab id=\"7\"/>" //
+            + "<b>D</b>" //
+            + "<ae id=\"7\"/>" //
+            + "<ae id=\"1\"/>" //
+            + "<ab id=\"2\"/>" //
+            + "e" //
+            + "<ae id=\"3\"/>" //
+            + "<ae id=\"2\"/>" //
+            + " tali conuiuio" //
+            + "<ae id=\"6\"/>" //
+            + " " //
+            + "<ab id=\"5\"/>" //
+            + "<ab id=\"4\"/>B<ae id=\"4\"/>" //
+            + "enedicamus" //
+            + "<ae id=\"5\"/>" //
+            + " domino" //
+            + "<le/>" //
+            + "</body>";
+    String expected =
+        "<body>" //
+            + "<lb/>" //
+            + "<ab id=\"6\"/>" //
+            + "<ab id=\"3\"/>" //
+            + "<ab id=\"1\"/>" //
+            + "<ab id=\"7\"/><b>D</b><ae id=\"7\"/>" //
+            + "<ae id=\"1\"/>" //
+            + "<ab id=\"2\"/>e<ae id=\"2\"/>" //
+            + "<ae id=\"3\"/>" //
+            + " tali conuiuio" //
+            + "<ae id=\"6\"/>" //
+            + " " //
+            + "<ab id=\"5\"/>" //
+            + "<ab id=\"4\"/>B<ae id=\"4\"/>" //
+            + "enedicamus" //
+            + "<ae id=\"5\"/>" //
+            + " domino" //
+            + "<le/></body>";
     String fixed = thf.fix(xml);
     assertThat(fixed).isEqualTo(expected);
   }
 
   @Test
   public void testIncorrectAnnotationBeginEndHierarchyIsFixed4() {
-    String xml = "<body>"//
-        + "<b><ab id=\"1\"/></b>"//
-        + "<b><ab id=\"3\"/><ab id=\"6\"/></b>"//
-        + "<b><ab id=\"7\"/>D<ae id=\"7\"/></b>"//
-        + "<b><ae id=\"1\"/></b>"//
-        + "<ab id=\"2\"/>"//
-        + "e"//
-        + "<ae id=\"3\"/>"//
-        + "<ae id=\"2\"/>"//
-        + " tali conuiuio<ae id=\"6\"/>"//
-        + " "//
-        + "<ab id=\"4\"/>"//
-        + "<ab id=\"5\"/>"//
-        + "B"//
-        + "<ae id=\"4\"/>"//
-        + "enedicamus"//
-        + "<ae id=\"5\"/>"//
-        + " domino"//
-        + "</body>";
-    String expected = "<body>"//
-        + "<ab id=\"6\"/>"//
-        + "<ab id=\"3\"/>"//
-        + "<ab id=\"1\"/><ab id=\"7\"/><b>D</b><ae id=\"7\"/><ae id=\"1\"/>"//
-        + "<ab id=\"2\"/>e<ae id=\"2\"/>"//
-        + "<ae id=\"3\"/>"//
-        + " tali conuiuio<ae id=\"6\"/>"//
-        + " "//
-        + "<ab id=\"5\"/>"//
-        + "<ab id=\"4\"/>"//
-        + "B"//
-        + "<ae id=\"4\"/>"//
-        + "enedicamus"//
-        + "<ae id=\"5\"/>"//
-        + " domino"//
-        + "</body>";
+    String xml =
+        "<body>" //
+            + "<b><ab id=\"1\"/></b>" //
+            + "<b><ab id=\"3\"/><ab id=\"6\"/></b>" //
+            + "<b><ab id=\"7\"/>D<ae id=\"7\"/></b>" //
+            + "<b><ae id=\"1\"/></b>" //
+            + "<ab id=\"2\"/>" //
+            + "e" //
+            + "<ae id=\"3\"/>" //
+            + "<ae id=\"2\"/>" //
+            + " tali conuiuio<ae id=\"6\"/>" //
+            + " " //
+            + "<ab id=\"4\"/>" //
+            + "<ab id=\"5\"/>" //
+            + "B" //
+            + "<ae id=\"4\"/>" //
+            + "enedicamus" //
+            + "<ae id=\"5\"/>" //
+            + " domino" //
+            + "</body>";
+    String expected =
+        "<body>" //
+            + "<ab id=\"6\"/>" //
+            + "<ab id=\"3\"/>" //
+            + "<ab id=\"1\"/><ab id=\"7\"/><b>D</b><ae id=\"7\"/><ae id=\"1\"/>" //
+            + "<ab id=\"2\"/>e<ae id=\"2\"/>" //
+            + "<ae id=\"3\"/>" //
+            + " tali conuiuio<ae id=\"6\"/>" //
+            + " " //
+            + "<ab id=\"5\"/>" //
+            + "<ab id=\"4\"/>" //
+            + "B" //
+            + "<ae id=\"4\"/>" //
+            + "enedicamus" //
+            + "<ae id=\"5\"/>" //
+            + " domino" //
+            + "</body>";
     String fixed = thf.fix(xml);
     assertThat(fixed).isEqualTo(expected);
   }
-
 }

@@ -29,9 +29,8 @@ import nl.knaw.huygens.security.client.model.SecurityInformation;
 
 class ElaborateSecurityContextCreator implements SecurityContextCreator {
 
-	@Override
-	public SecurityContext createSecurityContext(SecurityInformation securityInformation) {
-		return null;
-	}
-
+  @Override
+  public SecurityContext createSecurityContext(SecurityInformation securityInformation) {
+    return null;
+  }
 }

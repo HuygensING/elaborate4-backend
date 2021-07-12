@@ -48,9 +48,10 @@ public class DefaultAnnotationHandler implements AnnotationHandler {
   }
 
   @Override
-  public void onOpenAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {}
+  public void onOpenAnnotation(
+      StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {}
 
   @Override
-  public void onCloseAnnotation(StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {}
-
+  public void onCloseAnnotation(
+      StringBuilder teiBuilder, Collection<XmlAnnotation> xmlAnnotations, Context context) {}
 }

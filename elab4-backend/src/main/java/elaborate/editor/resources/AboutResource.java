@@ -58,10 +58,12 @@ public class AboutResource extends AbstractElaborateResource {
   private static synchronized String getProperty(String key) {
     if (propertyResourceBundle == null) {
       try {
-        propertyResourceBundle = new PropertyResourceBundle(//
-            Thread.currentThread().getContextClassLoader()//
-                .getResourceAsStream("about.properties")//
-        );
+        propertyResourceBundle =
+            new PropertyResourceBundle( //
+                Thread.currentThread()
+                    .getContextClassLoader() //
+                    .getResourceAsStream("about.properties") //
+                );
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -72,15 +74,16 @@ public class AboutResource extends AbstractElaborateResource {
   private static synchronized String getPublicationProperty(String key) {
     if (publicationPropertyResourceBundle == null) {
       try {
-        publicationPropertyResourceBundle = new PropertyResourceBundle(//
-            Thread.currentThread().getContextClassLoader()//
-                .getResourceAsStream("publication/WEB-INF/classes/about.properties")//
-        );
+        publicationPropertyResourceBundle =
+            new PropertyResourceBundle( //
+                Thread.currentThread()
+                    .getContextClassLoader() //
+                    .getResourceAsStream("publication/WEB-INF/classes/about.properties") //
+                );
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
     return publicationPropertyResourceBundle.getString(key);
   }
-
 }

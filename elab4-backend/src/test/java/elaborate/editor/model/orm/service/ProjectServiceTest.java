@@ -101,7 +101,8 @@ public class ProjectServiceTest extends AbstractTest {
 
   @Test
   public void testGetAnnotationDataForProject() {
-    Map<Integer, AnnotationData> annotationDataForProject = projectService.getAnnotationDataForProject(44L);
+    Map<Integer, AnnotationData> annotationDataForProject =
+        projectService.getAnnotationDataForProject(44L);
     assertThat(annotationDataForProject).isNotEmpty();
     Log.info("annotationTypesForProject={}", annotationDataForProject);
   }

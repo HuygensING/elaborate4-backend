@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 class MVNFolium {
 
   private String n = "";
@@ -70,5 +69,4 @@ class MVNFolium {
   public String getFacs() {
     return facs;
   }
-
 }

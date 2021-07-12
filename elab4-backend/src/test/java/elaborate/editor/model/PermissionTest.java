@@ -28,44 +28,43 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PermissionTest {
-	private Permission permission;
+  private Permission permission;
 
-	@Before
-	public void setUp() {
-		permission = new Permission();
-	}
+  @Before
+  public void setUp() {
+    permission = new Permission();
+  }
 
-	@Test
-	public void testAllow() {
-		assertThat(permission.can(Action.ADD)).isFalse();
+  @Test
+  public void testAllow() {
+    assertThat(permission.can(Action.ADD)).isFalse();
 
-		permission.allow(Action.ADD);
-		assertThat(permission.can(Action.ADD)).isTrue();
+    permission.allow(Action.ADD);
+    assertThat(permission.can(Action.ADD)).isTrue();
 
-		permission.disallow(Action.ADD);
-		assertThat(permission.can(Action.ADD)).isFalse();
-	}
+    permission.disallow(Action.ADD);
+    assertThat(permission.can(Action.ADD)).isFalse();
+  }
 
-	@Test
-	public void testSetCanRead() {
-		assertThat(permission.canRead()).isFalse();
+  @Test
+  public void testSetCanRead() {
+    assertThat(permission.canRead()).isFalse();
 
-		permission.setCanRead(true);
-		assertThat(permission.canRead()).isTrue();
-	}
+    permission.setCanRead(true);
+    assertThat(permission.canRead()).isTrue();
+  }
 
-	@Test
-	public void testSetCanWrite() {
-		assertThat(permission.canRead()).isFalse();
-		assertThat(permission.canWrite()).isFalse();
+  @Test
+  public void testSetCanWrite() {
+    assertThat(permission.canRead()).isFalse();
+    assertThat(permission.canWrite()).isFalse();
 
-		permission.setCanWrite(true);
-		assertThat(permission.canRead()).isTrue();
-		assertThat(permission.canWrite()).isTrue();
+    permission.setCanWrite(true);
+    assertThat(permission.canRead()).isTrue();
+    assertThat(permission.canWrite()).isTrue();
 
-		permission.setCanWrite(false);
-		assertThat(permission.canRead()).isTrue();
-		assertThat(permission.canWrite()).isFalse();
-	}
-
+    permission.setCanWrite(false);
+    assertThat(permission.canRead()).isTrue();
+    assertThat(permission.canWrite()).isFalse();
+  }
 }

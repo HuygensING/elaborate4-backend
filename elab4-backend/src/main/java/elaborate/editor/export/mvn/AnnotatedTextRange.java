@@ -169,7 +169,8 @@ public class AnnotatedTextRange {
     private final List<Element> closingElements;
     private final boolean hasCharacter;
 
-    public TextPositionInfo(char character, List<Element> closingElements, List<Element> openingElements) {
+    public TextPositionInfo(
+        char character, List<Element> closingElements, List<Element> openingElements) {
       this.character = character;
       this.closingElements = closingElements;
       this.openingElements = openingElements;
@@ -198,7 +199,5 @@ public class AnnotatedTextRange {
     public List<Element> getClosingElements() {
       return closingElements;
     }
-
   }
-
 }

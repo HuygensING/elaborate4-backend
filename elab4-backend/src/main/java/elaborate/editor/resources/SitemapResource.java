@@ -36,11 +36,10 @@ import elaborate.jaxrs.APIDesc;
 @Path("api")
 public class SitemapResource extends AbstractElaborateResource {
 
-	@GET
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	@APIDesc("Generates a structured sitemap.")
-	public Sitemap getSitemap(@Context Application app) {
-		return new Sitemap(app);
-	}
-
+  @GET
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  @APIDesc("Generates a structured sitemap.")
+  public Sitemap getSitemap(@Context Application app) {
+    return new Sitemap(app);
+  }
 }

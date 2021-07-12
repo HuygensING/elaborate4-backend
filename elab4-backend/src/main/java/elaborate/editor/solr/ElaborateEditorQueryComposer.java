@@ -31,25 +31,29 @@ import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.SolrFields;
 
 public class ElaborateEditorQueryComposer extends ElaborateQueryComposer {
-	private String searchQuery;
+  private String searchQuery;
 
-	@Override
-	public void compose(ElaborateSearchParameters sp) {
-		super.compose(sp);
-		String joinedTermQuery = super.getSearchQuery();
+  @Override
+  public void compose(ElaborateSearchParameters sp) {
+    super.compose(sp);
+    String joinedTermQuery = super.getSearchQuery();
 
-		boolean joinedTermQueryIsEmpty = StringUtils.isEmpty(joinedTermQuery);
-		ElaborateEditorSearchParameters esp = (ElaborateEditorSearchParameters) sp;
-		searchQuery = joinedTermQueryIsEmpty ? MessageFormat.format("{0}:{1,number,#}", SolrFields.PROJECT_ID, esp.getProjectId()) //
-				: MessageFormat.format("({0}) AND {1}:{2,number,#}", joinedTermQuery, SolrFields.PROJECT_ID, esp.getProjectId());
-	}
+    boolean joinedTermQueryIsEmpty = StringUtils.isEmpty(joinedTermQuery);
+    ElaborateEditorSearchParameters esp = (ElaborateEditorSearchParameters) sp;
+    searchQuery =
+        joinedTermQueryIsEmpty
+            ? MessageFormat.format(
+                "{0}:{1,number,#}", SolrFields.PROJECT_ID, esp.getProjectId()) //
+            : MessageFormat.format(
+                "({0}) AND {1}:{2,number,#}",
+                joinedTermQuery, SolrFields.PROJECT_ID, esp.getProjectId());
+  }
 
-	@Override
-	public String getSearchQuery() {
-		if (searchQuery == null) {
-			throw new RuntimeException("searchQuery not set, call compose() first");
-		}
-		return searchQuery;
-	}
-
+  @Override
+  public String getSearchQuery() {
+    if (searchQuery == null) {
+      throw new RuntimeException("searchQuery not set, call compose() first");
+    }
+    return searchQuery;
+  }
 }

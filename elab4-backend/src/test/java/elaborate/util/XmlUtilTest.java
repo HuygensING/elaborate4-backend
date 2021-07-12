@@ -44,7 +44,8 @@ public class XmlUtilTest {
 
   @Test
   public void testFixSupSub() {
-    String supsubxml = "<sup>SUPER</sup> normaal <sub>sub</sub> <sup>SUPER</sup> normaal <sub>sub</sub>";
+    String supsubxml =
+        "<sup>SUPER</sup> normaal <sub>sub</sub> <sup>SUPER</sup> normaal <sub>sub</sub>";
     String fixedXml = XmlUtil.fixXhtml(supsubxml);
     assertThat(fixedXml).isEqualTo(supsubxml);
   }
@@ -65,24 +66,29 @@ public class XmlUtilTest {
   @Test
   public void testRemoveXMLtags() {
     assertThat(XmlUtil.removeXMLtags("<body>kaal</body>")).isEqualTo("kaal");
-    assertThat(XmlUtil.removeXMLtags("<1>aap\n <2>noot\n mies</2></1>")).isEqualTo("aap\n noot\n mies");
+    assertThat(XmlUtil.removeXMLtags("<1>aap\n <2>noot\n mies</2></1>"))
+        .isEqualTo("aap\n noot\n mies");
   }
 
   @Test
   public void testToPlainTextReplacesXmlStuff() {
-    assertThat(XmlUtil.toPlainText("<b>bold</b> &apos;t <i>kofschip</i><br>&nbsp;&quot;blabla&quot;")).isEqualTo("bold 't kofschip\n \"blabla\"");
+    assertThat(
+            XmlUtil.toPlainText("<b>bold</b> &apos;t <i>kofschip</i><br>&nbsp;&quot;blabla&quot;"))
+        .isEqualTo("bold 't kofschip\n \"blabla\"");
   }
 
   @Test
   public void testToSimpleHTMLPreservesSimpleTagsRemovesOthers() {
     String body = "<span><b>bold</b> &apos;t <i>kofschip</i><br>&nbsp;&quot;blabla&quot;</span>";
-    String expected = "<strong>bold</strong> &apos;t <em>kofschip</em><br/>&nbsp;&quot;blabla&quot;";
+    String expected =
+        "<strong>bold</strong> &apos;t <em>kofschip</em><br/>&nbsp;&quot;blabla&quot;";
     assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
   }
 
   @Test
   public void testToSimpleHTMLPreservesUnderline() {
-    String body = "<span style=\"text-decoration: underline;\">I</span>b<span style=\"text-decoration: underline;\">i</span> or <u>underline</u>";
+    String body =
+        "<span style=\"text-decoration: underline;\">I</span>b<span style=\"text-decoration: underline;\">i</span> or <u>underline</u>";
     String expected = "<u>I</u>b<u>i</u> or <u>underline</u>";
     assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
   }
@@ -95,14 +101,17 @@ public class XmlUtilTest {
 
   @Test
   public void testToSimpleHTMLNormalizesBoldToStrong() {
-    String body = "<b>bold</b>, <span style=\"font-weight: bold;\">bold span</span> and <strong>strong</strong>";
-    String expected = "<strong>bold</strong>, <strong>bold span</strong> and <strong>strong</strong>";
+    String body =
+        "<b>bold</b>, <span style=\"font-weight: bold;\">bold span</span> and <strong>strong</strong>";
+    String expected =
+        "<strong>bold</strong>, <strong>bold span</strong> and <strong>strong</strong>";
     assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
   }
 
   @Test
   public void testToSimpleHTMLNormalizesItalicsToEm() {
-    String body = "<i>italic</i>, <span style=\"font-style: italic;\">italic span</span> and <em>emphasized</em>";
+    String body =
+        "<i>italic</i>, <span style=\"font-style: italic;\">italic span</span> and <em>emphasized</em>";
     String expected = "<em>italic</em>, <em>italic span</em> and <em>emphasized</em>";
     assertThat(XmlUtil.toSimpleHTML(body)).isEqualTo(expected);
   }
@@ -117,8 +126,10 @@ public class XmlUtilTest {
   //  @Ignore
   //  @Test
   //  public void testFixTagHierarchy() {
-  //    String body = "<ab id=\"9096396\"/><ab id=\"9096397\"/>W<ae id=\"9096396\"/>iē<ae id=\"9096397\"/>";
-  //    String expected = "<ab id=\"9096397\"/><ab id=\"9096396\"/>W<ae id=\"9096396\"/>iē<ae id=\"9096397\"/>";
+  //    String body = "<ab id=\"9096396\"/><ab id=\"9096397\"/>W<ae id=\"9096396\"/>iē<ae
+  // id=\"9096397\"/>";
+  //    String expected = "<ab id=\"9096397\"/><ab id=\"9096396\"/>W<ae id=\"9096396\"/>iē<ae
+  // id=\"9096397\"/>";
   //    String fixed = XmlUtil.fixTagHierarchy(body);
   //    assertThat(fixed).isEqualTo(expected);
   //  }
@@ -138,7 +149,8 @@ public class XmlUtilTest {
   // String textlayer = "Translation";
   // Project project = new Project().setId(1l);
   // List resultList = em//
-  // .createQuery("select e.id, t.id from ProjectEntry e join e.transcriptions as t where e.project=:project and t.text_layer=:textlayer")//
+  // .createQuery("select e.id, t.id from ProjectEntry e join e.transcriptions as t where
+  // e.project=:project and t.text_layer=:textlayer")//
   // .setParameter("project", project)//
   // .setParameter("textlayer", textlayer)//
   // .getResultList();

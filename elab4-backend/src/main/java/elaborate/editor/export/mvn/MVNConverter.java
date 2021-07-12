@@ -63,41 +63,46 @@ public class MVNConverter {
   private final Project project;
   private final MVNConversionData data;
   private final Status status;
-  private final TranscriptionHierarchyFixer transcriptionHiearchyFixer = new TranscriptionHierarchyFixer();
+  private final TranscriptionHierarchyFixer transcriptionHiearchyFixer =
+      new TranscriptionHierarchyFixer();
   private final String baseURL;
 
-  public MVNConverter(final Project project, final MVNConversionData data, Status status, String baseURL) {
+  public MVNConverter(
+      final Project project, final MVNConversionData data, Status status, String baseURL) {
     this.project = project;
     this.data = data;
     this.status = status;
     this.baseURL = baseURL;
   }
 
-  // phase 1: collect MVNFolium with raw transcription 
+  // phase 1: collect MVNFolium with raw transcription
   // order by 'order' or entryname
   // fail when 1, but not all entries have order
   // fail when entrynames are not unique
   // fail when entrynames contain characters illegal in xml:id
   // select id, name from project_entries where project_id=$projectId
-  // select 
+  // select
 
   @SuppressWarnings("unchecked")
   public static MVNConversionData getConversionData(final long project_id, Status status) {
     final MVNConversionData conversionData = new MVNConversionData();
     final EntityManager entityManager = HibernateUtil.beginTransaction();
 
-    final String transcriptionSQL = ("select"//
-        + "  e.id as id,"//
-        + "  e.name as name,"//
-        + "  m.data as entry_order,"//
-        + "  t.body as transcription,"//
-        + "  f.filename"//
-        + " from project_entries e"//
-        + "   left outer join project_entry_metadata_items m on (e.id = m.project_entry_id and m.field='order')"//
-        + "   left outer join transcriptions t on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
-        + "   left outer join facsimiles f on (e.id = f.project_entry_id)"//
-        + " where project_id=" + project_id//
-        + " order by entry_order, name").replaceAll(" +", " ");
+    final String transcriptionSQL =
+        ("select" //
+                + "  e.id as id," //
+                + "  e.name as name," //
+                + "  m.data as entry_order," //
+                + "  t.body as transcription," //
+                + "  f.filename" //
+                + " from project_entries e" //
+                + "   left outer join project_entry_metadata_items m on (e.id = m.project_entry_id and m.field='order')" //
+                + "   left outer join transcriptions t on (e.id = t.project_entry_id and t.text_layer='Diplomatic')" //
+                + "   left outer join facsimiles f on (e.id = f.project_entry_id)" //
+                + " where project_id="
+                + project_id //
+                + " order by entry_order, name")
+            .replaceAll(" +", " ");
     final Query transcriptionQuery = entityManager.createNativeQuery(transcriptionSQL);
     status.addLogline("collecting transcription data");
     final List<Object[]> transcriptions = transcriptionQuery.getResultList();
@@ -116,19 +121,22 @@ public class MVNConverter {
         conversionData.getEntryDataList().add(entryData);
       }
 
-      final String annotationSQL = ("select"//
-          + "   a.annotation_no as annotation_num,"//
-          + "   at.name as annotation_type,"//
-          + "   a.body as annotation_body"//
-          + " from project_entries e"//
-          + "   left outer join transcriptions t"//
-          + "     left outer join annotations a"//
-          + "       left outer join annotation_types at"//
-          + "       on (at.id=a.annotation_type_id)"//
-          + "     on (t.id = a.transcription_id)"//
-          + "   on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"//
-          + " where project_id=" + project_id//
-          + " order by annotation_num;").replaceAll(" +", " ");
+      final String annotationSQL =
+          ("select" //
+                  + "   a.annotation_no as annotation_num," //
+                  + "   at.name as annotation_type," //
+                  + "   a.body as annotation_body" //
+                  + " from project_entries e" //
+                  + "   left outer join transcriptions t" //
+                  + "     left outer join annotations a" //
+                  + "       left outer join annotation_types at" //
+                  + "       on (at.id=a.annotation_type_id)" //
+                  + "     on (t.id = a.transcription_id)" //
+                  + "   on (e.id = t.project_entry_id and t.text_layer='Diplomatic')" //
+                  + " where project_id="
+                  + project_id //
+                  + " order by annotation_num;")
+              .replaceAll(" +", " ");
       final Query annotationQuery = entityManager.createNativeQuery(annotationSQL);
       status.addLogline("collecting annotation data");
       final List<Object[]> annotations = annotationQuery.getResultList();
@@ -150,7 +158,10 @@ public class MVNConverter {
   public MVNConversionResult convert() {
     final MVNConversionResult result = new MVNConversionResult(project, status, baseURL);
     if (!onlyTextLayerIsDiplomatic()) {
-      result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
+      result.addError(
+          "",
+          "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): "
+              + Joiner.on(", ").join(project.getTextLayers()));
       return result;
     }
     validateEntryOrderAndName(result);
@@ -174,12 +185,19 @@ public class MVNConverter {
     result.getStatus().setTei(fullTEI);
     ValidationResult validateTEI = MVNValidator.validateTEI(fullTEI);
     if (!validateTEI.isValid()) {
-      result.addError("",
-          "Gegenereerde TEI voldoet niet aan TEI_MVN.rng:\n"//
-              + "<blockquote>" + validateTEI.getMessage() + "</blockquote>\n"//
-              + " TEI:\n<pre>" + escapeHtml4(fullTEI) + "</pre>"//
-              + " DEBUG:\n<pre>" + escapeHtml4(cooked) + "</pre>"//
-      );
+      result.addError(
+          "",
+          "Gegenereerde TEI voldoet niet aan TEI_MVN.rng:\n" //
+              + "<blockquote>"
+              + validateTEI.getMessage()
+              + "</blockquote>\n" //
+              + " TEI:\n<pre>"
+              + escapeHtml4(fullTEI)
+              + "</pre>" //
+              + " DEBUG:\n<pre>"
+              + escapeHtml4(cooked)
+              + "</pre>" //
+          );
     }
     return result;
   }
@@ -191,7 +209,12 @@ public class MVNConverter {
     Map<String, String> entryOrderMap = Maps.newTreeMap();
     for (final MVNConversionData.EntryData entryData : data.getEntryDataList()) {
       if (!entryData.name.matches(VALID_XML_ID_SUBSTRING_REGEXP)) {
-        result.addError(entryData.id, "Ongeldige entrynaam: " + entryData.name + ", voldoet niet aan de regexp " + VALID_XML_ID_SUBSTRING_REGEXP);
+        result.addError(
+            entryData.id,
+            "Ongeldige entrynaam: "
+                + entryData.name
+                + ", voldoet niet aan de regexp "
+                + VALID_XML_ID_SUBSTRING_REGEXP);
       }
       entryOrderMap.put(entryData.id, entryData.order);
       if (entryData.order != null) {
@@ -205,7 +228,11 @@ public class MVNConverter {
         if (StringUtils.isEmpty(order)) {
           result.addError(entryId, "Ontbrekend metadataveld 'order'");
         } else if (!StringUtils.isNumeric(order)) {
-          result.addError(entryId, "Ongeldige waarde voor metadataveld 'order': " + order + ", mag alleen cijfers bevatten");
+          result.addError(
+              entryId,
+              "Ongeldige waarde voor metadataveld 'order': "
+                  + order
+                  + ", mag alleen cijfers bevatten");
         }
       }
     }
@@ -223,14 +250,24 @@ public class MVNConverter {
     int i = 1;
     for (final MVNConversionData.EntryData entryData : entryDataList) {
       final String pageId = result.getSigle() + "-pb-" + entryData.name;
-      result.getStatus().addLogline("adding entry '" + entryData.name + "' (" + i++ + "/" + total + ")");
+      result
+          .getStatus()
+          .addLogline("adding entry '" + entryData.name + "' (" + i++ + "/" + total + ")");
       String transcriptionBody = transcriptionBody(entryData);
       validateTranscriptionContainsNoEmptyLines(transcriptionBody, result, entryData.id);
-      editionTextBuilder//
-          .append("<entry n=\"").append(entryData.name).append("\" xml:id=\"").append(pageId).append("\" facs=\"").append(entryData.facs).append("\" _entryId=\"").append(entryData.id).append("\">")//
-          .append("<lb/>")//
-          .append(transcriptionBody.replaceAll("\\s*\n", "<le/><lb/>"))//
-          .append("<le/>")//
+      editionTextBuilder //
+          .append("<entry n=\"")
+          .append(entryData.name)
+          .append("\" xml:id=\"")
+          .append(pageId)
+          .append("\" facs=\"")
+          .append(entryData.facs)
+          .append("\" _entryId=\"")
+          .append(entryData.id)
+          .append("\">") //
+          .append("<lb/>") //
+          .append(transcriptionBody.replaceAll("\\s*\n", "<le/><lb/>")) //
+          .append("<le/>") //
           .append("</entry>");
     }
 
@@ -238,20 +275,24 @@ public class MVNConverter {
   }
 
   private String transcriptionBody(final MVNConversionData.EntryData entryData) {
-    String rawBody = entryData.body//
-        .replace("&nbsp;", " ")//
-        .trim();
+    String rawBody =
+        entryData
+            .body //
+            .replace("&nbsp;", " ") //
+            .trim();
     if (rawBody.contains("tali conuiuio")) {
       Log.info(rawBody);
     }
-    return transcriptionHiearchyFixer.fix(rawBody)//
-        .replace("</i><i>", "")//
-        .replace("<body>", "")//
-        .replace("<body/>", "")//
+    return transcriptionHiearchyFixer
+        .fix(rawBody) //
+        .replace("</i><i>", "") //
+        .replace("<body>", "") //
+        .replace("<body/>", "") //
         .replace("</body>", "");
   }
 
-  static void validateTranscriptionContainsNoEmptyLines(String transcriptionBody, MVNConversionResult result, String entryId) {
+  static void validateTranscriptionContainsNoEmptyLines(
+      String transcriptionBody, MVNConversionResult result, String entryId) {
     if (Pattern.compile("\n\\s*\n").matcher(transcriptionBody).find()) {
       result.addError(entryId, "Lege regels mogen niet voorkomen.");
     }
@@ -261,7 +302,8 @@ public class MVNConverter {
     final Deque<String> textNumStack = new ArrayDeque<String>();
     final List<String> openTextNums = Lists.newArrayList();
     final List<String> closeTextNums = Lists.newArrayList();
-    final Matcher matcher = Pattern.compile("<mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
+    final Matcher matcher =
+        Pattern.compile("<mvn:tekst([be][^ >]+) body=\"([^\"]+)\"").matcher(cooked);
     boolean lastTagWasBegin = false;
     while (matcher.find()) {
       final String beginOrEinde = matcher.group(1);
@@ -282,10 +324,20 @@ public class MVNConverter {
             }
             textNumStack.pop();
           } else {
-            result.addError("", "mvn:teksteinde : tekstnummer '" + textnum + "' gevonden waar '" + peek + "' verwacht was.");
+            result.addError(
+                "",
+                "mvn:teksteinde : tekstnummer '"
+                    + textnum
+                    + "' gevonden waar '"
+                    + peek
+                    + "' verwacht was.");
           }
         } else {
-          result.addError("", "mvn:teksteinde : tekstnummer '" + textnum + "' heeft geen overeenkomstig mvn:tekstbegin");
+          result.addError(
+              "",
+              "mvn:teksteinde : tekstnummer '"
+                  + textnum
+                  + "' heeft geen overeenkomstig mvn:tekstbegin");
         }
         lastTagWasBegin = false;
         closeTextNums.add(textnum);
@@ -308,27 +360,55 @@ public class MVNConverter {
 
   }
 
-  private void validateTextNum(MVNConversionResult result, final String textNum, Deque<String> textNumStack, String entryId) {
+  private void validateTextNum(
+      MVNConversionResult result,
+      final String textNum,
+      Deque<String> textNumStack,
+      String entryId) {
     if (!textNum.matches("^[a-zA-Z0-9.]+$")) {
-      addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' mag alleen letters, cijfers en (maximaal 3) punten bevatten.", result, entryId);
+      addError(
+          MVNAnnotationType.TEKSTBEGIN,
+          "Ongeldig tekstnummer: '"
+              + textNum
+              + "' mag alleen letters, cijfers en (maximaal 3) punten bevatten.",
+          result,
+          entryId);
 
     } else if (textNum.split("\\.").length > 4) {
-      addError(MVNAnnotationType.TEKSTBEGIN, "Ongeldig tekstnummer: '" + textNum + "' mag maximaal 3 punten bevatten.", result, entryId);
+      addError(
+          MVNAnnotationType.TEKSTBEGIN,
+          "Ongeldig tekstnummer: '" + textNum + "' mag maximaal 3 punten bevatten.",
+          result,
+          entryId);
 
-    } else if (!textNumStack.isEmpty() && !textNum.matches(textNumStack.peek() + "\\.[A-Za-z0-9]+$")) {
-      addError(MVNAnnotationType.TEKSTBEGIN, "tekstnummer: '" + textNum + "' volgt niet op " + textNumStack.peek(), result, entryId);
+    } else if (!textNumStack.isEmpty()
+        && !textNum.matches(textNumStack.peek() + "\\.[A-Za-z0-9]+$")) {
+      addError(
+          MVNAnnotationType.TEKSTBEGIN,
+          "tekstnummer: '" + textNum + "' volgt niet op " + textNumStack.peek(),
+          result,
+          entryId);
 
     } else if (textNumStack.isEmpty() && textNum.contains(".")) {
-      addError(MVNAnnotationType.TEKSTBEGIN, "tekstnummer '" + textNum + "' niet omvat in " + textNum.replaceFirst("\\..+", "") + " (en dieper)", result, entryId);
+      addError(
+          MVNAnnotationType.TEKSTBEGIN,
+          "tekstnummer '"
+              + textNum
+              + "' niet omvat in "
+              + textNum.replaceFirst("\\..+", "")
+              + " (en dieper)",
+          result,
+          entryId);
     }
   }
 
   private void outputFiles(final String xml, final String cooked) {
     try {
-      String formatted = xml//
-          .replace("<entry", "\n  <entry")//
-          .replace("</entry>", "\n  </entry>\n")//
-          .replace("<lb/>", "\n    <lb/>");
+      String formatted =
+          xml //
+              .replace("<entry", "\n  <entry") //
+              .replace("</entry>", "\n  </entry>\n") //
+              .replace("<lb/>", "\n    <lb/>");
       FileUtils.write(new File("out/raw-formatted-body.xml"), formatted, Charsets.UTF_8);
       FileUtils.write(new File("out/cooked-body.xml"), cooked, Charsets.UTF_8);
     } catch (final IOException e) {
@@ -336,7 +416,8 @@ public class MVNConverter {
     }
   }
 
-  private static void addError(MVNAnnotationType type, String error, MVNConversionResult result, String currentEntryId) {
+  private static void addError(
+      MVNAnnotationType type, String error, MVNConversionResult result, String currentEntryId) {
     result.addError(currentEntryId, type.getName() + " : " + error);
   }
 
@@ -344,7 +425,9 @@ public class MVNConverter {
     Log.info("xml={}", xml);
     ParseResult parseresult = new ParseResult();
     final Document document = Document.createFromXml(xml, true);
-    final AnnotatedTranscriptionVisitor visitor = new AnnotatedTranscriptionVisitor(data.getAnnotationIndex(), parseresult, conversionResult.getSigle());
+    final AnnotatedTranscriptionVisitor visitor =
+        new AnnotatedTranscriptionVisitor(
+            data.getAnnotationIndex(), parseresult, conversionResult.getSigle());
     document.accept(visitor);
     parseresult.index();
     MVNTeiExporter teiExporter = new MVNTeiExporter(parseresult, conversionResult);
@@ -362,13 +445,16 @@ public class MVNConverter {
         if (isNotBlank(annotationData.body) && !"nvt".equals(annotationData.body)) {
           attributes = " body=\"" + escapeXml11(annotationData.body) + "\"";
         }
-        cooked = cooked//
-            .replace(originalAnnotationBegin(annotationNoString), "<" + type + attributes + ">")//
-            .replace(originalAnnotationEnd(annotationNoString), "</" + type + ">");
+        cooked =
+            cooked //
+                .replace(
+                    originalAnnotationBegin(annotationNoString), "<" + type + attributes + ">") //
+                .replace(originalAnnotationEnd(annotationNoString), "</" + type + ">");
       }
     }
-    return cooked.replace("<entry", "\n  <entry")//
-        .replace("</entry>", "\n  </entry>\n")//
+    return cooked
+        .replace("<entry", "\n  <entry") //
+        .replace("</entry>", "\n  </entry>\n") //
         .replace("<lb/>", "\n    <lb/>");
   }
 
@@ -389,7 +475,8 @@ public class MVNConverter {
   //  public MVNConversionResult convert0() {
   //    final MVNConversionResult result = new MVNConversionResult(project, status);
   //    if (!onlyTextLayerIsDiplomatic()) {
-  //      result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
+  //      result.addError("", "MVN projecten mogen alleen een Diplomatic textlayer hebben. Dit
+  // project heeft textlayer(s): " + Joiner.on(", ").join(project.getTextLayers()));
   //      return result;
   //    }
   //    final StringBuilder editionTextBuilder = new StringBuilder();
@@ -413,7 +500,8 @@ public class MVNConverter {
   //          .append("<le/>");
   //    }
   //
-  //    final String xml = "<body>" + editionTextBuilder.toString().replace("<lb/><le/>", "").replace("\n\n", "\n") + "</body>";
+  //    final String xml = "<body>" + editionTextBuilder.toString().replace("<lb/><le/>",
+  // "").replace("\n\n", "\n") + "</body>";
   //    final String repairedXml = repairAnnotationHierarchy(xml);
   //    final String cooked = replaceAnnotationMilestones(repairedXml);
   //    validateTextNums(cooked, result);
@@ -445,7 +533,8 @@ public class MVNConverter {
   //    return result;
   //  }
   //
-  //  private void setFacs(final ProjectEntry entry, final MVNFolium page, final MVNConversionResult result) {
+  //  private void setFacs(final ProjectEntry entry, final MVNFolium page, final MVNConversionResult
+  // result) {
   //    final List<Facsimile> facsimiles = entry.getFacsimiles();
   //    if (facsimiles.isEmpty()) {
   //      result.addError("" + entry.getId(), "no facsimile");
@@ -457,13 +546,15 @@ public class MVNConverter {
   //    }
   //  }
   //
-  //  private void setBody(final MVNFolium page, final ProjectEntry entry, final MVNConversionResult result, final Map<Integer, AnnotationData> annotationIndex) {
+  //  private void setBody(final MVNFolium page, final ProjectEntry entry, final MVNConversionResult
+  // result, final Map<Integer, AnnotationData> annotationIndex) {
   //    String body = null;
   //    for (final Transcription transcription : entry.getTranscriptions()) {
   //      if ("Diplomatic".equals(transcription.getTextLayer())) {
   //        body = transcription.getBody().replace("&nbsp;", " ");
   //      } else {
-  //        result.addError("" + entry.getId(), "incorrect textlayer found: " + transcription.getTextLayer());
+  //        result.addError("" + entry.getId(), "incorrect textlayer found: " +
+  // transcription.getTextLayer());
   //      }
   //    }
   //    Log.info("body=[\n{}\n]", body);
@@ -475,7 +566,8 @@ public class MVNConverter {
   //    Log.info("body=[\n{}\n]", page.getBody());
   //  }
   //  String toTei0(final String xml, final MVNConversionResult result) {
-  //    final MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result, data.getAnnotationIndex(), data.getDeepestTextNums());
+  //    final MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result,
+  // data.getAnnotationIndex(), data.getDeepestTextNums());
   //    Log.info("xml={}", xml);
   //
   //    final Document document = Document.createFromXml(xml, false);
@@ -489,14 +581,16 @@ public class MVNConverter {
   //        .replace("</b>", "")//
   //        .replace("<u>", "")//
   //        .replace("</u>", "")//
-  //        //        .replaceAll("<gap>.*?</gap>", "<gap/>")// according to the rng, gaps should be empty
+  //        //        .replaceAll("<gap>.*?</gap>", "<gap/>")// according to the rng, gaps should be
+  // empty
   //        .replace("<l><head", "<head")//
   //        //        .replace("<l><hi rend=\"rubric\"><head", "<head")//
   //        .replace("</head></l>", "</head>")//
   //        //        .replace("</head></hi></l>", "</head>")//
   //        .replace("<l><closer", "<closer")//
   //        .replace("</closer></l>", "</closer>")//
-  //        .replace("<hi rend=\"rubric\"><hi rend=\"rubric\">¶</hi></hi>", "<hi rend=\"rubric\">¶</hi>");
+  //        .replace("<hi rend=\"rubric\"><hi rend=\"rubric\">¶</hi></hi>", "<hi
+  // rend=\"rubric\">¶</hi>");
   //  }
 
 }

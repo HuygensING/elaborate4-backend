@@ -22,7 +22,6 @@ package elaborate.editor.resources.orm.wrappers;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.Map;
 

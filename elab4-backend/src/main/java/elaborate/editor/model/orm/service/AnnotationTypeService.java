@@ -126,12 +126,17 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
     beginTransaction();
     AnnotationType defaultAnnotationType;
     try {
-      defaultAnnotationType = (AnnotationType) getEntityManager()//
-          .createQuery("from AnnotationType as at where at.name=?1")//
-          .setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME)//
-          .getSingleResult();
+      defaultAnnotationType =
+          (AnnotationType)
+              getEntityManager() //
+                  .createQuery("from AnnotationType as at where at.name=?1") //
+                  .setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME) //
+                  .getSingleResult();
       if (defaultAnnotationType == null) {
-        defaultAnnotationType = new AnnotationType().setName(DEFAULT_ANNOTATIONTYPE_NAME).setDescription("Any annotation");
+        defaultAnnotationType =
+            new AnnotationType()
+                .setName(DEFAULT_ANNOTATIONTYPE_NAME)
+                .setDescription("Any annotation");
         User root = UserService.instance().getUser(1);
         create(defaultAnnotationType, root);
       }
@@ -143,14 +148,15 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
 
   public AnnotationType getAnnotationTypeByName(String name, EntityManager entityManager) {
     try {
-      List<AnnotationType> resultList = entityManager.createQuery("from AnnotationType where name=:name", AnnotationType.class)//
-          .setParameter("name", name)//
-          .getResultList();
+      List<AnnotationType> resultList =
+          entityManager
+              .createQuery("from AnnotationType where name=:name", AnnotationType.class) //
+              .setParameter("name", name) //
+              .getResultList();
       return resultList.isEmpty() ? null : resultList.get(0);
 
     } catch (NoResultException e) {
       return null;
     }
   }
-
 }

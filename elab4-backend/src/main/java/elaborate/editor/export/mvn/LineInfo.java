@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 class LineInfo {
   public boolean witregel = false;
   public boolean inspringen = false;
@@ -30,5 +29,4 @@ class LineInfo {
   public String lineNo = "";
   public String preTags = "";
   public String postTags = "";
-
 }

@@ -28,8 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ActionTest {
 
-	@Test
-	public void test() {
-		assertThat(Action.values()).isNotEmpty();
-	}
+  @Test
+  public void test() {
+    assertThat(Action.values()).isNotEmpty();
+  }
 }

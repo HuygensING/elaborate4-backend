@@ -33,62 +33,70 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectTest extends StoredEntityTest {
 
-	// @Test
-	public void test1() {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+  // @Test
+  public void test1() {
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-		User user = ModelFactory.create(User.class)//
-				.setUsername("root")//
-				.setFirstName("firstName")//
-				.setLastName("last");
-		assertThat(user).hasId(0);
+    User user =
+        ModelFactory.create(User.class) //
+            .setUsername("root") //
+            .setFirstName("firstName") //
+            .setLastName("last");
+    assertThat(user).hasId(0);
 
-		entityManager.getTransaction().begin();
-		entityManager.persist(user);
-		Project project1 = ModelFactory.create(Project.class).setName("project1").setCreatedOn(new Date()).setCreator(user);
-		entityManager.persist(project1);
-		ProjectEntry entry = project1.addEntry("entry", user);
-		entityManager.persist(entry);
-		Transcription transcription = entry.addTranscription(user);
-		entityManager.persist(transcription);
-		entityManager.persist(ModelFactory.create(Project.class).setName("project2").setCreatedOn(new Date()).setCreator(user));
-		entityManager.getTransaction().commit();
-		entityManager.close();
-		assertThat(user).hasId(1);
+    entityManager.getTransaction().begin();
+    entityManager.persist(user);
+    Project project1 =
+        ModelFactory.create(Project.class)
+            .setName("project1")
+            .setCreatedOn(new Date())
+            .setCreator(user);
+    entityManager.persist(project1);
+    ProjectEntry entry = project1.addEntry("entry", user);
+    entityManager.persist(entry);
+    Transcription transcription = entry.addTranscription(user);
+    entityManager.persist(transcription);
+    entityManager.persist(
+        ModelFactory.create(Project.class)
+            .setName("project2")
+            .setCreatedOn(new Date())
+            .setCreator(user));
+    entityManager.getTransaction().commit();
+    entityManager.close();
+    assertThat(user).hasId(1);
 
-		entityManager = entityManagerFactory.createEntityManager();
-		entityManager.getTransaction().begin();
+    entityManager = entityManagerFactory.createEntityManager();
+    entityManager.getTransaction().begin();
 
-		List<Project> result = entityManager.createQuery("from Project", Project.class).getResultList();
-		for (Project project : result) {
-			System.out.println("Project (" + project.getName() + ") : " + project.getId());
-		}
-		project1 = result.get(0);
-		Project project2 = result.get(1);
-		assertThat(project1).hasName("project1");
-		assertThat(project2).hasName("project2");
-		assertThat(project1.getCreator()).hasUsername("root");
+    List<Project> result = entityManager.createQuery("from Project", Project.class).getResultList();
+    for (Project project : result) {
+      System.out.println("Project (" + project.getName() + ") : " + project.getId());
+    }
+    project1 = result.get(0);
+    Project project2 = result.get(1);
+    assertThat(project1).hasName("project1");
+    assertThat(project2).hasName("project2");
+    assertThat(project1.getCreator()).hasUsername("root");
 
-		List<ProjectEntry> projectEntries = project1.getProjectEntries();
-		assertThat(projectEntries).hasSize(1);
+    List<ProjectEntry> projectEntries = project1.getProjectEntries();
+    assertThat(projectEntries).hasSize(1);
 
-		ProjectEntry projectEntry = projectEntries.get(0);
-		assertThat(projectEntry).hasName("entry");
+    ProjectEntry projectEntry = projectEntries.get(0);
+    assertThat(projectEntry).hasName("entry");
 
-		List<Transcription> transcriptions = projectEntry.getTranscriptions();
-		assertThat(transcriptions).hasSize(1);
+    List<Transcription> transcriptions = projectEntry.getTranscriptions();
+    assertThat(transcriptions).hasSize(1);
 
-		Transcription transcription2 = transcriptions.get(0);
-		assertThat(transcription2).hasBody("");
+    Transcription transcription2 = transcriptions.get(0);
+    assertThat(transcription2).hasBody("");
 
-		List<Facsimile> facsimiles = projectEntry.getFacsimiles();
-		assertThat(facsimiles).hasSize(1);
+    List<Facsimile> facsimiles = projectEntry.getFacsimiles();
+    assertThat(facsimiles).hasSize(1);
 
-		Facsimile facsimile = facsimiles.get(0);
-		assertThat(facsimile).hasFilename("");
+    Facsimile facsimile = facsimiles.get(0);
+    assertThat(facsimile).hasFilename("");
 
-		entityManager.getTransaction().commit();
-		entityManager.close();
-	}
-
+    entityManager.getTransaction().commit();
+    entityManager.close();
+  }
 }

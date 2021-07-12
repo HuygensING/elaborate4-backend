@@ -55,11 +55,15 @@ public class Elab4RestClient {
   public boolean login(String username, String password) {
     token = null;
     Form form = new Form().param("username", username).param("password", password);
-    Response response = sessionsTarget.path("login")//
-        .request(MediaType.APPLICATION_JSON)//
-        .post(Entity.form(form));
+    Response response =
+        sessionsTarget
+            .path("login") //
+            .request(MediaType.APPLICATION_JSON) //
+            .post(Entity.form(form));
 
-    boolean success = (response.getStatus() == Status.OK.getStatusCode() || response.getStatus() == Status.FOUND.getStatusCode());
+    boolean success =
+        (response.getStatus() == Status.OK.getStatusCode()
+            || response.getStatus() == Status.FOUND.getStatusCode());
     if (success) {
       Map<String, Object> map = response.readEntity(Map.class);
       token = (String) map.get("token");
@@ -74,44 +78,64 @@ public class Elab4RestClient {
 
   @SuppressWarnings("unchecked")
   public List<Map<String, Object>> getProjectEntries(int i) {
-    return projectsTarget.path(String.valueOf(i)).path("entries")//
-        .request()//
-        .header("Authorization", "SimpleAuth " + token)//
+    return projectsTarget
+        .path(String.valueOf(i))
+        .path("entries") //
+        .request() //
+        .header("Authorization", "SimpleAuth " + token) //
         .get(List.class);
   }
 
   @SuppressWarnings("unchecked")
   public Map<String, String> getProjectEntryMetadata(long projectId, long entryId) {
-    Map<String, String> map = projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("settings")//
-        .request()//
-        .header("Authorization", "SimpleAuth " + token)//
-        .get(Map.class);
-    Map<String, String> map2 = projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId))//
-        .request()//
-        .header("Authorization", "SimpleAuth " + token)//
-        .get(Map.class);
+    Map<String, String> map =
+        projectsTarget
+            .path(String.valueOf(projectId))
+            .path("entries")
+            .path(String.valueOf(entryId))
+            .path("settings") //
+            .request() //
+            .header("Authorization", "SimpleAuth " + token) //
+            .get(Map.class);
+    Map<String, String> map2 =
+        projectsTarget
+            .path(String.valueOf(projectId))
+            .path("entries")
+            .path(String.valueOf(entryId)) //
+            .request() //
+            .header("Authorization", "SimpleAuth " + token) //
+            .get(Map.class);
     map.put("entryname", map2.get("name"));
     return map;
   }
 
   @SuppressWarnings("unchecked")
   public List<Map<String, Object>> getProjectEntryTextLayers(long projectId, long entryId) {
-    return projectsTarget.path(String.valueOf(projectId)).path("entries").path(String.valueOf(entryId)).path("transcriptions")//
-        .request()//
-        .header("Authorization", "SimpleAuth " + token)//
+    return projectsTarget
+        .path(String.valueOf(projectId))
+        .path("entries")
+        .path(String.valueOf(entryId))
+        .path("transcriptions") //
+        .request() //
+        .header("Authorization", "SimpleAuth " + token) //
         .get(List.class);
   }
 
-  public void setProjectEntryTextLayerBody(int projectId, int entryId, int transcriptionId, String newBody) {
+  public void setProjectEntryTextLayerBody(
+      int projectId, int entryId, int transcriptionId, String newBody) {
     Map<String, Object> transcription = Maps.newHashMap();
     transcription.put("body", newBody);
     Entity<?> entity = Entity.entity(transcription, MediaType.APPLICATION_JSON);
-    Response response = projectsTarget.path(String.valueOf(projectId))//
-        .path("entries").path(String.valueOf(entryId))//
-        .path("transcriptions").path(String.valueOf(transcriptionId))//
-        .request(MediaType.APPLICATION_JSON)//
-        .header("Authorization", "SimpleAuth " + token)//
-        .put(entity);
+    Response response =
+        projectsTarget
+            .path(String.valueOf(projectId)) //
+            .path("entries")
+            .path(String.valueOf(entryId)) //
+            .path("transcriptions")
+            .path(String.valueOf(transcriptionId)) //
+            .request(MediaType.APPLICATION_JSON) //
+            .header("Authorization", "SimpleAuth " + token) //
+            .put(entity);
     LOG.info("response.status={}", response.getStatus());
   }
 
@@ -119,22 +143,23 @@ public class Elab4RestClient {
     Map<String, Object> payload = Maps.newHashMap();
     payload.put("title", projectTitle);
     Entity<?> entity = Entity.entity(payload, MediaType.APPLICATION_JSON);
-    Response response = projectsTarget//
-        .request(MediaType.APPLICATION_JSON)//
-        .header("Authorization", "SimpleAuth " + token)//
-        .post(entity);
+    Response response =
+        projectsTarget //
+            .request(MediaType.APPLICATION_JSON) //
+            .header("Authorization", "SimpleAuth " + token) //
+            .post(entity);
     LOG.info("response = {}", response);
     String location = response.getHeaderString("Location");
     return Integer.valueOf(location.replaceFirst("^.*/", ""));
   }
 
   public Boolean deleteProject(int projectId) {
-    Response response = projectsTarget//
-        .path(String.valueOf(projectId))//
-        .request()//
-        .header("Authorization", "SimpleAuth " + token)//
-        .delete();
+    Response response =
+        projectsTarget //
+            .path(String.valueOf(projectId)) //
+            .request() //
+            .header("Authorization", "SimpleAuth " + token) //
+            .delete();
     return response.getStatus() == 204;
   }
-
 }

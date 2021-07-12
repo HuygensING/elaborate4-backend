@@ -59,10 +59,13 @@ public class MVNConversionResult {
       logger.addError("project has no name");
     }
 
-    this.place = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_PLACENAME), "");
-    this.institution = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_INSTITUTION), "");
+    this.place =
+        StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_PLACENAME), "");
+    this.institution =
+        StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_INSTITUTION), "");
     this.idno = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_IDNO), "");
-    this.subtitle = StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_SUBTITLE), "");
+    this.subtitle =
+        StringUtils.defaultIfBlank(projectMetadata.get(ProjectMetadataFields.MVN_SUBTITLE), "");
   }
 
   public String getTitle() {
@@ -142,5 +145,4 @@ public class MVNConversionResult {
     }
     return baseURL;
   }
-
 }

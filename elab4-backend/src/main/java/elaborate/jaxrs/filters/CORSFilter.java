@@ -30,7 +30,7 @@ public class CORSFilter implements ContainerResponseFilter {
   @Override
   public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
 
-//    response.getHttpHeaders().add("Access-Control-Allow-Origin", "*");
+    //    response.getHttpHeaders().add("Access-Control-Allow-Origin", "*");
     //    response
     //        .getHttpHeaders()
     //        .add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");

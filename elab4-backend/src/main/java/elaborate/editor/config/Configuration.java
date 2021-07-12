@@ -91,7 +91,8 @@ public class Configuration {
       System.out.println(CLASS_NAME + " - Loading configuration from " + file.getCanonicalPath());
       if (!file.isFile()) {
         // try resourceAsStream
-        InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.xml");
+        InputStream resourceAsStream =
+            Thread.currentThread().getContextClassLoader().getResourceAsStream("config.xml");
         if (resourceAsStream == null) {
           fatalError("Cannot access configuration file '" + file.getCanonicalPath() + "'");
         }
@@ -149,7 +150,8 @@ public class Configuration {
     }
   }
 
-  private static HierarchicalConfiguration configurationAt(HierarchicalConfiguration config, String key) {
+  private static HierarchicalConfiguration configurationAt(
+      HierarchicalConfiguration config, String key) {
     List<HierarchicalConfiguration> list = config.configurationsAt(key);
     if (list.size() == 1) {
       return list.get(0);
@@ -164,7 +166,8 @@ public class Configuration {
   }
 
   public String getSetting(String key) {
-    return Joiner.on(xmlConfig.getListDelimiter()).join(xmlConfig.getStringArray(SETTINGS_PREFIX + key));
+    return Joiner.on(xmlConfig.getListDelimiter())
+        .join(xmlConfig.getStringArray(SETTINGS_PREFIX + key));
   }
 
   private String[] getSettings(String key) {
@@ -232,5 +235,4 @@ public class Configuration {
   public int getIntegerSetting(String key, int defaultValue) {
     return xmlConfig.getInt(SETTINGS_PREFIX + key, defaultValue);
   }
-
 }

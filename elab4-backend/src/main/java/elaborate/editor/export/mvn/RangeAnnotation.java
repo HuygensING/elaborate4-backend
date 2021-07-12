@@ -70,22 +70,21 @@ public class RangeAnnotation {
       return false;
     }
     RangeAnnotation otherRangeAnnotation = (RangeAnnotation) other;
-    return new EqualsBuilder()//
-        .append(element.getName(), otherRangeAnnotation.getElement().getName())//
-        .append(element.getAttributes(), otherRangeAnnotation.getElement().getAttributes())//
-        .append(startOffset, otherRangeAnnotation.getStartOffset())//
-        .append(endOffset, otherRangeAnnotation.getEndOffset())//
+    return new EqualsBuilder() //
+        .append(element.getName(), otherRangeAnnotation.getElement().getName()) //
+        .append(element.getAttributes(), otherRangeAnnotation.getElement().getAttributes()) //
+        .append(startOffset, otherRangeAnnotation.getStartOffset()) //
+        .append(endOffset, otherRangeAnnotation.getEndOffset()) //
         .isEquals();
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()//
-        .append(element.getName())//
-        .append(element.getAttributes())//
-        .append(startOffset)//
-        .append(endOffset)//
+    return new HashCodeBuilder() //
+        .append(element.getName()) //
+        .append(element.getAttributes()) //
+        .append(startOffset) //
+        .append(endOffset) //
         .hashCode();
   }
-
 }

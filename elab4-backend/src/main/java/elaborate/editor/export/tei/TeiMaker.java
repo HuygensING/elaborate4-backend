@@ -64,15 +64,16 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.ProjectService;
 
 public class TeiMaker {
-  public static final Map<String, String> HI_TAGS = ImmutableMap.<String, String> builder()//
-      .put("strong", "bold")//
-      .put("b", "bold")//
-      .put("u", "underline")//
-      .put("em", "italic")//
-      .put("i", "italic")//
-      .put("sub", "subscript")//
-      .put("sup", "superscript")//
-      .build();
+  public static final Map<String, String> HI_TAGS =
+      ImmutableMap.<String, String>builder() //
+          .put("strong", "bold") //
+          .put("b", "bold") //
+          .put("u", "underline") //
+          .put("em", "italic") //
+          .put("i", "italic") //
+          .put("sub", "subscript") //
+          .put("sup", "superscript") //
+          .build();
 
   public static final String INTERP_GRP = "interpGrp";
 
@@ -99,7 +100,8 @@ public class TeiMaker {
       addNewLine(root);
       ProjectService projectService = ProjectService.instance();
       projectService.setEntityManager(entityManager);
-      List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(project.getId());
+      List<ProjectEntry> projectEntriesInOrder =
+          projectService.getProjectEntriesInOrder(project.getId());
       Element facsimile = createFacsimile(projectEntriesInOrder);
       root.appendChild(facsimile);
       addNewLine(root);
@@ -204,19 +206,23 @@ public class TeiMaker {
     return interp;
   }
 
-  private static final Comparator<Transcription> ORDER_BY_TYPE = new Comparator<Transcription>() {
-    @Override
-    public int compare(Transcription t1, Transcription t2) {
-      Long tt1 = t1.getTranscriptionType().getId();
-      Long tt2 = t2.getTranscriptionType().getId();
-      return tt1.compareTo(tt2);
-    }
-  };
+  private static final Comparator<Transcription> ORDER_BY_TYPE =
+      new Comparator<Transcription>() {
+        @Override
+        public int compare(Transcription t1, Transcription t2) {
+          Long tt1 = t1.getTranscriptionType().getId();
+          Long tt2 = t2.getTranscriptionType().getId();
+          return tt1.compareTo(tt2);
+        }
+      };
 
-  private int processEntry(int _pageno, Element body, String _currentFolio, ProjectEntry projectEntry) {
+  private int processEntry(
+      int _pageno, Element body, String _currentFolio, ProjectEntry projectEntry) {
     int pageno = _pageno;
     String currentFolio = _currentFolio;
-    String folio = StringUtils.defaultIfBlank(projectEntry.getMetadataValue("Folio number"), "") + StringUtils.defaultIfBlank(projectEntry.getMetadataValue("Folio side"), "");
+    String folio =
+        StringUtils.defaultIfBlank(projectEntry.getMetadataValue("Folio number"), "")
+            + StringUtils.defaultIfBlank(projectEntry.getMetadataValue("Folio side"), "");
     if (!currentFolio.equals(folio)) {
       pageno = addPb(body, pageno, projectEntry, folio);
     }
@@ -229,10 +235,16 @@ public class TeiMaker {
 
     addEntryInterpGrp(entryDiv, projectEntry);
 
-    List<Transcription> orderedTranscriptions = Lists.newArrayList(projectEntry.getTranscriptions());
+    List<Transcription> orderedTranscriptions =
+        Lists.newArrayList(projectEntry.getTranscriptions());
     Collections.sort(orderedTranscriptions, ORDER_BY_TYPE);
     for (Transcription transcription : orderedTranscriptions) {
-      HtmlTeiConverter htmlTeiConverter = new HtmlTeiConverter(transcription.getBody(), config, transcription.getTranscriptionType().getName(), entityManager);
+      HtmlTeiConverter htmlTeiConverter =
+          new HtmlTeiConverter(
+              transcription.getBody(),
+              config,
+              transcription.getTranscriptionType().getName(),
+              entityManager);
       Node transcriptionNode = htmlTeiConverter.getContent();
       Node importedTranscriptionNode = tei.importNode(transcriptionNode, true);
       Node child = importedTranscriptionNode.getFirstChild();
@@ -252,7 +264,8 @@ public class TeiMaker {
 
   private void addEntryInterpGrp(Element entryDiv, ProjectEntry projectEntry) {
     Map<String, String> metaMap = Maps.newHashMap();
-    List<String> metadataToInclude = ImmutableList.copyOf(projectEntry.getProject().getProjectEntryMetadataFieldnames());
+    List<String> metadataToInclude =
+        ImmutableList.copyOf(projectEntry.getProject().getProjectEntryMetadataFieldnames());
     for (ProjectEntryMetadataItem meta : projectEntry.getProjectEntryMetadataItems()) {
       if (metadataToInclude.contains(meta.getField())) {
         metaMap.put(SolrUtils.normalize(meta.getField()), meta.getData());
@@ -296,7 +309,11 @@ public class TeiMaker {
     sourceDesc.appendChild(p);
     Element titleStmt = tei.createElement("titleStmt");
     Element title = tei.createElement("title");
-    Comment ordering = tei.createComment(MessageFormat.format("ordering: {0} / {1} / {2}", project.getLevel1(), project.getLevel2(), project.getLevel3()));
+    Comment ordering =
+        tei.createComment(
+            MessageFormat.format(
+                "ordering: {0} / {1} / {2}",
+                project.getLevel1(), project.getLevel2(), project.getLevel3()));
 
     Text textNode = tei.createTextNode(project.getTitle());
     title.appendChild(textNode);
@@ -322,5 +339,4 @@ public class TeiMaker {
     }
     return null;
   }
-
 }

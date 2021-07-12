@@ -84,11 +84,9 @@ class WarMaker {
   }
 
   /**
-   * Traverse a directory and get all files,
-   * and add the file into fileList
-   * 
-   * @param node
-   *          file or directory
+   * Traverse a directory and get all files, and add the file into fileList
+   *
+   * @param node file or directory
    */
   private void addToFileList(File node) {
     if (node.isFile()) {
@@ -99,14 +97,12 @@ class WarMaker {
         addToFileList(new File(node, filename));
       }
     }
-
   }
 
   /**
    * Format the file path for zip
-   * 
-   * @param file
-   *          file path
+   *
+   * @param file file path
    * @return Formatted file path
    */
   private String generateZipEntry(String file) {

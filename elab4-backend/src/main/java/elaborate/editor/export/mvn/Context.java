@@ -58,8 +58,11 @@ class Context {
 
   public void assertTextIsInValidScope() {
     if (!(inParagraph || inPoetry || inOpener || inCloser) && StringUtils.isNotBlank(text)) {
-      result.addError(currentEntryId, "De tekst '" + text + "' bevindt zich niet binnen de scope van een mvn:alinea, mvn:poëzie, mvn:opschrift of mvn:onderschrift.");
+      result.addError(
+          currentEntryId,
+          "De tekst '"
+              + text
+              + "' bevindt zich niet binnen de scope van een mvn:alinea, mvn:poëzie, mvn:opschrift of mvn:onderschrift.");
     }
   }
-
 }

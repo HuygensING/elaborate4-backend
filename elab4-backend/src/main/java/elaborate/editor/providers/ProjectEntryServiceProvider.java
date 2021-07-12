@@ -30,9 +30,10 @@ import com.sun.jersey.spi.inject.SingletonTypeInjectableProvider;
 import elaborate.editor.model.orm.service.ProjectEntryService;
 
 @Provider
-public class ProjectEntryServiceProvider extends SingletonTypeInjectableProvider<Context, ProjectEntryService> {
+public class ProjectEntryServiceProvider
+    extends SingletonTypeInjectableProvider<Context, ProjectEntryService> {
 
-	public ProjectEntryServiceProvider() {
-		super(ProjectEntryService.class, ProjectEntryService.instance());
-	}
+  public ProjectEntryServiceProvider() {
+    super(ProjectEntryService.class, ProjectEntryService.instance());
+  }
 }

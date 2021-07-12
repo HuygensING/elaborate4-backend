@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.io.File;
 import java.io.StringReader;
 import java.net.URL;
@@ -63,12 +62,14 @@ public class MVNValidator {
     return validateSource(asSource(xmlFile));
   }
 
-  //  private static DOMSource asSource(File xmlFile) throws ParserConfigurationException, SAXException, IOException, FileNotFoundException {
+  //  private static DOMSource asSource(File xmlFile) throws ParserConfigurationException,
+  // SAXException, IOException, FileNotFoundException {
   //    DocumentBuilderFactory dbf = new DocumentBuilderFactoryImpl();
   //    dbf.setXIncludeAware(true);
   //    DocumentBuilder newDocumentBuilder = dbf.newDocumentBuilder();
   //    Document document = newDocumentBuilder.parse(new FileInputStream(xmlFile));
-  //    DOMSource source = new DOMSource(document);// jing hasn't implemented validation of DOMSource yet.
+  //    DOMSource source = new DOMSource(document);// jing hasn't implemented validation of
+  // DOMSource yet.
   //    return source;
   //  }
 
@@ -94,12 +95,11 @@ public class MVNValidator {
 
     @Override
     public String toString() {
-      return MoreObjects.toStringHelper(this)//
-          .add("valid", valid)//
-          .add("message", message)//
+      return MoreObjects.toStringHelper(this) //
+          .add("valid", valid) //
+          .add("message", message) //
           .toString();
     }
-
   }
 
   private static ValidationResult validateSource(Source source) {

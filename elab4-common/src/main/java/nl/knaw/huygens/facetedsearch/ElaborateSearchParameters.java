@@ -35,106 +35,106 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 @XmlRootElement
 public class ElaborateSearchParameters extends FacetedSearchParameters<ElaborateSearchParameters> {
-    private List<String> textLayers = Lists.newArrayList();
-    private boolean searchInTranscriptions = true;
-    private boolean searchInAnnotations = false;
-    private String level1Field = SolrFields.NAME;
-    private String level2Field = SolrFields.NAME;
-    private String level3Field = SolrFields.NAME;
-    private List<RangeField> ranges = Lists.newArrayList();
+  private List<String> textLayers = Lists.newArrayList();
+  private boolean searchInTranscriptions = true;
+  private boolean searchInAnnotations = false;
+  private String level1Field = SolrFields.NAME;
+  private String level2Field = SolrFields.NAME;
+  private String level3Field = SolrFields.NAME;
+  private List<RangeField> ranges = Lists.newArrayList();
 
-    public List<String> getTextLayers() {
-        return textLayers;
+  public List<String> getTextLayers() {
+    return textLayers;
+  }
+
+  public ElaborateSearchParameters setTextLayers(final List<String> textLayers) {
+    this.textLayers = textLayers;
+    return this;
+  }
+
+  public void setLevelFields(String level1, String level2, String level3) {
+    if (StringUtils.isNotBlank(level1)) {
+      this.level1Field = SolrUtils.facetName(level1);
+    }
+    if (StringUtils.isNotBlank(level1)) {
+      this.level2Field = SolrUtils.facetName(level2);
+    }
+    if (StringUtils.isNotBlank(level1)) {
+      this.level3Field = SolrUtils.facetName(level3);
+    }
+  }
+
+  public boolean getSearchInTranscriptions() {
+    return searchInTranscriptions;
+  }
+
+  public ElaborateSearchParameters setSearchInTranscriptions(boolean searchInTranscriptions) {
+    this.searchInTranscriptions = searchInTranscriptions;
+    return this;
+  }
+
+  private boolean getSearchInAnnotations() {
+    return searchInAnnotations;
+  }
+
+  public ElaborateSearchParameters setSearchInAnnotations(boolean searchInAnnotations) {
+    this.searchInAnnotations = searchInAnnotations;
+    return this;
+  }
+
+  /* ------------------------------------------------------------------------------------------------------------------------------------ */
+
+  @JsonIgnore
+  public Map<String, String> getTextFieldsToSearch() {
+    Map<String, String> map = Maps.newLinkedHashMap();
+    String textlayerPrefix =
+        isCaseSensitive() ? SolrFields.TEXTLAYERCS_PREFIX : SolrFields.TEXTLAYER_PREFIX;
+    String annotationPrefix =
+        isCaseSensitive() ? SolrFields.ANNOTATIONCS_PREFIX : SolrFields.ANNOTATION_PREFIX;
+    for (String textLayer : textLayers) {
+      String fieldname = SolrUtils.normalize(textLayer);
+      if (getSearchInTranscriptions()) {
+        map.put(textlayerPrefix + fieldname, textLayer);
+      }
+      if (getSearchInAnnotations()) {
+        map.put(annotationPrefix + fieldname, textLayer + " annotations");
+      }
     }
 
-    public ElaborateSearchParameters setTextLayers(final List<String> textLayers) {
-        this.textLayers = textLayers;
-        return this;
-    }
+    return map;
+  }
 
-    public void setLevelFields(String level1, String level2, String level3) {
-        if (StringUtils.isNotBlank(level1)) {
-            this.level1Field = SolrUtils.facetName(level1);
-        }
-        if (StringUtils.isNotBlank(level1)) {
-            this.level2Field = SolrUtils.facetName(level2);
-        }
-        if (StringUtils.isNotBlank(level1)) {
-            this.level3Field = SolrUtils.facetName(level3);
-        }
-    }
+  public List<RangeField> getRanges() {
+    return ranges;
+  }
 
-    public boolean getSearchInTranscriptions() {
-        return searchInTranscriptions;
-    }
+  public ElaborateSearchParameters setRanges(List<RangeField> ranges) {
+    this.ranges = ranges;
+    return this;
+  }
 
-    public ElaborateSearchParameters setSearchInTranscriptions(boolean searchInTranscriptions) {
-        this.searchInTranscriptions = searchInTranscriptions;
-        return this;
-    }
+  /* ------------------------------------------------------------------------------------------------------------------------------------ */
 
-    private boolean getSearchInAnnotations() {
-        return searchInAnnotations;
-    }
+  public String getLevel1Field() {
+    return level1Field;
+  }
 
-    public ElaborateSearchParameters setSearchInAnnotations(boolean searchInAnnotations) {
-        this.searchInAnnotations = searchInAnnotations;
-        return this;
-    }
+  public String getLevel2Field() {
+    return level2Field;
+  }
 
-    /* ------------------------------------------------------------------------------------------------------------------------------------ */
+  public String getLevel3Field() {
+    return level3Field;
+  }
 
-    @JsonIgnore
-    public Map<String, String> getTextFieldsToSearch() {
-        Map<String, String> map = Maps.newLinkedHashMap();
-        String textlayerPrefix =
-                isCaseSensitive() ? SolrFields.TEXTLAYERCS_PREFIX : SolrFields.TEXTLAYER_PREFIX;
-        String annotationPrefix =
-                isCaseSensitive() ? SolrFields.ANNOTATIONCS_PREFIX : SolrFields.ANNOTATION_PREFIX;
-        for (String textLayer : textLayers) {
-            String fieldname = SolrUtils.normalize(textLayer);
-            if (getSearchInTranscriptions()) {
-                map.put(textlayerPrefix + fieldname, textLayer);
-            }
-            if (getSearchInAnnotations()) {
-                map.put(annotationPrefix + fieldname, textLayer + " annotations");
-            }
-        }
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
+  }
 
-        return map;
-    }
-
-    public List<RangeField> getRanges() {
-        return ranges;
-    }
-
-    public ElaborateSearchParameters setRanges(List<RangeField> ranges) {
-        this.ranges = ranges;
-        return this;
-    }
-
-    /* ------------------------------------------------------------------------------------------------------------------------------------ */
-
-    public String getLevel1Field() {
-        return level1Field;
-    }
-
-    public String getLevel2Field() {
-        return level2Field;
-    }
-
-    public String getLevel3Field() {
-        return level3Field;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
-    }
-
-    public boolean isLevelFieldsSet() {
-        return StringUtils.isNotEmpty(level1Field) //
-                && StringUtils.isNotEmpty(level2Field) //
-                && StringUtils.isNotEmpty(level3Field);
-    }
+  public boolean isLevelFieldsSet() {
+    return StringUtils.isNotEmpty(level1Field) //
+        && StringUtils.isNotEmpty(level2Field) //
+        && StringUtils.isNotEmpty(level3Field);
+  }
 }

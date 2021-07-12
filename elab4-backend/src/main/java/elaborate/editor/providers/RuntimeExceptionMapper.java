@@ -53,5 +53,4 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
     // exception.printStackTrace();
     // throw new InternalServerErrorException(exception.getMessage());
   }
-
 }

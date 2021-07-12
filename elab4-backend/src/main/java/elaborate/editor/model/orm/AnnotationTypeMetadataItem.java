@@ -39,50 +39,49 @@ import elaborate.editor.model.AbstractStoredEntity;
 @Table(name = "annotation_type_metadata_items")
 @XmlRootElement
 public class AnnotationTypeMetadataItem extends AbstractStoredEntity<AnnotationTypeMetadataItem> {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private String name;
-	private String description;
+  private String name;
+  private String description;
 
-	@ManyToOne
-	@JoinColumn(name = "annotation_type_id", columnDefinition = "int4")
-	private AnnotationType annotationType;
+  @ManyToOne
+  @JoinColumn(name = "annotation_type_id", columnDefinition = "int4")
+  private AnnotationType annotationType;
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public AnnotationTypeMetadataItem setName(String name) {
-		this.name = name;
-		return this;
-	}
+  public AnnotationTypeMetadataItem setName(String name) {
+    this.name = name;
+    return this;
+  }
 
-	private String getDescription() {
-		return description;
-	}
+  private String getDescription() {
+    return description;
+  }
 
-	public AnnotationTypeMetadataItem setDescription(String description) {
-		this.description = description;
-		return this;
-	}
+  public AnnotationTypeMetadataItem setDescription(String description) {
+    this.description = description;
+    return this;
+  }
 
-	@JsonIgnore
-	public AnnotationType getAnnotationType() {
-		return annotationType;
-	}
+  @JsonIgnore
+  public AnnotationType getAnnotationType() {
+    return annotationType;
+  }
 
-	public AnnotationTypeMetadataItem setAnnotationType(AnnotationType annotationType) {
-		this.annotationType = annotationType;
-		return this;
-	}
+  public AnnotationTypeMetadataItem setAnnotationType(AnnotationType annotationType) {
+    this.annotationType = annotationType;
+    return this;
+  }
 
-	@Transient
-	@JsonIgnore
-	public Map<String, Object> getDataMap() {
-		Map<String, Object> map = Maps.newHashMap();
-		map.put("name", getName());
-		map.put("description", getDescription());
-		return map;
-	}
-
+  @Transient
+  @JsonIgnore
+  public Map<String, Object> getDataMap() {
+    Map<String, Object> map = Maps.newHashMap();
+    map.put("name", getName());
+    map.put("description", getDescription());
+    return map;
+  }
 }

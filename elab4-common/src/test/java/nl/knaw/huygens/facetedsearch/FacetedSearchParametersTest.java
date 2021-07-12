@@ -30,17 +30,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FacetedSearchParametersTest<T> {
 
-	@Before
-	public void setUp() {}
+  @Before
+  public void setUp() {}
 
-	@After
-	public void tearDown() {}
+  @After
+  public void tearDown() {}
 
-	@Test
-	public void testSetTerm() {
-		FacetedSearchParameters<?> facetedSearchParameters = new FacetedSearchParameters()//
-				.setCaseSensitive(true)//
-				.setFacetFields(new String[] {});
-		assertThat(facetedSearchParameters.isCaseSensitive()).isTrue();
-	}
+  @Test
+  public void testSetTerm() {
+    FacetedSearchParameters<?> facetedSearchParameters =
+        new FacetedSearchParameters() //
+            .setCaseSensitive(true) //
+            .setFacetFields(new String[] {});
+    assertThat(facetedSearchParameters.isCaseSensitive()).isTrue();
+  }
 }

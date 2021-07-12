@@ -30,9 +30,10 @@ import com.sun.jersey.spi.inject.SingletonTypeInjectableProvider;
 import elaborate.editor.model.SessionService;
 
 @Provider
-public class SessionServiceProvider extends SingletonTypeInjectableProvider<Inject, SessionService> {
+public class SessionServiceProvider
+    extends SingletonTypeInjectableProvider<Inject, SessionService> {
 
-	public SessionServiceProvider() {
-		super(SessionService.class, SessionService.instance());
-	}
+  public SessionServiceProvider() {
+    super(SessionService.class, SessionService.instance());
+  }
 }

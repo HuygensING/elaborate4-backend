@@ -47,7 +47,12 @@ public class JAXUtils {
     public ImmutableList<String> responseContentTypes;
     public String description;
 
-    public API(String path, ImmutableList<String> requestTypes, ImmutableList<String> requestContentTypes, ImmutableList<String> responseContentTypes, String desc) {
+    public API(
+        String path,
+        ImmutableList<String> requestTypes,
+        ImmutableList<String> requestContentTypes,
+        ImmutableList<String> responseContentTypes,
+        String desc) {
       this.path = path;
       this.requestTypes = requestTypes;
       this.responseContentTypes = responseContentTypes;
@@ -62,9 +67,8 @@ public class JAXUtils {
   }
 
   /**
-   * Returns an API description for each HTTP method in the specified
-   * class if it has a <code>Path</code> annotation, or an empty list
-   * if the <code>Path</code> annotation is missing.
+   * Returns an API description for each HTTP method in the specified class if it has a <code>Path
+   * </code> annotation, or an empty list if the <code>Path</code> annotation is missing.
    */
   public static List<API> generateAPIs(Class<?> cls) {
     List<API> list = Lists.newArrayList();
@@ -91,7 +95,13 @@ public class JAXUtils {
           String subPath = pathValueOf(method);
           String fullPath = subPath.isEmpty() ? basePath : basePath + "/" + subPath;
           fullPath = fullPath.replaceAll("\\{([^:]*):[^}]*}", "{$1}");
-          list.add(new API(fullPath, reqs, requestContentTypesOf(method), responseContentTypesOf(method), descriptionOf(method)));
+          list.add(
+              new API(
+                  fullPath,
+                  reqs,
+                  requestContentTypesOf(method),
+                  responseContentTypesOf(method),
+                  descriptionOf(method)));
         }
       }
     }
@@ -99,10 +109,7 @@ public class JAXUtils {
     return list;
   }
 
-  /**
-   * Returns the path of the annotated element,
-   * or an empty string if no annotation is present.
-   */
+  /** Returns the path of the annotated element, or an empty string if no annotation is present. */
   private static String pathValueOf(AnnotatedElement element) {
     Path annotation = element.getAnnotation(Path.class);
     String value = (annotation != null) ? annotation.value() : "";
@@ -111,17 +118,20 @@ public class JAXUtils {
 
   private static ImmutableList<String> requestContentTypesOf(Method method) {
     Consumes annotation = method.getAnnotation(Consumes.class);
-    return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String>of();
+    return annotation != null
+        ? ImmutableList.copyOf(annotation.value())
+        : ImmutableList.<String>of();
   }
 
   private static ImmutableList<String> responseContentTypesOf(Method method) {
     Produces annotation = method.getAnnotation(Produces.class);
-    return annotation != null ? ImmutableList.copyOf(annotation.value()) : ImmutableList.<String>of();
+    return annotation != null
+        ? ImmutableList.copyOf(annotation.value())
+        : ImmutableList.<String>of();
   }
 
   private static String descriptionOf(Method method) {
     APIDesc annotation = method.getAnnotation(APIDesc.class);
     return (annotation != null) ? annotation.value() : "";
   }
-
 }

@@ -38,7 +38,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MVNValidatorTest {
   @Test
   public void testValidation() throws IOException {
-    String tei = FileUtils.readFileToString(new File("src/test/resources/validatortest.xml"), Charsets.UTF8_CHARSET);
+    String tei =
+        FileUtils.readFileToString(
+            new File("src/test/resources/validatortest.xml"), Charsets.UTF8_CHARSET);
     ValidationResult result = MVNValidator.validateTEI(tei);
     Log.info("result={}", result);
     assertThat(result.isValid()).isTrue();

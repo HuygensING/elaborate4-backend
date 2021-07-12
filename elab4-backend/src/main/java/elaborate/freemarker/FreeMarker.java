@@ -36,38 +36,40 @@ import freemarker.template.TemplateException;
 import freemarker.template.Version;
 
 public class FreeMarker {
-	private static final Version VERSION = Configuration.VERSION_2_3_21;
-	private static final Configuration FREEMARKER = new Configuration(VERSION);
+  private static final Version VERSION = Configuration.VERSION_2_3_21;
+  private static final Configuration FREEMARKER = new Configuration(VERSION);
 
-	static {
-		FREEMARKER.setObjectWrapper(new DefaultObjectWrapper(VERSION));
-	}
+  static {
+    FREEMARKER.setObjectWrapper(new DefaultObjectWrapper(VERSION));
+  }
 
-	public static String templateToString(String fmTemplate, Object fmRootMap, Class<?> clazz) {
-		StringWriter out = new StringWriter();
-		return processTemplate(fmTemplate, fmRootMap, clazz, out);
-	}
+  public static String templateToString(String fmTemplate, Object fmRootMap, Class<?> clazz) {
+    StringWriter out = new StringWriter();
+    return processTemplate(fmTemplate, fmRootMap, clazz, out);
+  }
 
-	private static String processTemplate(String fmTemplate, Object fmRootMap, Class<?> clazz, Writer out) {
-		try {
-			FREEMARKER.setClassForTemplateLoading(clazz, "");
-			Template template = FREEMARKER.getTemplate(fmTemplate);
-			template.setOutputEncoding(Charsets.UTF_8.displayName());
-			template.process(fmRootMap, out);
-			return out.toString();
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		} catch (TemplateException e) {
-			throw new RuntimeException(e);
-		}
-	}
+  private static String processTemplate(
+      String fmTemplate, Object fmRootMap, Class<?> clazz, Writer out) {
+    try {
+      FREEMARKER.setClassForTemplateLoading(clazz, "");
+      Template template = FREEMARKER.getTemplate(fmTemplate);
+      template.setOutputEncoding(Charsets.UTF_8.displayName());
+      template.process(fmRootMap, out);
+      return out.toString();
+    } catch (IOException e1) {
+      throw new RuntimeException(e1);
+    } catch (TemplateException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-	public static void templateToFile(String fmTemplate, File file, Object fmRootMap, Class<?> clazz) {
-		try {
-			FileWriter out = new FileWriter(file);
+  public static void templateToFile(
+      String fmTemplate, File file, Object fmRootMap, Class<?> clazz) {
+    try {
+      FileWriter out = new FileWriter(file);
       processTemplate(fmTemplate, fmRootMap, clazz, out);
     } catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+      throw new RuntimeException(e);
+    }
+  }
 }

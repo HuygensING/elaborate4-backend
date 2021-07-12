@@ -38,7 +38,8 @@ import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-public class AnnotatedTextRangeVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
+public class AnnotatedTextRangeVisitor extends DelegatingVisitor<XmlContext>
+    implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
   private final Set<RangeAnnotation> rangeAnnotations = Sets.newLinkedHashSet();
   private final Deque<Integer> elementOffsetStack = new ArrayDeque<Integer>();
 
@@ -61,7 +62,11 @@ public class AnnotatedTextRangeVisitor extends DelegatingVisitor<XmlContext> imp
   public Traversal leaveElement(final Element element, final XmlContext context) {
     int startOffset = elementOffsetStack.pop();
     int currentOffset = context.getResult().length();
-    rangeAnnotations.add(new RangeAnnotation().setElement(element).setStartOffset(startOffset).setEndOffset(currentOffset));
+    rangeAnnotations.add(
+        new RangeAnnotation()
+            .setElement(element)
+            .setStartOffset(startOffset)
+            .setEndOffset(currentOffset));
     return Traversal.NEXT;
   }
 
@@ -84,5 +89,4 @@ public class AnnotatedTextRangeVisitor extends DelegatingVisitor<XmlContext> imp
   public Set<RangeAnnotation> getRangeAnnotations() {
     return rangeAnnotations;
   }
-
 }

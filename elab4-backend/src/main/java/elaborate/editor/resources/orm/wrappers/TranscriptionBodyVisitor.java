@@ -45,109 +45,108 @@ import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
 class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
-	private static int notenum;
-	private static List<Integer> annotationIds;
-	private static Map<Integer, AnnotationData> annotationDataMap;
+  private static int notenum;
+  private static List<Integer> annotationIds;
+  private static Map<Integer, AnnotationData> annotationDataMap;
 
-	public TranscriptionBodyVisitor(Map<Integer, AnnotationData> _annotationDataMap) {
-		super(new XmlContext());
-		annotationDataMap = _annotationDataMap;
-		notenum = 1;
-		annotationIds = Lists.newArrayList();
-		setTextHandler(new XmlTextHandler<XmlContext>());
-		setDefaultElementHandler(new RenderElementHandler());
-		addElementHandler(new IgnoreHandler(), Transcription.BodyTags.BODY);
-		addElementHandler(new AnnotationBeginHandler(), Transcription.BodyTags.ANNOTATION_BEGIN);
-		addElementHandler(new AnnotationEndHandler(), Transcription.BodyTags.ANNOTATION_END);
-	}
+  public TranscriptionBodyVisitor(Map<Integer, AnnotationData> _annotationDataMap) {
+    super(new XmlContext());
+    annotationDataMap = _annotationDataMap;
+    notenum = 1;
+    annotationIds = Lists.newArrayList();
+    setTextHandler(new XmlTextHandler<XmlContext>());
+    setDefaultElementHandler(new RenderElementHandler());
+    addElementHandler(new IgnoreHandler(), Transcription.BodyTags.BODY);
+    addElementHandler(new AnnotationBeginHandler(), Transcription.BodyTags.ANNOTATION_BEGIN);
+    addElementHandler(new AnnotationEndHandler(), Transcription.BodyTags.ANNOTATION_END);
+  }
 
-	public List<Integer> getAnnotationIds() {
-		return annotationIds;
-	}
+  public List<Integer> getAnnotationIds() {
+    return annotationIds;
+  }
 
-	private static class IgnoreHandler implements ElementHandler<XmlContext> {
-		@Override
-		public Traversal enterElement(Element e, XmlContext c) {
-			return NEXT;
-		}
+  private static class IgnoreHandler implements ElementHandler<XmlContext> {
+    @Override
+    public Traversal enterElement(Element e, XmlContext c) {
+      return NEXT;
+    }
 
-		@Override
-		public Traversal leaveElement(Element e, XmlContext c) {
-			return NEXT;
-		}
-	}
+    @Override
+    public Traversal leaveElement(Element e, XmlContext c) {
+      return NEXT;
+    }
+  }
 
-	private static class AnnotationBeginHandler implements ElementHandler<XmlContext> {
-		private static final String TAG_SPAN = "span";
+  private static class AnnotationBeginHandler implements ElementHandler<XmlContext> {
+    private static final String TAG_SPAN = "span";
 
-		@Override
-		public Traversal enterElement(Element e, XmlContext c) {
-			String idString = e.getAttribute("id");
-			if (StringUtils.isNotBlank(idString)) {
-				Integer id = Integer.valueOf(idString);
-				if (tagAnnotationWithId(id)) {
-					AnnotationData annotationData = annotationDataMap.get(id);
-					Element span = new Element(TAG_SPAN);
-					span.setAttribute("data-marker", "begin");
-					span.setAttribute("data-id", idString);
-					span.setAttribute("data-type", annotationData.getType());
-					Map<String, String> parameters = annotationData.getParameters();
-					if (parameters != null) {
-						for (Entry<String, String> entry : parameters.entrySet()) {
-							String key = SolrUtils.normalize(entry.getKey());
-							String value = entry.getValue();
-							span.setAttribute("data-param-" + key, value);
-						}
-					}
-					c.addOpenTag(span);
-				}
-			}
-			return STOP;
-		}
+    @Override
+    public Traversal enterElement(Element e, XmlContext c) {
+      String idString = e.getAttribute("id");
+      if (StringUtils.isNotBlank(idString)) {
+        Integer id = Integer.valueOf(idString);
+        if (tagAnnotationWithId(id)) {
+          AnnotationData annotationData = annotationDataMap.get(id);
+          Element span = new Element(TAG_SPAN);
+          span.setAttribute("data-marker", "begin");
+          span.setAttribute("data-id", idString);
+          span.setAttribute("data-type", annotationData.getType());
+          Map<String, String> parameters = annotationData.getParameters();
+          if (parameters != null) {
+            for (Entry<String, String> entry : parameters.entrySet()) {
+              String key = SolrUtils.normalize(entry.getKey());
+              String value = entry.getValue();
+              span.setAttribute("data-param-" + key, value);
+            }
+          }
+          c.addOpenTag(span);
+        }
+      }
+      return STOP;
+    }
 
-		@Override
-		public Traversal leaveElement(Element e, XmlContext c) {
-			String idAttribute = e.getAttribute("id");
-			if (tagAnnotationWithId(idAttribute)) {
-				c.addCloseTag(TAG_SPAN);
-			}
-			return NEXT;
-		}
-	}
+    @Override
+    public Traversal leaveElement(Element e, XmlContext c) {
+      String idAttribute = e.getAttribute("id");
+      if (tagAnnotationWithId(idAttribute)) {
+        c.addCloseTag(TAG_SPAN);
+      }
+      return NEXT;
+    }
+  }
 
-	private static class AnnotationEndHandler implements ElementHandler<XmlContext> {
-		private static final String TAG_SUP = "sup";
+  private static class AnnotationEndHandler implements ElementHandler<XmlContext> {
+    private static final String TAG_SUP = "sup";
 
-		@Override
-		public Traversal enterElement(Element e, XmlContext c) {
-			String id = e.getAttribute("id");
-			if (tagAnnotationWithId(id)) {
-				Element sup = new Element(TAG_SUP);
-				sup.setAttribute("data-marker", "end");
-				sup.setAttribute("data-id", id);
-				c.addOpenTag(sup);
-			}
-			return STOP;
-		}
+    @Override
+    public Traversal enterElement(Element e, XmlContext c) {
+      String id = e.getAttribute("id");
+      if (tagAnnotationWithId(id)) {
+        Element sup = new Element(TAG_SUP);
+        sup.setAttribute("data-marker", "end");
+        sup.setAttribute("data-id", id);
+        c.addOpenTag(sup);
+      }
+      return STOP;
+    }
 
-		@Override
-		public Traversal leaveElement(Element e, XmlContext c) {
-			String id = e.getAttribute("id");
-			if (tagAnnotationWithId(id)) {
-				annotationIds.add(Integer.valueOf(id));
-				c.addLiteral(notenum++);
-				c.addCloseTag(TAG_SUP);
-			}
-			return NEXT;
-		}
-	}
+    @Override
+    public Traversal leaveElement(Element e, XmlContext c) {
+      String id = e.getAttribute("id");
+      if (tagAnnotationWithId(id)) {
+        annotationIds.add(Integer.valueOf(id));
+        c.addLiteral(notenum++);
+        c.addCloseTag(TAG_SUP);
+      }
+      return NEXT;
+    }
+  }
 
-	private static boolean tagAnnotationWithId(String id) {
-		return StringUtils.isNotBlank(id) && tagAnnotationWithId(Integer.valueOf(id));
-	}
+  private static boolean tagAnnotationWithId(String id) {
+    return StringUtils.isNotBlank(id) && tagAnnotationWithId(Integer.valueOf(id));
+  }
 
-	private static boolean tagAnnotationWithId(Integer id) {
-		return annotationDataMap != null && annotationDataMap.containsKey(id);
-	}
-
+  private static boolean tagAnnotationWithId(Integer id) {
+    return annotationDataMap != null && annotationDataMap.containsKey(id);
+  }
 }

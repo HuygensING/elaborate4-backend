@@ -17,15 +17,15 @@
 <!-- Configuration file for UrlRewriteFilter http://www.tuckey.org/urlrewrite/ -->
 <urlrewrite>
 
-	<rule>
-		<note>
-			The rule means that requests to /entry, /entry/*, /index, /index/* etc. 
-			will be redirected to / in a transparent fashion, that is,
-			the users will see these URLs but in reality be served index.html.
-		</note>
-		<from>(/(en|es|nl))?/(entry|index|search|annotations|person|person-search)(/.*)?$</from>
-		<to>/index.html</to>
-	</rule>
+    <rule>
+        <note>
+            The rule means that requests to /entry, /entry/*, /index, /index/* etc.
+            will be redirected to / in a transparent fashion, that is,
+            the users will see these URLs but in reality be served index.html.
+        </note>
+        <from>(/(en|es|nl))?/(entry|index|search|annotations|person|person-search)(/.*)?$</from>
+        <to>/index.html</to>
+    </rule>
 
 </urlrewrite>
 

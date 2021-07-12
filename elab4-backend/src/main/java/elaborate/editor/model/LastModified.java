@@ -29,37 +29,36 @@ import elaborate.editor.model.orm.User;
 
 class LastModified {
 
-	private Date date;
-	private User user;
+  private Date date;
+  private User user;
 
-	public LastModified(Date modificationDate, User modifiedBy) {
-		setDate(modificationDate);
-		setUser(modifiedBy);
-	}
+  public LastModified(Date modificationDate, User modifiedBy) {
+    setDate(modificationDate);
+    setUser(modifiedBy);
+  }
 
-	public String getDateString() {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return simpleDateFormat.format(getDate());
-	}
+  public String getDateString() {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    return simpleDateFormat.format(getDate());
+  }
 
-	public String getBy() {
-		return getUser().getUsername();
-	}
+  public String getBy() {
+    return getUser().getUsername();
+  }
 
-	private Date getDate() {
-		return date;
-	}
+  private Date getDate() {
+    return date;
+  }
 
-	private void setDate(Date date) {
-		this.date = date;
-	}
+  private void setDate(Date date) {
+    this.date = date;
+  }
 
-	private User getUser() {
-		return user;
-	}
+  private User getUser() {
+    return user;
+  }
 
-	private void setUser(User user) {
-		this.user = user;
-	}
-
+  private void setUser(User user) {
+    this.user = user;
+  }
 }

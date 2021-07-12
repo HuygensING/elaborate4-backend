@@ -44,42 +44,41 @@ import elaborate.editor.model.AbstractStoredEntity;
 @XmlRootElement(name = "storable_searchdata")
 @Access(value = AccessType.PROPERTY)
 public class StorableSearchData extends AbstractStoredEntity<StorableSearchData> {
-	@Transient
-	private static SearchData delegate;
+  @Transient private static SearchData delegate;
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public StorableSearchData() {
-		delegate = new SearchData();
-	}
+  public StorableSearchData() {
+    delegate = new SearchData();
+  }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getCreatedOn() {
-		return delegate.getCreatedOn();
-	}
+  @Temporal(TemporalType.TIMESTAMP)
+  public Date getCreatedOn() {
+    return delegate.getCreatedOn();
+  }
 
-	public StorableSearchData setCreatedOn(Date date) {
-		delegate.setCreatedOn(date);
-		return this;
-	}
+  public StorableSearchData setCreatedOn(Date date) {
+    delegate.setCreatedOn(date);
+    return this;
+  }
 
-	public String getJson() {
-		return delegate.getJson();
-	}
+  public String getJson() {
+    return delegate.getJson();
+  }
 
-	public StorableSearchData setJson(String json) {
-		delegate.setJson(json);
-		return this;
-	}
+  public StorableSearchData setJson(String json) {
+    delegate.setJson(json);
+    return this;
+  }
 
-	public StorableSearchData setResults(Map<String, Object> results) {
-		delegate.setResults(results);
-		return this;
-	}
+  public StorableSearchData setResults(Map<String, Object> results) {
+    delegate.setResults(results);
+    return this;
+  }
 
-	@JsonIgnore
-	@Transient
-	public Map<String, Object> getResults() {
-		return delegate.getResults();
-	}
+  @JsonIgnore
+  @Transient
+  public Map<String, Object> getResults() {
+    return delegate.getResults();
+  }
 }

@@ -36,35 +36,33 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.security.ElaborateSecurityContext;
 
 public abstract class AbstractElaborateResource {
-	protected AbstractElaborateResource() {
-		java.util.logging.Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
-	}
+  protected AbstractElaborateResource() {
+    java.util.logging.Logger.getLogger("com.sun.jersey").setLevel(Level.WARNING);
+  }
 
-	@Context
-	Request request;
+  @Context Request request;
 
-	protected User getUser() {
-		User user = null;
-		ContainerRequest cr = (ContainerRequest) request;
-		SecurityContext securityContext = cr.getSecurityContext();
-		if (securityContext instanceof ElaborateSecurityContext) {
-			ElaborateSecurityContext esc = (ElaborateSecurityContext) securityContext;
-			if (esc != null) {
-				user = esc.getUser();
-			}
-		}
-		return user;
-	}
+  protected User getUser() {
+    User user = null;
+    ContainerRequest cr = (ContainerRequest) request;
+    SecurityContext securityContext = cr.getSecurityContext();
+    if (securityContext instanceof ElaborateSecurityContext) {
+      ElaborateSecurityContext esc = (ElaborateSecurityContext) securityContext;
+      if (esc != null) {
+        user = esc.getUser();
+      }
+    }
+    return user;
+  }
 
-	protected URI createURI(AbstractStoredEntity<?> e) {
-		URI uri;
-		try {
-			uri = new URI(String.valueOf(e.getId()));
-		} catch (URISyntaxException ue) {
-			uri = null;
-			ue.printStackTrace();
-		}
-		return uri;
-	}
-
+  protected URI createURI(AbstractStoredEntity<?> e) {
+    URI uri;
+    try {
+      uri = new URI(String.valueOf(e.getId()));
+    } catch (URISyntaxException ue) {
+      uri = null;
+      ue.printStackTrace();
+    }
+    return uri;
+  }
 }

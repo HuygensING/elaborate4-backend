@@ -13,39 +13,39 @@
   #L% -->
 
 <config version="0.1">
-	<settings>
-		<solr>
-			<url>http://solr.example.com/solr-elab3/entries/</url>
-		</solr>
+    <settings>
+        <solr>
+            <url>http://solr.example.com/solr-elab3/entries/</url>
+        </solr>
 
-		<server>
-			<scheme>http</scheme>
-			<name>server.example.com</name>
-			<port>2013</port>
-		</server>
+        <server>
+            <scheme>http</scheme>
+            <name>server.example.com</name>
+            <port>2013</port>
+        </server>
 
-		<publication>
-			<draft>
-				<url>http://example.org/#/draft</url>
-			</draft>
-			<cdn>cdn.example.com/</cdn>
-			<version>
-				<work>development</work>
-				<collection>development</collection>
-			</version>
-			<tomcat>
-				<url>http://localhost:8080/</url>
-				<webappdir>/usr/share/tomcat6/webapps/</webappdir>
-			</tomcat>
-		</publication>
+        <publication>
+            <draft>
+                <url>http://example.org/#/draft</url>
+            </draft>
+            <cdn>cdn.example.com/</cdn>
+            <version>
+                <work>development</work>
+                <collection>development</collection>
+            </version>
+            <tomcat>
+                <url>http://localhost:8080/</url>
+                <webappdir>/usr/share/tomcat6/webapps/</webappdir>
+            </tomcat>
+        </publication>
 
-		<security>
-			<enabled>true</enabled>
-			<hss>
-				<url>http://security.example.com/</url>
-				<credentials>Fake Credentials</credentials>
-			</hss>
-		</security>
+        <security>
+            <enabled>true</enabled>
+            <hss>
+                <url>http://security.example.com/</url>
+                <credentials>Fake Credentials</credentials>
+            </hss>
+        </security>
 
-	</settings>
+    </settings>
 </config>

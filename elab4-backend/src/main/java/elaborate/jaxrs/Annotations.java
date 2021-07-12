@@ -29,8 +29,7 @@ import java.lang.annotation.Target;
 
 public class Annotations {
 
-	@Target({ ElementType.TYPE, ElementType.METHOD })
-	@Retention(RetentionPolicy.RUNTIME)
-	public @interface AuthorizationRequired {}
-
+  @Target({ElementType.TYPE, ElementType.METHOD})
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface AuthorizationRequired {}
 }

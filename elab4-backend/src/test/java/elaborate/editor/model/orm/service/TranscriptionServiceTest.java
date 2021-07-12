@@ -41,12 +41,10 @@ import static org.mockito.Mockito.when;
 public class TranscriptionServiceTest extends AbstractTest {
 
   @Before
-  public void setUp() {
-  }
+  public void setUp() {}
 
   @After
-  public void tearDown() {
-  }
+  public void tearDown() {}
 
   //  @Test
   public void testAddAnnotation() {
@@ -63,5 +61,4 @@ public class TranscriptionServiceTest extends AbstractTest {
     assertThat(annotation).isNotNull();
     assertThat(annotation).hasBody("body");
   }
-
 }

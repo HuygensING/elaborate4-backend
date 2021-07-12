@@ -40,54 +40,55 @@ import elaborate.editor.model.orm.service.ProjectService;
 
 public class PdfMaker {
 
-	private PDDocument doc;
+  private PDDocument doc;
 
   public PdfMaker(Project _project, EntityManager _entityManager) {
-		if (_project == null) {
-			doc = null;
+    if (_project == null) {
+      doc = null;
 
-		} else {
-			try {
-				doc = new PDDocument();
+    } else {
+      try {
+        doc = new PDDocument();
 
-				ProjectService projectService = ProjectService.instance();
-				projectService.setEntityManager(_entityManager);
-				List<ProjectEntry> projectEntriesInOrder = projectService.getProjectEntriesInOrder(_project.getId());
+        ProjectService projectService = ProjectService.instance();
+        projectService.setEntityManager(_entityManager);
+        List<ProjectEntry> projectEntriesInOrder =
+            projectService.getProjectEntriesInOrder(_project.getId());
 
-				for (ProjectEntry projectEntry : projectEntriesInOrder) {
-					PDPage page = new PDPage();
-					doc.addPage(page);
+        for (ProjectEntry projectEntry : projectEntriesInOrder) {
+          PDPage page = new PDPage();
+          doc.addPage(page);
 
-					PDFont font = PDType1Font.HELVETICA_BOLD;
+          PDFont font = PDType1Font.HELVETICA_BOLD;
 
-					PDPageContentStream content = new PDPageContentStream(doc, page);
-					content.beginText();
-					content.setFont(font, 12);
-					content.drawString(projectEntry.getName());
-					for (Transcription transcription : projectEntry.getTranscriptions()) {
-						content.drawString(transcription.getTextLayer());
-						content.drawString(transcription.getBody());
-					}
+          PDPageContentStream content = new PDPageContentStream(doc, page);
+          content.beginText();
+          content.setFont(font, 12);
+          content.drawString(projectEntry.getName());
+          for (Transcription transcription : projectEntry.getTranscriptions()) {
+            content.drawString(transcription.getTextLayer());
+            content.drawString(transcription.getBody());
+          }
 
-					content.endText();
-					content.close();
-				}
+          content.endText();
+          content.close();
+        }
 
-			} catch (Exception e) {
-				System.out.println("Exception");
-			}
-		}
-	}
+      } catch (Exception e) {
+        System.out.println("Exception");
+      }
+    }
+  }
 
-	public void saveToFile(String filename) {
-		if (doc != null) {
-			try {
-				doc.save(filename);
-			} catch (COSVisitorException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+  public void saveToFile(String filename) {
+    if (doc != null) {
+      try {
+        doc.save(filename);
+      } catch (COSVisitorException e) {
+        e.printStackTrace();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
 }

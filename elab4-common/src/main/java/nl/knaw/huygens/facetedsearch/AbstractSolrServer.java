@@ -149,16 +149,17 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
 
     SolrQuery query = new SolrQuery();
     String[] fieldsToReturn = getIndexFieldToReturn(sp.getResultFields());
-    query.setQuery(queryString)//
-        .setFields(fieldsToReturn)//
-        .setRows(ROWS)//
-        .addFacetField(facetFields)//
-        .setFacetMinCount(1)//
+    query
+        .setQuery(queryString) //
+        .setFields(fieldsToReturn) //
+        .setRows(ROWS) //
+        .addFacetField(facetFields) //
+        .setFacetMinCount(1) //
         .setFacetLimit(FACET_LIMIT);
     if (queryComposer.mustHighlight()) {
-      query//
-          .setHighlight(true)//
-          .setHighlightSnippets(500)//
+      query //
+          .setHighlight(true) //
+          .setHighlightSnippets(500) //
           .setHighlightFragsize(HIGHLIGHT_FRAGSIZE);
 
       query.set(HighlightParams.MERGE_CONTIGUOUS_FRAGMENTS, false);
@@ -178,10 +179,12 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
       facetFieldList.add(rangeField.lowerField);
       facetFieldList.add(rangeField.upperField);
     }
-    return facetFieldList.toArray(new String[]{});
+    return facetFieldList.toArray(new String[] {});
   }
 
-  private Map<String, Object> getSearchData(ElaborateSearchParameters sp, String[] facetFields, SolrQuery query, String[] fieldsToReturn) throws IndexException {
+  private Map<String, Object> getSearchData(
+      ElaborateSearchParameters sp, String[] facetFields, SolrQuery query, String[] fieldsToReturn)
+      throws IndexException {
     Map<String, Object> data = Maps.newHashMap();
     data.put("term", query.getQuery());
     try {
@@ -200,8 +203,11 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
       for (SolrDocument document : documents) {
         String docId = document.getFieldValue(SolrFields.DOC_ID).toString();
         ids.add(docId);
-        Map<String, List<String>> map = (Map<String, List<String>>) ((highlighting == null) ? ImmutableMap.of() : highlighting.get(docId));
-        Map<String, Object> result = entryView(document, fieldsToReturn, map, sp.getTextFieldsToSearch());
+        Map<String, List<String>> map =
+            (Map<String, List<String>>)
+                ((highlighting == null) ? ImmutableMap.of() : highlighting.get(docId));
+        Map<String, Object> result =
+            entryView(document, fieldsToReturn, map, sp.getTextFieldsToSearch());
         results.add(result);
         for (Integer integer : ((Map<String, Integer>) result.get("terms")).values()) {
           occurrences += integer;
@@ -220,12 +226,15 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
     return data;
   }
 
-  private List<FacetCount> getFacetCountList(ElaborateSearchParameters sp, String[] facetFields, QueryResponse response) {
+  private List<FacetCount> getFacetCountList(
+      ElaborateSearchParameters sp, String[] facetFields, QueryResponse response) {
     List<FacetCount> facets = Lists.newArrayList();
     for (String facetField : facetFields) {
       FacetInfo facetInfo = sp.getFacetInfoMap().get(facetField);
       if (facetInfo != null) {
-        FacetCount facetCount = convertFacet(response.getFacetField(facetField), facetInfo.getTitle(), facetInfo.getType());
+        FacetCount facetCount =
+            convertFacet(
+                response.getFacetField(facetField), facetInfo.getTitle(), facetInfo.getType());
         if (!facetCount.getOptions().isEmpty()) {
           facets.add(facetCount);
         }
@@ -236,8 +245,14 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
     for (Entry<String, Range> entry : entrySet) {
       String name = entry.getKey();
       Range range = entry.getValue();
-      RangeOption option = new RangeOption().setLowerLimit(range.lowest).setUpperLimit(range.highest);
-      FacetCount fc = new FacetCount().setName(name + "_range").setTitle(name + " range").setType(FacetType.RANGE).addOption(option);
+      RangeOption option =
+          new RangeOption().setLowerLimit(range.lowest).setUpperLimit(range.highest);
+      FacetCount fc =
+          new FacetCount()
+              .setName(name + "_range")
+              .setTitle(name + " range")
+              .setType(FacetType.RANGE)
+              .addOption(option);
       facets.add(fc);
     }
     return facets;
@@ -264,7 +279,11 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
     return map;
   }
 
-  private Map<String, Object> entryView(SolrDocument document, String[] fieldsToReturn, Map<String, List<String>> kwicMap, Map<String, String> fieldMap) {
+  private Map<String, Object> entryView(
+      SolrDocument document,
+      String[] fieldsToReturn,
+      Map<String, List<String>> kwicMap,
+      Map<String, String> fieldMap) {
     Map<String, Object> view = Maps.newHashMap();
     for (String field : fieldsToReturn) {
       if (field.startsWith(SolrUtils.METADATAFIELD_PREFIX)) {
@@ -333,7 +352,10 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
       }
     }
 
-    LinkedHashSet<String> levelFields = Sets.newLinkedHashSet(ImmutableList.of(sp.getLevel1Field(), sp.getLevel2Field(), sp.getLevel3Field(), SolrFields.NAME));
+    LinkedHashSet<String> levelFields =
+        Sets.newLinkedHashSet(
+            ImmutableList.of(
+                sp.getLevel1Field(), sp.getLevel2Field(), sp.getLevel3Field(), SolrFields.NAME));
     for (String sortField : levelFields) {
       query.addSort(sortField, SolrQuery.ORDER.asc);
     }
@@ -374,16 +396,18 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
    */
   protected FacetCount convertFacet(FacetField field, String title, FacetType type) {
     if (field != null) {
-      FacetCount facetCount = new FacetCount()//
-          .setName(field.getName())//
-          .setTitle(title)//
-          .setType(type);
+      FacetCount facetCount =
+          new FacetCount() //
+              .setName(field.getName()) //
+              .setTitle(title) //
+              .setType(type);
       List<Count> counts = field.getValues();
       if (counts != null) {
         for (Count count : counts) {
-          FacetCount.Option option = new FacetCount.Option()//
-              .setName(count.getName())//
-              .setCount(count.getCount());
+          FacetCount.Option option =
+              new FacetCount.Option() //
+                  .setName(count.getName()) //
+                  .setCount(count.getCount());
           facetCount.addOption(option);
         }
       }

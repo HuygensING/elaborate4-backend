@@ -22,6 +22,4 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-public class InspringenHandler {
-
-}
+public class InspringenHandler {}

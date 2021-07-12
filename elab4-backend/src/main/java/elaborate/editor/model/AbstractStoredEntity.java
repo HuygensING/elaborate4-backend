@@ -37,38 +37,37 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 // Jackson, please ignore the handles on the proxies!
-public abstract class AbstractStoredEntity<T extends AbstractStoredEntity<T>> implements Serializable {
-	private static final long serialVersionUID = 1L;
+public abstract class AbstractStoredEntity<T extends AbstractStoredEntity<T>>
+    implements Serializable {
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "serial")
-  private
-  long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(columnDefinition = "serial")
+  private long id;
 
-	// @Version
+  // @Version
   private long rev = 0;
 
-	@JsonView({ Views.IdOnly.class })
-	public long getId() {
-		return id;
-	}
+  @JsonView({Views.IdOnly.class})
+  public long getId() {
+    return id;
+  }
 
-	public T setId(long id) {
-		this.id = id;
-		return ((T) this);
-	}
+  public T setId(long id) {
+    this.id = id;
+    return ((T) this);
+  }
 
-	@JsonIgnore
-	public long getRev() {
-		return rev;
-	}
+  @JsonIgnore
+  public long getRev() {
+    return rev;
+  }
 
-	public T setRev(long rev) {
-		this.rev = rev;
-		return ((T) this);
-	}
-
+  public T setRev(long rev) {
+    this.rev = rev;
+    return ((T) this);
+  }
 }

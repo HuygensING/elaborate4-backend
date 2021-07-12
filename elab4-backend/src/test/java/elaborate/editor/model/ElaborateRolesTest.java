@@ -35,44 +35,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ElaborateRolesTest {
 
-	@Test
-	public void testHighestRole1() {
-		assertThat(highestRole(newArrayList(ADMIN, USER))).isEqualTo(ADMIN);
-	}
+  @Test
+  public void testHighestRole1() {
+    assertThat(highestRole(newArrayList(ADMIN, USER))).isEqualTo(ADMIN);
+  }
 
-	@Test
-	public void testHighestRole2() {
-		assertThat(highestRole(newArrayList(USER, READER))).isEqualTo(USER);
-	}
+  @Test
+  public void testHighestRole2() {
+    assertThat(highestRole(newArrayList(USER, READER))).isEqualTo(USER);
+  }
 
-	@Test
-	public void testHighestRole3() {
-		assertThat(highestRole(newArrayList(USER, READER, PROJECTLEADER))).isEqualTo(PROJECTLEADER);
-	}
+  @Test
+  public void testHighestRole3() {
+    assertThat(highestRole(newArrayList(USER, READER, PROJECTLEADER))).isEqualTo(PROJECTLEADER);
+  }
 
-	@Test
-	public void testHighestRole4() {
-		assertThat(highestRole(newArrayList(READER))).isEqualTo(READER);
-	}
+  @Test
+  public void testHighestRole4() {
+    assertThat(highestRole(newArrayList(READER))).isEqualTo(READER);
+  }
 
-	@Test
-	public void testGetRolestringForReader() {
-		assertThat(getRolestringFor(READER)).isEqualTo("READER");
-	}
+  @Test
+  public void testGetRolestringForReader() {
+    assertThat(getRolestringFor(READER)).isEqualTo("READER");
+  }
 
-	@Test
-	public void testGetRolestringForUser() {
-		assertThat(getRolestringFor(USER)).isEqualTo("READER,USER");
-	}
+  @Test
+  public void testGetRolestringForUser() {
+    assertThat(getRolestringFor(USER)).isEqualTo("READER,USER");
+  }
 
-	@Test
-	public void testGetRolestringForProjectLeader() {
-		assertThat(getRolestringFor(PROJECTLEADER)).isEqualTo("READER,PROJECTLEADER,USER");
-	}
+  @Test
+  public void testGetRolestringForProjectLeader() {
+    assertThat(getRolestringFor(PROJECTLEADER)).isEqualTo("READER,PROJECTLEADER,USER");
+  }
 
-	@Test
-	public void testGetRolestringForAdmin() {
-		assertThat(getRolestringFor(ADMIN)).isEqualTo("READER,ADMIN,PROJECTLEADER,USER");
-	}
-
+  @Test
+  public void testGetRolestringForAdmin() {
+    assertThat(getRolestringFor(ADMIN)).isEqualTo("READER,ADMIN,PROJECTLEADER,USER");
+  }
 }

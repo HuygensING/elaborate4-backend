@@ -130,5 +130,4 @@ public class ProjectMetadataFieldService extends AbstractStoredEntityService<Pro
       throw new UnauthorizedException("user " + user.getUsername() + " has no admin rights");
     }
   }
-
 }

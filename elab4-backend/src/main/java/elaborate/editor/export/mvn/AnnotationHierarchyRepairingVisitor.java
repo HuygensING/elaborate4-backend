@@ -43,7 +43,8 @@ import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_BEGIN;
 import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_END;
 
-public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
+public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlContext>
+    implements CommentHandler<XmlContext> {
   final Stack<String> openAnnotationStack = new Stack<String>();
   final Deque<Element> openElements = new ArrayDeque<Element>();
 
@@ -70,7 +71,6 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
       openAnnotationStack.push(id);
       return super.enterElement(element, context);
     }
-
   }
 
   public class AnnotationEndHandler extends RenderElementHandler {
@@ -100,7 +100,6 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
         addAnnotationBeginElement(context, annotationId);
       }
     }
-
   }
 
   private void addAnnotationBeginElement(XmlContext context, String annotationId) {
@@ -138,7 +137,6 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
       for (Element element : openElements) {
         context.addOpenTag(element);
       }
-
     }
   }
 
@@ -185,5 +183,4 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
   public String getRepairedXml() {
     return getContext().getResult().replaceAll("<ab id=\"([0-9]+)\"/><ae id=\"\\1\"/>", "");
   }
-
 }

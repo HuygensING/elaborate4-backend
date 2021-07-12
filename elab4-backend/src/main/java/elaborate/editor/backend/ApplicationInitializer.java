@@ -37,30 +37,30 @@ import elaborate.editor.model.orm.service.UserService;
 
 public class ApplicationInitializer implements ServletContextListener {
 
-	public ApplicationInitializer() {
-		System.setProperty("application.starttime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+  public ApplicationInitializer() {
+    System.setProperty(
+        "application.starttime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
-		Log.info("clearing expired searches");
-		SearchService searchService = SearchService.instance();
-		searchService.removeExpiredSearches();
+    Log.info("clearing expired searches");
+    SearchService searchService = SearchService.instance();
+    searchService.removeExpiredSearches();
 
-		Log.info("logging out all users");
-		UserService userService = UserService.instance();
-		ImmutableList<User> all = userService.getAll();
-		for (User user : all) {
-			userService.setUserIsLoggedOut(user);
-		}
-	}
+    Log.info("logging out all users");
+    UserService userService = UserService.instance();
+    ImmutableList<User> all = userService.getAll();
+    for (User user : all) {
+      userService.setUserIsLoggedOut(user);
+    }
+  }
 
-	@Override
-	public void contextInitialized(ServletContextEvent sce) {
-		Log.info("initializing context");
-		Log.info("serverinfo={}", sce.getServletContext().getServerInfo());
-	}
+  @Override
+  public void contextInitialized(ServletContextEvent sce) {
+    Log.info("initializing context");
+    Log.info("serverinfo={}", sce.getServletContext().getServerInfo());
+  }
 
-	@Override
-	public void contextDestroyed(ServletContextEvent sce) {
-		Log.info("destroying context");
-	}
-
+  @Override
+  public void contextDestroyed(ServletContextEvent sce) {
+    Log.info("destroying context");
+  }
 }

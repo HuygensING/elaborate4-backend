@@ -58,7 +58,8 @@ public class Publication {
     }
 
     public boolean includeAnnotationType(AnnotationType annotationType) {
-      return getAnnotationTypeIds().isEmpty() || getAnnotationTypeIds().contains(annotationType.getId());
+      return getAnnotationTypeIds().isEmpty()
+          || getAnnotationTypeIds().contains(annotationType.getId());
     }
 
     public List<String> getProjectEntryMetadataFields() {
@@ -114,7 +115,6 @@ public class Publication {
     public List<String> getFacetFields() {
       return facetFields;
     }
-
   }
 
   @JsonInclude(Include.NON_NULL)
@@ -135,7 +135,9 @@ public class Publication {
     public URI getURI() {
       URI uri;
       try {
-        // uri = new URIBuilder().setPath(MessageFormat.format("/projects/{0}/publicationstatus/{1}", String.valueOf(projectId), id)).build();
+        // uri = new
+        // URIBuilder().setPath(MessageFormat.format("/projects/{0}/publicationstatus/{1}",
+        // String.valueOf(projectId), id)).build();
         // uri = new URI(MessageFormat.format("status/{0}", id));
         uri = new URI(id);
       } catch (URISyntaxException ue) {
@@ -198,7 +200,5 @@ public class Publication {
     public void setTei(String tei) {
       this.tei = tei;
     }
-
   }
-
 }

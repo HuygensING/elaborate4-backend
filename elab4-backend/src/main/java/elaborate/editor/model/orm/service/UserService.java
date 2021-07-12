@@ -56,291 +56,316 @@ import elaborate.util.PasswordUtil;
 
 @Singleton
 public class UserService extends AbstractStoredEntityService<User> {
-	private static final UserService instance = new UserService();
-	private final Map<Long, String> tokenMap = Maps.newHashMap();
+  private static final UserService instance = new UserService();
+  private final Map<Long, String> tokenMap = Maps.newHashMap();
 
-	private UserService() {}
+  private UserService() {}
 
-	public static UserService instance() {
-		return instance;
-	}
-
-	@Override
-	Class<? extends AbstractStoredEntity<?>> getEntityClass() {
-		return User.class;
-	}
-
-	@Override
-	String getEntityName() {
-		return "User";
-	}
-
-	/* CRUD methods */
-	public void create(User user, User creator) {
-		beginTransaction();
-
-		if (creator.getPermissionFor(user).canWrite()) {
-			try {
-				getEntityManager().createQuery("from User as u where u.username=?1").setParameter(1, user.getUsername()).getSingleResult();
-				rollbackTransaction();
-				throw new ConflictException("a user with username " + user.getUsername() + " already exists. Usernames must be unique");
-			} catch (NoResultException e) {
-				// user doesn't already exist, that's good
-			}
-
-			normalizeEmailAddress(user);
-			User create = super.create(user);
-			commitTransaction();
-
-    } else {
-			rollbackTransaction();
-			throw new UnauthorizedException("user " + creator.getUsername() + " is not authorized to create new users");
-		}
-	}
-
-	private void normalizeEmailAddress(User user) {
-		if (user.getEmail() != null) {
-			user.setEmail(user.getEmail().toLowerCase());
-		}
-	}
-
-	@Override
-	public User read(long userId) {
-		openEntityManager();
-		User user;
-		try {
-			user = super.read(userId);
-		} finally {
-			closeEntityManager();
-		}
-		return user;
-	}
-
-	public void update(User user, User modifier) {
-		beginTransaction();
-		User updated;
-		try {
-			normalizeEmailAddress(user);
-			updated = super.update(user);
-		} finally {
-			commitTransaction();
-		}
+  public static UserService instance() {
+    return instance;
   }
 
-	public void delete(long id, User modifier) {
-		beginTransaction();
-		try {
-			super.delete(id);
-		} finally {
-			commitTransaction();
-		}
-	}
+  @Override
+  Class<? extends AbstractStoredEntity<?>> getEntityClass() {
+    return User.class;
+  }
 
-	/* */
-	public ImmutableMap<String, String> getSettings(long id) {
-		Builder<String, String> settings = ImmutableMap.builder();
+  @Override
+  String getEntityName() {
+    return "User";
+  }
 
-		openEntityManager();
-		User user;
-		try {
-			user = find(User.class, id);
-			if (user != null) {
-				for (UserSetting setting : user.getUserSettings()) {
-					settings.put(setting.getKey(), setting.getValue());
-				}
-			}
+  /* CRUD methods */
+  public void create(User user, User creator) {
+    beginTransaction();
 
-		} finally {
-			closeEntityManager();
-		}
+    if (creator.getPermissionFor(user).canWrite()) {
+      try {
+        getEntityManager()
+            .createQuery("from User as u where u.username=?1")
+            .setParameter(1, user.getUsername())
+            .getSingleResult();
+        rollbackTransaction();
+        throw new ConflictException(
+            "a user with username "
+                + user.getUsername()
+                + " already exists. Usernames must be unique");
+      } catch (NoResultException e) {
+        // user doesn't already exist, that's good
+      }
 
-		if (user == null) {
-			throw new NotFoundException("No user found with id " + id);
-		}
-		return settings.build();
-	}
+      normalizeEmailAddress(user);
+      User create = super.create(user);
+      commitTransaction();
 
-	public User getByUsernamePassword(String username, String password) {
-		openEntityManager();
-		User user;
-		try {
-			byte[] encodedPassword = PasswordUtil.encode(password);
-			user = (User) getEntityManager().createQuery("from User as u where u.username=?1 and u.encodedpassword=?2").setParameter(1, username).setParameter(2, encodedPassword).getSingleResult();
+    } else {
+      rollbackTransaction();
+      throw new UnauthorizedException(
+          "user " + creator.getUsername() + " is not authorized to create new users");
+    }
+  }
 
-		} catch (NoResultException e) {
-			user = null;
+  private void normalizeEmailAddress(User user) {
+    if (user.getEmail() != null) {
+      user.setEmail(user.getEmail().toLowerCase());
+    }
+  }
 
-		} finally {
-			closeEntityManager();
-		}
+  @Override
+  public User read(long userId) {
+    openEntityManager();
+    User user;
+    try {
+      user = super.read(userId);
+    } finally {
+      closeEntityManager();
+    }
+    return user;
+  }
 
-		return user;
-	}
+  public void update(User user, User modifier) {
+    beginTransaction();
+    User updated;
+    try {
+      normalizeEmailAddress(user);
+      updated = super.update(user);
+    } finally {
+      commitTransaction();
+    }
+  }
 
-	public User getByEmail(String emailAddress) {
-		openEntityManager();
-		User user;
-		try {
-			user = (User) getEntityManager().createQuery("from User as u where u.email=?1").setParameter(1, emailAddress.toLowerCase()).getSingleResult();
+  public void delete(long id, User modifier) {
+    beginTransaction();
+    try {
+      super.delete(id);
+    } finally {
+      commitTransaction();
+    }
+  }
 
-		} catch (NoResultException e) {
-			user = null;
+  /* */
+  public ImmutableMap<String, String> getSettings(long id) {
+    Builder<String, String> settings = ImmutableMap.builder();
 
-		} finally {
-			closeEntityManager();
-		}
+    openEntityManager();
+    User user;
+    try {
+      user = find(User.class, id);
+      if (user != null) {
+        for (UserSetting setting : user.getUserSettings()) {
+          settings.put(setting.getKey(), setting.getValue());
+        }
+      }
 
-		return user;
-	}
+    } finally {
+      closeEntityManager();
+    }
 
-	public User getUser(long id) {
-		openEntityManager();
-		User user;
-		try {
-			user = find(User.class, id);
-		} finally {
-			closeEntityManager();
-		}
-		return user;
-	}
+    if (user == null) {
+      throw new NotFoundException("No user found with id " + id);
+    }
+    return settings.build();
+  }
 
-	@Override
-	public ImmutableList<User> getAll() {
-		openEntityManager();
-		ImmutableList<User> all;
-		try {
-			all = super.getAll();
-		} finally {
-			closeEntityManager();
-		}
-		return all;
-	}
+  public User getByUsernamePassword(String username, String password) {
+    openEntityManager();
+    User user;
+    try {
+      byte[] encodedPassword = PasswordUtil.encode(password);
+      user =
+          (User)
+              getEntityManager()
+                  .createQuery("from User as u where u.username=?1 and u.encodedpassword=?2")
+                  .setParameter(1, username)
+                  .setParameter(2, encodedPassword)
+                  .getSingleResult();
 
-	public void setSetting(long userId, String key, String value, User modifier) {
-		beginTransaction();
-		try {
-			User user = read(userId);
-			if (!modifier.getUsername().equals(user.getUsername())) {
-				rollbackTransaction();
-				throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
-			}
-			UserSetting userSetting = user.setUserSetting(key, value);
-			persist(userSetting);
-		} finally {
-			commitTransaction();
-		}
-	}
+    } catch (NoResultException e) {
+      user = null;
 
-	public void updateSettings(long userId, Map<String, String> newSettingsMap, User modifier) {
-		beginTransaction();
-		try {
-			User user = read(userId);
-			if (!modifier.getUsername().equals(user.getUsername())) {
-				rollbackTransaction();
-				throw new UnauthorizedException(MessageFormat.format("{0} is not allowed to change settings for {1}", modifier.getUsername(), user.getUsername()));
-			}
+    } finally {
+      closeEntityManager();
+    }
 
-			for (Entry<String, String> entry : newSettingsMap.entrySet()) {
-				UserSetting userSetting = user.setUserSetting(entry.getKey(), entry.getValue());
-				persist(userSetting);
-			}
+    return user;
+  }
 
-			persist(user);
-		} finally {
-			commitTransaction();
-		}
-	}
+  public User getByEmail(String emailAddress) {
+    openEntityManager();
+    User user;
+    try {
+      user =
+          (User)
+              getEntityManager()
+                  .createQuery("from User as u where u.email=?1")
+                  .setParameter(1, emailAddress.toLowerCase())
+                  .getSingleResult();
 
-	public void sendResetPasswordMail(String emailAddress) {
-		User user = getByEmail(emailAddress);
-		if (user == null) {
-			throw new BadRequestException("unknown e-mail address: " + emailAddress);
-		}
-		Configuration config = Configuration.instance();
-		Emailer emailer = new Emailer(config.getSetting(Configuration.MAILHOST));
-		composeAndSendEmail(config, emailer, user);
-	}
+    } catch (NoResultException e) {
+      user = null;
 
-	void composeAndSendEmail(Configuration config, Emailer emailer, User user) {
-		String from_email = config.getSetting(Configuration.FROM_EMAIL);
-		String from_name = config.getSetting(Configuration.FROM_NAME);
-		String to_email = user.getEmail();
-		String subject = "Elaborate4 Password reset";
-		Map<String, Object> map = Maps.newHashMap();
-		map.put("user", user.getUsername());
-		String token = RandomStringUtils.randomAlphanumeric(20);
-		Log.info("token={}", token);
-		tokenMap.put(user.getId(), token);
-		map.put("url",
-				MessageFormat.format("{0}/resetpassword?emailaddress={1}&token={2}", //
-						config.getSetting(Configuration.WORK_URL), //
-						user.getEmail(), //
-						token//
-		));
-		String body = FreeMarker.templateToString("email.ftl", map, getClass());
-		try {
-			emailer.sendMail(from_email, from_name, to_email, subject, body);
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
-	}
+    } finally {
+      closeEntityManager();
+    }
 
-	public void resetPassword(PasswordData passwordData) {
-		String emailAddress = passwordData.getEmailAddress();
-		User user = getByEmail(emailAddress);
-		if (user == null) {
-			throw new BadRequestException("unknown e-mail address: " + emailAddress);
-		}
-		long userId = user.getId();
-		String expectedToken = tokenMap.get(userId);
-		if (!passwordData.getToken().equals(expectedToken)) {
-			throw new BadRequestException("token and e-mail address don't match");
-		}
+    return user;
+  }
 
-		tokenMap.remove(userId);
-		beginTransaction();
-		try {
-			user = super.read(userId);
-			byte[] encodedPassword = PasswordUtil.encode(passwordData.getNewPassword());
-			user.setEncodedPassword(encodedPassword);
-			persist(user);
-		} finally {
-			commitTransaction();
-		}
-	}
+  public User getUser(long id) {
+    openEntityManager();
+    User user;
+    try {
+      user = find(User.class, id);
+    } finally {
+      closeEntityManager();
+    }
+    return user;
+  }
 
-	public void makeProjectLeader(Long userId, User user) {
-		beginTransaction();
-		User projectLeader = super.read(userId);
-		if (!projectLeader.hasRole(ElaborateRoles.PROJECTLEADER)) {
-			String roleString = projectLeader.getRoleString() + "," + ElaborateRoles.PROJECTLEADER;
-			projectLeader.setRoleString(roleString);
-			commitTransaction();
-		} else {
-			rollbackTransaction();
-		}
-	}
+  @Override
+  public ImmutableList<User> getAll() {
+    openEntityManager();
+    ImmutableList<User> all;
+    try {
+      all = super.getAll();
+    } finally {
+      closeEntityManager();
+    }
+    return all;
+  }
 
-	public void setUserIsLoggedIn(User user) {
-		updateLoginStatus(user, false);
-	}
+  public void setSetting(long userId, String key, String value, User modifier) {
+    beginTransaction();
+    try {
+      User user = read(userId);
+      if (!modifier.getUsername().equals(user.getUsername())) {
+        rollbackTransaction();
+        throw new UnauthorizedException(
+            MessageFormat.format(
+                "{0} is not allowed to change settings for {1}",
+                modifier.getUsername(), user.getUsername()));
+      }
+      UserSetting userSetting = user.setUserSetting(key, value);
+      persist(userSetting);
+    } finally {
+      commitTransaction();
+    }
+  }
 
-	public void setUserIsLoggedOut(User user) {
-		updateLoginStatus(user, true);
-	}
+  public void updateSettings(long userId, Map<String, String> newSettingsMap, User modifier) {
+    beginTransaction();
+    try {
+      User user = read(userId);
+      if (!modifier.getUsername().equals(user.getUsername())) {
+        rollbackTransaction();
+        throw new UnauthorizedException(
+            MessageFormat.format(
+                "{0} is not allowed to change settings for {1}",
+                modifier.getUsername(), user.getUsername()));
+      }
 
-	private void updateLoginStatus(User user, boolean loggingOff) {
-		beginTransaction();
-		user = super.read(user.getId());
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (loggingOff && user.isLoggedIn()) {
-			persist(user.setUserSetting(UserSettings.ONLINE_STATUS, User.STATUS_OFFLINE));
-			persist(user.setUserSetting(UserSettings.LOGOUT_TIME, simpleDateFormat.format(new Date())));
-		} else if (!loggingOff && !user.isLoggedIn()) {
-			persist(user.setUserSetting(UserSettings.ONLINE_STATUS, User.STATUS_ONLINE));
-			persist(user.setUserSetting(UserSettings.LOGIN_TIME, simpleDateFormat.format(new Date())));
-		}
-		commitTransaction();
-	}
+      for (Entry<String, String> entry : newSettingsMap.entrySet()) {
+        UserSetting userSetting = user.setUserSetting(entry.getKey(), entry.getValue());
+        persist(userSetting);
+      }
 
+      persist(user);
+    } finally {
+      commitTransaction();
+    }
+  }
+
+  public void sendResetPasswordMail(String emailAddress) {
+    User user = getByEmail(emailAddress);
+    if (user == null) {
+      throw new BadRequestException("unknown e-mail address: " + emailAddress);
+    }
+    Configuration config = Configuration.instance();
+    Emailer emailer = new Emailer(config.getSetting(Configuration.MAILHOST));
+    composeAndSendEmail(config, emailer, user);
+  }
+
+  void composeAndSendEmail(Configuration config, Emailer emailer, User user) {
+    String from_email = config.getSetting(Configuration.FROM_EMAIL);
+    String from_name = config.getSetting(Configuration.FROM_NAME);
+    String to_email = user.getEmail();
+    String subject = "Elaborate4 Password reset";
+    Map<String, Object> map = Maps.newHashMap();
+    map.put("user", user.getUsername());
+    String token = RandomStringUtils.randomAlphanumeric(20);
+    Log.info("token={}", token);
+    tokenMap.put(user.getId(), token);
+    map.put(
+        "url",
+        MessageFormat.format(
+            "{0}/resetpassword?emailaddress={1}&token={2}", //
+            config.getSetting(Configuration.WORK_URL), //
+            user.getEmail(), //
+            token //
+            ));
+    String body = FreeMarker.templateToString("email.ftl", map, getClass());
+    try {
+      emailer.sendMail(from_email, from_name, to_email, subject, body);
+    } catch (MessagingException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void resetPassword(PasswordData passwordData) {
+    String emailAddress = passwordData.getEmailAddress();
+    User user = getByEmail(emailAddress);
+    if (user == null) {
+      throw new BadRequestException("unknown e-mail address: " + emailAddress);
+    }
+    long userId = user.getId();
+    String expectedToken = tokenMap.get(userId);
+    if (!passwordData.getToken().equals(expectedToken)) {
+      throw new BadRequestException("token and e-mail address don't match");
+    }
+
+    tokenMap.remove(userId);
+    beginTransaction();
+    try {
+      user = super.read(userId);
+      byte[] encodedPassword = PasswordUtil.encode(passwordData.getNewPassword());
+      user.setEncodedPassword(encodedPassword);
+      persist(user);
+    } finally {
+      commitTransaction();
+    }
+  }
+
+  public void makeProjectLeader(Long userId, User user) {
+    beginTransaction();
+    User projectLeader = super.read(userId);
+    if (!projectLeader.hasRole(ElaborateRoles.PROJECTLEADER)) {
+      String roleString = projectLeader.getRoleString() + "," + ElaborateRoles.PROJECTLEADER;
+      projectLeader.setRoleString(roleString);
+      commitTransaction();
+    } else {
+      rollbackTransaction();
+    }
+  }
+
+  public void setUserIsLoggedIn(User user) {
+    updateLoginStatus(user, false);
+  }
+
+  public void setUserIsLoggedOut(User user) {
+    updateLoginStatus(user, true);
+  }
+
+  private void updateLoginStatus(User user, boolean loggingOff) {
+    beginTransaction();
+    user = super.read(user.getId());
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    if (loggingOff && user.isLoggedIn()) {
+      persist(user.setUserSetting(UserSettings.ONLINE_STATUS, User.STATUS_OFFLINE));
+      persist(user.setUserSetting(UserSettings.LOGOUT_TIME, simpleDateFormat.format(new Date())));
+    } else if (!loggingOff && !user.isLoggedIn()) {
+      persist(user.setUserSetting(UserSettings.ONLINE_STATUS, User.STATUS_ONLINE));
+      persist(user.setUserSetting(UserSettings.LOGIN_TIME, simpleDateFormat.format(new Date())));
+    }
+    commitTransaction();
+  }
 }

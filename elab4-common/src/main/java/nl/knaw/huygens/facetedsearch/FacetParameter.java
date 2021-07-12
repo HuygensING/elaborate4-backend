@@ -29,76 +29,76 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.Lists;
 
 public class FacetParameter {
-	public enum AndOr {
-		and, or
-	}
+  public enum AndOr {
+    and,
+    or
+  }
 
-	private String name = "";
-	private List<String> values = Lists.newArrayList();
-	private AndOr combineValuesWith = AndOr.or;
+  private String name = "";
+  private List<String> values = Lists.newArrayList();
+  private AndOr combineValuesWith = AndOr.or;
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public FacetParameter setName(String name) {
-		this.name = name;
-		return this;
-	}
+  public FacetParameter setName(String name) {
+    this.name = name;
+    return this;
+  }
 
-	private List<String> getValues() {
-		return values;
-	}
+  private List<String> getValues() {
+    return values;
+  }
 
-	public FacetParameter setValues(List<String> values) {
-		this.values = values;
-		return this;
-	}
+  public FacetParameter setValues(List<String> values) {
+    this.values = values;
+    return this;
+  }
 
-	public List<String> getEscapedValues() {
-		Builder<String> builder = ImmutableList.builder();
-		for (String value : getValues()) {
-			builder.add(SolrUtils.escapeFacetValue(value));
-		}
-		return builder.build();
-	}
+  public List<String> getEscapedValues() {
+    Builder<String> builder = ImmutableList.builder();
+    for (String value : getValues()) {
+      builder.add(SolrUtils.escapeFacetValue(value));
+    }
+    return builder.build();
+  }
 
-	public AndOr getCombineValuesWith() {
-		return combineValuesWith;
-	}
+  public AndOr getCombineValuesWith() {
+    return combineValuesWith;
+  }
 
-	public FacetParameter setCombineValuesWith(String combineValuesWith) {
-		this.combineValuesWith = AndOr.valueOf(combineValuesWith);
-		return this;
-	}
+  public FacetParameter setCombineValuesWith(String combineValuesWith) {
+    this.combineValuesWith = AndOr.valueOf(combineValuesWith);
+    return this;
+  }
 
-	public boolean combineValuesWithAnd() {
-		return combineValuesWith.equals(AndOr.and);
-	}
+  public boolean combineValuesWithAnd() {
+    return combineValuesWith.equals(AndOr.and);
+  }
 
-	private long lowerLimit = -1;
-	private long upperLimit = -1;
+  private long lowerLimit = -1;
+  private long upperLimit = -1;
 
-	public FacetParameter setLowerLimit(long lowerLimit) {
-		this.lowerLimit = lowerLimit;
-		return this;
-	}
+  public FacetParameter setLowerLimit(long lowerLimit) {
+    this.lowerLimit = lowerLimit;
+    return this;
+  }
 
-	public long getLowerLimit() {
-		return lowerLimit;
-	}
+  public long getLowerLimit() {
+    return lowerLimit;
+  }
 
-	public FacetParameter setUpperLimit(long upperLimit) {
-		this.upperLimit = upperLimit;
-		return this;
-	}
+  public FacetParameter setUpperLimit(long upperLimit) {
+    this.upperLimit = upperLimit;
+    return this;
+  }
 
-	public long getUpperLimit() {
-		return upperLimit;
-	}
+  public long getUpperLimit() {
+    return upperLimit;
+  }
 
-	public boolean isRangeFacetParameter() {
-		return lowerLimit != -1 && upperLimit != -1;
-	}
-
+  public boolean isRangeFacetParameter() {
+    return lowerLimit != -1 && upperLimit != -1;
+  }
 }

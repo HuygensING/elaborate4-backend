@@ -37,7 +37,8 @@ import nl.knaw.huygens.tei.XmlContext;
 
 import elaborate.editor.model.orm.Transcription;
 
-class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
+class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext>
+    implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
   private final Element root = new Element("xml");
   private Element currentElement;
 
@@ -109,5 +110,4 @@ class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> implement
   public void status() {
     Log.info("root={}", root);
   }
-
 }

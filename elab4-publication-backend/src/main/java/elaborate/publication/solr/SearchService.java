@@ -75,10 +75,10 @@ public class SearchService {
   }
 
   public SearchData createSearch(ElaborateSearchParameters elaborateSearchParameters) {
-    elaborateSearchParameters//
-        .setFacetFields(getFacetFields())//
-        .setFacetInfoMap(getFacetInfoMap())//
-        .setRanges(getRangeFields())//
+    elaborateSearchParameters //
+        .setFacetFields(getFacetFields()) //
+        .setFacetInfoMap(getFacetInfoMap()) //
+        .setRanges(getRangeFields()) //
         .setLevelFields(defaultSortOrder[0], defaultSortOrder[1], defaultSortOrder[2]);
     try {
       Log.info("searchParameters={}", elaborateSearchParameters);
@@ -212,7 +212,8 @@ public class SearchService {
   void loadConfig() {
     //		Log.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
     try {
-      InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.json");
+      InputStream inputStream =
+          Thread.currentThread().getContextClassLoader().getResourceAsStream("config.json");
       Map<String, Object> configMap = readConfigMap(inputStream);
       setFacetInfoMap(toMap(configMap.get("facetInfoMap")));
       setRangeFields(toRangeFieldList(configMap.get("rangeFields")));
@@ -232,14 +233,18 @@ public class SearchService {
     }
     List<Map<String, Object>> mapList = (List<Map<String, Object>>) object;
     for (Map<String, Object> map : mapList) {
-      list.add(new RangeField((String) map.get("name"), (String) map.get("lowerField"), (String) map.get("upperField")));
+      list.add(
+          new RangeField(
+              (String) map.get("name"),
+              (String) map.get("lowerField"),
+              (String) map.get("upperField")));
     }
     return list;
   }
 
   @SuppressWarnings("unchecked")
   static String[] toStringArray(Object object) {
-    return ((List<String>) object).toArray(new String[]{});
+    return ((List<String>) object).toArray(new String[] {});
   }
 
   @SuppressWarnings("unchecked")
@@ -249,7 +254,12 @@ public class SearchService {
     for (Entry<String, Map<String, String>> entry : inMap.entrySet()) {
       String key = entry.getKey();
       Map<String, String> value = entry.getValue();
-      outMap.put(key, new FacetInfo().setName(value.get("name")).setTitle(value.get("title")).setType(FacetType.valueOf(value.get("type"))));
+      outMap.put(
+          key,
+          new FacetInfo()
+              .setName(value.get("name"))
+              .setTitle(value.get("title"))
+              .setType(FacetType.valueOf(value.get("type"))));
     }
     return outMap;
   }
@@ -279,5 +289,4 @@ public class SearchService {
   public String getBaseURL() {
     return hostname;
   }
-
 }

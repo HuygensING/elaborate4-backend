@@ -89,7 +89,8 @@ public class ElaborateSolrIndexer extends SolrIndexer {
     commit();
   }
 
-  public static SolrInputDocument getSolrInputDocument(ProjectEntry projectEntry, boolean forPublication, Collection<String> facetsToSplit) {
+  public static SolrInputDocument getSolrInputDocument(
+      ProjectEntry projectEntry, boolean forPublication, Collection<String> facetsToSplit) {
     SolrInputDocument doc = new SolrInputDocument();
     doc.addField(ID, projectEntry.getId());
     doc.addField(NAME, projectEntry.getName());
@@ -97,7 +98,10 @@ public class ElaborateSolrIndexer extends SolrIndexer {
     for (String field : project.getProjectEntryMetadataFieldnames()) {
       String facetName = SolrUtils.facetName(field);
       String value = projectEntry.getMetadataValue(field);
-      doc.addField(facetName, StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL).replaceAll("\\r?\\n|\\r", "/"), 1.0f);
+      doc.addField(
+          facetName,
+          StringUtils.defaultIfBlank(value, EMPTYVALUE_SYMBOL).replaceAll("\\r?\\n|\\r", "/"),
+          1.0f);
       if (forPublication) {
         // TODO: This is CNW/BoschDoc specific, refactoring needed
         handleCNWFacets(facetName, value, doc);
@@ -134,7 +138,8 @@ public class ElaborateSolrIndexer extends SolrIndexer {
     return doc;
   }
 
-  private static void handleMultiValuedFields(String facetName, String multiValue, SolrInputDocument doc) {
+  private static void handleMultiValuedFields(
+      String facetName, String multiValue, SolrInputDocument doc) {
     Log.info("facetName={}", facetName);
     doc.removeField(facetName);
     Iterable<String> values = StringUtil.getValues(multiValue);
@@ -222,5 +227,4 @@ public class ElaborateSolrIndexer extends SolrIndexer {
       e.printStackTrace();
     }
   }
-
 }

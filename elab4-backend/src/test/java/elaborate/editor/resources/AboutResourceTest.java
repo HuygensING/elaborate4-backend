@@ -36,5 +36,4 @@ public class AboutResourceTest {
     Map<String, String> about = r.getAbout();
     assertThat(about).containsKey("publicationBackendBuild");
   }
-
 }

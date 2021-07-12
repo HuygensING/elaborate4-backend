@@ -31,9 +31,9 @@ import nl.knaw.huygens.AbstractTest;
 import nl.knaw.huygens.Log;
 
 public class ElaborateSearchParametersTest extends AbstractTest {
-	@Test
-	public void testJson() throws IOException {
-		ElaborateSearchParameters e = new ElaborateSearchParameters();
-		Log.info(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(e));
-	}
+  @Test
+  public void testJson() throws IOException {
+    ElaborateSearchParameters e = new ElaborateSearchParameters();
+    Log.info(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(e));
+  }
 }

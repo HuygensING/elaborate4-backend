@@ -119,7 +119,8 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
   // static final String BODY_START = "<body>";
   // static final String BODY_END = "</body>";
   // static final String DEFAULT_BODY = BODY_START + BODY_END;
-  // public static final Comparator<Transcription> TRANSCRIPTION_TITLE_COMPARATOR = new Comparator<Transcription>() {
+  // public static final Comparator<Transcription> TRANSCRIPTION_TITLE_COMPARATOR = new
+  // Comparator<Transcription>() {
   // @Override
   // public int compare(Transcription t1, Transcription t2) {
   // return t1.getTranscriptionType().getName().compareTo(t2.getTranscriptionType().getName());
@@ -166,7 +167,8 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
   // }
   //
   // public String getLabel() {
-  // return String.format("transcription '%s' of %s", transcription.getTitle(), transcription.getProjectEntry().getLabel());
+  // return String.format("transcription '%s' of %s", transcription.getTitle(),
+  // transcription.getProjectEntry().getLabel());
   // }
   //
   // public String getSolrId() {
@@ -196,7 +198,8 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
   public static class BodyTags {
     public static final String ANNOTATION_BEGIN = "ab";
     public static final String ANNOTATION_END = "ae";
-    public static final List<String> ANNOTATION_MARKERS = Lists.newArrayList(ANNOTATION_BEGIN, ANNOTATION_END);
+    public static final List<String> ANNOTATION_MARKERS =
+        Lists.newArrayList(ANNOTATION_BEGIN, ANNOTATION_END);
 
     protected static final String ANNOTATION_BEGIN_CLASS = "annotationstart";
     protected static final String ANNOTATION_END_CLASS = "annotationend";
@@ -207,5 +210,4 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
     protected static final String TAG_SPAN = "span";
     protected static final String TAG_PAGEBREAK = "pb";
   }
-
 }

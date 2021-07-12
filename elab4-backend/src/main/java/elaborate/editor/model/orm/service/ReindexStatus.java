@@ -29,13 +29,13 @@ import org.apache.http.client.utils.URIBuilder;
 
 public class ReindexStatus {
 
-	public URI getURI() {
-		try {
-			return new URIBuilder().build();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
+  public URI getURI() {
+    try {
+      return new URIBuilder().build();
+    } catch (URISyntaxException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      return null;
+    }
+  }
 }

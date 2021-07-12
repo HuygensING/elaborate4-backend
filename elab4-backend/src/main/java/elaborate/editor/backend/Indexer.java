@@ -63,11 +63,14 @@ public class Indexer {
       Log.info("indexing {} projectEntries", size);
       int n = 1;
       for (ProjectEntry projectEntry : projectentries) {
-        Log.info("indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
-            projectEntry.getId(), n, size, //
+        Log.info(
+            "indexing projectEntry {} ({}/{} = {}%) (est. time remaining: {})", //
+            projectEntry.getId(),
+            n,
+            size, //
             percentage(n, size), //
             time_remaining(n, size, sw.getTime()) //
-        );
+            );
         solr.index(projectEntry, autoCommit(n));
         n++;
       }
@@ -97,5 +100,4 @@ public class Indexer {
     DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
     return formatter.format(date);
   }
-
 }

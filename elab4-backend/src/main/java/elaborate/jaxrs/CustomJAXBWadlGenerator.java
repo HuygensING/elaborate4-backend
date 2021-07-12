@@ -29,8 +29,8 @@ import com.sun.jersey.server.wadl.generators.WadlGeneratorJAXBGrammarGenerator;
 import com.sun.research.ws.wadl.Param;
 
 class CustomJAXBWadlGenerator extends WadlGeneratorJAXBGrammarGenerator {
-	@Override
-	public Param createParam(AbstractResource r, AbstractMethod m, final Parameter p) {
+  @Override
+  public Param createParam(AbstractResource r, AbstractMethod m, final Parameter p) {
     return super.createParam(r, m, p);
-	}
+  }
 }

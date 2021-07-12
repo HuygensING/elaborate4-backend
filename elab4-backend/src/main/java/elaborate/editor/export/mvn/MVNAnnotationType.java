@@ -61,12 +61,13 @@ public enum MVNAnnotationType {
   METAMARK("mvn:metamark", AnnotatedTextUsage.use);
 
   private enum AnnotatedTextUsage {
-    use, ignore
+    use,
+    ignore
   }
 
   private final String name;
   private final AnnotatedTextUsage ignoreText;
-  private final static Set<String> allNames = Sets.newHashSet();
+  private static final Set<String> allNames = Sets.newHashSet();
 
   MVNAnnotationType(final String name, final AnnotatedTextUsage ignoreText) {
     this.name = name;

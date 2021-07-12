@@ -21,71 +21,77 @@
   #L%
   -->
 
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="elaborate_publication" version="3.0">
-  <display-name>eLaborate publication</display-name>
-  <description>eLaborate publication</description>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="elaborate_publication" version="3.0">
+    <display-name>eLaborate publication</display-name>
+    <description>eLaborate publication</description>
 
-  <servlet>
-    <servlet-name>JerseyRESTService</servlet-name>
-    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-    <init-param>
-      <param-name>com.sun.jersey.config.property.packages</param-name>
-      <param-value>elaborate.publication.resources;elaborate.publication.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers</param-value>
-    </init-param>
-    <init-param>
-      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <init-param>
-      <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
-      <param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
-    </init-param>
-    <init-param>
-      <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-      <param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter;nl.knaw.huygens.jaxrstools.filters.CORSFilter</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
+    <servlet>
+        <servlet-name>JerseyRESTService</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>
+                elaborate.publication.resources;elaborate.publication.providers;nl.knaw.huygens.jaxrstools.resources;nl.knaw.huygens.jaxrstools.providers
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.sun.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+            <param-value>
+                com.sun.jersey.api.container.filter.GZIPContentEncodingFilter;nl.knaw.huygens.jaxrstools.filters.CORSFilter
+            </param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-  <listener>
-    <listener-class>se.jiderhamn.classloader.leak.prevention.ClassLoaderLeakPreventor</listener-class>
-  </listener>
+    <listener>
+        <listener-class>se.jiderhamn.classloader.leak.prevention.ClassLoaderLeakPreventor</listener-class>
+    </listener>
 
-  <filter>
-    <filter-name>UrlRewriteFilter</filter-name>
-    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-    <init-param>
-      <param-name>confReloadCheckInterval</param-name>
-      <param-value>-1</param-value>
-    </init-param>
-  </filter>
+    <filter>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+        <init-param>
+            <param-name>confReloadCheckInterval</param-name>
+            <param-value>-1</param-value>
+        </init-param>
+    </filter>
 
-  <servlet-mapping>
-    <servlet-name>JerseyRESTService</servlet-name>
-    <url-pattern>/api/*</url-pattern>
-  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>JerseyRESTService</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
 
-  <filter-mapping>
-    <filter-name>UrlRewriteFilter</filter-name>
-    <url-pattern>/nl/entry/*</url-pattern>
-    <url-pattern>/en/entry/*</url-pattern>
-    <url-pattern>/es/entry/*</url-pattern>
-    <url-pattern>/entry/*</url-pattern>
-    <url-pattern>/index</url-pattern>
-    <url-pattern>/search</url-pattern>
-    <url-pattern>/nl/search</url-pattern>
-    <url-pattern>/en/search</url-pattern>
-    <url-pattern>/es/search</url-pattern>
-    <url-pattern>/search/*</url-pattern>
-    <url-pattern>/nl/search/*</url-pattern>
-    <url-pattern>/en/search/*</url-pattern>
-    <url-pattern>/es/search/*</url-pattern>
-    <url-pattern>/annotations</url-pattern>
-    <url-pattern>/annotations/*</url-pattern>
-    <url-pattern>/person/*</url-pattern>
-    <url-pattern>/person-search</url-pattern>
-    <url-pattern>/person-search/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-    <dispatcher>FORWARD</dispatcher>
-  </filter-mapping>
+    <filter-mapping>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <url-pattern>/nl/entry/*</url-pattern>
+        <url-pattern>/en/entry/*</url-pattern>
+        <url-pattern>/es/entry/*</url-pattern>
+        <url-pattern>/entry/*</url-pattern>
+        <url-pattern>/index</url-pattern>
+        <url-pattern>/search</url-pattern>
+        <url-pattern>/nl/search</url-pattern>
+        <url-pattern>/en/search</url-pattern>
+        <url-pattern>/es/search</url-pattern>
+        <url-pattern>/search/*</url-pattern>
+        <url-pattern>/nl/search/*</url-pattern>
+        <url-pattern>/en/search/*</url-pattern>
+        <url-pattern>/es/search/*</url-pattern>
+        <url-pattern>/annotations</url-pattern>
+        <url-pattern>/annotations/*</url-pattern>
+        <url-pattern>/person/*</url-pattern>
+        <url-pattern>/person-search</url-pattern>
+        <url-pattern>/person-search/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
 </web-app>

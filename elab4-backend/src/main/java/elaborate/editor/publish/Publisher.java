@@ -29,52 +29,51 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 public class Publisher {
-	private static Publisher instance;
-	private final Map<String, PublishTask> taskIndex = Maps.newHashMap();
+  private static Publisher instance;
+  private final Map<String, PublishTask> taskIndex = Maps.newHashMap();
 
-	private Publisher() {}
+  private Publisher() {}
 
-	public static Publisher instance() {
-		if (instance == null) {
-			instance = new Publisher();
-		}
-		return instance;
-	}
+  public static Publisher instance() {
+    if (instance == null) {
+      instance = new Publisher();
+    }
+    return instance;
+  }
 
-	public Publication.Status publish(Publication.Settings settings) {
-		PublishTask publishTask = newOrRunningTask(settings);
-		return publishTask.getStatus();
-	}
+  public Publication.Status publish(Publication.Settings settings) {
+    PublishTask publishTask = newOrRunningTask(settings);
+    return publishTask.getStatus();
+  }
 
-	private PublishTask newOrRunningTask(Publication.Settings settings) {
-		PublishTask publishTask = findRunningTaskForProject(settings.getProjectId());
-		if (publishTask == null) {
-			publishTask = new PublishTask(settings);
-			taskIndex.put(publishTask.getStatus().getId(), publishTask);
-			new Thread(publishTask).start();
-		}
-		return publishTask;
-	}
+  private PublishTask newOrRunningTask(Publication.Settings settings) {
+    PublishTask publishTask = findRunningTaskForProject(settings.getProjectId());
+    if (publishTask == null) {
+      publishTask = new PublishTask(settings);
+      taskIndex.put(publishTask.getStatus().getId(), publishTask);
+      new Thread(publishTask).start();
+    }
+    return publishTask;
+  }
 
-	private PublishTask findRunningTaskForProject(Long projectId) {
-		PublishTask runningTask = null;
-		List<PublishTask> publishTasks = ImmutableList.copyOf(taskIndex.values());
-		for (PublishTask publishTask : publishTasks) {
-			if (publishTask.getProjectId() == projectId) {
-				if (publishTask.getStatus().isDone()) {
-					// remove PublishingTasks that are done for the given projectId
-					taskIndex.remove(publishTask.getStatus().getId());
-				} else {
-					runningTask = publishTask;
-				}
-			}
-		}
-		return runningTask;
-	}
+  private PublishTask findRunningTaskForProject(Long projectId) {
+    PublishTask runningTask = null;
+    List<PublishTask> publishTasks = ImmutableList.copyOf(taskIndex.values());
+    for (PublishTask publishTask : publishTasks) {
+      if (publishTask.getProjectId() == projectId) {
+        if (publishTask.getStatus().isDone()) {
+          // remove PublishingTasks that are done for the given projectId
+          taskIndex.remove(publishTask.getStatus().getId());
+        } else {
+          runningTask = publishTask;
+        }
+      }
+    }
+    return runningTask;
+  }
 
-	public Publication.Status getStatus(String id) {
-		PublishTask publishTask = taskIndex.get(id);
-		return (publishTask != null) ? publishTask.getStatus() : null;
-	}
-
+  public Publication.Status getStatus(String id) {
+    PublishTask publishTask = taskIndex.get(id);
+    return (publishTask != null) ? publishTask.getStatus() : null;
+  }
 }

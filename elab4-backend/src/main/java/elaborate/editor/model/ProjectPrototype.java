@@ -22,7 +22,6 @@ package elaborate.editor.model;
  * #L%
  */
 
-
 import elaborate.editor.model.orm.Project;
 
 public class ProjectPrototype {
@@ -50,5 +49,4 @@ public class ProjectPrototype {
   public String getType() {
     return type;
   }
-
 }

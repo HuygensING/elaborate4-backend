@@ -40,80 +40,79 @@ import elaborate.util.HibernateUtil;
 
 @Path("status")
 public class StatusResource extends AbstractElaborateResource {
-	Configuration config = Configuration.instance();
+  Configuration config = Configuration.instance();
 
-	@GET
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	public Object getStatus() {
-		return ImmutableMap.<String, Object> builder()//
-				.put("solrserver", getSolrStatus())//
-				.put("database", getDbStatus())//
-				.put("memory_in_mb", getMemoryStatus())//
-				.build();
-	}
+  @GET
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  public Object getStatus() {
+    return ImmutableMap.<String, Object>builder() //
+        .put("solrserver", getSolrStatus()) //
+        .put("database", getDbStatus()) //
+        .put("memory_in_mb", getMemoryStatus()) //
+        .build();
+  }
 
-	private MemoryStatus getMemoryStatus() {
-		return new MemoryStatus();
-	}
+  private MemoryStatus getMemoryStatus() {
+    return new MemoryStatus();
+  }
 
-	private static final int MB = 1024 * 1024;
+  private static final int MB = 1024 * 1024;
 
-	static class MemoryStatus {
-		private final Runtime runtime;
+  static class MemoryStatus {
+    private final Runtime runtime;
 
-		public MemoryStatus() {
-			System.gc();
-			runtime = Runtime.getRuntime();
-		}
+    public MemoryStatus() {
+      System.gc();
+      runtime = Runtime.getRuntime();
+    }
 
-		public long getUsed() {
-			return (getTotal() - getFree());
-		}
+    public long getUsed() {
+      return (getTotal() - getFree());
+    }
 
-		public long getTotal() {
-			return runtime.totalMemory() / MB;
-		}
+    public long getTotal() {
+      return runtime.totalMemory() / MB;
+    }
 
-		public long getMax() {
-			return runtime.maxMemory() / MB;
-		}
+    public long getMax() {
+      return runtime.maxMemory() / MB;
+    }
 
-		public long getFree() {
-			return runtime.freeMemory() / MB;
-		}
-	}
+    public long getFree() {
+      return runtime.freeMemory() / MB;
+    }
+  }
 
-	private ServerStatus getDbStatus() {
-		EntityManager entityManager = HibernateUtil.getEntityManager();
-		Map<String, Object> properties = entityManager.getEntityManagerFactory().getProperties();
-		String url = (String) properties.get("javax.persistence.jdbc.url");
-		boolean online = entityManager.isOpen();
-		ServerStatus status = new ServerStatus(url, online);
-		entityManager.close();
-		return status;
-	}
+  private ServerStatus getDbStatus() {
+    EntityManager entityManager = HibernateUtil.getEntityManager();
+    Map<String, Object> properties = entityManager.getEntityManagerFactory().getProperties();
+    String url = (String) properties.get("javax.persistence.jdbc.url");
+    boolean online = entityManager.isOpen();
+    ServerStatus status = new ServerStatus(url, online);
+    entityManager.close();
+    return status;
+  }
 
-	private ServerStatus getSolrStatus() {
-		SolrServerWrapper solrServer = SearchService.instance().getSolrServer();
-		return new ServerStatus(((RemoteSolrServer) solrServer).getUrl(), solrServer.ping());
-	}
+  private ServerStatus getSolrStatus() {
+    SolrServerWrapper solrServer = SearchService.instance().getSolrServer();
+    return new ServerStatus(((RemoteSolrServer) solrServer).getUrl(), solrServer.ping());
+  }
 
-	static class ServerStatus {
-		final String url;
-		final String status;
+  static class ServerStatus {
+    final String url;
+    final String status;
 
-		public ServerStatus(String url, boolean online) {
-			status = online ? "online" : "offline";
-			this.url = url;
-		}
+    public ServerStatus(String url, boolean online) {
+      status = online ? "online" : "offline";
+      this.url = url;
+    }
 
-		public String getUrl() {
-			return url;
-		}
+    public String getUrl() {
+      return url;
+    }
 
-		public String getStatus() {
-			return status;
-		}
-
-	}
+    public String getStatus() {
+      return status;
+    }
+  }
 }

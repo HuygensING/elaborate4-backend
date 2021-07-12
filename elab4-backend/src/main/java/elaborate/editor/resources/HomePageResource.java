@@ -34,17 +34,16 @@ import elaborate.jaxrs.APIDesc;
 @Path("/")
 public class HomePageResource extends AbstractElaborateResource {
 
-	@GET
-	@APIDesc("Shows the homepage")
-	@Produces(MediaType.TEXT_HTML)
-	public String getHomePage() {
-		return FreeMarker.templateToString("index.html.ftl", this, getClass());
-	}
+  @GET
+  @APIDesc("Shows the homepage")
+  @Produces(MediaType.TEXT_HTML)
+  public String getHomePage() {
+    return FreeMarker.templateToString("index.html.ftl", this, getClass());
+  }
 
-	@GET
-	@Path("favicon.ico")
-	public Response getFavIcon() {
-		return Response.noContent().build();
-	}
-
+  @GET
+  @Path("favicon.ico")
+  public Response getFavIcon() {
+    return Response.noContent().build();
+  }
 }

@@ -42,7 +42,8 @@ public class AboutResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   public Object getVersion() {
     Map<String, String> data = Maps.newHashMap();
-    for (String field : new String[] { "commitId", "buildDate", "version", "scmBranch", "publishdate" }) {
+    for (String field :
+        new String[] {"commitId", "buildDate", "version", "scmBranch", "publishdate"}) {
       data.put("commitId", getProperty(field));
     }
     return data;
@@ -51,12 +52,15 @@ public class AboutResource {
   private static synchronized String getProperty(String key) {
     if (propertyResourceBundle == null) {
       try {
-        propertyResourceBundle = new PropertyResourceBundle(Thread.currentThread().getContextClassLoader().getResourceAsStream("about.properties"));
+        propertyResourceBundle =
+            new PropertyResourceBundle(
+                Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResourceAsStream("about.properties"));
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
     return propertyResourceBundle.getString(key);
   }
-
 }

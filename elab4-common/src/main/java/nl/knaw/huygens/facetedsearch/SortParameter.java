@@ -26,34 +26,34 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 
 public class SortParameter {
-	private String fieldname;
-	private String direction = "asc";
+  private String fieldname;
+  private String direction = "asc";
 
-	public String getFieldname() {
-		return fieldname;
-	}
+  public String getFieldname() {
+    return fieldname;
+  }
 
-	public SortParameter setFieldname(String fieldname) {
-		this.fieldname = fieldname;
-		return this;
-	}
+  public SortParameter setFieldname(String fieldname) {
+    this.fieldname = fieldname;
+    return this;
+  }
 
-	public String getDirection() {
-		return direction;
-	}
+  public String getDirection() {
+    return direction;
+  }
 
-	public SortParameter setDirection(String direction) {
-		this.direction = direction;
-		return this;
-	}
+  public SortParameter setDirection(String direction) {
+    this.direction = direction;
+    return this;
+  }
 
-	@Override
-	public boolean equals(Object other) {
-		return EqualsBuilder.reflectionEquals(this, other);
-	}
+  @Override
+  public boolean equals(Object other) {
+    return EqualsBuilder.reflectionEquals(this, other);
+  }
 
-	@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
-	}
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this);
+  }
 }

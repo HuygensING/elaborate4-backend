@@ -28,30 +28,30 @@ import javax.persistence.EntityManagerFactory;
 import elaborate.editor.model.ModelFactory;
 
 public class HibernateUtil {
-	private final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();
+  private static final EntityManagerFactory ENTITY_MANAGER_FACTORY =
+      ModelFactory.INSTANCE.getEntityManagerFactory();
 
-	public static EntityManager beginTransaction() {
-		EntityManager entityManager = getEntityManager();
-		entityManager.getTransaction().begin();
-		return entityManager;
-	}
+  public static EntityManager beginTransaction() {
+    EntityManager entityManager = getEntityManager();
+    entityManager.getTransaction().begin();
+    return entityManager;
+  }
 
-	public static void commitTransaction(EntityManager entityManager) {
-		entityManager.getTransaction().commit();
-		endTransaction(entityManager);
-	}
+  public static void commitTransaction(EntityManager entityManager) {
+    entityManager.getTransaction().commit();
+    endTransaction(entityManager);
+  }
 
-	public static void endTransaction(EntityManager entityManager) {
-		entityManager.close();
-	}
+  public static void endTransaction(EntityManager entityManager) {
+    entityManager.close();
+  }
 
-	public static void rollbackTransaction(EntityManager entityManager) {
-		entityManager.getTransaction().rollback();
-		endTransaction(entityManager);
-	}
+  public static void rollbackTransaction(EntityManager entityManager) {
+    entityManager.getTransaction().rollback();
+    endTransaction(entityManager);
+  }
 
-	public static EntityManager getEntityManager() {
-		return ENTITY_MANAGER_FACTORY.createEntityManager();
-	}
-
+  public static EntityManager getEntityManager() {
+    return ENTITY_MANAGER_FACTORY.createEntityManager();
+  }
 }

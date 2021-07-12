@@ -33,13 +33,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AbstractSolrServerTest {
 
-	@Test
-	public void testExtractTerms() {
-		String snippet1 = "bladie <em>bla</em> <em>bla1</em>.";
-		String snippet2 = "bladie <em>bla</em> <em>bla2</em>.";
-		Collection<String> extractTerms = AbstractSolrServer.extractTerms(ImmutableList.of(snippet1, snippet2));
-		Log.info("terms={}", extractTerms);
-		assertThat(extractTerms).containsExactly("bla", "bla1", "bla", "bla2");
-	}
-
+  @Test
+  public void testExtractTerms() {
+    String snippet1 = "bladie <em>bla</em> <em>bla1</em>.";
+    String snippet2 = "bladie <em>bla</em> <em>bla2</em>.";
+    Collection<String> extractTerms =
+        AbstractSolrServer.extractTerms(ImmutableList.of(snippet1, snippet2));
+    Log.info("terms={}", extractTerms);
+    assertThat(extractTerms).containsExactly("bla", "bla1", "bla", "bla2");
+  }
 }

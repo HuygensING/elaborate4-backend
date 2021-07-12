@@ -30,9 +30,10 @@ import com.sun.jersey.spi.inject.SingletonTypeInjectableProvider;
 import elaborate.editor.model.orm.service.AnnotationService;
 
 @Provider
-public class AnnotationServiceProvider extends SingletonTypeInjectableProvider<Context, AnnotationService> {
+public class AnnotationServiceProvider
+    extends SingletonTypeInjectableProvider<Context, AnnotationService> {
 
-	public AnnotationServiceProvider() {
-		super(AnnotationService.class, AnnotationService.instance());
-	}
+  public AnnotationServiceProvider() {
+    super(AnnotationService.class, AnnotationService.instance());
+  }
 }

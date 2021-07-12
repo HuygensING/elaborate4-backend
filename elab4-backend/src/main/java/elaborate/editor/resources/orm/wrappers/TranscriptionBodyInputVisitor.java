@@ -37,7 +37,8 @@ import elaborate.editor.model.orm.Transcription;
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
-class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
+class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext>
+    implements CommentHandler<XmlContext> {
   private static final String TAG_SUP = "sup";
   private static final String TAG_SPAN = "span";
   private static final String ATTR_DATA_MARKER = "data-marker";
@@ -51,9 +52,26 @@ class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext> implem
     addElementHandler(new SpanHandler(), TAG_SPAN);
     addElementHandler(new SupHandler(), TAG_SUP);
     addElementHandler(new BrHandler(), "br");
-    addElementHandler(new IgnoreElementHandler(), "a", "div", "font", "h1", "h2", "h3", "h4", "h5", "h6", "p", "pre", //
-        "style", "table", "tbody", "td", "tr");
-    addElementHandler(new IgnoreElementAttributesHandler(), "i", "b", "strike", "del", "s", "sub", "u");
+    addElementHandler(
+        new IgnoreElementHandler(),
+        "a",
+        "div",
+        "font",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "p",
+        "pre", //
+        "style",
+        "table",
+        "tbody",
+        "td",
+        "tr");
+    addElementHandler(
+        new IgnoreElementAttributesHandler(), "i", "b", "strike", "del", "s", "sub", "u");
     addElementHandler(new ConvertToHandler("b"), "strong");
     addElementHandler(new ConvertToHandler("i"), "em");
   }
@@ -130,7 +148,6 @@ class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext> implem
     public Traversal leaveElement(Element arg0, XmlContext arg1) {
       return NEXT;
     }
-
   }
 
   private static class IgnoreElementHandler implements ElementHandler<XmlContext> {
@@ -178,5 +195,4 @@ class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext> implem
       return NEXT;
     }
   }
-
 }

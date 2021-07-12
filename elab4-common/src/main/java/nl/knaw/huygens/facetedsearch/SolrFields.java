@@ -48,5 +48,4 @@ public class SolrFields {
   private SolrFields() {
     throw new AssertionError("Non-instantiable class");
   }
-
 }

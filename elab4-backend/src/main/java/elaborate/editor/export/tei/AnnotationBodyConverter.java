@@ -50,7 +50,8 @@ public class AnnotationBodyConverter {
       visitor.setTextHandler(new XmlTextHandler<XmlContext>());
       visitor.setDefaultElementHandler(new DefaultElementHandler());
       visitor.addElementHandler(new IgnoreElementHandler(), "xml", "span");
-      visitor.addElementHandler(new HiHandler(), TeiMaker.HI_TAGS.keySet().toArray(new String[] {}));
+      visitor.addElementHandler(
+          new HiHandler(), TeiMaker.HI_TAGS.keySet().toArray(new String[] {}));
       visitor.addElementHandler(new DelHandler(), "strike");
       visitor.addElementHandler(new BrHandler(), "br");
 
@@ -143,5 +144,4 @@ public class AnnotationBodyConverter {
       return NEXT;
     }
   }
-
 }

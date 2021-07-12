@@ -23,9 +23,9 @@ package elaborate.editor.model;
  */
 
 public class ProjectTypes {
-  public final static String WORK = "work";
-  public final static String COLLECTION = "collection";
-  public final static String CORRESPONDENTIENETWERK = "correspondentienetwerk";
-  public final static String BOSCHDOC = "boschdoc";
-  public final static String MVN = "mvn";
+  public static final String WORK = "work";
+  public static final String COLLECTION = "collection";
+  public static final String CORRESPONDENTIENETWERK = "correspondentienetwerk";
+  public static final String BOSCHDOC = "boschdoc";
+  public static final String MVN = "mvn";
 }

@@ -36,91 +36,95 @@ import elaborate.editor.model.orm.User;
 
 @Singleton
 public class AnnotationService extends AbstractStoredEntityService<Annotation> {
-	private static final AnnotationService instance = new AnnotationService();
+  private static final AnnotationService instance = new AnnotationService();
 
-	private AnnotationService() {}
+  private AnnotationService() {}
 
-	public static AnnotationService instance() {
-		return instance;
-	}
+  public static AnnotationService instance() {
+    return instance;
+  }
 
-	@Override
-	Class<Annotation> getEntityClass() {
-		return Annotation.class;
-	}
+  @Override
+  Class<Annotation> getEntityClass() {
+    return Annotation.class;
+  }
 
-	@Override
-	String getEntityName() {
-		return "Annotation";
-	}
+  @Override
+  String getEntityName() {
+    return "Annotation";
+  }
 
-	/* CRUD methods */
-	public Annotation read(long id, User user) {
-		openEntityManager();
-		Annotation annotation;
-		try {
-			annotation = super.read(id);
-		} finally {
-			closeEntityManager();
-		}
-		return annotation;
-	}
+  /* CRUD methods */
+  public Annotation read(long id, User user) {
+    openEntityManager();
+    Annotation annotation;
+    try {
+      annotation = super.read(id);
+    } finally {
+      closeEntityManager();
+    }
+    return annotation;
+  }
 
-	public void update(Annotation annotation, User user) {
-		beginTransaction();
-		try {
-			annotation.setModifiedBy(user);
-			super.update(annotation);
-		} finally {
-			commitTransaction();
-		}
-	}
+  public void update(Annotation annotation, User user) {
+    beginTransaction();
+    try {
+      annotation.setModifiedBy(user);
+      super.update(annotation);
+    } finally {
+      commitTransaction();
+    }
+  }
 
-	public void delete(long id, User user) {
-		beginTransaction();
-		try {
-			super.delete(id);
-		} finally {
-			commitTransaction();
-		}
-	}
+  public void delete(long id, User user) {
+    beginTransaction();
+    try {
+      super.delete(id);
+    } finally {
+      commitTransaction();
+    }
+  }
 
-	/* */
-	public Annotation getAnnotationByAnnotationNo(int annotationNo, EntityManager entityManager) {
-		// Log.info("annotationNo={}", annotationNo);
-		try {
-			List<Annotation> resultList = entityManager.createQuery("from Annotation where annotationNo=:no", Annotation.class)//
-					.setParameter("no", annotationNo)//
-					.getResultList();
-			return resultList.isEmpty() ? null : resultList.get(0);
+  /* */
+  public Annotation getAnnotationByAnnotationNo(int annotationNo, EntityManager entityManager) {
+    // Log.info("annotationNo={}", annotationNo);
+    try {
+      List<Annotation> resultList =
+          entityManager
+              .createQuery("from Annotation where annotationNo=:no", Annotation.class) //
+              .setParameter("no", annotationNo) //
+              .getResultList();
+      return resultList.isEmpty() ? null : resultList.get(0);
 
-		} catch (NoResultException e) {
-			return null;
-		}
-	}
+    } catch (NoResultException e) {
+      return null;
+    }
+  }
 
-	public Annotation getAnnotationByAnnotationNo(Integer annotationNo) {
-		openEntityManager();
-		Annotation annotation;
-		try {
-			annotation = getAnnotationByAnnotationNo(annotationNo, getEntityManager());
-		} finally {
-			closeEntityManager();
-		}
-		return annotation;
-	}
+  public Annotation getAnnotationByAnnotationNo(Integer annotationNo) {
+    openEntityManager();
+    Annotation annotation;
+    try {
+      annotation = getAnnotationByAnnotationNo(annotationNo, getEntityManager());
+    } finally {
+      closeEntityManager();
+    }
+    return annotation;
+  }
 
-	public Collection<Annotation> getAnnotationsByAnnotationType(AnnotationType annotationType, EntityManager entityManager) {
-		List<Annotation> list = Lists.newArrayList();
-		try {
-			List<Annotation> resultList = entityManager.createQuery("from Annotation where annotationType=:type", Annotation.class)//
-					.setParameter("type", annotationType)//
-					.getResultList();
-			return resultList.isEmpty() ? list : resultList;
+  public Collection<Annotation> getAnnotationsByAnnotationType(
+      AnnotationType annotationType, EntityManager entityManager) {
+    List<Annotation> list = Lists.newArrayList();
+    try {
+      List<Annotation> resultList =
+          entityManager
+              .createQuery("from Annotation where annotationType=:type", Annotation.class) //
+              .setParameter("type", annotationType) //
+              .getResultList();
+      return resultList.isEmpty() ? list : resultList;
 
-		} catch (NoResultException e) {
-			return list;
-		}
-
-	}
+    } catch (NoResultException e) {
+      return list;
+    }
+  }
 }

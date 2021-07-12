@@ -50,7 +50,9 @@ public class XmlUtil {
   private static final String XML_OPEN_TAG = "<xml>";
 
   public static String unwrapFromXml(String xml) {
-    return xml.replaceFirst(XML_OPEN_TAG, "").replaceFirst(XML_CLOSE_TAG, "").replaceAll("&apos;", "'");
+    return xml.replaceFirst(XML_OPEN_TAG, "")
+        .replaceFirst(XML_CLOSE_TAG, "")
+        .replaceAll("&apos;", "'");
   }
 
   public static String wrapInXml(String xmlContent) {
@@ -79,12 +81,18 @@ public class XmlUtil {
 
   public static String fixXhtml(String badxml) {
     Document doc = Jsoup.parse(badxml);
-    doc.outputSettings().indentAmount(0).prettyPrint(false).escapeMode(Entities.EscapeMode.xhtml).charset("UTF-8");
+    doc.outputSettings()
+        .indentAmount(0)
+        .prettyPrint(false)
+        .escapeMode(Entities.EscapeMode.xhtml)
+        .charset("UTF-8");
     return doc.body().html().replaceAll(" />", "/>").replace("\u00A0", "&#160;");
     // return Jsoup.clean(badxml, Whitelist.relaxed());
   }
 
-  private static final Pattern ENDTAG_AFTER_NEWLINE_PATTERN = Pattern.compile("\n(</.*?>)"); // endtag at the beginning of line, should be at end of previouse line
+  private static final Pattern ENDTAG_AFTER_NEWLINE_PATTERN =
+      Pattern.compile(
+          "\n(</.*?>)"); // endtag at the beginning of line, should be at end of previouse line
 
   public static String fixTagEndings(String body) {
     String newBody = body;
@@ -104,43 +112,47 @@ public class XmlUtil {
   public static String toPlainText(String body) {
     String breaksToNewlines = body.replaceAll("<br/?>", "\n");
     String noTags = removeXMLtags(breaksToNewlines);
-    return StringEscapeUtils.unescapeXml(noTags)//
-        .replace("&nbsp;", " ").trim();
+    return StringEscapeUtils.unescapeXml(noTags) //
+        .replace("&nbsp;", " ")
+        .trim();
   }
 
   public static String toSimpleHTML(String body) {
-    String escapeAllowedHtml = body//
-        .replaceAll("<br/?>", "[[#br/#]]")//
-
-        .replaceAll("<em>(.*?)</em>", "[[#em#]]$1[[#/em#]]")//
-        .replaceAll("<i>(.*?)</i>", "[[#em#]]$1[[#/em#]]")//
-        .replaceAll("<span style=\"font-style: italic;\">(.*?)</span>", "[[#em#]]$1[[#/em#]]")//
-
-        .replaceAll("<strong>(.*?)</strong>", "[[#strong#]]$1[[#/strong#]]")//
-        .replaceAll("<b>(.*?)</b>", "[[#strong#]]$1[[#/strong#]]")//
-        .replaceAll("<span style=\"font-weight: bold;\">(.*?)</span>", "[[#strong#]]$1[[#/strong#]]")//
-
-        .replaceAll("<u>(.*?)</u>", "[[#u#]]$1[[#/u#]]")//
-        .replaceAll("<span style=\"text-decoration: underline;\">(.*?)</span>", "[[#u#]]$1[[#/u#]]")//
-
-        .replaceAll("<sup>(.*?)</sup>", "[[#sup#]]$1[[#/sup#]]")//
-        .replaceAll("<sub>(.*?)</sub>", "[[#sub#]]$1[[#/sub#]]")//
-    ;
-    return removeXMLtags(escapeAllowedHtml)//
-        .replace("[[#", "<")//
+    String escapeAllowedHtml =
+        body //
+            .replaceAll("<br/?>", "[[#br/#]]") //
+            .replaceAll("<em>(.*?)</em>", "[[#em#]]$1[[#/em#]]") //
+            .replaceAll("<i>(.*?)</i>", "[[#em#]]$1[[#/em#]]") //
+            .replaceAll(
+                "<span style=\"font-style: italic;\">(.*?)</span>", "[[#em#]]$1[[#/em#]]") //
+            .replaceAll("<strong>(.*?)</strong>", "[[#strong#]]$1[[#/strong#]]") //
+            .replaceAll("<b>(.*?)</b>", "[[#strong#]]$1[[#/strong#]]") //
+            .replaceAll(
+                "<span style=\"font-weight: bold;\">(.*?)</span>",
+                "[[#strong#]]$1[[#/strong#]]") //
+            .replaceAll("<u>(.*?)</u>", "[[#u#]]$1[[#/u#]]") //
+            .replaceAll(
+                "<span style=\"text-decoration: underline;\">(.*?)</span>", "[[#u#]]$1[[#/u#]]") //
+            .replaceAll("<sup>(.*?)</sup>", "[[#sup#]]$1[[#/sup#]]") //
+            .replaceAll("<sub>(.*?)</sub>", "[[#sub#]]$1[[#/sub#]]") //
+        ;
+    return removeXMLtags(escapeAllowedHtml) //
+        .replace("[[#", "<") //
         .replace("#]]", ">");
   }
 
   //  public static String fixTagHierarchy(String body) {
   //    Collection<String> annotationNos = extractAnnotationNos(body);
   //    String bodyWithConvertedAnnotationTags = body;
-  //    bodyWithConvertedAnnotationTags = convertAnnotationTagsToCustom(annotationNos, bodyWithConvertedAnnotationTags);
+  //    bodyWithConvertedAnnotationTags = convertAnnotationTagsToCustom(annotationNos,
+  // bodyWithConvertedAnnotationTags);
   //    String fixed = fixXhtml(bodyWithConvertedAnnotationTags);
   //    fixed = convertCustomAnnotationTagsToOriginal(annotationNos, fixed);
   //    return fixed;
   //  }
   //
-  //  private static String convertCustomAnnotationTagsToOriginal(Collection<String> annotationNos, String fixed) {
+  //  private static String convertCustomAnnotationTagsToOriginal(Collection<String> annotationNos,
+  // String fixed) {
   //    for (String annotationNo : annotationNos) {
   //      fixed = fixed//
   //          .replace(customAnnotationBegin(annotationNo), originalAnnotationBegin(annotationNo))//
@@ -149,7 +161,8 @@ public class XmlUtil {
   //    return fixed;
   //  }
   //
-  //  private static String convertAnnotationTagsToCustom(Collection<String> annotationNos, String bodyWithConvertedAnnotationTags) {
+  //  private static String convertAnnotationTagsToCustom(Collection<String> annotationNos, String
+  // bodyWithConvertedAnnotationTags) {
   //    for (String annotationNo : annotationNos) {
   //      bodyWithConvertedAnnotationTags = bodyWithConvertedAnnotationTags//
   //          .replace(originalAnnotationBegin(annotationNo), customAnnotationBegin(annotationNo))//
@@ -239,7 +252,7 @@ public class XmlUtil {
     return "<" + name + ">";
   }
 
-  //-- private methods --//
+  // -- private methods --//
 
   private XmlUtil() {
     throw new AssertionError("Non-instantiable class");

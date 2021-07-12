@@ -64,16 +64,25 @@ public class XmlAnnotation extends TextAnnotation implements Comparable<XmlAnnot
 
   @Override
   public int compareTo(XmlAnnotation other) {
-    return new CompareToBuilder()//
-        .append(this.firstSegmentIndex, other.firstSegmentIndex)//
-        .append(other.lastSegmentIndex, this.lastSegmentIndex)//
-        .append(getDepth(), other.getDepth())//
+    return new CompareToBuilder() //
+        .append(this.firstSegmentIndex, other.firstSegmentIndex) //
+        .append(other.lastSegmentIndex, this.lastSegmentIndex) //
+        .append(getDepth(), other.getDepth()) //
         .build();
   }
 
   @Override
   public String toString() {
-    return "XmlAnnotation[" + getDepth() + ":" + firstSegmentIndex + "-" + lastSegmentIndex + "] <" + getName() + " " + getAttributes() + (isMilestone ? "/>" : ">");
+    return "XmlAnnotation["
+        + getDepth()
+        + ":"
+        + firstSegmentIndex
+        + "-"
+        + lastSegmentIndex
+        + "] <"
+        + getName()
+        + " "
+        + getAttributes()
+        + (isMilestone ? "/>" : ">");
   }
-
 }

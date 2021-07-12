@@ -60,5 +60,4 @@ public class MVNConversionData {
   public Set<String> getDeepestTextNums() {
     return deepestTextNums;
   }
-
 }

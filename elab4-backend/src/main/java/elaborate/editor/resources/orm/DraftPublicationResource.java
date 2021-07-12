@@ -43,27 +43,26 @@ import elaborate.jaxrs.Annotations.AuthorizationRequired;
 @AuthorizationRequired
 @Singleton
 public class DraftPublicationResource extends AbstractElaborateResource {
-	private final ProjectService projectService;
-	private final User user;
+  private final ProjectService projectService;
+  private final User user;
 
-	public DraftPublicationResource(User user, ProjectService projectService) {
-		this.user = user;
-		this.projectService = projectService;
-	}
+  public DraftPublicationResource(User user, ProjectService projectService) {
+    this.user = user;
+    this.projectService = projectService;
+  }
 
-	@POST
-	@APIDesc("begin the publication of the project")
-	public Response startPublication(@PathParam("project_id") long project_id) {
-		Publication.Status status = projectService.createPublicationStatus(project_id, user);
-		return Response.created(status.getURI()).build();
-	}
+  @POST
+  @APIDesc("begin the publication of the project")
+  public Response startPublication(@PathParam("project_id") long project_id) {
+    Publication.Status status = projectService.createPublicationStatus(project_id, user);
+    return Response.created(status.getURI()).build();
+  }
 
-	@GET
-	@Path("{status_id}")
-	@Produces(UTF8MediaType.APPLICATION_JSON)
-	@APIDesc("Returns the status of the publication with the given status_id")
-	public Publication.Status getPublicationStatus(@PathParam("status_id") String status_id) {
-		return projectService.getPublicationStatus(status_id);
-	}
-
+  @GET
+  @Path("{status_id}")
+  @Produces(UTF8MediaType.APPLICATION_JSON)
+  @APIDesc("Returns the status of the publication with the given status_id")
+  public Publication.Status getPublicationStatus(@PathParam("status_id") String status_id) {
+    return projectService.getPublicationStatus(status_id);
+  }
 }

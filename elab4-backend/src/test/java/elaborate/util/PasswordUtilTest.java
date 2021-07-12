@@ -40,5 +40,4 @@ public class PasswordUtilTest {
     assertThat(PasswordUtil.matches(password, encodedPassword)).isTrue();
     assertThat(PasswordUtil.matches("somethingelse", encodedPassword)).isFalse();
   }
-
 }

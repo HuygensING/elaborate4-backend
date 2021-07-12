@@ -45,7 +45,8 @@ import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.model.orm.Transcription;
 
-public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext> {
+public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
+    implements ElementHandler<XmlContext> {
   private static boolean lastNodeWasText = false;
   private final Deque<Integer> startIndexStack = new ArrayDeque<Integer>();
   private final Deque<Element> elementStack = new ArrayDeque<Element>();
@@ -55,9 +56,11 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   private static final Map<String, Integer> annotationStartIndexMap = Maps.newHashMap();
   private static Map<Integer, AnnotationData> annotationIndex;
   private static int lineStartIndex = 0;
-  private static final Deque<XmlAnnotation> poetryOrParagraphAnnotations = new ArrayDeque<XmlAnnotation>();
+  private static final Deque<XmlAnnotation> poetryOrParagraphAnnotations =
+      new ArrayDeque<XmlAnnotation>();
 
-  public AnnotatedTranscriptionVisitor(Map<Integer, AnnotationData> annotationIndex, ParseResult result, String sigle) {
+  public AnnotatedTranscriptionVisitor(
+      Map<Integer, AnnotationData> annotationIndex, ParseResult result, String sigle) {
     super(new XmlContext());
     AnnotatedTranscriptionVisitor.annotationIndex = annotationIndex;
     AnnotatedTranscriptionVisitor.result = result;
@@ -86,10 +89,11 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   public Traversal leaveElement(final Element element, final XmlContext context) {
     elementStack.pop();
     lastNodeWasText = false;
-    XmlAnnotation xmlAnnotation = new XmlAnnotation(element.getName(), element.getAttributes(), elementStack.size())//
-        .setMilestone(element.hasNoChildren())//
-        .setFirstSegmentIndex(startIndexStack.pop())//
-        .setLastSegmentIndex(currentTextSegmentIndex());
+    XmlAnnotation xmlAnnotation =
+        new XmlAnnotation(element.getName(), element.getAttributes(), elementStack.size()) //
+            .setMilestone(element.hasNoChildren()) //
+            .setFirstSegmentIndex(startIndexStack.pop()) //
+            .setLastSegmentIndex(currentTextSegmentIndex());
     result.getXmlAnnotations().add(xmlAnnotation);
     return Traversal.NEXT;
   }
@@ -113,12 +117,13 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     }
   }
 
-  static final List<String> POETRY_AND_PARAGRAPH_CLOSERS = ImmutableList.of(//
-      MVNAnnotationType.ALINEA.getName(), //
-      MVNAnnotationType.POEZIE.getName(), //
-      MVNAnnotationType.ONDERSCHRIFT.getName(), //
-      MVNAnnotationType.OPSCHRIFT.getName()//
-  );
+  static final List<String> POETRY_AND_PARAGRAPH_CLOSERS =
+      ImmutableList.of( //
+          MVNAnnotationType.ALINEA.getName(), //
+          MVNAnnotationType.POEZIE.getName(), //
+          MVNAnnotationType.ONDERSCHRIFT.getName(), //
+          MVNAnnotationType.OPSCHRIFT.getName() //
+          );
 
   public static class AnnotationHandler implements ElementHandler<XmlContext> {
     @Override
@@ -136,7 +141,8 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
 
     private void handleAnnotationBegin(final String id) {
       int currentTextSegmentIndex = currentTextSegmentIndex();
-      annotationStartIndexMap.put(id, currentTextSegmentIndex + 1); // opening annotation for the next text segment
+      annotationStartIndexMap.put(
+          id, currentTextSegmentIndex + 1); // opening annotation for the next text segment
       AnnotationData annotationData = annotationIndex.get(Integer.valueOf(id));
       if (annotationData == null) {
         Log.error("no annotationData for {}", id);
@@ -195,8 +201,9 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       if (annotationBody.contains(";")) {
         attributes.put("title", annotationBody.replaceFirst("^.*;", "").replace("<br>", "").trim());
       }
-      XmlAnnotation tekstAnnotation = new XmlAnnotation("tekst", attributes, 0)//
-          .setFirstSegmentIndex(currentTextSegmentIndex() + 1);
+      XmlAnnotation tekstAnnotation =
+          new XmlAnnotation("tekst", attributes, 0) //
+              .setFirstSegmentIndex(currentTextSegmentIndex() + 1);
       textRangeAnnotationIndex.put(n, tekstAnnotation);
     }
 
@@ -217,18 +224,21 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       // start poezie or paragraph
       closeOpenPoetryOrParagraph();
       Map<String, String> attributes = new HashMap<String, String>();
-      poetryOrParagraphAnnotations.add(new XmlAnnotation(annotationData.type, attributes, 0)//
-          .setFirstSegmentIndex(currentTextSegmentIndex() + 1));
+      poetryOrParagraphAnnotations.add(
+          new XmlAnnotation(annotationData.type, attributes, 0) //
+              .setFirstSegmentIndex(currentTextSegmentIndex() + 1));
     }
 
-    private void handleDefault(final String id, AnnotationData annotationData, String annotationBody) {
+    private void handleDefault(
+        final String id, AnnotationData annotationData, String annotationBody) {
       if (POETRY_AND_PARAGRAPH_CLOSERS.contains(annotationData.type)) {
         closeOpenPoetryOrParagraph();
       }
       Map<String, String> attributes = ImmutableMap.of("body", annotationBody);
-      XmlAnnotation xmlAnnotation = new XmlAnnotation(annotationData.type, attributes, 0)//
-          .setFirstSegmentIndex(annotationStartIndexMap.get(id))//
-          .setLastSegmentIndex(currentTextSegmentIndex());
+      XmlAnnotation xmlAnnotation =
+          new XmlAnnotation(annotationData.type, attributes, 0) //
+              .setFirstSegmentIndex(annotationStartIndexMap.get(id)) //
+              .setLastSegmentIndex(currentTextSegmentIndex());
       result.getXmlAnnotations().add(xmlAnnotation);
     }
 
@@ -257,9 +267,10 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     public Traversal enterElement(Element element, XmlContext context) {
       lastNodeWasText = false;
       Map<String, String> attributes = new HashMap<String, String>();
-      XmlAnnotation xmlAnnotation = new XmlAnnotation("l", attributes, 0)//
-          .setFirstSegmentIndex(lineStartIndex)//
-          .setLastSegmentIndex(currentTextSegmentIndex());
+      XmlAnnotation xmlAnnotation =
+          new XmlAnnotation("l", attributes, 0) //
+              .setFirstSegmentIndex(lineStartIndex) //
+              .setLastSegmentIndex(currentTextSegmentIndex());
       result.getXmlAnnotations().add(xmlAnnotation);
       return Traversal.STOP;
     }
@@ -268,7 +279,6 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     public Traversal leaveElement(Element element, XmlContext context) {
       return Traversal.NEXT;
     }
-
   }
 
   private static int currentTextSegmentIndex() {

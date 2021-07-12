@@ -54,7 +54,11 @@ class HtmlTeiConverter {
   private final TeiConversionConfig config;
   private final EntityManager entityManager;
 
-  public HtmlTeiConverter(String _html, TeiConversionConfig _config, String transcriptionType, EntityManager entityManager) {
+  public HtmlTeiConverter(
+      String _html,
+      TeiConversionConfig _config,
+      String transcriptionType,
+      EntityManager entityManager) {
     this.config = _config;
     this.entityManager = entityManager;
     String html = _html;
@@ -121,18 +125,21 @@ class HtmlTeiConverter {
   }
 
   private String convert2TEI(String xml, String transcriptionType) {
-    DelegatingVisitor<XmlContext> visitor = new TranscriptionVisitor(config, transcriptionType, entityManager);
+    DelegatingVisitor<XmlContext> visitor =
+        new TranscriptionVisitor(config, transcriptionType, entityManager);
 
-    xml = xml.replace("<i></em></i>", "</em>")//
-        .replace("<em style=\"font-style: italic;\">", "<em>")//
-        .replace("<em></i></em>", "</i>")//
-        .replace("<em></em>", "")//
-        .replace("<i></i>", "")//
-        .replaceAll(" style=\"font-size:.*?>", ">")//
-        .replaceAll("\n", " ")//
+    xml =
+        xml.replace("<i></em></i>", "</em>") //
+            .replace("<em style=\"font-style: italic;\">", "<em>") //
+            .replace("<em></i></em>", "</i>") //
+            .replace("<em></em>", "") //
+            .replace("<i></i>", "") //
+            .replaceAll(" style=\"font-size:.*?>", ">") //
+            .replaceAll("\n", " ") //
     ;
     Log.info("xml={}", xml);
-    final nl.knaw.huygens.tei.Document document = nl.knaw.huygens.tei.Document.createFromXml(xml, false);
+    final nl.knaw.huygens.tei.Document document =
+        nl.knaw.huygens.tei.Document.createFromXml(xml, false);
     document.accept(visitor);
     final XmlContext c = visitor.getContext();
     String rawResult = c.getResult();
@@ -141,12 +148,13 @@ class HtmlTeiConverter {
   }
 
   private String toXml(String html) {
-    String fixedHtml = html//
-        .replaceAll("&", "&amp;")//
-        .replaceAll("<br>", "<br/>\n")//
-        .replaceAll("<body>", "<div>")//
-        .replaceAll("</body>", "</div>\n")//
-        .replaceAll("\n", "<lb/>\n");
+    String fixedHtml =
+        html //
+            .replaceAll("&", "&amp;") //
+            .replaceAll("<br>", "<br/>\n") //
+            .replaceAll("<body>", "<div>") //
+            .replaceAll("</body>", "</div>\n") //
+            .replaceAll("\n", "<lb/>\n");
     return XmlUtil.wrapInXml(fixedHtml);
   }
 }

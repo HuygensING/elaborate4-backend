@@ -22,7 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-
 import java.util.ArrayDeque;
 import java.util.Iterator;
 
@@ -36,7 +35,8 @@ import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-public class TextDecorationVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
+public class TextDecorationVisitor extends DelegatingVisitor<XmlContext>
+    implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
 
   final ArrayDeque<Element> textDecoratorDeque = new ArrayDeque<Element>();
 
@@ -45,7 +45,8 @@ public class TextDecorationVisitor extends DelegatingVisitor<XmlContext> impleme
     setDefaultElementHandler(this);
     setCommentHandler(this);
     setTextHandler(this);
-    addElementHandler(new TextDecorationElementHandler(), "b", "i", "sub", "sup", "em", "strike", "del");
+    addElementHandler(
+        new TextDecorationElementHandler(), "b", "i", "sub", "sup", "em", "strike", "del");
     addElementHandler(new IgnoreElementTagHandler(), "font", "span");
     //    addElementHandler(new SpanHandler(), "span");
   }

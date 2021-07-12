@@ -33,64 +33,70 @@ import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.TranscriptionService;
 
 public class ModelFactory {
-	// private static final String PERSISTENCE_UNIT_NAME = "nl.knaw.huygens.elaborate.jpa";
-	private static final String PERSISTENCE_UNIT_NAME = "nl.knaw.huygens.elaborate.old.jpa";
-	public static final ModelFactory INSTANCE = new ModelFactory();
-	private static final TranscriptionService transcriptionService = TranscriptionService.instance();
+  // private static final String PERSISTENCE_UNIT_NAME = "nl.knaw.huygens.elaborate.jpa";
+  private static final String PERSISTENCE_UNIT_NAME = "nl.knaw.huygens.elaborate.old.jpa";
+  public static final ModelFactory INSTANCE = new ModelFactory();
+  private static final TranscriptionService transcriptionService = TranscriptionService.instance();
 
-	private final static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+  private static final EntityManagerFactory entityManagerFactory =
+      Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
-	// private final static EntityManager entityManager = entityManagerFactory.createEntityManager();
+  // private final static EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-	private ModelFactory() {}
+  private ModelFactory() {}
 
-	public static <T extends AbstractStoredEntity<T>> T create(Class<T> clazz) {
-		try {
-			return clazz.newInstance();
-		} catch (InstantiationException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
+  public static <T extends AbstractStoredEntity<T>> T create(Class<T> clazz) {
+    try {
+      return clazz.newInstance();
+    } catch (InstantiationException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-	public static <T extends AbstractMetadataItem<T>> T createMetadataItem(Class<T> clazz, String field, String data, User creator) {
-		try {
-			return clazz.newInstance()//
-					.setCreatedOn(new Date())//
-					.setCreator(creator)//
-					.setModifiedOn(new Date())//
-					.setModifier(creator)//
-					.setField(field)//
-					.setData(data);
-		} catch (InstantiationException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
+  public static <T extends AbstractMetadataItem<T>> T createMetadataItem(
+      Class<T> clazz, String field, String data, User creator) {
+    try {
+      return clazz
+          .newInstance() //
+          .setCreatedOn(new Date()) //
+          .setCreator(creator) //
+          .setModifiedOn(new Date()) //
+          .setModifier(creator) //
+          .setField(field) //
+          .setData(data);
+    } catch (InstantiationException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-	public static <T extends AbstractTrackedEntity<T>> T createTrackedEntity(Class<T> clazz, User creator) {
-		try {
-			return clazz.newInstance()//
-					.setCreatedOn(new Date())//
-					.setCreator(creator)//
-					.setModifiedOn(new Date())//
-					.setModifier(creator);
-		} catch (InstantiationException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
+  public static <T extends AbstractTrackedEntity<T>> T createTrackedEntity(
+      Class<T> clazz, User creator) {
+    try {
+      return clazz
+          .newInstance() //
+          .setCreatedOn(new Date()) //
+          .setCreator(creator) //
+          .setModifiedOn(new Date()) //
+          .setModifier(creator);
+    } catch (InstantiationException e) {
+      throw new RuntimeException(e);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-	public EntityManagerFactory getEntityManagerFactory() {
-		return entityManagerFactory;
-	}
+  public EntityManagerFactory getEntityManagerFactory() {
+    return entityManagerFactory;
+  }
 
-	public static TranscriptionType getDefaultTranscriptionType() {
-		ImmutableList<TranscriptionType> entities = transcriptionService.getTranscriptionTypes();
-		return entities.size() > 0 ? entities.get(0) : create(TranscriptionType.class).setName(TranscriptionType.DIPLOMATIC);
-	}
-
+  public static TranscriptionType getDefaultTranscriptionType() {
+    ImmutableList<TranscriptionType> entities = transcriptionService.getTranscriptionTypes();
+    return entities.size() > 0
+        ? entities.get(0)
+        : create(TranscriptionType.class).setName(TranscriptionType.DIPLOMATIC);
+  }
 }

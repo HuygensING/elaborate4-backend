@@ -1,32 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>nl.knaw.huygens.elab4</groupId>
-		<artifactId>elab4</artifactId>
-		<version>4.0.17-SNAPSHOT</version>
-	</parent>
-	<artifactId>elab4-backend-configuration-example</artifactId>
-	<packaging>war</packaging>
-	<description>Configuration project for the example environment</description>
-	<inceptionYear>2014</inceptionYear>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nl.knaw.huygens.elab4</groupId>
+        <artifactId>elab4</artifactId>
+        <version>4.0.17-SNAPSHOT</version>
+    </parent>
+    <artifactId>elab4-backend-configuration-example</artifactId>
+    <packaging>war</packaging>
+    <description>Configuration project for the example environment</description>
+    <inceptionYear>2014</inceptionYear>
 
-	<dependencies>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servlet-api.version}</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-api.version}</version>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>${maven-war.version}</version>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

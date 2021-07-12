@@ -39,75 +39,75 @@ import elaborate.editor.model.AbstractStoredEntity;
 @Entity
 @Table(name = "log_entries")
 @XmlRootElement
-public class LogEntry extends AbstractStoredEntity<LogEntry>implements Comparable<LogEntry> {
-	private static final long serialVersionUID = 1L;
+public class LogEntry extends AbstractStoredEntity<LogEntry> implements Comparable<LogEntry> {
+  private static final long serialVersionUID = 1L;
 
-	private String comment;
+  private String comment;
 
-	// @Column(name = "project_title")
+  // @Column(name = "project_title")
   private String projectTitle;
 
-	// @Column(name = "user_name")
+  // @Column(name = "user_name")
   private String userName;
 
-	@Temporal(TemporalType.TIMESTAMP)
+  @Temporal(TemporalType.TIMESTAMP)
   private
   // @Column(name = "created_on")
-	Date createdOn;
+  Date createdOn;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id", columnDefinition = "int4")
-	private Project project;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "project_id", columnDefinition = "int4")
+  private Project project;
 
-	@JsonIgnore
-	public Project getProject() {
-		return project;
-	}
-
-	public LogEntry setProject(Project project) {
-		this.project = project;
-		setProjectTitle(project.getTitle());
-		return this;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public LogEntry setComment(String comment) {
-		this.comment = comment;
-		return this;
-	}
-
-	@JsonIgnore
-	public String getProjectTitle() {
-		return projectTitle;
-	}
-
-	private void setProjectTitle(String projectTitle) {
-		this.projectTitle = projectTitle;
+  @JsonIgnore
+  public Project getProject() {
+    return project;
   }
 
-	public String getUserName() {
-		return userName;
-	}
+  public LogEntry setProject(Project project) {
+    this.project = project;
+    setProjectTitle(project.getTitle());
+    return this;
+  }
 
-	public LogEntry setUserName(String userName) {
-		this.userName = userName;
-		return this;
-	}
+  public String getComment() {
+    return comment;
+  }
 
-	public Date getCreatedOn() {
-		return createdOn;
-	}
+  public LogEntry setComment(String comment) {
+    this.comment = comment;
+    return this;
+  }
 
-	public LogEntry setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-		return this;
-	}
+  @JsonIgnore
+  public String getProjectTitle() {
+    return projectTitle;
+  }
 
-	@Override
-	public int compareTo(LogEntry o) {
-		return o.getCreatedOn().compareTo(this.getCreatedOn());
-	}
+  private void setProjectTitle(String projectTitle) {
+    this.projectTitle = projectTitle;
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public LogEntry setUserName(String userName) {
+    this.userName = userName;
+    return this;
+  }
+
+  public Date getCreatedOn() {
+    return createdOn;
+  }
+
+  public LogEntry setCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
+    return this;
+  }
+
+  @Override
+  public int compareTo(LogEntry o) {
+    return o.getCreatedOn().compareTo(this.getCreatedOn());
+  }
 }

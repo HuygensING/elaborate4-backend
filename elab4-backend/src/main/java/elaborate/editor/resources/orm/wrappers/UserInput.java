@@ -34,45 +34,46 @@ import elaborate.util.PasswordUtil;
 
 @XmlRootElement
 public class UserInput {
-	// {
-	// "id": 123, // only for PUT/update
-	// "username": "marijke_boter",
-	// "email": "marijke.boter@huygens.knaw.nl",
-	// "firstName": "Marijke",
-	// "lastName": "Boter",
-	// "password": "whatever",
-	// "role": "USER"
-	// },
+  // {
+  // "id": 123, // only for PUT/update
+  // "username": "marijke_boter",
+  // "email": "marijke.boter@huygens.knaw.nl",
+  // "firstName": "Marijke",
+  // "lastName": "Boter",
+  // "password": "whatever",
+  // "role": "USER"
+  // },
 
-	private static final long NULL_ID = -1L;
-	public long id = NULL_ID;
-	public String username;
-	public String email;
-	public String firstName;
-	public String lastName;
-	public String role;
-	public String password;
+  private static final long NULL_ID = -1L;
+  public long id = NULL_ID;
+  public String username;
+  public String email;
+  public String firstName;
+  public String lastName;
+  public String role;
+  public String password;
 
-	public User getUser() {
-		User user = (id == NULL_ID) ? new User() : UserService.instance().getUser(id);
-		user.setUsername(StringUtils.defaultIfEmpty(username, ""))//
-				.setEmail(StringUtils.defaultIfEmpty(email, ""))//
-				.setFirstName(StringUtils.defaultIfEmpty(firstName, ""))//
-				.setLastName(StringUtils.defaultIfEmpty(lastName, ""));
+  public User getUser() {
+    User user = (id == NULL_ID) ? new User() : UserService.instance().getUser(id);
+    user.setUsername(StringUtils.defaultIfEmpty(username, "")) //
+        .setEmail(StringUtils.defaultIfEmpty(email, "")) //
+        .setFirstName(StringUtils.defaultIfEmpty(firstName, "")) //
+        .setLastName(StringUtils.defaultIfEmpty(lastName, ""));
 
-		if (StringUtils.isNotBlank(role)) {
-			user.setRoleString(ElaborateRoles.getRolestringFor(role));
-		}
+    if (StringUtils.isNotBlank(role)) {
+      user.setRoleString(ElaborateRoles.getRolestringFor(role));
+    }
 
-		if (StringUtils.isNotBlank(password)) {
-			user.setEncodedPassword(PasswordUtil.encode(password));
-		}
+    if (StringUtils.isNotBlank(password)) {
+      user.setEncodedPassword(PasswordUtil.encode(password));
+    }
 
-		if (StringUtils.isNotBlank(firstName) || StringUtils.isNotBlank(lastName)) {
-			user.setTitle(Joiner.on(", ").skipNulls().join(new String[] { user.getLastName(), user.getFirstName() }));
-		} else {
-			user.setTitle(user.getUsername().replaceAll("_", " "));
-		}
-		return user;
-	}
+    if (StringUtils.isNotBlank(firstName) || StringUtils.isNotBlank(lastName)) {
+      user.setTitle(
+          Joiner.on(", ").skipNulls().join(new String[] {user.getLastName(), user.getFirstName()}));
+    } else {
+      user.setTitle(user.getUsername().replaceAll("_", " "));
+    }
+    return user;
+  }
 }

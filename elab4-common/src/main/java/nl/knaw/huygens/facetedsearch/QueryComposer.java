@@ -23,11 +23,11 @@ package nl.knaw.huygens.facetedsearch;
  */
 
 public interface QueryComposer {
-	void compose(ElaborateSearchParameters esp);
+  void compose(ElaborateSearchParameters esp);
 
-	String getSearchQuery();
+  String getSearchQuery();
 
-	String getHighlightQuery();
+  String getHighlightQuery();
 
-	boolean mustHighlight();
+  boolean mustHighlight();
 }

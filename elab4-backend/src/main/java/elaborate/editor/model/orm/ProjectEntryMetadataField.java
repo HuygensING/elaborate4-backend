@@ -32,16 +32,15 @@ import elaborate.editor.model.AbstractStoredEntity;
 @Table(name = "project_entry_metadata_fields")
 @XmlRootElement
 public class ProjectEntryMetadataField extends AbstractStoredEntity<ProjectEntryMetadataField> {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private String field;
+  private String field;
 
-	public String getField() {
-		return field;
-	}
+  public String getField() {
+    return field;
+  }
 
-	public void setField(String field) {
-		this.field = field;
-	}
-
+  public void setField(String field) {
+    this.field = field;
+  }
 }

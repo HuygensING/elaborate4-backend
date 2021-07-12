@@ -260,7 +260,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations-java5</artifactId>
-			<version>${annotations-java5.version}</version>
+            <version>${annotations-java5.version}</version>
             <scope>compile</scope>
         </dependency>
         <!--        <dependency>-->
