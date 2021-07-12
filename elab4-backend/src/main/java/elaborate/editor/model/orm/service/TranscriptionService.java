@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -294,17 +294,17 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
         for (String key : update.metadata.keySet()) {
           AnnotationTypeMetadataItem annotationTypeMetadataItem =
               (AnnotationTypeMetadataItem)
-                  getEntityManager() //
+                  getEntityManager()
                       .createQuery(
-                          "from AnnotationTypeMetadataItem as m where m.name=?1 and m.annotationType=?2") //
-                      .setParameter(1, key) //
-                      .setParameter(2, annotationType) //
+                          "from AnnotationTypeMetadataItem as m where m.name=?1 and m.annotationType=?2")
+                      .setParameter(1, key)
+                      .setParameter(2, annotationType)
                       .getSingleResult();
           if (annotationTypeMetadataItem != null) {
             AnnotationMetadataItem item =
-                new AnnotationMetadataItem() //
-                    .setAnnotation(annotation) //
-                    .setAnnotationTypeMetadataItem(annotationTypeMetadataItem) //
+                new AnnotationMetadataItem()
+                    .setAnnotation(annotation)
+                    .setAnnotationTypeMetadataItem(annotationTypeMetadataItem)
                     .setData(update.metadata.get(key));
             persist(item);
             annotationMetadataItems.add(item);
@@ -312,13 +312,12 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
         }
 
         String logLine =
-            MessageFormat.format( //
-                "updated ''{0}'' annotation on ''{1}'' in transcription ''{2}'' in entry ''{3}''", //
-                annotation.getAnnotationType().getName(), //
-                annotation.getAnnotatedText(), //
-                transcription.getTextLayer(), //
-                projectEntry.getName() //
-                );
+            MessageFormat.format(
+                "updated ''{0}'' annotation on ''{1}'' in transcription ''{2}'' in entry ''{3}''",
+                annotation.getAnnotationType().getName(),
+                annotation.getAnnotatedText(),
+                transcription.getTextLayer(),
+                projectEntry.getName());
         updateParents(projectEntry, user, logLine);
 
         // String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
@@ -392,10 +391,10 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
     Set<String> orphanedAnnotationTags = Sets.newHashSet();
     String body = transcription.getBody();
     String format = "(?m)(?s)<%s id=\"(.*?)\"/>";
-    String startRegex = String.format(format, Transcription.BodyTags.ANNOTATION_BEGIN); //
+    String startRegex = String.format(format, Transcription.BodyTags.ANNOTATION_BEGIN);
     Pattern startPattern = Pattern.compile(startRegex);
     Matcher startMatcher = startPattern.matcher(body);
-    String endRegex = String.format(format, Transcription.BodyTags.ANNOTATION_END); //
+    String endRegex = String.format(format, Transcription.BodyTags.ANNOTATION_END);
     Pattern endPattern = Pattern.compile(endRegex);
     Matcher endMatcher = endPattern.matcher(body);
     processTags(annotationNoSet, orphanedAnnotationTags, startMatcher);
@@ -412,17 +411,11 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
   }
 
   private String annotationEndTag(Object annotationNo) {
-    return String.format(
-        "<%s id=\"%s\"/>", //
-        Transcription.BodyTags.ANNOTATION_END, //
-        annotationNo);
+    return String.format("<%s id=\"%s\"/>", Transcription.BodyTags.ANNOTATION_END, annotationNo);
   }
 
   private String annotationBeginTag(Object annotationNo) {
-    return String.format(
-        "<%s id=\"%s\"/>", //
-        Transcription.BodyTags.ANNOTATION_BEGIN, //
-        annotationNo);
+    return String.format("<%s id=\"%s\"/>", Transcription.BodyTags.ANNOTATION_BEGIN, annotationNo);
   }
 
   private void processTags(

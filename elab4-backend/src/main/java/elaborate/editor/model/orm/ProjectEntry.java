@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -144,16 +144,16 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
    * other functions
    */
   public Transcription addTranscription(User creator) {
-    return ModelFactory.createTrackedEntity(Transcription.class, creator) //
-        .setProjectEntry(this) //
-        .setBody(Transcription.DEFAULT_BODY) //
+    return ModelFactory.createTrackedEntity(Transcription.class, creator)
+        .setProjectEntry(this)
+        .setBody(Transcription.DEFAULT_BODY)
         .setTranscriptionType(ModelFactory.getDefaultTranscriptionType());
   }
 
   public Facsimile addFacsimile(String name, String title, User creator) {
-    return ModelFactory.createTrackedEntity(Facsimile.class, creator) //
-        .setProjectEntry(this) //
-        .setName(name) //
+    return ModelFactory.createTrackedEntity(Facsimile.class, creator)
+        .setProjectEntry(this)
+        .setName(name)
         .setTitle(title);
   }
 
@@ -175,32 +175,31 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
   }
 
   public ProjectEntryMetadataItem addMetadataItem(String key, String value, User creator) {
-    return ModelFactory.createMetadataItem(ProjectEntryMetadataItem.class, key, value, creator) //
+    return ModelFactory.createMetadataItem(ProjectEntryMetadataItem.class, key, value, creator)
         .setProjectEntry(this);
   }
 
-  //
   // public int getFacsimileCount() {
   // return ModelFactory.getEntityCount(ProjectFacsimile.class, getCurrentProjectEntryQuery());
   // }
-  //
+
   // private Query getCurrentProjectEntryQuery() {
   // Query currentProjectEntryQuery = new Query("project_entry_id", entry.getId());
   // return currentProjectEntryQuery;
   // }
-  //
+
   // public int getTranscriptionCount() {
   // return ModelFactory.getEntityCount(ProjectTranscription.class, getCurrentProjectEntryQuery());
   // }
-  //
+
   // public boolean hasFacsimiles() {
   // return entry.getFacsimileCount() > 0;
   // }
-  //
+
   // public boolean hasTranscriptions() {
   // return entry.getTranscriptionCount() > 0;
   // }
-  //
+
   // public String getMetadata(String field) {
   // ProjectEntryMetadataItem[] projectEntryMetadataItems = entry.getProjectEntryMetadataItems();
   // for (ProjectEntryMetadataItem projectEntryMetadataItem : projectEntryMetadataItems) {
@@ -210,8 +209,7 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
   // }
   // return "";
   // }
-  //
-  //
+
   // public ProjectEntryMetadataItem getProjectEntryMetadataItem(String field) {
   // Term entryTerm = new Term("project_entry_id", Integer.valueOf(entry.getId().toString()));
   // Term fieldTerm = new Term("field", field);
@@ -223,7 +221,7 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
   // }
   // return entities.length == 0 ? null : entities[0];
   // }
-  //
+
   // void removeAllMetadata() {
   // for (ProjectEntryMetadataItem projectEntryMetadataItem : entry.getProjectEntryMetadataItems())
   // {
@@ -234,14 +232,14 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
   // }
   // }
   // }
-  //
+
   // public void setMetadata(Map<String, String> metadata, User creator) {
   // removeAllMetadata();
   // for (Entry<String, String> metadataEntry : metadata.entrySet()) {
   // setMetadata(metadataEntry.getKey(), metadataEntry.getValue().trim(), creator);
   // }
   // }
-  //
+
   // public String getLabel() {
   // String label = "";
   // String page = StringUtils.stripToNull(entry.getMetadata("Page number"));
@@ -250,7 +248,7 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
   // String folio = StringUtils.stripToNull(entry.getMetadata("Folio number"));
   // String side = StringUtils.stripToNull(entry.getMetadata("Folio side"));
   // String column = StringUtils.stripToNull(entry.getMetadata("Column on page"));
-  //
+
   // List<String> positionParts = Lists.newArrayList();
   // if (page != null) {
   // positionParts.add(String.format("page %s", page));
@@ -265,7 +263,7 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
   // positionParts.add(String.format("column %s", column));
   // }
   // String position = Joiner.on(", ").join(positionParts);
-  //
+
   // if (title != null && author != null) {
   // label = String.format("%s of '%s' by %s", position, title, author);
   // } else if (title != null) {
@@ -275,20 +273,20 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
   // }
   // return label;
   // }
-  //
+
   // public LastModified getLastModified() {
   // Date modificationDate = entry.getProject().getCreatedOn();
   // User modifiedBy = entry.getProject().getCreator();
   // User modifiedBy2 = modifiedBy;
   // LastModified lastModified = new LastModified(modificationDate, modifiedBy2);
-  //
+
   // updateLastModified(lastModified, entry.getProjectEntryMetadataItems());
   // updateLastModified(lastModified, entry.getFacsimiles());
   // updateLastModified(lastModified, entry.getTranscriptions());
-  //
+
   // return lastModified;
   // }
-  //
+
   // private void updateLastModified(LastModified lastModified, AbstractTrackedEntity[]
   // trackedEntryChildren) {
   // for (AbstractTrackedEntity entity : trackedEntryChildren) {
@@ -299,6 +297,5 @@ public class ProjectEntry extends AbstractProjectEntity<ProjectEntry> {
   // }
   // }
   // }
-  //
 
 }

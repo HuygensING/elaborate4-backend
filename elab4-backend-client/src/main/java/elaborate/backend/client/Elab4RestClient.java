@@ -10,12 +10,12 @@ package elaborate.backend.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -56,10 +56,7 @@ public class Elab4RestClient {
     token = null;
     Form form = new Form().param("username", username).param("password", password);
     Response response =
-        sessionsTarget
-            .path("login") //
-            .request(MediaType.APPLICATION_JSON) //
-            .post(Entity.form(form));
+        sessionsTarget.path("login").request(MediaType.APPLICATION_JSON).post(Entity.form(form));
 
     boolean success =
         (response.getStatus() == Status.OK.getStatusCode()
@@ -80,9 +77,9 @@ public class Elab4RestClient {
   public List<Map<String, Object>> getProjectEntries(int i) {
     return projectsTarget
         .path(String.valueOf(i))
-        .path("entries") //
-        .request() //
-        .header("Authorization", "SimpleAuth " + token) //
+        .path("entries")
+        .request()
+        .header("Authorization", "SimpleAuth " + token)
         .get(List.class);
   }
 
@@ -93,17 +90,17 @@ public class Elab4RestClient {
             .path(String.valueOf(projectId))
             .path("entries")
             .path(String.valueOf(entryId))
-            .path("settings") //
-            .request() //
-            .header("Authorization", "SimpleAuth " + token) //
+            .path("settings")
+            .request()
+            .header("Authorization", "SimpleAuth " + token)
             .get(Map.class);
     Map<String, String> map2 =
         projectsTarget
             .path(String.valueOf(projectId))
             .path("entries")
-            .path(String.valueOf(entryId)) //
-            .request() //
-            .header("Authorization", "SimpleAuth " + token) //
+            .path(String.valueOf(entryId))
+            .request()
+            .header("Authorization", "SimpleAuth " + token)
             .get(Map.class);
     map.put("entryname", map2.get("name"));
     return map;
@@ -115,9 +112,9 @@ public class Elab4RestClient {
         .path(String.valueOf(projectId))
         .path("entries")
         .path(String.valueOf(entryId))
-        .path("transcriptions") //
-        .request() //
-        .header("Authorization", "SimpleAuth " + token) //
+        .path("transcriptions")
+        .request()
+        .header("Authorization", "SimpleAuth " + token)
         .get(List.class);
   }
 
@@ -128,13 +125,13 @@ public class Elab4RestClient {
     Entity<?> entity = Entity.entity(transcription, MediaType.APPLICATION_JSON);
     Response response =
         projectsTarget
-            .path(String.valueOf(projectId)) //
+            .path(String.valueOf(projectId))
             .path("entries")
-            .path(String.valueOf(entryId)) //
+            .path(String.valueOf(entryId))
             .path("transcriptions")
-            .path(String.valueOf(transcriptionId)) //
-            .request(MediaType.APPLICATION_JSON) //
-            .header("Authorization", "SimpleAuth " + token) //
+            .path(String.valueOf(transcriptionId))
+            .request(MediaType.APPLICATION_JSON)
+            .header("Authorization", "SimpleAuth " + token)
             .put(entity);
     LOG.info("response.status={}", response.getStatus());
   }
@@ -144,9 +141,9 @@ public class Elab4RestClient {
     payload.put("title", projectTitle);
     Entity<?> entity = Entity.entity(payload, MediaType.APPLICATION_JSON);
     Response response =
-        projectsTarget //
-            .request(MediaType.APPLICATION_JSON) //
-            .header("Authorization", "SimpleAuth " + token) //
+        projectsTarget
+            .request(MediaType.APPLICATION_JSON)
+            .header("Authorization", "SimpleAuth " + token)
             .post(entity);
     LOG.info("response = {}", response);
     String location = response.getHeaderString("Location");
@@ -155,10 +152,10 @@ public class Elab4RestClient {
 
   public Boolean deleteProject(int projectId) {
     Response response =
-        projectsTarget //
-            .path(String.valueOf(projectId)) //
-            .request() //
-            .header("Authorization", "SimpleAuth " + token) //
+        projectsTarget
+            .path(String.valueOf(projectId))
+            .request()
+            .header("Authorization", "SimpleAuth " + token)
             .delete();
     return response.getStatus() == 204;
   }

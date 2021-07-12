@@ -10,12 +10,12 @@ package elaborate.editor.export.mvn;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -68,34 +68,34 @@ public class MVNTeiExporter {
   }
 
   private static final List<AnnotationHandler> ANNOTATION_HANDLERS =
-      ImmutableList.<AnnotationHandler>builder() //
-          .add(new InspringenHandler(MVNAnnotationType.INSPRINGEN)) //
-          .add(new RegelnummeringBladHandler(MVNAnnotationType.REGELNUMMERING_BLAD)) //
-          .add(new PaleoHandler(MVNAnnotationType.PALEOGRAFISCH)) //
-          .add(new TekstHandler("tekst")) //
-          .add(new PoezieHandler(MVNAnnotationType.POEZIE)) //
-          .add(new AlineaHandler(MVNAnnotationType.ALINEA)) //
-          .add(new EntryHandler("entry")) //
-          .add(new OpschriftHandler(MVNAnnotationType.OPSCHRIFT)) //
-          .add(new OnderschriftHandler(MVNAnnotationType.ONDERSCHRIFT)) //
-          .add(new WitregelHandler(MVNAnnotationType.WITREGEL)) //
-          .add(new LHandler("l")) //
-          .add(new LinkerMargeKolomHandler(MVNAnnotationType.LINKERMARGEKOLOM)) //
-          .add(new RechterMargeKolomHandler(MVNAnnotationType.RECHTERMARGEKOLOM)) //
-          .add(new SubHandler("sub")) //
-          .add(new SupHandler("sup")) //
-          .add(new OnduidelijkHandler(MVNAnnotationType.ONDUIDELIJK)) //
-          .add(new DefectHandler(MVNAnnotationType.DEFECT, MVNAnnotationType.ONLEESBAAR)) //
-          .add(new DoorhalingHandler(MVNAnnotationType.DOORHALING, "strike")) //
-          .add(new AfkortingHandler(MVNAnnotationType.AFKORTING)) //
-          .add(new ItalicHandler("i")) //
-          .add(new TekstKleurRoodHandler(MVNAnnotationType.TEKSTKLEUR_ROOD, "b")) //
-          .add(new OphogingRoodHandler(MVNAnnotationType.OPHOGING_ROOD)) //
-          .add(new CijfersHandler(MVNAnnotationType.CIJFERS)) //
-          .add(new LettersHandler(MVNAnnotationType.LETTERS)) //
-          .add(new InitiaalHandler(MVNAnnotationType.INITIAAL)) //
-          .add(new KolomHandler(MVNAnnotationType.KOLOM)) //
-          .add(new VersregelHandler(MVNAnnotationType.VERSREGEL)) //
+      ImmutableList.<AnnotationHandler>builder()
+          .add(new InspringenHandler(MVNAnnotationType.INSPRINGEN))
+          .add(new RegelnummeringBladHandler(MVNAnnotationType.REGELNUMMERING_BLAD))
+          .add(new PaleoHandler(MVNAnnotationType.PALEOGRAFISCH))
+          .add(new TekstHandler("tekst"))
+          .add(new PoezieHandler(MVNAnnotationType.POEZIE))
+          .add(new AlineaHandler(MVNAnnotationType.ALINEA))
+          .add(new EntryHandler("entry"))
+          .add(new OpschriftHandler(MVNAnnotationType.OPSCHRIFT))
+          .add(new OnderschriftHandler(MVNAnnotationType.ONDERSCHRIFT))
+          .add(new WitregelHandler(MVNAnnotationType.WITREGEL))
+          .add(new LHandler("l"))
+          .add(new LinkerMargeKolomHandler(MVNAnnotationType.LINKERMARGEKOLOM))
+          .add(new RechterMargeKolomHandler(MVNAnnotationType.RECHTERMARGEKOLOM))
+          .add(new SubHandler("sub"))
+          .add(new SupHandler("sup"))
+          .add(new OnduidelijkHandler(MVNAnnotationType.ONDUIDELIJK))
+          .add(new DefectHandler(MVNAnnotationType.DEFECT, MVNAnnotationType.ONLEESBAAR))
+          .add(new DoorhalingHandler(MVNAnnotationType.DOORHALING, "strike"))
+          .add(new AfkortingHandler(MVNAnnotationType.AFKORTING))
+          .add(new ItalicHandler("i"))
+          .add(new TekstKleurRoodHandler(MVNAnnotationType.TEKSTKLEUR_ROOD, "b"))
+          .add(new OphogingRoodHandler(MVNAnnotationType.OPHOGING_ROOD))
+          .add(new CijfersHandler(MVNAnnotationType.CIJFERS))
+          .add(new LettersHandler(MVNAnnotationType.LETTERS))
+          .add(new InitiaalHandler(MVNAnnotationType.INITIAAL))
+          .add(new KolomHandler(MVNAnnotationType.KOLOM))
+          .add(new VersregelHandler(MVNAnnotationType.VERSREGEL))
           .build();
 
   // opening annotations
@@ -179,16 +179,12 @@ public class MVNTeiExporter {
         context.textId = attributes.get(XML_ID);
         if (context.parseresult.isTextGroup(tekstN)) {
           Element group =
-              new Element("group") //
-                  .withAttribute("n", tekstN) //
-                  .withAttribute(XML_ID, context.textId);
+              new Element("group").withAttribute("n", tekstN).withAttribute(XML_ID, context.textId);
           teiBuilder.append(openingTag(group));
 
         } else {
           Element text =
-              new Element("text") //
-                  .withAttribute("n", tekstN) //
-                  .withAttribute(XML_ID, context.textId);
+              new Element("text").withAttribute("n", tekstN).withAttribute(XML_ID, context.textId);
           teiBuilder.append(openingTag(text)).append(openingTag("body"));
           //        openLineGroup(teiBuilder); // only for testing purposes
         }
@@ -307,9 +303,7 @@ public class MVNTeiExporter {
         addOptionalAttribute(pb, XML_ID, entryAttributes);
         addOptionalAttribute(pb, "n", entryAttributes);
         addOptionalAttribute(pb, "facs", entryAttributes);
-        teiBuilder //
-            .append(NL) //
-            .append(milestoneTag(pb));
+        teiBuilder.append(NL).append(milestoneTag(pb));
       }
     }
   }
@@ -422,8 +416,8 @@ public class MVNTeiExporter {
           context.incrementTextLineNumber();
           String lId = context.textId + "-l-" + context.textLineNumber;
           Element l =
-              new Element("l") //
-                  .withAttribute("n", String.valueOf(context.textLineNumber)) //
+              new Element("l")
+                  .withAttribute("n", String.valueOf(context.textLineNumber))
                   .withAttribute(XML_ID, lId);
           teiBuilder.append(openingTag(l));
         }
@@ -455,8 +449,8 @@ public class MVNTeiExporter {
         if (context.inPoetry) {
           String lId = context.textId + "-l-" + context.textLineNumber;
           Element l =
-              new Element("l") //
-                  .withAttribute("n", String.valueOf(context.textLineNumber)) //
+              new Element("l")
+                  .withAttribute("n", String.valueOf(context.textLineNumber))
                   .withAttribute(XML_ID, lId);
           teiBuilder.append(openingTag(l));
         }
@@ -483,8 +477,8 @@ public class MVNTeiExporter {
     }
 
     private static Element note(String place) {
-      return new Element("note") //
-          .withAttribute("place", "margin-" + place) //
+      return new Element("note")
+          .withAttribute("place", "margin-" + place)
           .withAttribute("type", "ms");
     }
   }
@@ -616,23 +610,22 @@ public class MVNTeiExporter {
         String expan =
             xmlAnnotation
                 .getAttributes()
-                .get("body") //
-                .replaceAll("&nbsp;", " ") //
-                .replaceAll("<i[^>]*>", openSubstitute) //
-                .replace("</i>", closeSubstitute) //
-                .replaceAll("<[^>]*>", "") //
-                .replace(openSubstitute, "<ex>") //
-                .replace(closeSubstitute, "</ex>") //
-            ;
+                .get("body")
+                .replaceAll("&nbsp;", " ")
+                .replaceAll("<i[^>]*>", openSubstitute)
+                .replace("</i>", closeSubstitute)
+                .replaceAll("<[^>]*>", "")
+                .replace(openSubstitute, "<ex>")
+                .replace(closeSubstitute, "</ex>");
 
-        teiBuilder //
-            .append(openingTag(CHOICE)) //
-            .append(openingTag(ABBR)) //
-            .append(abbr) //
-            .append(closingTag(ABBR)) //
-            .append(openingTag(EXPAN)) //
-            .append(expan) //
-            .append(closingTag(EXPAN)) //
+        teiBuilder
+            .append(openingTag(CHOICE))
+            .append(openingTag(ABBR))
+            .append(abbr)
+            .append(closingTag(ABBR))
+            .append(openingTag(EXPAN))
+            .append(expan)
+            .append(closingTag(EXPAN))
             .append(closingTag(CHOICE));
         context.text = "";
       }
@@ -734,23 +727,17 @@ public class MVNTeiExporter {
         String content =
             xmlAnnotation
                 .getAttributes()
-                .get("body") //
-                .replaceAll("&nbsp;", " ") //
-                .replaceAll("<i[^>]*>", openSubstitute) //
-                .replace("</i>", closeSubstitute) //
-                .replaceAll("<[^>]*>", "") //
-                .replace(openSubstitute, "<mentioned>") //
-                .replace(closeSubstitute, "</mentioned>") //
-            ;
-        teiBuilder //
-            .append(openingTag(note)) //
-            .append(content) //
-            .append(closingTag(note));
+                .get("body")
+                .replaceAll("&nbsp;", " ")
+                .replaceAll("<i[^>]*>", openSubstitute)
+                .replace("</i>", closeSubstitute)
+                .replaceAll("<[^>]*>", "")
+                .replace(openSubstitute, "<mentioned>")
+                .replace(closeSubstitute, "</mentioned>");
+        teiBuilder.append(openingTag(note)).append(content).append(closingTag(note));
       }
     }
   }
-
-  //
 
   private Multimap<String, XmlAnnotation> indexXmlAnnotations(
       Collection<XmlAnnotation> annotations) {

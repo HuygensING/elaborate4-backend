@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -65,12 +65,11 @@ public class Project extends AbstractDocument<Project> {
   private static final Set<String> DEFAULT_FACETFIELDS =
       Sets.newLinkedHashSet(Lists.newArrayList("publishable"));
   private static final Set<FacetInfo> DEFAULT_FACETINFO =
-      Sets.newHashSet( //
+      Sets.newHashSet(
           new FacetInfo()
               .setName(SolrFields.PUBLISHABLE)
               .setTitle(ProjectEntry.PUBLISHABLE)
-              .setType(FacetType.BOOLEAN) //
-          );
+              .setType(FacetType.BOOLEAN));
 
   /* properties to persist */
   private String level_1 = "";
@@ -90,40 +89,40 @@ public class Project extends AbstractDocument<Project> {
   private List<ProjectMetadataItem> project_metadata_items;
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable( //
-      name = "project_annotation_types", //
+  @JoinTable(
+      name = "project_annotation_types",
       joinColumns = {
         @JoinColumn(
             name = "project_id",
             columnDefinition = "int4",
             nullable = false,
             updatable = false)
-      }, //
+      },
       inverseJoinColumns = {
         @JoinColumn(
             name = "annotation_type_id",
             columnDefinition = "int4",
             nullable = false,
-            updatable = false) //
+            updatable = false)
       })
   private Set<AnnotationType> annotationTypes = Sets.newHashSet();
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable( //
-      name = "project_users", //
+  @JoinTable(
+      name = "project_users",
       joinColumns = {
         @JoinColumn(
             name = "project_id",
             columnDefinition = "int4",
             nullable = false,
             updatable = false)
-      }, //
+      },
       inverseJoinColumns = {
         @JoinColumn(
             name = "user_id",
             columnDefinition = "int4",
             nullable = false,
-            updatable = false) //
+            updatable = false)
       })
   private Set<User> users;
 
@@ -188,11 +187,10 @@ public class Project extends AbstractDocument<Project> {
     List<FacetInfo> list = Lists.newArrayList(DEFAULT_FACETINFO);
     for (String pemfn : getProjectEntryMetadataFieldnames()) {
       list.add(
-          new FacetInfo() //
-              .setName(SolrUtils.facetName(pemfn)) //
-              .setTitle(pemfn) //
-              .setType(FacetType.LIST) //
-          );
+          new FacetInfo()
+              .setName(SolrUtils.facetName(pemfn))
+              .setTitle(pemfn)
+              .setType(FacetType.LIST));
     }
     return list;
   }
@@ -250,13 +248,9 @@ public class Project extends AbstractDocument<Project> {
     this.annotationTypes = annotationTypes;
   }
 
-  //
   // @OneToMany
   // ProjectAnnotationType[] getProjectAnnotationTypes();
-  //
 
-  //
-  //
   // /**
   // * @deprecated use
   // * {@link #getLevel(1)}
@@ -264,9 +258,9 @@ public class Project extends AbstractDocument<Project> {
   // */
   // @Deprecated
   // String getLevel1();
-  //
+
   // void setLevel1(String projectEntryMetadataFieldname);
-  //
+
   // /**
   // * @deprecated use
   // * {@link #getLevel(2)}
@@ -274,9 +268,9 @@ public class Project extends AbstractDocument<Project> {
   // */
   // @Deprecated
   // String getLevel2();
-  //
+
   // void setLevel2(String projectEntryMetadataFieldname);
-  //
+
   // /**
   // * @deprecated use
   // * {@link #getLevel(3)}
@@ -284,17 +278,15 @@ public class Project extends AbstractDocument<Project> {
   // */
   // @Deprecated
   // String getLevel3();
-  //
+
   // void setLevel3(String projectEntryMetadataFieldname);
-  //
-  //
+
   // int getProjectLeaderId();
-  //
+
   // void setProjectLeaderId(int id);
-  //
-  //
+
   // }
-  //
+
   // // public List<ProjectEntryMetadataKey> getProjectEntryMetadataKeys() {
   // // Set<ProjectEntryMetadataKey> metadataKeys = Sets.newLinkedHashSet();
   // // // for (Corpus corpus : getCorpora()) {
@@ -302,14 +294,13 @@ public class Project extends AbstractDocument<Project> {
   // // // }
   // // return Lists.newArrayList(metadataKeys);
   // // }
-  //
 
   /* transient methods */
 
   // public String[] getLevels() {
   // return new String[] { getLevel(1), getLevel(2), getLevel(3) };
   // }
-  //
+
   // @SuppressWarnings("deprecation")
   // public String getLevel(int i) {
   // switch (i) {
@@ -319,12 +310,12 @@ public class Project extends AbstractDocument<Project> {
   // return (project.getLevel2() != null) ? project.getLevel2() : ProjectEntry.FOLIO_SIDE;
   // case 3:
   // return (project.getLevel3() != null) ? project.getLevel3() : ProjectEntry.COLUMN_ON_PAGE;
-  //
+
   // default:
   // return null;
   // }
   // }
-  //
+
   // public void setLevel(int i, String facsimileMetadataKeyName) {
   // switch (i) {
   // case 1:
@@ -336,12 +327,12 @@ public class Project extends AbstractDocument<Project> {
   // case 3:
   // project.setLevel3(facsimileMetadataKeyName);
   // break;
-  //
+
   // default:
   // break;
   // }
   // }
-  //
+
   // // public List<ProjectEntry> getProjectEntriesInOrder0() {
   // // StopWatch sw = new StopWatch();
   // // sw.start();
@@ -353,12 +344,12 @@ public class Project extends AbstractDocument<Project> {
   // // Log.info("entrysort took:" + sw.getTime() + " milliseconds");
   // // return entries;
   // // }
-  //
+
   // public List<ProjectEntryProxy> getProjectEntryProxiesInOrder(String[] levels) {
   // Map<String, String> filter = Maps.newHashMap();
   // return getProjectEntryProxiesInOrder(filter, levels);
   // }
-  //
+
   // public List<ProjectEntryProxy> getProjectEntryProxiesInOrder(final Map<String, String> filter,
   // String[] level) {
   // StopWatch sw = new StopWatch();
@@ -372,12 +363,12 @@ public class Project extends AbstractDocument<Project> {
   // Log.info("entrysort of " + entries.size() + " entries took:" + sw.getTime() + " milliseconds");
   // return entries;
   // }
-  //
+
   // public List<ProjectEntry> getProjectEntriesInOrder(String[] levels) {
   // Map<String, String> filter = Maps.newHashMap();
   // return getProjectEntriesInOrder(filter, levels);
   // }
-  //
+
   // public List<ProjectEntry> getProjectEntriesInOrder(final Map<String, String> filter, String[]
   // level) {
   // StopWatch sw = new StopWatch();
@@ -403,15 +394,15 @@ public class Project extends AbstractDocument<Project> {
   // if (!filter.isEmpty()) {
   // entries = Lists.newArrayList(Iterables.filter(entries, filterPredicate(filter)));
   // }
-  //
+
   // sw.stop();
   // Log.info("entrysort of " + entries.size() + " entries took:" + sw.getTime() + " milliseconds");
   // return entries;
   // }
-  //
+
   // private Predicate<ProjectEntry> filterPredicate(final Map<String, String> filter) {
   // return new Predicate<ProjectEntry>() {
-  //
+
   // @Override
   // public boolean apply(ProjectEntry projectEntry) {
   // boolean result = true;
@@ -425,7 +416,7 @@ public class Project extends AbstractDocument<Project> {
   // }
   // };
   // }
-  //
+
   // public ProjectEntry getProjectEntryByName(String name) {
   // for (ProjectEntry projectEntry : project.getProjectEntries()) {
   // if (projectEntry.getName().equals(name)) {
@@ -434,7 +425,7 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return null;
   // }
-  //
+
   // public List<Transcription> getTranscriptionsInOrder(TranscriptionType transcriptionType,
   // String[] levels) {
   // List<Transcription> transcriptionsInOrder = Lists.newArrayList();
@@ -450,11 +441,11 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return transcriptionsInOrder;
   // }
-  //
+
   // public Comparator<ProjectEntry> getEntryComparator() {
   // // TODO: is guava's Ordering niet beter in dit geval?
   // return new Comparator<ProjectEntry>() {
-  //
+
   // @Override
   // public int compare(ProjectEntry e1, ProjectEntry e2) {
   // int compare1 = compareLevel(1, e1, e2);
@@ -468,7 +459,7 @@ public class Project extends AbstractDocument<Project> {
   // int compare3 = compareLevel(3, e1, e2);
   // return compare3;
   // }
-  //
+
   // private int compareLevel(int i, ProjectEntry e1, ProjectEntry e2) {
   // String f1level = e1.getMetadata(getLevel(i));
   // String f2level = e2.getMetadata(getLevel(i));
@@ -476,23 +467,23 @@ public class Project extends AbstractDocument<Project> {
   // }
   // };
   // }
-  //
+
   // public AnnotationType addAnnotationType(String name, User user, String description) {
   // return ModelFactory.createAnnotationType(name, description, user);
   // }
-  //
+
   // public AnnotationType getDefaultAnnotationType() {
   // AnnotationType[] annotationTypes = ModelFactory.getAnnotationTypes();
   // AnnotationType annotationtype = annotationTypes.length > 0 ? annotationTypes[0] : null;
   // return annotationtype;
   // }
-  //
+
   // public void addUser(User user) {
   // if (!getUsers().contains(user)) {
   // ModelFactory.createProjectUser(project, user);
   // }
   // }
-  //
+
   // public void removeUser(User user) {
   // for (ProjectUser projectUser : project.getProjectUsers()) {
   // if (projectUser.getUser().equals(user)) {
@@ -505,7 +496,7 @@ public class Project extends AbstractDocument<Project> {
   // }
   // }
   // }
-  //
+
   // public List<User> getUsers() {
   // ProjectUser[] projectUsers = project.getProjectUsers();
   // List<User> users = Lists.newArrayList();
@@ -514,16 +505,15 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return users;
   // }
-  //
+
   public ProjectEntry addEntry(String name, User creator) {
-    return ModelFactory.createTrackedEntity(ProjectEntry.class, creator) //
-        .setProject(this) //
-        .setName(name) //
-        .setFacsimiles(Lists.<Facsimile>newArrayList()) //
+    return ModelFactory.createTrackedEntity(ProjectEntry.class, creator)
+        .setProject(this)
+        .setName(name)
+        .setFacsimiles(Lists.<Facsimile>newArrayList())
         .setTranscriptions(Lists.<Transcription>newArrayList());
   }
 
-  //
   // private void log(String comment, User _user) {
   // User user = _user;
   // if (user == null) {
@@ -536,7 +526,7 @@ public class Project extends AbstractDocument<Project> {
   // }
   // ModelFactory.createLogEntry(user, project, comment);
   // }
-  //
+
   // public List<String> getProjectMetadataFieldnamesList() {
   // List<String> projectMetadataFieldnamesList = Lists.newArrayList();
   // for (ProjectMetadataFields projectMetadataField : ModelFactory.getProjectMetadataFields()) {
@@ -544,13 +534,13 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return projectMetadataFieldnamesList;
   // }
-  //
+
   // public List<String> getProjectEntryMetadataFieldnamesList() {
   // return
   // Lists.newArrayList(Splitter.on(FIELDNAME_SEPARATOR).omitEmptyStrings().split(project.getProjectEntryMetadataFieldnames()));
   // // return project.getProjectEntryMetadataFieldnames().split(FIELDNAME_SEPARATOR);
   // }
-  //
+
   // public synchronized void checkProjectEntryMetadataFieldname(String fieldname, User modifier) {
   // List<String> projectEntryMetadataFieldnamesList = getProjectEntryMetadataFieldnamesList();
   // if (!projectEntryMetadataFieldnamesList.contains(fieldname)) {
@@ -561,14 +551,14 @@ public class Project extends AbstractDocument<Project> {
   // ModelFactory.save(project, modifier);
   // }
   // }
-  //
+
   // public synchronized void checkProjectMetadataFieldname(String fieldname, User user) {
   // List<String> projectMetadataFieldnamesList = getProjectMetadataFieldnamesList();
   // if (!projectMetadataFieldnamesList.contains(fieldname)) {
   // ModelFactory.createProjectMetadataField(fieldname, user);
   // }
   // }
-  //
+
   // public String getMetadata(String field) {
   // ProjectMetadataItem[] projectMetadataItems = project.getProjectMetadataItems();
   // for (ProjectMetadataItem projectMetadataItem : projectMetadataItems) {
@@ -578,15 +568,14 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return "";
   // }
-  //
-  //
+
   // public void setMetadata(Map<String, String> metadata, User creator) {
   // removeAllMetadata();
   // for (Entry<String, String> entry : metadata.entrySet()) {
   // addMetadata(entry.getKey(), entry.getValue(), creator);
   // }
   // }
-  //
+
   // public AnnotationType getAnnotationType(String name) {
   // AnnotationType[] annotationTypes = ModelFactory.getAnnotationTypes();
   // for (AnnotationType annotationType : annotationTypes) {
@@ -596,12 +585,12 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return null;
   // }
-  //
+
   // public int getProjectEntryCount() {
   // return ModelFactory.getEntityCount(ProjectEntry.class, new Query("project_id",
   // Integer.valueOf(project.getId().toString())));
   // }
-  //
+
   // public List<String> getFolioNumbers(String[] levels) {
   // List<String> list = Lists.newArrayList();
   // for (ProjectEntry projectEntry : project.getProjectEntriesInOrder(levels)) {
@@ -612,7 +601,7 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return list;
   // }
-  //
+
   // public User getProjectLeader() {
   // int projectLeaderId = project.getProjectLeaderId();
   // if (projectLeaderId == -1) {
@@ -622,13 +611,13 @@ public class Project extends AbstractDocument<Project> {
   // return projectUser.getUser();
   // }
   // }
-  //
+
   // } else {
   // return ModelFactory.getUserById(String.valueOf(projectLeaderId));
   // }
   // return null;
   // }
-  //
+
   // public List<AnnotationType> getAnnotationTypes() {
   // List<AnnotationType> types = Lists.newArrayList();
   // for (ProjectAnnotationType projectAnnotationType : project.getProjectAnnotationTypes()) {
@@ -641,13 +630,13 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return types;
   // }
-  //
+
   // public void addAnnotationType(AnnotationType at) {
   // if (!getAnnotationTypes().contains(at)) {
   // ModelFactory.createProjectAnnotationType(project, at);
   // }
   // }
-  //
+
   // public boolean removeAnnotationType(AnnotationType at) {
   // ProjectAnnotationType[] projectAnnotationTypes = project.getProjectAnnotationTypes();
   // for (ProjectAnnotationType projectAnnotationType : projectAnnotationTypes) {
@@ -658,19 +647,19 @@ public class Project extends AbstractDocument<Project> {
   // }
   // return false;
   // }
-  //
+
   // public Class<? extends ProjectPage> getProjectPageClass() {
   // if (isFaceted()) {
   // return FacetedProjectPage.class;
   // }
   // return TreeProjectPage.class;
   // }
-  //
+
   // public boolean isFaceted() {
   // // return true;
   // return project.getMetadata("pagemode").equals("faceted");
   // }
-  //
+
   // // public boolean removeAnnotationType(AnnotationType annotationType) {
   // // try {
   // // log(String.format("removed AnnotationType %s: %s", annotationType.getName(),
@@ -697,7 +686,7 @@ public class Project extends AbstractDocument<Project> {
   // project.checkProjectMetadataFieldname(field, creator);
   // ModelFactory.createProjectMetadataItem(project, field, value, creator);
   // }
-  //
+
   // void removeAllMetadata() {
   // for (ProjectMetadataItem projectMetadataItem : project.getProjectMetadataItems()) {
   // try {
@@ -708,9 +697,9 @@ public class Project extends AbstractDocument<Project> {
   // }
   // }
   public ProjectMetadataItem addMetadata(String key, String value, User creator) {
-    return ModelFactory.createTrackedEntity(ProjectMetadataItem.class, creator) //
-        .setProject(this) //
-        .setField(key) //
+    return ModelFactory.createTrackedEntity(ProjectMetadataItem.class, creator)
+        .setProject(this)
+        .setField(key)
         .setData(value);
   }
 
@@ -730,10 +719,10 @@ public class Project extends AbstractDocument<Project> {
   }
 
   public LogEntry addLogEntry(String string, User user) {
-    return ModelFactory.create(LogEntry.class) //
-        .setProject(this) //
-        .setComment(string) //
-        .setCreatedOn(new Date()) //
+    return ModelFactory.create(LogEntry.class)
+        .setProject(this)
+        .setComment(string)
+        .setCreatedOn(new Date())
         .setUserName(user.getUsername());
   }
 }

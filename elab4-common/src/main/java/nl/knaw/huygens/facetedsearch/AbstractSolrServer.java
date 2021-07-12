@@ -10,12 +10,12 @@ package nl.knaw.huygens.facetedsearch;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -150,17 +150,14 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
     SolrQuery query = new SolrQuery();
     String[] fieldsToReturn = getIndexFieldToReturn(sp.getResultFields());
     query
-        .setQuery(queryString) //
-        .setFields(fieldsToReturn) //
-        .setRows(ROWS) //
-        .addFacetField(facetFields) //
-        .setFacetMinCount(1) //
+        .setQuery(queryString)
+        .setFields(fieldsToReturn)
+        .setRows(ROWS)
+        .addFacetField(facetFields)
+        .setFacetMinCount(1)
         .setFacetLimit(FACET_LIMIT);
     if (queryComposer.mustHighlight()) {
-      query //
-          .setHighlight(true) //
-          .setHighlightSnippets(500) //
-          .setHighlightFragsize(HIGHLIGHT_FRAGSIZE);
+      query.setHighlight(true).setHighlightSnippets(500).setHighlightFragsize(HIGHLIGHT_FRAGSIZE);
 
       query.set(HighlightParams.MERGE_CONTIGUOUS_FRAGMENTS, false);
       query.set(HighlightParams.MAX_CHARS, -1);
@@ -375,11 +372,11 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
   //		ORDER sortOrder = ascending ? SolrQuery.ORDER.asc : SolrQuery.ORDER.desc;
   //		if (SolrFields.SCORE.equals(sortField)) {
   //			query.addSort(SolrFields.SCORE, ascending ? SolrQuery.ORDER.desc : SolrQuery.ORDER.asc);
-  //
+
   //		} else if (sortField != null) {
   //			query.addSort(sortField, sortOrder);
   //		}
-  //
+
   //		query.addSort(sp.getLevel1Field(), SolrQuery.ORDER.asc);
   //		query.addSort(sp.getLevel2Field(), SolrQuery.ORDER.asc);
   //		query.addSort(sp.getLevel3Field(), SolrQuery.ORDER.asc);
@@ -397,17 +394,12 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
   protected FacetCount convertFacet(FacetField field, String title, FacetType type) {
     if (field != null) {
       FacetCount facetCount =
-          new FacetCount() //
-              .setName(field.getName()) //
-              .setTitle(title) //
-              .setType(type);
+          new FacetCount().setName(field.getName()).setTitle(title).setType(type);
       List<Count> counts = field.getValues();
       if (counts != null) {
         for (Count count : counts) {
           FacetCount.Option option =
-              new FacetCount.Option() //
-                  .setName(count.getName()) //
-                  .setCount(count.getCount());
+              new FacetCount.Option().setName(count.getName()).setCount(count.getCount());
           facetCount.addOption(option);
         }
       }

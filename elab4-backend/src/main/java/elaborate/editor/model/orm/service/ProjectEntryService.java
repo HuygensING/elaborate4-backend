@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -197,8 +197,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
       ProjectEntry projectEntry = find(getEntityClass(), id);
       transcription =
           projectEntry
-              .addTranscription(user) //
-              .setBody(transcriptionInput.getBodyForDb()) //
+              .addTranscription(user)
+              .setBody(transcriptionInput.getBodyForDb())
               .setTextLayer(transcriptionInput.getTextLayer());
       persist(transcription);
 
@@ -241,9 +241,9 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
       Project project = projectEntry.getProject();
 
       facsimile =
-          projectEntry //
-              .addFacsimile(facsimileData.getName(), facsimileData.getTitle(), user) //
-              .setFilename(facsimileData.getFilename()) //
+          projectEntry
+              .addFacsimile(facsimileData.getName(), facsimileData.getTitle(), user)
+              .setFilename(facsimileData.getFilename())
               .setZoomableUrl(facsimileData.getZoomableUrl());
       persist(facsimile);
       persist(
@@ -281,8 +281,8 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
       Project project = projectService.getProjectIfUserCanRead(project_id, user);
 
       facsimile
-          .setName(facsimileData.getName()) //
-          .setFilename(facsimileData.getFilename()) //
+          .setName(facsimileData.getName())
+          .setFilename(facsimileData.getFilename())
           .setZoomableUrl(facsimileData.getZoomableUrl());
       persist(facsimile);
       persist(

@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -274,13 +274,9 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     List<ProjectEntry> resultList =
         getEntityManager() // .
             .createQuery(
-                "from ProjectEntry pe"
-                    + //
-                    " where project_id=:projectId"
-                    + //
-                    " order by pe.name", //
-                ProjectEntry.class) //
-            .setParameter("projectId", id) //
+                "from ProjectEntry pe" + " where project_id=:projectId" + " order by pe.name",
+                ProjectEntry.class)
+            .setParameter("projectId", id)
             .getResultList();
 
     return ImmutableList.copyOf(resultList);
@@ -295,7 +291,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         new Comparator<ProjectEntry>() {
           @Override
           public int compare(ProjectEntry e1, ProjectEntry e2) {
-            return projectEntryIdsInOrder.indexOf(e1.getId()) //
+            return projectEntryIdsInOrder.indexOf(e1.getId())
                 - projectEntryIdsInOrder.indexOf(e2.getId());
           }
         });
@@ -308,21 +304,16 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
         getEntityManager() // .
             .createQuery(
                 "select pe.id from ProjectEntry pe"
-                    + //
-                    " left join pe.projectEntryMetadataItems l1 with l1.field=:level1"
-                    + //
-                    " left join pe.projectEntryMetadataItems l2 with l2.field=:level2"
-                    + //
-                    " left join pe.projectEntryMetadataItems l3 with l3.field=:level3"
-                    + //
-                    " where project_id=:projectId"
-                    + //
-                    " order by ascii(l1.data),ascii(l2.data),ascii(l3.data),pe.name", //
-                Long.class) //
-            .setParameter("level1", project.getLevel1()) //
-            .setParameter("level2", project.getLevel2()) //
-            .setParameter("level3", project.getLevel3()) //
-            .setParameter("projectId", id) //
+                    + " left join pe.projectEntryMetadataItems l1 with l1.field=:level1"
+                    + " left join pe.projectEntryMetadataItems l2 with l2.field=:level2"
+                    + " left join pe.projectEntryMetadataItems l3 with l3.field=:level3"
+                    + " where project_id=:projectId"
+                    + " order by ascii(l1.data),ascii(l2.data),ascii(l3.data),pe.name",
+                Long.class)
+            .setParameter("level1", project.getLevel1())
+            .setParameter("level2", project.getLevel2())
+            .setParameter("level3", project.getLevel3())
+            .setParameter("projectId", id)
             .getResultList();
     // query translates to:
     //    select pe.id from project_entries pe
@@ -415,12 +406,12 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
     Project project = null;
     List<ProjectUser> resultList =
-        getEntityManager() //
+        getEntityManager()
             .createQuery(
                 "from ProjectUser where user_id=:userId and project_id=:projectId",
-                ProjectUser.class) //
-            .setParameter("userId", user.getId()) //
-            .setParameter("projectId", project_id) //
+                ProjectUser.class)
+            .setParameter("userId", user.getId())
+            .setParameter("projectId", project_id)
             .getResultList();
     // logMemory();
     if (!resultList.isEmpty()) {
@@ -617,13 +608,12 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   private Long getTranscriptionCount(long project_id, EntityManager entityManager) {
     return (Long)
-        entityManager //
+        entityManager
             .createQuery(
-                "select count(*) from Transcription" //
-                    + " where project_entry_id in" //
-                    + " (select id from ProjectEntry where project_id=:project_id)" //
-                ) //
-            .setParameter("project_id", project_id) //
+                "select count(*) from Transcription"
+                    + " where project_entry_id in"
+                    + " (select id from ProjectEntry where project_id=:project_id)")
+            .setParameter("project_id", project_id)
             .getSingleResult();
   }
 
@@ -642,13 +632,12 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   private Long getFacsimileCount(long project_id, EntityManager entityManager) {
     return (Long)
-        entityManager //
+        entityManager
             .createQuery(
-                "select count(*) from" //
-                    + " Facsimile where project_entry_id in" //
-                    + " (select id from ProjectEntry where project_id=:project_id)" //
-                ) //
-            .setParameter("project_id", project_id) //
+                "select count(*) from"
+                    + " Facsimile where project_entry_id in"
+                    + " (select id from ProjectEntry where project_id=:project_id)")
+            .setParameter("project_id", project_id)
             .getSingleResult();
   }
 
@@ -658,15 +647,14 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     for (String textLayer : project.getTextLayers()) {
       Long textLayerCount =
           (Long)
-              entityManager //
+              entityManager
                   .createQuery(
-                      "select count(*) from Transcription" //
-                          + " where text_layer = :text_layer" //
-                          + " and project_entry_id in" //
-                          + " (select id from ProjectEntry where project_id=:project_id)" //
-                      ) //
-                  .setParameter("text_layer", textLayer) //
-                  .setParameter("project_id", project_id) //
+                      "select count(*) from Transcription"
+                          + " where text_layer = :text_layer"
+                          + " and project_entry_id in"
+                          + " (select id from ProjectEntry where project_id=:project_id)")
+                  .setParameter("text_layer", textLayer)
+                  .setParameter("project_id", project_id)
                   .getSingleResult();
       textLayerCountMap.put(textLayer, textLayerCount);
     }
@@ -679,17 +667,16 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     for (AnnotationType annotationType : project.getAnnotationTypes()) {
       Long annotationTypeCount =
           (Long)
-              entityManager //
+              entityManager
                   .createQuery(
-                      "select count(*) from Annotation" //
-                          + " where annotation_type_id = :annotation_type_id" //
-                          + "   and transcription_id in" //
-                          + "     (select id from Transcription" //
-                          + "       where project_entry_id in" //
-                          + "         (select id from ProjectEntry where project_id=:project_id))" //
-                      ) //
-                  .setParameter("annotation_type_id", annotationType.getId()) //
-                  .setParameter("project_id", project_id) //
+                      "select count(*) from Annotation"
+                          + " where annotation_type_id = :annotation_type_id"
+                          + "   and transcription_id in"
+                          + "     (select id from Transcription"
+                          + "       where project_entry_id in"
+                          + "         (select id from ProjectEntry where project_id=:project_id))")
+                  .setParameter("annotation_type_id", annotationType.getId())
+                  .setParameter("project_id", project_id)
                   .getSingleResult();
       annotationTypeCountMap.put(annotationType.getName(), annotationTypeCount);
     }
@@ -698,12 +685,9 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
 
   private Long getEntriesCount(long project_id, EntityManager entityManager) {
     return (Long)
-        entityManager //
-            .createQuery(
-                "select count(*) from ProjectEntry" //
-                    + " where project_id=:project_id" //
-                ) //
-            .setParameter("project_id", project_id) //
+        entityManager
+            .createQuery("select count(*) from ProjectEntry" + " where project_id=:project_id")
+            .setParameter("project_id", project_id)
             .getSingleResult();
   }
 
@@ -738,11 +722,11 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
                 "removing textlayer(s) " + Joiner.on(", ").join(textLayersToRemove), user));
         for (String textlayer : textLayersToRemove) {
           List<?> resultList =
-              getEntityManager() //
+              getEntityManager()
                   .createQuery(
-                      "select e.id, t.id from ProjectEntry e join e.transcriptions as t with t.text_layer=:textlayer where e.project=:project") //
-                  .setParameter("project", project) //
-                  .setParameter("textlayer", textlayer) //
+                      "select e.id, t.id from ProjectEntry e join e.transcriptions as t with t.text_layer=:textlayer where e.project=:project")
+                  .setParameter("project", project)
+                  .setParameter("textlayer", textlayer)
                   .getResultList();
           for (Object object : resultList) {
             Object[] ids = (Object[]) object;
@@ -963,13 +947,13 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     List<String> facetableProjectEntryMetadataFields =
         getFacetableProjectEntryMetadataFields(projectMetadata);
     List<String> publishableTextLayers = getPublishableTextLayers(projectMetadata);
-    return new Publication.Settings() //
-        .setProjectId(project_id) //
-        .setUser(user) //
-        .setTextLayers(publishableTextLayers) //
-        .setAnnotationTypeIds(publishableAnnotationTypeIds) //
-        .setProjectEntryMetadataFields(publishableProjectEntryMetadataFields) //
-        .setFacetFields(facetableProjectEntryMetadataFields) //
+    return new Publication.Settings()
+        .setProjectId(project_id)
+        .setUser(user)
+        .setTextLayers(publishableTextLayers)
+        .setAnnotationTypeIds(publishableAnnotationTypeIds)
+        .setProjectEntryMetadataFields(publishableProjectEntryMetadataFields)
+        .setFacetFields(facetableProjectEntryMetadataFields)
         .setProjectType(projectType);
   }
 
@@ -1051,8 +1035,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
           }
         };
     TeiConversionConfig config =
-        new TeiConversionConfig() //
-            .setGroupTextsByMetadata(groupTextsByMetadata) //
+        new TeiConversionConfig()
+            .setGroupTextsByMetadata(groupTextsByMetadata)
             .addAnnotationTypeMapping(versregels, mapToL);
 
     String xml;
@@ -1212,10 +1196,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   //			Object[] objects = (Object[]) result;
   //			annotationTypes.put((Integer) objects[0], (String) objects[1]);
   //		}
-  //
+
   //		return annotationTypes;
   //	}
-  //
+
   //	public Map<Integer, Map<String, String>> getAnnotationParametersForProject(Long projectId) {
   //		Map<Integer, Map<String, String>> annotationParameters = Maps.newHashMap();
   //		Project project = read(projectId);
@@ -1243,10 +1227,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     Project project = read(projectId);
     Map<Integer, AnnotationData> annotationDataMap = Maps.newHashMap();
     List<?> resultList =
-        getEntityManager() //
+        getEntityManager()
             .createQuery(
-                "select a.annotationNo, at.id, at.name from Annotation as a inner join a.annotationType as at where a.transcription.projectEntry.project=:project") //
-            .setParameter("project", project) //
+                "select a.annotationNo, at.id, at.name from Annotation as a inner join a.annotationType as at where a.transcription.projectEntry.project=:project")
+            .setParameter("project", project)
             .getResultList();
     for (Object result : resultList) {
       Object[] objects = (Object[]) result;
@@ -1258,10 +1242,10 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     }
 
     resultList =
-        getEntityManager() //
+        getEntityManager()
             .createQuery(
-                "select a.annotationNo, am.annotationTypeMetadataItem.name, am.data from Annotation as a join a.annotationMetadataItems as am where a.transcription.projectEntry.project=:project") //
-            .setParameter("project", project) //
+                "select a.annotationNo, am.annotationTypeMetadataItem.name, am.data from Annotation as a join a.annotationMetadataItems as am where a.transcription.projectEntry.project=:project")
+            .setParameter("project", project)
             .getResultList();
     for (Object result : resultList) {
       Object[] objects = (Object[]) result;

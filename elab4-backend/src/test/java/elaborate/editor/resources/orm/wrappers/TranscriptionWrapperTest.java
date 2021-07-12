@@ -10,12 +10,12 @@ package elaborate.editor.resources.orm.wrappers;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -100,31 +100,31 @@ public class TranscriptionWrapperTest {
   @Test
   public void testConvertBodyForOutput() {
     String in =
-        "<body>" //
-            + "  " //
-            + "<ab id=\"9085822\"/>" //
-            + "bla " //
-            + "<ab id=\"9085821\"/>" //
-            + "die" //
-            + "<ae id=\"9085822\"/>" //
-            + " bla" //
-            + "<ae id=\"9085821\"/>" //
-            + "\nhello world  " //
+        "<body>"
+            + "  "
+            + "<ab id=\"9085822\"/>"
+            + "bla "
+            + "<ab id=\"9085821\"/>"
+            + "die"
+            + "<ae id=\"9085822\"/>"
+            + " bla"
+            + "<ae id=\"9085821\"/>"
+            + "\nhello world  "
             + "</body>";
     String expected =
-        "<span data-marker=\"begin\" data-id=\"9085822\" data-type=\"type2\"></span>" //
-            + "bla " //
-            + "<span data-marker=\"begin\" data-id=\"9085821\" data-type=\"type1\"></span>" //
-            + "die" //
-            + "<sup data-marker=\"end\" data-id=\"9085822\">1</sup>" //
-            + " bla" //
-            + "<sup data-marker=\"end\" data-id=\"9085821\">2</sup>" //
+        "<span data-marker=\"begin\" data-id=\"9085822\" data-type=\"type2\"></span>"
+            + "bla "
+            + "<span data-marker=\"begin\" data-id=\"9085821\" data-type=\"type1\"></span>"
+            + "die"
+            + "<sup data-marker=\"end\" data-id=\"9085822\">1</sup>"
+            + " bla"
+            + "<sup data-marker=\"end\" data-id=\"9085821\">2</sup>"
             + "<br>hello world";
     Transcription transcription = mockTranscription("textLayer", "title", in);
     Map<Integer, AnnotationData> annotationDataMap =
-        ImmutableMap.<Integer, ProjectService.AnnotationData>builder() //
-            .put(9085821, new AnnotationData().setType("type1")) //
-            .put(9085822, new AnnotationData().setType("type2")) //
+        ImmutableMap.<Integer, ProjectService.AnnotationData>builder()
+            .put(9085821, new AnnotationData().setType("type1"))
+            .put(9085822, new AnnotationData().setType("type2"))
             .build();
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
     assertThat(tw.getBody()).isEqualTo(expected);
@@ -211,9 +211,9 @@ public class TranscriptionWrapperTest {
   @Test
   public void testConvertFromInputRemovesMostWordTags() {
     String in =
-        "<p class=\"MsoNormal\" style=\"margin-right:29.9pt;text-align:justify\">" //
-            + "I <i style=\"mso-bidi-font-style:normal\">HEART</i>" //
-            + " <b style=\"mso-bidi-font-weight:normal\">WORD!!</b>" //
+        "<p class=\"MsoNormal\" style=\"margin-right:29.9pt;text-align:justify\">"
+            + "I <i style=\"mso-bidi-font-style:normal\">HEART</i>"
+            + " <b style=\"mso-bidi-font-weight:normal\">WORD!!</b>"
             + "</p>";
     String expected = "<body>I <i>HEART</i> <b>WORD!!</b></body>";
     assertThat(TranscriptionWrapper.convertFromInput(in)).isEqualTo(expected);
@@ -254,19 +254,17 @@ public class TranscriptionWrapperTest {
   public void testAnnotationMarkerIsHandledWell() {
     TranscriptionWrapper tw = new TranscriptionWrapper();
     tw.setBody(
-        "<sup>super</sup> " //
-            + "<span data-id=\"9075405\" data-marker=\"begin\"></span>" //
-            + "normaal <sub>" //
-            + "<sup data-id=\"9075405\" data-marker=\"end\">1</sup>" //
+        "<sup>super</sup> "
+            + "<span data-id=\"9075405\" data-marker=\"begin\"></span>"
+            + "normaal <sub>"
+            + "<sup data-id=\"9075405\" data-marker=\"end\">1</sup>"
             + "sub</sub><br><sup>super</sup> normaal <sub>sub<br></sub><sup>super</sup> normaal <sub>sub</sub><br>");
     String expected =
-        "<body><sup>super</sup> " //
-            + "<ab id=\"9075405\"/>" //
-            + "normaal <sub>" //
-            + "<ae id=\"9075405\"/>" //
+        "<body><sup>super</sup> "
+            + "<ab id=\"9075405\"/>"
+            + "normaal <sub>"
+            + "<ae id=\"9075405\"/>"
             + "sub</sub>\n<sup>super</sup> normaal <sub>sub\n</sub><sup>super</sup> normaal <sub>sub</sub>\n</body>";
     assertThat(tw.getBodyForDb()).isEqualTo(expected);
   }
-
-  //
 }

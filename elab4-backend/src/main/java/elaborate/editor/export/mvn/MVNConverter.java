@@ -10,12 +10,12 @@ package elaborate.editor.export.mvn;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -89,18 +89,18 @@ public class MVNConverter {
     final EntityManager entityManager = HibernateUtil.beginTransaction();
 
     final String transcriptionSQL =
-        ("select" //
-                + "  e.id as id," //
-                + "  e.name as name," //
-                + "  m.data as entry_order," //
-                + "  t.body as transcription," //
-                + "  f.filename" //
-                + " from project_entries e" //
-                + "   left outer join project_entry_metadata_items m on (e.id = m.project_entry_id and m.field='order')" //
-                + "   left outer join transcriptions t on (e.id = t.project_entry_id and t.text_layer='Diplomatic')" //
-                + "   left outer join facsimiles f on (e.id = f.project_entry_id)" //
+        ("select"
+                + "  e.id as id,"
+                + "  e.name as name,"
+                + "  m.data as entry_order,"
+                + "  t.body as transcription,"
+                + "  f.filename"
+                + " from project_entries e"
+                + "   left outer join project_entry_metadata_items m on (e.id = m.project_entry_id and m.field='order')"
+                + "   left outer join transcriptions t on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"
+                + "   left outer join facsimiles f on (e.id = f.project_entry_id)"
                 + " where project_id="
-                + project_id //
+                + project_id
                 + " order by entry_order, name")
             .replaceAll(" +", " ");
     final Query transcriptionQuery = entityManager.createNativeQuery(transcriptionSQL);
@@ -122,19 +122,19 @@ public class MVNConverter {
       }
 
       final String annotationSQL =
-          ("select" //
-                  + "   a.annotation_no as annotation_num," //
-                  + "   at.name as annotation_type," //
-                  + "   a.body as annotation_body" //
-                  + " from project_entries e" //
-                  + "   left outer join transcriptions t" //
-                  + "     left outer join annotations a" //
-                  + "       left outer join annotation_types at" //
-                  + "       on (at.id=a.annotation_type_id)" //
-                  + "     on (t.id = a.transcription_id)" //
-                  + "   on (e.id = t.project_entry_id and t.text_layer='Diplomatic')" //
+          ("select"
+                  + "   a.annotation_no as annotation_num,"
+                  + "   at.name as annotation_type,"
+                  + "   a.body as annotation_body"
+                  + " from project_entries e"
+                  + "   left outer join transcriptions t"
+                  + "     left outer join annotations a"
+                  + "       left outer join annotation_types at"
+                  + "       on (at.id=a.annotation_type_id)"
+                  + "     on (t.id = a.transcription_id)"
+                  + "   on (e.id = t.project_entry_id and t.text_layer='Diplomatic')"
                   + " where project_id="
-                  + project_id //
+                  + project_id
                   + " order by annotation_num;")
               .replaceAll(" +", " ");
       final Query annotationQuery = entityManager.createNativeQuery(annotationSQL);
@@ -187,17 +187,16 @@ public class MVNConverter {
     if (!validateTEI.isValid()) {
       result.addError(
           "",
-          "Gegenereerde TEI voldoet niet aan TEI_MVN.rng:\n" //
+          "Gegenereerde TEI voldoet niet aan TEI_MVN.rng:\n"
               + "<blockquote>"
               + validateTEI.getMessage()
-              + "</blockquote>\n" //
+              + "</blockquote>\n"
               + " TEI:\n<pre>"
               + escapeHtml4(fullTEI)
-              + "</pre>" //
+              + "</pre>"
               + " DEBUG:\n<pre>"
               + escapeHtml4(cooked)
-              + "</pre>" //
-          );
+              + "</pre>");
     }
     return result;
   }
@@ -255,7 +254,7 @@ public class MVNConverter {
           .addLogline("adding entry '" + entryData.name + "' (" + i++ + "/" + total + ")");
       String transcriptionBody = transcriptionBody(entryData);
       validateTranscriptionContainsNoEmptyLines(transcriptionBody, result, entryData.id);
-      editionTextBuilder //
+      editionTextBuilder
           .append("<entry n=\"")
           .append(entryData.name)
           .append("\" xml:id=\"")
@@ -264,10 +263,10 @@ public class MVNConverter {
           .append(entryData.facs)
           .append("\" _entryId=\"")
           .append(entryData.id)
-          .append("\">") //
-          .append("<lb/>") //
-          .append(transcriptionBody.replaceAll("\\s*\n", "<le/><lb/>")) //
-          .append("<le/>") //
+          .append("\">")
+          .append("<lb/>")
+          .append(transcriptionBody.replaceAll("\\s*\n", "<le/><lb/>"))
+          .append("<le/>")
           .append("</entry>");
     }
 
@@ -275,19 +274,15 @@ public class MVNConverter {
   }
 
   private String transcriptionBody(final MVNConversionData.EntryData entryData) {
-    String rawBody =
-        entryData
-            .body //
-            .replace("&nbsp;", " ") //
-            .trim();
+    String rawBody = entryData.body.replace("&nbsp;", " ").trim();
     if (rawBody.contains("tali conuiuio")) {
       Log.info(rawBody);
     }
     return transcriptionHiearchyFixer
-        .fix(rawBody) //
-        .replace("</i><i>", "") //
-        .replace("<body>", "") //
-        .replace("<body/>", "") //
+        .fix(rawBody)
+        .replace("</i><i>", "")
+        .replace("<body>", "")
+        .replace("<body/>", "")
         .replace("</body>", "");
   }
 
@@ -405,9 +400,8 @@ public class MVNConverter {
   private void outputFiles(final String xml, final String cooked) {
     try {
       String formatted =
-          xml //
-              .replace("<entry", "\n  <entry") //
-              .replace("</entry>", "\n  </entry>\n") //
+          xml.replace("<entry", "\n  <entry")
+              .replace("</entry>", "\n  </entry>\n")
               .replace("<lb/>", "\n    <lb/>");
       FileUtils.write(new File("out/raw-formatted-body.xml"), formatted, Charsets.UTF_8);
       FileUtils.write(new File("out/cooked-body.xml"), cooked, Charsets.UTF_8);
@@ -446,15 +440,14 @@ public class MVNConverter {
           attributes = " body=\"" + escapeXml11(annotationData.body) + "\"";
         }
         cooked =
-            cooked //
-                .replace(
-                    originalAnnotationBegin(annotationNoString), "<" + type + attributes + ">") //
+            cooked
+                .replace(originalAnnotationBegin(annotationNoString), "<" + type + attributes + ">")
                 .replace(originalAnnotationEnd(annotationNoString), "</" + type + ">");
       }
     }
     return cooked
-        .replace("<entry", "\n  <entry") //
-        .replace("</entry>", "\n  </entry>\n") //
+        .replace("<entry", "\n  <entry")
+        .replace("</entry>", "\n  </entry>\n")
         .replace("<lb/>", "\n    <lb/>");
   }
 
@@ -499,7 +492,7 @@ public class MVNConverter {
   //          .append(transcriptionBody(entryData).replace("\n", "<le/>\n<lb/>"))//
   //          .append("<le/>");
   //    }
-  //
+
   //    final String xml = "<body>" + editionTextBuilder.toString().replace("<lb/><le/>",
   // "").replace("\n\n", "\n") + "</body>";
   //    final String repairedXml = repairAnnotationHierarchy(xml);
@@ -532,7 +525,7 @@ public class MVNConverter {
   //    //    }
   //    return result;
   //  }
-  //
+
   //  private void setFacs(final ProjectEntry entry, final MVNFolium page, final MVNConversionResult
   // result) {
   //    final List<Facsimile> facsimiles = entry.getFacsimiles();
@@ -545,7 +538,7 @@ public class MVNConverter {
   //      page.setFacs(facsimiles.get(0).getName());
   //    }
   //  }
-  //
+
   //  private void setBody(final MVNFolium page, final ProjectEntry entry, final MVNConversionResult
   // result, final Map<Integer, AnnotationData> annotationIndex) {
   //    String body = null;
@@ -569,13 +562,13 @@ public class MVNConverter {
   //    final MVNTranscriptionVisitor visitor = new MVNTranscriptionVisitor(result,
   // data.getAnnotationIndex(), data.getDeepestTextNums());
   //    Log.info("xml={}", xml);
-  //
+
   //    final Document document = Document.createFromXml(xml, false);
   //    document.accept(visitor);
-  //
+
   //    final XmlContext c = visitor.getContext();
   //    final String rawResult = c.getResult();
-  //
+
   //    return rawResult//
   //        .replace("<b>", "")//
   //        .replace("</b>", "")//

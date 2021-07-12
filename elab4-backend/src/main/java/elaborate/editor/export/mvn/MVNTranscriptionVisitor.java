@@ -10,12 +10,12 @@ package elaborate.editor.export.mvn;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -276,8 +276,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext>
         lb++;
       }
       Element e =
-          new Element("lb") //
-              .withAttribute("n", String.valueOf(lineNo)) //
+          new Element("lb")
+              .withAttribute("n", String.valueOf(lineNo))
               .withAttribute("xml:id", pageId + "-lb-" + lineNo);
       if (currentLineInfo.inspringen) {
         e.setAttribute("rend", "indent");
@@ -319,7 +319,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       //          addError(MVNAnnotationType.REGELNUMMERING_BLAD, "body: '" + body + "' is not
       // numeric");
       //        }
-      //
+
       //      } else {
       //      handleFirstLB(context);
       if (handlers.containsKey(type)) {
@@ -367,52 +367,52 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   }
 
   static final Map<MVNAnnotationType, MVNAnnotationHandler> handlers =
-      ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler>builder() //
-          .put(MVNAnnotationType.AFKORTING, new AfkortingHandler()) //
-          .put(MVNAnnotationType.ALINEA, new AlineaHandler()) //
+      ImmutableMap.<MVNAnnotationType, MVNTranscriptionVisitor.MVNAnnotationHandler>builder()
+          .put(MVNAnnotationType.AFKORTING, new AfkortingHandler())
+          .put(MVNAnnotationType.ALINEA, new AlineaHandler())
           .put(
               MVNAnnotationType.CIJFERS,
-              new WrapInElementHandler(new Element("num").withAttribute("type", "roman"))) //
-          .put(MVNAnnotationType.DEFECT, new DefectHandler()) //
-          .put(MVNAnnotationType.DOORHALING, new WrapInElementHandler("del")) //
-          .put(MVNAnnotationType.GEBRUIKERSNOTITIE, new GebruikersnotitieHandler()) //
-          .put(MVNAnnotationType.INCIPIT, new IncipitHandler()) //
-          .put(MVNAnnotationType.INITIAAL, new InitiaalHandler()) //
-          .put(MVNAnnotationType.INSPRINGEN, new InspringenHandler()) //
-          .put(MVNAnnotationType.KOLOM, new KolomHandler()) //
-          .put(MVNAnnotationType.LETTERS, new WrapInElementHandler("mentioned")) //
+              new WrapInElementHandler(new Element("num").withAttribute("type", "roman")))
+          .put(MVNAnnotationType.DEFECT, new DefectHandler())
+          .put(MVNAnnotationType.DOORHALING, new WrapInElementHandler("del"))
+          .put(MVNAnnotationType.GEBRUIKERSNOTITIE, new GebruikersnotitieHandler())
+          .put(MVNAnnotationType.INCIPIT, new IncipitHandler())
+          .put(MVNAnnotationType.INITIAAL, new InitiaalHandler())
+          .put(MVNAnnotationType.INSPRINGEN, new InspringenHandler())
+          .put(MVNAnnotationType.KOLOM, new KolomHandler())
+          .put(MVNAnnotationType.LETTERS, new WrapInElementHandler("mentioned"))
           .put(
               MVNAnnotationType.LINKERMARGEKOLOM,
               new WrapInElementHandler(
                   new Element("note")
                       .withAttribute("place", "margin-left")
-                      .withAttribute("type", "ms"))) //
+                      .withAttribute("type", "ms")))
           .put(
               MVNAnnotationType.RECHTERMARGEKOLOM,
               new WrapInElementHandler(
                   new Element("note")
                       .withAttribute("place", "margin-right")
-                      .withAttribute("type", "ms"))) //
-          .put(MVNAnnotationType.METAMARK, new MetamarkHandler()) //
-          .put(MVNAnnotationType.ONDERSCHRIFT, new OnderschriftHandler()) //
-          .put(MVNAnnotationType.ONDUIDELIJK, new WrapInElementHandler("unclear")) //
-          .put(MVNAnnotationType.ONLEESBAAR, new DefectHandler()) //
+                      .withAttribute("type", "ms")))
+          .put(MVNAnnotationType.METAMARK, new MetamarkHandler())
+          .put(MVNAnnotationType.ONDERSCHRIFT, new OnderschriftHandler())
+          .put(MVNAnnotationType.ONDUIDELIJK, new WrapInElementHandler("unclear"))
+          .put(MVNAnnotationType.ONLEESBAAR, new DefectHandler())
           .put(
               MVNAnnotationType.OPHOGING_ROOD,
-              new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubricated"))) //
-          .put(MVNAnnotationType.OPSCHRIFT, new OpschriftHandler()) //
-          .put(MVNAnnotationType.PALEOGRAFISCH, new PaleografischHandler()) //
-          .put(MVNAnnotationType.POEZIE, new PoezieHandler()) //
-          .put(MVNAnnotationType.REGELNUMMERING_BLAD, new RegelnummeringBladHandler()) //
-          .put(MVNAnnotationType.REGELNUMMERING_TEKST, new RegelnummeringTekstHandler()) //
-          .put(MVNAnnotationType.TEKSTBEGIN, new TekstBeginHandler()) //
-          .put(MVNAnnotationType.TEKSTEINDE, new TekstEindeHandler()) //
+              new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubricated")))
+          .put(MVNAnnotationType.OPSCHRIFT, new OpschriftHandler())
+          .put(MVNAnnotationType.PALEOGRAFISCH, new PaleografischHandler())
+          .put(MVNAnnotationType.POEZIE, new PoezieHandler())
+          .put(MVNAnnotationType.REGELNUMMERING_BLAD, new RegelnummeringBladHandler())
+          .put(MVNAnnotationType.REGELNUMMERING_TEKST, new RegelnummeringTekstHandler())
+          .put(MVNAnnotationType.TEKSTBEGIN, new TekstBeginHandler())
+          .put(MVNAnnotationType.TEKSTEINDE, new TekstEindeHandler())
           .put(
               MVNAnnotationType.TEKSTKLEUR_ROOD,
-              new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubric"))) //
-          .put(MVNAnnotationType.VERSREGEL, new VersregelHandler()) //
-          .put(MVNAnnotationType.VREEMDTEKEN, new VreemdtekenHandler()) //
-          .put(MVNAnnotationType.WITREGEL, new WitregelHandler()) //
+              new WrapInElementHandler(new Element(HI).withAttribute("rend", "rubric")))
+          .put(MVNAnnotationType.VERSREGEL, new VersregelHandler())
+          .put(MVNAnnotationType.VREEMDTEKEN, new VreemdtekenHandler())
+          .put(MVNAnnotationType.WITREGEL, new WitregelHandler())
           .build();
 
   public interface MVNAnnotationHandler {
@@ -669,8 +669,8 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       textNumStack.push(textNum);
       final boolean isText = isText(textNum);
       final Element element =
-          new Element(isText ? "text" : "group") //
-              .withAttribute("n", textNum) //
+          new Element(isText ? "text" : "group")
+              .withAttribute("n", textNum)
               .withAttribute("xml:id", result.getSigle() + "-" + textNum);
       context.openLayer();
       context.addLiteral("\n" + indent());
@@ -833,21 +833,21 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   }
 
   private static String cleanUpAnnotationBody(final AnnotationData annotation) {
-    return normalized(annotation.body) //
+    return normalized(annotation.body)
         .replaceAll("<b>", "<hi rend=\"rubric\">")
-        .replaceAll("</b>", "</hi>") //
+        .replaceAll("</b>", "</hi>")
         .replaceAll("<u>", "<hi rend=\"underline\">")
         .replaceAll("</u>", "</hi>");
   }
 
   private static String normalized(final String rawXml) {
-    return rawXml //
-        .replaceAll("<i .*?>", "<i>") //
-        .replaceAll("<div>", "") //
-        .replaceAll("</div>", "") //
-        .replaceAll("<br>", "") //
-        .replaceAll("<span.*?>", "") //
-        .replaceAll("</span>", "") //
+    return rawXml
+        .replaceAll("<i .*?>", "<i>")
+        .replaceAll("<div>", "")
+        .replaceAll("</div>", "")
+        .replaceAll("<br>", "")
+        .replaceAll("<span.*?>", "")
+        .replaceAll("</span>", "")
         .replace("&nbsp;", " ");
   }
 

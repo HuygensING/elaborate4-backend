@@ -10,12 +10,12 @@ package elaborate.editor.model.orm.service;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -128,9 +128,9 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
     try {
       defaultAnnotationType =
           (AnnotationType)
-              getEntityManager() //
-                  .createQuery("from AnnotationType as at where at.name=?1") //
-                  .setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME) //
+              getEntityManager()
+                  .createQuery("from AnnotationType as at where at.name=?1")
+                  .setParameter(1, DEFAULT_ANNOTATIONTYPE_NAME)
                   .getSingleResult();
       if (defaultAnnotationType == null) {
         defaultAnnotationType =
@@ -150,8 +150,8 @@ public class AnnotationTypeService extends AbstractStoredEntityService<Annotatio
     try {
       List<AnnotationType> resultList =
           entityManager
-              .createQuery("from AnnotationType where name=:name", AnnotationType.class) //
-              .setParameter("name", name) //
+              .createQuery("from AnnotationType where name=:name", AnnotationType.class)
+              .setParameter("name", name)
               .getResultList();
       return resultList.isEmpty() ? null : resultList.get(0);
 

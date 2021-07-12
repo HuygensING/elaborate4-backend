@@ -10,12 +10,12 @@ package elaborate.editor.resources.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -70,10 +70,9 @@ public class SearchResource extends AbstractElaborateResource {
   @POST
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @Produces(UTF8MediaType.APPLICATION_JSON)
-  public synchronized Response createSearch( //
-      @PathParam("project_id") long projectId, //
-      ElaborateEditorSearchParameters elaborateSearchParameters //
-      ) {
+  public synchronized Response createSearch(
+      @PathParam("project_id") long projectId,
+      ElaborateEditorSearchParameters elaborateSearchParameters) {
     searchService.removeExpiredSearches();
     elaborateSearchParameters.setProjectId(projectId);
     StorableSearchData search = searchService.createSearch(elaborateSearchParameters, user);
@@ -83,11 +82,11 @@ public class SearchResource extends AbstractElaborateResource {
   @GET
   @Path("{search_id:[0-9]+}")
   @Produces(UTF8MediaType.APPLICATION_JSON)
-  public Response getSearchResults( //
-      @PathParam("project_id") long projectId, //
-      @PathParam("search_id") long searchId, //
-      @QueryParam("start") @DefaultValue("0") String startString, //
-      @QueryParam("rows") @DefaultValue("25") String rowsString //
+  public Response getSearchResults(
+      @PathParam("project_id") long projectId,
+      @PathParam("search_id") long searchId,
+      @QueryParam("start") @DefaultValue("0") String startString,
+      @QueryParam("rows") @DefaultValue("25") String rowsString
       // @QueryParam("verbose") @DefaultValue("false") boolean verbose//
       ) {
     if (!StringUtils.isNumeric(startString) || !StringUtils.isNumeric(rowsString)) {
@@ -123,11 +122,10 @@ public class SearchResource extends AbstractElaborateResource {
   private void addURI(
       Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
     UriBuilder builder =
-        UriBuilder //
-            .fromPath(prevLink) //
-            .scheme(config.getStringSetting("server.scheme", "html")) //
-            .host(config.getStringSetting("server.name", "127.0.0.1")) //
-            .queryParam("start", start) //
+        UriBuilder.fromPath(prevLink)
+            .scheme(config.getStringSetting("server.scheme", "html"))
+            .host(config.getStringSetting("server.name", "127.0.0.1"))
+            .queryParam("start", start)
             .queryParam("rows", rows);
     int port = config.getIntSetting("server.port", DEFAULT_PORT);
     if (port != DEFAULT_PORT) {

@@ -10,12 +10,12 @@ package elaborate.editor.publish;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -41,11 +41,11 @@ public class SearchConfigTest {
   @Test
   public void testSearchConfigWithMultivaluedFacets() {
     Project project =
-        new Project() //
+        new Project()
             .setProjectEntryMetadataFieldnames(
                 ImmutableList.of(
-                    "Field 1", "Field 2", "Field 3", "field 4", "MultiField 1", "MultiField 2")) //
-            .setLevel1("Field1") //
+                    "Field 1", "Field 2", "Field 3", "field 4", "MultiField 1", "MultiField 2"))
+            .setLevel1("Field1")
             .setLevel2("Field3");
     List<String> metadataFieldsForFacets =
         ImmutableList.of("Field 1", "Field 2", "MultiField 1", "MultiField 2");

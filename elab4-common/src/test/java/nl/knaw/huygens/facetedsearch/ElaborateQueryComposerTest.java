@@ -10,12 +10,12 @@ package nl.knaw.huygens.facetedsearch;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -44,9 +44,7 @@ public class ElaborateQueryComposerTest {
   @Test
   public void testcomposeQueryString2() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
-    sp.setTerm("iets") //
-        .setTextLayers(ImmutableList.of("Diplomatic")) //
-        .setCaseSensitive(true);
+    sp.setTerm("iets").setTextLayers(ImmutableList.of("Diplomatic")).setCaseSensitive(true);
     String expected = "title:iets textlayercs_diplomatic:iets";
 
     queryComposer.compose(sp);
@@ -60,9 +58,7 @@ public class ElaborateQueryComposerTest {
   @Test
   public void testcomposeQueryString3() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
-    sp.setTerm("iets anders") //
-        .setTextLayers(ImmutableList.of("Diplomatic")) //
-        .setCaseSensitive(true);
+    sp.setTerm("iets anders").setTextLayers(ImmutableList.of("Diplomatic")).setCaseSensitive(true);
     String expected = "title:(iets anders) textlayercs_diplomatic:(iets anders)";
 
     queryComposer.compose(sp);
@@ -76,10 +72,10 @@ public class ElaborateQueryComposerTest {
   @Test
   public void testcomposeQueryString4() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
-    sp.setTerm("iets vaags") //
-        .setFuzzy(true) //
-        .setTextLayers(ImmutableList.of("Diplomatic", "Comments")) //
-        .setCaseSensitive(false) //
+    sp.setTerm("iets vaags")
+        .setFuzzy(true)
+        .setTextLayers(ImmutableList.of("Diplomatic", "Comments"))
+        .setCaseSensitive(false)
         .setSearchInAnnotations(true);
     String expected =
         "title:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75) textlayer_comments:(iets~0.75 vaags~0.75) annotations_comments:(iets~0.75 vaags~0.75)";
@@ -95,10 +91,7 @@ public class ElaborateQueryComposerTest {
   @Test
   public void testcomposeQueryString5() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
-    sp.setTerm("iets vaags") //
-        .setFuzzy(true) //
-        .setCaseSensitive(false) //
-        .setSearchInAnnotations(true);
+    sp.setTerm("iets vaags").setFuzzy(true).setCaseSensitive(false).setSearchInAnnotations(true);
     String expected = "*:*"; // Because no textlayers are indicated
 
     queryComposer.compose(sp);
@@ -109,20 +102,20 @@ public class ElaborateQueryComposerTest {
 
   @Test
   public void testcomposeQueryString6() {
-    //
+
     // {"searchInAnnotations":false,"searchInTranscriptions":false,"facetValues":[{"name":"metadata_folio_number","values":["199"]}],"term":"a*"}
     ElaborateSearchParameters sp =
-        new ElaborateSearchParameters() //
-            .setTerm("a*") //
-            .setFuzzy(true) //
-            .setCaseSensitive(false) //
-            .setTextLayers(ImmutableList.of("Diplomatic")) //
+        new ElaborateSearchParameters()
+            .setTerm("a*")
+            .setFuzzy(true)
+            .setCaseSensitive(false)
+            .setTextLayers(ImmutableList.of("Diplomatic"))
             .setFacetValues(
                 ImmutableList.of(
                     new FacetParameter()
                         .setName("metadata_folio_number")
-                        .setValues(ImmutableList.of("199")))) //
-            .setSearchInAnnotations(false) //
+                        .setValues(ImmutableList.of("199"))))
+            .setSearchInAnnotations(false)
             .setSearchInTranscriptions(false);
     String expected = "+(title:a*~0.75) +metadata_folio_number:(199)";
 
@@ -135,24 +128,24 @@ public class ElaborateQueryComposerTest {
   @Test
   public void testcomposeQueryStringWithRange() {
     ElaborateSearchParameters sp = new ElaborateSearchParameters();
-    sp.setTerm("iets vaags") //
-        .setFuzzy(true) //
-        .setTextLayers(ImmutableList.of("Diplomatic")) //
-        .setCaseSensitive(false) //
+    sp.setTerm("iets vaags")
+        .setFuzzy(true)
+        .setTextLayers(ImmutableList.of("Diplomatic"))
+        .setCaseSensitive(false)
         .setFacetValues(
-            ImmutableList.of( //
+            ImmutableList.of(
                 new FacetParameter()
                     .setName("metadata_folio_number")
-                    .setValues(ImmutableList.of("199")), //
+                    .setValues(ImmutableList.of("199")),
                 new FacetParameter()
                     .setName("metadata_date")
                     .setLowerLimit(16000101)
-                    .setUpperLimit(20201231))) //
+                    .setUpperLimit(20201231)))
         .setSearchInAnnotations(true);
     String expected =
-        "+(title:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75))" //
-            + " +metadata_folio_number:(199)" //
-            + " +metadata_date_lower:[16000101 TO 20201231]" //
+        "+(title:(iets~0.75 vaags~0.75) textlayer_diplomatic:(iets~0.75 vaags~0.75) annotations_diplomatic:(iets~0.75 vaags~0.75))"
+            + " +metadata_folio_number:(199)"
+            + " +metadata_date_lower:[16000101 TO 20201231]"
             + " +metadata_date_upper:[16000101 TO 20201231]";
 
     queryComposer.compose(sp);

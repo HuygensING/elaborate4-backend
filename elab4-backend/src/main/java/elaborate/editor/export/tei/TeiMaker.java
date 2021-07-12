@@ -10,12 +10,12 @@ package elaborate.editor.export.tei;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -65,14 +65,14 @@ import elaborate.editor.model.orm.service.ProjectService;
 
 public class TeiMaker {
   public static final Map<String, String> HI_TAGS =
-      ImmutableMap.<String, String>builder() //
-          .put("strong", "bold") //
-          .put("b", "bold") //
-          .put("u", "underline") //
-          .put("em", "italic") //
-          .put("i", "italic") //
-          .put("sub", "subscript") //
-          .put("sup", "superscript") //
+      ImmutableMap.<String, String>builder()
+          .put("strong", "bold")
+          .put("b", "bold")
+          .put("u", "underline")
+          .put("em", "italic")
+          .put("i", "italic")
+          .put("sub", "subscript")
+          .put("sup", "superscript")
           .build();
 
   public static final String INTERP_GRP = "interpGrp";

@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -76,23 +76,22 @@ public class User extends AbstractStoredEntity<User> {
   private Set<UserSetting> userSettings;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable( //
-      name = "project_users", //
+  @JoinTable(
+      name = "project_users",
       joinColumns = {
         @JoinColumn(
             name = "user_id",
             columnDefinition = "int4",
             nullable = false,
             updatable = false)
-      }, //
+      },
       inverseJoinColumns = {
         @JoinColumn(
             name = "project_id",
             columnDefinition = "int4",
             nullable = false,
             updatable = false)
-      } //
-      )
+      })
   private List<Project> projects;
 
   /* persistent properties getters and setters */
@@ -286,12 +285,12 @@ public class User extends AbstractStoredEntity<User> {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder() //
-        .append(username) //
-        .append(firstname) //
-        .append(lastname) //
-        .append(email) //
-        .append(rolestring) //
+    return new HashCodeBuilder()
+        .append(username)
+        .append(firstname)
+        .append(lastname)
+        .append(email)
+        .append(rolestring)
         .toHashCode();
   }
 
@@ -307,12 +306,12 @@ public class User extends AbstractStoredEntity<User> {
       return false;
     }
     User other = (User) obj;
-    return new EqualsBuilder() //
-        .append(username, other.getUsername()) //
-        .append(email, other.getEmail()) //
-        .append(firstname, other.getFirstName()) //
-        .append(lastname, other.getLastName()) //
-        .append(rolestring, other.getRoleString()) //
+    return new EqualsBuilder()
+        .append(username, other.getUsername())
+        .append(email, other.getEmail())
+        .append(firstname, other.getFirstName())
+        .append(lastname, other.getLastName())
+        .append(rolestring, other.getRoleString())
         .isEquals();
   }
 }

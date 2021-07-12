@@ -10,12 +10,12 @@ package elaborate.editor.export.mvn;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -34,11 +34,11 @@ class MVNClientTest {
     ClientResponse response =
         c.putTEI(
             "TEST",
-            "<MVN><text xml:id=\"TEST\"><body>" //
-                + "<group><text n=\"1\" xml:id=\"BS1\"><body>" //
-                + "<pb facs=\"1r.jpg\" n=\"1r\" xml:id=\"BSf1r\"/>" //
-                + "<lb n=\"1\" xml:id=\"TEST-lb-1\"/>this is just a test" //
-                + "</body></text></group>" //
+            "<MVN><text xml:id=\"TEST\"><body>"
+                + "<group><text n=\"1\" xml:id=\"BS1\"><body>"
+                + "<pb facs=\"1r.jpg\" n=\"1r\" xml:id=\"BSf1r\"/>"
+                + "<lb n=\"1\" xml:id=\"TEST-lb-1\"/>this is just a test"
+                + "</body></text></group>"
                 + "</body></text></MVN>");
     assertThat(response.getClientResponseStatus()).isEqualTo(ClientResponse.Status.CREATED);
   }

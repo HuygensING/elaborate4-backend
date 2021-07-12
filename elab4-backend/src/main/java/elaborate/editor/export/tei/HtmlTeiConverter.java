@@ -10,12 +10,12 @@ package elaborate.editor.export.tei;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -129,14 +129,13 @@ class HtmlTeiConverter {
         new TranscriptionVisitor(config, transcriptionType, entityManager);
 
     xml =
-        xml.replace("<i></em></i>", "</em>") //
-            .replace("<em style=\"font-style: italic;\">", "<em>") //
-            .replace("<em></i></em>", "</i>") //
-            .replace("<em></em>", "") //
-            .replace("<i></i>", "") //
-            .replaceAll(" style=\"font-size:.*?>", ">") //
-            .replaceAll("\n", " ") //
-    ;
+        xml.replace("<i></em></i>", "</em>")
+            .replace("<em style=\"font-style: italic;\">", "<em>")
+            .replace("<em></i></em>", "</i>")
+            .replace("<em></em>", "")
+            .replace("<i></i>", "")
+            .replaceAll(" style=\"font-size:.*?>", ">")
+            .replaceAll("\n", " ");
     Log.info("xml={}", xml);
     final nl.knaw.huygens.tei.Document document =
         nl.knaw.huygens.tei.Document.createFromXml(xml, false);
@@ -149,11 +148,10 @@ class HtmlTeiConverter {
 
   private String toXml(String html) {
     String fixedHtml =
-        html //
-            .replaceAll("&", "&amp;") //
-            .replaceAll("<br>", "<br/>\n") //
-            .replaceAll("<body>", "<div>") //
-            .replaceAll("</body>", "</div>\n") //
+        html.replaceAll("&", "&amp;")
+            .replaceAll("<br>", "<br/>\n")
+            .replaceAll("<body>", "<div>")
+            .replaceAll("</body>", "</div>\n")
             .replaceAll("\n", "<lb/>\n");
     return XmlUtil.wrapInXml(fixedHtml);
   }

@@ -10,12 +10,12 @@ package elaborate.util;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -112,33 +112,25 @@ public class XmlUtil {
   public static String toPlainText(String body) {
     String breaksToNewlines = body.replaceAll("<br/?>", "\n");
     String noTags = removeXMLtags(breaksToNewlines);
-    return StringEscapeUtils.unescapeXml(noTags) //
-        .replace("&nbsp;", " ")
-        .trim();
+    return StringEscapeUtils.unescapeXml(noTags).replace("&nbsp;", " ").trim();
   }
 
   public static String toSimpleHTML(String body) {
     String escapeAllowedHtml =
-        body //
-            .replaceAll("<br/?>", "[[#br/#]]") //
-            .replaceAll("<em>(.*?)</em>", "[[#em#]]$1[[#/em#]]") //
-            .replaceAll("<i>(.*?)</i>", "[[#em#]]$1[[#/em#]]") //
+        body.replaceAll("<br/?>", "[[#br/#]]")
+            .replaceAll("<em>(.*?)</em>", "[[#em#]]$1[[#/em#]]")
+            .replaceAll("<i>(.*?)</i>", "[[#em#]]$1[[#/em#]]")
+            .replaceAll("<span style=\"font-style: italic;\">(.*?)</span>", "[[#em#]]$1[[#/em#]]")
+            .replaceAll("<strong>(.*?)</strong>", "[[#strong#]]$1[[#/strong#]]")
+            .replaceAll("<b>(.*?)</b>", "[[#strong#]]$1[[#/strong#]]")
             .replaceAll(
-                "<span style=\"font-style: italic;\">(.*?)</span>", "[[#em#]]$1[[#/em#]]") //
-            .replaceAll("<strong>(.*?)</strong>", "[[#strong#]]$1[[#/strong#]]") //
-            .replaceAll("<b>(.*?)</b>", "[[#strong#]]$1[[#/strong#]]") //
+                "<span style=\"font-weight: bold;\">(.*?)</span>", "[[#strong#]]$1[[#/strong#]]")
+            .replaceAll("<u>(.*?)</u>", "[[#u#]]$1[[#/u#]]")
             .replaceAll(
-                "<span style=\"font-weight: bold;\">(.*?)</span>",
-                "[[#strong#]]$1[[#/strong#]]") //
-            .replaceAll("<u>(.*?)</u>", "[[#u#]]$1[[#/u#]]") //
-            .replaceAll(
-                "<span style=\"text-decoration: underline;\">(.*?)</span>", "[[#u#]]$1[[#/u#]]") //
-            .replaceAll("<sup>(.*?)</sup>", "[[#sup#]]$1[[#/sup#]]") //
-            .replaceAll("<sub>(.*?)</sub>", "[[#sub#]]$1[[#/sub#]]") //
-        ;
-    return removeXMLtags(escapeAllowedHtml) //
-        .replace("[[#", "<") //
-        .replace("#]]", ">");
+                "<span style=\"text-decoration: underline;\">(.*?)</span>", "[[#u#]]$1[[#/u#]]")
+            .replaceAll("<sup>(.*?)</sup>", "[[#sup#]]$1[[#/sup#]]")
+            .replaceAll("<sub>(.*?)</sub>", "[[#sub#]]$1[[#/sub#]]");
+    return removeXMLtags(escapeAllowedHtml).replace("[[#", "<").replace("#]]", ">");
   }
 
   //  public static String fixTagHierarchy(String body) {
@@ -150,7 +142,7 @@ public class XmlUtil {
   //    fixed = convertCustomAnnotationTagsToOriginal(annotationNos, fixed);
   //    return fixed;
   //  }
-  //
+
   //  private static String convertCustomAnnotationTagsToOriginal(Collection<String> annotationNos,
   // String fixed) {
   //    for (String annotationNo : annotationNos) {
@@ -160,7 +152,7 @@ public class XmlUtil {
   //    }
   //    return fixed;
   //  }
-  //
+
   //  private static String convertAnnotationTagsToCustom(Collection<String> annotationNos, String
   // bodyWithConvertedAnnotationTags) {
   //    for (String annotationNo : annotationNos) {
@@ -170,19 +162,19 @@ public class XmlUtil {
   //    }
   //    return bodyWithConvertedAnnotationTags;
   //  }
-  //
+
   //  private static String customAnnotationEnd(String annotationNo) {
   //    return "</a" + annotationNo + ">";
   //  }
-  //
+
   //  private static String originalAnnotationEnd(String annotationNo) {
   //    return "<ae id=\"" + annotationNo + "\"/>";
   //  }
-  //
+
   //  private static String customAnnotationBegin(String annotationNo) {
   //    return "<a" + annotationNo + ">";
   //  }
-  //
+
   //  private static String originalAnnotationBegin(String annotationNo) {
   //    return "<ab id=\"" + annotationNo + "\"/>";
   //  }

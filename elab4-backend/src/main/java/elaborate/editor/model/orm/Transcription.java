@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -126,17 +126,16 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
   // return t1.getTranscriptionType().getName().compareTo(t2.getTranscriptionType().getName());
   // }
   // };
-  //
-  //
+
   // @OneToMany
   // Annotation[] getAnnotations();
-  //
+
   // @Implemented
   // Annotation addAnnotation(User creator);
-  //
+
   // @Implemented
   // String getLabel();
-  //
+
   // /**
   // * Remove the annotation and the corresponding annotationmarkers in the Transcription Body
   // * @param annotation The Annotation to remove
@@ -144,45 +143,43 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
   // */
   // @Implemented
   // void removeAnnotation(Annotation annotation, User modifier);
-  //
-  //
+
   // /**
   // * Remove annotation markers in the Transcription Body that have no corresponding annotation
   // * @param modifier The User credited with the removal
   // */
   // @Implemented
   // void removeOrphanedAnnotationReferences(User modifier);
-  //
+
   // @Implemented
   // boolean hasTranscriptionType(TranscriptionType transcriptionType);
-  //
-  //
+
   // public Annotation addAnnotation(User creator) {
   // Annotation annotation = ModelFactory.createAnnotation(transcription, creator);
   // return annotation;
   // }
-  //
+
   // public Project getProject() {
   // return transcription.getProjectEntry().getProject();
   // }
-  //
+
   // public String getLabel() {
   // return String.format("transcription '%s' of %s", transcription.getTitle(),
   // transcription.getProjectEntry().getLabel());
   // }
-  //
+
   // public String getSolrId() {
   // return Transcription.TYPE + transcription.getId();
   // }
-  //
+
   // public void index(boolean commitNow) {
   // new SolrIndexer().index(transcription, commitNow);
   // }
-  //
+
   // public void deindex() {
   // new SolrIndexer().deindex(transcription);
   // }
-  //
+
   // public void removeAnnotation(Annotation annotation, User deleter) {
   // int annotationNo = annotation.getAnnotationNo();
   // String begintag = annotationBeginTag(annotationNo);
@@ -191,7 +188,7 @@ public class Transcription extends AbstractProjectEntryElement<Transcription> {
   // ModelFactory.delete(annotation, deleter);
   // ModelFactory.save(transcription, deleter);
   // }
-  //
+
   // public boolean hasTranscriptionType(TranscriptionType transcriptionType) {
   // return transcription.getTranscriptionType().equals(transcriptionType);
   // }

@@ -10,12 +10,12 @@ package elaborate.editor.publish;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -179,10 +179,10 @@ public class PublishTaskTest extends AbstractTest {
     List<String> selectedProjectEntryMetadataFields =
         ImmutableList.of("Field1", "Field2", "Field3");
     Project project =
-        new Project() //
+        new Project()
             .setProjectEntryMetadataFieldnames(
-                ImmutableList.of("Field1", "Field2", "Field3", "field4")) //
-            .setLevel1("Field1") //
+                ImmutableList.of("Field1", "Field2", "Field3", "field4"))
+            .setLevel1("Field1")
             .setLevel2("Field3");
     Collection<String> multivaluedFacetTitles = Lists.newArrayList();
     SearchConfig searchConfig =
@@ -215,12 +215,11 @@ public class PublishTaskTest extends AbstractTest {
     PublishTask publishTask = new PublishTask(settings);
     Project project = mock(Project.class);
     Map<String, String> metadataMap =
-        ImmutableMap.of( //
-            ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold", //
-            ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION, "Vetgedrukt", //
-            ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, "italic", //
-            ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION, "" //
-            );
+        ImmutableMap.of(
+            ProjectMetadataFields.ANNOTATIONTYPE_BOLD_NAME, "bold",
+            ProjectMetadataFields.ANNOTATIONTYPE_BOLD_DESCRIPTION, "Vetgedrukt",
+            ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_NAME, "italic",
+            ProjectMetadataFields.ANNOTATIONTYPE_ITALIC_DESCRIPTION, "");
     when(project.getMetadataMap()).thenReturn(metadataMap);
     Map<String, String> map = publishTask.getTypographicalAnnotationMap(project);
     assertThat(map).containsOnly(entry("b", "Vetgedrukt [bold]"), entry("i", "italic"));
@@ -249,10 +248,9 @@ public class PublishTaskTest extends AbstractTest {
     Settings settings = mock(Publication.Settings.class);
     PublishTask publishTask = new PublishTask(settings);
     Map<String, String> metadataMap =
-        ImmutableMap.of( //
+        ImmutableMap.of(
             ProjectMetadataFields.MULTIVALUED_METADATA_FIELDS,
-            "MultivaluedField 1;MultivaluedField 2" //
-            );
+            "MultivaluedField 1;MultivaluedField 2");
     when(project.getMetadataMap()).thenReturn(metadataMap);
 
     Collection<String> facetsToSplit = publishTask.getFacetsToSplit(project);

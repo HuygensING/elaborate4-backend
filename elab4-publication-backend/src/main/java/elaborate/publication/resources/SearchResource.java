@@ -10,12 +10,12 @@ package elaborate.publication.resources;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -66,9 +66,7 @@ public class SearchResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   public Object doSimpleSearch(@QueryParam("q") @DefaultValue("") String term) {
     ElaborateSearchParameters elaborateSearchParameters =
-        new ElaborateSearchParameters() //
-            .setTerm(term) //
-            .setTextLayers(ImmutableList.of("Diplomatic"));
+        new ElaborateSearchParameters().setTerm(term).setTextLayers(ImmutableList.of("Diplomatic"));
     searchService.setSolrDir(getSolrDir());
     SearchData search = searchService.createSearch(elaborateSearchParameters);
     return searchService.getSearchResult(search.getId(), 0, 1000);
@@ -81,9 +79,7 @@ public class SearchResource {
   @POST
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @Produces(UTF8MediaType.APPLICATION_JSON)
-  public Response createSearch( //
-      ElaborateSearchParameters elaborateSearchParameters //
-      ) {
+  public Response createSearch(ElaborateSearchParameters elaborateSearchParameters) {
     Log.debug("elaborateSearchParameters:{}", elaborateSearchParameters);
     searchService.setSolrDir(getSolrDir());
     SearchData search = searchService.createSearch(elaborateSearchParameters);
@@ -93,11 +89,10 @@ public class SearchResource {
   @GET
   @Path("{search_id:[0-9]+}")
   @Produces(UTF8MediaType.APPLICATION_JSON)
-  public Response getSearchResults( //
-      @PathParam("search_id") long searchId, //
-      @QueryParam("start") @DefaultValue("0") String startString, //
-      @QueryParam("rows") @DefaultValue("100") String rowsString //
-      ) {
+  public Response getSearchResults(
+      @PathParam("search_id") long searchId,
+      @QueryParam("start") @DefaultValue("0") String startString,
+      @QueryParam("rows") @DefaultValue("100") String rowsString) {
     if (!StringUtils.isNumeric(startString) || !StringUtils.isNumeric(rowsString)) {
       throw new BadRequestException();
     }
@@ -138,10 +133,9 @@ public class SearchResource {
   private void addURI(
       Map<String, Object> searchResult, String key, String prevLink, int start, int rows) {
     UriBuilder builder =
-        UriBuilder //
-            .fromUri(searchService.getBaseURL() + "/api/") //
-            .path(prevLink) //
-            .queryParam("start", start) //
+        UriBuilder.fromUri(searchService.getBaseURL() + "/api/")
+            .path(prevLink)
+            .queryParam("start", start)
             .queryParam("rows", rows);
     searchResult.put(key, builder.build().toString());
   }

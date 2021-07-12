@@ -10,12 +10,12 @@ package elaborate.editor.export.mvn;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -90,9 +90,9 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     elementStack.pop();
     lastNodeWasText = false;
     XmlAnnotation xmlAnnotation =
-        new XmlAnnotation(element.getName(), element.getAttributes(), elementStack.size()) //
-            .setMilestone(element.hasNoChildren()) //
-            .setFirstSegmentIndex(startIndexStack.pop()) //
+        new XmlAnnotation(element.getName(), element.getAttributes(), elementStack.size())
+            .setMilestone(element.hasNoChildren())
+            .setFirstSegmentIndex(startIndexStack.pop())
             .setLastSegmentIndex(currentTextSegmentIndex());
     result.getXmlAnnotations().add(xmlAnnotation);
     return Traversal.NEXT;
@@ -118,12 +118,11 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   }
 
   static final List<String> POETRY_AND_PARAGRAPH_CLOSERS =
-      ImmutableList.of( //
-          MVNAnnotationType.ALINEA.getName(), //
-          MVNAnnotationType.POEZIE.getName(), //
-          MVNAnnotationType.ONDERSCHRIFT.getName(), //
-          MVNAnnotationType.OPSCHRIFT.getName() //
-          );
+      ImmutableList.of(
+          MVNAnnotationType.ALINEA.getName(),
+          MVNAnnotationType.POEZIE.getName(),
+          MVNAnnotationType.ONDERSCHRIFT.getName(),
+          MVNAnnotationType.OPSCHRIFT.getName());
 
   public static class AnnotationHandler implements ElementHandler<XmlContext> {
     @Override
@@ -202,7 +201,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
         attributes.put("title", annotationBody.replaceFirst("^.*;", "").replace("<br>", "").trim());
       }
       XmlAnnotation tekstAnnotation =
-          new XmlAnnotation("tekst", attributes, 0) //
+          new XmlAnnotation("tekst", attributes, 0)
               .setFirstSegmentIndex(currentTextSegmentIndex() + 1);
       textRangeAnnotationIndex.put(n, tekstAnnotation);
     }
@@ -225,7 +224,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       closeOpenPoetryOrParagraph();
       Map<String, String> attributes = new HashMap<String, String>();
       poetryOrParagraphAnnotations.add(
-          new XmlAnnotation(annotationData.type, attributes, 0) //
+          new XmlAnnotation(annotationData.type, attributes, 0)
               .setFirstSegmentIndex(currentTextSegmentIndex() + 1));
     }
 
@@ -236,8 +235,8 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       }
       Map<String, String> attributes = ImmutableMap.of("body", annotationBody);
       XmlAnnotation xmlAnnotation =
-          new XmlAnnotation(annotationData.type, attributes, 0) //
-              .setFirstSegmentIndex(annotationStartIndexMap.get(id)) //
+          new XmlAnnotation(annotationData.type, attributes, 0)
+              .setFirstSegmentIndex(annotationStartIndexMap.get(id))
               .setLastSegmentIndex(currentTextSegmentIndex());
       result.getXmlAnnotations().add(xmlAnnotation);
     }
@@ -268,8 +267,8 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       lastNodeWasText = false;
       Map<String, String> attributes = new HashMap<String, String>();
       XmlAnnotation xmlAnnotation =
-          new XmlAnnotation("l", attributes, 0) //
-              .setFirstSegmentIndex(lineStartIndex) //
+          new XmlAnnotation("l", attributes, 0)
+              .setFirstSegmentIndex(lineStartIndex)
               .setLastSegmentIndex(currentTextSegmentIndex());
       result.getXmlAnnotations().add(xmlAnnotation);
       return Traversal.STOP;

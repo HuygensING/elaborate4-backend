@@ -10,12 +10,12 @@ package elaborate.editor.export.mvn;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -64,10 +64,10 @@ public class XmlAnnotation extends TextAnnotation implements Comparable<XmlAnnot
 
   @Override
   public int compareTo(XmlAnnotation other) {
-    return new CompareToBuilder() //
-        .append(this.firstSegmentIndex, other.firstSegmentIndex) //
-        .append(other.lastSegmentIndex, this.lastSegmentIndex) //
-        .append(getDepth(), other.getDepth()) //
+    return new CompareToBuilder()
+        .append(this.firstSegmentIndex, other.firstSegmentIndex)
+        .append(other.lastSegmentIndex, this.lastSegmentIndex)
+        .append(getDepth(), other.getDepth())
         .build();
   }
 

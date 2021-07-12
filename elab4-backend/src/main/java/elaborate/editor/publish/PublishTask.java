@@ -10,12 +10,12 @@ package elaborate.editor.publish;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -167,16 +167,13 @@ public class PublishTask implements Runnable {
       Log.info("responseStatus = {}", response.getClientResponseStatus());
       if (!response.getClientResponseStatus().equals(ClientResponse.Status.CREATED)) {
         String error =
-            MessageFormat.format( //
-                "MVN server returned error: <br/>{0}<br/>On generated TEI: <hr/><pre>{1}</pre><hr/>", //
-                response
-                    .getEntity(String.class) //
-                    .replaceAll("\n", "<br/>"), //
-                tei.replace("&", "&amp;") //
-                    .replace("<", "&lt;") //
-                    .replace(">", "&gt;") //
-                    .replaceAll("\n", "<br/>") //
-                );
+            MessageFormat.format(
+                "MVN server returned error: <br/>{0}<br/>On generated TEI: <hr/><pre>{1}</pre><hr/>",
+                response.getEntity(String.class).replaceAll("\n", "<br/>"),
+                tei.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replaceAll("\n", "<br/>"));
         status.addError(error);
       }
     }
@@ -459,11 +456,11 @@ public class PublishTask implements Runnable {
     // projectSettings.putAll(settingsMap);
     // projectSettings.put("levels", ImmutableList.of(project.getLevel1(), project.getLevel2(),
     // project.getLevel3()));
-    //
+
     // List<String> publishableTextLayers = settings.getTextLayers();
     // projectSettings.put("textLayers", publishableTextLayers.isEmpty() ? project.getTextLayers() :
     // publishableTextLayers);
-    //
+
     // map.put("settings", projectSettings);
     return map;
   }
@@ -528,13 +525,13 @@ public class PublishTask implements Runnable {
       if (textlayerData != null) {
         for (AnnotationPublishData ad : textlayerData.getAnnotationData()) {
           AnnotationIndexData annotationIndexData =
-              new AnnotationIndexData() //
-                  .setEntryId(projectEntry.getId()) //
-                  .setEntryName(projectEntry.getName()) //
-                  .setN(ad.getN()) //
-                  .setAnnotatedText(ad.getAnnotatedText()) //
-                  .setAnnotationText(ad.getText()) //
-                  .setTextLayer(textLayer) //
+              new AnnotationIndexData()
+                  .setEntryId(projectEntry.getId())
+                  .setEntryName(projectEntry.getName())
+                  .setN(ad.getN())
+                  .setAnnotatedText(ad.getAnnotatedText())
+                  .setAnnotationText(ad.getText())
+                  .setTextLayer(textLayer)
                   .setAnnotationOrder(order++);
           String atype = annotationTypeKey(ad.getType());
           annotationDataMap.put(atype, annotationIndexData);
@@ -592,17 +589,16 @@ public class PublishTask implements Runnable {
     EntityManager entityManager = HibernateUtil.getEntityManager();
     String body = cleanupAfterWord(transcription.getBody());
     String fixed =
-        body //
-            .replace("<strong>", "<b>") //
-            .replace("</strong>", "</b>") //
+        body.replace("<strong>", "<b>")
+            .replace("</strong>", "</b>")
             .replaceAll(
                 "(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)¶([^<]*?)</b>",
-                "$1<b>¶</b>$2<b>¶</b>$3<b>¶</b>$4") //
-            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3") //
-            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2") //
-            .replaceAll("¶", "<b>¶</b>") //
-            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>") //
-            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>") //
+                "$1<b>¶</b>$2<b>¶</b>$3<b>¶</b>$4")
+            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2<b>¶</b>$3")
+            .replaceAll("(?s)<b>([^<]*?)¶([^<]*?)</b>", "$1<b>¶</b>$2")
+            .replaceAll("¶", "<b>¶</b>")
+            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")
+            .replaceAll("<b><b>¶</b></b>", "<b>¶</b>")
             .replaceAll("<b><b>¶</b></b>", "<b>¶</b>");
     transcription.setBody(fixed);
     if (!fixed.equals(body)) {
@@ -614,8 +610,8 @@ public class PublishTask implements Runnable {
 
   private TextlayerData getTextlayerData(Transcription transcription) {
     TranscriptionWrapper tw = new TranscriptionWrapper(transcription, annotationDataMap);
-    return new TextlayerData() //
-        .setText(cleanupAfterWord(tw.getBody())) //
+    return new TextlayerData()
+        .setText(cleanupAfterWord(tw.getBody()))
         .setAnnotations(getAnnotationData(tw.annotationNumbers));
   }
 
@@ -627,10 +623,10 @@ public class PublishTask implements Runnable {
         AnnotationType annotationType = annotation.getAnnotationType();
         if (settings.includeAnnotationType(annotationType)) {
           AnnotationPublishData ad2 =
-              new AnnotationPublishData() //
-                  .setN(annotation.getAnnotationNo()) //
-                  .setText(cleanupAfterWord(annotation.getBody())) //
-                  .setAnnotatedText(annotation.getAnnotatedText()) //
+              new AnnotationPublishData()
+                  .setN(annotation.getAnnotationNo())
+                  .setText(cleanupAfterWord(annotation.getBody()))
+                  .setAnnotatedText(annotation.getAnnotatedText())
                   .setType(
                       getAnnotationTypeData(
                           annotationType, annotation.getAnnotationMetadataItems()));
@@ -661,10 +657,10 @@ public class PublishTask implements Runnable {
   private AnnotationTypeData getAnnotationTypeData(
       AnnotationType annotationType, Set<AnnotationMetadataItem> meta) {
     Map<String, Object> metadata = getMetadataMap(meta);
-    return new AnnotationTypeData() //
-        .setId(annotationType.getId()) //
-        .setName(annotationType.getName()) //
-        .setDescription(annotationType.getDescription()) //
+    return new AnnotationTypeData()
+        .setId(annotationType.getId())
+        .setName(annotationType.getName())
+        .setDescription(annotationType.getDescription())
         .setMetadata(metadata);
   }
 
@@ -775,12 +771,11 @@ public class PublishTask implements Runnable {
     String version = configuration.getSetting("publication.version." + projectType);
     String cdnBaseURL = configuration.getSetting("publication.cdn");
     Map<String, Object> fmRootMap =
-        ImmutableMap.of( //
-            "BASE_URL", projectData.get("baseURL"), //
-            "TYPE", projectType, //
-            "ELABORATE_CDN", cdnBaseURL, //
-            "VERSION", version //
-            );
+        ImmutableMap.of(
+            "BASE_URL", projectData.get("baseURL"),
+            "TYPE", projectType,
+            "ELABORATE_CDN", cdnBaseURL,
+            "VERSION", version);
     FreeMarker.templateToFile(indexfilename, destIndex, fmRootMap, getClass());
   }
 
@@ -803,29 +798,27 @@ public class PublishTask implements Runnable {
 
       projectData.put(
           "personMetadataFields",
-          ImmutableList.of( //
+          ImmutableList.of(
               "dynamic_s_koppelnaam",
               "dynamic_s_altname",
-              "dynamic_s_gender", //
+              "dynamic_s_gender",
               "dynamic_i_birthyear",
               "dynamic_i_deathyear",
-              "dynamic_s_networkdomain", //
+              "dynamic_s_networkdomain",
               "dynamic_s_characteristic",
               "dynamic_s_subdomain",
               "dynamic_s_domain",
-              "dynamic_s_combineddomain", //
+              "dynamic_s_combineddomain",
               "dynamic_s_periodical",
-              "dynamic_s_membership" //
-              ));
+              "dynamic_s_membership"));
       projectData.put(
           "personLevels",
-          ImmutableList.of( //
+          ImmutableList.of(
               "dynamic_sort_name",
               "dynamic_k_birthDate",
               "dynamic_k_deathDate",
               "dynamic_sort_networkdomain",
-              "dynamic_sort_gender" //
-              ));
+              "dynamic_sort_gender"));
     }
   }
 

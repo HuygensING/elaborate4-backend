@@ -10,12 +10,12 @@ package elaborate.editor.model.orm;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -112,26 +112,25 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
 
   /* transient methods */
 
-  //
   // @OneToMany
   // AnnotationMetadataItem[] getAnnotationMetadataItems();
-  //
+
   // @Implemented
   // AnnotationMetadataItem addMetadataItem(AnnotationTypeMetadataItem annotationTypeMetadataItem,
   // String value, User user);
-  //
+
   // @Implemented
   // void clearMetadata();
-  //
+
   // @Implemented
   // void addMetadata(String name, String value, User user);
-  //
+
   // @Implemented
   // String getAnnotatedText();
-  //
+
   // @Implemented
   // String getLabel();
-  //
+
   // @Implemented
   // /**
   // *
@@ -139,11 +138,11 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
   // */
   // String getActiveBody();
   // private final Annotation annotation;
-  //
+
   // public AnnotationImpl(Annotation _annotation) {
   // this.annotation = _annotation;
   // }
-  //
+
   // public AnnotationMetadataItem addMetadataItem(AnnotationTypeMetadataItem
   // annotationTypeMetadataItem, String value, User user) {
   // if (!annotationTypeMetadataItem.getAnnotationType().equals(annotation.getAnnotationType())) {
@@ -153,7 +152,7 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
   // return ModelFactory.createAnnotationMetadataItem(annotation, annotationTypeMetadataItem, value,
   // user);
   // }
-  //
+
   // public void clearMetadata() {
   // for (AnnotationMetadataItem annotationMetadataItem : annotation.getAnnotationMetadataItems()) {
   // try {
@@ -164,17 +163,17 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
   // }
   // }
   // }
-  //
+
   // public void addMetadata(String name, String value, User user) {
   // ModelFactory.createAnnotationMetadataItem(annotation, getAnnotationTypeMetadataItem(name),
   // value, user);
   // }
-  //
+
   // // Convenience method
   // public Project getProject() {
   // return annotation.getTranscription().getProject();
   // }
-  //
+
   // private AnnotationTypeMetadataItem getAnnotationTypeMetadataItem(String name) {
   // for (AnnotationTypeMetadataItem annotationTypeMetadataItem :
   // annotation.getAnnotationType().getAnnotationTypeMetadataItems()) {
@@ -184,15 +183,15 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
   // }
   // return null;
   // }
-  //
+
   // public void index(boolean commitNow) {
   // new SolrIndexer().index(annotation, commitNow);
   // }
-  //
+
   // public void deindex() {
   // new SolrIndexer().deindex(annotation);
   // }
-  //
+
   // @SuppressWarnings("boxing")
 
   @JsonIgnore
@@ -203,10 +202,10 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
     }
     String regex =
         String.format(
-            "(?m)(?s)<%s id=\"%s\"/>(.*)<%s id=\"%s\"/>", //
-            Transcription.BodyTags.ANNOTATION_BEGIN, //
-            getAnnotationNo(), //
-            Transcription.BodyTags.ANNOTATION_END, //
+            "(?m)(?s)<%s id=\"%s\"/>(.*)<%s id=\"%s\"/>",
+            Transcription.BodyTags.ANNOTATION_BEGIN,
+            getAnnotationNo(),
+            Transcription.BodyTags.ANNOTATION_END,
             getAnnotationNo());
     // Log.info("regex={}", regex);
     // Log.info("body={}", body);
@@ -214,22 +213,22 @@ public class Annotation extends AbstractTrackedEntity<Annotation> {
     Matcher matcher = pattern.matcher(body);
     return matcher.find() ? matcher.group(1) : "";
   }
-  //
+
   // public String getSolrId() {
   // return Annotation.TYPE + annotation.getId();
   // }
-  //
+
   // public String getActiveBody() {
   // return StringUtil.activateURLs(annotation.getBody());
   // }
-  //
+
   // public String getLabel() {
   // String cleanBody = annotation.getBody().replaceAll("<.*?>", "");
   // String normalizedType = SolrUtil.normalize(annotation.getAnnotationType().getName());
   // String value = StringUtils.defaultIfBlank(cleanBody, annotation.getAnnotatedText());
   // return String.format("%s:%s", normalizedType, value);
   // }
-  //
+
   // public void save(User modifier) {
   // ModelFactory.save(annotation, modifier);
   // AnnotationMetadataItem[] annotationMetadataItems = annotation.getAnnotationMetadataItems();

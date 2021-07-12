@@ -10,12 +10,12 @@ package elaborate.editor.publish;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -75,11 +75,10 @@ public class SearchConfig {
     facetFields = ImmutableList.copyOf(facetInfoMap.keySet());
 
     defaultSortOrder =
-        ImmutableList.of( //
-            fieldOf(project.getLevel1()), //
-            fieldOf(project.getLevel2()), //
-            fieldOf(project.getLevel3()) //
-            );
+        ImmutableList.of(
+            fieldOf(project.getLevel1()),
+            fieldOf(project.getLevel2()),
+            fieldOf(project.getLevel3()));
   }
 
   private void insertFacetsForCNW(Project project, String key) {
@@ -87,10 +86,7 @@ public class SearchConfig {
       if (key.equals("metadata_ontvanger")) {
         String name = MULTIVALUED_PREFIX + "metadata_correspondents";
         FacetInfo facetInfo =
-            new FacetInfo() //
-                .setName(name) //
-                .setTitle("Correspondent") //
-                .setType(FacetType.LIST);
+            new FacetInfo().setName(name).setTitle("Correspondent").setType(FacetType.LIST);
         facetInfoMap.put(name, facetInfo);
       }
     }
