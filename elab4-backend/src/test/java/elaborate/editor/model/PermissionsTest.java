@@ -22,15 +22,14 @@ package elaborate.editor.model;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.google.common.collect.ImmutableList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
 import elaborate.editor.model.orm.User;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PermissionsTest {
 	User root;

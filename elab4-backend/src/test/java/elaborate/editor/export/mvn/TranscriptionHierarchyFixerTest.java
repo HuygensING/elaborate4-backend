@@ -23,9 +23,9 @@ package elaborate.editor.export.mvn;
  */
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TranscriptionHierarchyFixerTest {
   final TranscriptionHierarchyFixer thf = new TranscriptionHierarchyFixer();

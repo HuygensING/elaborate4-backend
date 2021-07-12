@@ -22,17 +22,31 @@ package elaborate.editor.export.tei;
  * #L%
  */
 
-import com.google.common.collect.*;
-import elaborate.editor.model.orm.*;
-import elaborate.editor.model.orm.service.*;
-import nl.knaw.huygens.tei.*;
-import nl.knaw.huygens.tei.handlers.*;
-import org.apache.commons.lang.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Map;
+import java.util.Set;
+import javax.persistence.EntityManager;
 
-import javax.persistence.*;
-import java.util.*;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 
-import static nl.knaw.huygens.tei.Traversal.*;
+import nl.knaw.huygens.tei.DelegatingVisitor;
+import nl.knaw.huygens.tei.Element;
+import nl.knaw.huygens.tei.ElementHandler;
+import nl.knaw.huygens.tei.Traversal;
+import nl.knaw.huygens.tei.XmlContext;
+import nl.knaw.huygens.tei.handlers.XmlTextHandler;
+
+import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.AnnotationMetadataItem;
+import elaborate.editor.model.orm.AnnotationType;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.AnnotationService;
+
+import static nl.knaw.huygens.tei.Traversal.NEXT;
+import static nl.knaw.huygens.tei.Traversal.STOP;
 
 class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
   private static final Deque<Element> openElements = new ArrayDeque<Element>();

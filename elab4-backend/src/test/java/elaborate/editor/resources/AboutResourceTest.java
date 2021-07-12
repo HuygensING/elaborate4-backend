@@ -22,9 +22,9 @@ package elaborate.editor.resources;
  * #L%
  */
 
-import org.junit.Test;
-
 import java.util.Map;
+
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -25,7 +25,6 @@ package elaborate.editor.model.orm;
 import java.util.Date;
 
 import org.assertj.core.api.AbstractAssert;
-// Assertions is needed if an assertion for Iterable is generated
 import org.assertj.core.api.Assertions;
 
 /**

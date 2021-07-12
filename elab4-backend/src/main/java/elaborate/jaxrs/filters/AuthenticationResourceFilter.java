@@ -23,11 +23,8 @@ package elaborate.jaxrs.filters;
  */
 
 import java.util.List;
-
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.SecurityContext;
-
-import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -35,9 +32,11 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
+import org.apache.commons.lang.StringUtils;
+
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import elaborate.editor.model.SessionService;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 public class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {
 	public static final String HEADER = "Authorization";

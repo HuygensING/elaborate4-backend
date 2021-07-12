@@ -22,13 +22,13 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-import static org.mockito.Mockito.mock;
-
 import org.junit.Test;
 
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
+
+import static org.mockito.Mockito.mock;
 
 public class ProjectEntriesResourceTest {
   @Test

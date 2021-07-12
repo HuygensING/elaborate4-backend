@@ -22,16 +22,16 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-import static elaborate.editor.model.orm.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.junit.After;
 import org.junit.Before;
 
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
+
+import static elaborate.editor.model.orm.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ProjectEntryServiceTest extends AbstractTest {
 

@@ -22,12 +22,23 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+
 import com.google.common.collect.Lists;
-import nl.knaw.huygens.tei.*;
+
+import nl.knaw.huygens.tei.Comment;
+import nl.knaw.huygens.tei.CommentHandler;
+import nl.knaw.huygens.tei.DelegatingVisitor;
+import nl.knaw.huygens.tei.Element;
+import nl.knaw.huygens.tei.Traversal;
+import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
-
-import java.util.*;
 
 import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_BEGIN;
 import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_END;

@@ -23,11 +23,6 @@ package elaborate.util;
  */
 
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.filters.CORSFilter;
-
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +30,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.filters.CORSFilter;
 
 public class CNWUtil {
 CORSFilter c=null;

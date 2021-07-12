@@ -22,21 +22,31 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-import com.fasterxml.jackson.annotation.*;
-import elaborate.editor.model.*;
-import elaborate.editor.model.orm.*;
-import elaborate.editor.model.orm.service.*;
-import elaborate.editor.resources.*;
-import elaborate.jaxrs.*;
-import elaborate.jaxrs.Annotations.*;
-import nl.knaw.huygens.jaxrstools.resources.*;
+import java.util.List;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
-import javax.annotation.security.*;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import java.util.*;
+import com.fasterxml.jackson.annotation.JsonView;
 
-import static elaborate.editor.model.ElaborateRoles.*;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+import elaborate.editor.model.Views;
+import elaborate.editor.model.orm.ProjectMetadataField;
+import elaborate.editor.model.orm.service.ProjectMetadataFieldService;
+import elaborate.editor.resources.AbstractElaborateResource;
+import elaborate.jaxrs.APIDesc;
+import elaborate.jaxrs.Annotations.AuthorizationRequired;
+
+import static elaborate.editor.model.ElaborateRoles.ADMIN;
 
 @Path("projectmetadatafields")
 @AuthorizationRequired

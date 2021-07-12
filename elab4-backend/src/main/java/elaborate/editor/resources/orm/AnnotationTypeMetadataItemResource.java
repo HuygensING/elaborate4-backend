@@ -35,6 +35,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.spi.resource.Singleton;
 
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
 import elaborate.editor.model.Views;
 import elaborate.editor.model.orm.AnnotationTypeMetadataItem;
 import elaborate.editor.model.orm.User;
@@ -43,7 +45,6 @@ import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.editor.resources.orm.wrappers.AnnotationTypeMetadataItemInput;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 @AuthorizationRequired
 @Singleton

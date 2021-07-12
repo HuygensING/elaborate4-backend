@@ -22,10 +22,10 @@ package elaborate.util;
  * #L%
  */
 
-import elaborate.editor.model.ModelFactory;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+
+import elaborate.editor.model.ModelFactory;
 
 public class HibernateUtil {
 	private final static EntityManagerFactory ENTITY_MANAGER_FACTORY = ModelFactory.INSTANCE.getEntityManagerFactory();

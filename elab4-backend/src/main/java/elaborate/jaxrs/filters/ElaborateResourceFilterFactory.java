@@ -22,13 +22,14 @@ package elaborate.jaxrs.filters;
  * #L%
  */
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.model.AbstractMethod;
 import com.sun.jersey.spi.container.ResourceFilter;
 import com.sun.jersey.spi.container.ResourceFilterFactory;
-import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
-import java.util.List;
+import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
 public class ElaborateResourceFilterFactory implements ResourceFilterFactory {
   private static final Class<AuthorizationRequired> ANNOTATION_CLASS = AuthorizationRequired.class;

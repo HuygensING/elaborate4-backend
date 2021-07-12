@@ -22,6 +22,22 @@ package elaborate.editor.model.orm;
  * #L%
  */
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
@@ -29,16 +45,14 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import elaborate.editor.model.AbstractDocument;
-import elaborate.editor.model.ModelFactory;
+
 import nl.knaw.huygens.facetedsearch.SolrFields;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.solr.FacetInfo;
 import nl.knaw.huygens.solr.FacetType;
 
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.*;
+import elaborate.editor.model.AbstractDocument;
+import elaborate.editor.model.ModelFactory;
 
 @Entity
 @Table(name = "projects")

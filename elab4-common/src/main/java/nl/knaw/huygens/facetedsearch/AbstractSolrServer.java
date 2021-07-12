@@ -22,11 +22,24 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
-import com.google.common.collect.*;
-import nl.knaw.huygens.solr.FacetCount;
-import nl.knaw.huygens.solr.FacetInfo;
-import nl.knaw.huygens.solr.FacetType;
-import nl.knaw.huygens.solr.RangeOption;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -42,11 +55,10 @@ import org.apache.solr.common.params.HighlightParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import nl.knaw.huygens.solr.FacetCount;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
+import nl.knaw.huygens.solr.RangeOption;
 
 public abstract class AbstractSolrServer implements SolrServerWrapper {
   private final Logger LOG = LoggerFactory.getLogger(getClass());

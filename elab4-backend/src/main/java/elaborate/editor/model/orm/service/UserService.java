@@ -27,18 +27,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.inject.Singleton;
 import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
-
-import org.apache.commons.lang.RandomStringUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
 import com.sun.jersey.api.NotFoundException;
+import org.apache.commons.lang.RandomStringUtils;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.ConflictException;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
@@ -50,10 +53,6 @@ import elaborate.editor.resources.orm.PasswordData;
 import elaborate.freemarker.FreeMarker;
 import elaborate.util.Emailer;
 import elaborate.util.PasswordUtil;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.ConflictException;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Singleton
 public class UserService extends AbstractStoredEntityService<User> {

@@ -25,7 +25,6 @@ package elaborate.publication.resources;
 import java.io.IOException;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;

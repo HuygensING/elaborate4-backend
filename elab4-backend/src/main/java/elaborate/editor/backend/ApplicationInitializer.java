@@ -24,16 +24,16 @@ package elaborate.editor.backend;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import com.google.common.collect.ImmutableList;
 
+import nl.knaw.huygens.Log;
+
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.SearchService;
 import elaborate.editor.model.orm.service.UserService;
-import nl.knaw.huygens.Log;
 
 public class ApplicationInitializer implements ServletContextListener {
 

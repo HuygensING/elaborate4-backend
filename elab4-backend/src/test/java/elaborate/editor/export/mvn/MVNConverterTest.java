@@ -22,21 +22,56 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
+import java.util.Arrays;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.export.mvn.MVNConversionData.EntryData;
-import elaborate.editor.model.ProjectMetadataFields;
-import elaborate.editor.model.orm.*;
-import elaborate.editor.publish.Publication;
-import elaborate.editor.publish.Publication.Status;
-import nl.knaw.huygens.Log;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Arrays;
+import nl.knaw.huygens.Log;
 
-import static elaborate.editor.export.mvn.MVNAnnotationType.*;
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.export.mvn.MVNConversionData.EntryData;
+import elaborate.editor.model.ProjectMetadataFields;
+import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.AnnotationType;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.TranscriptionType;
+import elaborate.editor.publish.Publication;
+import elaborate.editor.publish.Publication.Status;
+
+import static elaborate.editor.export.mvn.MVNAnnotationType.AFKORTING;
+import static elaborate.editor.export.mvn.MVNAnnotationType.ALINEA;
+import static elaborate.editor.export.mvn.MVNAnnotationType.CIJFERS;
+import static elaborate.editor.export.mvn.MVNAnnotationType.DEFECT;
+import static elaborate.editor.export.mvn.MVNAnnotationType.DOORHALING;
+import static elaborate.editor.export.mvn.MVNAnnotationType.GEBRUIKERSNOTITIE;
+import static elaborate.editor.export.mvn.MVNAnnotationType.INCIPIT;
+import static elaborate.editor.export.mvn.MVNAnnotationType.INITIAAL;
+import static elaborate.editor.export.mvn.MVNAnnotationType.INSPRINGEN;
+import static elaborate.editor.export.mvn.MVNAnnotationType.KOLOM;
+import static elaborate.editor.export.mvn.MVNAnnotationType.LETTERS;
+import static elaborate.editor.export.mvn.MVNAnnotationType.LINKERMARGEKOLOM;
+import static elaborate.editor.export.mvn.MVNAnnotationType.METAMARK;
+import static elaborate.editor.export.mvn.MVNAnnotationType.ONDERSCHRIFT;
+import static elaborate.editor.export.mvn.MVNAnnotationType.ONDUIDELIJK;
+import static elaborate.editor.export.mvn.MVNAnnotationType.ONLEESBAAR;
+import static elaborate.editor.export.mvn.MVNAnnotationType.OPHOGING_ROOD;
+import static elaborate.editor.export.mvn.MVNAnnotationType.OPSCHRIFT;
+import static elaborate.editor.export.mvn.MVNAnnotationType.PALEOGRAFISCH;
+import static elaborate.editor.export.mvn.MVNAnnotationType.POEZIE;
+import static elaborate.editor.export.mvn.MVNAnnotationType.RECHTERMARGEKOLOM;
+import static elaborate.editor.export.mvn.MVNAnnotationType.REGELNUMMERING_BLAD;
+import static elaborate.editor.export.mvn.MVNAnnotationType.REGELNUMMERING_TEKST;
+import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTBEGIN;
+import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTEINDE;
+import static elaborate.editor.export.mvn.MVNAnnotationType.TEKSTKLEUR_ROOD;
+import static elaborate.editor.export.mvn.MVNAnnotationType.VERSREGEL;
+import static elaborate.editor.export.mvn.MVNAnnotationType.VREEMDTEKEN;
+import static elaborate.editor.export.mvn.MVNAnnotationType.WITREGEL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

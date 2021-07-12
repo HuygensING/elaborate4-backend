@@ -27,9 +27,10 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+
 import elaborate.editor.model.orm.ProjectMetadataField;
 import elaborate.editor.model.orm.User;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 public class ProjectMetadataFieldService extends AbstractStoredEntityService<ProjectMetadataField> {
   private static ProjectMetadataFieldService instance;

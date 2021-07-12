@@ -22,10 +22,10 @@ package elaborate.editor.model;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PermissionTest {
 	private Permission permission;

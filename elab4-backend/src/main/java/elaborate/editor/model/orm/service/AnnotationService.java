@@ -24,7 +24,6 @@ package elaborate.editor.model.orm.service;
 
 import java.util.Collection;
 import java.util.List;
-
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

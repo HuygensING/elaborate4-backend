@@ -23,9 +23,18 @@ package elaborate.editor.export.mvn;
  */
 
 
-import nl.knaw.huygens.tei.*;
+import java.util.ArrayDeque;
+import java.util.Iterator;
 
-import java.util.*;
+import nl.knaw.huygens.tei.Comment;
+import nl.knaw.huygens.tei.CommentHandler;
+import nl.knaw.huygens.tei.DelegatingVisitor;
+import nl.knaw.huygens.tei.Element;
+import nl.knaw.huygens.tei.ElementHandler;
+import nl.knaw.huygens.tei.Text;
+import nl.knaw.huygens.tei.TextHandler;
+import nl.knaw.huygens.tei.Traversal;
+import nl.knaw.huygens.tei.XmlContext;
 
 public class TextDecorationVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
 

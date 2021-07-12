@@ -23,7 +23,6 @@ package elaborate.editor.model.orm;
  */
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

@@ -57,12 +57,10 @@
         543 Howard Street, 5th Floor
         San Francisco, California, 94105, USA
  -->
-<xsl:stylesheet 
- xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
- xmlns:wadl="http://wadl.dev.java.net/2009/02"
- xmlns:xs="http://www.w3.org/2001/XMLSchema"
- xmlns:html="http://www.w3.org/1999/xhtml"
- xmlns="http://www.w3.org/1999/xhtml"
+<xsl:stylesheet
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+        xmlns:wadl="http://wadl.dev.java.net/2009/02"
+        xmlns="http://www.w3.org/1999/xhtml"
 >
 
 <!-- Global variables -->

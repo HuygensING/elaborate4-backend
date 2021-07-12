@@ -22,15 +22,14 @@ package elaborate.editor.model.orm;
  * #L%
  */
 
-import static elaborate.editor.model.orm.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import elaborate.editor.model.ModelFactory;
+
+import static elaborate.editor.model.orm.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectTest extends StoredEntityTest {
 

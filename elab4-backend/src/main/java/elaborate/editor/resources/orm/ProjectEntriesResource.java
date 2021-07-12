@@ -22,27 +22,48 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-import com.fasterxml.jackson.annotation.*;
-import com.google.common.collect.*;
-import com.sun.jersey.spi.resource.*;
-import elaborate.editor.model.*;
-import elaborate.editor.model.orm.*;
-import elaborate.editor.model.orm.service.*;
-import elaborate.editor.model.orm.service.ProjectService.*;
-import elaborate.editor.resources.*;
-import elaborate.editor.resources.orm.wrappers.*;
-import elaborate.jaxrs.*;
-import elaborate.jaxrs.Annotations.*;
-import elaborate.util.*;
-import nl.knaw.huygens.*;
-import nl.knaw.huygens.jaxrstools.resources.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
-import javax.annotation.security.*;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import java.util.*;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
+import com.sun.jersey.spi.resource.Singleton;
 
-import static elaborate.editor.model.ElaborateRoles.*;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+import elaborate.editor.model.AnnotationInputWrapper;
+import elaborate.editor.model.Views;
+import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.Facsimile;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.service.PrevNext;
+import elaborate.editor.model.orm.service.ProjectEntryService;
+import elaborate.editor.model.orm.service.ProjectService;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
+import elaborate.editor.model.orm.service.TranscriptionService;
+import elaborate.editor.resources.AbstractElaborateResource;
+import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
+import elaborate.jaxrs.APIDesc;
+import elaborate.jaxrs.Annotations.AuthorizationRequired;
+import elaborate.util.XmlUtil;
+
+import static elaborate.editor.model.ElaborateRoles.ADMIN;
+import static elaborate.editor.model.ElaborateRoles.PROJECTLEADER;
+import static elaborate.editor.model.ElaborateRoles.USER;
 
 @AuthorizationRequired
 @Singleton

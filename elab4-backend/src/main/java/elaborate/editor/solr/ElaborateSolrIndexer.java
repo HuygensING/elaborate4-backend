@@ -22,16 +22,6 @@ package elaborate.editor.solr;
  * #L%
  */
 
-import static nl.knaw.huygens.facetedsearch.SolrFields.ANNOTATIONCS_PREFIX;
-import static nl.knaw.huygens.facetedsearch.SolrFields.ANNOTATION_PREFIX;
-import static nl.knaw.huygens.facetedsearch.SolrFields.ID;
-import static nl.knaw.huygens.facetedsearch.SolrFields.NAME;
-import static nl.knaw.huygens.facetedsearch.SolrFields.PROJECT_ID;
-import static nl.knaw.huygens.facetedsearch.SolrFields.PUBLISHABLE;
-import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYERCS_PREFIX;
-import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYER_PREFIX;
-import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,14 +29,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.datable.Datable;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.tei.Document;
+import nl.knaw.huygens.tei.XmlContext;
 
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.orm.Annotation;
@@ -56,11 +51,16 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.util.CNWUtil;
 import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.datable.Datable;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.tei.Document;
-import nl.knaw.huygens.tei.XmlContext;
+
+import static nl.knaw.huygens.facetedsearch.SolrFields.ANNOTATIONCS_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrFields.ANNOTATION_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrFields.ID;
+import static nl.knaw.huygens.facetedsearch.SolrFields.NAME;
+import static nl.knaw.huygens.facetedsearch.SolrFields.PROJECT_ID;
+import static nl.knaw.huygens.facetedsearch.SolrFields.PUBLISHABLE;
+import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYERCS_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrFields.TEXTLAYER_PREFIX;
+import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 
 public class ElaborateSolrIndexer extends SolrIndexer {
   private static final CNWUtil CNW_UTIL = new CNWUtil();

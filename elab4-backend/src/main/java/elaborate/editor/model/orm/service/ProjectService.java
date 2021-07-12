@@ -22,13 +22,40 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+import nl.knaw.huygens.solr.FacetInfo;
+
 import elaborate.editor.export.mvn.MVNAnnotationType;
 import elaborate.editor.export.pdf.PdfMaker;
 import elaborate.editor.export.tei.TagInfo;
@@ -38,23 +65,20 @@ import elaborate.editor.model.Action;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.ProjectPrototype;
 import elaborate.editor.model.ProjectTypes;
-import elaborate.editor.model.orm.*;
+import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.AnnotationMetadataItem;
+import elaborate.editor.model.orm.AnnotationType;
+import elaborate.editor.model.orm.LogEntry;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.ProjectEntryMetadataItem;
+import elaborate.editor.model.orm.ProjectMetadataItem;
+import elaborate.editor.model.orm.ProjectUser;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.TranscriptionType;
+import elaborate.editor.model.orm.User;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-import nl.knaw.huygens.solr.FacetInfo;
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.*;
-import java.util.Map.Entry;
 
 public class ProjectService extends AbstractStoredEntityService<Project> {
   private static final String PROJECT_NAME = "name";

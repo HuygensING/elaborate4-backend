@@ -26,10 +26,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import com.google.common.base.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
-
-import com.google.common.base.Charsets;
 
 public final class PasswordUtil {
 

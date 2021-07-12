@@ -22,19 +22,30 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-import com.google.common.collect.*;
-import elaborate.editor.model.orm.*;
-import elaborate.editor.model.orm.service.*;
-import elaborate.editor.resources.*;
-import elaborate.editor.resources.orm.wrappers.*;
-import elaborate.jaxrs.*;
-import elaborate.jaxrs.Annotations.*;
-import nl.knaw.huygens.*;
-import nl.knaw.huygens.jaxrstools.resources.*;
+import java.util.Map;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import java.util.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.service.UserService;
+import elaborate.editor.resources.AbstractElaborateResource;
+import elaborate.editor.resources.orm.wrappers.UserInput;
+import elaborate.jaxrs.APIDesc;
+import elaborate.jaxrs.Annotations.AuthorizationRequired;
 
 @Path("users")
 @AuthorizationRequired

@@ -25,7 +25,6 @@ package elaborate.editor.resources;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
-
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;

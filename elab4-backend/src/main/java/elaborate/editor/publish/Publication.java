@@ -27,12 +27,11 @@ import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.collect.Lists;
+import org.joda.time.DateTime;
 
 import elaborate.editor.model.ProjectTypes;
 import elaborate.editor.model.orm.AnnotationType;

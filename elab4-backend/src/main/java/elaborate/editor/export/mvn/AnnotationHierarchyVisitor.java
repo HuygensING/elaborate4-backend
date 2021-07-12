@@ -22,11 +22,20 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import elaborate.editor.model.orm.*;
-import nl.knaw.huygens.*;
-import nl.knaw.huygens.tei.*;
+import java.util.Map.Entry;
 
-import java.util.Map.*;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.tei.Comment;
+import nl.knaw.huygens.tei.CommentHandler;
+import nl.knaw.huygens.tei.DelegatingVisitor;
+import nl.knaw.huygens.tei.Element;
+import nl.knaw.huygens.tei.ElementHandler;
+import nl.knaw.huygens.tei.Text;
+import nl.knaw.huygens.tei.TextHandler;
+import nl.knaw.huygens.tei.Traversal;
+import nl.knaw.huygens.tei.XmlContext;
+
+import elaborate.editor.model.orm.Transcription;
 
 class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
   private final Element root = new Element("xml");

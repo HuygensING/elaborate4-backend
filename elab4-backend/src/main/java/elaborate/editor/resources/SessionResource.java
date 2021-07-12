@@ -22,24 +22,32 @@ package elaborate.editor.resources;
  * #L%
  */
 
+import java.util.Collection;
+import java.util.Map;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang.StringUtils;
+
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+import nl.knaw.huygens.security.client.UnauthorizedException;
+
 import elaborate.editor.model.SessionService;
 import elaborate.editor.model.SessionService.SessionUserInfo;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;
 import elaborate.editor.resources.orm.PasswordData;
 import elaborate.jaxrs.APIDesc;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-import nl.knaw.huygens.security.client.UnauthorizedException;
-import org.apache.commons.lang.StringUtils;
-
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import java.util.Collection;
-import java.util.Map;
 
 @Path("sessions")
 public class SessionResource extends AbstractElaborateResource {

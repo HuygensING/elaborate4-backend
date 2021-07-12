@@ -36,6 +36,8 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableList;
 
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
 import elaborate.editor.model.Views;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.service.AnnotationTypeService;
@@ -43,7 +45,6 @@ import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.editor.resources.orm.wrappers.AnnotationTypeMetadataItemInput;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 @Path("annotationtypes")
 @AuthorizationRequired

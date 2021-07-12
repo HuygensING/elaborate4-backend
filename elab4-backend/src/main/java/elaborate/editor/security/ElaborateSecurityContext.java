@@ -23,7 +23,6 @@ package elaborate.editor.security;
  */
 
 import java.security.Principal;
-
 import javax.ws.rs.core.SecurityContext;
 
 import elaborate.editor.model.SessionService;

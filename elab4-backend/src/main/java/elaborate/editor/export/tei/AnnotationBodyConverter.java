@@ -22,11 +22,8 @@ package elaborate.editor.export.tei;
  * #L%
  */
 
-import static nl.knaw.huygens.tei.Traversal.NEXT;
-
 import java.util.TreeSet;
 
-import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Document;
@@ -35,6 +32,10 @@ import nl.knaw.huygens.tei.ElementHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
+
+import elaborate.util.XmlUtil;
+
+import static nl.knaw.huygens.tei.Traversal.NEXT;
 
 public class AnnotationBodyConverter {
   static final TreeSet<String> unhandledTags = new TreeSet<String>();

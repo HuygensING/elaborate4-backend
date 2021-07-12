@@ -24,7 +24,6 @@ package elaborate.editor.model;
 
 import java.util.Comparator;
 import java.util.List;
-
 import javax.ws.rs.core.Application;
 import javax.xml.bind.annotation.XmlRootElement;
 

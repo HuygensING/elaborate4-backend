@@ -22,18 +22,17 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.text.MessageFormat;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.Maps;
-
 import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SearchResourceTest {
 

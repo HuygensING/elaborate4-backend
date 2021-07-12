@@ -24,13 +24,12 @@ package elaborate.jaxrs.filters;
 
 import java.text.MessageFormat;
 
-import org.joda.time.DateTime;
-
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
+import org.joda.time.DateTime;
 
 class LoggingResourceFilter implements ResourceFilter, ContainerRequestFilter, ContainerResponseFilter {
 	// private final StopWatch sw = new StopWatch();

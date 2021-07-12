@@ -22,9 +22,9 @@ package elaborate.editor.export.tei;
  * #L%
  */
 
-import com.google.common.collect.Maps;
-
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 public class TagInfo {
 	private String name = "";

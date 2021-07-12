@@ -22,6 +22,8 @@ package elaborate.editor.model;
  * #L%
  */
 
+import org.junit.Test;
+
 import static com.google.common.collect.Lists.newArrayList;
 import static elaborate.editor.model.ElaborateRoles.ADMIN;
 import static elaborate.editor.model.ElaborateRoles.PROJECTLEADER;
@@ -30,8 +32,6 @@ import static elaborate.editor.model.ElaborateRoles.USER;
 import static elaborate.editor.model.ElaborateRoles.getRolestringFor;
 import static elaborate.editor.model.ElaborateRoles.highestRole;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
 
 public class ElaborateRolesTest {
 

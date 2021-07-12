@@ -23,16 +23,16 @@ package elaborate.editor.model.orm.service;
  */
 
 import java.util.List;
-
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import com.google.common.collect.ImmutableList;
 
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.User;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 @Singleton
 public class AnnotationTypeService extends AbstractStoredEntityService<AnnotationType> {

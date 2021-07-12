@@ -28,14 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.model.orm.Transcription;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
@@ -44,6 +41,9 @@ import nl.knaw.huygens.tei.Text;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
+
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.model.orm.Transcription;
 
 public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext> implements ElementHandler<XmlContext> {
   private static boolean lastNodeWasText = false;

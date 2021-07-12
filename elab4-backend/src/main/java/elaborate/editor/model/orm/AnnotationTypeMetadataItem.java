@@ -23,7 +23,6 @@ package elaborate.editor.model.orm;
  */
 
 import java.util.Map;
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;

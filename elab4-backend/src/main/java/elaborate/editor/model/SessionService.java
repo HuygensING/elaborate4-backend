@@ -29,20 +29,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.inject.Singleton;
-
-import org.apache.commons.lang.RandomStringUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.RandomStringUtils;
+
+import nl.knaw.huygens.security.client.UnauthorizedException;
 
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;
 import elaborate.editor.security.ElaborateSecurityContext;
-import nl.knaw.huygens.security.client.UnauthorizedException;
 
 @Singleton
 public class SessionService {

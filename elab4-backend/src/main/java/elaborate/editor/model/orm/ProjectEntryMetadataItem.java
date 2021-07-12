@@ -29,8 +29,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import elaborate.editor.model.AbstractMetadataItem;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
+
+import elaborate.editor.model.AbstractMetadataItem;
 
 @Entity
 @Table(name = "project_entry_metadata_items")

@@ -22,13 +22,12 @@ package elaborate.util;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.google.common.base.Charsets;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.common.base.Charsets;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PasswordUtilTest {
 

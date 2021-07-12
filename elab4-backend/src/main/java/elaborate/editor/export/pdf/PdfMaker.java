@@ -24,7 +24,6 @@ package elaborate.editor.export.pdf;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;

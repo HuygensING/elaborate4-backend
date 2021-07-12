@@ -22,25 +22,24 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import static elaborate.util.XmlUtil.closingTag;
-import static elaborate.util.XmlUtil.milestoneTag;
-import static elaborate.util.XmlUtil.openingTag;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import org.apache.commons.lang3.StringUtils;
 
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Element;
+
+import static elaborate.util.XmlUtil.closingTag;
+import static elaborate.util.XmlUtil.milestoneTag;
+import static elaborate.util.XmlUtil.openingTag;
 
 public class MVNTeiExporter {
   private static final String NL = "\n";

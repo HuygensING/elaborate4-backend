@@ -22,22 +22,23 @@ package elaborate.publication.solr;
  * #L%
  */
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.RangeField;
-import nl.knaw.huygens.solr.FacetInfo;
-import nl.knaw.huygens.solr.FacetType;
-import org.assertj.core.data.MapEntry;
-import org.junit.Test;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.assertj.core.data.MapEntry;
+import org.junit.Test;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.RangeField;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

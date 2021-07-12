@@ -22,10 +22,11 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import nl.knaw.huygens.Log;
+import java.util.Set;
+
 import org.junit.Test;
 
-import java.util.Set;
+import nl.knaw.huygens.Log;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

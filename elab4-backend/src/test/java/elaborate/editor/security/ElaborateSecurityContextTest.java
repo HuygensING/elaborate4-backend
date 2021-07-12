@@ -22,15 +22,15 @@ package elaborate.editor.security;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.orm.User;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ElaborateSecurityContextTest {
 	private User user;

@@ -25,10 +25,9 @@ package nl.knaw.huygens.facetedsearch;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 
 public class ElaborateQueryComposer implements QueryComposer {
   private static final String FUZZY = "~0.75";

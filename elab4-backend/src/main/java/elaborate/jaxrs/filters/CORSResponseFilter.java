@@ -22,9 +22,13 @@ package elaborate.jaxrs.filters;
  * #L%
  */
 
-import com.sun.jersey.spi.container.*;
-
 import javax.ws.rs.core.MultivaluedMap;
+
+import com.sun.jersey.spi.container.ContainerRequest;
+import com.sun.jersey.spi.container.ContainerRequestFilter;
+import com.sun.jersey.spi.container.ContainerResponse;
+import com.sun.jersey.spi.container.ContainerResponseFilter;
+import com.sun.jersey.spi.container.ResourceFilter;
 
 public class CORSResponseFilter
     implements ResourceFilter, ContainerResponseFilter, ContainerRequestFilter {

@@ -22,8 +22,6 @@ package elaborate.backend.client;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +29,8 @@ import org.junit.After;
 import org.junit.Before;
 
 import nl.knaw.huygens.Log;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class Elab4RestClientTest {
   private static Elab4RestClient e4;

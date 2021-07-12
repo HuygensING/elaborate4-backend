@@ -22,24 +22,17 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import static nl.knaw.huygens.tei.Traversal.NEXT;
-import static nl.knaw.huygens.tei.Traversal.STOP;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang.StringUtils;
 
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.util.XmlUtil;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Comment;
 import nl.knaw.huygens.tei.CommentHandler;
@@ -50,6 +43,13 @@ import nl.knaw.huygens.tei.Text;
 import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
+
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.util.XmlUtil;
+
+import static nl.knaw.huygens.tei.Traversal.NEXT;
+import static nl.knaw.huygens.tei.Traversal.STOP;
 
 @Deprecated
 // use MVNTeiExporter

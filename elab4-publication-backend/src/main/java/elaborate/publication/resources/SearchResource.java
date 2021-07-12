@@ -22,21 +22,36 @@ package elaborate.publication.resources;
  * #L%
  */
 
-import com.google.common.collect.*;
-import elaborate.publication.solr.*;
-import nl.knaw.huygens.*;
-import nl.knaw.huygens.facetedsearch.*;
-import nl.knaw.huygens.jaxrstools.exceptions.*;
-import nl.knaw.huygens.jaxrstools.resources.*;
-import org.apache.commons.lang.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.UriBuilder;
 
-import javax.servlet.*;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
+import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang.StringUtils;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
+import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
+import nl.knaw.huygens.facetedsearch.SearchData;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+import elaborate.publication.solr.SearchService;
 
 @Path("search")
 public class SearchResource {

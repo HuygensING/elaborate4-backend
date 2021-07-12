@@ -22,16 +22,18 @@ package elaborate.editor.resources;
  * #L%
  */
 
-import com.google.common.collect.Maps;
-import elaborate.jaxrs.APIDesc;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import java.io.IOException;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+import com.google.common.collect.Maps;
+
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+import elaborate.jaxrs.APIDesc;
 
 @Path("about")
 public class AboutResource extends AbstractElaborateResource {

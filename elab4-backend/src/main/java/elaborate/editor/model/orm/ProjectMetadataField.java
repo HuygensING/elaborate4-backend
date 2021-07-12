@@ -23,16 +23,14 @@ package elaborate.editor.model.orm;
  */
 
 import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 
 import elaborate.editor.model.AbstractTrackedEntity;
 

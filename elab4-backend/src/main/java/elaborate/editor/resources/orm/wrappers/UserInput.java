@@ -24,9 +24,8 @@ package elaborate.editor.resources.orm.wrappers;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.base.Joiner;
+import org.apache.commons.lang.StringUtils;
 
 import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.orm.User;

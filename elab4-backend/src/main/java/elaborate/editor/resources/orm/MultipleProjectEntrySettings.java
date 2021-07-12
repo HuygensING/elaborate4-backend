@@ -24,7 +24,6 @@ package elaborate.editor.resources.orm;
 
 import java.util.List;
 import java.util.Map;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import elaborate.editor.model.orm.ProjectEntry;

@@ -29,7 +29,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import com.google.common.base.Charsets;
-
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;

@@ -22,11 +22,8 @@ package elaborate.util;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.IOException;
 import java.io.StringReader;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,6 +34,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import nl.knaw.huygens.Log;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class XmlTestUtil {
 

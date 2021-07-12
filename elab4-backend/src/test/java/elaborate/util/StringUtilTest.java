@@ -22,21 +22,23 @@ package elaborate.util;
  * #L%
  */
 
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriBuilderException;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import elaborate.editor.resources.SessionResource;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import nl.knaw.huygens.Log;
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.junit.Test;
 
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriBuilderException;
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
+import nl.knaw.huygens.Log;
+
+import elaborate.editor.resources.SessionResource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

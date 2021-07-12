@@ -29,7 +29,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.persistence.EntityManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,6 +41,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Comment;
@@ -50,10 +53,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
@@ -62,7 +62,6 @@ import elaborate.editor.model.orm.ProjectEntryMetadataItem;
 import elaborate.editor.model.orm.ProjectMetadataItem;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.ProjectService;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 public class TeiMaker {
   public static final Map<String, String> HI_TAGS = ImmutableMap.<String, String> builder()//

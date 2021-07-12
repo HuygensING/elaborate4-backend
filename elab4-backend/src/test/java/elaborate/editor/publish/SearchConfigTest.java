@@ -23,19 +23,19 @@ package elaborate.editor.publish;
  */
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
-import elaborate.editor.model.orm.Project;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.solr.FacetInfo;
+
+import elaborate.editor.model.orm.Project;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SearchConfigTest {
 

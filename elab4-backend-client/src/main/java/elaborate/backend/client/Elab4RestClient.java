@@ -22,11 +22,8 @@ package elaborate.backend.client;
  * #L%
  */
 
-import jersey.repackaged.com.google.common.collect.Maps;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.util.List;
+import java.util.Map;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -35,8 +32,11 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.util.List;
-import java.util.Map;
+
+import jersey.repackaged.com.google.common.collect.Maps;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Elab4RestClient {
   private final Logger LOG = LoggerFactory.getLogger(getClass());

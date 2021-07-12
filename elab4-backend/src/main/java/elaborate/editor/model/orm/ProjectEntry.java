@@ -23,18 +23,16 @@ package elaborate.editor.model.orm;
  */
 
 import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 
 import elaborate.editor.model.AbstractProjectEntity;
 import elaborate.editor.model.ModelFactory;

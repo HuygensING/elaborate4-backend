@@ -22,14 +22,16 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
-import nl.knaw.huygens.Log;
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.glassfish.grizzly.utils.Charsets;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
+import nl.knaw.huygens.Log;
+
+import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -22,15 +22,14 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Collection;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
 import nl.knaw.huygens.Log;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AbstractSolrServerTest {
 

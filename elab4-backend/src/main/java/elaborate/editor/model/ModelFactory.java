@@ -23,7 +23,6 @@ package elaborate.editor.model;
  */
 
 import java.util.Date;
-
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 

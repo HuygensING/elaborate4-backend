@@ -22,18 +22,20 @@ package elaborate.editor.solr;
  * #L%
  */
 
+import java.util.Collection;
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
-import elaborate.editor.AbstractTest;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.SolrFields;
 import org.apache.solr.common.SolrInputDocument;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.List;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.SolrFields;
+
+import elaborate.editor.AbstractTest;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

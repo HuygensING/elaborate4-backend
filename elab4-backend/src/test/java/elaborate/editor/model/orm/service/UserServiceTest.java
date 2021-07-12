@@ -22,18 +22,18 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
+import org.junit.Test;
+
+import elaborate.editor.config.Configuration;
+import elaborate.editor.model.orm.User;
+import elaborate.util.Emailer;
+
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.contains;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import org.junit.Test;
-
-import elaborate.editor.config.Configuration;
-import elaborate.editor.model.orm.User;
-import elaborate.util.Emailer;
 
 public class UserServiceTest {
 

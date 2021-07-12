@@ -22,10 +22,6 @@ package elaborate.editor.resources.orm.wrappers;
  * #L%
  */
 
-import static nl.knaw.huygens.tei.Traversal.NEXT;
-import static nl.knaw.huygens.tei.Traversal.STOP;
-
-import elaborate.editor.model.orm.Transcription;
 import nl.knaw.huygens.tei.Comment;
 import nl.knaw.huygens.tei.CommentHandler;
 import nl.knaw.huygens.tei.DelegatingVisitor;
@@ -35,6 +31,11 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
+
+import elaborate.editor.model.orm.Transcription;
+
+import static nl.knaw.huygens.tei.Traversal.NEXT;
+import static nl.knaw.huygens.tei.Traversal.STOP;
 
 class TranscriptionBodyInputVisitor extends DelegatingVisitor<XmlContext> implements CommentHandler<XmlContext> {
   private static final String TAG_SUP = "sup";

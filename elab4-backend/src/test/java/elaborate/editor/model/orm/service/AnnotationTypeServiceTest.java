@@ -22,24 +22,24 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-import static elaborate.editor.model.orm.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-
+import com.google.common.collect.ImmutableList;
+import com.sun.jersey.api.NotFoundException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.sun.jersey.api.NotFoundException;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.User;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+
+import static elaborate.editor.model.orm.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 @Ignore
 public class AnnotationTypeServiceTest extends AbstractTest {

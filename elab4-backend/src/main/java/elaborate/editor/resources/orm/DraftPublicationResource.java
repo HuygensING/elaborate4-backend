@@ -31,13 +31,14 @@ import javax.ws.rs.core.Response;
 
 import com.sun.jersey.spi.resource.Singleton;
 
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.ProjectService;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 @AuthorizationRequired
 @Singleton

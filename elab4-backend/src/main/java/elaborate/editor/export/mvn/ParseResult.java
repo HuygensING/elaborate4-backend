@@ -22,11 +22,19 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import com.google.common.base.*;
-import com.google.common.collect.*;
-import nl.knaw.huygens.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-import java.util.*;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
+
+import nl.knaw.huygens.Log;
 
 public class ParseResult {
   private final List<String> textSegments = new ArrayList<String>();

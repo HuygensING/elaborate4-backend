@@ -22,19 +22,21 @@ package elaborate.editor.backend;
  * #L%
  */
 
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.service.TranscriptionService;
-import elaborate.util.HibernateUtil;
-import nl.knaw.huygens.Log;
-import org.apache.commons.lang.time.StopWatch;
-
-import javax.persistence.EntityManager;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.EntityManager;
+
+import org.apache.commons.lang.time.StopWatch;
+
+import nl.knaw.huygens.Log;
+
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.TranscriptionService;
+import elaborate.util.HibernateUtil;
 
 class AnnotationMarkerScrubber {
 	@SuppressWarnings("boxing")

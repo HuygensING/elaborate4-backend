@@ -23,16 +23,17 @@ package elaborate.editor.resources.orm.wrappers;
  */
 
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.ImmutableMap;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.service.ProjectService;
-import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Map;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.ProjectService;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

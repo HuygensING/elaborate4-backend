@@ -23,7 +23,6 @@ package elaborate.editor.resources;
  */
 
 import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -31,12 +30,13 @@ import javax.ws.rs.Produces;
 
 import com.google.common.collect.ImmutableMap;
 
-import elaborate.editor.config.Configuration;
-import elaborate.editor.model.orm.service.SearchService;
-import elaborate.util.HibernateUtil;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
+import elaborate.editor.config.Configuration;
+import elaborate.editor.model.orm.service.SearchService;
+import elaborate.util.HibernateUtil;
 
 @Path("status")
 public class StatusResource extends AbstractElaborateResource {

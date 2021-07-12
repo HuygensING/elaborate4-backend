@@ -23,9 +23,9 @@ package elaborate.editor.export.mvn;
  */
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.sun.jersey.api.client.ClientResponse;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MVNClientTest {
 

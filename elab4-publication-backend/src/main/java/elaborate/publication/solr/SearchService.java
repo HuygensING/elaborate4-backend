@@ -22,18 +22,6 @@ package elaborate.publication.solr;
  * #L%
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.*;
-import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
-import nl.knaw.huygens.solr.FacetInfo;
-import nl.knaw.huygens.solr.FacetType;
-import org.joda.time.DateTime;
-
-import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,6 +29,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.inject.Singleton;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.joda.time.DateTime;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
+import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
+import nl.knaw.huygens.facetedsearch.LocalSolrServer;
+import nl.knaw.huygens.facetedsearch.RangeField;
+import nl.knaw.huygens.facetedsearch.SearchData;
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
+import nl.knaw.huygens.solr.FacetInfo;
+import nl.knaw.huygens.solr.FacetType;
 
 import static nl.knaw.huygens.facetedsearch.SolrUtils.EMPTYVALUE_SYMBOL;
 

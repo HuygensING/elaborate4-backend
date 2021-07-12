@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.Map;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

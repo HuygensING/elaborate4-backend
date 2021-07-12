@@ -28,9 +28,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+
 import elaborate.editor.model.Sitemap;
 import elaborate.jaxrs.APIDesc;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 @Path("api")
 public class SitemapResource extends AbstractElaborateResource {

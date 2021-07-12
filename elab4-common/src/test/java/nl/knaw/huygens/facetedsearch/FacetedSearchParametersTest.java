@@ -22,11 +22,11 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FacetedSearchParametersTest<T> {
 

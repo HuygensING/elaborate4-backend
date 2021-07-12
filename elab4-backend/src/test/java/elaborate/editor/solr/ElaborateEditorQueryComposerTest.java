@@ -22,15 +22,15 @@ package elaborate.editor.solr;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
-import elaborate.editor.model.orm.TranscriptionType;
 import nl.knaw.huygens.facetedsearch.FacetParameter;
 import nl.knaw.huygens.facetedsearch.QueryComposer;
+
+import elaborate.editor.model.orm.TranscriptionType;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ElaborateEditorQueryComposerTest {
   private static final QueryComposer queryComposer = new ElaborateEditorQueryComposer();

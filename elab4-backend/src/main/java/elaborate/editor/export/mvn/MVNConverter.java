@@ -22,24 +22,6 @@ package elaborate.editor.export.mvn;
  * #L%
  */
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.export.mvn.MVNConversionData.EntryData;
-import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.TranscriptionType;
-import elaborate.editor.publish.Publication.Status;
-import elaborate.util.HibernateUtil;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.tei.Document;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -49,6 +31,26 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.tei.Document;
+
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.export.mvn.MVNConversionData.EntryData;
+import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.TranscriptionType;
+import elaborate.editor.publish.Publication.Status;
+import elaborate.util.HibernateUtil;
 
 import static elaborate.util.XmlUtil.extractAnnotationNos;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;

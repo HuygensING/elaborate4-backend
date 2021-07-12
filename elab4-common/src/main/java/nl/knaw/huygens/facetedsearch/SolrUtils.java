@@ -25,11 +25,10 @@ package nl.knaw.huygens.facetedsearch;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.parser.SolrQueryParserBase;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.parser.SolrQueryParserBase;
 
 public class SolrUtils {
 	// Special Lucene characters: + - & | ! ( ) { } [ ] ^ " ~ * ? : \

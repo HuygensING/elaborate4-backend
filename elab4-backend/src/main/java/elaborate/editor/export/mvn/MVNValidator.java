@@ -26,18 +26,16 @@ package elaborate.editor.export.mvn;
 import java.io.File;
 import java.io.StringReader;
 import java.net.URL;
-
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
 import com.google.common.base.MoreObjects;
 import com.thaiopensource.relaxng.jaxp.XMLSyntaxSchemaFactory;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import nl.knaw.huygens.Log;
 

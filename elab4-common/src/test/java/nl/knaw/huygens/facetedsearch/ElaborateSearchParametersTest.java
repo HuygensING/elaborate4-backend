@@ -24,9 +24,8 @@ package nl.knaw.huygens.facetedsearch;
 
 import java.io.IOException;
 
-import org.junit.Test;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Test;
 
 import nl.knaw.huygens.AbstractTest;
 import nl.knaw.huygens.Log;

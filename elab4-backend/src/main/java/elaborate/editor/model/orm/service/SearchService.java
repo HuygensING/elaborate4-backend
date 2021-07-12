@@ -24,14 +24,16 @@ package elaborate.editor.model.orm.service;
 
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Singleton;
-
-import org.joda.time.DateTime;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.joda.time.DateTime;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
 
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.Project;
@@ -39,9 +41,6 @@ import elaborate.editor.model.orm.StorableSearchData;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.solr.ElaborateEditorSearchParameters;
 import elaborate.util.ResourceUtil;
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
 
 @Singleton
 public class SearchService extends AbstractStoredEntityService<StorableSearchData> {

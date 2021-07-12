@@ -22,8 +22,6 @@ package elaborate.editor.resources.orm;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import javax.persistence.EntityManager;
 import javax.ws.rs.core.MediaType;
 
@@ -33,6 +31,8 @@ import org.junit.Test;
 
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.orm.User;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Ignore
 public class UserResourceTest extends ResourceTest {

@@ -24,7 +24,6 @@ package elaborate.editor.model.orm;
 
 import java.util.Date;
 import java.util.Map;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
@@ -36,8 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import elaborate.editor.model.AbstractStoredEntity;
 import nl.knaw.huygens.facetedsearch.SearchData;
+
+import elaborate.editor.model.AbstractStoredEntity;
 
 @Entity
 @Table(name = "searchdata")

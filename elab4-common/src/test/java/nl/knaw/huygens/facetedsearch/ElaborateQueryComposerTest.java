@@ -22,11 +22,10 @@ package nl.knaw.huygens.facetedsearch;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ElaborateQueryComposerTest {
   private static final QueryComposer queryComposer = new ElaborateQueryComposer();
