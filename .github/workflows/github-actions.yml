@@ -28,4 +28,4 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: 5/5 - Build with Maven
-        run: mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --update-snapshots verify
+        run: mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true --batch-mode --update-snapshots verify
