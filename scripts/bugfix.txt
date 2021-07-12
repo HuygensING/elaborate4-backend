@@ -1,0 +1,26 @@
+Bug: annotationtype=1
+Vanaf 2018-11-06
+
+Betrokken projecten:
+
+ 54 | Lipsius Correspondence
+ 18 | Correspondance d'Isabelle de Charrière
+ 64 | GOS: Vroedschapsboek circa 1700
+
+
+select distinct(project_id) from project_entries where id in (
+  select project_entry_id from transcriptions where id in (
+    select transcription_id from annotations where modified_on > '2018-11-06'::date)) order by project_id;
+
+
+
+select distinct('https://www.elaborate.huygens.knaw.nl/projects/' || p.name || '/entries/'|| pe.id || '/transcriptions/' || lower(t.text_layer))
+  from projects p
+  left join project_entries pe
+    left join transcriptions t
+      left join annotations a
+      on (a.transcription_id=t.id)
+    on (t.project_entry_id=pe.id)
+  on (pe.project_id=p.id)
+  where a.modified_on > '2018-11-05'::date
+  ;

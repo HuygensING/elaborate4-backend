@@ -4,54 +4,73 @@ package elaborate.editor.resources.orm;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2021 Huygens ING
+ * Copyright (C) 2011 - 2019 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
-import com.fasterxml.jackson.annotation.*;
-import com.google.common.collect.*;
-import elaborate.editor.config.*;
-import elaborate.editor.model.*;
-import elaborate.editor.model.orm.*;
-import elaborate.editor.model.orm.service.*;
-import elaborate.editor.resources.*;
-import elaborate.jaxrs.*;
-import elaborate.jaxrs.Annotations.*;
-import nl.knaw.huygens.*;
-import nl.knaw.huygens.jaxrstools.exceptions.*;
-import nl.knaw.huygens.jaxrstools.resources.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
-import javax.annotation.security.*;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import java.util.*;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import static elaborate.editor.model.ElaborateRoles.*;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.ImmutableList;
+
+import elaborate.editor.config.Configuration;
+import elaborate.editor.model.ProjectPrototype;
+import elaborate.editor.model.Views;
+import elaborate.editor.model.orm.LogEntry;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.service.ProjectEntryService;
+import elaborate.editor.model.orm.service.ProjectService;
+import elaborate.editor.model.orm.service.ReindexStatus;
+import elaborate.editor.model.orm.service.TranscriptionService;
+import elaborate.editor.resources.AbstractElaborateResource;
+import elaborate.jaxrs.APIDesc;
+import elaborate.jaxrs.Annotations.AuthorizationRequired;
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 @Path("projects")
 @AuthorizationRequired
 public class ProjectResource extends AbstractElaborateResource {
   Configuration config = Configuration.instance();
 
-  @Context private ProjectService projectService;
+  @Context
+  private ProjectService projectService;
 
-  @Context private ProjectEntryService projectEntryService;
+  @Context
+  private ProjectEntryService projectEntryService;
 
-  @Context private TranscriptionService transcriptionService;
+  @Context
+  private TranscriptionService transcriptionService;
 
   @GET
   @Produces(UTF8MediaType.APPLICATION_JSON)
@@ -79,7 +98,7 @@ public class ProjectResource extends AbstractElaborateResource {
 
   // @PUT
   // @Path("{project_id: [0-9]+}")
-  // @RolesAllowed({ ADMIN })
+  // @RolesAllowed("ADMIN")
   // @Consumes(UTF8MediaType.APPLICATION_JSON)
   // @APIDesc("Updates the project with the given project_id")
   // public void updateProject(Project project) {
@@ -101,8 +120,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @RolesAllowed({ ADMIN })
   @APIDesc("Updates level1,2,3 of the project with the given project_id")
-  public void updateProjectSortLevels(
-      @PathParam("project_id") long project_id, List<String> levels) {
+  public void updateProjectSortLevels(@PathParam("project_id") long project_id, List<String> levels) {
     if (levels != null) {
       projectService.setProjectSortLevels(project_id, levels, getUser());
     } else {
@@ -123,8 +141,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @RolesAllowed({ ADMIN })
   @APIDesc("Updates the settings of the project with the given project_id")
-  public void updateProjectSettings(
-      @PathParam("project_id") long project_id, Map<String, String> settingsMap) {
+  public void updateProjectSettings(@PathParam("project_id") long project_id, Map<String, String> settingsMap) {
     if (settingsMap != null) {
       projectService.setProjectSettings(project_id, settingsMap, getUser());
     } else {
@@ -137,8 +154,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @RolesAllowed({ ADMIN })
   @APIDesc("Updates the textlayers settings of the project with the given project_id")
-  public void updateTextlayersSettings(
-      @PathParam("project_id") long project_id, List<String> textLayers) {
+  public void updateTextlayersSettings(@PathParam("project_id") long project_id, List<String> textLayers) {
     projectService.setTextLayers(project_id, textLayers, getUser());
   }
 
@@ -156,8 +172,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   @APIDesc("Returns the metadata of the entries of the project with the given project_id")
   @JsonView(Views.Extended.class)
-  public Collection<Map<String, String>> getProjectEntryMetadata(
-      @PathParam("project_id") long project_id) {
+  public Collection<Map<String, String>> getProjectEntryMetadata(@PathParam("project_id") long project_id) {
     return projectService.getProjectEntryMetadata(project_id, getUser());
   }
 
@@ -165,25 +180,21 @@ public class ProjectResource extends AbstractElaborateResource {
   @GET
   @Path("{project_id: [0-9]+}/entrymetadatafields")
   @Produces(UTF8MediaType.APPLICATION_JSON)
-  @APIDesc(
-      "Returns the metadatafields for the project entries of the project with the given project_id")
-  public Collection<String> getProjectEntryMetadataFields(
-      @PathParam("project_id") long project_id) {
-    return ImmutableList.copyOf(
-        projectService.getProjectEntryMetadataFields(project_id, getUser()));
+  @APIDesc("Returns the metadatafields for the project entries of the project with the given project_id")
+  public Collection<String> getProjectEntryMetadataFields(@PathParam("project_id") long project_id) {
+    return ImmutableList.copyOf(projectService.getProjectEntryMetadataFields(project_id, getUser()));
   }
 
   @PUT
   @Path("{project_id: [0-9]+}/entrymetadatafields")
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @RolesAllowed({ADMIN})
-  @APIDesc(
-      "Updates the metadatafields for the project entries of the project with the given project_id")
-  public Response updateProjectEntryMetadataFields(
-      @PathParam("project_id") long project_id, List<String> fields) {
+  @APIDesc("Updates the metadatafields for the project entries of the project with the given project_id")
+  public Response updateProjectEntryMetadataFields(@PathParam("project_id") long project_id, List<String> fields) {
     projectService.setProjectEntryMetadataFields(project_id, fields, getUser());
     ReindexStatus status = projectService.createReindexStatus(project_id);
     return Response.created(status.getURI()).build();
+
   }
 
   /* project annotationtypes */
@@ -201,8 +212,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Consumes(UTF8MediaType.APPLICATION_JSON)
   @JsonView(Views.Minimal.class)
   @APIDesc("Updates the annotation types for the project with the given project_id")
-  public void setProjectAnnotationTypes(
-      @PathParam("project_id") long project_id, List<Long> annotationTypeIds) {
+  public void setProjectAnnotationTypes(@PathParam("project_id") long project_id, List<Long> annotationTypeIds) {
     projectService.setProjectAnnotationTypes(project_id, annotationTypeIds, getUser());
   }
 
@@ -230,16 +240,40 @@ public class ProjectResource extends AbstractElaborateResource {
   @APIDesc("Updates the user ids assigned to the project with the given project_id")
   public void updateProjectUsers(@PathParam("project_id") long project_id, List<Long> userIds) {
     Log.info("updateProjectUsers: project_id={}, userIds={}", project_id, userIds);
-    projectService.updateProjectUserIds(project_id, userIds, getUser());
+    List<Long> currentUserIds = projectService.getProjectUserIds(project_id, getUser());
+    if (updateIsAllowed(currentUserIds, userIds)) {
+      projectService.updateProjectUserIds(project_id, userIds, getUser());
+    } else
+      throw new BadRequestException(
+          MessageFormat.format(
+              "Changing projectUsers from {0} to {1} is not allowed: only one user change per call is allowed.",
+              currentUserIds, userIds));
+  }
+
+  static boolean updateIsAllowed(List<Long> currentUserIds, List<Long> userIds) {
+    // at most 1 userId should have been removed or added
+    boolean acceptUpdate = false;
+    int sizeDiff = currentUserIds.size() - userIds.size();
+    if (sizeDiff >= 0) {
+      // deletion
+      List<Long> deletedUserIds = new ArrayList<Long>(currentUserIds);
+      deletedUserIds.removeAll(userIds);
+      acceptUpdate = deletedUserIds.size() <= 1;
+    } else {
+      // addition
+      List<Long> addedUserIds = new ArrayList<Long>(userIds);
+      addedUserIds.removeAll(currentUserIds);
+      acceptUpdate = addedUserIds.size() <= 1;
+    }
+    return acceptUpdate;
   }
 
   // @PUT
   // @Path("{project_id: [0-9]+}/projectusers/{user_id}")
   // @Consumes(UTF8MediaType.APPLICATION_JSON)
-  // @RolesAllowed({ ADMIN })
+  // @RolesAllowed("ADMIN")
   // @APIDesc("Adds an existing user to the project with the given project_id")
-  // public Response addProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id")
-  // long user_id) {
+  // public Response addProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
   // User created = projectService.addProjectUser(project_id, user_id, getUser());
   // return Response.created(createURI(created)).build();
   // }
@@ -247,10 +281,9 @@ public class ProjectResource extends AbstractElaborateResource {
   // @DELETE
   // @Path("{project_id: [0-9]+}/projectusers/{user_id}")
   // @Consumes(UTF8MediaType.APPLICATION_JSON)
-  // @RolesAllowed({ ADMIN })
+  // @RolesAllowed("ADMIN")
   // @APIDesc("Removes the user with the given user_id from the project with the given project_id")
-  // public void deleteProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id")
-  // long user_id) {
+  // public void deleteProjectUser(@PathParam("project_id") long project_id, @PathParam("user_id") long user_id) {
   // projectService.deleteProjectUser(project_id, user_id, getUser());
   // }
 
@@ -266,8 +299,7 @@ public class ProjectResource extends AbstractElaborateResource {
   /* project entries */
 
   @Path("{project_id: [0-9]+}/entries")
-  public ProjectEntriesResource getProjectEntriesResource(
-      @PathParam("project_id") long project_id) {
+  public ProjectEntriesResource getProjectEntriesResource(@PathParam("project_id") long project_id) {
     return new ProjectEntriesResource(getUser(), projectService, project_id);
   }
 
@@ -277,8 +309,7 @@ public class ProjectResource extends AbstractElaborateResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   @RolesAllowed({USER, ADMIN})
   @APIDesc("Updates the settings of the project entries with the given entry_ids")
-  public void updateMultipleProjectEntrySettings(
-      @PathParam("project_id") long project_id, MultipleProjectEntrySettings mpes) {
+  public void updateMultipleProjectEntrySettings(@PathParam("project_id") long project_id, MultipleProjectEntrySettings mpes) {
     Log.info("in:{}", mpes);
     projectEntryService.updateMultipleProjectEntrySettings(project_id, mpes, getUser());
   }
@@ -319,4 +350,5 @@ public class ProjectResource extends AbstractElaborateResource {
   public SearchResource getSearchResource() {
     return new SearchResource(getUser());
   }
+
 }
