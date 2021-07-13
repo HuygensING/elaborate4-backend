@@ -68,7 +68,7 @@
     <maven-license.version>1.20</maven-license.version>
     <maven-war.version>3.3.0</maven-war.version>
     <mockito.version>2.23.0</mockito.version>
-    <pdfbox.version>1.8.15</pdfbox.version>
+    <pdfbox.version>1.8.16</pdfbox.version>
     <postgresql.version>9.3-1100-jdbc4</postgresql.version> <!-- > 9.3-1100-jdbc4 = JDK7 -->
     <security.version>2.1.4</security.version><!-- <security.version>2.2.1</security.version> --><!-- nog niet voldoende getest -->
     <servlet-api.version>3.1.0</servlet-api.version>
