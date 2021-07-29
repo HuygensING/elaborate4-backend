@@ -45,13 +45,13 @@
         <facetedsearchtools.version>0.3.0</facetedsearchtools.version>
         <fest.version>1.0.16</fest.version>
         <flexjson.version>3.3</flexjson.version>
-        <freemarker.version>2.3.30</freemarker.version>
+        <freemarker.version>2.3.31</freemarker.version>
         <guava.version>30.0-android</guava.version>
         <guice.version>5.0.0</guice.version>
-        <hibernate.version>5.4.24.Final
-        </hibernate.version> <!-- > 4.2.7 uses javassist, leads to "org.hibernate.jpa.boot.archive.spi.ArchiveException:			Could not build ClassFile", > 4.3.8.Final : java.lang.ClassNotFoundException: javax.transaction.SystemException -->
+        <hibernate.version>5.5.3.Final
+        </hibernate.version><!-- > 4.2.7 uses javassist, leads to "org.hibernate.jpa.boot.archive.spi.ArchiveException:			Could not build ClassFile", > 4.3.8.Final : java.lang.ClassNotFoundException: javax.transaction.SystemException -->
         <hsqldb.version>2.3.3</hsqldb.version>
-        <jackson.version>2.12.2</jackson.version> <!-- 2.6.1 gives NoClassDefFoundError -->
+        <jackson.version>2.12.4</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
         <javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
         <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
         <jaxrstools.version>0.1.0</jaxrstools.version>
@@ -70,7 +70,7 @@
         <maven-license.version>1.20</maven-license.version>
         <maven-war.version>3.3.0</maven-war.version>
         <mockito.version>2.23.0</mockito.version>
-        <pdfbox.version>1.8.15</pdfbox.version>
+        <pdfbox.version>1.8.16</pdfbox.version>
         <postgresql.version>9.3-1100-jdbc4</postgresql.version> <!-- > 9.3-1100-jdbc4 = JDK7 -->
         <security.version>2.1.4
         </security.version> <!-- <security.version>2.2.1</security.version> --><!-- nog niet voldoende getest -->
@@ -207,10 +207,6 @@
         <name>Huygens ING</name>
         <url>https://www.huygens.knaw.nl/</url>
     </organization>
-
-    <!--  <prerequisites>-->
-    <!--    <maven>3.0</maven>-->
-    <!--  </prerequisites>-->
 
     <distributionManagement>
         <repository>
