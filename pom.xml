@@ -22,7 +22,7 @@
         <!-- Timestamp settings for use in properties file -->
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
 
         <elab4.version>${project.parent.version}</elab4.version>
         <elab4-config.version>1.1</elab4-config.version>
