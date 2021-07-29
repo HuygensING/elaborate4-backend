@@ -1,7 +1,7 @@
 eLaborate (backend)
 ===================
 
-![](https://github.com/HuygensING/elaborate4-backend/workflows/tests/badge.svg)
+[![Github build](https://github.com/HuygensING/elaborate4-backend/workflows/tests/badge.svg)](https://github.com/HuygensING/elaborate4-backend/actions)
 
 ## What is eLaborate?
 
