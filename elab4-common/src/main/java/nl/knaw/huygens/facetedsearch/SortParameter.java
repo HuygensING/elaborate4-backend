@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * #%L
  * elab4-common
  * =======
- * Copyright (C) 2013 - 2021 Huygens ING
+ * Copyright (C) 2013 - 2022 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as

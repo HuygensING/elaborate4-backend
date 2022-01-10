@@ -4,7 +4,7 @@ package elaborate.editor.export.tei;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2021 Huygens ING
+ * Copyright (C) 2011 - 2022 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
