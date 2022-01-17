@@ -47,12 +47,10 @@ public class XmlTestUtil {
       InputSource is = new InputSource(new StringReader(xml));
       Document doc = builder.parse(is);
       assertThat(doc).isNotNull();
-    } catch (ParserConfigurationException e) {
+    } catch (ParserConfigurationException | IOException e) {
       throw new RuntimeException(e);
     } catch (SAXException e) {
       Log.info("xml={}", xml);
-      throw new RuntimeException(e);
-    } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }

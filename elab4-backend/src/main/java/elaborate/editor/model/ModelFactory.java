@@ -27,7 +27,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import com.google.common.collect.ImmutableList;
-
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.TranscriptionService;
@@ -48,9 +47,7 @@ public class ModelFactory {
   public static <T extends AbstractStoredEntity<T>> T create(Class<T> clazz) {
     try {
       return clazz.newInstance();
-    } catch (InstantiationException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }
@@ -66,9 +63,7 @@ public class ModelFactory {
           .setModifier(creator)
           .setField(field)
           .setData(data);
-    } catch (InstantiationException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }
@@ -82,9 +77,7 @@ public class ModelFactory {
           .setCreator(creator)
           .setModifiedOn(new Date())
           .setModifier(creator);
-    } catch (InstantiationException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }

@@ -25,7 +25,6 @@ package elaborate.editor.model.orm.service;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +34,6 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,15 +45,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-import nl.knaw.huygens.solr.FacetInfo;
-
 import elaborate.editor.export.mvn.MVNAnnotationType;
 import elaborate.editor.export.pdf.PdfMaker;
 import elaborate.editor.export.tei.TagInfo;
@@ -79,6 +68,14 @@ import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+import nl.knaw.huygens.solr.FacetInfo;
 
 public class ProjectService extends AbstractStoredEntityService<Project> {
   private static final String PROJECT_NAME = "name";
@@ -286,15 +283,8 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     final List<Long> projectEntryIdsInOrder = getProjectEntryIdsInOrder(id);
     Project project = find(getEntityClass(), id);
     List<ProjectEntry> projectEntries = project.getProjectEntries();
-    Collections.sort(
-        projectEntries,
-        new Comparator<ProjectEntry>() {
-          @Override
-          public int compare(ProjectEntry e1, ProjectEntry e2) {
-            return projectEntryIdsInOrder.indexOf(e1.getId())
-                - projectEntryIdsInOrder.indexOf(e2.getId());
-          }
-        });
+    projectEntries.sort((e1, e2) -> projectEntryIdsInOrder.indexOf(e1.getId())
+        - projectEntryIdsInOrder.indexOf(e2.getId()));
     return projectEntries;
   }
 
@@ -349,12 +339,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   }
 
   private static final Comparator<Project> SORT_PROJECTS =
-      new Comparator<Project>() {
-        @Override
-        public int compare(Project p1, Project p2) {
-          return p2.getModifiedOn().compareTo(p1.getModifiedOn());
-        }
-      };
+      (p1, p2) -> p2.getModifiedOn().compareTo(p1.getModifiedOn());
 
   public List<Project> getAll(User user) {
     List<Project> projects;
@@ -366,7 +351,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       } else {
         projects = getProjectsForUser(user);
       }
-      Collections.sort(projects, SORT_PROJECTS);
+      projects.sort(SORT_PROJECTS);
     } finally {
       closeEntityManager();
     }
@@ -563,7 +548,7 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       Project project = getProjectIfUserCanRead(project_id, user);
 
       statistics =
-          ImmutableMap.<String, Object>of(
+          ImmutableMap.of(
               "entries", getProjectEntriesStatistics(project_id, getEntityManager(), project));
 
     } finally {
@@ -979,8 +964,6 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
     if (metadataString != null) {
       try {
         list = new ObjectMapper().readValue(metadataString, List.class);
-      } catch (JsonParseException e) {
-        e.printStackTrace();
       } catch (JsonMappingException e) {
         e.printStackTrace();
       } catch (IOException e) {
@@ -998,8 +981,6 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
       try {
         publishableAnnotationTypeIds =
             new ObjectMapper().readValue(metadataString, new TypeReference<List<Long>>() {});
-      } catch (JsonParseException e) {
-        e.printStackTrace();
       } catch (JsonMappingException e) {
         e.printStackTrace();
       } catch (IOException e) {
@@ -1017,22 +998,19 @@ public class ProjectService extends AbstractStoredEntityService<Project> {
   private String exportTei(
       Project project, String groupTextsByMetadata, AnnotationType versregels) {
     Function<Annotation, TagInfo> mapToL =
-        new Function<Annotation, TagInfo>() {
-          @Override
-          public TagInfo apply(Annotation annotation) {
-            TagInfo tagInfo = new TagInfo().setName("l") /* .setSkipNewlineAfter(true) */;
-            for (AnnotationMetadataItem annotationMetadataItem :
-                annotation.getAnnotationMetadataItems()) {
-              String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
-              String value = annotationMetadataItem.getData();
-              if ("n".equals(name)) {
-                tagInfo.addAttribute("n", value);
-              } else if ("inspringen".equals(name)) {
-                tagInfo.addAttribute("rend", "indent");
-              }
+        annotation -> {
+          TagInfo tagInfo = new TagInfo().setName("l") /* .setSkipNewlineAfter(true) */;
+          for (AnnotationMetadataItem annotationMetadataItem :
+              annotation.getAnnotationMetadataItems()) {
+            String name = annotationMetadataItem.getAnnotationTypeMetadataItem().getName();
+            String value = annotationMetadataItem.getData();
+            if ("n".equals(name)) {
+              tagInfo.addAttribute("n", value);
+            } else if ("inspringen".equals(name)) {
+              tagInfo.addAttribute("rend", "indent");
             }
-            return tagInfo;
           }
+          return tagInfo;
         };
     TeiConversionConfig config =
         new TeiConversionConfig()

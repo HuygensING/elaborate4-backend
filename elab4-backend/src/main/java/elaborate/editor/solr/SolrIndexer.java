@@ -44,9 +44,7 @@ public class SolrIndexer {
   public void clear() {
     try {
       this.server.deleteByQuery("*:*");
-    } catch (SolrServerException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (SolrServerException | IOException e) {
       e.printStackTrace();
     }
   }
@@ -55,9 +53,7 @@ public class SolrIndexer {
     try {
       this.server.commit();
       this.server.optimize();
-    } catch (SolrServerException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (SolrServerException | IOException e) {
       e.printStackTrace();
     }
   }
@@ -69,20 +65,16 @@ public class SolrIndexer {
       int status = this.server.ping().getStatus();
       Log.info("solrserver status = {}", status);
       isUp = (status == STATUS_OK);
-    } catch (SolrServerException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (SolrServerException | IOException e) {
       e.printStackTrace();
     }
-    return isUp;
+      return isUp;
   }
 
   void deleteById(String id) {
     try {
       this.server.deleteById(id);
-    } catch (SolrServerException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (SolrServerException | IOException e) {
       e.printStackTrace();
     }
   }
@@ -96,9 +88,7 @@ public class SolrIndexer {
       if (commitNow) {
         this.server.commit();
       }
-    } catch (SolrServerException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (SolrServerException | IOException e) {
       e.printStackTrace();
     }
   }

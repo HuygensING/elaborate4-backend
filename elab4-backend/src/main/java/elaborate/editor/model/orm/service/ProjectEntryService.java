@@ -24,7 +24,6 @@ package elaborate.editor.model.orm.service;
 
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +35,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sun.jersey.api.NotFoundException;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-
 import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
@@ -49,6 +43,10 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.resources.orm.MultipleProjectEntrySettings;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntry> {
   private static final ProjectEntryService instance = new ProjectEntryService();
@@ -213,12 +211,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
 
   /* facsimiles */
   private static final Comparator<? super Facsimile> ON_NAME =
-      new Comparator<Facsimile>() {
-        @Override
-        public int compare(Facsimile f1, Facsimile f2) {
-          return f1.getName().compareTo(f2.getName());
-        }
-      };
+      (Comparator<Facsimile>) (f1, f2) -> f1.getName().compareTo(f2.getName());
 
   public Collection<Facsimile> getFacsimiles(long id, User user) {
     openEntityManager();
@@ -226,7 +219,7 @@ public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntr
     try {
       ProjectEntry projectEntry = find(getEntityClass(), id);
       facsimiles = Lists.newArrayList(projectEntry.getFacsimiles());
-      Collections.sort(facsimiles, ON_NAME);
+      facsimiles.sort(ON_NAME);
     } finally {
       closeEntityManager();
     }

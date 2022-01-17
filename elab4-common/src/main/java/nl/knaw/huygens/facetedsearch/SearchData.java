@@ -29,8 +29,6 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -63,14 +61,12 @@ public class SearchData {
     StringWriter stringWriter = new StringWriter();
     try {
       objectMapper.writeValue(stringWriter, result);
-    } catch (JsonGenerationException e) {
-      e.printStackTrace();
     } catch (JsonMappingException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    setJson(stringWriter.toString());
+      setJson(stringWriter.toString());
     return this;
   }
 
@@ -78,14 +74,12 @@ public class SearchData {
   public Map<String, Object> getResults() {
     try {
       return objectMapper.readValue(json, Map.class);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
     } catch (JsonMappingException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return null;
+      return null;
   }
 
   public long getId() {

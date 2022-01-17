@@ -24,15 +24,16 @@ package elaborate.editor.model.orm.service;
 
 import java.util.HashMap;
 
-import org.junit.After;
-import org.junit.Before;
-
-import nl.knaw.huygens.Log;
-
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.AnnotationInputWrapper;
 import elaborate.editor.model.orm.Annotation;
 import elaborate.editor.model.orm.User;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import nl.knaw.huygens.Log;
 
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -46,13 +47,14 @@ public class TranscriptionServiceTest extends AbstractTest {
   @After
   public void tearDown() {}
 
-  //  @Test
+  @Ignore
+  @Test
   public void testAddAnnotation() {
     TranscriptionService ts = TranscriptionService.instance();
     AnnotationInputWrapper annotationInput = new AnnotationInputWrapper();
     annotationInput.body = "body";
     annotationInput.typeId = 123;
-    annotationInput.metadata = new HashMap<String, String>();
+    annotationInput.metadata = new HashMap<>();
 
     User root = mock(User.class);
     when(root.isRoot()).thenReturn(true);

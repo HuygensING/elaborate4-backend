@@ -31,6 +31,9 @@ import java.util.Set;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.util.XmlUtil;
 import org.apache.commons.lang.StringUtils;
 
 import nl.knaw.huygens.Log;
@@ -44,10 +47,6 @@ import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.util.XmlUtil;
-
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
 
@@ -59,7 +58,7 @@ public class MVNTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   static final String abbrTag = "abbr";
   static final String expanTag = "expan";
 
-  static final Deque<String> textNumStack = new ArrayDeque<String>();
+  static final Deque<String> textNumStack = new ArrayDeque<>();
 
   public static boolean inParagraph = false;
 

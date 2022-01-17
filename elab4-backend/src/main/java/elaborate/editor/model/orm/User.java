@@ -38,17 +38,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.Permission;
 import elaborate.editor.model.Permissions;
 import elaborate.editor.model.UserSettings;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
 @Table(name = "users")
@@ -220,7 +218,7 @@ public class User extends AbstractStoredEntity<User> {
   public UserSetting setUserSetting(final String key, String value) {
     if (hasUserSetting(key)) {
       UserSetting setting =
-          Iterables.find(Lists.newArrayList(getUserSettings()), userSettingWithKey(key));
+          Lists.newArrayList(getUserSettings()).stream().filter(userSettingWithKey(key)::apply).findFirst().get();
       setting.setValue(value);
       return setting;
 
@@ -235,7 +233,7 @@ public class User extends AbstractStoredEntity<User> {
 
   public void removeUserSetting(String key) {
     if (hasUserSetting(key)) {
-      Iterables.find(Lists.newArrayList(getUserSettings()), userSettingWithKey(key));
+      Lists.newArrayList(getUserSettings()).stream().filter(userSettingWithKey(key)::apply).findFirst().get();
     }
   }
 
@@ -249,21 +247,16 @@ public class User extends AbstractStoredEntity<User> {
 
   private String userSetting(final String key) {
     UserSetting setting =
-        Iterables.find(Lists.newArrayList(getUserSettings()), userSettingWithKey(key));
+        Lists.newArrayList(getUserSettings()).stream().filter(userSettingWithKey(key)::apply).findFirst().get();
     return setting.getValue();
   }
 
   private Predicate<UserSetting> userSettingWithKey(final String key) {
-    return new Predicate<UserSetting>() {
-      @Override
-      public boolean apply(UserSetting userSetting) {
-        return key.equals(userSetting.getKey());
-      }
-    };
+    return userSetting -> key.equals(userSetting.getKey());
   }
 
   public boolean hasUserSetting(final String key) {
-    return Iterables.any(Lists.newArrayList(getUserSettings()), userSettingWithKey(key));
+    return Lists.newArrayList(getUserSettings()).stream().anyMatch(userSettingWithKey(key)::apply);
   }
 
   public String[] getProjectLevels(String project_id) {

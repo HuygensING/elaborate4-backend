@@ -10,12 +10,12 @@ package elaborate.editor.export.mvn;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,11 +26,6 @@ import java.util.Arrays;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import nl.knaw.huygens.Log;
-
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
 import elaborate.editor.model.ProjectMetadataFields;
@@ -42,6 +37,10 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publication.Status;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import nl.knaw.huygens.Log;
 
 import static elaborate.editor.export.mvn.MVNAnnotationType.AFKORTING;
 import static elaborate.editor.export.mvn.MVNAnnotationType.ALINEA;
@@ -878,7 +877,8 @@ public class MVNConverterTest {
   //               Een puntannotatie.
   //  Validatie:   Geen
   //  Conversie:   Zie sectie Problemen: Poëzie
-  //  @Test
+  @Ignore
+  @Test
   public void testVersregelConversie() {
     final Annotation tekstBegin = mockAnnotationOfType(TEKSTBEGIN);
     final Annotation poetryAnnotation = mockAnnotationOfType(POEZIE);

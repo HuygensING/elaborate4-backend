@@ -59,7 +59,6 @@ public final class PasswordUtil {
   /**
    * @param plainPassword a plain text password
    * @param encodedPassword Base64 encoded MD5 hash
-   * @return
    */
   public static synchronized boolean matches(String plainPassword, String encodedPassword) {
     byte[] base64DecodedMd5Password = Base64.decodeBase64(encodedPassword.getBytes());

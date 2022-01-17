@@ -26,16 +26,15 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import elaborate.editor.AbstractTest;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
 import org.apache.solr.common.SolrInputDocument;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.SolrFields;
-
-import elaborate.editor.AbstractTest;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -93,7 +92,7 @@ public class ElaborateSolrIndexerTest extends AbstractTest {
     when(mockEntry.getMetadataValue("multiline"))
         .thenReturn("Metadata\rvalues\rwith\rmultiple\r\nlines");
     SolrInputDocument docForPublication =
-        ElaborateSolrIndexer.getSolrInputDocument(mockEntry, true, Lists.<String>newArrayList());
+        ElaborateSolrIndexer.getSolrInputDocument(mockEntry, true, Lists.newArrayList());
     assertThat(docForPublication != null).isTrue();
     Log.info("docForPublication={}", docForPublication);
     assertThat(docForPublication.getField(SolrFields.ID).getValue()).isEqualTo(mockEntry.getId());

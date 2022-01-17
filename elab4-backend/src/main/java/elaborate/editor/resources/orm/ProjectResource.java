@@ -42,11 +42,6 @@ import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableList;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.ProjectPrototype;
 import elaborate.editor.model.Views;
@@ -59,6 +54,10 @@ import elaborate.editor.model.orm.service.TranscriptionService;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import static elaborate.editor.model.ElaborateRoles.ADMIN;
 import static elaborate.editor.model.ElaborateRoles.USER;
@@ -267,12 +266,12 @@ public class ProjectResource extends AbstractElaborateResource {
     int sizeDiff = currentUserIds.size() - userIds.size();
     if (sizeDiff >= 0) {
       // deletion
-      List<Long> deletedUserIds = new ArrayList<Long>(currentUserIds);
+      List<Long> deletedUserIds = new ArrayList<>(currentUserIds);
       deletedUserIds.removeAll(userIds);
       acceptUpdate = deletedUserIds.size() <= 1;
     } else {
       // addition
-      List<Long> addedUserIds = new ArrayList<Long>(userIds);
+      List<Long> addedUserIds = new ArrayList<>(userIds);
       addedUserIds.removeAll(currentUserIds);
       acceptUpdate = addedUserIds.size() <= 1;
     }

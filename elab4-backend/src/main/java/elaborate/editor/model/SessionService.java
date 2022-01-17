@@ -23,7 +23,6 @@ package elaborate.editor.model;
  */
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -35,13 +34,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang.RandomStringUtils;
-
-import nl.knaw.huygens.security.client.UnauthorizedException;
-
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;
 import elaborate.editor.security.ElaborateSecurityContext;
+import org.apache.commons.lang.RandomStringUtils;
+
+import nl.knaw.huygens.security.client.UnauthorizedException;
 
 @Singleton
 public class SessionService {
@@ -139,12 +137,7 @@ public class SessionService {
   }
 
   private static final Comparator<SessionUserInfo> ON_LAST_ACCESSED =
-      new Comparator<SessionUserInfo>() {
-        @Override
-        public int compare(SessionUserInfo i0, SessionUserInfo i1) {
-          return i1.lastAccessed.compareTo(i0.lastAccessed);
-        }
-      };
+      (i0, i1) -> i1.lastAccessed.compareTo(i0.lastAccessed);
 
   public Collection<SessionUserInfo> getActiveSessionUsersInfo() {
     removeExpiredSessions();
@@ -167,7 +160,7 @@ public class SessionService {
       }
     }
     List<SessionUserInfo> activeSessionUserInfoCollection = Lists.newArrayList(userinfo.values());
-    Collections.sort(activeSessionUserInfoCollection, ON_LAST_ACCESSED);
+    activeSessionUserInfoCollection.sort(ON_LAST_ACCESSED);
     return activeSessionUserInfoCollection;
   }
 

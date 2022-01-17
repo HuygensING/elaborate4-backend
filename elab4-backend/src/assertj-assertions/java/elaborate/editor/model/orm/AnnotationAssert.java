@@ -191,7 +191,6 @@ public class AnnotationAssert extends AbstractAssert<AnnotationAssert, Annotatio
    * Verifies that the actual Annotation's body is equal to the given one.
    *
    * @param body the given body to compare the actual Annotation's body to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual Annotation's body is not equal to the given one.
    */
   public void hasBody(String body) {

@@ -514,7 +514,6 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
    * Verifies that the actual Project's name is equal to the given one.
    *
    * @param name the given name to compare the actual Project's name to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual Project's name is not equal to the given one.
    */
   public void hasName(String name) {

@@ -31,13 +31,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.base.Charsets;
+import elaborate.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -46,8 +46,6 @@ import org.xml.sax.SAXException;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.XmlContext;
-
-import elaborate.util.XmlUtil;
 
 class HtmlTeiConverter {
   private Document teiDocument;
@@ -73,11 +71,7 @@ class HtmlTeiConverter {
     try {
       DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
       teiDocument = docBuilder.parse(new ByteArrayInputStream(teiSource.getBytes(Charsets.UTF_8)));
-    } catch (ParserConfigurationException e) {
-      e.printStackTrace();
-    } catch (SAXException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (ParserConfigurationException | IOException | SAXException e) {
       e.printStackTrace();
     }
   }
@@ -93,12 +87,10 @@ class HtmlTeiConverter {
       StreamResult result = new StreamResult(sw);
       trans.transform(source, result);
       return sw.toString();
-    } catch (TransformerConfigurationException e) {
-      e.printStackTrace();
     } catch (TransformerException e) {
       e.printStackTrace();
     }
-    return null;
+      return null;
   }
 
   public Document getDocument() {

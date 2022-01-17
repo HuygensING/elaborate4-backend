@@ -116,7 +116,7 @@ public class FacetedSearchParameters<T extends FacetedSearchParameters<T>> {
   }
 
   public FacetedSearchParameters<T> setSortParameters(List<SortParameter> sortParameters) {
-    this.sortParameters = new LinkedHashSet<SortParameter>(sortParameters);
+    this.sortParameters = new LinkedHashSet<>(sortParameters);
     return this;
   }
 

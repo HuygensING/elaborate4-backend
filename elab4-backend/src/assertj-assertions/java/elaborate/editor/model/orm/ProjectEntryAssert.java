@@ -159,7 +159,6 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
    * Verifies that the actual ProjectEntry's id is equal to the given one.
    *
    * @param id the given id to compare the actual ProjectEntry's id to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual ProjectEntry's id is not equal to the given one.
    */
   public void hasId(long id) {
@@ -232,7 +231,6 @@ public class ProjectEntryAssert extends AbstractAssert<ProjectEntryAssert, Proje
    * Verifies that the actual ProjectEntry's name is equal to the given one.
    *
    * @param name the given name to compare the actual ProjectEntry's name to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual ProjectEntry's name is not equal to the given one.
    */
   public void hasName(String name) {

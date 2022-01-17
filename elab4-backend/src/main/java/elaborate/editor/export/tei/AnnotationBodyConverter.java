@@ -24,6 +24,8 @@ package elaborate.editor.export.tei;
 
 import java.util.TreeSet;
 
+import elaborate.util.XmlUtil;
+
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Document;
@@ -33,12 +35,10 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
-import elaborate.util.XmlUtil;
-
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 
 public class AnnotationBodyConverter {
-  static final TreeSet<String> unhandledTags = new TreeSet<String>();
+  static final TreeSet<String> unhandledTags = new TreeSet<>();
 
   @SuppressWarnings("synthetic-access")
   public static String convert(String xml) {
@@ -46,8 +46,8 @@ public class AnnotationBodyConverter {
     try {
       Document document = Document.createFromXml(fixedXml, false);
 
-      DelegatingVisitor<XmlContext> visitor = new DelegatingVisitor<XmlContext>(new XmlContext());
-      visitor.setTextHandler(new XmlTextHandler<XmlContext>());
+      DelegatingVisitor<XmlContext> visitor = new DelegatingVisitor<>(new XmlContext());
+      visitor.setTextHandler(new XmlTextHandler<>());
       visitor.setDefaultElementHandler(new DefaultElementHandler());
       visitor.addElementHandler(new IgnoreElementHandler(), "xml", "span");
       visitor.addElementHandler(

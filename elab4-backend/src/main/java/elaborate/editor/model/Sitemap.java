@@ -30,26 +30,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-
 import elaborate.jaxrs.JAXUtils;
 import elaborate.jaxrs.JAXUtils.API;
 
 @XmlRootElement
 public class Sitemap {
   private static final Comparator<API> PATH_COMPARATOR =
-      new Comparator<JAXUtils.API>() {
-        @Override
-        public int compare(API a1, API a2) {
-          return a1.path.compareTo(a2.path);
-        }
-      };
+      (a1, a2) -> a1.path.compareTo(a2.path);
   private static final Comparator<API> REQUESTTYPES_COMPARATOR =
-      new Comparator<JAXUtils.API>() {
-        @Override
-        public int compare(API a1, API a2) {
-          return a1.requestTypes.toString().compareTo(a2.requestTypes.toString());
-        }
-      };
+      (a1, a2) -> a1.requestTypes.toString().compareTo(a2.requestTypes.toString());
   public final String description = "Elaborate backend sitemap";
 
   public Sitemap(Application application) {

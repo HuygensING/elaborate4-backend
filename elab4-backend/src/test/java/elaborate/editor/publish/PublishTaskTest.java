@@ -32,14 +32,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import org.apache.commons.lang.StringUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.solr.FacetInfo;
-
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
@@ -50,6 +42,13 @@ import elaborate.editor.publish.PublishTask.AnnotationPublishData;
 import elaborate.editor.publish.PublishTask.AnnotationTypeData;
 import elaborate.editor.publish.PublishTask.EntryData;
 import elaborate.util.XmlUtil;
+import org.apache.commons.lang.StringUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.solr.FacetInfo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -78,9 +77,9 @@ public class PublishTaskTest extends AbstractTest {
 
     PublishTask publishTask = new PublishTask(settings);
     EntryData entry1 =
-        new EntryData(1L, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
+        new EntryData(1L, "uno", "uno", "entry1.json", ArrayListMultimap.create());
     EntryData entry2 =
-        new EntryData(2L, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
+        new EntryData(2L, "due", "due", "entry2.json", ArrayListMultimap.create());
     List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();
@@ -115,9 +114,9 @@ public class PublishTaskTest extends AbstractTest {
 
     PublishTask publishTask = new PublishTask(settings);
     EntryData entry1 =
-        new EntryData(1L, "uno", "uno", "entry1.json", ArrayListMultimap.<String, String>create());
+        new EntryData(1L, "uno", "uno", "entry1.json", ArrayListMultimap.create());
     EntryData entry2 =
-        new EntryData(2L, "due", "due", "entry2.json", ArrayListMultimap.<String, String>create());
+        new EntryData(2L, "due", "due", "entry2.json", ArrayListMultimap.create());
     List<EntryData> entries = ImmutableList.of(entry1, entry2);
 
     Map<Long, List<String>> thumbnails = Maps.newHashMap();

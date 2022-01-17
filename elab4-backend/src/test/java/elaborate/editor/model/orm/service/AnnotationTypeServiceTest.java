@@ -24,6 +24,10 @@ package elaborate.editor.model.orm.service;
 
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.NotFoundException;
+import elaborate.editor.AbstractTest;
+import elaborate.editor.model.ElaborateRoles;
+import elaborate.editor.model.orm.AnnotationType;
+import elaborate.editor.model.orm.User;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -31,11 +35,6 @@ import org.junit.Test;
 
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-
-import elaborate.editor.AbstractTest;
-import elaborate.editor.model.ElaborateRoles;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.User;
 
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -158,7 +157,7 @@ public class AnnotationTypeServiceTest extends AbstractTest {
     try {
       service.read(id, user);
       fail("NotFoundException expected");
-    } catch (NotFoundException e) {
+    } catch (NotFoundException ignored) {
     }
   }
 

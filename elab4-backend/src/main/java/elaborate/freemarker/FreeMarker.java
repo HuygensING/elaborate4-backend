@@ -56,10 +56,8 @@ public class FreeMarker {
       template.setOutputEncoding(Charsets.UTF_8.displayName());
       template.process(fmRootMap, out);
       return out.toString();
-    } catch (IOException e1) {
+    } catch (IOException | TemplateException e1) {
       throw new RuntimeException(e1);
-    } catch (TemplateException e) {
-      throw new RuntimeException(e);
     }
   }
 

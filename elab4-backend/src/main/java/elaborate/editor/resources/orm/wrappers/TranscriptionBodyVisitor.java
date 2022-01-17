@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.collect.Lists;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import org.apache.commons.lang.StringUtils;
 
 import nl.knaw.huygens.facetedsearch.SolrUtils;
@@ -37,9 +39,6 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.RenderElementHandler;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
-
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;
@@ -54,7 +53,7 @@ class TranscriptionBodyVisitor extends DelegatingVisitor<XmlContext> {
     annotationDataMap = _annotationDataMap;
     notenum = 1;
     annotationIds = Lists.newArrayList();
-    setTextHandler(new XmlTextHandler<XmlContext>());
+    setTextHandler(new XmlTextHandler<>());
     setDefaultElementHandler(new RenderElementHandler());
     addElementHandler(new IgnoreHandler(), Transcription.BodyTags.BODY);
     addElementHandler(new AnnotationBeginHandler(), Transcription.BodyTags.ANNOTATION_BEGIN);

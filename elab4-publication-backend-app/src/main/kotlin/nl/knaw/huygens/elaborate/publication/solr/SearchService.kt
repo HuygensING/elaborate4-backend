@@ -6,6 +6,7 @@ import com.google.common.collect.Maps
 import nl.knaw.huygens.facetedsearch.*
 import nl.knaw.huygens.solr.FacetInfo
 import org.joda.time.DateTime
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import javax.inject.Singleton
@@ -88,7 +89,7 @@ private constructor() {
         return resultsMap
     }
 
-    fun groupMetadata(results: List<MutableMap<String, Any?>>) {
+    private fun groupMetadata(results: List<MutableMap<String, Any?>>) {
         for (resultmap in results) {
             val metadata: MutableMap<String, String> = Maps.newHashMap()
             val keys: List<String> = ImmutableList.copyOf(resultmap.keys)
@@ -129,11 +130,11 @@ private constructor() {
         }
     }
 
-    fun toRange(value: Int, minValue: Int, maxValue: Int): Int {
+    private fun toRange(value: Int, minValue: Int, maxValue: Int): Int {
         return min(max(value, minValue), maxValue)
     }
 
-    fun loadConfig() {
+    private fun loadConfig() {
         //		LOG.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
         try {
 //            val inputStream = Thread.currentThread().contextClassLoader.getResourceAsStream("config.json")
@@ -211,6 +212,6 @@ private constructor() {
 //            }
 //            return configMap
 //        }
-        val LOG = LoggerFactory.getLogger(SearchService::class.java)
+        val LOG: Logger = LoggerFactory.getLogger(SearchService::class.java)
     }
 }

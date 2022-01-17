@@ -31,6 +31,8 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.model.orm.Transcription;
 import org.apache.commons.lang.StringUtils;
 
 import nl.knaw.huygens.Log;
@@ -42,14 +44,11 @@ import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
 
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.model.orm.Transcription;
-
 public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     implements ElementHandler<XmlContext> {
   private static boolean lastNodeWasText = false;
-  private final Deque<Integer> startIndexStack = new ArrayDeque<Integer>();
-  private final Deque<Element> elementStack = new ArrayDeque<Element>();
+  private final Deque<Integer> startIndexStack = new ArrayDeque<>();
+  private final Deque<Element> elementStack = new ArrayDeque<>();
   public static final Map<String, XmlAnnotation> textRangeAnnotationIndex = Maps.newHashMap();
   private static String sigle;
   private static ParseResult result;
@@ -57,7 +56,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
   private static Map<Integer, AnnotationData> annotationIndex;
   private static int lineStartIndex = 0;
   private static final Deque<XmlAnnotation> poetryOrParagraphAnnotations =
-      new ArrayDeque<XmlAnnotation>();
+      new ArrayDeque<>();
 
   public AnnotatedTranscriptionVisitor(
       Map<Integer, AnnotationData> annotationIndex, ParseResult result, String sigle) {
@@ -194,7 +193,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
 
     private static void handleTekstBegin(String annotationBody) {
       String n = annotationBody.replaceFirst(";.*$", "").replaceAll("[^A-Za-z0-9.]", "X");
-      Map<String, String> attributes = new HashMap<String, String>();
+      Map<String, String> attributes = new HashMap<>();
       attributes.put("n", n);
       attributes.put("xml:id", sigle + "-" + n);
       if (annotationBody.contains(";")) {
@@ -222,7 +221,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
       //      removeCurrentTextSegment();
       // start poezie or paragraph
       closeOpenPoetryOrParagraph();
-      Map<String, String> attributes = new HashMap<String, String>();
+      Map<String, String> attributes = new HashMap<>();
       poetryOrParagraphAnnotations.add(
           new XmlAnnotation(annotationData.type, attributes, 0)
               .setFirstSegmentIndex(currentTextSegmentIndex() + 1));
@@ -265,7 +264,7 @@ public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     @Override
     public Traversal enterElement(Element element, XmlContext context) {
       lastNodeWasText = false;
-      Map<String, String> attributes = new HashMap<String, String>();
+      Map<String, String> attributes = new HashMap<>();
       XmlAnnotation xmlAnnotation =
           new XmlAnnotation("l", attributes, 0)
               .setFirstSegmentIndex(lineStartIndex)

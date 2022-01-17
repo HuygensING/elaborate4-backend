@@ -22,18 +22,19 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-import org.junit.After;
-import org.junit.Before;
-
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.User;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class ProjectEntryServiceTest extends AbstractTest {
+public class ProjectEntryServiceTest extends AbstractTest {
 
   private ProjectEntryService projectEntryService;
 
@@ -45,7 +46,8 @@ class ProjectEntryServiceTest extends AbstractTest {
   @After
   public void tearDown() {}
 
-  // @Test
+  @Ignore
+  @Test
   public void testRead() {
     User user = mock(User.class);
     when(user.getId()).thenReturn((long) 1);

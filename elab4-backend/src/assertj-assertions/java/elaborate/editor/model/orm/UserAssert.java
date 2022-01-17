@@ -158,7 +158,6 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
    * Verifies that the actual User's id is equal to the given one.
    *
    * @param id the given id to compare the actual User's id to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual User's id is not equal to the given one.
    */
   public void hasId(long id) {
@@ -481,7 +480,6 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
    * Verifies that the actual User's username is equal to the given one.
    *
    * @param username the given username to compare the actual User's username to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual User's username is not equal to the given one.
    */
   public void hasUsername(String username) {

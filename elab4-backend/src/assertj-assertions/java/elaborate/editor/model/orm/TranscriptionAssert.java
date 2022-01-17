@@ -110,7 +110,6 @@ public class TranscriptionAssert extends AbstractAssert<TranscriptionAssert, Tra
    * Verifies that the actual Transcription's body is equal to the given one.
    *
    * @param body the given body to compare the actual Transcription's body to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual Transcription's body is not equal to the given one.
    */
   public void hasBody(String body) {

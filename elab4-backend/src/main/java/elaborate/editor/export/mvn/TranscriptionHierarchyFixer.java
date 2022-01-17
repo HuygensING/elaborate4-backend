@@ -29,14 +29,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
+import elaborate.editor.model.orm.Transcription.BodyTags;
 
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.Node;
 import nl.knaw.huygens.tei.Text;
 import nl.knaw.huygens.tei.export.ExportVisitor;
-
-import elaborate.editor.model.orm.Transcription.BodyTags;
 
 public class TranscriptionHierarchyFixer {
 
@@ -177,14 +176,11 @@ public class TranscriptionHierarchyFixer {
     try {
       grouping = groupingClass.newInstance();
       groupings.add(grouping);
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       e.printStackTrace();
       throw new RuntimeException(e);
     }
-    return grouping;
+      return grouping;
   }
 
   private boolean isAnnotationMarker(Element element) {

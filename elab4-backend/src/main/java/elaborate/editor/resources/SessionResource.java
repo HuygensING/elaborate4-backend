@@ -36,18 +36,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang.StringUtils;
-
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-import nl.knaw.huygens.security.client.UnauthorizedException;
-
 import elaborate.editor.model.SessionService;
 import elaborate.editor.model.SessionService.SessionUserInfo;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;
 import elaborate.editor.resources.orm.PasswordData;
 import elaborate.jaxrs.APIDesc;
+import org.apache.commons.lang.StringUtils;
+
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
+import nl.knaw.huygens.security.client.UnauthorizedException;
 
 @Path("sessions")
 public class SessionResource extends AbstractElaborateResource {
@@ -87,7 +86,7 @@ public class SessionResource extends AbstractElaborateResource {
       token = sessionService.startSession(user);
     }
 
-    Map<String, Object> content = ImmutableMap.<String, Object>of("token", token, "user", user);
+    Map<String, Object> content = ImmutableMap.of("token", token, "user", user);
     userService.setUserIsLoggedIn(user);
     return Response.ok(content).build();
   }

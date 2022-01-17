@@ -35,48 +35,48 @@ public class ProjectResourceTest {
 
   @Test
   public void testAddingOneProjectUserIsAllowed() {
-    List<Long> oldUserIds = new ArrayList<Long>(asList(1L, 2L, 3L));
-    List<Long> newUserIds = new ArrayList<Long>(asList(1L, 2L, 3L, 4L));
+    List<Long> oldUserIds = new ArrayList<>(asList(1L, 2L, 3L));
+    List<Long> newUserIds = new ArrayList<>(asList(1L, 2L, 3L, 4L));
     boolean ok = ProjectResource.updateIsAllowed(oldUserIds, newUserIds);
     assertThat(ok).isTrue();
   }
 
   @Test
   public void testDeletingOneProjectUserIsAllowed() {
-    List<Long> oldUserIds = new ArrayList<Long>(asList(1L, 2L, 3L));
-    List<Long> newUserIds = new ArrayList<Long>(asList(1L, 3L));
+    List<Long> oldUserIds = new ArrayList<>(asList(1L, 2L, 3L));
+    List<Long> newUserIds = new ArrayList<>(asList(1L, 3L));
     boolean ok = ProjectResource.updateIsAllowed(oldUserIds, newUserIds);
     assertThat(ok).isTrue();
   }
 
   @Test
   public void testAddingTwoProjectUsersIsNotAllowed() {
-    List<Long> oldUserIds = new ArrayList<Long>(asList(1L, 2L, 3L));
-    List<Long> newUserIds = new ArrayList<Long>(asList(1L, 2L, 3L, 4L, 5L));
+    List<Long> oldUserIds = new ArrayList<>(asList(1L, 2L, 3L));
+    List<Long> newUserIds = new ArrayList<>(asList(1L, 2L, 3L, 4L, 5L));
     boolean ok = ProjectResource.updateIsAllowed(oldUserIds, newUserIds);
     assertThat(ok).isFalse();
   }
 
   @Test
   public void testDeletingTwoProjectUsersIsNotAllowed() {
-    List<Long> oldUserIds = new ArrayList<Long>(asList(1L, 2L, 3L));
-    List<Long> newUserIds = new ArrayList<Long>(Collections.singletonList(3L));
+    List<Long> oldUserIds = new ArrayList<>(asList(1L, 2L, 3L));
+    List<Long> newUserIds = new ArrayList<>(Collections.singletonList(3L));
     boolean ok = ProjectResource.updateIsAllowed(oldUserIds, newUserIds);
     assertThat(ok).isFalse();
   }
 
   @Test
   public void testChangingNothingIsAllowed() {
-    List<Long> oldUserIds = new ArrayList<Long>(asList(1L, 2L, 3L));
-    List<Long> newUserIds = new ArrayList<Long>(asList(1L, 2L, 3L));
+    List<Long> oldUserIds = new ArrayList<>(asList(1L, 2L, 3L));
+    List<Long> newUserIds = new ArrayList<>(asList(1L, 2L, 3L));
     boolean ok = ProjectResource.updateIsAllowed(oldUserIds, newUserIds);
     assertThat(ok).isTrue();
   }
 
   @Test
   public void testChangingEverythingIsNotAllowed() {
-    List<Long> oldUserIds = new ArrayList<Long>(asList(1L, 2L, 3L));
-    List<Long> newUserIds = new ArrayList<Long>(asList(4L, 5L, 6L));
+    List<Long> oldUserIds = new ArrayList<>(asList(1L, 2L, 3L));
+    List<Long> newUserIds = new ArrayList<>(asList(4L, 5L, 6L));
 
     boolean ok = ProjectResource.updateIsAllowed(oldUserIds, newUserIds);
     assertThat(ok).isFalse();

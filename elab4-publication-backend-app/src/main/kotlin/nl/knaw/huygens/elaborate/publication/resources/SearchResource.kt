@@ -13,6 +13,7 @@ import java.text.MessageFormat
 import javax.servlet.ServletContext
 import javax.ws.rs.*
 import javax.ws.rs.core.*
+import kotlin.math.max
 
 @Path("/search")
 class SearchResource {
@@ -89,7 +90,7 @@ class SearchResource {
         start: Int,
         rows: Int
     ) {
-        val prevStart = Math.max(0, start - rows)
+        val prevStart = max(0, start - rows)
         LOG.info("prevStart={}", prevStart)
         val path = MessageFormat.format(SEARCH_PATH_TEMPLATE, searchId)
         if (start > 0) {

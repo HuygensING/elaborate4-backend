@@ -29,7 +29,6 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,19 +54,6 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.sun.jersey.api.client.ClientResponse;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.output.FileWriterWithEncoding;
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.common.SolrInputDocument;
-import org.joda.time.DateTime;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
-import nl.knaw.huygens.facetedsearch.IndexException;
-import nl.knaw.huygens.facetedsearch.LocalSolrServer;
-import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.export.mvn.MVNClient;
 import elaborate.editor.export.mvn.MVNConversionData;
@@ -93,6 +79,18 @@ import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
 import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.FileWriterWithEncoding;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.common.SolrInputDocument;
+import org.joda.time.DateTime;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
+import nl.knaw.huygens.facetedsearch.IndexException;
+import nl.knaw.huygens.facetedsearch.LocalSolrServer;
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 public class PublishTask implements Runnable {
   private static final String MVN_BASE_URL = "http://test.mvn.huygens.knaw.nl/";
@@ -466,7 +464,7 @@ public class PublishTask implements Runnable {
   }
 
   private Map<String, String> facetDefaultOrder(Project project) {
-    final Map<String, String> facetDefaultOrder = new HashMap<String, String>();
+    final Map<String, String> facetDefaultOrder = new HashMap<>();
     for (String f : settings.getFacetFields()) {
       facetDefaultOrder.put(f, "az");
     }
@@ -481,7 +479,7 @@ public class PublishTask implements Runnable {
         String facetName = entry.getKey();
         String facetValue = entry.getValue();
         if (!tmpindex.containsKey(facetName)) {
-          tmpindex.put(facetName, ArrayListMultimap.<String, Long>create());
+          tmpindex.put(facetName, ArrayListMultimap.create());
         }
         tmpindex.get(facetName).put(facetValue, entryData.entryId);
       }
@@ -508,12 +506,7 @@ public class PublishTask implements Runnable {
   // }
 
   private static final Comparator<Facsimile> SORT_ON_NAME =
-      new Comparator<Facsimile>() {
-        @Override
-        public int compare(Facsimile f1, Facsimile f2) {
-          return f1.getName().compareTo(f2.getName());
-        }
-      };
+      (f1, f2) -> f1.getName().compareTo(f2.getName());
 
   Map<String, Object> getProjectEntryData(
       ProjectEntry projectEntry, List<String> projectMetadataFields) {
@@ -692,7 +685,7 @@ public class PublishTask implements Runnable {
 
   private List<Map<String, String>> getFacsimileURLs(ProjectEntry projectEntry) {
     List<Facsimile> facsimiles = Lists.newArrayList(projectEntry.getFacsimiles());
-    Collections.sort(facsimiles, SORT_ON_NAME);
+    facsimiles.sort(SORT_ON_NAME);
     List<Map<String, String>> facsimileURLs = Lists.newArrayList();
     for (Facsimile facsimile : facsimiles) {
       Map<String, String> facsimileData = getFacsimileData(facsimile.getZoomableUrl());
@@ -717,9 +710,7 @@ public class PublishTask implements Runnable {
     try {
       File publicationResourceDir = new File(resource.toURI());
       FileUtils.copyDirectory(publicationResourceDir, distDir);
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (URISyntaxException | IOException e) {
       e.printStackTrace();
     }
     jsonDir = new File(distDir, "data");

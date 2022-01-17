@@ -26,17 +26,16 @@ import java.io.IOException;
 import java.util.List;
 import javax.persistence.EntityManager;
 
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.ProjectService;
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.service.ProjectService;
 
 public class PdfMaker {
 
@@ -84,9 +83,7 @@ public class PdfMaker {
     if (doc != null) {
       try {
         doc.save(filename);
-      } catch (COSVisitorException e) {
-        e.printStackTrace();
-      } catch (IOException e) {
+      } catch (COSVisitorException | IOException e) {
         e.printStackTrace();
       }
     }

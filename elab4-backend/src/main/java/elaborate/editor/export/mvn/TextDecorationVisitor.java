@@ -38,7 +38,7 @@ import nl.knaw.huygens.tei.XmlContext;
 public class TextDecorationVisitor extends DelegatingVisitor<XmlContext>
     implements ElementHandler<XmlContext>, CommentHandler<XmlContext>, TextHandler<XmlContext> {
 
-  final ArrayDeque<Element> textDecoratorDeque = new ArrayDeque<Element>();
+  final ArrayDeque<Element> textDecoratorDeque = new ArrayDeque<>();
 
   public TextDecorationVisitor() {
     super(new XmlContext());

@@ -24,7 +24,6 @@ package elaborate.editor.export.tei;
 
 import java.io.StringWriter;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -45,6 +43,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import elaborate.editor.model.orm.Facsimile;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.ProjectEntryMetadataItem;
+import elaborate.editor.model.orm.ProjectMetadataItem;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.ProjectService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Comment;
@@ -54,14 +59,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 import nl.knaw.huygens.facetedsearch.SolrUtils;
-
-import elaborate.editor.model.orm.Facsimile;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.ProjectEntryMetadataItem;
-import elaborate.editor.model.orm.ProjectMetadataItem;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.service.ProjectService;
 
 public class TeiMaker {
   public static final Map<String, String> HI_TAGS =
@@ -130,12 +127,10 @@ public class TeiMaker {
       StreamResult result = new StreamResult(sw);
       trans.transform(source, result);
       return sw.toString().replace("interpgrp>", "interpGrp>").replaceAll(" +<lb/>", "<lb/>");
-    } catch (TransformerConfigurationException e) {
-      e.printStackTrace();
     } catch (TransformerException e) {
       e.printStackTrace();
     }
-    return null;
+      return null;
   }
 
   private Element createFacsimile(List<ProjectEntry> projectEntriesInOrder) {
@@ -207,13 +202,10 @@ public class TeiMaker {
   }
 
   private static final Comparator<Transcription> ORDER_BY_TYPE =
-      new Comparator<Transcription>() {
-        @Override
-        public int compare(Transcription t1, Transcription t2) {
-          Long tt1 = t1.getTranscriptionType().getId();
-          Long tt2 = t2.getTranscriptionType().getId();
-          return tt1.compareTo(tt2);
-        }
+      (t1, t2) -> {
+        Long tt1 = t1.getTranscriptionType().getId();
+        Long tt2 = t2.getTranscriptionType().getId();
+        return tt1.compareTo(tt2);
       };
 
   private int processEntry(
@@ -237,7 +229,7 @@ public class TeiMaker {
 
     List<Transcription> orderedTranscriptions =
         Lists.newArrayList(projectEntry.getTranscriptions());
-    Collections.sort(orderedTranscriptions, ORDER_BY_TYPE);
+    orderedTranscriptions.sort(ORDER_BY_TYPE);
     for (Transcription transcription : orderedTranscriptions) {
       HtmlTeiConverter htmlTeiConverter =
           new HtmlTeiConverter(

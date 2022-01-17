@@ -64,17 +64,11 @@ public interface SolrServerWrapper {
   void add(Collection<SolrInputDocument> docs) throws IndexException;
 
   /**
-   * @param facetedSearchParameters
-   * @return
-   * @throws IndexException
    */
   Map<String, Object> search(FacetedSearchParameters<?> facetedSearchParameters)
       throws IndexException;
 
   /**
-   * @param solrDocumentId
-   * @return
-   * @throws IndexException
    */
   void delete(String solrDocumentId) throws SolrServerException, IOException;
 

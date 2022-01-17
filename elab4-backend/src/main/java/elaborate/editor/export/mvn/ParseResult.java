@@ -37,8 +37,8 @@ import com.google.common.collect.Sets;
 import nl.knaw.huygens.Log;
 
 public class ParseResult {
-  private final List<String> textSegments = new ArrayList<String>();
-  private final List<XmlAnnotation> xmlAnnotations = new ArrayList<XmlAnnotation>();
+  private final List<String> textSegments = new ArrayList<>();
+  private final List<XmlAnnotation> xmlAnnotations = new ArrayList<>();
   private final Multimap<Integer, XmlAnnotation> openingAnnotationIndex =
       ArrayListMultimap.create();
   private final Multimap<Integer, XmlAnnotation> closingAnnotationIndex =

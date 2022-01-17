@@ -45,14 +45,13 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import elaborate.editor.model.AbstractDocument;
+import elaborate.editor.model.ModelFactory;
 
 import nl.knaw.huygens.facetedsearch.SolrFields;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.solr.FacetInfo;
 import nl.knaw.huygens.solr.FacetType;
-
-import elaborate.editor.model.AbstractDocument;
-import elaborate.editor.model.ModelFactory;
 
 @Entity
 @Table(name = "projects")
@@ -510,8 +509,8 @@ public class Project extends AbstractDocument<Project> {
     return ModelFactory.createTrackedEntity(ProjectEntry.class, creator)
         .setProject(this)
         .setName(name)
-        .setFacsimiles(Lists.<Facsimile>newArrayList())
-        .setTranscriptions(Lists.<Transcription>newArrayList());
+        .setFacsimiles(Lists.newArrayList())
+        .setTranscriptions(Lists.newArrayList());
   }
 
   // private void log(String comment, User _user) {

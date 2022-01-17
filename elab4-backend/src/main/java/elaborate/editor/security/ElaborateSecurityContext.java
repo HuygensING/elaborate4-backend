@@ -41,12 +41,7 @@ public class ElaborateSecurityContext implements SecurityContext {
 
   @Override
   public Principal getUserPrincipal() {
-    return new Principal() {
-      @Override
-      public String getName() {
-        return user.getUsername();
-      }
-    };
+    return () -> user.getUsername();
   }
 
   @Override

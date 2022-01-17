@@ -46,9 +46,7 @@ public class Emailer {
       final String body) /* (String from, String to, String subject, String body) */
       throws MessagingException {
     Properties props = System.getProperties();
-    if (props.get("mail.smtp.host") == null) {
-      props.put("mail.smtp.host", this.mailhost);
-    }
+          props.putIfAbsent("mail.smtp.host", this.mailhost);
     Session session = Session.getDefaultInstance(props, null);
 
     MimeMessage message = new MimeMessage(session);

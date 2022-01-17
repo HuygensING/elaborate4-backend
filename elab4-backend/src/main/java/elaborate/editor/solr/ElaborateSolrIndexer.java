@@ -31,6 +31,14 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import elaborate.editor.config.Configuration;
+import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.util.CNWUtil;
+import elaborate.util.StringUtil;
+import elaborate.util.XmlUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -42,15 +50,6 @@ import nl.knaw.huygens.datable.Datable;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.XmlContext;
-
-import elaborate.editor.config.Configuration;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.util.CNWUtil;
-import elaborate.util.StringUtil;
-import elaborate.util.XmlUtil;
 
 import static nl.knaw.huygens.facetedsearch.SolrFields.ANNOTATIONCS_PREFIX;
 import static nl.knaw.huygens.facetedsearch.SolrFields.ANNOTATION_PREFIX;
@@ -219,10 +218,7 @@ public class ElaborateSolrIndexer extends SolrIndexer {
       SolrServer server = getServer();
       server.deleteByQuery("project_id:" + project_id);
       server.commit();
-    } catch (SolrServerException e) {
-      Log.error("deindexProject failed:");
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (SolrServerException | IOException e) {
       Log.error("deindexProject failed:");
       e.printStackTrace();
     }

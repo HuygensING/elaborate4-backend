@@ -41,7 +41,7 @@ import nl.knaw.huygens.tei.XmlContext;
 public class AnnotatedTextRangeVisitor extends DelegatingVisitor<XmlContext>
     implements ElementHandler<XmlContext>, TextHandler<XmlContext>, CommentHandler<XmlContext> {
   private final Set<RangeAnnotation> rangeAnnotations = Sets.newLinkedHashSet();
-  private final Deque<Integer> elementOffsetStack = new ArrayDeque<Integer>();
+  private final Deque<Integer> elementOffsetStack = new ArrayDeque<>();
 
   public AnnotatedTextRangeVisitor() {
     super(new XmlContext());

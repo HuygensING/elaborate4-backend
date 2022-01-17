@@ -107,7 +107,6 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
    * Verifies that the actual AnnotationType's description is equal to the given one.
    *
    * @param description the given description to compare the actual AnnotationType's description to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual AnnotationType's description is not equal to the given
    *     one.
    */
@@ -262,7 +261,6 @@ public class AnnotationTypeAssert extends AbstractAssert<AnnotationTypeAssert, A
    * Verifies that the actual AnnotationType's name is equal to the given one.
    *
    * @param name the given name to compare the actual AnnotationType's name to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual AnnotationType's name is not equal to the given one.
    */
   public void hasName(String name) {

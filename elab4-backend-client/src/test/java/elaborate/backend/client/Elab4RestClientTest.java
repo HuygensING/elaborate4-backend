@@ -10,12 +10,12 @@ package elaborate.backend.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,12 +27,14 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import nl.knaw.huygens.Log;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Elab4RestClientTest {
+public class Elab4RestClientTest {
   private static Elab4RestClient e4;
 
   @Before
@@ -45,7 +47,8 @@ class Elab4RestClientTest {
     e4 = null;
   }
 
-  //  @Test
+  @Ignore
+  @Test
   public void testAddProject() {
     Log.info("logging in...");
     loginAsRoot();
@@ -57,31 +60,36 @@ class Elab4RestClientTest {
     assertThat(deleted).isTrue();
   }
 
-  //	@Test
+  @Ignore
+  @Test
   public void testLoginFaila() {
     boolean success = e4.login("bla", "boe");
     assertThat(success).isFalse();
   }
 
-  //	@Test
+  @Ignore
+  @Test
   public void testLoginSucceeds() {
     loginAsRoot();
   }
 
-  //	@Test
+  @Ignore
+  @Test
   public void testVersion() {
     Map<String, String> versionMap = e4.getAbout();
     Log.info("{}", versionMap);
     assertThat(versionMap).containsKey("version");
   }
 
-  //	@Test
+  @Ignore
+  @Test
   public void testGetProjectEntries() {
     loginAsRoot();
     e4.getProjectEntries(1);
   }
 
-  //	@Test
+  @Ignore
+  @Test
   public void testCNWPagebreakFix() {
     loginAsRoot();
     int projectId = 44; // CNW

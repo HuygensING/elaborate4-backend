@@ -38,12 +38,6 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.tei.Document;
-
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
 import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
@@ -51,6 +45,11 @@ import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.publish.Publication.Status;
 import elaborate.util.HibernateUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.tei.Document;
 
 import static elaborate.util.XmlUtil.extractAnnotationNos;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -294,7 +293,7 @@ public class MVNConverter {
   }
 
   private void validateTextNums(final String cooked, final MVNConversionResult result) {
-    final Deque<String> textNumStack = new ArrayDeque<String>();
+    final Deque<String> textNumStack = new ArrayDeque<>();
     final List<String> openTextNums = Lists.newArrayList();
     final List<String> closeTextNums = Lists.newArrayList();
     final Matcher matcher =

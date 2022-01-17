@@ -30,20 +30,15 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import javax.inject.Singleton;
 import javax.persistence.TypedQuery;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
-
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.AnnotationInputWrapper;
 import elaborate.editor.model.ModelFactory;
@@ -56,6 +51,10 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
 
 @Singleton
 public class TranscriptionService extends AbstractStoredEntityService<Transcription> {
@@ -377,17 +376,12 @@ public class TranscriptionService extends AbstractStoredEntityService<Transcript
   }
 
   static final Function<Annotation, Integer> EXTRACT_ANNOTATION_NO =
-      new Function<Annotation, Integer>() {
-        @Override
-        public Integer apply(Annotation annotation) {
-          return annotation.getAnnotationNo();
-        }
-      };
+      annotation -> annotation.getAnnotationNo();
 
   void removeOrphanedAnnotationReferences(Transcription transcription) {
     List<Annotation> annotations = Lists.newArrayList(transcription.getAnnotations());
     Set<Integer> annotationNoSet =
-        Sets.newHashSet(Iterables.transform(annotations, EXTRACT_ANNOTATION_NO));
+        Sets.newHashSet(annotations.stream().map(EXTRACT_ANNOTATION_NO::apply).collect(Collectors.toList()));
     Set<String> orphanedAnnotationTags = Sets.newHashSet();
     String body = transcription.getBody();
     String format = "(?m)(?s)<%s id=\"(.*?)\"/>";

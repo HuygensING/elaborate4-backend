@@ -120,14 +120,14 @@ public class JAXUtils {
     Consumes annotation = method.getAnnotation(Consumes.class);
     return annotation != null
         ? ImmutableList.copyOf(annotation.value())
-        : ImmutableList.<String>of();
+        : ImmutableList.of();
   }
 
   private static ImmutableList<String> responseContentTypesOf(Method method) {
     Produces annotation = method.getAnnotation(Produces.class);
     return annotation != null
         ? ImmutableList.copyOf(annotation.value())
-        : ImmutableList.<String>of();
+        : ImmutableList.of();
   }
 
   private static String descriptionOf(Method method) {

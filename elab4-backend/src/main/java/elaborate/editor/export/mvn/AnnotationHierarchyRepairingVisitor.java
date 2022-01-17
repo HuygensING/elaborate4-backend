@@ -45,14 +45,14 @@ import static elaborate.editor.model.orm.Transcription.BodyTags.ANNOTATION_END;
 
 public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlContext>
     implements CommentHandler<XmlContext> {
-  final Stack<String> openAnnotationStack = new Stack<String>();
-  final Deque<Element> openElements = new ArrayDeque<Element>();
+  final Stack<String> openAnnotationStack = new Stack<>();
+  final Deque<Element> openElements = new ArrayDeque<>();
 
   public AnnotationHierarchyRepairingVisitor() {
     super(new XmlContext());
     setDefaultElementHandler(new OtherElementHandler());
     setCommentHandler(this);
-    setTextHandler(new XmlTextHandler<XmlContext>());
+    setTextHandler(new XmlTextHandler<>());
     addElementHandler(new LineBeginHandler(), "lb");
     addElementHandler(new LineEndHandler(), "le");
     addElementHandler(new AnnotationBeginHandler(), ANNOTATION_BEGIN);
@@ -77,7 +77,7 @@ public class AnnotationHierarchyRepairingVisitor extends DelegatingVisitor<XmlCo
     @Override
     public Traversal enterElement(Element element, XmlContext context) {
       String id = element.getAttribute("id");
-      List<String> annotationsToReopen = new ArrayList<String>();
+      List<String> annotationsToReopen = new ArrayList<>();
       while (!openAnnotationStack.peek().equals(id)) {
         String annotationId = openAnnotationStack.pop();
         annotationsToReopen.add(annotationId);

@@ -65,18 +65,15 @@ public class XmlUtil {
       parser = SAXParserFactory.newInstance().newSAXParser();
       DefaultHandler dh = new DefaultHandler();
       parser.parse(new InputSource(new StringReader(body)), dh);
-    } catch (ParserConfigurationException e1) {
+    } catch (ParserConfigurationException | IOException e1) {
       e1.printStackTrace();
       return false;
     } catch (SAXException e1) {
       e1.printStackTrace();
       Log.error("body={}", body);
       return false;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return false;
     }
-    return true;
+      return true;
   }
 
   public static String fixXhtml(String badxml) {

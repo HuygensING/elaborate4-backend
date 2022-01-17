@@ -105,7 +105,6 @@ public class FacsimileAssert extends AbstractAssert<FacsimileAssert, Facsimile> 
    * Verifies that the actual Facsimile's filename is equal to the given one.
    *
    * @param filename the given filename to compare the actual Facsimile's filename to.
-   * @return this assertion object.
    * @throws AssertionError - if the actual Facsimile's filename is not equal to the given one.
    */
   public void hasFilename(String filename) {

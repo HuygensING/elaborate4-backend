@@ -201,8 +201,7 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
         String docId = document.getFieldValue(SolrFields.DOC_ID).toString();
         ids.add(docId);
         Map<String, List<String>> map =
-            (Map<String, List<String>>)
-                ((highlighting == null) ? ImmutableMap.of() : highlighting.get(docId));
+            (highlighting == null) ? ImmutableMap.of() : highlighting.get(docId);
         Map<String, Object> result =
             entryView(document, fieldsToReturn, map, sp.getTextFieldsToSearch());
         results.add(result);
@@ -387,9 +386,6 @@ public abstract class AbstractSolrServer implements SolrServerWrapper {
   /**
    * Returns a list of facetinfo with counts.
    *
-   * @param field
-   * @param title
-   * @param type
    */
   protected FacetCount convertFacet(FacetField field, String title, FacetType type) {
     if (field != null) {
