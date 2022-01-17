@@ -44,7 +44,7 @@ public class AboutResource {
     Map<String, String> data = Maps.newHashMap();
     for (String field :
         new String[] {"commitId", "buildDate", "version", "scmBranch", "publishdate"}) {
-      data.put("commitId", getProperty(field));
+      data.put(field, getProperty(field));
     }
     return data;
   }

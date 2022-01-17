@@ -10,12 +10,12 @@ package elaborate.publication.resources;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -38,8 +38,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
@@ -61,6 +61,7 @@ public class SearchResource {
 
   @Context SearchService searchService;
   @Context ServletContext context;
+  @Context UriInfo uri;
 
   @GET
   @Produces(UTF8MediaType.APPLICATION_JSON)
@@ -83,6 +84,8 @@ public class SearchResource {
     Log.debug("elaborateSearchParameters:{}", elaborateSearchParameters);
     searchService.setSolrDir(getSolrDir());
     SearchData search = searchService.createSearch(elaborateSearchParameters);
+    URI createdURI = uri.getRequestUriBuilder().build(search.getId());
+    Log.info("createdURI={}",createdURI.toString());
     return Response.created(createURI(search)).build();
   }
 
@@ -100,8 +103,7 @@ public class SearchResource {
     int rows = Integer.parseInt(rowsString);
     Map<String, Object> searchResult = searchService.getSearchResult(searchId, start, rows);
     addPrevNextURIs(searchResult, searchId, start, rows);
-    ResponseBuilder builder = Response.ok(searchResult);
-    return builder.build();
+    return Response.ok(searchResult).build();
   }
 
   @GET
@@ -109,8 +111,7 @@ public class SearchResource {
   @Produces(UTF8MediaType.APPLICATION_JSON)
   public Response getAllSearchResultIds(@PathParam("search_id") long searchId) {
     List<String> searchResultIds = searchService.getAllSearchResultIds(searchId);
-    ResponseBuilder builder = Response.ok(searchResultIds);
-    return builder.build();
+    return Response.ok(searchResultIds).build();
   }
 
   private void addPrevNextURIs(

@@ -1,0 +1,3 @@
+projectName: hattem
+dataDir: ../dockerization/charriere/data
+solrDir: ../dockerization/charriere/solr
