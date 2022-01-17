@@ -1,8 +1,8 @@
 package nl.knaw.huygens.elaborate.publication.resources
 
 import nl.knaw.huygens.elaborate.publication.AppConfig
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.IOException
 import java.util.*
 import javax.servlet.ServletContext
 import javax.ws.rs.GET
@@ -14,14 +14,26 @@ import javax.ws.rs.core.UriInfo
 
 @Path("/about")
 class AboutResource(private val config: AppConfig) {
-    private var propertyResourceBundle: PropertyResourceBundle? = null
-    val log = LoggerFactory.getLogger(AboutResource::class.java)
+    val log: Logger = LoggerFactory.getLogger(AboutResource::class.java)
+
+    private val propertyResourceBundle: PropertyResourceBundle by lazy {
+        PropertyResourceBundle(
+            Thread.currentThread()
+                .contextClassLoader
+                .getResourceAsStream("about.properties")
+        )
+    }
+
+    private val properties = listOf("commitId", "buildDate", "version", "scmBranch", "publishdate")
 
     @Produces(MediaType.APPLICATION_JSON)
     @GET
-    fun get(@Context context: ServletContext, @Context uriInfo: UriInfo): Any {
+    fun get(
+        @Context context: ServletContext,
+        @Context uriInfo: UriInfo
+    ): Any {
         val data: MutableMap<String, String> = mutableMapOf()
-        for (field: String in listOf("commitId", "buildDate", "version", "scmBranch", "publishdate")) {
+        for (field: String in properties) {
             data[field] = getProperty(field)
         }
         data["serverInfo"] = context.serverInfo
@@ -29,25 +41,13 @@ class AboutResource(private val config: AppConfig) {
         data["baseUri"] = uriInfo.baseUri.toString()
         data["absolutePath"] = uriInfo.absolutePath.toString()
         data["projectName"] = config.projectName
-        data["dataDir"] = config!!.dataDir
-        data["solrDir"] = config!!.solrDir
+        data["dataDir"] = config.dataDir
+        data["solrDir"] = config.solrDir
         return data
     }
 
 
     @Synchronized
-    private fun getProperty(key: String): String {
-        if (propertyResourceBundle == null) {
-            try {
-                propertyResourceBundle = PropertyResourceBundle(
-                    Thread.currentThread()
-                        .contextClassLoader
-                        .getResourceAsStream("about.properties")
-                )
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-        return propertyResourceBundle!!.getString(key)
-    }
+    private fun getProperty(key: String): String =
+        propertyResourceBundle.getString(key)
 }
