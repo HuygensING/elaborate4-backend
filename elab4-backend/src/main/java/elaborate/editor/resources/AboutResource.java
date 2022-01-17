@@ -32,7 +32,6 @@ import javax.ws.rs.Produces;
 import com.google.common.collect.Maps;
 
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.jaxrs.APIDesc;
 
 @Path("about")

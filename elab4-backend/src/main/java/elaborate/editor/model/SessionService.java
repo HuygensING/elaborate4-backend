@@ -34,12 +34,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import elaborate.editor.model.orm.User;
-import elaborate.editor.model.orm.service.UserService;
-import elaborate.editor.security.ElaborateSecurityContext;
 import org.apache.commons.lang.RandomStringUtils;
 
 import nl.knaw.huygens.security.client.UnauthorizedException;
+import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.service.UserService;
+import elaborate.editor.security.ElaborateSecurityContext;
 
 @Singleton
 public class SessionService {

@@ -39,6 +39,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.AnnotationInputWrapper;
 import elaborate.editor.model.ModelFactory;
@@ -51,10 +55,6 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.NotFoundException;
 
 @Singleton
 public class TranscriptionService extends AbstractStoredEntityService<Transcription> {

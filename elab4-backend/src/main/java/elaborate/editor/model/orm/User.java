@@ -39,14 +39,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.ElaborateRoles;
 import elaborate.editor.model.ModelFactory;
 import elaborate.editor.model.Permission;
 import elaborate.editor.model.Permissions;
 import elaborate.editor.model.UserSettings;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
 @Table(name = "users")

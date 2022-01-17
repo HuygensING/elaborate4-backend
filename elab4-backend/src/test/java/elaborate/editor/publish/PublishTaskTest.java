@@ -32,6 +32,13 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import org.apache.commons.lang.StringUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.solr.FacetInfo;
 import elaborate.editor.AbstractTest;
 import elaborate.editor.model.ProjectMetadataFields;
 import elaborate.editor.model.orm.Project;
@@ -42,13 +49,6 @@ import elaborate.editor.publish.PublishTask.AnnotationPublishData;
 import elaborate.editor.publish.PublishTask.AnnotationTypeData;
 import elaborate.editor.publish.PublishTask.EntryData;
 import elaborate.util.XmlUtil;
-import org.apache.commons.lang.StringUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.solr.FacetInfo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;

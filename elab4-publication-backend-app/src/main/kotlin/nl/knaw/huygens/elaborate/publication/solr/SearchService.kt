@@ -1,18 +1,18 @@
 package nl.knaw.huygens.elaborate.publication.solr
 
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.Lists
-import com.google.common.collect.Maps
-import nl.knaw.huygens.facetedsearch.*
-import nl.knaw.huygens.solr.FacetInfo
-import org.joda.time.DateTime
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.io.IOException
 import javax.inject.Singleton
 import javax.ws.rs.InternalServerErrorException
 import kotlin.math.max
 import kotlin.math.min
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.Lists
+import com.google.common.collect.Maps
+import org.joda.time.DateTime
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import nl.knaw.huygens.facetedsearch.*
+import nl.knaw.huygens.solr.FacetInfo
 
 @Singleton
 class SearchService

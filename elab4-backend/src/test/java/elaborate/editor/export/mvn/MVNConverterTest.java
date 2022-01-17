@@ -26,6 +26,10 @@ import java.util.Arrays;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import nl.knaw.huygens.Log;
 import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
 import elaborate.editor.export.mvn.MVNConversionData.EntryData;
 import elaborate.editor.model.ProjectMetadataFields;
@@ -37,10 +41,6 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publication.Status;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import nl.knaw.huygens.Log;
 
 import static elaborate.editor.export.mvn.MVNAnnotationType.AFKORTING;
 import static elaborate.editor.export.mvn.MVNAnnotationType.ALINEA;

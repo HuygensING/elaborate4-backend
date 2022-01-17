@@ -1,12 +1,5 @@
 package nl.knaw.huygens.elaborate.publication.resources
 
-import com.codahale.metrics.annotation.Timed
-import nl.knaw.huygens.elaborate.publication.solr.SearchService
-import nl.knaw.huygens.facetedsearch.AbstractSolrServer
-import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters
-import nl.knaw.huygens.facetedsearch.SearchData
-import org.apache.commons.lang.StringUtils
-import org.slf4j.LoggerFactory
 import java.net.URI
 import java.net.URISyntaxException
 import java.text.MessageFormat
@@ -14,6 +7,13 @@ import javax.servlet.ServletContext
 import javax.ws.rs.*
 import javax.ws.rs.core.*
 import kotlin.math.max
+import com.codahale.metrics.annotation.Timed
+import org.apache.commons.lang.StringUtils
+import org.slf4j.LoggerFactory
+import nl.knaw.huygens.elaborate.publication.solr.SearchService
+import nl.knaw.huygens.facetedsearch.AbstractSolrServer
+import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters
+import nl.knaw.huygens.facetedsearch.SearchData
 
 @Path("/search")
 class SearchResource {

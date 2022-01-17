@@ -54,6 +54,18 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.sun.jersey.api.client.ClientResponse;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.FileWriterWithEncoding;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.common.SolrInputDocument;
+import org.joda.time.DateTime;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
+import nl.knaw.huygens.facetedsearch.IndexException;
+import nl.knaw.huygens.facetedsearch.LocalSolrServer;
+import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
 import elaborate.editor.config.Configuration;
 import elaborate.editor.export.mvn.MVNClient;
 import elaborate.editor.export.mvn.MVNConversionData;
@@ -79,18 +91,6 @@ import elaborate.freemarker.FreeMarker;
 import elaborate.util.HibernateUtil;
 import elaborate.util.StringUtil;
 import elaborate.util.XmlUtil;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.output.FileWriterWithEncoding;
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.common.SolrInputDocument;
-import org.joda.time.DateTime;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.ElaborateQueryComposer;
-import nl.knaw.huygens.facetedsearch.IndexException;
-import nl.knaw.huygens.facetedsearch.LocalSolrServer;
-import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
 
 public class PublishTask implements Runnable {
   private static final String MVN_BASE_URL = "http://test.mvn.huygens.knaw.nl/";

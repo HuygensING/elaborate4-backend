@@ -38,7 +38,6 @@ import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.AbstractTrackedEntity;

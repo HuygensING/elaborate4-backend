@@ -43,13 +43,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import elaborate.editor.model.orm.Facsimile;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.ProjectEntryMetadataItem;
-import elaborate.editor.model.orm.ProjectMetadataItem;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.service.ProjectService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Comment;
@@ -59,6 +52,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 import nl.knaw.huygens.facetedsearch.SolrUtils;
+import elaborate.editor.model.orm.Facsimile;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.ProjectEntryMetadataItem;
+import elaborate.editor.model.orm.ProjectMetadataItem;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.ProjectService;
 
 public class TeiMaker {
   public static final Map<String, String> HI_TAGS =

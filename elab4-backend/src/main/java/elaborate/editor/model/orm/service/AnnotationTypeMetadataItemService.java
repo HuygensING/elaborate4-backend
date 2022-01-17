@@ -27,7 +27,6 @@ import javax.inject.Singleton;
 import com.google.common.collect.ImmutableList;
 
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.AnnotationTypeMetadataItem;
 import elaborate.editor.model.orm.User;

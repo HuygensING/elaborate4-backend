@@ -34,7 +34,6 @@ import org.joda.time.DateTime;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.facetedsearch.SolrUtils;
 import nl.knaw.huygens.jaxrstools.exceptions.InternalServerErrorException;
-
 import elaborate.editor.model.AbstractStoredEntity;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.StorableSearchData;

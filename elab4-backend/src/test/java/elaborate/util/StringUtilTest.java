@@ -30,7 +30,6 @@ import javax.ws.rs.core.UriBuilderException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import elaborate.editor.resources.SessionResource;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 import org.joda.time.DateTime;
@@ -39,6 +38,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import nl.knaw.huygens.Log;
+import elaborate.editor.resources.SessionResource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

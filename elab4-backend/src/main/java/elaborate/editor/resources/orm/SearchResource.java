@@ -42,7 +42,6 @@ import org.apache.commons.lang.StringUtils;
 import nl.knaw.huygens.facetedsearch.AbstractSolrServer;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.orm.StorableSearchData;
 import elaborate.editor.model.orm.User;

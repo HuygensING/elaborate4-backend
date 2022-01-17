@@ -27,7 +27,6 @@ import org.junit.Test;
 
 import nl.knaw.huygens.facetedsearch.FacetParameter;
 import nl.knaw.huygens.facetedsearch.QueryComposer;
-
 import elaborate.editor.model.orm.TranscriptionType;
 
 import static org.assertj.core.api.Assertions.assertThat;

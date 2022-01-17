@@ -27,7 +27,6 @@ import com.sun.jersey.api.client.Client;
 import nl.knaw.huygens.security.client.HuygensAuthorizationHandler;
 import nl.knaw.huygens.security.client.UnauthorizedException;
 import nl.knaw.huygens.security.client.model.SecurityInformation;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;

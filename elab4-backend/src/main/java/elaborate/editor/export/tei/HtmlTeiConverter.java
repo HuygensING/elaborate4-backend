@@ -37,7 +37,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.base.Charsets;
-import elaborate.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -46,6 +45,7 @@ import org.xml.sax.SAXException;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.XmlContext;
+import elaborate.util.XmlUtil;
 
 class HtmlTeiConverter {
   private Document teiDocument;

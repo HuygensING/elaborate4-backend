@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.solr.FacetInfo;
-
 import elaborate.editor.model.orm.Project;
 
 import static org.assertj.core.api.Assertions.assertThat;

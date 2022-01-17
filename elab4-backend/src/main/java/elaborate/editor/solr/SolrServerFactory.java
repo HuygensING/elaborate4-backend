@@ -28,7 +28,6 @@ import nl.knaw.huygens.facetedsearch.LocalSolrServer;
 import nl.knaw.huygens.facetedsearch.QueryComposer;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
-
 import elaborate.editor.config.Configuration;
 
 class SolrServerFactory {

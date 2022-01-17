@@ -34,7 +34,6 @@ import nl.knaw.huygens.tei.Text;
 import nl.knaw.huygens.tei.TextHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
-
 import elaborate.editor.model.orm.Transcription;
 
 class AnnotationHierarchyVisitor extends DelegatingVisitor<XmlContext>

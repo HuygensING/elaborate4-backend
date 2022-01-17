@@ -32,7 +32,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
-
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
 import elaborate.util.XmlUtil;

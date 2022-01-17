@@ -39,7 +39,6 @@ import com.google.common.collect.ImmutableMap;
 
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.UserService;
 import elaborate.editor.resources.AbstractElaborateResource;

@@ -32,7 +32,6 @@ import javax.persistence.EntityManager;
 import org.apache.commons.lang.time.StopWatch;
 
 import nl.knaw.huygens.Log;
-
 import elaborate.editor.model.orm.ProjectEntry;
 import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.service.TranscriptionService;

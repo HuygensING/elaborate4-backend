@@ -24,16 +24,16 @@ package elaborate.editor.model.orm.service;
 
 import java.util.HashMap;
 
-import elaborate.editor.AbstractTest;
-import elaborate.editor.model.AnnotationInputWrapper;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import nl.knaw.huygens.Log;
+import elaborate.editor.AbstractTest;
+import elaborate.editor.model.AnnotationInputWrapper;
+import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.User;
 
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

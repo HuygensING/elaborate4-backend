@@ -1,8 +1,5 @@
 package nl.knaw.huygens.elaborate.publication.resources
 
-import nl.knaw.huygens.elaborate.publication.AppConfig
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.util.*
 import javax.servlet.ServletContext
 import javax.ws.rs.GET
@@ -11,6 +8,9 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriInfo
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import nl.knaw.huygens.elaborate.publication.AppConfig
 
 @Path("/about")
 class AboutResource(private val config: AppConfig) {

@@ -42,6 +42,10 @@ import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableList;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.ProjectPrototype;
 import elaborate.editor.model.Views;
@@ -54,10 +58,6 @@ import elaborate.editor.model.orm.service.TranscriptionService;
 import elaborate.editor.resources.AbstractElaborateResource;
 import elaborate.jaxrs.APIDesc;
 import elaborate.jaxrs.Annotations.AuthorizationRequired;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
 
 import static elaborate.editor.model.ElaborateRoles.ADMIN;
 import static elaborate.editor.model.ElaborateRoles.USER;

@@ -29,11 +29,6 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import com.google.common.collect.Maps;
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.AnnotationMetadataItem;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.service.AnnotationService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -43,6 +38,11 @@ import nl.knaw.huygens.tei.ElementHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
+import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.AnnotationMetadataItem;
+import elaborate.editor.model.orm.AnnotationType;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.AnnotationService;
 
 import static nl.knaw.huygens.tei.Traversal.NEXT;
 import static nl.knaw.huygens.tei.Traversal.STOP;

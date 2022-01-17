@@ -26,12 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import elaborate.editor.AbstractTest;
-import elaborate.editor.model.ProjectPrototype;
-import elaborate.editor.model.orm.Project;
-import elaborate.editor.model.orm.User;
-import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
-import elaborate.editor.publish.Publication;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,6 +33,12 @@ import org.junit.Test;
 
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+import elaborate.editor.AbstractTest;
+import elaborate.editor.model.ProjectPrototype;
+import elaborate.editor.model.orm.Project;
+import elaborate.editor.model.orm.User;
+import elaborate.editor.model.orm.service.ProjectService.AnnotationData;
+import elaborate.editor.publish.Publication;
 
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;

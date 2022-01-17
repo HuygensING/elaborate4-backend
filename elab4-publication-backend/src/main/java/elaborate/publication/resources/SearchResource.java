@@ -50,7 +50,6 @@ import nl.knaw.huygens.facetedsearch.ElaborateSearchParameters;
 import nl.knaw.huygens.facetedsearch.SearchData;
 import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.publication.solr.SearchService;
 
 @Path("search")

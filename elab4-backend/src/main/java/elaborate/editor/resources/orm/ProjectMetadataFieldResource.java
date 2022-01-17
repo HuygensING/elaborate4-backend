@@ -38,7 +38,6 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.editor.model.Views;
 import elaborate.editor.model.orm.ProjectMetadataField;
 import elaborate.editor.model.orm.service.ProjectMetadataFieldService;

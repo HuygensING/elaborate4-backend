@@ -35,7 +35,6 @@ import com.sun.jersey.spi.container.ResourceFilter;
 import org.apache.commons.lang.StringUtils;
 
 import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-
 import elaborate.editor.model.SessionService;
 
 public class AuthenticationResourceFilter implements ResourceFilter, ContainerRequestFilter {

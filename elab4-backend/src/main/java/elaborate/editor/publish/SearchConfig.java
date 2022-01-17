@@ -36,7 +36,6 @@ import org.apache.commons.lang.StringUtils;
 import nl.knaw.huygens.facetedsearch.RangeField;
 import nl.knaw.huygens.solr.FacetInfo;
 import nl.knaw.huygens.solr.FacetType;
-
 import elaborate.editor.model.orm.Project;
 
 public class SearchConfig {

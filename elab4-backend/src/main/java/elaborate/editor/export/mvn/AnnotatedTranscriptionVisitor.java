@@ -31,8 +31,6 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
-import elaborate.editor.model.orm.Transcription;
 import org.apache.commons.lang.StringUtils;
 
 import nl.knaw.huygens.Log;
@@ -43,6 +41,8 @@ import nl.knaw.huygens.tei.Text;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
+import elaborate.editor.export.mvn.MVNConversionData.AnnotationData;
+import elaborate.editor.model.orm.Transcription;
 
 public class AnnotatedTranscriptionVisitor extends DelegatingVisitor<XmlContext>
     implements ElementHandler<XmlContext> {

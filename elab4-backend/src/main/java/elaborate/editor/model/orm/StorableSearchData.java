@@ -36,7 +36,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import nl.knaw.huygens.facetedsearch.SearchData;
-
 import elaborate.editor.model.AbstractStoredEntity;
 
 @Entity

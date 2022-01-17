@@ -35,6 +35,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.sun.jersey.api.NotFoundException;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 import elaborate.editor.model.orm.Facsimile;
 import elaborate.editor.model.orm.Project;
 import elaborate.editor.model.orm.ProjectEntry;
@@ -43,10 +47,6 @@ import elaborate.editor.model.orm.Transcription;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.resources.orm.MultipleProjectEntrySettings;
 import elaborate.editor.resources.orm.wrappers.TranscriptionWrapper;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
 
 public class ProjectEntryService extends AbstractStoredEntityService<ProjectEntry> {
   private static final ProjectEntryService instance = new ProjectEntryService();

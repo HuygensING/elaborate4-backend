@@ -42,7 +42,6 @@ import com.sun.jersey.spi.resource.Singleton;
 
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.editor.model.AnnotationInputWrapper;
 import elaborate.editor.model.Views;
 import elaborate.editor.model.orm.Annotation;

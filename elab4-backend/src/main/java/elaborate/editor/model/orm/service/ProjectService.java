@@ -45,6 +45,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
+
+import nl.knaw.huygens.Log;
+import nl.knaw.huygens.facetedsearch.SolrUtils;
+import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
+import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
+import nl.knaw.huygens.solr.FacetInfo;
 import elaborate.editor.export.mvn.MVNAnnotationType;
 import elaborate.editor.export.pdf.PdfMaker;
 import elaborate.editor.export.tei.TagInfo;
@@ -68,14 +76,6 @@ import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.publish.Publication;
 import elaborate.editor.publish.Publisher;
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
-
-import nl.knaw.huygens.Log;
-import nl.knaw.huygens.facetedsearch.SolrUtils;
-import nl.knaw.huygens.jaxrstools.exceptions.BadRequestException;
-import nl.knaw.huygens.jaxrstools.exceptions.UnauthorizedException;
-import nl.knaw.huygens.solr.FacetInfo;
 
 public class ProjectService extends AbstractStoredEntityService<Project> {
   private static final String PROJECT_NAME = "name";

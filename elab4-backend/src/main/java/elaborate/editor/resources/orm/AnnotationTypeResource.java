@@ -37,7 +37,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableList;
 
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.editor.model.Views;
 import elaborate.editor.model.orm.AnnotationType;
 import elaborate.editor.model.orm.service.AnnotationTypeService;

@@ -22,13 +22,14 @@ package elaborate.editor.model.orm.service;
  * #L%
  */
 
-import elaborate.editor.AbstractTest;
-import elaborate.editor.model.orm.ProjectEntry;
-import elaborate.editor.model.orm.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import elaborate.editor.AbstractTest;
+import elaborate.editor.model.orm.ProjectEntry;
+import elaborate.editor.model.orm.User;
 
 import static elaborate.editor.model.orm.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

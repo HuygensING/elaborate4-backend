@@ -30,7 +30,6 @@ import org.glassfish.grizzly.utils.Charsets;
 import org.junit.Test;
 
 import nl.knaw.huygens.Log;
-
 import elaborate.editor.export.mvn.MVNValidator.ValidationResult;
 
 import static org.assertj.core.api.Assertions.assertThat;

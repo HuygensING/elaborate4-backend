@@ -1,10 +1,10 @@
 package nl.knaw.huygens.elaborate.publication.resources
 
-import nl.knaw.huygens.elaborate.publication.AppConfig
 import java.io.File
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
+import nl.knaw.huygens.elaborate.publication.AppConfig
 
 @Path("/data")
 class DataResource(config: AppConfig) {

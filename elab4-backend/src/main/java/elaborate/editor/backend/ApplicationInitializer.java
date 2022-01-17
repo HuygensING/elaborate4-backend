@@ -30,7 +30,6 @@ import javax.servlet.ServletContextListener;
 import com.google.common.collect.ImmutableList;
 
 import nl.knaw.huygens.Log;
-
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.SearchService;
 import elaborate.editor.model.orm.service.UserService;

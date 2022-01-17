@@ -33,7 +33,6 @@ import com.google.common.collect.ImmutableMap;
 import nl.knaw.huygens.facetedsearch.RemoteSolrServer;
 import nl.knaw.huygens.facetedsearch.SolrServerWrapper;
 import nl.knaw.huygens.jaxrstools.resources.UTF8MediaType;
-
 import elaborate.editor.config.Configuration;
 import elaborate.editor.model.orm.service.SearchService;
 import elaborate.util.HibernateUtil;

@@ -30,7 +30,6 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import nl.knaw.huygens.facetedsearch.SolrUtils;
-
 import elaborate.editor.model.AbstractMetadataItem;
 
 @Entity

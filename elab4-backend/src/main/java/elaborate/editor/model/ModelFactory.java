@@ -27,6 +27,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import com.google.common.collect.ImmutableList;
+
 import elaborate.editor.model.orm.TranscriptionType;
 import elaborate.editor.model.orm.User;
 import elaborate.editor.model.orm.service.TranscriptionService;

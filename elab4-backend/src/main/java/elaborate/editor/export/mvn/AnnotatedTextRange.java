@@ -35,7 +35,6 @@ import com.google.common.collect.Sets;
 import nl.knaw.huygens.Log;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
-
 import elaborate.util.XmlUtil;
 
 public class AnnotatedTextRange {
