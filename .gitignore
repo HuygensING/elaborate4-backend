@@ -1,8 +1,8 @@
 target/
-/elab4.sublime-project
-/elab4.sublime-workspace
-/locate.exe.stackdump
-/out
-/torec.tei.xml
-/elab4.iml
-.idea
+elab4.sublime-project
+elab4.sublime-workspace
+locate.exe.stackdump
+out/
+torec.tei.xml
+.idea/
+**.iml
