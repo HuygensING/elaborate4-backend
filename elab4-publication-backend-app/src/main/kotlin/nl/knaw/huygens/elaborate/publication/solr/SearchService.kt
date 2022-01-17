@@ -1,10 +1,14 @@
 package nl.knaw.huygens.elaborate.publication.solr
 
+import java.io.File
 import java.io.IOException
 import javax.inject.Singleton
 import javax.ws.rs.InternalServerErrorException
 import kotlin.math.max
 import kotlin.math.min
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.Lists
 import com.google.common.collect.Maps
@@ -13,29 +17,21 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import nl.knaw.huygens.facetedsearch.*
 import nl.knaw.huygens.solr.FacetInfo
+import nl.knaw.huygens.solr.FacetType
 
 @Singleton
-class SearchService
-private constructor() {
-    private val searchDataIndex: MutableMap<Long, SearchData> = Maps.newHashMap()
+class SearchService(private val solrDir: String, private val solrConfigFile: File) {
 
-    private var solrServer: SolrServerWrapper? = null
-        get() {
-            if (field == null) {
-                field = LocalSolrServer(solrDir, "entries", ElaborateQueryComposer())
-            }
-            return field
-        }
+    private val searchDataIndex: MutableMap<Long, SearchData> = mutableMapOf()
 
-    var solrDir: String? = null
+    private val solrServer: SolrServerWrapper by lazy {
+        LocalSolrServer(solrDir, "entries", ElaborateQueryComposer())
+    }
 
-    private var facetInfoMap: Map<String, FacetInfo>? = null
-    private var rangeFields: List<RangeField>? = null
-    private var facetFields: Array<String>? = null
-    private var defaultSortOrder: Array<String>? = null
-
-    var baseURL: String? = null
-        private set
+    private lateinit var facetInfoMap: Map<String, FacetInfo>
+    private lateinit var rangeFields: List<RangeField>
+    private lateinit var facetFields: Array<String?>
+    private lateinit var defaultSortOrder: Array<String?>
 
     init {
         loadConfig()
@@ -43,13 +39,13 @@ private constructor() {
 
     fun createSearch(elaborateSearchParameters: ElaborateSearchParameters): SearchData {
         elaborateSearchParameters
-            .setFacetFields(facetFields)
-            .setFacetInfoMap(facetInfoMap)
-            .setRanges(rangeFields)
-            .setLevelFields(defaultSortOrder!![0], defaultSortOrder!![1], defaultSortOrder!![2])
+                .setFacetFields(facetFields)
+                .setFacetInfoMap(facetInfoMap)
+                .setRanges(rangeFields)
+                .setLevelFields(defaultSortOrder[0], defaultSortOrder[1], defaultSortOrder[2])
         return try {
             LOG.info("searchParameters={}", elaborateSearchParameters)
-            val result = solrServer!!.search(elaborateSearchParameters)
+            val result = solrServer.search(elaborateSearchParameters)
             LOG.info("result={}", result)
             val searchData = SearchData().setResults(result)
             searchDataIndex[searchData.id] = searchData
@@ -67,15 +63,15 @@ private constructor() {
         val searchData = searchDataIndex[searchId]
         //		Map<String, String> fieldnameMap = getFieldnameMap();
         if (searchData != null) {
-            val sortableFields: MutableList<String> = Lists.newArrayList("id", "name")
-            sortableFields.addAll(ImmutableList.copyOf(facetFields))
+            val sortableFields: MutableList<String?> = Lists.newArrayList("id", "name")
+            sortableFields.addAll(facetFields.asList())
             resultsMap = searchData.results
             val ids = resultsMap.remove("ids") as List<String>?
             var results = resultsMap.remove("results") as List<MutableMap<String, Any?>>?
-            LOG.info("start={}, rows={}", start, rows)
+//            LOG.info("start={}, rows={}", start, rows)
             val lo = toRange(start, 0, ids!!.size)
             val hi = toRange(lo + rows, 0, ids.size)
-            LOG.info("lo={}, hi={}", lo, hi)
+//            LOG.info("lo={}, hi={}", lo, hi)
             results = results!!.subList(lo, hi)
             LOG.info("results={}", results)
             groupMetadata(results)
@@ -96,7 +92,7 @@ private constructor() {
             for (key in keys) {
                 if (key.startsWith(SolrUtils.METADATAFIELD_PREFIX)) {
                     val valueObject = resultmap.remove(key)
-                    val facetInfo = facetInfoMap!![key]
+                    val facetInfo = facetInfoMap[key]
                     if (facetInfo != null) {
                         val name = facetInfo.title
                         if (valueObject == null) {
@@ -115,7 +111,7 @@ private constructor() {
                     }
                 }
             }
-            LOG.info("metadata:{}", metadata)
+//            LOG.info("metadata:{}", metadata)
             resultmap["metadata"] = metadata
         }
     }
@@ -135,15 +131,13 @@ private constructor() {
     }
 
     private fun loadConfig() {
-        //		LOG.info("{}", Thread.currentThread().getContextClassLoader().getResource(".").getPath());
         try {
-//            val inputStream = Thread.currentThread().contextClassLoader.getResourceAsStream("config.json")
-//            val configMap = readConfigMap(inputStream)
-//            facetInfoMap = toMap(configMap!!["facetInfoMap"])
-//            rangeFields = toRangeFieldList(configMap["rangeFields"])
-//            facetFields = toStringArray(configMap["facetFields"])
-//            defaultSortOrder = toStringArray(configMap["defaultSortOrder"])
-//            baseURL = configMap["baseURL"] as String?
+            val json = solrConfigFile.readText()
+            val configMap = readConfigMap(json)
+            facetInfoMap = toMap(configMap["facetInfoMap"])
+            rangeFields = toRangeFieldList(configMap["rangeFields"])
+            facetFields = toStringArray(configMap["facetFields"])
+            defaultSortOrder = toStringArray(configMap["defaultSortOrder"])
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -163,11 +157,6 @@ private constructor() {
     }
 
     companion object {
-        private val instance = SearchService()
-
-        fun instance(): SearchService {
-            return instance
-        }
 
         fun toRangeFieldList(obj: Any?): List<RangeField> {
             val list: MutableList<RangeField> = Lists.newArrayList()
@@ -177,41 +166,42 @@ private constructor() {
             val mapList = obj as List<Map<String, Any>>
             for (map in mapList) {
                 list.add(
-                    RangeField(
-                        map["name"] as String?,
-                        map["lowerField"] as String?,
-                        map["upperField"] as String?
-                    )
+                        RangeField(
+                                map["name"] as String?,
+                                map["lowerField"] as String?,
+                                map["upperField"] as String?
+                        )
                 )
             }
             return list
         }
 
-        //        fun toStringArray(obj: Any?): Array<String> {
-//            return (obj as List<String?>?).toArray<String>(arrayOf<String>())
-//        }
-//
-//        fun toMap(obj: Any): Map<String, FacetInfo> {
-//            val inMap = obj as Map<String, Map<String, String>>
-//            val outMap: MutableMap<String, FacetInfo> = Maps.newHashMapWithExpectedSize(inMap!!.size)
-//            for ((key, value): Map.Entry<String, Map<String, String>> in inMap) {
-//                outMap[key] = FacetInfo()
-//                        .setName(value.get("name"))
-//                        .setTitle(value.get("title"))
-//                        .setType(FacetType.valueOf(value.get("type")!!))
-//            }
-//            return outMap
-//        }
-//
-//        @Throws(IOException::class)
-//        fun readConfigMap(inputStream: InputStream?): Map<String, Any>? {
-//            val inputStreamReader = InputStreamReader(inputStream)
-//            var configMap: Map<String, Any>? = ObjectMapper().readValue<Map<*, *>>(inputStreamReader, MutableMap::class.java)
-//            if (configMap == null) {
-//                configMap = Maps.newHashMap()
-//            }
-//            return configMap
-//        }
+        fun toStringArray(obj: Any?): Array<String?> {
+            return (obj as List<String?>?)!!.toTypedArray()
+        }
+
+        fun toMap(obj: Any?): Map<String, FacetInfo> {
+            val inMap = obj as Map<String, Map<String, String>>
+            val outMap: MutableMap<String, FacetInfo> = Maps.newHashMapWithExpectedSize(inMap.size)
+            for ((key, value) in inMap) {
+                outMap[key] = FacetInfo()
+                        .setName(value["name"])
+                        .setTitle(value["title"])
+                        .setType(FacetType.valueOf(value["type"]!!))
+
+            }
+            return outMap
+        }
+
+        fun readConfigMap(json: String): Map<String, Any> {
+            val mapper = ObjectMapper().registerModule(KotlinModule())
+            var configMap: MutableMap<String, Any> = mapper.readValue(json)
+            if (configMap == null) {
+                configMap = Maps.newHashMap()
+            }
+            return configMap
+        }
+
         val LOG: Logger = LoggerFactory.getLogger(SearchService::class.java)
     }
 }

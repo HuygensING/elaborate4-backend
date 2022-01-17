@@ -1,5 +1,6 @@
 package nl.knaw.huygens.elaborate.publication.resources
 
+import java.io.File
 import java.util.*
 import javax.servlet.ServletContext
 import javax.ws.rs.GET
@@ -16,12 +17,10 @@ import nl.knaw.huygens.elaborate.publication.AppConfig
 class AboutResource(private val config: AppConfig) {
     val log: Logger = LoggerFactory.getLogger(AboutResource::class.java)
 
+    private val stream = File("${config.publicationDir}/about.properties").inputStream()
+
     private val propertyResourceBundle: PropertyResourceBundle by lazy {
-        PropertyResourceBundle(
-            Thread.currentThread()
-                .contextClassLoader
-                .getResourceAsStream("about.properties")
-        )
+        PropertyResourceBundle(stream)
     }
 
     private val properties = listOf("commitId", "buildDate", "version", "scmBranch", "publishdate")
@@ -29,8 +28,8 @@ class AboutResource(private val config: AppConfig) {
     @Produces(MediaType.APPLICATION_JSON)
     @GET
     fun get(
-        @Context context: ServletContext,
-        @Context uriInfo: UriInfo
+            @Context context: ServletContext,
+            @Context uriInfo: UriInfo
     ): Any {
         val data: MutableMap<String, String> = mutableMapOf()
         for (field: String in properties) {
@@ -41,13 +40,12 @@ class AboutResource(private val config: AppConfig) {
         data["baseUri"] = uriInfo.baseUri.toString()
         data["absolutePath"] = uriInfo.absolutePath.toString()
         data["projectName"] = config.projectName
-        data["dataDir"] = config.dataDir
-        data["solrDir"] = config.solrDir
+        data["publicationDir"] = config.publicationDir
         return data
     }
 
 
     @Synchronized
     private fun getProperty(key: String): String =
-        propertyResourceBundle.getString(key)
+            propertyResourceBundle.getString(key)
 }

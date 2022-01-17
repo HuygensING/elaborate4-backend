@@ -9,7 +9,7 @@ import nl.knaw.huygens.elaborate.publication.AppConfig
 @Path("/data")
 class DataResource(config: AppConfig) {
 
-    private val dataDir = config.dataDir
+    private val dataDir = "${config.publicationDir}/data"
 
     @GET
     @Path("{baseName:.+}.json")

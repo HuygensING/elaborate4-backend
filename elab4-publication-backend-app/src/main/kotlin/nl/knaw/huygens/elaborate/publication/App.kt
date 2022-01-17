@@ -24,6 +24,6 @@ class App : Application<AppConfig>() {
         env.jersey().register(RootResource())
         env.jersey().register(AboutResource(config))
         env.jersey().register(DataResource(config))
-        env.jersey().register(SearchResource::class.java)
+        env.jersey().register(SearchResource(config.publicationDir))
     }
 }
