@@ -7,7 +7,7 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("/data")
-class DataResource(private val config: AppConfig) {
+class DataResource(config: AppConfig) {
 
     private val dataDir = config.dataDir
 
