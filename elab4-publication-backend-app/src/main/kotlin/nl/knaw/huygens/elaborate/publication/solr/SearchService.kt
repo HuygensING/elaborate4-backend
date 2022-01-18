@@ -33,11 +33,18 @@ class SearchService(private val solrDir: String, private val solrConfigFile: Fil
     private lateinit var facetFields: Array<String?>
     private lateinit var defaultSortOrder: Array<String?>
 
+    private var lastCleanUpDay = 0
+
     init {
         loadConfig()
     }
 
     fun createSearch(elaborateSearchParameters: ElaborateSearchParameters): SearchData {
+        val currentDay = DateTime.now().dayOfYear
+        if (currentDay != lastCleanUpDay) {
+            removeExpiredSearches()
+            lastCleanUpDay = currentDay
+        }
         elaborateSearchParameters
                 .setFacetFields(facetFields)
                 .setFacetInfoMap(facetInfoMap)
@@ -118,8 +125,7 @@ class SearchService(private val solrDir: String, private val solrConfigFile: Fil
 
     fun removeExpiredSearches() {
         val cutoffDate = DateTime().minusDays(1).millis
-        val keySet: Set<Long> = searchDataIndex.keys
-        for (key in keySet) {
+        for (key in searchDataIndex.keys) {
             if (key < cutoffDate) {
                 searchDataIndex.remove(key)
             }
