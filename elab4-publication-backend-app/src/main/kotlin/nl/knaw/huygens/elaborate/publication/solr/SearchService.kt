@@ -81,7 +81,7 @@ class SearchService(private val solrDir: String, private val solrConfigFile: Fil
 //            LOG.info("lo={}, hi={}", lo, hi)
             results = results!!.subList(lo, hi)
             LOG.info("results={}", results)
-            groupMetadata(results)
+            results.groupMetadata()
             LOG.info("after groupMetadata: results={}", results)
             resultsMap["ids"] = ids
             resultsMap["results"] = results
@@ -92,8 +92,8 @@ class SearchService(private val solrDir: String, private val solrConfigFile: Fil
         return resultsMap
     }
 
-    private fun groupMetadata(results: List<MutableMap<String, Any?>>) {
-        for (resultmap in results) {
+    private fun List<MutableMap<String, Any?>>.groupMetadata() {
+        for (resultmap in this) {
             val metadata: MutableMap<String, String> = Maps.newHashMap()
             val keys: List<String> = ImmutableList.copyOf(resultmap.keys)
             for (key in keys) {
@@ -110,7 +110,7 @@ class SearchService(private val solrDir: String, private val solrConfigFile: Fil
                                 metadata[name] = SolrUtils.EMPTYVALUE_SYMBOL
                             } else if (values.size == 1) {
                                 metadata[name] = values[0]
-                            } else if (values.size > 1) {
+                            } else {
                                 LOG.warn("unexpected: multiple values: {}", values)
                                 metadata[name] = values[0]
                             }
@@ -123,7 +123,7 @@ class SearchService(private val solrDir: String, private val solrConfigFile: Fil
         }
     }
 
-    fun removeExpiredSearches() {
+    private fun removeExpiredSearches() {
         val cutoffDate = DateTime().minusDays(1).millis
         for (key in searchDataIndex.keys) {
             if (key < cutoffDate) {
