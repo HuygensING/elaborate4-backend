@@ -38,12 +38,11 @@ class AboutResource(private val config: AppConfig) {
         data["serverInfo"] = context.serverInfo
         data["contextPath"] = context.contextPath
         data["baseUri"] = uriInfo.baseUri.toString()
-        data["absolutePath"] = uriInfo.absolutePath.toString()
         data["projectName"] = config.projectName
         data["publicationDir"] = config.publicationDir
+        data["PROXY_URL"] = System.getenv("PROXY_URL") ?: "not defined"
         return data
     }
-
 
     @Synchronized
     private fun getProperty(key: String): String =

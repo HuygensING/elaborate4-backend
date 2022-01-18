@@ -1,6 +1,7 @@
 package nl.knaw.huygens.elaborate.publication.resources
 
 import java.io.File
+import java.net.URI
 import javax.ws.rs.*
 import javax.ws.rs.core.*
 import kotlin.math.max
@@ -37,7 +38,7 @@ class SearchResource(publicationDir: String) {
     ): Response {
         LOG.debug("elaborateSearchParameters:{}", elaborateSearchParameters)
         val search: SearchData = searchService.createSearch(elaborateSearchParameters)
-        val createdURI = uriInfo.requestUriBuilder.path(search.id.toString()).build()
+        val createdURI = searchUriBuilder(uriInfo).path(search.id.toString()).build()
         LOG.info("createdURI={}", createdURI.toString())
         return Response.created(createdURI).build()
     }
@@ -62,8 +63,22 @@ class SearchResource(publicationDir: String) {
         if (searchResult.isEmpty()) {
             throw NotFoundException()
         }
-        searchResult.addPrevNextURIs(uriInfo.requestUriBuilder, start, rows)
+        searchResult.addPrevNextURIs(searchUriBuilder(uriInfo, searchId), start, rows)
         return Response.ok(searchResult).build()
+    }
+
+    private fun searchUriBuilder(uriInfo: UriInfo, searchId: Long? = null): UriBuilder {
+        val proxyURL = System.getenv("PROXY_URL")
+        return if (proxyURL == null || proxyURL.isBlank()) {
+            uriInfo.requestUriBuilder
+        } else {
+            val builder = UriBuilder.fromUri(URI.create(proxyURL)).path("search")
+            if (searchId != null) {
+                builder.path(searchId.toString())
+            } else {
+                builder
+            }
+        }
     }
 
     @GET
@@ -103,7 +118,6 @@ class SearchResource(publicationDir: String) {
                     .replaceQueryParam("rows", rows)
                     .build()
                     .toString()
-
 
     companion object {
         private const val KEY_NEXT = "_next"
