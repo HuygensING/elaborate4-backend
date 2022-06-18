@@ -57,7 +57,7 @@
     <jersey.version>1.19.4</jersey.version>
     <jetty-maven.version>11.0.2</jetty-maven.version>
     <joda-time.version>2.10.1</joda-time.version>
-    <jsoup.version>1.7.3</jsoup.version><!-- >= 1.8.1 throws an error -->
+    <jsoup.version>1.15.1</jsoup.version><!-- >= 1.8.1 throws an error -->
     <jsr250-api.version>1.0</jsr250-api.version>
     <jtidy.version>r938</jtidy.version>
     <junit.version>4.12</junit.version>
