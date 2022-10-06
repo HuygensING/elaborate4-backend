@@ -49,7 +49,7 @@
     <guice.version>5.1.0</guice.version>
     <hibernate.version>5.6.10.Final</hibernate.version><!-- > 4.2.7 uses javassist, leads to "org.hibernate.jpa.boot.archive.spi.ArchiveException:			Could not build ClassFile", > 4.3.8.Final : java.lang.ClassNotFoundException: javax.transaction.SystemException -->
     <hsqldb.version>2.3.3</hsqldb.version>
-    <jackson.version>2.13.3</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
+    <jackson.version>2.13.4</jackson.version><!-- 2.6.1 gives NoClassDefFoundError -->
     <javaxservlet-api.version>3.0-alpha-1</javaxservlet-api.version>
     <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
     <jaxrstools.version>0.1.0</jaxrstools.version>
@@ -57,7 +57,7 @@
     <jersey.version>1.19.4</jersey.version>
     <jetty-maven.version>11.0.2</jetty-maven.version>
     <joda-time.version>2.10.14</joda-time.version>
-    <jsoup.version>1.7.3</jsoup.version><!-- >= 1.8.1 throws an error -->
+    <jsoup.version>1.15.3</jsoup.version><!-- >= 1.8.1 throws an error -->
     <jsr250-api.version>1.0</jsr250-api.version>
     <jtidy.version>r938</jtidy.version>
     <junit.version>4.12</junit.version>
@@ -69,7 +69,7 @@
     <maven-war.version>3.3.0</maven-war.version>
     <mockito.version>2.23.0</mockito.version>
     <pdfbox.version>1.8.16</pdfbox.version>
-    <postgresql.version>9.3-1100-jdbc4</postgresql.version> <!-- > 9.3-1100-jdbc4 = JDK7 -->
+    <postgresql.version>42.2.26</postgresql.version> <!-- > 9.3-1100-jdbc4 = JDK7 -->
     <security.version>2.1.4</security.version><!-- <security.version>2.2.1</security.version> --><!-- nog niet voldoende getest -->
     <servlet-api.version>3.1.0</servlet-api.version>
     <slf4j.version>1.7.10</slf4j.version>
