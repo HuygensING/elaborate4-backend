@@ -28,12 +28,15 @@ class AboutResource(private val config: AppConfig) {
     @Produces(MediaType.APPLICATION_JSON)
     @GET
     fun get(
-            @Context context: ServletContext,
-            @Context uriInfo: UriInfo
+        @Context context: ServletContext,
+        @Context uriInfo: UriInfo
     ): Any {
         val data: MutableMap<String, String> = mutableMapOf()
+        val propertyKeys = propertyResourceBundle.keys.toList()
         for (field: String in properties) {
-            data[field] = getProperty(field)
+            if (propertyKeys.contains(field)) {
+                data[field] = getProperty(field)
+            }
         }
         data["serverInfo"] = context.serverInfo
         data["contextPath"] = context.contextPath
@@ -46,5 +49,5 @@ class AboutResource(private val config: AppConfig) {
 
     @Synchronized
     private fun getProperty(key: String): String =
-            propertyResourceBundle.getString(key)
+        propertyResourceBundle.getString(key)
 }
