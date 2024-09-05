@@ -4,7 +4,7 @@ package elaborate.editor.export.tei;
  * #%L
  * elab4-backend
  * =======
- * Copyright (C) 2011 - 2019 Huygens ING
+ * Copyright (C) 2011 - 2024 Huygens ING
  * =======
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,32 +22,30 @@ package elaborate.editor.export.tei;
  * #L%
  */
 
-import static nl.knaw.huygens.tei.Traversal.NEXT;
-import static nl.knaw.huygens.tei.Traversal.STOP;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.google.common.collect.Maps;
-
-import elaborate.editor.model.orm.Annotation;
-import elaborate.editor.model.orm.AnnotationMetadataItem;
-import elaborate.editor.model.orm.AnnotationType;
-import elaborate.editor.model.orm.Transcription;
-import elaborate.editor.model.orm.service.AnnotationService;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.ElementHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 import nl.knaw.huygens.tei.handlers.XmlTextHandler;
+import elaborate.editor.model.orm.Annotation;
+import elaborate.editor.model.orm.AnnotationMetadataItem;
+import elaborate.editor.model.orm.AnnotationType;
+import elaborate.editor.model.orm.Transcription;
+import elaborate.editor.model.orm.service.AnnotationService;
+
+import static nl.knaw.huygens.tei.Traversal.NEXT;
+import static nl.knaw.huygens.tei.Traversal.STOP;
 
 class TranscriptionVisitor extends DelegatingVisitor<XmlContext> {
   private static final Deque<Element> openElements = new ArrayDeque<Element>();
